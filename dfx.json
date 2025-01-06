@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "cosmicrafts_dao_backend": {
+      "main": "src/cosmicrafts_dao_backend/main.mo",
+      "type": "motoko"
+    },
+    "cosmicrafts_dao_frontend": {
+      "dependencies": [
+        "cosmicrafts_dao_backend"
+      ],
+      "source": [
+        "src/cosmicrafts_dao_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "cosmicrafts_dao_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
