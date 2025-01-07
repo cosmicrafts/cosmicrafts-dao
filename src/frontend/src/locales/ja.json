@@ -1,0 +1,113 @@
+{
+  "header": {
+    "home": "ホーム",
+    "features": "機能",
+    "play": "プレイ",
+    "games": "ゲーム",
+    "community": "コミュニティ",
+    "contact": "お問い合わせ",
+    "support": "手伝おうか？",
+    "language": "言語",
+    "marketplace": "マーケット",
+    "spiral": "スパイラル",
+    "dao": "DAO",
+    "dashboard": "ダッシュボード",
+    "connect": "接続する",
+    "whitepaper": "ホワイトペーパー"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "ここがスタートだよ。アルファが稼働中、今すぐ参加しよう！",
+        "ctaButtons": [
+          { "text": "今すぐプレイ！" },
+          { "text": "Epic Gamesでウィッシュリストに追加" }
+        ]
+      },
+      {
+        "title": "パーティーはここから！参加する？どうする？",
+        "ctaButtons": [
+          { "text": "NNSへ行く" },
+          { "text": "ホワイトペーパーを読む" }
+        ]
+      },
+      {
+        "title": "ブロックチェーンでRTS。星間ドリフト、銀河の大混乱",
+        "ctaButtons": [
+          { "text": "今すぐダウンロード！" },
+          { "text": "もっと知る！" }
+        ]
+      },
+      {
+        "title": "みんなで繋がろう！友達を招待して限定報酬をゲット！",
+        "ctaButtons": [
+          { "text": "ダッシュボードへ行く" },
+          { "text": "紹介コードをゲット" }
+        ]
+      }
+    ]
+  },
+  "cta": "Cosmicrafts Adventuresを試してみよう",
+  "lore": {
+    "title": "Cosmicraftsの物語",
+    "description": "一緒にCosmicraftsの壮大な物語に飛び込もう！ヒーロー、伝説のバトル、そしてまだ見ぬミステリーが君を待っている！"
+  },
+  "games": {
+    "title": "私たちのゲーム",
+    "battlegrounds": {
+      "title": "Cosmicrafts バトルグラウンド",
+      "description": "友達と一緒にCosmicraftsの世界でエピックなマルチプレイヤーバトルに参戦しよう！"
+    },
+    "adventures": {
+      "title": "Cosmicrafts Adventures",
+      "description": "ワクワクする宇宙探検に出かけて、銀河の秘密を一緒に見つけよう！"
+    }
+  },
+  "carousel": {
+    "slides": [
+      {
+        "title": "Cosmicrafts Adventures",
+        "description": "Cosmicrafts Adventuresで開発中の新しい世界を探検しよう！",
+        "buttonText": "もっと知る",
+        "action": "adventures"
+      },
+      {
+        "title": "Cosmicrafts バトルグラウンド",
+        "description": "アクションに参加して、今すぐCosmicrafts バトルグラウンドをプレイしよう！",
+        "buttonText": "今すぐプレイ",
+        "action": "battleground"
+      },
+      {
+        "title": "最新ニュース",
+        "description": "Cosmicraftsに関する最新のニュースやアップデートをチェックしよう。",
+        "buttonText": "ニュースを読む",
+        "action": "news"
+      },
+      {
+        "title": "ICPテクノロジー",
+        "description": "Cosmicraftsを支える革新的なICPテクノロジーについてもっと知ろう！",
+        "buttonText": "ICPを探る",
+        "action": "technology"
+      }
+    ]
+  },
+  "footer": {
+    "stayConnected": "一緒に繋がろう",
+    "careers": "採用情報",
+    "about": "私たちについて",
+    "support": "手伝おうか？",
+    "press": "プレス",
+    "creators": "クリエイター",
+    "privacy": "プライバシー",
+    "legal": "法律情報",
+    "terms": "利用規約",
+    "cookiePolicy": "クッキーポリシー",
+    "cookieSettings": "クッキー設定",
+    "language": "言語"
+  },
+  "darkRift": {
+  "title": "ダークリフト",
+  "discover": "発見する"
+}
+
+}

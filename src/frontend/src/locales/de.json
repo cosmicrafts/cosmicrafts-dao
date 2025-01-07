@@ -1,0 +1,112 @@
+{
+  "header": {
+    "home": "Startseite",
+    "features": "Features",
+    "play": "Spielen",
+    "games": "Spiele",
+    "community": "Community",
+    "contact": "Kontakt",
+    "support": "Braucht's Hilfe?",
+    "language": "Sprache",
+    "marketplace": "Marktplatz",
+    "spiral": "Spiral",
+    "dao": "DAO",
+    "dashboard": "Dashboard",
+    "connect": "Verbinden"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "Hier geht's los. Alpha ist am Start – komm rein!",
+        "ctaButtons": [
+          { "text": "Jetzt Spielen!" },
+          { "text": "Zur Wunschliste bei Epic Games hinzufügen" }
+        ]
+      },
+      {
+        "title": "Die Party steigt! Bist du dabei oder was?",
+        "ctaButtons": [
+          { "text": "Zu NNS" },
+          { "text": "Whitepaper Lesen" }
+        ]
+      },
+      {
+        "title": "On-Chain RTS. Ein Sternendrift, galaktisches Chaos",
+        "ctaButtons": [
+          { "text": "Jetzt Herunterladen!" },
+          { "text": "Mehr Erfahren!" }
+        ]
+      },
+      {
+        "title": "Lass uns vernetzen! Lade Freunde ein und hol dir exklusive Belohnungen!",
+        "ctaButtons": [
+          { "text": "Zum Dashboard" },
+          { "text": "Erhalte einen Einladungslink" }
+        ]
+      }
+    ]
+  },
+  "cta": "Probier Cosmicrafts Adventures aus",
+  "lore": {
+    "title": "Cosmicrafts Lore",
+    "description": "Tauche mit uns ein in das faszinierende Lore von Cosmicrafts – voller Helden, epischer Schlachten und Geheimnisse, die es zu entdecken gibt!"
+  },
+  "games": {
+    "title": "Unsere Spiele",
+    "battlegrounds": {
+      "title": "Cosmicrafts Battlegrounds",
+      "description": "Stürz dich in epische Multiplayer-Schlachten im Cosmicrafts-Universum!"
+    },
+    "adventures": {
+      "title": "Cosmicrafts Adventures",
+      "description": "Begib dich mit uns auf spannende Weltraum-Abenteuer und entdecke die Geheimnisse der Galaxie!"
+    }
+  },
+  "carousel": {
+    "slides": [
+      {
+        "title": "Cosmicrafts Adventures",
+        "description": "Erkunde ein neues Universum in Entwicklung mit Cosmicrafts Adventures!",
+        "buttonText": "Mehr Erfahren",
+        "action": "adventures"
+      },
+      {
+        "title": "Cosmicrafts Battleground",
+        "description": "Stürz dich in die Action und spiel Cosmicrafts Battleground jetzt!",
+        "buttonText": "Jetzt Spielen",
+        "action": "battleground"
+      },
+      {
+        "title": "Neuigkeiten",
+        "description": "Bleib auf dem Laufenden mit den neuesten Infos zu Cosmicrafts.",
+        "buttonText": "Neuigkeiten Lesen",
+        "action": "news"
+      },
+      {
+        "title": "ICP-Technologie",
+        "description": "Erfahre mehr über die innovative ICP-Technologie, die Cosmicrafts antreibt.",
+        "buttonText": "Entdecke ICP",
+        "action": "technology"
+      }
+    ]
+  },
+  "footer": {
+    "stayConnected": "Lass uns in Verbindung bleiben",
+    "careers": "Karriere",
+    "about": "Über uns",
+    "support": "Braucht's Hilfe?",
+    "press": "Presse",
+    "creators": "Ersteller",
+    "privacy": "Datenschutz",
+    "legal": "Impressum",
+    "terms": "AGB",
+    "cookiePolicy": "Cookie-Richtlinie",
+    "cookieSettings": "Cookie-Einstellungen",
+    "language": "Sprache"
+  },
+  "darkRift": {
+  "title": "Die Dunkle Kluft",
+  "discover": "Entdecken"
+}
+
+}

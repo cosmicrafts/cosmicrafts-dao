@@ -1,0 +1,113 @@
+{
+  "header": {
+    "home": "홈",
+    "features": "특징",
+    "play": "플레이",
+    "games": "게임",
+    "community": "커뮤니티",
+    "contact": "문의하기",
+    "support": "도움 필요?",
+    "language": "언어",
+    "marketplace": "상점",
+    "spiral": "스파이럴",
+    "dao": "DAO",
+    "dashboard": "대시보드",
+    "connect": "연결하기",
+    "whitepaper": "백서"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "여기가 시작이다. 알파가 열렸어, 들어와!",
+        "ctaButtons": [
+          { "text": "지금 바로 플레이!" },
+          { "text": "에픽 게임즈에 위시리스트 추가" }
+        ]
+      },
+      {
+        "title": "파티는 여기서 시작! 너도 함께 할래?",
+        "ctaButtons": [
+          { "text": "NNS로 이동" },
+          { "text": "화이트페이퍼 읽기" }
+        ]
+      },
+      {
+        "title": "블록체인 RTS. 별 간의 드리프트, 은하 대혼란",
+        "ctaButtons": [
+          { "text": "지금 다운로드!" },
+          { "text": "더 알아보기!" }
+        ]
+      },
+      {
+        "title": "친구들 불러 모으고 보상 받아가자!",
+        "ctaButtons": [
+          { "text": "대시보드로 가기" },
+          { "text": "초대 코드 받기" }
+        ]
+      }
+    ]
+  },
+  "cta": "Cosmicrafts Adventures를 체험해보세요",
+  "lore": {
+    "title": "Cosmicrafts 이야기",
+    "description": "우리와 함께 Cosmicrafts의 놀라운 이야기 속으로 빠져들어 보세요 – 영웅들, 전설적인 전투, 그리고 당신을 기다리는 비밀들로 가득해요!"
+  },
+  "games": {
+    "title": "우리의 게임들",
+    "battlegrounds": {
+      "title": "Cosmicrafts Battlegrounds",
+      "description": "친구들과 함께 Cosmicrafts 세계에서의 에픽한 멀티플레이어 전투에 뛰어들어 보세요!"
+    },
+    "adventures": {
+      "title": "Cosmicrafts Adventures",
+      "description": "흥미진진한 우주 모험을 떠나고 함께 은하의 비밀을 찾아보세요!"
+    }
+  },
+  "carousel": {
+    "slides": [
+      {
+        "title": "Cosmicrafts Adventures",
+        "description": "Cosmicrafts Adventures로 개발 중인 새로운 세계를 탐험하세요!",
+        "buttonText": "더 알아보기",
+        "action": "adventures"
+      },
+      {
+        "title": "Cosmicrafts Battleground",
+        "description": "액션에 참여하고 지금 Cosmicrafts Battleground를 플레이하세요!",
+        "buttonText": "지금 플레이",
+        "action": "battleground"
+      },
+      {
+        "title": "최신 뉴스",
+        "description": "Cosmicrafts의 최신 뉴스와 업데이트를 확인하세요.",
+        "buttonText": "뉴스 보기",
+        "action": "news"
+      },
+      {
+        "title": "ICP 기술",
+        "description": "Cosmicrafts를 지원하는 혁신적인 ICP 기술에 대해 알아보세요.",
+        "buttonText": "ICP 탐색하기",
+        "action": "technology"
+      }
+    ]
+  },
+  "footer": {
+    "stayConnected": "우리와 함께하세요",
+    "careers": "채용",
+    "about": "소개",
+    "support": "도움 필요?",
+    "press": "언론",
+    "creators": "창작자",
+    "privacy": "개인정보",
+    "legal": "법적 고지",
+    "terms": "이용 약관",
+    "cookiePolicy": "쿠키 정책",
+    "cookieSettings": "쿠키 설정",
+    "language": "언어"
+  },
+  "darkRift": {
+  "title": "다크 리프트",
+  "discover": "발견하다"
+}
+
+}

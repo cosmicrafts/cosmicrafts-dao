@@ -1,0 +1,113 @@
+{
+  "header": {
+    "home": "Início",
+    "features": "Recursos",
+    "play": "Jogar",
+    "games": "Jogos",
+    "community": "Comunidade",
+    "contact": "Contato",
+    "support": "Precisa de uma mão?",
+    "language": "Idioma",
+    "marketplace": "Loja",
+    "spiral": "Spiral",
+    "dao": "DAO",
+    "dashboard": "Painel",
+    "connect": "Conectar",
+    "whitepaper": "Documento técnico"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "Aqui começa tudo. O Alpha tá no ar, chega junto!",
+        "ctaButtons": [
+          { "text": "Jogue Agora!" },
+          { "text": "Adicionar na Wishlist da Epic Games" }
+        ]
+      },
+      {
+        "title": "A festa é aqui! Tá dentro ou vai ficar de fora?",
+        "ctaButtons": [
+          { "text": "Ir para o NNS" },
+          { "text": "Ler o Whitepaper" }
+        ]
+      },
+      {
+        "title": "RTS na Blockchain. Um Drift Estelar, Caos Galáctico",
+        "ctaButtons": [
+          { "text": "Baixe Agora!" },
+          { "text": "Saiba Mais!" }
+        ]
+      },
+      {
+        "title": "Bora se conectar? Chame amigos e ganhe recompensas exclusivas!",
+        "ctaButtons": [
+          { "text": "Ir para o Painel" },
+          { "text": "Pegar Código de Referência" }
+        ]
+      }
+    ]
+  },
+  "cta": "Experimente Cosmicrafts Adventures",
+  "lore": {
+    "title": "Lore de Cosmicrafts",
+    "description": "Mergulhe com a gente no lore incrível do universo Cosmicrafts – cheio de heróis, batalhas épicas e mistérios esperando pra serem descobertos!"
+  },
+  "games": {
+    "title": "Nossos Jogos",
+    "battlegrounds": {
+      "title": "Cosmicrafts Battlegrounds",
+      "description": "Entre em batalhas épicas com a galera no universo de Cosmicrafts!"
+    },
+    "adventures": {
+      "title": "Cosmicrafts Adventures",
+      "description": "Parta em missões espaciais emocionantes e descubra os segredos da galáxia com a gente!"
+    }
+  },
+  "carousel": {
+    "slides": [
+      {
+        "title": "Cosmicrafts Adventures",
+        "description": "Descubra um novo universo em desenvolvimento com Cosmicrafts Adventures!",
+        "buttonText": "Saiba Mais",
+        "action": "adventures"
+      },
+      {
+        "title": "Cosmicrafts Battleground",
+        "description": "Caia na ação e jogue Cosmicrafts Battleground agora!",
+        "buttonText": "Jogue Agora",
+        "action": "battleground"
+      },
+      {
+        "title": "Últimas Notícias",
+        "description": "Fique por dentro das últimas novidades do Cosmicrafts.",
+        "buttonText": "Ler Notícias",
+        "action": "news"
+      },
+      {
+        "title": "Tecnologia ICP",
+        "description": "Conheça mais sobre a tecnologia inovadora ICP que impulsiona o Cosmicrafts.",
+        "buttonText": "Descubra o ICP",
+        "action": "technology"
+      }
+    ]
+  },
+  "footer": {
+    "stayConnected": "Vamos Ficar Conectados",
+    "careers": "Carreiras",
+    "about": "Sobre",
+    "support": "Precisa de uma mão?",
+    "press": "Imprensa",
+    "creators": "Criadores",
+    "privacy": "Privacidade",
+    "legal": "Legal",
+    "terms": "Termos",
+    "cookiePolicy": "Política de Cookies",
+    "cookieSettings": "Configurações de Cookies",
+    "language": "Idioma"
+  },
+  "darkRift": {
+  "title": "A Fenda Sombria",
+  "discover": "Descubra"
+}
+
+}

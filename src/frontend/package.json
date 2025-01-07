@@ -1,0 +1,45 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "setup": "npm i && dfx canister create backend && dfx generate backend && dfx deploy",
+    "start": "vite --port 3000",
+    "preview": "vite preview",
+    "prebuild": "dfx generate",
+    "build": "tsc && vite build",
+    "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\""
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.4",
+    "@vue/tsconfig": "^0.4.0",
+    "dotenv": "^16.3.1",
+    "prettier": "^2.8.8",
+    "sass-embedded": "^1.80.5",
+    "typescript": "^5.1.3",
+    "vite": "^5.4.10",
+    "vite-plugin-environment": "^1.1.3"
+  },
+  "dependencies": {
+    "@dfinity/agent": "^2.1.3",
+    "@dfinity/candid": "^2.1.3",
+    "@dfinity/principal": "^2.1.3",
+    "@dfinity/auth-client": "^2.2.0",
+    "@dfinity/identity": "^2.2.0",
+    "@solana/web3.js": "^1.98.0",
+    "base64-arraybuffer": "^1.0.2",
+    "buffer": "^6.0.3",
+    "dotenv": "^16.4.7",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "pinia": "^2.3.0",
+    "process": "^0.11.10",
+    "tweetnacl": "^1.0.3",
+    "vite-plugin-environment": "^1.1.3",
+    "vue": "^3.5.12",
+    "vue-i18n": "^9.14.1",
+    "vue-router": "^4.4.5"
+  }
+}

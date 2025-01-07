@@ -1,0 +1,113 @@
+{
+  "header": {
+    "home": "Ana Sayfa",
+    "features": "Özellikler",
+    "play": "Oyna",
+    "games": "Oyunlar",
+    "community": "Topluluk",
+    "contact": "İletişim",
+    "support": "Yardıma mı ihtiyacın var?",
+    "language": "Dil",
+    "marketplace": "Mağaza",
+    "spiral": "Spiral",
+    "dao": "DAO",
+    "dashboard": "Kontrol Paneli",
+    "connect": "Bağlan",
+    "whitepaper": "Beyaz kağıt"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "Başlangıç burada. Alpha yayında, hadi katıl!",
+        "ctaButtons": [
+          { "text": "Hemen Oyna!" },
+          { "text": "Epic Games Wishlist’ine Ekle" }
+        ]
+      },
+      {
+        "title": "Parti burada! Bizimle misin yoksa ne?",
+        "ctaButtons": [
+          { "text": "NNS'ye Git" },
+          { "text": "Whitepaper'ı Oku" }
+        ]
+      },
+      {
+        "title": "Blockchain’de RTS. Yıldızlararası Drift, Galaktik Kaos",
+        "ctaButtons": [
+          { "text": "Hemen İndir!" },
+          { "text": "Daha Fazla Bilgi!" }
+        ]
+      },
+      {
+        "title": "Bağlanalım mı? Arkadaşlarını davet et ve özel ödüller kazan!",
+        "ctaButtons": [
+          { "text": "Kontrol Paneline Git" },
+          { "text": "Referans Kodunu Al" }
+        ]
+      }
+    ]
+  },
+  "cta": "Cosmicrafts Adventures'ı Deneyin",
+  "lore": {
+    "title": "Cosmicrafts Hikayesi",
+    "description": "Cosmicrafts’ın derin hikayesine bizimle dal – kahramanlar, epik savaşlar ve keşfedilmeyi bekleyen gizemlerle dolu!"
+  },
+  "games": {
+    "title": "Oyunlarımız",
+    "battlegrounds": {
+      "title": "Cosmicrafts Battlegrounds",
+      "description": "Cosmicrafts evreninde arkadaşlarınla epik çok oyunculu savaşlara katıl!"
+    },
+    "adventures": {
+      "title": "Cosmicrafts Adventures",
+      "description": "Heyecan dolu uzay görevlerine çık ve galaksinin sırlarını bizimle keşfet!"
+    }
+  },
+  "carousel": {
+    "slides": [
+      {
+        "title": "Cosmicrafts Adventures",
+        "description": "Cosmicrafts Adventures ile gelişmekte olan yeni bir evreni keşfet!",
+        "buttonText": "Daha Fazla Bilgi",
+        "action": "adventures"
+      },
+      {
+        "title": "Cosmicrafts Battleground",
+        "description": "Harekete geç ve Cosmicrafts Battleground’u hemen oyna!",
+        "buttonText": "Şimdi Oyna",
+        "action": "battleground"
+      },
+      {
+        "title": "Son Haberler",
+        "description": "Cosmicrafts ile ilgili en güncel haberler ve güncellemelerden haberdar ol.",
+        "buttonText": "Haberleri Oku",
+        "action": "news"
+      },
+      {
+        "title": "ICP Teknolojisi",
+        "description": "Cosmicrafts'a güç veren yenilikçi ICP teknolojisi hakkında daha fazla bilgi edinin.",
+        "buttonText": "ICP'yi Keşfet",
+        "action": "technology"
+      }
+    ]
+  },
+  "footer": {
+    "stayConnected": "Bağlı Kalalım",
+    "careers": "Kariyer",
+    "about": "Hakkımızda",
+    "support": "Yardıma mı ihtiyacın var?",
+    "press": "Basın",
+    "creators": "Yaratıcılar",
+    "privacy": "Gizlilik",
+    "legal": "Yasal",
+    "terms": "Şartlar",
+    "cookiePolicy": "Çerez Politikası",
+    "cookieSettings": "Çerez Ayarları",
+    "language": "Dil"
+  },
+  "darkRift": {
+  "title": "Karanlık Yarık",
+  "discover": "Keşfet"
+}
+
+}

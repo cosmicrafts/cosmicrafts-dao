@@ -1,0 +1,113 @@
+{
+  "header": {
+    "home": "Главная",
+    "features": "Функции",
+    "play": "Играть",
+    "games": "Игры",
+    "community": "Сообщество",
+    "contact": "Контакты",
+    "support": "Нужна помощь?",
+    "language": "Язык",
+    "marketplace": "Магазин",
+    "spiral": "Спираль",
+    "dao": "DAO",
+    "dashboard": "Панель",
+    "connect": "Подключиться",
+    "whitepaper": "Белая книга"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "Начало здесь. Альфа запущена — заходи!",
+        "ctaButtons": [
+          { "text": "Играть Сейчас!" },
+          { "text": "Добавить в список желаний на Epic Games" }
+        ]
+      },
+      {
+        "title": "Вечеринка здесь! Ты с нами или как?",
+        "ctaButtons": [
+          { "text": "Перейти к NNS" },
+          { "text": "Читать Whitepaper" }
+        ]
+      },
+      {
+        "title": "RTS на блокчейне. Звездный Дрейф, Галактический Хаос",
+        "ctaButtons": [
+          { "text": "Скачать Сейчас!" },
+          { "text": "Узнать Больше!" }
+        ]
+      },
+      {
+        "title": "Давай тусить вместе! Пригласи друзей и получи эксклюзивные бонусы!",
+        "ctaButtons": [
+          { "text": "Перейти к Панели" },
+          { "text": "Получить Реферальный Код" }
+        ]
+      }
+    ]
+  },
+  "cta": "Попробуй Cosmicrafts Adventures",
+  "lore": {
+    "title": "Лор Cosmicrafts",
+    "description": "Погрузись вместе с нами в удивительный лор вселенной Cosmicrafts – полный героев, эпичных сражений и тайн, ждущих своего открытия!"
+  },
+  "games": {
+    "title": "Наши Игры",
+    "battlegrounds": {
+      "title": "Cosmicrafts Battlegrounds",
+      "description": "Присоединяйся к эпическим сражениям в вселенной Cosmicrafts!"
+    },
+    "adventures": {
+      "title": "Cosmicrafts Adventures",
+      "description": "Отправляйся с нами на захватывающие космические приключения и раскрой секреты галактики!"
+    }
+  },
+  "carousel": {
+    "slides": [
+      {
+        "title": "Cosmicrafts Adventures",
+        "description": "Исследуй новую вселенную, разрабатываемую для Cosmicrafts Adventures!",
+        "buttonText": "Узнать Больше",
+        "action": "adventures"
+      },
+      {
+        "title": "Cosmicrafts Battleground",
+        "description": "Врывайся в бой и играй в Cosmicrafts Battleground прямо сейчас!",
+        "buttonText": "Играть Сейчас",
+        "action": "battleground"
+      },
+      {
+        "title": "Последние Новости",
+        "description": "Будь в курсе последних новостей и обновлений о Cosmicrafts.",
+        "buttonText": "Читать Новости",
+        "action": "news"
+      },
+      {
+        "title": "Технология ICP",
+        "description": "Узнай больше об инновационной технологии ICP, которая двигает Cosmicrafts.",
+        "buttonText": "Открыть ICP",
+        "action": "technology"
+      }
+    ]
+  },
+  "footer": {
+    "stayConnected": "Оставайся на связи",
+    "careers": "Карьера",
+    "about": "О нас",
+    "support": "Нужна помощь?",
+    "press": "Пресса",
+    "creators": "Создатели",
+    "privacy": "Конфиденциальность",
+    "legal": "Правовая информация",
+    "terms": "Условия",
+    "cookiePolicy": "Политика файлов cookie",
+    "cookieSettings": "Настройки файлов cookie",
+    "language": "Язык"
+  },
+  "darkRift": {
+  "title": "Тёмный Разлом",
+  "discover": "Откройте"
+}
+
+}

@@ -1,0 +1,139 @@
+{
+  "header": {
+    "home": "Home",
+    "features": "Features",
+    "play": "Play",
+    "games": "Games",
+    "community": "Community",
+    "contact": "Contact",
+    "support": "Need a Hand?",
+    "language": "Language",
+    "marketplace": "Marketplace",
+    "spiral": "Spiral",
+    "dao": "DAO",
+    "dashboard": "Dashboard",
+    "connect": "Connect",
+    "whitepaper": "Whitepaper"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "It all starts here. Alpha’s live—get in now!",
+        "ctaButtons": [
+          { "text": "Play Now!" },
+          { "text": "Wishlist on Epic Games" }
+        ]
+      },
+      {
+        "title": "The Party’s Here. Are You In or What?",
+        "ctaButtons": [
+          { "text": "Go to NNS" },
+          { "text": "Read Whitepaper" }
+        ]
+      },
+      {
+        "title": "On-chain RTS. A Starlight Drift, Galactic Mayhem",
+        "ctaButtons": [
+          { "text": "Download Now!" },
+          { "text": "Learn More!" }
+        ]
+      },
+      {
+        "title": "Time to team up! Invite friends and score exclusive rewards!",
+        "ctaButtons": [
+          { "text": "Go to Dashboard" },
+          { "text": "Get Referral Code" }
+        ]
+      }
+    ]
+  },
+  "cta": "Try Cosmicrafts Adventures",
+  "lore": {
+    "title": "Cosmicrafts Lore",
+    "description": "Dive deep with us into the rich lore of Cosmicrafts—full of heroes, epic battles, and mysteries waiting to be uncovered."
+  },
+  "games": {
+    "title": "Our Games",
+    "battlegrounds": {
+      "title": "Cosmicrafts Battlegrounds",
+      "description": "Get in on epic multiplayer battles with friends in the Cosmicrafts universe!"
+    },
+    "adventures": {
+      "title": "Cosmicrafts Adventures",
+      "description": "Join thrilling space quests and unlock the secrets of the galaxy with us!"
+    }
+  },
+  "carousel": {
+    "slides": [
+      {
+        "title": "Cosmicrafts Adventures",
+        "description": "Discover a new universe in development with Cosmicrafts Adventures!",
+        "buttonText": "Learn More",
+        "action": "adventures"
+      },
+      {
+        "title": "Cosmicrafts Battleground",
+        "description": "Jump into the action and play Cosmicrafts Battleground now!",
+        "buttonText": "Play Now",
+        "action": "battleground"
+      },
+      {
+        "title": "Latest News",
+        "description": "Stay in the loop with the latest updates from Cosmicrafts.",
+        "buttonText": "Read News",
+        "action": "news"
+      },
+      {
+        "title": "ICP Technology",
+        "description": "Learn more about the innovative ICP technology powering Cosmicrafts.",
+        "buttonText": "Discover ICP",
+        "action": "technology"
+      }
+    ]
+  },
+  "footer": {
+    "stayConnected": "Let’s Stay Connected",
+    "careers": "Careers",
+    "about": "About",
+    "support": "Need a Hand?",
+    "press": "Press",
+    "creators": "Creators",
+    "privacy": "Privacy",
+    "legal": "Legal",
+    "terms": "Terms",
+    "cookiePolicy": "Cookie Policy",
+    "cookieSettings": "Cookie Settings",
+    "language": "Language"
+  },
+    "dao": {
+    "mission": {
+      "title": "Decentralized governance, united vision.",
+      "description": "Set a course, take it slow, make it happen."
+    },
+    "cta_title": "Join the DAO",
+    "cta_join": "Get Started",
+    "cta_learn_more": "Learn More",
+    "features": {
+      "decentralised_voting": "Decentralized Voting",
+      "decentralised_voting_desc": "Participate in key decisions with transparency.",
+      "community_ownership": "Community Ownership",
+      "community_ownership_desc": "Own and influence the direction of Cosmicrafts.",
+      "transparency": "Transparency",
+      "transparency_desc": "Clear and open governance for everyone."
+    },
+    "proposals": {
+      "title": "Current Proposals",
+      "sample1": { "title": "Proposal 1", "summary": "Details about proposal 1." },
+      "sample2": { "title": "Proposal 2", "summary": "Details about proposal 2." },
+      "no_proposals": "No proposals available at this time.",
+      "view": "View Proposal"
+    }
+  },
+  "darkRift": {
+    "title": "The Dark Rift",
+    "discover": "Discover"
+  },
+  "whitepaper": {
+    "title": "Cosmicrafts Whitepaper"
+  }
+}

@@ -1,0 +1,311 @@
+/* Global Styles */
+
+/* Import primary fonts and multilingual fallbacks */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;800;900&display=swap'); /* General fallback */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap'); /* Japanese */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap'); /* Korean */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap'); /* Simplified Chinese */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800;900&display=swap'); /* Traditional Chinese */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;700;800;900&display=swap'); /* Arabic */
+
+:root {
+  /* Colors */
+  --background-color: #23272e;
+  --font-color: #ffffff;
+  --accent-color: #00C0FC;
+  --hover-accent-color: #00C0FC;
+  --font-family-default: 'Montserrat', 'Noto Sans', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans TC', 'Noto Sans Arabic', 'Arial', sans-serif;
+
+  /* Typography */
+  font-family: 'Montserrat', 'Noto Sans', Helvetica, sans-serif;
+  line-height: 1.5;
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-extra-bold: 800;
+  --font-weight-black: 900;
+
+  /* Button Colors */
+  --button-bg: var(--accent-color);
+  --button-bg-hover: var(--hover-accent-color);
+  --button-font-color: #ffffff;
+  --button-border-radius: 8px;
+  --button-padding: 0.6em 1.2em;
+}
+
+html, body {
+  font-family: var(--font-family-default);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  color: var(--font-color);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* Links */
+a {
+  color: var(--accent-color);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--hover-accent-color);
+}
+
+
+/* Universal Button Styles */
+.button {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  color: var(--button-font-color);
+  background-color: var(--button-bg);
+  padding: var(--button-padding);
+  border: none;
+  border-radius: var(--button-border-radius);
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.button:hover {
+  background-color: var(--button-bg-hover);
+}
+
+.button:focus {
+  outline: 3px solid var(--hover-accent-color);
+}
+
+/* Variants */
+.button.primary {
+  background: linear-gradient(to bottom, #4a90e2, #264f89);
+}
+
+.button.primary {
+  background: linear-gradient(to bottom, #f68f19, #d7640d); /* Primary gradient background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), /* Drop shadow with blur on Y-axis */
+              inset 0 2px 4px rgba(255, 255, 255, 0.25), /* Inner shadow white on top */
+              inset 0 -2px 4px rgba(0, 0, 0, 0.25); 
+              text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Secondary Button with Shadows and Gradient */
+.button.secondary {
+  background: linear-gradient(to bottom, #3886de, #246ed6); /* Secondary gradient background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), /* Drop shadow with blur on Y-axis */
+              inset 0 2px 4px rgba(255, 255, 255, 0.3), /* Inner shadow white on top */
+              inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+              text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Primary Button Hover */
+.button.primary:hover {
+  background: linear-gradient(to bottom, #f9a839, #e0730d); /* Lighter gradient on hover */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4), /* More pronounced shadow */
+              inset 0 2px 4px rgba(255, 255, 255, 0.3), /* Inner white highlight */
+              inset 0 -2px 4px rgba(0, 0, 0, 0.35);
+              text-shadow: 0px 0px 8px rgb(255, 255, 255);
+  color: #ffffff;
+}
+
+/* Secondary Button Hover */
+.button.secondary:hover {
+  background: linear-gradient(to bottom, #3d92f3, #287aed); /* Lighter gradient for secondary */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4), /* Slightly larger shadow */
+              inset 0 2px 4px rgba(255, 255, 255, 0.3), /* Top white inner shadow */
+              inset 0 -2px 4px rgba(0, 0, 0, 0.35);
+              text-shadow: 0px 0px 8px rgb(255, 255, 255);
+  color: #ffffff; /* Consistent font color */
+}
+
+
+.button.outline {
+  background-color: transparent;
+  border: 2px solid var(--accent-color);
+  color: var(--accent-color);
+}
+
+.button.outline:hover {
+  color: var(--button-font-color);
+  background-color: var(--button-bg-hover);
+}
+
+
+.markdown-content {
+  font-family: var(--font-family-default);
+  color: var(--font-color); /* Use your default text color */
+  line-height: 1.6;
+}
+
+/* Headings */
+.markdown-content h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  border-bottom: 1px solid #00aeff;
+  padding-bottom: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #65e0ff;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-content h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Paragraphs */
+.markdown-content p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-align: justify;
+  color: #cdcdcd;
+  line-height: 1.6;
+}
+
+/* Lists */
+.markdown-content ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-content li {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.markdown-content li::marker {
+  color: #00ccff;
+}
+
+/* Bold text */
+.markdown-content strong {
+  font-weight: 600;
+  color:  #ffffff;
+}
+
+.markdown-content a {
+  font-weight: 600;
+  color: #00c3ff;
+  transition: color 0.25s ease, border 0.25s ease, padding 0.25s ease;
+  border-bottom: 1px solid transparent; /* Initial border state */
+  border-top: 1px solid transparent;   /* Initial border state */
+}
+
+.markdown-content a:hover {
+  color: #ff9900;
+  border-bottom: 1px solid #00c3ff; /* Animate the bottom border */
+  border-top: 1px solid #00c3ff;    /* Animate the top border */
+  padding: 0.16rem 0.1rem;           /* Subtle padding adjustment */
+}
+
+
+/* Code blocks */
+.markdown-content code {
+  font-family: 'Courier New', monospace;
+  background: #00000046;
+  color: #00c3ff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+}
+
+/* Blockquotes */
+.markdown-content blockquote {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(180deg, #252c3f2a, #191e2b35);
+  border-left: 4px solid #00c3ff;
+  color: #ff0000;
+  font-style: italic;
+}
+
+/* Lists */
+.markdown-content ul {
+  margin-left: .1rem;
+  margin-bottom: 1rem;
+  color: #cdcdcd;
+  list-style-type: disc;
+}
+
+.markdown-content li {
+  font-size: 1rem; /* Adjust font size here */
+  color: #cdcdcd; /* Set text color */
+}
+
+/* Bullet point marker customization */
+.markdown-content li::marker {
+  color: #ffffff; /* Set bullet color */
+  font-size: 1rem; /* Adjust bullet size */
+  font-weight: bold; /* Make the bullet bold */
+}
+
+/* For nested lists */
+.markdown-content ul ul {
+  list-style-type: circle; /* Change to circle for nested lists */
+  margin-left: .1rem;
+}
+
+.markdown-content ul ul li::marker {
+  color: #00ddff; /* Different color for nested bullets */
+  font-size: 1rem;
+}
+
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1rem auto;
+  border-radius: 8px; 
+  filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.5));
+}
+
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  background: #1d2537b3;
+  color: white;
+}
+
+.markdown-content th,
+.markdown-content td {
+  border: 1px solid #3a3a3a;
+  padding: .5rem .5rem;
+  text-align: center;
+}
+
+.markdown-content th {
+  background-color: #121725;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .markdown-content table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,46 @@
+<svg
+  width="64px"
+  height="64px"
+  viewBox="0 0 64 64"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <!-- Crown Base -->
+  <path
+    d="M12 44h40v4H12z"
+    fill="currentColor"
+    opacity="0.15"
+  />
+  <path d="M12 44h40v4H12z" />
+
+  <!-- Crown Points -->
+  <path
+    d="M20 40l4-12 8 8 8-8 4 12"
+    fill="currentColor"
+    opacity="0.15"
+  />
+  <path d="M20 40l4-12 8 8 8-8 4 12" />
+
+  <!-- Crown Jewels -->
+  <circle cx="16" cy="32" r="2" fill="currentColor" />
+  <circle cx="32" cy="28" r="2" fill="currentColor" />
+  <circle cx="48" cy="32" r="2" fill="currentColor" />
+
+  <!-- Left Laurel Branch -->
+  <path
+    d="M12 44c-4 0-8-6-8-12s4-12 8-12"
+    fill="none"
+  />
+  <path d="M12 44c-4 0-8-6-8-12s4-12 8-12" />
+
+  <!-- Right Laurel Branch -->
+  <path
+    d="M52 44c4 0 8-6 8-12s-4-12-8-12"
+    fill="none"
+  />
+  <path d="M52 44c4 0 8-6 8-12s-4-12-8-12" />
+</svg>

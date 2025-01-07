@@ -1,0 +1,35 @@
+<svg
+  width="64px"
+  height="64px"
+  viewBox="0 0 64 64"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <!-- Shield -->
+  <path
+    d="M32 4L16 12V30c0 8.84 7.16 16 16 16s16-7.16 16-16V12L32 4z"
+    fill="currentColor"
+    opacity="0.15"
+  />
+  <path
+    d="M32 4L16 12V30c0 8.84 7.16 16 16 16s16-7.16 16-16V12L32 4z"
+  />
+
+  <!-- Left Sword -->
+  <line x1="18" y1="18" x2="8" y2="8" />
+  <line x1="14" y1="14" x2="6" y2="6" />
+  <path d="M18 18L6 6" />
+  <path d="M19 19l-1-1m5 2l-8-8" />
+  <path d="M16 21L4 9l4-4 12 12-4 4z" fill="currentColor" />
+
+  <!-- Right Sword -->
+  <line x1="46" y1="18" x2="56" y2="8" />
+  <line x1="50" y1="14" x2="58" y2="6" />
+  <path d="M46 18L58 6" />
+  <path d="M45 19l1-1m-5 2l8-8" />
+  <path d="M48 21l12-12-4-4-12 12 4 4z" fill="currentColor" />
+</svg>

@@ -1,0 +1,113 @@
+{
+  "header": {
+    "home": "الرئيسية",
+    "features": "المميزات",
+    "play": "العب",
+    "games": "الألعاب",
+    "community": "المجتمع",
+    "contact": "تواصل معنا",
+    "support": "تحتاج مساعدة؟",
+    "language": "اللغة",
+    "marketplace": "المتجر",
+    "spiral": "سبيرال",
+    "dao": "DAO",
+    "dashboard": "لوحة التحكم",
+    "connect": "اتصل",
+    "whitepaper": "الورقة البيضاء"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "هنا البداية. الألفا شغّالة، يلا شارك!",
+        "ctaButtons": [
+          { "text": "العب الآن!" },
+          { "text": "أضفها لقائمة الرغبات على Epic Games" }
+        ]
+      },
+      {
+        "title": "الحفلة هنا! معانا ولا إيه؟",
+        "ctaButtons": [
+          { "text": "الذهاب إلى NNS" },
+          { "text": "اقرأ الورقة البيضاء" }
+        ]
+      },
+      {
+        "title": "RTS على البلوكتشين. دريفت بين النجوم، وفوضى مجرّية",
+        "ctaButtons": [
+          { "text": "حمّلها الآن!" },
+          { "text": "اعرف المزيد!" }
+        ]
+      },
+      {
+        "title": "خلينا نتواصل! ادعو أصحابك وخذ جوائز حصرية!",
+        "ctaButtons": [
+          { "text": "اذهب للوحة التحكم" },
+          { "text": "احصل على كود الدعوة" }
+        ]
+      }
+    ]
+  },
+  "cta": "جرّب Cosmicrafts Adventures",
+  "lore": {
+    "title": "لور Cosmicrafts",
+    "description": "غص معانا في لور Cosmicrafts العجيب – مليان أبطال، معارك أسطورية وأسرار بانتظارك!"
+  },
+  "games": {
+    "title": "ألعابنا",
+    "battlegrounds": {
+      "title": "Cosmicrafts Battlegrounds",
+      "description": "ادخل معارك ملحمية متعددة اللاعبين في عالم Cosmicrafts!"
+    },
+    "adventures": {
+      "title": "Cosmicrafts Adventures",
+      "description": "انطلق في مغامرات فضائية مشوّقة واكتشف أسرار المجرة معانا!"
+    }
+  },
+  "carousel": {
+    "slides": [
+      {
+        "title": "Cosmicrafts Adventures",
+        "description": "استكشف عالم جديد قيد التطوير مع Cosmicrafts Adventures!",
+        "buttonText": "اعرف المزيد",
+        "action": "adventures"
+      },
+      {
+        "title": "Cosmicrafts Battleground",
+        "description": "انطلق في الأكشن وابدأ اللعب في Cosmicrafts Battleground الآن!",
+        "buttonText": "العب الآن",
+        "action": "battleground"
+      },
+      {
+        "title": "آخر الأخبار",
+        "description": "ابقى على اطلاع بآخر أخبار وتحديثات Cosmicrafts.",
+        "buttonText": "اقرأ الأخبار",
+        "action": "news"
+      },
+      {
+        "title": "تقنية ICP",
+        "description": "تعرف على تقنية ICP المبتكرة اللي بتدفع Cosmicrafts للأمام.",
+        "buttonText": "اكتشف ICP",
+        "action": "technology"
+      }
+    ]
+  },
+  "footer": {
+    "stayConnected": "خلينا متواصلين",
+    "careers": "الوظائف",
+    "about": "معلومات عنا",
+    "support": "تحتاج مساعدة؟",
+    "press": "الإعلام",
+    "creators": "المبدعون",
+    "privacy": "الخصوصية",
+    "legal": "القانوني",
+    "terms": "الشروط",
+    "cookiePolicy": "سياسة الكوكيز",
+    "cookieSettings": "إعدادات الكوكيز",
+    "language": "اللغة"
+  },
+  "darkRift": {
+  "title": "الصدع المظلم",
+  "discover": "اكتشف"
+}
+
+}

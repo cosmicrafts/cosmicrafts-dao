@@ -1,0 +1,115 @@
+{
+  "header": {
+    "home": "Inicio",
+    "features": "Características",
+    "play": "Jugar",
+    "games": "Juegos",
+    "community": "Comunidad",
+    "contact": "Contacto",
+    "support": "¿Necesitas ayuda?",
+    "language": "Idioma",
+    "marketplace": "Tienda",
+    "spiral": "Spiral",
+    "dao": "DAO",
+    "dashboard": "Tablero",
+    "connect": "Enchúfate",
+    "whitepaper": "Documento técnico"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "Aquí comienza todo. ¡El Alpha está en vivo, únete ya!",
+        "ctaButtons": [
+          { "text": "¡Juega Ahora!" },
+          { "text": "Añadir a Wishlist en Epic Games" }
+        ]
+      },
+      {
+        "title": "La fiesta está aquí. ¿Te unes o qué?",
+        "ctaButtons": [
+          { "text": "Ir a NNS" },
+          { "text": "Leer el Whitepaper" }
+        ]
+      },
+      {
+        "title": "RTS en Blockchain. Una Guerra Estelar, Caos Galáctico.",
+        "ctaButtons": [
+          { "text": "¡Descárgalo Ya!" },
+          { "text": "Saber Más!" }
+        ]
+      },
+      {
+        "title": "¡Únete a la diversión! Invita y gana recompensas exclusivas.",
+        "ctaButtons": [
+          { "text": "Ir al Panel" },
+          { "text": "Obtén tu Código de Referencia" }
+        ]
+      }
+    ]
+  },
+  "cta": "Prueba Cosmicrafts Adventures",
+  "lore": {
+    "title": "Lore de Cosmicrafts",
+    "description": "Vamos juntos a descubrir el lore profundo del universo de Cosmicrafts, ¡lleno de héroes, batallas épicas y misterios!"
+  },
+  "games": {
+    "title": "Nuestros Juegos",
+    "battlegrounds": {
+      "title": "Cosmicrafts Battlegrounds",
+      "description": "¡Únete a épicas batallas multijugador en el universo de Cosmicrafts!"
+    },
+    "adventures": {
+      "title": "Cosmicrafts Adventures",
+      "description": "¡Emprende misiones espaciales emocionantes y descubre los secretos de la galaxia con nosotros!"
+    }
+  },
+  "carousel": {
+    "slides": [
+      {
+        "title": "Cosmicrafts Adventures",
+        "description": "¡Explora un nuevo universo en desarrollo con Cosmicrafts Adventures!",
+        "buttonText": "Saber Más",
+        "action": "adventures"
+      },
+      {
+        "title": "Cosmicrafts Battleground",
+        "description": "¡Entra en acción y juega Cosmicrafts Battleground ahora!",
+        "buttonText": "Jugar Ahora",
+        "action": "battleground"
+      },
+      {
+        "title": "Últimas Noticias",
+        "description": "Mantente al tanto de las últimas novedades de Cosmicrafts.",
+        "buttonText": "Leer Noticias",
+        "action": "news"
+      },
+      {
+        "title": "Tecnología ICP",
+        "description": "Descubre más sobre la tecnología innovadora ICP que impulsa Cosmicrafts.",
+        "buttonText": "Descubrir ICP",
+        "action": "technology"
+      }
+    ]
+  },
+  "footer": {
+    "stayConnected": "Mantente Conectado",
+    "careers": "Carreras",
+    "about": "Acerca de",
+    "support": "¿Necesitas ayuda?",
+    "press": "Prensa",
+    "creators": "Creadores",
+    "privacy": "Privacidad",
+    "legal": "Legal",
+    "terms": "Términos",
+    "cookiePolicy": "Política de Cookies",
+    "cookieSettings": "Configuración de Cookies",
+    "language": "Idioma"
+  },
+  "darkRift": {
+    "title": "La Fisura Oscura",
+    "discover": "Descubre"
+  },
+  "whitepaper": {
+    "title": "Libro Blanco"
+  }
+}

@@ -1,0 +1,42 @@
+<svg
+  width="64px"
+  height="64px"
+  viewBox="0 0 64 64"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <!-- Center Figure -->
+  <circle cx="32" cy="22" r="6" fill="currentColor" />
+  <path
+    d="M26 36c0 0 2-6 12-6s12 6 12 6"
+    fill="none"
+  />
+
+  <!-- Left Figure -->
+  <circle cx="16" cy="26" r="4" fill="currentColor" />
+  <path
+    d="M12 40c0 0 1-4 8-4s8 4 8 4"
+    fill="none"
+  />
+
+  <!-- Right Figure -->
+  <circle cx="48" cy="26" r="4" fill="currentColor" />
+  <path
+    d="M44 40c0 0 1-4 8-4s8 4 8 4"
+    fill="none"
+  />
+
+  <!-- Connecting Lines -->
+  <path
+    d="M20 26c4 4 12 4 16 0"
+    fill="none"
+  />
+  <path
+    d="M36 26c4 4 12 4 16 0"
+    fill="none"
+  />
+</svg>

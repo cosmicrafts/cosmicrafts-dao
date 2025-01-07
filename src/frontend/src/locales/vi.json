@@ -1,0 +1,113 @@
+{
+  "header": {
+    "home": "Trang Chủ",
+    "features": "Tính Năng",
+    "play": "Chơi",
+    "games": "Trò Chơi",
+    "community": "Cộng Đồng",
+    "contact": "Liên Hệ",
+    "support": "Cần Giúp?",
+    "language": "Ngôn Ngữ",
+    "marketplace": "Cửa Hàng",
+    "spiral": "Spiral",
+    "dao": "DAO",
+    "dashboard": "Bảng Điều Khiển",
+    "connect": "Kết nối",
+    "whitepaper": "Sách trắng"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "Mọi thứ bắt đầu ở đây. Alpha đã sẵn sàng, vào ngay!",
+        "ctaButtons": [
+          { "text": "Chơi Ngay!" },
+          { "text": "Thêm vào Wishlist trên Epic Games" }
+        ]
+      },
+      {
+        "title": "Tiệc tùng đây! Tham gia hay là gì?",
+        "ctaButtons": [
+          { "text": "Đi tới NNS" },
+          { "text": "Xem Whitepaper" }
+        ]
+      },
+      {
+        "title": "RTS trên Blockchain. Dịch Chuyển Giữa Sao, Hỗn Loạn Ngân Hà",
+        "ctaButtons": [
+          { "text": "Tải Ngay!" },
+          { "text": "Tìm Hiểu Thêm!" }
+        ]
+      },
+      {
+        "title": "Kết nối nào! Mời bạn bè và nhận thưởng độc quyền!",
+        "ctaButtons": [
+          { "text": "Đi tới Bảng Điều Khiển" },
+          { "text": "Nhận Mã Giới Thiệu" }
+        ]
+      }
+    ]
+  },
+  "cta": "Thử Ngay Cosmicrafts Adventures",
+  "lore": {
+    "title": "Truyền Thuyết Cosmicrafts",
+    "description": "Cùng chúng tôi lặn vào truyền thuyết kỳ thú của Cosmicrafts – đầy anh hùng, trận đấu huyền thoại và những bí ẩn chờ bạn khám phá!"
+  },
+  "games": {
+    "title": "Trò Chơi Của Chúng Tôi",
+    "battlegrounds": {
+      "title": "Cosmicrafts Battlegrounds",
+      "description": "Tham gia ngay vào các trận đấu đầy kịch tính với bạn bè trong vũ trụ Cosmicrafts!"
+    },
+    "adventures": {
+      "title": "Cosmicrafts Adventures",
+      "description": "Khám phá các nhiệm vụ không gian hấp dẫn và cùng nhau tìm hiểu bí ẩn của ngân hà!"
+    }
+  },
+  "carousel": {
+    "slides": [
+      {
+        "title": "Cosmicrafts Adventures",
+        "description": "Khám phá một vũ trụ mới đang phát triển với Cosmicrafts Adventures!",
+        "buttonText": "Tìm Hiểu Thêm",
+        "action": "adventures"
+      },
+      {
+        "title": "Cosmicrafts Battleground",
+        "description": "Tham gia hành động và chơi Cosmicrafts Battleground ngay bây giờ!",
+        "buttonText": "Chơi Ngay",
+        "action": "battleground"
+      },
+      {
+        "title": "Tin Tức Mới Nhất",
+        "description": "Luôn cập nhật tin tức và thông tin mới nhất về Cosmicrafts.",
+        "buttonText": "Xem Tin Tức",
+        "action": "news"
+      },
+      {
+        "title": "Công Nghệ ICP",
+        "description": "Tìm hiểu thêm về công nghệ ICP sáng tạo đang điều khiển Cosmicrafts.",
+        "buttonText": "Khám Phá ICP",
+        "action": "technology"
+      }
+    ]
+  },
+  "footer": {
+    "stayConnected": "Giữ Liên Lạc Nào",
+    "careers": "Nghề Nghiệp",
+    "about": "Giới Thiệu",
+    "support": "Cần Giúp?",
+    "press": "Báo Chí",
+    "creators": "Người Sáng Tạo",
+    "privacy": "Riêng Tư",
+    "legal": "Pháp Lý",
+    "terms": "Điều Khoản",
+    "cookiePolicy": "Chính Sách Cookie",
+    "cookieSettings": "Cài Đặt Cookie",
+    "language": "Ngôn Ngữ"
+  },
+  "darkRift": {
+  "title": "Khe Nứt Bóng Tối",
+  "discover": "Khám Phá"
+}
+
+}

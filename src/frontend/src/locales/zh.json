@@ -1,0 +1,113 @@
+{
+  "header": {
+    "home": "首页",
+    "features": "特色",
+    "play": "玩游戏",
+    "games": "游戏",
+    "community": "社区",
+    "contact": "联系我们",
+    "support": "需要帮助吗？",
+    "language": "语言",
+    "marketplace": "商城",
+    "spiral": "螺旋",
+    "dao": "DAO",
+    "dashboard": "控制面板",
+    "connect": "连接",
+    "whitepaper": "白皮书"
+  },
+  "hero": {
+    "slides": [
+      {
+        "title": "一切从这里开始。Alpha上线啦，快来加入！",
+        "ctaButtons": [
+          { "text": "立刻玩！" },
+          { "text": "添加到Epic Games愿望清单" }
+        ]
+      },
+      {
+        "title": "派对就在这儿！你来不来？",
+        "ctaButtons": [
+          { "text": "前往NNS" },
+          { "text": "查看白皮书" }
+        ]
+      },
+      {
+        "title": "区块链上的RTS。星际漂移，银河混乱",
+        "ctaButtons": [
+          { "text": "立刻下载！" },
+          { "text": "了解更多！" }
+        ]
+      },
+      {
+        "title": "快来互动！邀请好友一起拿独家奖励！",
+        "ctaButtons": [
+          { "text": "进入控制面板" },
+          { "text": "获取推荐码" }
+        ]
+      }
+    ]
+  },
+  "cta": "尝试一下Cosmicrafts Adventures",
+  "lore": {
+    "title": "Cosmicrafts传说",
+    "description": "跟我们一起探索Cosmicrafts的精彩故事 – 英雄、传奇战斗，还有等你发现的秘密！"
+  },
+  "games": {
+    "title": "我们的游戏",
+    "battlegrounds": {
+      "title": "Cosmicrafts战场",
+      "description": "和朋友们一起加入Cosmicrafts宇宙的史诗级多人对战！"
+    },
+    "adventures": {
+      "title": "Cosmicrafts冒险",
+      "description": "展开刺激的太空任务，一起探索银河的秘密！"
+    }
+  },
+  "carousel": {
+    "slides": [
+      {
+        "title": "Cosmicrafts冒险",
+        "description": "跟随Cosmicrafts Adventures探索开发中的新宇宙！",
+        "buttonText": "了解更多",
+        "action": "adventures"
+      },
+      {
+        "title": "Cosmicrafts战场",
+        "description": "立刻加入战斗，现在就玩Cosmicrafts战场！",
+        "buttonText": "立刻玩",
+        "action": "battleground"
+      },
+      {
+        "title": "最新资讯",
+        "description": "随时了解Cosmicrafts的最新新闻和动态。",
+        "buttonText": "查看新闻",
+        "action": "news"
+      },
+      {
+        "title": "ICP科技",
+        "description": "了解更多支持Cosmicrafts的创新ICP科技。",
+        "buttonText": "探索ICP",
+        "action": "technology"
+      }
+    ]
+  },
+  "footer": {
+    "stayConnected": "保持联系",
+    "careers": "招聘信息",
+    "about": "关于我们",
+    "support": "需要帮助吗？",
+    "press": "媒体",
+    "creators": "创作者",
+    "privacy": "隐私政策",
+    "legal": "法律信息",
+    "terms": "使用条款",
+    "cookiePolicy": "Cookie政策",
+    "cookieSettings": "Cookie设置",
+    "language": "语言"
+  },
+  "darkRift": {
+  "title": "黑暗裂隙",
+  "discover": "发现"
+}
+
+}
