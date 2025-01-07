@@ -2553,9 +2553,9 @@ shared actor class Cosmicrafts() = Self {
         var updateTimestamps: HashMap.HashMap<PlayerId, UpdateTimestamps> = HashMap.fromIter(_updateTimestamps.vals(), 0, Principal.equal, Principal.hash);
 
     public shared({ caller: PlayerId }) func registerPlayer(
-        username: Username, 
-        avatar: AvatarID, 
-        referralCode: ReferralCode
+        username: Username,
+        avatar: AvatarID,
+        referralCode: ?ReferralCode
     ): async (Bool, ?Player, Text) {
         if (username.size() > 12) {
             return (false, null, "Username must be 12 characters or less");
@@ -2566,39 +2566,47 @@ shared actor class Cosmicrafts() = Self {
         // Check if the player is already registered
         switch (players.get(playerId)) {
             case (?existingPlayer) {
-                // If the player is already registered, return immediately without making any changes
+                // Player is already registered
                 return (false, ?existingPlayer, "User is already registered and cannot register again.");
             };
             case (null) {
-                // Validate the referral code against unassigned or assigned codes
-                let codeAssigned = await assignUnassignedReferralCode(playerId, referralCode);
+                // Handle referral code scenarios
+                let finalCode: ReferralCode = switch (referralCode) {
+                    case (?code) {
+                        // Referral code is provided
+                        let codeAssigned = await assignUnassignedReferralCode(playerId, code);
 
-                var finalCode = referralCode;
-
-                switch (codeAssigned) {
-                    case (#ok(true)) {
-                        // Code was successfully assigned from unassigned codes
-                        // The original referral code should be preserved.
-                        finalCode := referralCode;
-                    };
-                    case (#err(errMsg)) {
-                        return (false, null, errMsg);  // Return error message if code is invalid
-                    };
-                    case (#ok(false)) {
-                        // Code is valid but already assigned; identify the referrer
-                        switch (referralCodes.get(referralCode)) {
-                            case (null) {
-                                return (false, null, "Invalid referral code");
+                        switch (codeAssigned) {
+                            case (#ok(true)) {
+                                // Starter referral code successfully adopted
+                                code;
                             };
-                            case (?referrerId) {
-                                // Update the referrer data and track referrals
-                                trackReferrer(referrerId, playerId);
+                            case (#ok(false)) {
+                                // Code is valid but already assigned; track referrer and generate a new referral code
+                                switch (referralCodes.get(code)) {
+                                    case (?referrerId) {
+                                        trackReferrer(referrerId, playerId);
+                                        let (newCode, _) = await assignReferralCode(playerId, null);
+                                        newCode;
+                                    };
+                                    case (null) {
+                                        return (false, null, "Invalid referral code");
+                                    };
+                                };
+                            };
+                            case (#err(errMsg)) {
+                                return (false, null, errMsg); // Invalid referral code
                             };
                         };
                     };
+                    case (null) {
+                        // No referral code provided; generate a new referral code
+                        let (newCode, _) = await assignReferralCode(playerId, null);
+                        newCode;
+                    };
                 };
 
-                // Proceed with player registration if referral code is valid
+                // Proceed with player registration
                 let registrationDate = Time.now();
                 let newPlayer: Player = {
                     id = playerId;
@@ -2613,19 +2621,13 @@ shared actor class Cosmicrafts() = Self {
                 };
                 players.put(playerId, newPlayer);
 
-                // Initialize the player's multiplier with a base value
+                // Initialize the player's multiplier
                 multiplierByPlayer.put(playerId, 1.0);
                 _multiplierByPlayer := Iter.toArray(multiplierByPlayer.entries());
 
                 // Assign default avatars and titles
                 availableAvatars.put(playerId, Iter.toArray(Iter.range(1, 12)));
                 availableTitles.put(playerId, [1]);
-
-                // If the code was from the unassigned list, no need to generate a new one
-                if (codeAssigned != #ok(true)) {
-                    let (assignedCode, _assignedReferrerId) = await assignReferralCode(playerId, null);
-                    finalCode := assignedCode;
-                };
 
                 return (true, ?newPlayer, "User registered successfully with referral code " # finalCode);
             };
