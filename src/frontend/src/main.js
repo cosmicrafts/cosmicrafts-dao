@@ -3,6 +3,7 @@ import App from './App.vue';
 import { createI18n } from 'vue-i18n';
 import router from './router';
 import './style.css';
+import { useLoadingScreen } from '@/utils/useLoadingScreen';
 import { createPinia } from 'pinia';
 
 // Import language files
@@ -44,6 +45,35 @@ const app = createApp(App);
 // Initialize Pinia
 const pinia = createPinia();
 app.use(pinia); // Use Pinia
+
+const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
+// Router Navigation Guards
+router.beforeEach((to, from, next) => {
+  const t = i18n.global.t;
+
+  if (to.path === '/dao') {
+    showLoadingScreen(t, 'header.dao');
+  } else if (to.path === '/whitepaper') {
+    showLoadingScreen(t, 'header.whitepaper');
+  } else {
+    showLoadingScreen(t, 'header.home');
+  }
+
+  // Update the document title based on the route's meta title
+  if (to.meta.title) {
+    document.title = t(to.meta.title); // Use the translation key to set the title
+  } else {
+    document.title = t('header.default'); // Fallback title
+  }
+
+  next();
+});
+
+router.afterEach(() => {
+  setTimeout(() => {
+    hideLoadingScreen(); // Hide loading screen after 1 second
+  }, 0);
+});
 
 // Define `selectedLanguage` as a global state
 const selectedLanguage = ref('en');
