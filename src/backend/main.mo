@@ -2552,7 +2552,7 @@ shared actor class Cosmicrafts() = Self {
         var notifications: HashMap.HashMap<PlayerId, [Notification]> = HashMap.fromIter(_notifications.vals(), 0, Principal.equal, Principal.hash);
         var updateTimestamps: HashMap.HashMap<PlayerId, UpdateTimestamps> = HashMap.fromIter(_updateTimestamps.vals(), 0, Principal.equal, Principal.hash);
 
-    public shared({ caller: PlayerId }) func registerPlayer(
+    public shared({ caller: PlayerId }) func signup(
         username: Username,
         avatar: AvatarID,
         referralCode: ?ReferralCode

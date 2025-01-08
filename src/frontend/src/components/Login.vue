@@ -1,80 +1,71 @@
-<template>
-  <div class="login-container">
-    <div class="login-panel">
-      <!-- Logo at the top -->
-      <img src="@/assets/icons/Cosmicrafts_Logo.svg" class="full-logo" alt="Cosmicrafts Logo" />
-
-      <!-- "Connect with" Text -->
-      <label class="cosmic-label-connect">Connect with:</label>
-
-      <!-- Custom Google Button -->
-      <div class="inner-grid">
-        <div class="btn-div" @click="loginWithGoogle">
-          <label class="btn-label">
-            <img src="@/assets/icons/google_logo.svg" class="button-account-icon" alt="Google" />
-            <span class="btn-text"> Google</span>
-          </label>
-        </div>
-
-        <!-- Other Auth Methods -->
-        <div class="btn-div" v-for="method in authMethods" :key="method.text" @click="method.onClick">
-          <label class="btn-label">
-            <img :src="method.logo" class="button-account-icon" :alt="method.text" />
-            <span class="btn-text"> {{ method.text }}</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Clarification Message -->
-      <div class="clarification-message">
-        <p>Create a new account by connecting.</p>
-      </div>
-    </div>
-
-    <!-- WOU Info detached from the panel, at the bottom -->
-    <div class="bottom-div">
-      <img src="@/assets/icons/wou_logo.svg" alt="wou-icon" class="bottom-wou-icon" />
-      <label class="bottom-label">
-        &copy;&nbsp;2024 World of Unreal<br />
-        All trademarks referenced herein are the properties of their respective owners.
-      </label>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import Modal from '@/components/Modal.vue'; // Import the modal
+import Registration from '@/components/Registration.vue'; // Import the registration form component
 
-import icpLogo from '@/assets/icons/icp.svg';
-import metaMaskLogo from '@/assets/icons/metaMask_icon.svg';
-import phantomLogo from '@/assets/icons/Phantom_icon.svg';
+// Modal State
+const isRegistrationModalOpen = ref(false); // State to control registration modal
 
 const authStore = useAuthStore();
 const router = useRouter();
 
+
+
+/**
+ * Handles post-login actions based on registration status.
+ */
+
+const isLoading = ref(false);
 const handleAfterLogin = async () => {
-  router.push({ path: '/' });
+  isLoading.value = true; // Start loading
+  try {
+    const isReg = await authStore.isPlayerRegistered();
+    if (isReg) {
+      closeLoginModal();
+    } else {
+      showRegistrationModal();
+    }
+  } catch (error) {
+    console.error("Error during handleAfterLogin:", error);
+  } finally {
+    isLoading.value = false; // End loading
+  }
 };
 
-// Custom Google login handler
-const loginWithGoogle = () => {
+
+
+/**
+ * Shows the registration modal.
+ */
+const showRegistrationModal = () => {
+  isRegistrationModalOpen.value = true;
+};
+
+/**
+ * Closes the registration modal.
+ */
+const closeRegistrationModal = () => {
+  isRegistrationModalOpen.value = false;
+};
+
+/**
+ * Google flow: The button triggers google.accounts.id.prompt() 
+ * which calls handleCredentialResponse when the user logs in.
+ */
+const onGoogleClick = () => {
   window.google.accounts.id.prompt();
 };
 
-const loginIC = async () => {
-  await authStore.loginWithInternetIdentity();
-  router.push({ path: '/' });
-};
-
+/**
+ * Initialize Google Sign-In
+ */
 const loadGoogleIdentityServices = () => {
   const script = document.createElement('script');
   script.src = 'https://accounts.google.com/gsi/client';
   script.onload = initializeGoogleSignIn;
-  script.onerror = () => {
-    setTimeout(loadGoogleIdentityServices, 10000);
-  };
+  script.onerror = () => setTimeout(loadGoogleIdentityServices, 5000);
   document.body.appendChild(script);
 };
 
@@ -85,35 +76,91 @@ const initializeGoogleSignIn = () => {
   });
 };
 
-const handleCredentialResponse = (response) => {
-  authStore.loginWithGoogle(response, router).then(handleAfterLogin);
+/**
+ * Google credential callback
+ */
+const handleCredentialResponse = async (response) => {
+  await authStore.loginWithGoogle(response);
+  await handleAfterLogin();
 };
 
+/**
+ * Called on mount
+ */
 onMounted(() => {
   loadGoogleIdentityServices();
 });
 
 const authMethods = [
   {
-    logo: icpLogo,
+    logo: new URL('@/assets/icons/icp.svg', import.meta.url).href,
     text: 'Internet Identity',
-    onClick: () => loginIC(),
+    onClick: async () => {
+      await authStore.loginWithInternetIdentity();
+      await handleAfterLogin();
+    },
   },
   {
-    logo: metaMaskLogo,
+    logo: new URL('@/assets/icons/metaMask_icon.svg', import.meta.url).href,
     text: 'MetaMask',
-    onClick: () => authStore.loginWithMetaMask().then(handleAfterLogin),
+    onClick: async () => {
+      await authStore.loginWithMetaMask();
+      await handleAfterLogin();
+    },
   },
   {
-    logo: phantomLogo,
+    logo: new URL('@/assets/icons/Phantom_icon.svg', import.meta.url).href,
     text: 'Phantom',
-    onClick: () => authStore.loginWithPhantom().then(handleAfterLogin),
+    onClick: async () => {
+      await authStore.loginWithPhantom();
+      await handleAfterLogin();
+    },
   },
 ];
+
 </script>
 
+<template>
+  <div class="login-container">
+    <div class="login-panel">
+      <img src="@/assets/icons/Cosmicrafts_Logo.svg" class="full-logo" alt="Cosmicrafts Logo" />
+      <label class="cosmic-label-connect">Connect with:</label>
+      <div class="inner-grid">
+        <div class="btn-div" @click="onGoogleClick">
+          <label class="btn-label">
+            <img src="@/assets/icons/google_logo.svg" class="button-account-icon" alt="Google" />
+            <span class="btn-text">Google</span>
+          </label>
+        </div>
+        <div
+        class="btn-div"
+        v-for="method in authMethods"
+        :key="method.text"
+        @click="method.onClick"
+        :aria-label="'Login with ' + method.text"
+      >
+
+          <label class="btn-label">
+            <img :src="method.logo" class="button-account-icon" :alt="method.text" />
+            <span class="btn-text">{{ method.text }}</span>
+          </label>
+        </div>
+      </div>
+      <div class="clarification-message">
+        <p>Create a new account by connecting.</p>
+      </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <Modal :isOpen="isRegistrationModalOpen" @close="closeRegistrationModal">
+      <Registration />
+    </Modal>
+  </div>
+</template>
+
+
 <style scoped>
-/* Container for the login screen */
+/* Basic styling for your login page */
 .login-container {
   display: flex;
   flex-direction: column;
@@ -123,32 +170,6 @@ const authMethods = [
   background: linear-gradient(350deg, #161a2070, #1f242c4c);
   overflow: hidden;
   position: relative;
-}
-
-/* Container for the login screen */
-.login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: linear-gradient(350deg, #161a2070, #1f242c4c);
-  overflow: hidden;
-  position: relative;
-}
-
-.login-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('@/assets/webp/fondo.webp');
-  background-size: cover;
-  background-position: center;
-  opacity: 1;
-  z-index: -1;
 }
 
 .login-panel {
@@ -156,51 +177,37 @@ const authMethods = [
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   background: rgba(31, 48, 62, 0.37);
   backdrop-filter: blur(4px);
-  padding: 5vh; /* Adjusted padding for responsiveness */
+  padding: 5vh;
   border-radius: 12px;
   border: 0.5px solid rgba(0, 0, 0, 0.114);
   box-shadow: inset 0px 0px 10px rgba(255, 255, 255, 0.149);
-
-  /* Max width and height constraints */
   max-width: 240px;
-  max-height: 60vh;
   width: 100%;
-  height: auto;
-  
-  /* Ensure margin spacing relative to viewport */
-  margin-top: 5vh;
-  margin-bottom: 5vh;
+  margin: 5vh 0;
 }
 
-/* Full logo styling */
 .full-logo {
-  display: block;
-  width: 21vh; /* Proportional to viewport height */
-  margin-top: 0px;
+  width: 21vh;
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.25));
 }
 
-/* Connect with text */
 .cosmic-label-connect {
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 600;
   margin-top: 4vh;
   margin-bottom: 2vh;
   font-size: 2vh;
 }
 
-/* Custom Google Button & Auth Methods Grid */
 .inner-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2vh; /* Use vh for gap for consistency */
+  gap: 2vh;
   margin-bottom: 2vh;
 }
 
-/* Button for Auth Methods and Custom Google Button */
 .btn-div {
   display: flex;
   justify-content: space-between;
@@ -209,36 +216,31 @@ const authMethods = [
   background: linear-gradient(135deg, rgba(28, 30, 33, 0.625), rgba(31, 36, 44, 0.765));
   border-radius: 8px;
   cursor: pointer;
-  border: .25px solid rgba(255, 255, 255, 0.157);
-  padding: 0 2vh; /* Use vh for padding */
+  border: 0.25px solid rgba(255, 255, 255, 0.157);
+  padding: 0 2vh;
 }
 
 .btn-div:hover {
   background: linear-gradient(135deg, rgba(40, 45, 55, 0.635), rgba(50, 60, 70, 0.612));
 }
 
-/* Icon inside the button */
 .button-account-icon {
-  width: 3vh; /* Responsive icon size */
-  height: 3vh;
+  width: 3vh;
   margin-right: 1.5vh;
 }
 
-/* Label and Text inside the button */
 .btn-label {
   display: flex;
   align-items: center;
   width: 100%;
-  justify-content: flex-start;
   color: #d6d6d6;
-  font-size: 1.8vh; /* Responsive font size */
+  font-size: 1.8vh;
 }
 
 .btn-text {
-  margin-left: 1vh; /* Adjust text margin */
+  margin-left: 1vh;
 }
 
-/* Clarification message */
 .clarification-message {
   text-align: center;
   font-size: 1.2vh;
@@ -246,7 +248,6 @@ const authMethods = [
   margin-top: -1vh;
 }
 
-/* WOU info, detached from panel and placed at the bottom */
 .bottom-div {
   display: flex;
   flex-direction: column;
@@ -255,15 +256,14 @@ const authMethods = [
 }
 
 .bottom-wou-icon {
-  width: 6vh; /* Responsive size */
+  width: 6vh;
 }
 
 .bottom-label {
   color: #aaaaaa;
   display: block;
-  font-size: 1.4vh; /* Responsive font size */
+  font-size: 1.4vh;
   text-align: center;
   margin-top: 1vh;
 }
-
 </style>

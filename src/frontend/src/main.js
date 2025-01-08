@@ -5,7 +5,7 @@ import router from './router';
 import './style.css';
 import { useLoadingScreen } from '@/utils/useLoadingScreen';
 import { createPinia } from 'pinia';
-import useAuthStore from './stores/auth.js';
+import { useAuthStore } from '@/stores/auth';
 
 // Import language files
 import en from './locales/en.json';

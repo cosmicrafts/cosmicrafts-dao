@@ -1,4 +1,7 @@
 {
+  "login": {
+    "connect_with": "Enchúfate con:"
+  },
   "header": {
     "home": "Inicio",
     "features": "Características",
