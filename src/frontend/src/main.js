@@ -5,6 +5,7 @@ import router from './router';
 import './style.css';
 import { useLoadingScreen } from '@/utils/useLoadingScreen';
 import { createPinia } from 'pinia';
+import useAuthStore from './stores/auth.js';
 
 // Import language files
 import en from './locales/en.json';
@@ -45,6 +46,8 @@ const app = createApp(App);
 // Initialize Pinia
 const pinia = createPinia();
 app.use(pinia); // Use Pinia
+const authStore = useAuthStore();
+authStore.loadStateFromLocalStorage();
 
 const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
 // Router Navigation Guards

@@ -14,5 +14,10 @@
   "type": "module",
   "workspaces": [
     "src/frontend"
-  ]
+  ],
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "process": "^0.11.10",
+    "vite-plugin-node-polyfills": "^0.22.0"
+  }
 }

@@ -6,7 +6,7 @@ class PhantomService {
   }
 
   async connectWallet() {
-    if (true) {
+    if (window.solana && window.solana.isPhantom) {
       console.log('Phantom wallet found.');
       try {
         const response = await window.solana.connect();
@@ -23,7 +23,7 @@ class PhantomService {
   }
 
   async signAndSend(message) {
-    if (!window.solana.isConnected) {
+    if (!window.solana || !window.solana.isConnected) {
       const walletConnection = await this.connectWallet();
       if (!walletConnection) return null;
     }
