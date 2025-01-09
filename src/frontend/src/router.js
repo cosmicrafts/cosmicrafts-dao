@@ -3,7 +3,8 @@ import Home from './pages/Home.vue';
 import DAO from './pages/DAO.vue';
 import Whitepaper from './pages/Whitepaper.vue';
 import Dashboard from './pages/Dashboard.vue'; // Import Dashboard
-import Games from './pages/Games.vue'; // Import Games
+import Games from './pages/Games.vue';
+import Login from './components/Login.vue';
 
 const routes = [
   { 
@@ -30,6 +31,11 @@ const routes = [
     path: '/games', 
     component: Games, 
     meta: { title: 'header.games' } 
+  },
+  {
+    path: '/login',
+    component: Login,
+    meta: { title: 'header.login' }
   },
 ];
 

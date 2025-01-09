@@ -16,7 +16,8 @@
     "dao": "DAO",
     "dashboard": "Dashboard",
     "connect": "Connect",
-    "whitepaper": "Whitepaper"
+    "whitepaper": "Whitepaper",
+    "login": "Login"
   },
   "hero": {
     "slides": [

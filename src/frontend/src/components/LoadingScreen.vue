@@ -1,64 +1,59 @@
 <template>
-  <transition name="fade">
-    <div class="loading-screen" v-if="isLoading">
-      <div class="spinner"></div>
-      <p>{{ loadingMessage }}</p>
+  <div class="modal-overlay" v-if="isOpen">
+    <div class="modal-content">
+      <slot>
+        <div class="spinner"></div>
+        <p>{{ message }}</p>
+      </slot>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script setup>
-import { useLoadingScreen } from '@/utils/useLoadingScreen';
-
-const { isLoading, loadingMessage } = useLoadingScreen();
+const props = defineProps({
+  isOpen: Boolean,
+  message: {
+    type: String,
+    default: 'Processing...',
+  },
+});
 </script>
 
 <style scoped>
-.loading-screen {
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(to bottom, rgb(30, 43, 56), rgb(23, 33, 43));
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  color: white;
-  z-index: 9999;
+  align-items: center;
+  z-index: 1000;
 }
-
+.modal-content {
+  background: #20232a;
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+}
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #00c3ff;
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid #00ffff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
+  margin: 1rem auto;
 }
-
 @keyframes spin {
-  to {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
     transform: rotate(360deg);
   }
-}
-
-p {
-  font-size: 1.25rem;
-  font-weight: 600;
-  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-}
-
-/* Fade Animation */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.35s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>

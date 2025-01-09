@@ -9,13 +9,8 @@
       <div class="register-panel">
         <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts" class="full-logo" />
 
-        <!-- Registration Result -->
-        <div v-if="registerResult" class="register-result">
-          {{ registerResult }}
-        </div>
-
         <form @submit.prevent="registerPlayer" class="form-grid">
-          <!-- Example AvatarSelector (optional) -->
+          <!-- Example AvatarSelector -->
           <div class="avatar-section">
             <AvatarSelector @avatar-selected="onAvatarSelected" />
           </div>
@@ -24,11 +19,18 @@
           <div class="right-section">
             <div class="form-group">
               <label for="username">Username:</label>
-              <input type="text" id="username" v-model="username" required placeholder="Do not use real name" />
+              <input
+                type="text"
+                id="username"
+                v-model="username"
+                @input="enforceUsernameLimit"
+                required
+                placeholder="Max 12 characters"
+              />
             </div>
             <div class="form-group">
               <label for="referralCode">Referral Code:</label>
-              <input type="text" id="referralCode" v-model="referralCode" placeholder="ex. WAGMI420, HODL99, etc" />
+              <input type="text" id="referralCode" v-model="referralCode" placeholder="Optional" />
             </div>
             <div class="referral-link">
               <p>
@@ -62,6 +64,11 @@
         </form>
       </div>
     </div>
+
+    <!-- Registration Result -->
+    <div v-if="registerResult" class="register-result">
+      {{ registerResult }}
+    </div>
   </div>
 </template>
 
@@ -70,17 +77,19 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useCanisterStore } from '@/stores/canister';
+import { useModalStore } from '@/stores/modal'; // Import the modal store
 import AvatarSelector from '@/components/account/AvatarSelector.vue';
 import LoadingSpinner from '@/components/loading/LoadingSpinner.vue';
 
 export default {
   components: {
     AvatarSelector,
-    LoadingSpinner
+    LoadingSpinner,
   },
   setup() {
     const authStore = useAuthStore();
     const router = useRouter();
+    const modalStore = useModalStore(); // Initialize the modal store
 
     const loading = ref(false);
     const username = ref('');
@@ -88,6 +97,12 @@ export default {
     const selectedAvatarId = ref(null);
     const acceptedTerms = ref(true);
     const registerResult = ref(null);
+
+    const enforceUsernameLimit = () => {
+      if (username.value.length > 12) {
+        username.value = username.value.substring(0, 12);
+      }
+    };
 
     // If not authenticated, go back to login
     if (!authStore.isAuthenticated()) {
@@ -112,7 +127,7 @@ export default {
       const canisterStore = useCanisterStore();
       const cosmicrafts = await canisterStore.get('cosmicrafts');
 
-      // default to 1 if no avatar selected
+      // Default to 1 if no avatar is selected
       const avatarId = selectedAvatarId.value || 1;
 
       try {
@@ -131,6 +146,8 @@ export default {
           registerResult.value = `Welcome, ${maybePlayer[0]?.username ?? 'New Player'}!`;
           // Refresh the store registration status
           await authStore.isPlayerRegistered();
+          // Close the modal
+          modalStore.closeModal(); // Close the modal after successful registration
           // Redirect to home or dash
           router.push('/');
         } else {
@@ -148,6 +165,7 @@ export default {
     return {
       loading,
       username,
+      enforceUsernameLimit,
       referralCode,
       selectedAvatarId,
       acceptedTerms,
@@ -155,7 +173,7 @@ export default {
       onAvatarSelected,
       registerPlayer,
     };
-  }
+  },
 };
 </script>
 
@@ -165,8 +183,6 @@ export default {
   top: 0;
   height: 100%;
   width: 100%;
-  z-index: 9999;
-  background: rgba(34, 47, 90, 0.95);
 }
 
 .register-container {
@@ -174,8 +190,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background: linear-gradient(350deg, #161a2070, #1f242c4c);
   overflow: hidden;
 }
 
@@ -188,27 +202,22 @@ export default {
   height: 100%;
   background-size: cover;
   background-position: center;
-  opacity: 1;
   z-index: -1;
 }
 
 .register-panel {
-  background: #1f303e5f;
-  backdrop-filter: blur(4px);
-  padding: 40px;
+  padding: 1rem;
   border-radius: 12px;
   position: relative;
-  border: 0.5px solid rgba(0, 0, 0, 0.114);
-  box-shadow: inset 0px 0px 10px rgba(255, 255, 255, 0.149);
   height: 30%;
-  max-width: 360px;
+  max-width: 24rem;
   width: 100%;
 }
 
 .full-logo {
   display: block;
-  margin: 0 auto 32px auto;
-  width: 196px;
+  margin: 0 auto 24px auto;
+  width: 128px;
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.25));
 }
 
@@ -320,5 +329,11 @@ button.submit-button:active {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.error-message {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: -8px;
 }
 </style>

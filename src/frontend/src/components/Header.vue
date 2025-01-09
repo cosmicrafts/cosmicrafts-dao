@@ -1,34 +1,38 @@
+<!-- File: components/Header.vue -->
 <script setup>
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import LanguageSelector from '@/components/LanguageSelector.vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 import MobileMenu from '@/components/MobileMenu.vue';
-import Modal from '@/components/Modal.vue'; // Import the modal
-import Login from '@/components/Login.vue'; // Import the login component
+import { useModalStore } from '@/stores/modal';
+import Login from '@/components/Login.vue';
 import defaultLogo from '@/assets/icons/logo.svg';
 import logoCN from '@/assets/icons/logo-cn.svg';
 import logoKR from '@/assets/icons/logo-kr.svg';
 import logoJP from '@/assets/icons/logo-jp.svg';
 import logoRU from '@/assets/icons/logo-ru.svg';
 import logoAR from '@/assets/icons/logo-ar.svg';
-import { inject } from 'vue';
-const selectedLanguage = inject('selectedLanguage');
-import { useRouter, useRoute } from 'vue-router';
 
 const { t, locale } = useI18n();
 const isMenuOpen = ref(false);
-const isLoginModalOpen = ref(false); // State for controlling the modal
+const authStore = useAuthStore();
+const modalStore = useModalStore();
+
+const playerAvatar = computed(() => {
+  if (authStore.player && authStore.player.avatar) {
+    const avatarId = String(authStore.player.avatar).padStart(2, '0');
+    return `/src/assets/avatars/Avatar_${avatarId}.webp`;
+  }
+  return null;
+});
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
 
 const handleLogin = () => {
-  isLoginModalOpen.value = true; // Open the modal
-};
-
-const closeLoginModal = () => {
-  isLoginModalOpen.value = false; // Close the modal
+  modalStore.openModal(Login); // Open the Login component in the modal
 };
 
 // Scroll to the top of the page when the logo is clicked
@@ -37,10 +41,8 @@ const route = useRoute();
 
 const scrollToTop = () => {
   if (route.path !== '/') {
-    // Redirect to the home page if not already there
     router.push('/');
   } else {
-    // Scroll to the top if already on the home page
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
@@ -98,22 +100,17 @@ const additionalLogoSrc = computed(() => {
 
     <!-- Flex Container for Connect Button and Language Selector -->
     <div class="connect-container">
-      <div class="desktop-language-selector header">
-        <LanguageSelector direction="down-left" />
+      <div v-if="authStore.isAuthenticated() && playerAvatar">
+        <!-- Display Player Avatar -->
+        <img :src="playerAvatar" alt="Player Avatar" class="player-avatar" />
       </div>
-      <button class="button outline" @click="handleLogin">{{ t('header.connect') }}</button>
+      <button v-else class="button outline" @click="handleLogin">{{ t('header.connect') }}</button>
     </div>
   </header>
 
   <!-- MobileMenu Component -->
   <MobileMenu :isOpen="isMenuOpen" @closeMenu="toggleMenu" />
-
-  <!-- Login Modal -->
-  <Modal :isOpen="isLoginModalOpen" @close="closeLoginModal">
-    <Login />
-  </Modal>
 </template>
-
 
 <style scoped>
 /* Basic Header Styling */

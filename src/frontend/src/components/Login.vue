@@ -1,53 +1,23 @@
-<script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
-import Modal from '@/components/Modal.vue'; // Import the modal
-import Registration from '@/components/Registration.vue'; // Import the registration form component
 
-// Modal State
-const isRegistrationModalOpen = ref(false); // State to control registration modal
+Copy
+<!-- File: components/Login.vue -->
+<script setup>
+import { ref, onMounted, nextTick } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import { useModalStore } from '@/stores/modal';
+import Registration from '@/components/Registration.vue';
+
 
 const authStore = useAuthStore();
-const router = useRouter();
+const modalStore = useModalStore();
 
-
-
-/**
- * Handles post-login actions based on registration status.
- */
-
-const isLoading = ref(false);
 const handleAfterLogin = async () => {
-  isLoading.value = true; // Start loading
-  try {
-    const isReg = await authStore.isPlayerRegistered();
-    if (isReg) {
-      closeLoginModal();
-    } else {
-      showRegistrationModal();
-    }
-  } catch (error) {
-    console.error("Error during handleAfterLogin:", error);
-  } finally {
-    isLoading.value = false; // End loading
+  const isRegistered = await authStore.isPlayerRegistered();
+  if (isRegistered) {
+    modalStore.closeModal(); // Close the modal
+  } else {
+    modalStore.openModal(Registration); // Open the registration component
   }
-};
-
-
-
-/**
- * Shows the registration modal.
- */
-const showRegistrationModal = () => {
-  isRegistrationModalOpen.value = true;
-};
-
-/**
- * Closes the registration modal.
- */
-const closeRegistrationModal = () => {
-  isRegistrationModalOpen.value = false;
 };
 
 /**
@@ -94,7 +64,7 @@ onMounted(() => {
 const authMethods = [
   {
     logo: new URL('@/assets/icons/icp.svg', import.meta.url).href,
-    text: 'Internet Identity',
+    text: 'Sign in with Internet Identity',
     onClick: async () => {
       await authStore.loginWithInternetIdentity();
       await handleAfterLogin();
@@ -102,7 +72,7 @@ const authMethods = [
   },
   {
     logo: new URL('@/assets/icons/metaMask_icon.svg', import.meta.url).href,
-    text: 'MetaMask',
+    text: 'Sign in with MetaMask',
     onClick: async () => {
       await authStore.loginWithMetaMask();
       await handleAfterLogin();
@@ -110,14 +80,13 @@ const authMethods = [
   },
   {
     logo: new URL('@/assets/icons/Phantom_icon.svg', import.meta.url).href,
-    text: 'Phantom',
+    text: 'Sign in with Phantom',
     onClick: async () => {
       await authStore.loginWithPhantom();
       await handleAfterLogin();
     },
   },
 ];
-
 </script>
 
 <template>
@@ -125,38 +94,36 @@ const authMethods = [
     <div class="login-panel">
       <img src="@/assets/icons/Cosmicrafts_Logo.svg" class="full-logo" alt="Cosmicrafts Logo" />
       <label class="cosmic-label-connect">Connect with:</label>
-      <div class="inner-grid">
-        <div class="btn-div" @click="onGoogleClick">
-          <label class="btn-label">
-            <img src="@/assets/icons/google_logo.svg" class="button-account-icon" alt="Google" />
-            <span class="btn-text">Google</span>
-          </label>
-        </div>
-        <div
+
+      <div
         class="btn-div"
         v-for="method in authMethods"
         :key="method.text"
         @click="method.onClick"
         :aria-label="'Login with ' + method.text"
       >
+        <label class="btn-label">
+          <img :src="method.logo" class="button-account-icon" :alt="method.text" />
+          <span class="btn-text">{{ method.text }}</span>
+        </label>
+      </div>
 
+      <div class="inner-grid">
+        <div class="btn-div" @click="onGoogleClick">
           <label class="btn-label">
-            <img :src="method.logo" class="button-account-icon" :alt="method.text" />
-            <span class="btn-text">{{ method.text }}</span>
+            <img src="@/assets/icons/google_logo.svg" class="button-account-icon" alt="Google" />
+            <span class="btn-text">Sign in with Google</span>
           </label>
         </div>
       </div>
+
       <div class="clarification-message">
-        <p>Create a new account by connecting.</p>
+        <p>Sign in to create a new account</p>
       </div>
     </div>
-
-    <!-- Registration Modal -->
-    <Modal :isOpen="isRegistrationModalOpen" @close="closeRegistrationModal">
-      <Registration />
-    </Modal>
   </div>
 </template>
+
 
 
 <style scoped>
@@ -166,8 +133,6 @@ const authMethods = [
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background: linear-gradient(350deg, #161a2070, #1f242c4c);
   overflow: hidden;
   position: relative;
 }
@@ -177,28 +142,20 @@ const authMethods = [
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(31, 48, 62, 0.37);
-  backdrop-filter: blur(4px);
-  padding: 5vh;
-  border-radius: 12px;
-  border: 0.5px solid rgba(0, 0, 0, 0.114);
-  box-shadow: inset 0px 0px 10px rgba(255, 255, 255, 0.149);
-  max-width: 240px;
-  width: 100%;
-  margin: 5vh 0;
 }
 
 .full-logo {
-  width: 21vh;
+  width: 18vh;
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.25));
 }
 
 .cosmic-label-connect {
   color: #ffffff;
   font-weight: 600;
-  margin-top: 4vh;
-  margin-bottom: 2vh;
+  margin-top: 2vh;
+  margin-bottom: 1vh;
   font-size: 2vh;
+  
 }
 
 .inner-grid {
@@ -218,6 +175,7 @@ const authMethods = [
   cursor: pointer;
   border: 0.25px solid rgba(255, 255, 255, 0.157);
   padding: 0 2vh;
+  margin-top: 1vh;
 }
 
 .btn-div:hover {
@@ -225,26 +183,28 @@ const authMethods = [
 }
 
 .button-account-icon {
-  width: 3vh;
-  margin-right: 1.5vh;
+  width: 2.5vh;
+  margin-right: 1vh;
 }
 
 .btn-label {
   display: flex;
   align-items: center;
   width: 100%;
-  color: #d6d6d6;
-  font-size: 1.8vh;
+  color: #ffffff;
+  font-size: 1.5vh;
 }
 
 .btn-text {
   margin-left: 1vh;
+  font-size: 1.25vh;
+  font-weight: 500;
 }
 
 .clarification-message {
   text-align: center;
   font-size: 1.2vh;
-  color: #a1a1a1;
+  color: #505050;
   margin-top: -1vh;
 }
 
