@@ -2567,7 +2567,7 @@ shared actor class Cosmicrafts() = Self {
         switch (players.get(playerId)) {
             case (?existingPlayer) {
                 // Player is already registered
-                return (false, ?existingPlayer, "User is already registered and cannot register again.");
+                return (false, ?existingPlayer, "User is already registered.");
             };
             case (null) {
                 // Handle referral code scenarios

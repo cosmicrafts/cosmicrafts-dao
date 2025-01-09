@@ -113,10 +113,10 @@ export default {
     /**
      * Avatar selection callback
      */
-    const onAvatarSelected = (avatarId) => {
-      selectedAvatarId.value = avatarId;
-    };
-
+     const onAvatarSelected = (avatarIndex) => {
+        console.log(`Avatar ID received from AvatarSelector (0-based): ${avatarIndex}`);
+        selectedAvatarId.value = avatarIndex; // Store zero-based index
+      };
     /**
      * Register the player on the canister
      */
@@ -128,7 +128,9 @@ export default {
       const cosmicrafts = await canisterStore.get('cosmicrafts');
 
       // Default to 1 if no avatar is selected
-      const avatarId = selectedAvatarId.value || 1;
+      console.log('Selected Avatar ID before registration:', selectedAvatarId.value);
+      const avatarId = selectedAvatarId.value + 1; 
+      console.log(`Avatar ID being registered (1-based): ${avatarId}`);
 
       try {
         /**

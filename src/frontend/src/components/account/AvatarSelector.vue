@@ -86,9 +86,10 @@ export default {
       this.showGrid = !this.showGrid;
     },
     selectAvatar(index) {
-      this.selectedAvatarIndex = index; // Update the selected avatar index
-      this.showGrid = false; // Hide the grid after selection
-      this.$emit('avatar-selected', index); // Emit the selected avatar index to the parent component
+      this.selectedAvatarIndex = index; // Store zero-based index
+      this.showGrid = false; // Hide the grid
+      console.log(`AvatarSelector emitted: Index (0-based) = ${index}`);
+      this.$emit('avatar-selected', index); // Emit zero-based index
     },
     closeGrid() {
       this.showGrid = false; // Close the avatar grid without any changes

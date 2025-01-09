@@ -1,5 +1,3 @@
-
-Copy
 <!-- File: components/Login.vue -->
 <script setup>
 import { ref, onMounted, nextTick } from 'vue';
@@ -14,11 +12,14 @@ const modalStore = useModalStore();
 const handleAfterLogin = async () => {
   const isRegistered = await authStore.isPlayerRegistered();
   if (isRegistered) {
-    modalStore.closeModal(); // Close the modal
+    console.log('Player is registered. Closing modal and updating UI.');
+    modalStore.closeModal(); // Close the modal immediately
   } else {
-    modalStore.openModal(Registration); // Open the registration component
+    console.log('Player not registered. Opening registration modal.');
+    modalStore.openModal(Registration); // Open the registration modal
   }
 };
+
 
 /**
  * Google flow: The button triggers google.accounts.id.prompt() 

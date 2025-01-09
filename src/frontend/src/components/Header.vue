@@ -1,6 +1,52 @@
-<!-- File: components/Header.vue -->
+<template>
+  <header>
+    <!-- Burger Menu Icon (Visible on Mobile) -->
+    <div class="burger" @click="toggleMenu">
+      <span :class="{ open: isMenuOpen }"></span>
+      <span :class="{ open: isMenuOpen }"></span>
+      <span :class="{ open: isMenuOpen }"></span>
+    </div>
+
+    <!-- Logo -->
+    <div class="logo-wrapper" @click="scrollToTop">
+      <div class="logo">
+        <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts Logo" />
+      </div>
+      <div class="additional-logo">
+        <img :src="additionalLogoSrc" alt="Additional Logo" />
+      </div>
+    </div>
+
+    <!-- Navigation Links (Desktop Only) -->
+    <nav class="nav-links">
+      <ul>
+        <li><router-link to="/games">{{ t('header.games') }}</router-link></li>
+        <li><router-link to="/dao">{{ t('header.dao') }}</router-link></li>
+        <li><router-link to="/whitepaper">{{ t('header.whitepaper') }}</router-link></li>
+        <li><router-link to="/dashboard">{{ t('header.dashboard') }}</router-link></li>
+      </ul>
+    </nav>
+
+    <!-- Flex Container for Connect Button and Language Selector -->
+    <div class="connect-container">
+      <!-- Show Avatar When Authenticated -->
+      <div v-if="authStore.isAuthenticated()">
+        <img v-if="computedPlayerAvatar" :src="computedPlayerAvatar" :key="computedPlayerAvatar" alt="Player Avatar" class="player-avatar" />
+        <span v-else class="player-placeholder">{{ }}</span>
+      </div>
+
+      <!-- Show "Connect" Button When Not Authenticated -->
+      <button v-else class="button outline" @click="handleLogin">
+        {{ t('header.connect') }}
+      </button>
+    </div>
+  </header>
+
+  <MobileMenu :isOpen="isMenuOpen" @closeMenu="toggleMenu" />
+</template>
+
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
@@ -18,14 +64,29 @@ const { t, locale } = useI18n();
 const isMenuOpen = ref(false);
 const authStore = useAuthStore();
 const modalStore = useModalStore();
+const playerAvatar = ref(null); // Reactive avatar reference
 
-const playerAvatar = computed(() => {
-  if (authStore.player && authStore.player.avatar) {
-    const avatarId = String(authStore.player.avatar).padStart(2, '0');
-    return `/src/assets/avatars/Avatar_${avatarId}.webp`;
-  }
-  return null;
-});
+// Computed property for reactive player avatar
+const computedPlayerAvatar = computed(() => playerAvatar.value);
+
+// Watch authStore.player for changes
+watch(
+  () => authStore.player,
+  (newPlayer) => {
+    console.log('authStore.player updated:', newPlayer); // Log the entire player object
+    if (newPlayer?.avatar !== undefined && newPlayer?.avatar !== null) {
+      const avatarId = newPlayer.avatar.toString().padStart(2, '0'); // Ensure two-digit format
+      playerAvatar.value = `/src/assets/avatars/Avatar_${avatarId}.webp`;
+      console.log('Computed avatar ID:', avatarId); // Log computed ID
+      console.log('Avatar path set to:', playerAvatar.value); // Log the full path
+    } else {
+      playerAvatar.value = null;
+      console.log('Player has no avatar or avatar cleared.');
+    }
+  },
+  { immediate: true }
+);
+
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
@@ -66,51 +127,7 @@ const additionalLogoSrc = computed(() => {
 });
 </script>
 
-<template>
-  <header>
-    <!-- Burger Menu Icon (Visible on Mobile) -->
-    <div class="burger" @click="toggleMenu">
-      <span :class="{ open: isMenuOpen }"></span>
-      <span :class="{ open: isMenuOpen }"></span>
-      <span :class="{ open: isMenuOpen }"></span>
-    </div>
 
-    <!-- Logo with Click Event for Scrolling to Top -->
-    <div class="logo-wrapper" @click="scrollToTop">
-      <!-- Main Logo -->
-      <div class="logo">
-        <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts Logo" />
-      </div>
-
-      <!-- Additional Logo SVG (Visible only on desktop) with dynamic source -->
-      <div class="additional-logo">
-        <img :src="additionalLogoSrc" alt="Additional Logo" />
-      </div>
-    </div>
-
-    <!-- Navigation Links (Desktop Only) -->
-    <nav class="nav-links">
-      <ul>
-        <li><router-link to="/games">{{ t('header.games') }}</router-link></li>
-        <li><router-link to="/dao">{{ t('header.dao') }}</router-link></li>
-        <li><router-link to="/whitepaper">{{ t('header.whitepaper') }}</router-link></li>
-        <li><router-link to="/dashboard">{{ t('header.dashboard') }}</router-link></li>
-      </ul>
-    </nav>
-
-    <!-- Flex Container for Connect Button and Language Selector -->
-    <div class="connect-container">
-      <div v-if="authStore.isAuthenticated() && playerAvatar">
-        <!-- Display Player Avatar -->
-        <img :src="playerAvatar" alt="Player Avatar" class="player-avatar" />
-      </div>
-      <button v-else class="button outline" @click="handleLogin">{{ t('header.connect') }}</button>
-    </div>
-  </header>
-
-  <!-- MobileMenu Component -->
-  <MobileMenu :isOpen="isMenuOpen" @closeMenu="toggleMenu" />
-</template>
 
 <style scoped>
 /* Basic Header Styling */
@@ -263,11 +280,11 @@ header {
 .connect-container {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* Adjust spacing as needed */
+  gap: 0.5rem;
   position: absolute;
   right: 1rem;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-45%);
 }
 
 /* Log In Button Styling */
@@ -325,6 +342,23 @@ header {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
+
+/* Player Avatar Styling */
+.player-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #00c3ff;
+}
+
+.player-placeholder {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  background: #333;
+  padding: 8px;
+  border-radius: 4px;
+}
 @media (max-width: 1080px) {
   .nav-links ul {
     left: 7.5rem;

@@ -23,13 +23,12 @@ function base64ToUint8Array(base64) {
 
 // We keep identity, registration, etc. in module-level variables
 let identity = null;
-let authenticated = false;
-let registered = false;
-let isCheckingPlayer = false;
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    player: null, // Holds the player's details
+    authenticated: false, // Ensure this is reactive
+    registered: false,    // Ensure this is reactive
+    player: null,         // Holds the player's details
     googleSub: '',
   }),
   actions: {
@@ -44,63 +43,65 @@ export const useAuthStore = defineStore('auth', {
      * Reflects if the user is authenticated
      */
     isAuthenticated() {
-      return authenticated;
+      return this.authenticated;
     },
 
     /**
      * Reflects if the user is already registered on the backend
      */
     isRegistered() {
-      return registered;
+      return this.registered;
     },
 
     /**
      * Checks the canister to see if a user is registered
      * by calling getPlayer(). If null -> not registered.
      */
-     // Add flag to prevent duplicate calls
-
      async isPlayerRegistered() {
-      if (isCheckingPlayer) {
+      if (this.isCheckingPlayer) {
         console.log('AuthStore: Player registration already being checked.');
-        return registered; // Return the current value without calling the backend again
+        return this.registered; // Return the current value without calling the backend again
       }
-    
-      isCheckingPlayer = true;
-    
+      
+      this.isCheckingPlayer = true;
+      
       try {
         console.log('AuthStore: Checking player registration via getPlayer()');
         const canister = useCanisterStore();
         const cosmicrafts = await canister.get('cosmicrafts');
-    
+      
         if (!cosmicrafts) {
           console.error('AuthStore: Canister not initialized');
           return false;
         }
-    
+      
         const playerArr = await cosmicrafts.getPlayer();
         console.log('AuthStore: getPlayer() response:', playerArr);
-    
+      
         if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0] !== null) {
-          registered = true;
-          this.player = playerArr[0]; // Save player details
+          this.registered = true;
+          this.$patch((state) => {
+            state.player = { ...playerArr[0] }; // Replace the player object to ensure reactivity
+          });
         } else {
-          registered = false;
-          this.player = null;
+          this.registered = false;
+          this.$patch((state) => {
+            state.player = null; // Ensure the player is set to null
+          });
         }
-    
-        console.log('AuthStore: Registered:', registered);
-        return registered;
+      
+        console.log('AuthStore: Registered:', this.registered);
+        return this.registered;
       } catch (error) {
         console.error('AuthStore: Error in isPlayerRegistered:', error);
-        registered = false;
-        this.player = null;
+        this.registered = false;
+        this.$patch((state) => { state.player = null; });
         return false;
       } finally {
-        isCheckingPlayer = false; // Reset flag
+        this.isCheckingPlayer = false; // Reset flag
       }
     },
-    
+
     /**
      * Google login using Google One-Tap 
      */
@@ -124,7 +125,7 @@ export const useAuthStore = defineStore('auth', {
         keyPair.secretKey
       );
 
-      authenticated = true;
+      this.authenticated = true;
       // After login, check if registered
       await this.isPlayerRegistered();
 
@@ -136,29 +137,29 @@ export const useAuthStore = defineStore('auth', {
      * MetaMask login
      */
     async loginWithMetaMask() {
-  try {
-    const uniqueMessage = 'Sign this message to log in with your Ethereum wallet';
-    const signature = await MetaMaskService.signMessage(uniqueMessage);
+      try {
+        const uniqueMessage = 'Sign this message to log in with your Ethereum wallet';
+        const signature = await MetaMaskService.signMessage(uniqueMessage);
 
-    if (signature) {
-      // Generate keys from signature
-      const { public: publicKeyB64, private: secretKeyB64 } =
-        await this.generateKeysFromSignature(signature);
+        if (signature) {
+          // Generate keys from signature
+          const { public: publicKeyB64, private: secretKeyB64 } =
+            await this.generateKeysFromSignature(signature);
 
-      // Convert base64 to Uint8Array
-      const publicBytes = base64ToUint8Array(publicKeyB64);
-      const privateBytes = base64ToUint8Array(secretKeyB64);
+          // Convert base64 to Uint8Array
+          const publicBytes = base64ToUint8Array(publicKeyB64);
+          const privateBytes = base64ToUint8Array(secretKeyB64);
 
-      // Create Ed25519KeyIdentity
-      identity = Ed25519KeyIdentity.fromKeyPair(publicBytes, privateBytes);
+          // Create Ed25519KeyIdentity
+          identity = Ed25519KeyIdentity.fromKeyPair(publicBytes, privateBytes);
 
-      authenticated = true;
-      // Do not call isPlayerRegistered here; let handleAfterLogin handle it
-    }
-  } catch (err) {
-    console.error('MetaMask login error:', err);
-  }
-},
+          this.authenticated = true;
+          await this.isPlayerRegistered(); // Update registered state
+        }
+      } catch (err) {
+        console.error('MetaMask login error:', err);
+      }
+    },
 
     /**
      * Phantom login
@@ -177,7 +178,7 @@ export const useAuthStore = defineStore('auth', {
             base64ToUint8Array(secretKeyB64)
           );
 
-          authenticated = true;
+          this.authenticated = true;
           await this.isPlayerRegistered();
         }
       } catch (err) {
@@ -218,7 +219,7 @@ export const useAuthStore = defineStore('auth', {
           onSuccess: async () => {
             console.log('II/NFID AuthClient login success');
             identity = authClient.getIdentity();
-            authenticated = true;
+            this.authenticated = true;
             await this.isPlayerRegistered();
           },
           onError: (error) => {
@@ -284,8 +285,8 @@ export const useAuthStore = defineStore('auth', {
      */
     async logout() {
       identity = null;
-      authenticated = false;
-      registered = false;
+      this.authenticated = false;
+      this.registered = false;
 
       // Clear store values
       this.googleSub = '';
