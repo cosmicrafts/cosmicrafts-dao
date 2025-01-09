@@ -29,10 +29,21 @@
 
     <!-- Flex Container for Connect Button and Language Selector -->
     <div class="connect-container">
+      <!-- Multi-Language Selector -->
+      <div class="desktop-language-selector header">
+        <LanguageSelector direction="down-left" />
+      </div>
+
       <!-- Show Avatar When Authenticated -->
       <div v-if="authStore.isAuthenticated()">
-        <img v-if="computedPlayerAvatar" :src="computedPlayerAvatar" :key="computedPlayerAvatar" alt="Player Avatar" class="player-avatar" />
-        <span v-else class="player-placeholder">{{ }}</span>
+        <img
+          v-if="computedPlayerAvatar"
+          :src="computedPlayerAvatar"
+          :key="computedPlayerAvatar"
+          alt="Player Avatar"
+          class="player-avatar"
+        />
+        <span v-else class="player-placeholder"></span>
       </div>
 
       <!-- Show "Connect" Button When Not Authenticated -->
@@ -51,6 +62,7 @@ import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import MobileMenu from '@/components/MobileMenu.vue';
+import LanguageSelector from '@/components/LanguageSelector.vue'; // Re-import the LanguageSelector
 import { useModalStore } from '@/stores/modal';
 import Login from '@/components/Login.vue';
 import defaultLogo from '@/assets/icons/logo.svg';
@@ -73,20 +85,15 @@ const computedPlayerAvatar = computed(() => playerAvatar.value);
 watch(
   () => authStore.player,
   (newPlayer) => {
-    console.log('authStore.player updated:', newPlayer); // Log the entire player object
     if (newPlayer?.avatar !== undefined && newPlayer?.avatar !== null) {
       const avatarId = newPlayer.avatar.toString().padStart(2, '0'); // Ensure two-digit format
       playerAvatar.value = `/src/assets/avatars/Avatar_${avatarId}.webp`;
-      console.log('Computed avatar ID:', avatarId); // Log computed ID
-      console.log('Avatar path set to:', playerAvatar.value); // Log the full path
     } else {
       playerAvatar.value = null;
-      console.log('Player has no avatar or avatar cleared.');
     }
   },
   { immediate: true }
 );
-
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
@@ -126,7 +133,6 @@ const additionalLogoSrc = computed(() => {
   return additionalLogoMap[locale.value] || additionalLogoMap.default;
 });
 </script>
-
 
 
 <style scoped>

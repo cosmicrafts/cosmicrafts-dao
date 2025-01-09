@@ -1,37 +1,28 @@
 <!-- File: components/Login.vue -->
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useModalStore } from '@/stores/modal';
+import { useI18n } from 'vue-i18n';
 import Registration from '@/components/Registration.vue';
-
 
 const authStore = useAuthStore();
 const modalStore = useModalStore();
+const { t } = useI18n();
 
 const handleAfterLogin = async () => {
   const isRegistered = await authStore.isPlayerRegistered();
   if (isRegistered) {
-    console.log('Player is registered. Closing modal and updating UI.');
     modalStore.closeModal(); // Close the modal immediately
   } else {
-    console.log('Player not registered. Opening registration modal.');
     modalStore.openModal(Registration); // Open the registration modal
   }
 };
 
-
-/**
- * Google flow: The button triggers google.accounts.id.prompt() 
- * which calls handleCredentialResponse when the user logs in.
- */
 const onGoogleClick = () => {
   window.google.accounts.id.prompt();
 };
 
-/**
- * Initialize Google Sign-In
- */
 const loadGoogleIdentityServices = () => {
   const script = document.createElement('script');
   script.src = 'https://accounts.google.com/gsi/client';
@@ -47,17 +38,11 @@ const initializeGoogleSignIn = () => {
   });
 };
 
-/**
- * Google credential callback
- */
 const handleCredentialResponse = async (response) => {
   await authStore.loginWithGoogle(response);
   await handleAfterLogin();
 };
 
-/**
- * Called on mount
- */
 onMounted(() => {
   loadGoogleIdentityServices();
 });
@@ -65,7 +50,7 @@ onMounted(() => {
 const authMethods = [
   {
     logo: new URL('@/assets/icons/icp.svg', import.meta.url).href,
-    text: 'Sign in with Internet Identity',
+    text: t('login.internetIdentity'),
     onClick: async () => {
       await authStore.loginWithInternetIdentity();
       await handleAfterLogin();
@@ -73,7 +58,7 @@ const authMethods = [
   },
   {
     logo: new URL('@/assets/icons/metaMask_icon.svg', import.meta.url).href,
-    text: 'Sign in with MetaMask',
+    text: t('login.metaMask'),
     onClick: async () => {
       await authStore.loginWithMetaMask();
       await handleAfterLogin();
@@ -81,7 +66,7 @@ const authMethods = [
   },
   {
     logo: new URL('@/assets/icons/Phantom_icon.svg', import.meta.url).href,
-    text: 'Sign in with Phantom',
+    text: t('login.phantom'),
     onClick: async () => {
       await authStore.loginWithPhantom();
       await handleAfterLogin();
@@ -94,14 +79,14 @@ const authMethods = [
   <div class="login-container">
     <div class="login-panel">
       <img src="@/assets/icons/Cosmicrafts_Logo.svg" class="full-logo" alt="Cosmicrafts Logo" />
-      <label class="cosmic-label-connect">Connect with:</label>
+      <label class="cosmic-label-connect">{{ t('login.connectWith') }}</label>
 
       <div
         class="btn-div"
         v-for="method in authMethods"
         :key="method.text"
         @click="method.onClick"
-        :aria-label="'Login with ' + method.text"
+        :aria-label="t('login.loginWith', { method: method.text })"
       >
         <label class="btn-label">
           <img :src="method.logo" class="button-account-icon" :alt="method.text" />
@@ -113,18 +98,17 @@ const authMethods = [
         <div class="btn-div" @click="onGoogleClick">
           <label class="btn-label">
             <img src="@/assets/icons/google_logo.svg" class="button-account-icon" alt="Google" />
-            <span class="btn-text">Sign in with Google</span>
+            <span class="btn-text">{{ t('login.google') }}</span>
           </label>
         </div>
       </div>
 
       <div class="clarification-message">
-        <p>Sign in to create a new account</p>
+        <p>{{ t('login.signInClarification') }}</p>
       </div>
     </div>
   </div>
 </template>
-
 
 
 <style scoped>

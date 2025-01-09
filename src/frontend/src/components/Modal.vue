@@ -25,7 +25,7 @@ const closeModal = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(14, 17, 27, 0.664);
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;

@@ -1,7 +1,13 @@
 {
     "login": {
-      "connect_with": "Connect with:"
-    },
+    "connectWith": "Connect with:",
+    "internetIdentity": "Sign in with Internet Identity",
+    "metaMask": "Sign in with MetaMask",
+    "phantom": "Sign in with Phantom",
+    "google": "Sign in with Google",
+    "signInClarification": "Sign in to create a new account",
+    "loginWith": "Login with {method}"
+  },
   "header": {
     "home": "Home",
     "features": "Features",

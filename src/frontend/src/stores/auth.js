@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia';
 import { encode as base64Encode } from 'base64-arraybuffer';
 import { Ed25519KeyIdentity } from '@dfinity/identity';
+import { HttpAgent } from '@dfinity/agent';
 import { AuthClient } from '@dfinity/auth-client';
 import nacl from 'tweetnacl';
 import MetaMaskService from '@/services/MetaMaskService';
@@ -208,10 +209,9 @@ export const useAuthStore = defineStore('auth', {
     async loginWithAuthClient(identityProviderUrl) {
       try {
         const authClient = await AuthClient.create();
-
+    
         authClient.login({
           identityProvider: identityProviderUrl,
-          // optional window features
           windowOpenerFeatures:
             `left=${window.screen.width / 2 - 525 / 2},` +
             `top=${window.screen.height / 2 - 705 / 2},` +
@@ -220,6 +220,22 @@ export const useAuthStore = defineStore('auth', {
             console.log('II/NFID AuthClient login success');
             identity = authClient.getIdentity();
             this.authenticated = true;
+    
+            // Log identity details
+            console.log('AuthClient Identity:', identity);
+            console.log('AuthClient Principal:', identity.getPrincipal().toText());
+    
+            // Debug agent setup
+            const agent = new HttpAgent({ identity });
+    
+            // Ensure the agent is fetching its root key in local environments
+            if (process.env.NODE_ENV === 'development') {
+              agent.fetchRootKey();
+            }
+    
+            console.log('Agent Principal:', identity.getPrincipal().toText());
+    
+            // Check player registration
             await this.isPlayerRegistered();
           },
           onError: (error) => {
