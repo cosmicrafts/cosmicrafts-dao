@@ -40,7 +40,7 @@
           v-if="computedPlayerAvatar"
           :src="computedPlayerAvatar"
           :key="computedPlayerAvatar"
-          alt="Player Avatar"
+          alt="Avatar"
           class="player-avatar"
         />
         <span v-else class="player-placeholder"></span>
@@ -71,6 +71,7 @@ import logoKR from '@/assets/icons/logo-kr.svg';
 import logoJP from '@/assets/icons/logo-jp.svg';
 import logoRU from '@/assets/icons/logo-ru.svg';
 import logoAR from '@/assets/icons/logo-ar.svg';
+import avatarMap from '@/utils/avatarMap';
 
 const { t, locale } = useI18n();
 const isMenuOpen = ref(false);
@@ -84,12 +85,20 @@ const computedPlayerAvatar = computed(() => playerAvatar.value);
 // Watch authStore.player for changes
 watch(
   () => authStore.player,
-  (newPlayer) => {
+  async (newPlayer) => {
     if (newPlayer?.avatar !== undefined && newPlayer?.avatar !== null) {
       const avatarId = newPlayer.avatar.toString().padStart(2, '0'); // Ensure two-digit format
-      playerAvatar.value = `/src/assets/avatars/Avatar_${avatarId}.webp`;
+
+      // Dynamically import the avatar
+      try {
+        const avatarModule = await avatarMap[avatarId]();
+        playerAvatar.value = avatarModule.default; // Set the avatar URL
+      } catch (error) {
+        console.error('Failed to load avatar:', error);
+        playerAvatar.value = null; // Fallback to no avatar
+      }
     } else {
-      playerAvatar.value = null;
+      playerAvatar.value = null; // No avatar selected
     }
   },
   { immediate: true }
