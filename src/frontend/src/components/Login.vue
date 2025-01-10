@@ -4,18 +4,31 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useModalStore } from '@/stores/modal';
 import { useI18n } from 'vue-i18n';
-import Registration from '@/components/Registration.vue';
 
 const authStore = useAuthStore();
 const modalStore = useModalStore();
 const { t } = useI18n();
 
+// State for the recovery input
+const seedPhrase = ref('');
+const showRecoveryInput = ref(false);
+
 const handleAfterLogin = async () => {
-  const isRegistered = await authStore.isPlayerRegistered();
-  if (isRegistered) {
-    modalStore.closeModal(); // Close the modal immediately
-  } else {
-    modalStore.openModal(Registration); // Open the registration modal
+  modalStore.closeModal(); // Close the login modal immediately
+};
+
+const handleGuestLogin = async () => {
+  const { seedPhrase: generatedSeedPhrase } = await authStore.createGuestAccount();
+  alert(`Your seed phrase: ${generatedSeedPhrase}\n\nPlease save this securely.`);
+  await handleAfterLogin();
+};
+
+const handleAccountRecovery = async () => {
+  try {
+    await authStore.recoverAccount(seedPhrase.value);
+    await handleAfterLogin();
+  } catch (error) {
+    alert(t('login.invalidSeedPhrase')); // Add this key to your i18n file
   }
 };
 
@@ -72,6 +85,16 @@ const authMethods = [
       await handleAfterLogin();
     },
   },
+  {
+    logo: new URL('@/assets/icons/users.svg', import.meta.url).href,
+    text: `Sign in with ${t('login.guestAccount')}`,
+    onClick: handleGuestLogin,
+  },
+  {
+    logo: new URL('@/assets/icons/wallet-hover.svg', import.meta.url).href,
+    text: t('login.accountRecovery'),
+    onClick: () => (showRecoveryInput.value = true),
+  },
 ];
 </script>
 
@@ -94,6 +117,13 @@ const authMethods = [
         </label>
       </div>
 
+      <!-- Seed Phrase Recovery Input -->
+      <div v-if="showRecoveryInput" class="recovery-input">
+        <label>{{ t('login.enterSeedPhrase') }}</label>
+        <textarea v-model="seedPhrase" placeholder="Enter your 12-word seed phrase here"></textarea>
+        <button @click="handleAccountRecovery">{{ t('login.recoverAccount') }}</button>
+      </div>
+
       <div class="inner-grid">
         <div class="btn-div" @click="onGoogleClick">
           <label class="btn-label">
@@ -109,6 +139,7 @@ const authMethods = [
     </div>
   </div>
 </template>
+
 
 
 <style scoped>
@@ -211,4 +242,37 @@ const authMethods = [
   text-align: center;
   margin-top: 1vh;
 }
+
+.recovery-input {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2vh;
+  align-items: center;
+  gap: 1vh;
+}
+
+.recovery-input textarea {
+  width: 90%;
+  height: 6vh;
+  font-size: 1.5vh;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1vh;
+}
+
+.recovery-input button {
+  padding: 1vh 2vh;
+  font-size: 1.2vh;
+  font-weight: bold;
+  color: #fff;
+  background-color: #505050;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.recovery-input button:hover {
+  background-color: #606060;
+}
+
 </style>

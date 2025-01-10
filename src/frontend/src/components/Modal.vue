@@ -25,7 +25,7 @@ const closeModal = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(14, 17, 27, 0.664);
+  background: rgba(8, 11, 20, 0.462);
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
@@ -34,7 +34,7 @@ const closeModal = () => {
 }
 
 .modal-content {
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.9), rgba(23, 33, 43, 0.9));
+  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.88), rgba(23, 33, 43, 0.77));
   border-radius: 8px;
   border: 1px solid #ffffff12;
   padding: 2rem;

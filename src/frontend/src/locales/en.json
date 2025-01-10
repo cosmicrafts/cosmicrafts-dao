@@ -6,7 +6,12 @@
     "phantom": "Sign in with Phantom",
     "google": "Sign in with Google",
     "signInClarification": "Sign in to create a new account",
-    "loginWith": "Login with {method}"
+    "loginWith": "Login with {method}",
+    "guestAccount": "Guest Account",
+    "enterSeedPhrase": "Enter Seed Phrase",
+    "accountRecovery": "Account Recovery",
+    "recoverAccount": "Account Recovery",
+    "guestLoginError": "Whoops, something went wrong!"
   },
   "header": {
     "home": "Home",
@@ -23,7 +28,10 @@
     "dashboard": "Dashboard",
     "connect": "Connect",
     "whitepaper": "Whitepaper",
-    "login": "Login"
+    "login": "Login",
+    "myProfile": "My Profile",
+    "settings": "Settings",
+    "signout": "Sign out"
   },
   "hero": {
     "slides": [

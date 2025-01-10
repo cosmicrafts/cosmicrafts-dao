@@ -34,16 +34,26 @@
         <LanguageSelector direction="down-left" />
       </div>
 
-      <!-- Show Avatar When Authenticated -->
-      <div v-if="authStore.isAuthenticated()">
+      <!-- Avatar and Dropdown Menu -->
+      <div v-if="authStore.isAuthenticated()" class="avatar-container">
         <img
           v-if="computedPlayerAvatar"
           :src="computedPlayerAvatar"
           :key="computedPlayerAvatar"
           alt="Avatar"
           class="player-avatar"
+          @click="toggleDropdown"
         />
-        <span v-else class="player-placeholder"></span>
+        <span v-else class="player-placeholder" @click="toggleDropdown"></span>
+
+        <!-- Dropdown Menu -->
+        <div v-if="isDropdownVisible" class="dropdown-menu">
+          <ul>
+            <li @click="goToProfile">{{ t('header.myProfile') }}</li>
+            <li @click="goToSettings">{{ t('header.settings') }}</li>
+            <li @click="logout">{{ t('header.signout') }}</li>
+          </ul>
+        </div>
       </div>
 
       <!-- Show "Connect" Button When Not Authenticated -->
@@ -78,6 +88,7 @@ const isMenuOpen = ref(false);
 const authStore = useAuthStore();
 const modalStore = useModalStore();
 const playerAvatar = ref(null); // Reactive avatar reference
+const isDropdownVisible = ref(false);
 
 // Computed property for reactive player avatar
 const computedPlayerAvatar = computed(() => playerAvatar.value);
@@ -108,8 +119,28 @@ const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
 
+const toggleDropdown = () => {
+  isDropdownVisible.value = !isDropdownVisible.value;
+};
+
+// Logout functionality
+const logout = async () => {
+  await authStore.logout();
+  router.push('/'); // Redirect to the home page
+};
+
+// Navigation handlers
+const goToProfile = () => {
+  router.push('/profile'); // Adjust route as needed
+};
+
+const goToSettings = () => {
+  router.push('/settings'); // Adjust route as needed
+};
+
+// Open login modal
 const handleLogin = () => {
-  modalStore.openModal(Login); // Open the Login component in the modal
+  modalStore.openModal(Login);
 };
 
 // Scroll to the top of the page when the logo is clicked
@@ -374,6 +405,43 @@ header {
   padding: 8px;
   border-radius: 4px;
 }
+
+.avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #1e2b38;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  padding: 0.5rem 0;
+  z-index: 10;
+  min-width: 160px;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu li {
+  padding: 0.5rem 1rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-menu li:hover {
+  background-color: #243546;
+}
+
+
 @media (max-width: 1080px) {
   .nav-links ul {
     left: 7.5rem;

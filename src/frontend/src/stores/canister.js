@@ -7,6 +7,8 @@ let canisters = {
   cosmicrafts: null,
 };
 let currentIdentity = null; // Track the current identity
+let initializing = false; // Track initialization state
+
 
 const MANUAL_ENV = 'ic'; // 'ic' for IC, 'local' for local development
 const isLocal = MANUAL_ENV === 'local';
@@ -32,6 +34,7 @@ export const useCanisterStore = defineStore('canister', {
         console.log('Identity changed. Reinitializing actor...');
         currentIdentity = identity; // Update the current identity
         canisters[canisterName] = null; // Reset the actor for the canister
+        initializing = true; // Set initializing flag
       }
 
       if (!canisters[canisterName]) {
@@ -39,15 +42,19 @@ export const useCanisterStore = defineStore('canister', {
         console.log(`Identity Principal: ${identity ? identity.getPrincipal().toText() : 'No Identity'}`);
         console.log(`Agent Host: ${host}`);
 
+        // Always use the authenticated identity for the HttpAgent
         const agent = new HttpAgent({ identity, host });
 
-        if (isLocal) {
-          console.log('Fetching root key for local environment');
-          await agent.fetchRootKey();
-        }
+        
 
         console.log(`Creating actor for canister: ${this.canisterIds[canisterName]}`);
         canisters[canisterName] = createActor(this.canisterIds[canisterName], { agent });
+        initializing = false; // Reset initializing flag
+      }
+
+      // Wait for initialization to complete
+      while (initializing) {
+        await new Promise(resolve => setTimeout(resolve, 100));
       }
 
       return canisters[canisterName];

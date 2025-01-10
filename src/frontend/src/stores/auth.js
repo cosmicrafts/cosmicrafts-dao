@@ -1,5 +1,6 @@
 // File: /stores/auth.js
 import { defineStore } from 'pinia';
+import { mnemonicToSeedSync, generateMnemonic, validateMnemonic } from 'bip39';
 import { encode as base64Encode } from 'base64-arraybuffer';
 import { Ed25519KeyIdentity } from '@dfinity/identity';
 import { HttpAgent } from '@dfinity/agent';
@@ -9,9 +10,20 @@ import MetaMaskService from '@/services/MetaMaskService';
 import PhantomService from '@/services/PhantomService';
 import useCanisterStore from './canister.js';
 
-/**
- * Helper to convert base64 to Uint8Array
- */
+
+// Helper function to derive keys from a seed phrase
+function deriveKeysFromSeedPhrase(seedPhrase) {
+  const seed = mnemonicToSeedSync(seedPhrase).slice(0, 32); // Derive 32-byte seed
+  return nacl.sign.keyPair.fromSeed(seed);
+}
+
+// Create identity from a key pair
+function createIdentityFromKeyPair(keyPair) {
+  return Ed25519KeyIdentity.fromKeyPair(keyPair.publicKey, keyPair.secretKey);
+}
+
+// Helper to convert base64 to Uint8Array
+
 function base64ToUint8Array(base64) {
   const binaryString = atob(base64);
   const len = binaryString.length;
@@ -27,58 +39,114 @@ let identity = null;
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    authenticated: false, // Ensure this is reactive
-    registered: false,    // Ensure this is reactive
-    player: null,         // Holds the player's details
+    authenticated: false,
+    registered: false,
+    player: null,
     googleSub: '',
+    seedPhrase: '',
   }),
   actions: {
-    /**
-     * Returns the current identity for use by canisterStore.
-     */
     getIdentity() {
       return identity;
     },
-
-    /**
-     * Reflects if the user is authenticated
-     */
     isAuthenticated() {
       return this.authenticated;
     },
-
-    /**
-     * Reflects if the user is already registered on the backend
-     */
     isRegistered() {
       return this.registered;
+    },
+    /**
+     * Generate a guest account with a random seed phrase.
+     */
+    async createGuestAccount() {
+      console.log('Generating a new guest account...');
+      
+      // Generate a 12-word seed phrase
+      const seedPhrase = generateMnemonic();
+      this.seedPhrase = seedPhrase; // Store in memory for this session
+      
+      // Derive keys and create identity
+      const keyPair = deriveKeysFromSeedPhrase(seedPhrase);
+      const identity = createIdentityFromKeyPair(keyPair);
+      
+      // Use the identity for authentication
+      console.log('Guest Identity Principal:', identity.getPrincipal().toText());
+      this.authenticated = true;
+
+      // Optional: Save state to local storage or persist elsewhere
+      this.saveStateToLocalStorage();
+
+      return { seedPhrase, identity };
+    },
+
+    /**
+     * Recover an account using a seed phrase.
+     * @param {string} seedPhrase - The seed phrase provided by the user.
+     */
+    async recoverAccount(seedPhrase) {
+      if (!validateMnemonic(seedPhrase)) {
+        throw new Error('Invalid seed phrase. Please try again.');
+      }
+
+      console.log('Recovering account using seed phrase...');
+      
+      // Derive keys and create identity
+      const keyPair = deriveKeysFromSeedPhrase(seedPhrase);
+      const identity = createIdentityFromKeyPair(keyPair);
+
+      // Use the identity for authentication
+      console.log('Recovered Identity Principal:', identity.getPrincipal().toText());
+      this.authenticated = true;
+
+      // Optional: Save state to local storage or persist elsewhere
+      this.saveStateToLocalStorage();
+
+      return identity;
+    },
+
+        /**
+     * Load from localStorage on app mount if desired.
+     */
+        loadStateFromLocalStorage() {
+          const stored = localStorage.getItem('authStore');
+          if (stored) {
+            this.$patch(JSON.parse(stored));
+          }
+        },
+
+    /**
+     * Persist relevant parts of the store (e.g., authenticated state) to localStorage.
+     */
+    saveStateToLocalStorage() {
+      localStorage.setItem('authStore', JSON.stringify(this.$state));
     },
 
     /**
      * Checks the canister to see if a user is registered
      * by calling getPlayer(). If null -> not registered.
      */
-     async isPlayerRegistered() {
+    async isPlayerRegistered() {
       if (this.isCheckingPlayer) {
         console.log('AuthStore: Player registration already being checked.');
         return this.registered; // Return the current value without calling the backend again
       }
-      
+    
       this.isCheckingPlayer = true;
-      
+    
       try {
         console.log('AuthStore: Checking player registration via getPlayer()');
         const canister = useCanisterStore();
         const cosmicrafts = await canister.get('cosmicrafts');
-      
+    
+        // Ensure the actor is fully initialized
         if (!cosmicrafts) {
           console.error('AuthStore: Canister not initialized');
           return false;
         }
-      
+    
         const playerArr = await cosmicrafts.getPlayer();
         console.log('AuthStore: getPlayer() response:', playerArr);
-      
+    
         if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0] !== null) {
           this.registered = true;
           this.$patch((state) => {
@@ -90,7 +158,7 @@ export const useAuthStore = defineStore('auth', {
             state.player = null; // Ensure the player is set to null
           });
         }
-      
+    
         console.log('AuthStore: Registered:', this.registered);
         return this.registered;
       } catch (error) {
@@ -107,29 +175,27 @@ export const useAuthStore = defineStore('auth', {
      * Google login using Google One-Tap 
      */
     async loginWithGoogle(response) {
-      // Decode token
+      // Decode token and set identity
       const decodedIdToken = response.credential.split('.')[1];
       const payload = JSON.parse(atob(decodedIdToken));
-      // Get googleSub from the JWT payload
       this.googleSub = payload.sub;
-
-      // Derive a keypair from googleSub
+    
       const encoder = new TextEncoder();
       const encodedSub = encoder.encode(payload.sub);
       const hashBuffer = await crypto.subtle.digest('SHA-256', encodedSub);
       const seed = new Uint8Array(hashBuffer.slice(0, 32));
       const keyPair = nacl.sign.keyPair.fromSeed(seed);
-
-      // Create Ed25519KeyIdentity
-      identity = Ed25519KeyIdentity.fromKeyPair(
-        keyPair.publicKey,
-        keyPair.secretKey
-      );
-
+    
+      identity = Ed25519KeyIdentity.fromKeyPair(keyPair.publicKey, keyPair.secretKey);
       this.authenticated = true;
-      // After login, check if registered
+    
+      // Ensure the actor is initialized before checking registration
+      const canister = useCanisterStore();
+      await canister.get('cosmicrafts'); // Wait for actor initialization
+    
+      // Now check if the player is registered
       await this.isPlayerRegistered();
-
+    
       // Optional: persist googleSub in local storage or entire store
       this.saveStateToLocalStorage();
     },

@@ -30,7 +30,7 @@
             </div>
             <div class="form-group">
               <label for="referralCode">Referral Code:</label>
-              <input type="text" id="referralCode" v-model="referralCode" placeholder="Optional" />
+              <input type="text" id="referralCode" v-model="referralCode" placeholder="(optional)" />
             </div>
             <div class="referral-link">
               <p>
