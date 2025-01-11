@@ -31,7 +31,7 @@ export const useCanisterStore = defineStore('canister', {
 
       // Check if the identity has changed
       if (identity !== currentIdentity) {
-        console.log('Identity changed. Reinitializing actor...');
+        console.log('New identity. Reinitializing actor...');
         currentIdentity = identity; // Update the current identity
         canisters[canisterName] = null; // Reset the actor for the canister
         initializing = true; // Set initializing flag

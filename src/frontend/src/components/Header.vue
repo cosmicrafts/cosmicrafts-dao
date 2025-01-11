@@ -204,10 +204,11 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 4px;
   width: 2rem;
   height: 2rem;
   background-color: rgba(30, 43, 56, 0.9);
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */

@@ -9,6 +9,8 @@ import nacl from 'tweetnacl';
 import MetaMaskService from '@/services/MetaMaskService';
 import PhantomService from '@/services/PhantomService';
 import useCanisterStore from './canister.js';
+import { useModalStore } from './modal';
+import Registration from '@/components/Registration.vue';
 
 let identity = null;
 
@@ -148,7 +150,7 @@ export const useAuthStore = defineStore('auth', {
         console.log('Checking player existence...');
         const canister = useCanisterStore();
         const cosmicrafts = await canister.get('cosmicrafts');
-        
+    
         if (!cosmicrafts) {
           console.error('Canister not initialized');
           throw new Error('Could not connect to the server.');
@@ -161,9 +163,16 @@ export const useAuthStore = defineStore('auth', {
           console.log('Player exists. Logging in...');
           this.registered = true;
     
+          // Convert BigInt values to strings
+          const safePlayer = JSON.parse(
+            JSON.stringify(playerArr[0], (key, value) =>
+              typeof value === 'bigint' ? value.toString() : value
+            )
+          );
+    
           // Update player state
           this.$patch((state) => {
-            state.player = { ...playerArr[0] };
+            state.player = safePlayer;
           });
     
           // Redirect to home or dashboard
@@ -179,7 +188,8 @@ export const useAuthStore = defineStore('auth', {
         console.error('Error during account recovery:', error);
         throw new Error('Account recovery failed. Please try again.');
       }
-    },
+    }
+    ,
 
         /**
      * Load from localStorage on app mount if desired.
@@ -429,8 +439,17 @@ export const useAuthStore = defineStore('auth', {
      * Persist relevant parts of the store (e.g. googleSub) to localStorage
      */
     saveStateToLocalStorage() {
-      localStorage.setItem('authStore', JSON.stringify(this.$state));
-    },
+      const replacer = (key, value) => {
+        if (typeof value === 'bigint') {
+          return value.toString(); // Convert BigInt to string
+        }
+        return value;
+      };
+    
+      const serializedState = JSON.stringify(this.$state, replacer); // Use replacer for BigInt
+      localStorage.setItem('authStore', serializedState);
+    }
+    ,
 
     /**
      * Load from localStorage on app mount if desired
@@ -438,25 +457,39 @@ export const useAuthStore = defineStore('auth', {
     loadStateFromLocalStorage() {
       const stored = localStorage.getItem('authStore');
       if (stored) {
-        this.$patch(JSON.parse(stored));
+        const parsed = JSON.parse(stored, (key, value) => {
+          if (typeof value === 'string' && /^\d+$/.test(value)) {
+            try {
+              return BigInt(value); // Convert back to BigInt
+            } catch {
+              return value; // If conversion fails, return original value
+            }
+          }
+          return value;
+        });
+        this.$patch(parsed);
       }
-    },
+    }
+    ,
     
     /**
      * Helper to redirect to home
      */
     redirectToHome() {
-      const router = useRouter();
-      router.push('/');
+      const modalStore = useModalStore(); // Access the modal store
+      console.log('Redirecting to home or dashboard modal...');
+      modalStore.closeModal(); // Close the current modal
+      //modalStore.openModal('DashboardModal'); // Optionally, open the dashboard or another modal
     },
-
+    
     /**
      * Helper to redirect to registration
      */
     redirectToRegistration() {
-      const router = useRouter();
-      router.push('/register');
-    },
+      const modalStore = useModalStore(); // Access the modal store
+      console.log('Redirecting to registration modal...');
+      modalStore.openModal(Registration); // Pass the component directly
+    },  
 
     /**
      * Logout
