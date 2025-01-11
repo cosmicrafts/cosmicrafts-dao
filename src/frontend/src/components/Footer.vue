@@ -38,9 +38,10 @@ const { locale } = useI18n();
 
       <!-- Logo and Trademark -->
       <div class="branding">
-        <img src="@/assets/icons/wou.svg" alt="World of Unreal Logo" />
-        <p>©2024 World of Unreal, LLC.<br>All trademarks referenced herein are the properties of their respective owners.</p>
-      </div>
+  <img src="@/assets/icons/wou.svg" alt="World of Unreal Logo" />
+  <p>©2025 World of Unreal, LLC.<br>{{ $t('footer.trademarks') }}</p>
+</div>
+
 
       <!-- Legal Links -->
       <ul class="legal-links">
@@ -114,30 +115,36 @@ footer {
 
 .links a,
 .legal-links a {
-  color: #4a90e2;
+  color: #00a6ff;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
+  font-weight: 500;
 }
 
 .links a:hover,
 .legal-links a:hover {
-  color: #3a7bd5;
+  color: #7cb3ff;
+  font-weight: 800;
   text-decoration: underline;
 }
 
 /* Branding and Logo */
 .branding {
   text-align: center;
-  margin: 1rem 0;
+  margin: 2rem 0;
 }
 
 .branding img {
-  width: 80px;
-  margin-bottom: 0.5rem;
+  width: 64px;
+  margin-bottom: -0.5rem;
 }
 
 .branding p {
-  font-size: 0.8rem;
-  color: #b0b0b0;
+  font-size: 0.6rem;
+  color: #9c9c9c;
+}
+
+.branding br {
+  color: #fff5f5;
 }
 </style>

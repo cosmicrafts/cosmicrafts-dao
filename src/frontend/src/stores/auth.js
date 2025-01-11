@@ -9,7 +9,6 @@ import nacl from 'tweetnacl';
 import MetaMaskService from '@/services/MetaMaskService';
 import PhantomService from '@/services/PhantomService';
 import useCanisterStore from './canister.js';
-import { useModalStore } from './modal';
 
 let identity = null;
 
@@ -130,21 +129,56 @@ export const useAuthStore = defineStore('auth', {
       if (!validateMnemonic(seedPhrase)) {
         throw new Error('Invalid seed phrase. Please try again.');
       }
-
+    
       console.log('Recovering account using seed phrase...');
       
       // Derive keys and create identity
       const keyPair = deriveKeysFromSeedPhrase(seedPhrase);
-      const identity = createIdentityFromKeyPair(keyPair);
-
+      identity = createIdentityFromKeyPair(keyPair);
+    
       // Use the identity for authentication
       console.log('Recovered Identity Principal:', identity.getPrincipal().toText());
       this.authenticated = true;
-
-      // Optional: Save state to local storage or persist elsewhere
+    
+      // Save state to localStorage
       this.saveStateToLocalStorage();
-
-      return identity;
+    
+      // Check if the player exists
+      try {
+        console.log('Checking player existence...');
+        const canister = useCanisterStore();
+        const cosmicrafts = await canister.get('cosmicrafts');
+        
+        if (!cosmicrafts) {
+          console.error('Canister not initialized');
+          throw new Error('Could not connect to the server.');
+        }
+    
+        const playerArr = await cosmicrafts.getPlayer();
+        console.log('getPlayer() response:', playerArr);
+    
+        if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0] !== null) {
+          console.log('Player exists. Logging in...');
+          this.registered = true;
+    
+          // Update player state
+          this.$patch((state) => {
+            state.player = { ...playerArr[0] };
+          });
+    
+          // Redirect to home or dashboard
+          this.redirectToHome();
+        } else {
+          console.log('Player does not exist. Redirecting to registration...');
+          this.registered = false;
+    
+          // Redirect to registration
+          this.redirectToRegistration();
+        }
+      } catch (error) {
+        console.error('Error during account recovery:', error);
+        throw new Error('Account recovery failed. Please try again.');
+      }
     },
 
         /**

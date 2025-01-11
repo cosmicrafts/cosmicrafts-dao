@@ -1,17 +1,18 @@
 {
     "login": {
-    "connectWith": "Connect with:",
+    "connectWith": "Welcome to the Metaverse",
     "internetIdentity": "Sign in with Internet Identity",
-    "metaMask": "Sign in with MetaMask",
-    "phantom": "Sign in with Phantom",
     "google": "Sign in with Google",
-    "signInClarification": "Sign in to create a new account",
+    "guestAccount": "Continue as a Guest",
+    "signInClarification": "Already have a seed?",
     "loginWith": "Login with {method}",
-    "guestAccount": "Guest Account",
     "enterSeedPhrase": "Enter Seed Phrase",
-    "accountRecovery": "Account Recovery",
-    "recoverAccount": "Account Recovery",
-    "guestLoginError": "Whoops, something went wrong!"
+    "accountRecovery": "Recover your account",
+    "recoverAccount": "Recover",
+    "guestLoginError": "Whoops, something went wrong!",
+    "recoverySuccess": "Account recovery successful!",
+    "invalidSeedPhrase": "Invalid seed phrase. Please try again.",
+    "recovering": "Recovering..."
   },
   "header": {
     "home": "Home",
@@ -121,7 +122,8 @@
     "terms": "Terms",
     "cookiePolicy": "Cookie Policy",
     "cookieSettings": "Cookie Settings",
-    "language": "Language"
+    "language": "Language",
+    "trademarks": "All trademarks referenced herein are the properties of their respective owners."
   },
     "dao": {
     "mission": {

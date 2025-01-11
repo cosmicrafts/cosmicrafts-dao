@@ -708,12 +708,12 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .hero-image {
-    max-width: 21rem;
-    margin-top: -12rem;
+    max-width: 24rem;
+    margin-top: -8rem;
   }
 
   .hero-logo {
-    max-width: 16rem;
+    max-width: 12rem;
     margin-top: -10rem;
   }
 
@@ -738,8 +738,8 @@ onUnmounted(() => {
 
   /* Slightly smaller hero title text */
   .hero-title {
-    font-size: 1.25rem;
-    margin-top: -1rem;
+    font-size: 1rem;
+    margin-top: -.5rem;
     padding: 0 1rem
   }
 
