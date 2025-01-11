@@ -9,7 +9,9 @@ import nacl from 'tweetnacl';
 import MetaMaskService from '@/services/MetaMaskService';
 import PhantomService from '@/services/PhantomService';
 import useCanisterStore from './canister.js';
+import { useModalStore } from './modal';
 
+let identity = null;
 
 // Helper function to derive keys from a seed phrase
 function deriveKeysFromSeedPhrase(seedPhrase) {
@@ -34,9 +36,6 @@ function base64ToUint8Array(base64) {
   return bytes;
 }
 
-// We keep identity, registration, etc. in module-level variables
-let identity = null;
-
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     authenticated: false,
@@ -55,28 +54,72 @@ export const useAuthStore = defineStore('auth', {
     isRegistered() {
       return this.registered;
     },
-    /**
-     * Generate a guest account with a random seed phrase.
-     */
     async createGuestAccount() {
       console.log('Generating a new guest account...');
       
       // Generate a 12-word seed phrase
       const seedPhrase = generateMnemonic();
-      this.seedPhrase = seedPhrase; // Store in memory for this session
-      
+      this.seedPhrase = seedPhrase;
+    
       // Derive keys and create identity
       const keyPair = deriveKeysFromSeedPhrase(seedPhrase);
-      const identity = createIdentityFromKeyPair(keyPair);
-      
-      // Use the identity for authentication
+      identity = createIdentityFromKeyPair(keyPair);
+    
       console.log('Guest Identity Principal:', identity.getPrincipal().toText());
       this.authenticated = true;
-
-      // Optional: Save state to local storage or persist elsewhere
+      this.registered = false;
+    
+      // Save state to local storage
       this.saveStateToLocalStorage();
+    
+      // Automatically sign up the guest on the canister
+      try {
+        console.log('Automatically signing up guest to canister...');
+        const canister = useCanisterStore();
+        const cosmicrafts = await canister.get('cosmicrafts');
+    
+        const defaultUsername = `Guest${Math.floor(Math.random() * 10000)}`;
+        const defaultAvatarId = Math.floor(Math.random() * 12) + 1; // Random avatar ID between 1 and 12
+    
+        /**
+         * signup: [Username, AvatarID, Opt(ReferralCode)]
+         * returns [Bool, Opt(Player), Text]
+         */
+        const [ok, maybePlayer, msg] = await cosmicrafts.signup(
+          defaultUsername,
+          defaultAvatarId,
+          [] // No referral code for guests
+        );
 
-      return { seedPhrase, identity };
+
+        console.log('Signup response:', { ok, maybePlayer, msg });
+    
+        if (ok) {
+          console.log(`Guest account signed up successfully: ${defaultUsername}`);
+          this.registered = true;
+
+          // Convert BigInt values in the player object to strings
+          const safePlayer = JSON.parse(
+            JSON.stringify(maybePlayer[0], (key, value) =>
+              typeof value === 'bigint' ? value.toString() : value
+            )
+          );
+
+          this.$patch((state) => {
+            state.player = safePlayer; // Update player state
+          });
+    
+          // Save updated state
+          this.saveStateToLocalStorage();
+          return { seedPhrase, identity, username: defaultUsername };
+        } else {
+          console.error('Failed to sign up guest account:', msg);
+          throw new Error(msg || 'Signup failed');
+        }
+      } catch (error) {
+        console.error('Error during guest account signup:', error);
+        throw new Error('Failed to automatically sign up the guest account.');
+      }
     },
 
     /**
@@ -110,7 +153,14 @@ export const useAuthStore = defineStore('auth', {
         loadStateFromLocalStorage() {
           const stored = localStorage.getItem('authStore');
           if (stored) {
-            this.$patch(JSON.parse(stored));
+            const parsed = JSON.parse(stored, (key, value) => {
+              // Convert strings back to BigInt if they represent BigInt values
+              if (typeof value === 'string' && /^\d+n$/.test(value)) {
+                return BigInt(value.slice(0, -1)); // Remove the 'n' suffix and convert to BigInt
+              }
+              return value;
+            });
+            this.$patch(parsed);
           }
         },
 
@@ -118,8 +168,20 @@ export const useAuthStore = defineStore('auth', {
      * Persist relevant parts of the store (e.g., authenticated state) to localStorage.
      */
     saveStateToLocalStorage() {
-      localStorage.setItem('authStore', JSON.stringify(this.$state));
-    },
+      const replacer = (key, value) => {
+        if (typeof value === 'bigint') {
+          return value.toString(); // Convert BigInt to string
+        }
+        return value; // Return other values as is
+      };
+    
+      // Stringify with replacer
+      const serializedState = JSON.stringify(this.$state, replacer);
+    
+      // Save to localStorage
+      localStorage.setItem('authStore', serializedState);
+    }
+    ,
 
     /**
      * Checks the canister to see if a user is registered

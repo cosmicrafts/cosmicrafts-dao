@@ -4,6 +4,8 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useModalStore } from '@/stores/modal';
 import { useI18n } from 'vue-i18n';
+import LoadingSpinner from '@/components/loading/LoadingSpinner.vue'; // Import the spinner
+
 
 const authStore = useAuthStore();
 const modalStore = useModalStore();
@@ -17,11 +19,22 @@ const handleAfterLogin = async () => {
   modalStore.closeModal(); // Close the login modal immediately
 };
 
+const loading = ref(false); // Add loading state
+
 const handleGuestLogin = async () => {
-  const { seedPhrase: generatedSeedPhrase } = await authStore.createGuestAccount();
-  alert(`Your seed phrase: ${generatedSeedPhrase}\n\nPlease save this securely.`);
-  await handleAfterLogin();
+  loading.value = true; // Start loading spinner
+  try {
+    const { seedPhrase, username } = await authStore.createGuestAccount();
+    console.log(`Guest account created with username: ${username}`);
+    await handleAfterLogin();
+  } catch (error) {
+    console.error('Error during guest login:', error);
+    alert('Failed to create a guest account. Please try again.');
+  } finally {
+    loading.value = true; // Stop loading spinner
+  }
 };
+
 
 const handleAccountRecovery = async () => {
   try {
@@ -99,8 +112,13 @@ const authMethods = [
 </script>
 
 <template>
-  <div class="login-container">
-    <div class="login-panel">
+<div class="login-container">
+    <!-- Loading Spinner -->
+    <div v-if="loading" class="loading-overlay">
+      <LoadingSpinner :isLoading="loading" />
+    </div>
+
+    <div class="login-panel" v-if="!loading">
       <img src="@/assets/icons/Cosmicrafts_Logo.svg" class="full-logo" alt="Cosmicrafts Logo" />
       <label class="cosmic-label-connect">{{ t('login.connectWith') }}</label>
 
