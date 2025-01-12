@@ -4,8 +4,7 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
-import LoadingScreen from '@/components/LoadingScreen.vue';
-import Modal from '@/components/Modal.vue'; // Add this import
+import Modal from '@/components/Modal.vue'; 
 
 const route = useRoute();
 const isWhitepaper = computed(() => route.path === '/whitepaper');
@@ -13,7 +12,6 @@ const isWhitepaper = computed(() => route.path === '/whitepaper');
 
 <template>
   <main id="app">
-    <LoadingScreen />
     <Header />
     <Modal />
     <router-view />

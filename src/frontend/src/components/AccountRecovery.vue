@@ -172,20 +172,20 @@ onMounted(() => {
 }
 
 .recovery-icon {
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
 }
 
 .title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bold;
   color: #ffffff;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .subtitle {
-  font-size: 1rem;
+  font-size: .75rem;
   color: #00befd;
   margin-bottom: .25rem;
   font-weight: 500;
@@ -228,7 +228,7 @@ onMounted(() => {
   width: 100px; /* Set a fixed width */
   max-width: 8rem; /* Optional: limit the maximum width */
   padding: .5rem;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   border: 1px solid #00e1ff;
   border-radius: 8px;
   outline: none;
@@ -255,20 +255,19 @@ onMounted(() => {
 
 .valid-message {
   color: #35c500; /* Green for confirmation */
+  margin-top: 1.5rem;
   font-size: .75rem;
   font-weight: thin;
   text-align: center;
 }
 
-
-
 button {
   margin-top: 1rem;
-  padding: 1rem 1rem;
+  padding: .75rem 1rem;
   font-size: .75rem;
-  font-weight: bold;
-  color: #fff;
-  background-color: #0080ff;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #008cff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -276,14 +275,15 @@ button {
 }
 
 button:disabled {
-  background-color: #515151;
+  background-color: #343434;
+  color: #a7a7a7;
   cursor: not-allowed;
+  font-weight: 400;
 }
 
 button:hover:not(:disabled) {
   background-color: #00aaff;
 }
-
 
 .icon-container {
   display: flex;

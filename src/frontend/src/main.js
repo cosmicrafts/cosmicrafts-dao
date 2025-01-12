@@ -3,11 +3,9 @@ import App from './App.vue';
 import { createI18n } from 'vue-i18n';
 import router from './router';
 import './style.css';
-import { useLoadingScreen } from '@/utils/useLoadingScreen';
 import { createPinia } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 
-// Import language files
 import en from './locales/en.json';
 import es from './locales/es.json';
 import fr from './locales/fr.json';
@@ -49,34 +47,20 @@ app.use(pinia); // Use Pinia
 const authStore = useAuthStore();
 authStore.loadStateFromLocalStorage();
 
-const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
-// Router Navigation Guards
-router.beforeEach((to, from, next) => {
-  const t = i18n.global.t;
+// Check if there is an identity; if not, create a guest account
+(async () => {
+  authStore.loadStateFromLocalStorage(); // Load the store from localStorage
 
-  if (to.path === '/dao') {
-    showLoadingScreen(t, 'header.dao');
-  } else if (to.path === '/whitepaper') {
-    showLoadingScreen(t, 'header.whitepaper');
+  // If authenticated and a seedPhrase exists, recreate the identity
+  if (authStore.isAuthenticated() && authStore.seedPhrase) {
+    console.log("Restoring identity from saved seed phrase...");
+    await authStore.handleLoginFlow(authStore.seedPhrase);
   } else {
-    showLoadingScreen(t, 'header.home');
+    console.log("No saved identity found. Creating a guest account...");
+    await authStore.createGuestAccount();
   }
+})();
 
-  // Update the document title based on the route's meta title
-  if (to.meta.title) {
-    document.title = t(to.meta.title); // Use the translation key to set the title
-  } else {
-    document.title = t('header.default'); // Fallback title
-  }
-
-  next();
-});
-
-router.afterEach(() => {
-  setTimeout(() => {
-    hideLoadingScreen(); // Hide loading screen after 1 second
-  }, 0);
-});
 
 // Define `selectedLanguage` as a global state
 const selectedLanguage = ref('en');

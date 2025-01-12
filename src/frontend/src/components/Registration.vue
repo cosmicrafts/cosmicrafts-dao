@@ -18,25 +18,32 @@
           <!-- Right Section -->
           <div class="right-section">
             <div class="form-group">
-              <label for="username">Username:</label>
+              <label for="username">{{ t('register.usernameLabel') }}</label>
               <input
                 type="text"
                 id="username"
                 v-model="username"
                 @input="enforceUsernameLimit"
                 required
-                placeholder="Max 12 characters"
+                :placeholder="t('register.usernamePlaceholder')"
               />
             </div>
             <div class="form-group">
-              <label for="referralCode">Referral Code:</label>
-              <input type="text" id="referralCode" v-model="referralCode" placeholder="(optional)" />
+              <label for="referralCode">{{ t('register.referralCodeLabel') }}</label>
+              <input
+                type="text"
+                id="referralCode"
+                v-model="referralCode"
+                :placeholder="t('register.referralCodePlaceholder')"
+              />
             </div>
             <div class="referral-link">
               <p>
-                Don't have a code?
-                <a href="https://discord.com/invite/cosmicrafts-884272584491941888" target="_blank"
-                  >Get one here!</a
+                {{ t('register.noReferralCode') }}
+                <a
+                  href="https://discord.com/invite/cosmicrafts-884272584491941888"
+                  target="_blank"
+                  >{{ t('register.getReferralCode') }}</a
                 >
               </p>
             </div>
@@ -47,10 +54,14 @@
             <div class="form-group terms">
               <input type="checkbox" id="terms" v-model="acceptedTerms" required />
               <label for="terms">
-                I accept
-                <a href="https://cosmicrafts.com/privacy-policy" target="_blank">Terms of Service</a>
-                and
-                <a href="https://cosmicrafts.com/terms-of-service" target="_blank">Privacy Policy</a>
+                {{ t('register.acceptTerms') }}
+                <a href="https://cosmicrafts.com/privacy-policy" target="_blank"
+                  >{{ t('register.privacyPolicy') }}</a
+                >
+                {{ t('register.and') }}
+                <a href="https://cosmicrafts.com/terms-of-service" target="_blank"
+                  >{{ t('register.termsOfService') }}</a
+                >
               </label>
             </div>
           </div>
@@ -58,7 +69,7 @@
           <!-- Submit -->
           <div class="submit-column">
             <button type="submit" class="submit-button">
-              Register
+              {{ t('register.continueButton') }}
             </button>
           </div>
         </form>
@@ -77,7 +88,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useCanisterStore } from '@/stores/canister';
-import { useModalStore } from '@/stores/modal'; // Import the modal store
+import { useModalStore } from '@/stores/modal';
+import { useI18n } from 'vue-i18n';
 import AvatarSelector from '@/components/account/AvatarSelector.vue';
 import LoadingSpinner from '@/components/loading/LoadingSpinner.vue';
 
@@ -89,7 +101,8 @@ export default {
   setup() {
     const authStore = useAuthStore();
     const router = useRouter();
-    const modalStore = useModalStore(); // Initialize the modal store
+    const modalStore = useModalStore();
+    const { t } = useI18n();
 
     const loading = ref(false);
     const username = ref('');
@@ -104,22 +117,16 @@ export default {
       }
     };
 
-    // If not authenticated, go back to login
     if (!authStore.isAuthenticated()) {
       console.log('User is not authenticated');
       router.push({ path: '/login' });
     }
 
-    /**
-     * Avatar selection callback
-     */
-     const onAvatarSelected = (avatarIndex) => {
-        console.log(`Avatar ID received from AvatarSelector (0-based): ${avatarIndex}`);
-        selectedAvatarId.value = avatarIndex; // Store zero-based index
-      };
-    /**
-     * Register the player on the canister
-     */
+    const onAvatarSelected = (avatarIndex) => {
+      console.log(`Avatar ID selected: ${avatarIndex + 1}`);
+      selectedAvatarId.value = avatarIndex;
+    };
+
     const registerPlayer = async () => {
       loading.value = true;
       registerResult.value = null;
@@ -127,16 +134,9 @@ export default {
       const canisterStore = useCanisterStore();
       const cosmicrafts = await canisterStore.get('cosmicrafts');
 
-      // Default to 1 if no avatar is selected
-      console.log('Selected Avatar ID before registration:', selectedAvatarId.value);
-      const avatarId = selectedAvatarId.value + 1; 
-      console.log(`Avatar ID being registered (1-based): ${avatarId}`);
+      const avatarId = selectedAvatarId.value + 1;
 
       try {
-        /**
-         * signup: [Username, AvatarID, Opt(ReferralCode)]
-         * returns [Bool, Opt(Player), Text]
-         */
         const [ok, maybePlayer, msg] = await cosmicrafts.signup(
           username.value,
           avatarId,
@@ -144,21 +144,18 @@ export default {
         );
 
         if (ok) {
-          // If signup succeeded
-          registerResult.value = `Welcome, ${maybePlayer[0]?.username ?? 'New Player'}!`;
-          // Refresh the store registration status
+          registerResult.value = t('register.successMessage', {
+            username: maybePlayer[0]?.username || t('register.newPlayer'),
+          });
           await authStore.isPlayerRegistered();
-          // Close the modal
-          modalStore.closeModal(); // Close the modal after successful registration
-          // Redirect to home or dash
+          modalStore.closeModal();
           router.push('/');
         } else {
-          // If signup failed
-          registerResult.value = msg || 'Registration failed.';
+          registerResult.value = msg || t('register.failureMessage');
         }
       } catch (error) {
         console.error('Error in registerPlayer:', error);
-        registerResult.value = error.message || 'Registration failed.';
+        registerResult.value = error.message || t('register.failureMessage');
       }
 
       loading.value = false;
@@ -174,11 +171,11 @@ export default {
       registerResult,
       onAvatarSelected,
       registerPlayer,
+      t,
     };
   },
 };
 </script>
-
 <style scoped>
 .top {
   position: absolute;
@@ -338,4 +335,16 @@ button.submit-button:active {
   font-size: 12px;
   margin-top: -8px;
 }
+
+.register-result {
+  justify-content: center;
+  align-items: center;
+  color: #e63d40;
+  font-size: .75rem;
+  font-weight: 500;
+  text-align: center;
+  margin-top: .25rem;
+}
+
+
 </style>

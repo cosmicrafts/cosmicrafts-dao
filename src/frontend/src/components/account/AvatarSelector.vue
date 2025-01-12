@@ -1,35 +1,38 @@
 <template>
   <div>
-    <!-- Image that shows the currently selected avatar -->
-    <img :src="selectedAvatar" alt="Selected Avatar" class="selected-avatar" @click="toggleGrid" />
+    <!-- Selected Avatar -->
+    <img
+      :src="selectedAvatar"
+      :alt="t('register.selectedAvatarAlt')"
+      class="selected-avatar"
+      @click="toggleGrid"
+    />
 
     <transition name="fade">
-      <!-- Use teleport to move the overlay to the root of the document -->
+      <!-- Avatar Selection Grid -->
       <teleport to="body">
         <div v-if="showGrid" class="overlay" @click.self="closeGrid">
-          <!-- Projected Image Section (outside the panel) -->
           <div v-if="hoveredAvatar" class="avatar-projection">
-            <img :src="hoveredAvatar" alt="Projected Avatar" class="projected-avatar" />
+            <img :src="hoveredAvatar" :alt="t('register.projectedAvatarAlt')" class="projected-avatar" />
           </div>
 
-          <!-- Avatar Grid Container (Panel) -->
           <div class="avatar-grid-container">
-            <!-- SVG Icon and Title for avatar selection grid -->
             <div class="avatar-grid-header">
-              <img src="@/assets/icons/avatar_icon.svg" alt="Avatar Icon" class="avatar-icon" />
-              <h2 class="avatar-grid-title">Select Your Avatar</h2>
+              <img src="@/assets/icons/avatar_icon.svg" :alt="t('register.avatarIconAlt')" class="avatar-icon" />
+              <h2 class="avatar-grid-title">{{ t('register.avatarGridTitle') }}</h2>
             </div>
 
             <div class="outer-panel">
-              <!-- Avatar Grid -->
               <div class="avatar-grid">
-                <div v-for="(avatar, index) in avatarSrcArray" 
-                     :key="index" 
-                     @mouseover="hoverAvatar(avatar)" 
-                     @mouseleave="clearHoveredAvatar"
-                     @click="selectAvatar(index)" 
-                     class="avatar-item">
-                  <img :src="avatar" alt="Avatar" class="avatar-image" />
+                <div
+                  v-for="(avatar, index) in avatarSrcArray"
+                  :key="index"
+                  @mouseover="hoverAvatar(avatar)"
+                  @mouseleave="clearHoveredAvatar"
+                  @click="selectAvatar(index)"
+                  class="avatar-item"
+                >
+                  <img :src="avatar" :alt="t('register.avatarAlt', { index: index + 1 })" class="avatar-image" />
                 </div>
               </div>
             </div>
@@ -53,13 +56,20 @@ import avatar9 from '@/assets/avatars/Avatar_09.webp';
 import avatar10 from '@/assets/avatars/Avatar_10.webp';
 import avatar11 from '@/assets/avatars/Avatar_11.webp';
 import avatar12 from '@/assets/avatars/Avatar_12.webp';
+import { useI18n } from 'vue-i18n';
 
 export default {
+  props: {
+    initialAvatarIndex: {
+      type: Number,
+      default: 0,
+    },
+  },
   data() {
     return {
       showGrid: false,
-      selectedAvatarIndex: 0,
-      hoveredAvatar: null, // Store the hovered avatar
+      selectedAvatarIndex: this.initialAvatarIndex,
+      hoveredAvatar: null,
       avatarSrcArray: [
         avatar1,
         avatar2,
@@ -88,7 +98,6 @@ export default {
     selectAvatar(index) {
       this.selectedAvatarIndex = index; // Store zero-based index
       this.showGrid = false; // Hide the grid
-      console.log(`AvatarSelector emitted: Index (0-based) = ${index}`);
       this.$emit('avatar-selected', index); // Emit zero-based index
     },
     closeGrid() {
@@ -100,10 +109,13 @@ export default {
     clearHoveredAvatar() {
       this.hoveredAvatar = null; // Clear the hovered avatar when the mouse leaves
     }
+  },
+  setup() {
+    const { t } = useI18n();
+    return { t };
   }
 };
 </script>
-
 
 <style scoped>
 /* Styling for the selected avatar */
@@ -117,7 +129,7 @@ export default {
 }
 
 .selected-avatar:hover {
-  border-color: #ff8fff;
+  border-color: #ff00e6;
   transform: scale(1.025);
 }
 
@@ -127,14 +139,13 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.289);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000;
+  z-index: 1000;
   opacity: 0;
-  animation: fadeIn 0.15s forwards;
+  animation: fadeIn 0.10s forwards;
 }
 
 @keyframes fadeIn {
@@ -143,11 +154,10 @@ export default {
   }
 }
 
-
 /* Outer panel with black background and transparency */
 .outer-panel {
-  background: rgba(0, 0, 0, 0.361);
-  padding: 20px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 1rem;
   border-radius: 10px;
   justify-content: center;
   align-items: center;
@@ -157,7 +167,6 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-
 /* Avatar grid container styling */
 .avatar-grid-container {
   display: flex;
@@ -165,8 +174,8 @@ export default {
   align-items: center;
   background: #19242fd1;
   backdrop-filter: blur(4px);
-  padding: 36px;
-  border-radius: 12px;
+  padding: .5rem;
+  border-radius: 10px;
   border: 0.5px solid rgba(255, 255, 255, 0.077);
   box-shadow: inset 0px 4px 4px rgba(255, 255, 255, 0.037);
 }
@@ -176,23 +185,21 @@ export default {
   display: flex;
   align-items: center;
   width: 100%;
-  margin-bottom: 16px;
-  margin-left: 20px;
 }
 
 /* SVG icon before title */
 .avatar-icon {
-  width: 24px;
-  height: 24px;
+  width: 12px;
+  height: 12px;
   margin-right: 8px;
 }
 .avatar-icon:hover  {
-  color: #cacaca;
+  color: #ffffff;
 }
 .avatar-grid-title {
   color: #afafaf;
-  font-size: 18px;
-  font-weight: 900;
+  font-size: .75rem;
+  font-weight: 500;
   text-align: left;
   transition: color 0.3s ease;
 }
@@ -200,7 +207,6 @@ export default {
 .avatar-grid-title:hover {
   color: #ffffff;
 }
-
 
 /* Avatar grid layout */
 .avatar-grid {
@@ -224,16 +230,16 @@ export default {
   cursor: pointer;
   border-radius: 10px;
   border: 1px solid #00FFFF;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  transition: transform 0.5s ease, box-shadow 0.8s ease, filter 0.6s ease;
 }
 
 /* Glow and elastic hover animation */
 .avatar-item:hover .avatar-image {
-  animation: elasticScale 0.45s ease-in-out;
+  animation: elasticScale 0.25s ease-in-out;
   box-shadow: 0 0 8px rgba(255, 0, 234, 0.818),
               0 0 16px rgba(255, 0, 247, 0.498);
-  filter: brightness(1.2);
-  border: 2px solid #ff00c3;
+  filter: brightness(1.9);
+  border: 1px solid #ff00c3;
 }
 
 /* Keyframe for elastic animation */
@@ -241,14 +247,8 @@ export default {
   0% {
     transform: scale(1);
   }
-  30% {
-    transform: scale(1.05);
-  }
-  60% {
-    transform: scale(0.95);
-  }
-  80% {
-    transform: scale(1.05);
+  50% {
+    transform: scale(1.1);
   }
   100% {
     transform: scale(1);
@@ -306,28 +306,4 @@ export default {
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-
-
-
-@media screen and (max-width: 480px) {
-  .avatar-grid {
-    grid-template-columns: 1fr 1fr; /* Two columns */
-    gap: 15px; /* Adjust gap for smaller screens */
-  }
-
-  .avatar-image {
-    width: 96px;
-    height: 96px; /* 4:3 aspect ratio */
-  }
-}
-
-/* Transition effects */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.35s;
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
 </style>

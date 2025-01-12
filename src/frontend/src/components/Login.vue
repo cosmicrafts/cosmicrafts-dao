@@ -41,6 +41,11 @@ const openAccountRecoveryModal = async () => {
 
 // Main authentication methods (buttons with text)
 const mainMethods = [
+{
+    logo: new URL('@/assets/icons/wouid_icon.svg', import.meta.url).href,
+    text: t('login.guestAccount'),
+    onClick: handleGuestLogin,
+  },
   {
     logo: new URL('@/assets/icons/icp.svg', import.meta.url).href,
     text: t('login.internetIdentity'),
@@ -54,11 +59,7 @@ const mainMethods = [
     text: t('login.google'),
     onClick: onGoogleClick,
   },
-  {
-    logo: new URL('@/assets/icons/wouid_icon.svg', import.meta.url).href,
-    text: t('login.guestAccount'),
-    onClick: handleGuestLogin,
-  },
+
 ];
 
 // Secondary methods (icon-only buttons)
@@ -77,6 +78,21 @@ const secondaryMethods = [
       await handleAfterLogin();
     },
   },
+  {
+    logo: new URL('@/assets/icons/nfid.svg', import.meta.url).href,
+    onClick: async () => {
+      await authStore.loginWithNFID();
+      await handleAfterLogin();
+    },
+  },
+  {
+    logo: new URL('@/assets/icons/plug.svg', import.meta.url).href, // Replace with Plug icon URL
+    onClick: async () => {
+      await authStore.loginWithPlug();
+      await handleAfterLogin();
+    }
+  },
+  
 ];
 </script>
 

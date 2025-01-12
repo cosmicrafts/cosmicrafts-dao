@@ -9,10 +9,21 @@ import nacl from 'tweetnacl';
 import MetaMaskService from '@/services/MetaMaskService';
 import PhantomService from '@/services/PhantomService';
 import useCanisterStore from './canister.js';
-import { useModalStore } from './modal';
 import Registration from '@/components/Registration.vue';
+import * as bip39 from 'bip39';
+import { useModalStore } from '@/stores/modal';
+import PlugService from '@/services/PlugService';
 
 let identity = null;
+
+function generateSeedPhrase(input) {
+  const encoder = new TextEncoder();
+  const encodedInput = encoder.encode(input);
+  return crypto.subtle.digest('SHA-256', encodedInput).then(hashBuffer => {
+    const seed = new Uint8Array(hashBuffer.slice(0, 32));
+    return bip39.entropyToMnemonic(seed);
+  });
+}
 
 // Helper function to derive keys from a seed phrase
 function deriveKeysFromSeedPhrase(seedPhrase) {
@@ -55,94 +66,21 @@ export const useAuthStore = defineStore('auth', {
     isRegistered() {
       return this.registered;
     },
-    async createGuestAccount() {
-      console.log('Generating a new guest account...');
-      
-      // Generate a 12-word seed phrase
-      const seedPhrase = generateMnemonic();
-      this.seedPhrase = seedPhrase;
-    
-      // Derive keys and create identity
-      const keyPair = deriveKeysFromSeedPhrase(seedPhrase);
-      identity = createIdentityFromKeyPair(keyPair);
-    
-      console.log('Guest Identity Principal:', identity.getPrincipal().toText());
-      this.authenticated = true;
-      this.registered = false;
-    
-      // Save state to local storage
-      this.saveStateToLocalStorage();
-    
-      // Automatically sign up the guest on the canister
-      try {
-        console.log('Automatically signing up guest to canister...');
-        const canister = useCanisterStore();
-        const cosmicrafts = await canister.get('cosmicrafts');
-    
-        const defaultUsername = `Guest${Math.floor(Math.random() * 10000)}`;
-        const defaultAvatarId = Math.floor(Math.random() * 12) + 1; // Random avatar ID between 1 and 12
-    
-        /**
-         * signup: [Username, AvatarID, Opt(ReferralCode)]
-         * returns [Bool, Opt(Player), Text]
-         */
-        const [ok, maybePlayer, msg] = await cosmicrafts.signup(
-          defaultUsername,
-          defaultAvatarId,
-          [] // No referral code for guests
-        );
-
-
-        console.log('Signup response:', { ok, maybePlayer, msg });
-    
-        if (ok) {
-          console.log(`Guest account signed up successfully: ${defaultUsername}`);
-          this.registered = true;
-
-          // Convert BigInt values in the player object to strings
-          const safePlayer = JSON.parse(
-            JSON.stringify(maybePlayer[0], (key, value) =>
-              typeof value === 'bigint' ? value.toString() : value
-            )
-          );
-
-          this.$patch((state) => {
-            state.player = safePlayer; // Update player state
-          });
-    
-          // Save updated state
-          this.saveStateToLocalStorage();
-          return { seedPhrase, identity, username: defaultUsername };
-        } else {
-          console.error('Failed to sign up guest account:', msg);
-          throw new Error(msg || 'Signup failed');
-        }
-      } catch (error) {
-        console.error('Error during guest account signup:', error);
-        throw new Error('Failed to automatically sign up the guest account.');
-      }
-    },
-
-    /**
-     * Recover an account using a seed phrase.
-     * @param {string} seedPhrase - The seed phrase provided by the user.
-     */
-    async recoverAccount(seedPhrase) {
+    async handleLoginFlow(seedPhrase) {
       if (!validateMnemonic(seedPhrase)) {
-        throw new Error('Invalid seed phrase. Please try again.');
+        throw new Error('Invalid seed phrase.');
       }
     
-      console.log('Recovering account using seed phrase...');
-      
       // Derive keys and create identity
       const keyPair = deriveKeysFromSeedPhrase(seedPhrase);
       identity = createIdentityFromKeyPair(keyPair);
     
       // Use the identity for authentication
-      console.log('Recovered Identity Principal:', identity.getPrincipal().toText());
+      console.log('Identity Principal:', identity.getPrincipal().toText());
       this.authenticated = true;
     
-      // Save state to localStorage
+      // Save the seed phrase to the store and localStorage
+      this.seedPhrase = seedPhrase;
       this.saveStateToLocalStorage();
     
       // Check if the player exists
@@ -185,11 +123,29 @@ export const useAuthStore = defineStore('auth', {
           this.redirectToRegistration();
         }
       } catch (error) {
-        console.error('Error during account recovery:', error);
-        throw new Error('Account recovery failed. Please try again.');
+        console.error('Error during login:', error);
+        throw new Error('Login failed. Please try again.');
       }
-    }
-    ,
+    },
+
+    async createGuestAccount() {
+      console.log('Generating a new guest account...');
+      
+      // Generate a 12-word seed phrase
+      const seedPhrase = generateMnemonic();
+      await this.handleLoginFlow(seedPhrase);
+    
+      // Return a dummy username or principal for compatibility
+      return { username: identity.getPrincipal().toText() };
+    },
+
+    /**
+     * Recover an account using a seed phrase.
+     * @param {string} seedPhrase - The seed phrase provided by the user.
+     */
+    async recoverAccount(seedPhrase) {
+      return this.handleLoginFlow(seedPhrase);
+    },
 
         /**
      * Load from localStorage on app mount if desired.
@@ -198,13 +154,21 @@ export const useAuthStore = defineStore('auth', {
           const stored = localStorage.getItem('authStore');
           if (stored) {
             const parsed = JSON.parse(stored, (key, value) => {
-              // Convert strings back to BigInt if they represent BigInt values
+              // Convert strings back to BigInt if needed
               if (typeof value === 'string' && /^\d+n$/.test(value)) {
-                return BigInt(value.slice(0, -1)); // Remove the 'n' suffix and convert to BigInt
+                return BigInt(value.slice(0, -1));
               }
               return value;
             });
+        
             this.$patch(parsed);
+        
+            // Reinitialize identity if a seedPhrase exists
+            if (parsed.seedPhrase) {
+              console.log("Reinitializing identity from seed phrase...");
+              const keyPair = deriveKeysFromSeedPhrase(parsed.seedPhrase);
+              identity = createIdentityFromKeyPair(keyPair);
+            }
           }
         },
 
@@ -276,108 +240,91 @@ export const useAuthStore = defineStore('auth', {
         this.isCheckingPlayer = false; // Reset flag
       }
     },
-
-    /**
-     * Google login using Google One-Tap 
-     */
-    async loginWithGoogle(response) {
-      // Decode token and set identity
-      const decodedIdToken = response.credential.split('.')[1];
-      const payload = JSON.parse(atob(decodedIdToken));
-      this.googleSub = payload.sub;
+    async loginWithPlug() {
+      try {
+        if (!window.ic || !window.ic.plug) {
+          throw new Error('Plug Wallet is not installed. Please install the Plug extension.');
+        }
     
-      const encoder = new TextEncoder();
-      const encodedSub = encoder.encode(payload.sub);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', encodedSub);
-      const seed = new Uint8Array(hashBuffer.slice(0, 32));
-      const keyPair = nacl.sign.keyPair.fromSeed(seed);
+        const isConnected = await window.ic.plug.isConnected();
+        if (!isConnected) {
+          console.log('Connecting to Plug Wallet...');
+          const connected = await window.ic.plug.requestConnect({
+            whitelist: ['lqso3-syaaa-aaaap-qpoeq-cai'], // Replace with your canister ID
+          });
+          if (!connected) {
+            throw new Error('Failed to connect to Plug Wallet.');
+          }
+        }
     
-      identity = Ed25519KeyIdentity.fromKeyPair(keyPair.publicKey, keyPair.secretKey);
-      this.authenticated = true;
+        const principal = await window.ic.plug.getPrincipal();
+        console.log('Plug Wallet Principal:', principal);
     
-      // Ensure the actor is initialized before checking registration
-      const canister = useCanisterStore();
-      await canister.get('cosmicrafts'); // Wait for actor initialization
-    
-      // Now check if the player is registered
-      await this.isPlayerRegistered();
-    
-      // Optional: persist googleSub in local storage or entire store
-      this.saveStateToLocalStorage();
+        // Generate and save seed phrase
+        const seedPhrase = await generateSeedPhrase(principal.toText());
+        await this.handleLoginFlow(seedPhrase);
+      } catch (error) {
+        console.error('Plug Wallet login error:', error);
+        throw new Error('Plug Wallet login failed.');
+      }
     },
-
-    /**
-     * MetaMask login
-     */
+    async loginWithGoogle(response) {
+      try {
+        const decodedIdToken = response.credential.split('.')[1];
+        const payload = JSON.parse(atob(decodedIdToken));
+        this.googleSub = payload.sub;
+    
+        // Generate and save seed phrase
+        const seedPhrase = await generateSeedPhrase(payload.sub);
+        await this.handleLoginFlow(seedPhrase);
+      } catch (error) {
+        console.error('Google login error:', error);
+        throw new Error('Google login failed.');
+      }
+    },
     async loginWithMetaMask() {
       try {
         const uniqueMessage = 'Sign this message to log in with your Ethereum wallet';
         const signature = await MetaMaskService.signMessage(uniqueMessage);
-
+        console.log('MetaMask Signature:', signature);
+    
+        // Generate and save seed phrase
         if (signature) {
-          // Generate keys from signature
-          const { public: publicKeyB64, private: secretKeyB64 } =
-            await this.generateKeysFromSignature(signature);
-
-          // Convert base64 to Uint8Array
-          const publicBytes = base64ToUint8Array(publicKeyB64);
-          const privateBytes = base64ToUint8Array(secretKeyB64);
-
-          // Create Ed25519KeyIdentity
-          identity = Ed25519KeyIdentity.fromKeyPair(publicBytes, privateBytes);
-
-          this.authenticated = true;
-          await this.isPlayerRegistered(); // Update registered state
+          const seedPhrase = await generateSeedPhrase(signature);
+          await this.handleLoginFlow(seedPhrase);
+        } else {
+          throw new Error('Failed to sign with MetaMask.');
         }
-      } catch (err) {
-        console.error('MetaMask login error:', err);
+      } catch (error) {
+        console.error('MetaMask login error:', error);
+        throw new Error('MetaMask login failed.');
       }
-    },
-
-    /**
-     * Phantom login
-     */
+    } ,
     async loginWithPhantom() {
       try {
         const message = 'Sign this message to log in with your Phantom Wallet';
         const signature = await PhantomService.signAndSend(message);
-
+    
+        // Generate and save seed phrase
         if (signature) {
-          const { public: publicKeyB64, private: secretKeyB64 } =
-            await this.generateKeysFromSignature(signature);
-
-          identity = Ed25519KeyIdentity.fromKeyPair(
-            base64ToUint8Array(publicKeyB64),
-            base64ToUint8Array(secretKeyB64)
-          );
-
-          this.authenticated = true;
-          await this.isPlayerRegistered();
+          const seedPhrase = await generateSeedPhrase(signature);
+          await this.handleLoginFlow(seedPhrase);
+        } else {
+          throw new Error('Failed to sign with Phantom.');
         }
-      } catch (err) {
-        console.error('Phantom login error:', err);
+      } catch (error) {
+        console.error('Phantom login error:', error);
+        throw new Error('Phantom login failed.');
       }
     },
-
-    /**
-     * Internet Identity login via AuthClient
-     */
     async loginWithInternetIdentity() {
       await this.loginWithAuthClient('https://identity.ic0.app');
     },
-
-    /**
-     * NFID login via AuthClient
-     */
     async loginWithNFID() {
       await this.loginWithAuthClient(
         'https://nfid.one/authenticate/?applicationName=COSMICRAFTS&applicationLogo=https://cosmicrafts.com/wp-content/uploads/2023/09/cosmisrafts-242x300.png#authorize'
       );
     },
-
-    /**
-     * Generic login with an external identity provider
-     */
     async loginWithAuthClient(identityProviderUrl) {
       try {
         const authClient = await AuthClient.create();
@@ -389,39 +336,27 @@ export const useAuthStore = defineStore('auth', {
             `top=${window.screen.height / 2 - 705 / 2},` +
             `toolbar=0,location=0,menubar=0,width=525,height=705`,
           onSuccess: async () => {
-            console.log('II/NFID AuthClient login success');
-            identity = authClient.getIdentity();
-            this.authenticated = true;
+            console.log('AuthClient login success');
+            const identity = authClient.getIdentity();
     
-            // Log identity details
-            console.log('AuthClient Identity:', identity);
-            console.log('AuthClient Principal:', identity.getPrincipal().toText());
+            // Generate and save seed phrase
+            const principalBytes = identity.getPrincipal().toUint8Array();
+            const hashBuffer = await crypto.subtle.digest('SHA-256', principalBytes);
+            const entropy = new Uint8Array(hashBuffer);
+            const seedPhrase = bip39.entropyToMnemonic(entropy);
     
-            // Debug agent setup
-            const agent = new HttpAgent({ identity });
-    
-            // Ensure the agent is fetching its root key in local environments
-            if (process.env.NODE_ENV === 'development') {
-              agent.fetchRootKey();
-            }
-    
-            console.log('Agent Principal:', identity.getPrincipal().toText());
-    
-            // Check player registration
-            await this.isPlayerRegistered();
+            await this.handleLoginFlow(seedPhrase);
           },
           onError: (error) => {
-            console.error('Authentication error:', error);
+            console.error('AuthClient login error:', error);
+            throw new Error('Authentication failed.');
           },
         });
-      } catch (err) {
-        console.error('loginWithAuthClient error:', err);
+      } catch (error) {
+        console.error('loginWithAuthClient error:', error);
+        throw new Error('Login failed.');
       }
     },
-
-    /**
-     * Helper to create keypair from a signature
-     */
     async generateKeysFromSignature(signature) {
       const encoder = new TextEncoder();
       const encodedSignature = encoder.encode(signature);
@@ -434,10 +369,6 @@ export const useAuthStore = defineStore('auth', {
         private: base64Encode(keyPair.secretKey),
       };
     },
-
-    /**
-     * Persist relevant parts of the store (e.g. googleSub) to localStorage
-     */
     saveStateToLocalStorage() {
       const replacer = (key, value) => {
         if (typeof value === 'bigint') {
@@ -448,12 +379,7 @@ export const useAuthStore = defineStore('auth', {
     
       const serializedState = JSON.stringify(this.$state, replacer); // Use replacer for BigInt
       localStorage.setItem('authStore', serializedState);
-    }
-    ,
-
-    /**
-     * Load from localStorage on app mount if desired
-     */
+    },
     loadStateFromLocalStorage() {
       const stored = localStorage.getItem('authStore');
       if (stored) {
@@ -469,28 +395,24 @@ export const useAuthStore = defineStore('auth', {
         });
         this.$patch(parsed);
       }
-    }
-    ,
-    
-    /**
-     * Helper to redirect to home
-     */
+    },
     redirectToHome() {
       const modalStore = useModalStore(); // Access the modal store
       console.log('Redirecting to home or dashboard modal...');
-      modalStore.closeModal(); // Close the current modal
+      //modalStore.closeModal(); // Close the current modal
       //modalStore.openModal('DashboardModal'); // Optionally, open the dashboard or another modal
     },
-    
-    /**
-     * Helper to redirect to registration
-     */
     redirectToRegistration() {
-      const modalStore = useModalStore(); // Access the modal store
-      console.log('Redirecting to registration modal...');
-      modalStore.openModal(Registration); // Pass the component directly
-    },  
-
+      const modalStore = useModalStore(); // Access modal store
+      //console.log('Redirecting to registration modal...');
+    
+      // Ensure the modal is reset
+      modalStore.closeModal(); // Close the existing modal if any
+      setTimeout(() => {
+        modalStore.openModal(Registration); // Open the registration modal
+        //console.log('Modal State After Opening Registration:', modalStore.isOpen);
+      }, 0); // Add a slight delay to ensure Vue processes the close event
+    },
     /**
      * Logout
      */
@@ -498,11 +420,7 @@ export const useAuthStore = defineStore('auth', {
       identity = null;
       this.authenticated = false;
       this.registered = false;
-
-      // Clear store values
       this.googleSub = '';
-
-      // Clear localStorage
       localStorage.removeItem('authStore');
     },
   },

@@ -2552,6 +2552,58 @@ shared actor class Cosmicrafts() = Self {
         var notifications: HashMap.HashMap<PlayerId, [Notification]> = HashMap.fromIter(_notifications.vals(), 0, Principal.equal, Principal.hash);
         var updateTimestamps: HashMap.HashMap<PlayerId, UpdateTimestamps> = HashMap.fromIter(_updateTimestamps.vals(), 0, Principal.equal, Principal.hash);
 
+    public shared ({ caller: PlayerId }) func deleteAccount() : async (Bool, Text) {
+        let playerId = caller;
+
+        // Check if the user exists
+        switch (players.get(playerId)) {
+            case (null) {
+                return (false, "User record does not exist");
+            };
+            case (?_) {
+                // Remove from players
+                ignore players.remove(playerId);
+
+                // Remove associated data
+                ignore friendRequests.remove(playerId);
+                ignore privacySettings.remove(playerId);
+                ignore blockedUsers.remove(playerId);
+                ignore notifications.remove(playerId);
+                ignore updateTimestamps.remove(playerId);
+
+                // Remove user from others' blocked lists
+                for ((otherPlayerId, blockedList) in blockedUsers.entries()) {
+                    let updatedList = Array.filter(blockedList, func(blockedId: PlayerId): Bool {
+                        blockedId != playerId;
+                    });
+                    blockedUsers.put(otherPlayerId, updatedList);
+                };
+
+                // Remove user from mutualFriendships
+                for ((key, _) in mutualFriendships.entries()) {
+                    if (key.0 == playerId or key.1 == playerId) {
+                        ignore mutualFriendships.remove(key);
+                    };
+                };
+
+                // Remove user from other players' friend lists
+                for ((otherPlayerId, user) in players.entries()) {
+                    let updatedFriends = Array.filter(user.friends, func(friend: FriendDetails): Bool {
+                        friend.playerId != playerId;
+                    });
+                    players.put(otherPlayerId, { user with friends = updatedFriends });
+                };
+
+                // Clear associated multipliers, avatars, and titles
+                ignore multiplierByPlayer.remove(playerId);
+                ignore availableAvatars.remove(playerId);
+                ignore availableTitles.remove(playerId);
+
+                return (true, "Account and all associated data deleted successfully");
+            };
+        };
+    };
+
     public shared({ caller: PlayerId }) func signup(
         username: Username,
         avatar: AvatarID,
@@ -3155,6 +3207,10 @@ shared actor class Cosmicrafts() = Self {
     public query func getAllPlayers() : async [Player] {
         return Iter.toArray(players.vals());
     };
+
+    public query func getTotalPlayers() : async Nat {
+    return players.size();
+};
 
 //--
 // Statistics
