@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useCanisterStore } from '@/stores/canister';
@@ -92,6 +92,7 @@ import { useModalStore } from '@/stores/modal';
 import { useI18n } from 'vue-i18n';
 import AvatarSelector from '@/components/account/AvatarSelector.vue';
 import LoadingSpinner from '@/components/loading/LoadingSpinner.vue';
+import { languageToNat8Mapping } from '@/utils/languageMapping';
 
 export default {
   components: {
@@ -102,7 +103,7 @@ export default {
     const authStore = useAuthStore();
     const router = useRouter();
     const modalStore = useModalStore();
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
 
     const loading = ref(false);
     const username = ref('');
@@ -127,6 +128,10 @@ export default {
       selectedAvatarId.value = avatarIndex;
     };
 
+    const currentLanguageNat8 = computed(() => {
+      return languageToNat8Mapping[locale.value] || 0; // Default to English (0) if mapping is unavailable
+    });
+
     const registerPlayer = async () => {
       loading.value = true;
       registerResult.value = null;
@@ -140,7 +145,8 @@ export default {
         const [ok, maybePlayer, msg] = await cosmicrafts.signup(
           username.value,
           avatarId,
-          referralCode.value ? [referralCode.value] : []
+          referralCode.value ? [referralCode.value] : [],
+          currentLanguageNat8.value // Language as Nat8
         );
 
         if (ok) {
@@ -176,6 +182,8 @@ export default {
   },
 };
 </script>
+
+
 <style scoped>
 .top {
   position: absolute;

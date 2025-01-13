@@ -16,6 +16,7 @@ module Types {
   public type MatchResult = Text;
   public type MatchMap = Text;
   public type PlayerFaction = Text;
+  public type LanguageCode = Nat8;
 
 // Player and Friend Details
   public type Player = {
@@ -28,7 +29,9 @@ module Types {
     level: Level;
     elo: Float;
     friends: [FriendDetails];
+    language: Nat8;
   };
+
   public type FriendDetails = {
     playerId: PlayerId;
     username: Username;

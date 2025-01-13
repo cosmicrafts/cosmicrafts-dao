@@ -2520,6 +2520,7 @@ shared actor class Cosmicrafts() = Self {
                     elo = player.elo;
                     friends = player.friends;
                     title = player.title;
+                    language = player.language;
                 };
                 players.put(playerId, updatedPlayer);
             };
@@ -2604,87 +2605,89 @@ shared actor class Cosmicrafts() = Self {
         };
     };
 
-    public shared({ caller: PlayerId }) func signup(
-        username: Username,
-        avatar: AvatarID,
-        referralCode: ?ReferralCode
-    ): async (Bool, ?Player, Text) {
-        if (username.size() > 12) {
-            return (false, null, "Username must be 12 characters or less");
+public shared({ caller: PlayerId }) func signup(
+    username: Username,
+    avatar: AvatarID,
+    referralCode: ?ReferralCode,
+    language: Nat8 // Add language as a parameter
+): async (Bool, ?Player, Text) {
+    if (username.size() > 12) {
+        return (false, null, "Username must be 12 characters or less");
+    };
+
+    let playerId = caller;
+
+    // Check if the player is already registered
+    switch (players.get(playerId)) {
+        case (?existingPlayer) {
+            // Player is already registered
+            return (false, ?existingPlayer, "User is already registered.");
         };
+        case (null) {
+            // Handle referral code scenarios
+            let finalCode: ReferralCode = switch (referralCode) {
+                case (?code) {
+                    // Referral code is provided
+                    let codeAssigned = await assignUnassignedReferralCode(playerId, code);
 
-        let playerId = caller;
-
-        // Check if the player is already registered
-        switch (players.get(playerId)) {
-            case (?existingPlayer) {
-                // Player is already registered
-                return (false, ?existingPlayer, "User is already registered.");
-            };
-            case (null) {
-                // Handle referral code scenarios
-                let finalCode: ReferralCode = switch (referralCode) {
-                    case (?code) {
-                        // Referral code is provided
-                        let codeAssigned = await assignUnassignedReferralCode(playerId, code);
-
-                        switch (codeAssigned) {
-                            case (#ok(true)) {
-                                // Starter referral code successfully adopted
-                                code;
-                            };
-                            case (#ok(false)) {
-                                // Code is valid but already assigned; track referrer and generate a new referral code
-                                switch (referralCodes.get(code)) {
-                                    case (?referrerId) {
-                                        trackReferrer(referrerId, playerId);
-                                        let (newCode, _) = await assignReferralCode(playerId, null);
-                                        newCode;
-                                    };
-                                    case (null) {
-                                        return (false, null, "Invalid referral code");
-                                    };
+                    switch (codeAssigned) {
+                        case (#ok(true)) {
+                            // Starter referral code successfully adopted
+                            code;
+                        };
+                        case (#ok(false)) {
+                            // Code is valid but already assigned; track referrer and generate a new referral code
+                            switch (referralCodes.get(code)) {
+                                case (?referrerId) {
+                                    trackReferrer(referrerId, playerId);
+                                    let (newCode, _) = await assignReferralCode(playerId, null);
+                                    newCode;
+                                };
+                                case (null) {
+                                    return (false, null, "Invalid referral code");
                                 };
                             };
-                            case (#err(errMsg)) {
-                                return (false, null, errMsg); // Invalid referral code
-                            };
+                        };
+                        case (#err(errMsg)) {
+                            return (false, null, errMsg); // Invalid referral code
                         };
                     };
-                    case (null) {
-                        // No referral code provided; generate a new referral code
-                        let (newCode, _) = await assignReferralCode(playerId, null);
-                        newCode;
-                    };
                 };
-
-                // Proceed with player registration
-                let registrationDate = Time.now();
-                let newPlayer: Player = {
-                    id = playerId;
-                    username = username;
-                    avatar = avatar;
-                    description = "";
-                    registrationDate = registrationDate;
-                    level = 1;
-                    elo = 1200;
-                    friends = [];
-                    title = "Starbound Initiate";
+                case (null) {
+                    // No referral code provided; generate a new referral code
+                    let (newCode, _) = await assignReferralCode(playerId, null);
+                    newCode;
                 };
-                players.put(playerId, newPlayer);
-
-                // Initialize the player's multiplier
-                multiplierByPlayer.put(playerId, 1.0);
-                _multiplierByPlayer := Iter.toArray(multiplierByPlayer.entries());
-
-                // Assign default avatars and titles
-                availableAvatars.put(playerId, Iter.toArray(Iter.range(1, 12)));
-                availableTitles.put(playerId, [1]);
-
-                return (true, ?newPlayer, "User registered successfully with referral code " # finalCode);
             };
+
+            // Proceed with player registration
+            let registrationDate = Time.now();
+            let newPlayer: Player = {
+                id = playerId;
+                username = username;
+                avatar = avatar;
+                description = "";
+                registrationDate = registrationDate;
+                level = 1;
+                elo = 1200;
+                friends = [];
+                title = "Starbound Initiate";
+                language = language; // Use the passed language parameter
+            };
+            players.put(playerId, newPlayer);
+
+            // Initialize the player's multiplier
+            multiplierByPlayer.put(playerId, 1.0);
+            _multiplierByPlayer := Iter.toArray(multiplierByPlayer.entries());
+
+            // Assign default avatars and titles
+            availableAvatars.put(playerId, Iter.toArray(Iter.range(1, 12)));
+            availableTitles.put(playerId, [1]);
+
+            return (true, ?newPlayer, "User registered successfully with referral code " # finalCode);
         };
     };
+};
 
     private func addNotification(to: PlayerId, notification: Notification) {
         var userNotifications = Utils.nullishCoalescing<[Notification]>(notifications.get(to), []);
@@ -2754,7 +2757,7 @@ shared actor class Cosmicrafts() = Self {
 
                 let updatedPlayer: Player = {
                     id = player.id;
-                    username = username;
+                    username = username; // Update the username
                     avatar = player.avatar;
                     description = player.description;
                     registrationDate = player.registrationDate;
@@ -2762,6 +2765,7 @@ shared actor class Cosmicrafts() = Self {
                     elo = player.elo;
                     friends = player.friends;
                     title = player.title;
+                    language = player.language;
                 };
                 players.put(playerId, updatedPlayer);
 
@@ -2807,6 +2811,7 @@ shared actor class Cosmicrafts() = Self {
                     elo = player.elo;
                     friends = player.friends;
                     title = player.title;
+                    language = player.language;
                 };
                 players.put(playerId, updatedPlayer);
 
@@ -3317,6 +3322,7 @@ shared actor class Cosmicrafts() = Self {
                 return false;
             };
             case (?existingPlayer) {
+                
                 let updatedPlayer : Player = {
                     id = existingPlayer.id;
                     username = existingPlayer.username;
@@ -3327,6 +3333,7 @@ shared actor class Cosmicrafts() = Self {
                     elo = newELO;
                     friends = existingPlayer.friends;
                     title = existingPlayer.title;
+                    language = existingPlayer.language;
                 };
                 players.put(playerId, updatedPlayer);
                 return true;

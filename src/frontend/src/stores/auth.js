@@ -3,7 +3,6 @@ import { defineStore } from 'pinia';
 import { mnemonicToSeedSync, generateMnemonic, validateMnemonic } from 'bip39';
 import { encode as base64Encode } from 'base64-arraybuffer';
 import { Ed25519KeyIdentity } from '@dfinity/identity';
-import { HttpAgent } from '@dfinity/agent';
 import { AuthClient } from '@dfinity/auth-client';
 import nacl from 'tweetnacl';
 import MetaMaskService from '@/services/MetaMaskService';
@@ -12,7 +11,6 @@ import useCanisterStore from './canister.js';
 import Registration from '@/components/Registration.vue';
 import * as bip39 from 'bip39';
 import { useModalStore } from '@/stores/modal';
-import PlugService from '@/services/PlugService';
 
 let identity = null;
 
@@ -25,27 +23,13 @@ function generateSeedPhrase(input) {
   });
 }
 
-// Helper function to derive keys from a seed phrase
 function deriveKeysFromSeedPhrase(seedPhrase) {
   const seed = mnemonicToSeedSync(seedPhrase).slice(0, 32); // Derive 32-byte seed
   return nacl.sign.keyPair.fromSeed(seed);
 }
 
-// Create identity from a key pair
 function createIdentityFromKeyPair(keyPair) {
   return Ed25519KeyIdentity.fromKeyPair(keyPair.publicKey, keyPair.secretKey);
-}
-
-// Helper to convert base64 to Uint8Array
-
-function base64ToUint8Array(base64) {
-  const binaryString = atob(base64);
-  const len = binaryString.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-  return bytes;
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -127,7 +111,6 @@ export const useAuthStore = defineStore('auth', {
         throw new Error('Login failed. Please try again.');
       }
     },
-
     async createGuestAccount() {
       console.log('Generating a new guest account...');
       
@@ -138,19 +121,43 @@ export const useAuthStore = defineStore('auth', {
       // Return a dummy username or principal for compatibility
       return { username: identity.getPrincipal().toText() };
     },
-
-    /**
-     * Recover an account using a seed phrase.
-     * @param {string} seedPhrase - The seed phrase provided by the user.
-     */
-    async recoverAccount(seedPhrase) {
-      return this.handleLoginFlow(seedPhrase);
-    },
-
-        /**
-     * Load from localStorage on app mount if desired.
-     */
-        loadStateFromLocalStorage() {
+    async createAutomatedAccount() {
+      console.log('Creating an automated account...');
+    
+      const username = generateName(); // Generate a unique username
+      const avatarId = Math.floor(Math.random() * 12) + 1; // Random avatar ID from 1 to 12
+      const currentLanguageNat8 = 0; // Assuming English (adjust as necessary)
+    
+      try {
+        // Access the canister
+        const canisterStore = useCanisterStore();
+        const cosmicrafts = await canisterStore.get('cosmicrafts');
+    
+        // Perform the signup
+        const [ok, maybePlayer, msg] = await cosmicrafts.signup(
+          username,
+          avatarId,
+          [], // No referral code
+          currentLanguageNat8 // Language
+        );
+    
+        if (ok) {
+          console.log('Automated account created successfully:', maybePlayer);
+          // Call handleLoginFlow with a new seed phrase to authenticate the guest account
+          const seedPhrase = generateMnemonic();
+          await this.handleLoginFlow(seedPhrase);
+    
+          return { success: true, username };
+        } else {
+          console.error('Automated account creation failed:', msg);
+          return { success: false, error: msg };
+        }
+      } catch (error) {
+        console.error('Error in createAutomatedAccount:', error);
+        throw new Error('Automated account creation failed.');
+      }
+    },    
+    loadStateFromLocalStorage() {
           const stored = localStorage.getItem('authStore');
           if (stored) {
             const parsed = JSON.parse(stored, (key, value) => {
@@ -170,31 +177,21 @@ export const useAuthStore = defineStore('auth', {
               identity = createIdentityFromKeyPair(keyPair);
             }
           }
-        },
-
-    /**
-     * Persist relevant parts of the store (e.g., authenticated state) to localStorage.
-     */
-    saveStateToLocalStorage() {
-      const replacer = (key, value) => {
-        if (typeof value === 'bigint') {
-          return value.toString(); // Convert BigInt to string
-        }
-        return value; // Return other values as is
-      };
+      },
+      saveStateToLocalStorage() {
+        const replacer = (key, value) => {
+          if (typeof value === 'bigint') {
+            return value.toString(); // Convert BigInt to string
+          }
+          return value; // Return other values as is
+        };
     
       // Stringify with replacer
       const serializedState = JSON.stringify(this.$state, replacer);
     
       // Save to localStorage
       localStorage.setItem('authStore', serializedState);
-    }
-    ,
-
-    /**
-     * Checks the canister to see if a user is registered
-     * by calling getPlayer(). If null -> not registered.
-     */
+    },
     async isPlayerRegistered() {
       if (this.isCheckingPlayer) {
         console.log('AuthStore: Player registration already being checked.');
@@ -357,18 +354,6 @@ export const useAuthStore = defineStore('auth', {
         throw new Error('Login failed.');
       }
     },
-    async generateKeysFromSignature(signature) {
-      const encoder = new TextEncoder();
-      const encodedSignature = encoder.encode(signature);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', encodedSignature);
-      const seed = new Uint8Array(hashBuffer.slice(0, 32));
-      const keyPair = nacl.sign.keyPair.fromSeed(seed);
-
-      return {
-        public: base64Encode(keyPair.publicKey),
-        private: base64Encode(keyPair.secretKey),
-      };
-    },
     saveStateToLocalStorage() {
       const replacer = (key, value) => {
         if (typeof value === 'bigint') {
@@ -396,6 +381,41 @@ export const useAuthStore = defineStore('auth', {
         this.$patch(parsed);
       }
     },
+    loadStateFromLocalStorage() {
+      const stored = localStorage.getItem('authStore');
+      if (stored) {
+        const parsed = JSON.parse(stored, (key, value) => {
+          // Convert strings back to BigInt if needed
+          if (typeof value === 'string' && /^\d+n$/.test(value)) {
+            return BigInt(value.slice(0, -1));
+          }
+          return value;
+        });
+    
+        this.$patch(parsed);
+    
+        // Reinitialize identity if a seedPhrase exists
+        if (parsed.seedPhrase) {
+          console.log("Reinitializing identity from seed phrase...");
+          const keyPair = deriveKeysFromSeedPhrase(parsed.seedPhrase);
+          identity = createIdentityFromKeyPair(keyPair);
+        }
+      }
+      },
+    saveStateToLocalStorage() {
+        const replacer = (key, value) => {
+          if (typeof value === 'bigint') {
+            return value.toString(); // Convert BigInt to string
+          }
+          return value; // Return other values as is
+        };
+
+      // Stringify with replacer
+      const serializedState = JSON.stringify(this.$state, replacer);
+
+      // Save to localStorage
+      localStorage.setItem('authStore', serializedState);
+    },
     redirectToHome() {
       const modalStore = useModalStore(); // Access the modal store
       console.log('Redirecting to home or dashboard modal...');
@@ -412,6 +432,13 @@ export const useAuthStore = defineStore('auth', {
         modalStore.openModal(Registration); // Open the registration modal
         //console.log('Modal State After Opening Registration:', modalStore.isOpen);
       }, 0); // Add a slight delay to ensure Vue processes the close event
+    },
+    /**
+     * Recover an account using a seed phrase.
+     * @param {string} seedPhrase - The seed phrase provided by the user.
+     */
+    async recoverAccount(seedPhrase) {
+      return this.handleLoginFlow(seedPhrase);
     },
     /**
      * Logout
