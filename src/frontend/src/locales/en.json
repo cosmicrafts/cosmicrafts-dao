@@ -1,5 +1,5 @@
 {
-    "login": {
+  "login": {
     "connectWith": "Welcome to the Metaverse",
     "internetIdentity": "Sign in with Internet Identity",
     "google": "Sign in with Google",
@@ -91,48 +91,48 @@
     ]
   },
   "cta": "Try Cosmicrafts Adventures",
-  "lore": {
-    "title": "Cosmicrafts Lore",
-    "description": "Dive deep with us into the rich lore of Cosmicrafts—full of heroes, epic battles, and mysteries waiting to be uncovered."
-  },
-  "games": {
-    "title": "Our Games",
-    "battlegrounds": {
-      "title": "Cosmicrafts Battlegrounds",
-      "description": "Get in on epic multiplayer battles with friends in the Cosmicrafts universe!"
+    "lore": {
+      "title": "Cosmicrafts Lore",
+      "description": "Dive deep with us into the rich lore of Cosmicrafts—full of heroes, epic battles, and mysteries waiting to be uncovered."
     },
-    "adventures": {
-      "title": "Cosmicrafts Adventures",
-      "description": "Join thrilling space quests and unlock the secrets of the galaxy with us!"
-    }
-  },
-  "carousel": {
-    "slides": [
-      {
+  "games": {
+      "title": "Our Games",
+      "battlegrounds": {
+        "title": "Cosmicrafts Battlegrounds",
+        "description": "Get in on epic multiplayer battles with friends in the Cosmicrafts universe!"
+      },
+      "adventures": {
         "title": "Cosmicrafts Adventures",
-        "description": "Discover a new universe in development with Cosmicrafts Adventures!",
-        "buttonText": "Learn More",
-        "action": "adventures"
-      },
-      {
-        "title": "Cosmicrafts Battleground",
-        "description": "Jump into the action and play Cosmicrafts Battleground now!",
-        "buttonText": "Play Now",
-        "action": "battleground"
-      },
-      {
-        "title": "Latest News",
-        "description": "Stay in the loop with the latest updates from Cosmicrafts.",
-        "buttonText": "Read News",
-        "action": "news"
-      },
-      {
-        "title": "ICP Technology",
-        "description": "Learn more about the innovative ICP technology powering Cosmicrafts.",
-        "buttonText": "Discover ICP",
-        "action": "technology"
+        "description": "Join thrilling space quests and unlock the secrets of the galaxy with us!"
       }
-    ]
+    },
+    "carousel": {
+      "slides": [
+        {
+          "title": "Cosmicrafts Adventures",
+          "description": "Discover a new universe in development with Cosmicrafts Adventures!",
+          "buttonText": "Learn More",
+          "action": "adventures"
+        },
+        {
+          "title": "Cosmicrafts Battleground",
+          "description": "Jump into the action and play Cosmicrafts Battleground now!",
+          "buttonText": "Play Now",
+          "action": "battleground"
+        },
+        {
+          "title": "Latest News",
+          "description": "Stay in the loop with the latest updates from Cosmicrafts.",
+          "buttonText": "Read News",
+          "action": "news"
+        },
+        {
+          "title": "ICP Technology",
+          "description": "Learn more about the innovative ICP technology powering Cosmicrafts.",
+          "buttonText": "Discover ICP",
+          "action": "technology"
+        }
+      ]
   },
   "footer": {
     "stayConnected": "Let’s Stay Connected",
@@ -149,7 +149,7 @@
     "language": "Language",
     "trademarks": "All trademarks referenced herein are the properties of their respective owners."
   },
-    "dao": {
+  "dao": {
     "mission": {
       "title": "Decentralized governance, united vision.",
       "description": "Set a course, take it slow, make it happen."
@@ -179,5 +179,58 @@
   },
   "whitepaper": {
     "title": "Cosmicrafts Whitepaper"
+  },
+  "loadingScreen": {
+      "messages": {
+        "initializingQuantumShenanigans": "Activating quantum magic",
+        "chargingHyperdrive": "Charging hyperdrive",
+        "generatingCosmicChaos": "Spawning cosmic chaos",
+        "decodingAlienSignals": "Decoding alien signals",
+        "calibratingFluxCapacitor": "Tuning flux capacitor",
+        "initiatingSelfDestruct": "Starting self-destruct",
+        "fuelingRocket": "Fueling the rocket",
+        "generatingWormholes": "Opening wormholes",
+        "conjuringBlackHole": "Summoning black hole",
+        "syncingHiveMind": "Syncing hive mind",
+        "reticulatingSplines": "Reticulating splines",
+        "summoningSpaceHamsters": "Calling space hamsters",
+        "defragmentingSpaceTime": "Defragging space-time",
+        "transmogrifyingMatter": "Transforming matter",
+        "brewingNebula": "Brewing nebula",
+        "lubricatingGears": "Greasing the gears",
+        "tighteningRealityBolts": "Tightening reality bolts",
+        "chargingStardustReserves": "Charging stardust",
+        "calibratingLaserBeams": "Calibrating lasers",
+        "summoningFriendlyAliens": "Calling friendly aliens",
+        "spinningUpWormhole": "Spinning up wormhole",
+        "tamingBlackHoles": "Taming black holes",
+        "polishingStars": "Polishing stars",
+        "clearingAsteroidBelt": "Clearing asteroid belt",
+        "rewritingGalacticCode": "Rewriting galactic code",
+        "encryptingCosmos": "Encrypting the cosmos",
+        "quantumJuggling": "Juggling quantum stuff",
+        "debuggingAliens": "Debugging alien tech",
+        "hackingGravity": "Hacking gravity",
+        "warmingUpWarpDrive": "Warming up warp drive",
+        "tamingComets": "Taming comets",
+        "aligningPhotonBeams": "Aligning photon beams",
+        "overclockingStellarEngine": "Overclocking star engine",
+        "stirringCosmicSoup": "Stirring cosmic soup",
+        "buffingRocketPaint": "Buffing rocket paint",
+        "resettingWormholePhysics": "Resetting wormhole physics",
+        "aligningNebulas": "Aligning nebulas",
+        "herdingAsteroids": "Herding asteroids",
+        "debuggingStardust": "Debugging stardust",
+        "uploadingTheUniverse": "Uploading the universe",
+        "turningOffInertia": "Turning off inertia",
+        "pluckingSuperstrings": "Plucking superstrings",
+        "paintingNebulas": "Painting nebulas",
+        "scanningForLife": "Scanning for life",
+        "reversingPolarity": "Reversing polarity",
+        "quantumDancing": "Quantum dancing",
+        "herdingWormholes": "Herding wormholes",
+        "encryptingReality": "Encrypting reality",
+        "debuggingTheMultiverse": "Debugging the multiverse"
+      }
   }
 }

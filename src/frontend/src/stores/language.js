@@ -66,7 +66,7 @@ export const useLanguageStore = defineStore('language', () => {
         }
 
         const data = await response.json();
-        console.log(`Successful response from ${url}:`, data);
+        console.log(`Localization ready from ${url}:`, data);
 
         const countryCode = data.country_code || data.countryCode || data.location?.country_code;
         const language = mapLanguageByCountry(countryCode);

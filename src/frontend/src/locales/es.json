@@ -14,7 +14,7 @@
   "invalidSeedLength": "La frase semilla debe contener exactamente 12 palabras.",
   "guestLoginError": "¡Ups! Algo salió mal.",
   "recoverySuccess": "¡Recuperación de cuenta exitosa!",
-  "recovering": "Recuperando..."
+  "recovering": "Recuperando"
 },
 "register": {
   "usernameLabel": "Nombre de Usuario:",
@@ -154,5 +154,61 @@
   },
   "whitepaper": {
     "title": "Libro Blanco"
+  },
+  "loadingScreen": {
+  "messages": {
+    "initializingQuantumShenanigans": "Activando la magia cuántica",
+    "chargingHyperdrive": "Cargando el hiperimpulsor",
+    "generatingCosmicChaos": "Generando caos cósmico",
+    "decodingAlienSignals": "Descifrando señales alienígenas",
+    "calibratingFluxCapacitor": "Calibrando el condensador de flujo",
+    "initiatingSelfDestruct": "Iniciando autodestrucción",
+    "fuelingRocket": "Cargando combustible en el cohete",
+    "generatingWormholes": "Creando agujeros de gusano",
+    "conjuringBlackHole": "Invocando un agujero negro",
+    "syncingHiveMind": "Sincronizando la mente colmena",
+    "reticulatingSplines": "Reticulando splines",
+    "summoningSpaceHamsters": "Convocando hámsters espaciales",
+    "defragmentingSpaceTime": "Desfragmentando el espacio-tiempo",
+    "transmogrifyingMatter": "Transfigurando la materia",
+    "brewingNebula": "Preparando una nebulosa",
+    "lubricatingGears": "Lubricando engranajes",
+    "tighteningRealityBolts": "Apretando los tornillos de la realidad",
+    "chargingStardustReserves": "Cargando reservas de polvo estelar",
+    "calibratingLaserBeams": "Calibrando rayos láser",
+    "summoningFriendlyAliens": "Convocando alienígenas amigables",
+    "spinningUpWormhole": "Haciendo girar el agujero de gusano",
+    "tamingBlackHoles": "Domando agujeros negros",
+    "polishingStars": "Pulizando estrellas",
+    "clearingAsteroidBelt": "Despejando el cinturón de asteroides",
+    "rewritingGalacticCode": "Reescribiendo el código galáctico",
+    "encryptingCosmos": "Encriptando el cosmos",
+    "quantumJuggling": "Haciendo malabares cuánticos",
+    "debuggingAliens": "Depurando tecnología alienígena",
+    "hackingGravity": "Hackeando la gravedad",
+    "warmingUpWarpDrive": "Calentando el motor de curvatura",
+    "tamingComets": "Domando cometas",
+    "aligningPhotonBeams": "Alineando haces de fotones",
+    "overclockingStellarEngine": "Overclockeando el motor estelar",
+    "stirringCosmicSoup": "Revolviendo la sopa cósmica",
+    "buffingRocketPaint": "Pulizando la pintura del cohete",
+    "resettingWormholePhysics": "Reiniciando la física de agujeros de gusano",
+    "aligningNebulas": "Alineando nebulosas",
+    "herdingAsteroids": "Pastoreando asteroides",
+    "debuggingStardust": "Depurando polvo estelar",
+    "uploadingTheUniverse": "Subiendo el universo a la nube",
+    "turningOffInertia": "Desactivando la inercia",
+    "pluckingSuperstrings": "Pulsando supercuerdas",
+    "paintingNebulas": "Pintando nebulosas",
+    "scanningForLife": "Buscando vida inteligente",
+    "reversingPolarity": "Revirtiendo la polaridad",
+    "quantumDancing": "Bailando cuánticamente",
+    "herdingWormholes": "Pastoreando agujeros de gusano",
+    "encryptingReality": "Encriptando la realidad",
+    "debuggingTheMultiverse": "Depurando el multiverso"
   }
 }
+}
+
+
+

@@ -4,7 +4,7 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useModalStore } from '@/stores/modal';
 import { useI18n } from 'vue-i18n';
-import LoadingSpinner from '@/components/loading/LoadingSpinner.vue'; // Import the spinner
+import LoadingScreen from '@/components/LoadingScreen.vue';
 
 const authStore = useAuthStore();
 const modalStore = useModalStore();
@@ -96,13 +96,23 @@ const secondaryMethods = [
 ];
 </script>
 
-
 <template>
   <div class="login-container">
     <!-- Loading Spinner -->
-    <div v-if="loading" class="loading-overlay">
-      <LoadingSpinner :isLoading="loading" />
-    </div>
+    <LoadingScreen 
+      :isLoading="loading" 
+      :messages="[
+        t('loadingScreen.messages.chargingHyperdrive'),
+        t('loadingScreen.messages.summoningSpaceHamsters'),
+        t('loadingScreen.messages.fuelingRocket'),
+        t('loadingScreen.messages.lubricatingGears'),
+        t('loadingScreen.messages.herdingWormholes'),
+        t('loadingScreen.messages.calibratingFluxCapacitor'),
+        t('loadingScreen.messages.syncingHiveMind'),
+        t('loadingScreen.messages.hackingGravity'),
+        t('loadingScreen.messages.debuggingTheMultiverse'),
+      ]"
+    />
 
     <div class="login-panel" v-if="!loading">
       <img src="@/assets/icons/Cosmicrafts_Logo.svg" class="full-logo" alt="Cosmicrafts Logo" />
@@ -268,7 +278,5 @@ const secondaryMethods = [
 .recovery-link:hover {
   color: #61c8ff; /* Slightly darker blue on hover */
 }
-
-
 
 </style>

@@ -1,9 +1,21 @@
 <template>
   <div>
     <!-- Loading Spinner -->
-    <div class="top" v-if="loading">
-      <LoadingSpinner :isLoading="loading" />
-    </div>
+    <LoadingScreen 
+      :isLoading="loading" 
+      :messages="[
+        t('loadingScreen.messages.initializingQuantumShenanigans'),
+        t('loadingScreen.messages.chargingHyperdrive'),
+        t('loadingScreen.messages.syncingHiveMind'),
+        t('loadingScreen.messages.encryptingCosmos'),
+        t('loadingScreen.messages.uploadingTheUniverse'),
+        t('loadingScreen.messages.calibratingFluxCapacitor'),
+        t('loadingScreen.messages.rewritingGalacticCode'),
+        t('loadingScreen.messages.hackingGravity'),
+        t('loadingScreen.messages.debuggingTheMultiverse'),
+      ]"
+    />
+
 
     <div class="register-container">
       <div class="register-panel">
@@ -91,12 +103,12 @@
   import { useLanguageStore } from '@/stores/language';
   import { useI18n } from 'vue-i18n';
   import AvatarSelector from '@/components/account/AvatarSelector.vue';
-  import LoadingSpinner from '@/components/loading/LoadingSpinner.vue';
+  import LoadingScreen from '@/components/LoadingScreen.vue';
 
   export default {
     components: {
       AvatarSelector,
-      LoadingSpinner,
+      LoadingScreen,
     },
     setup() {
       const authStore = useAuthStore();
@@ -135,9 +147,12 @@
         const canisterStore = useCanisterStore();
         const cosmicrafts = await canisterStore.get('cosmicrafts');
 
+        // Default avatar ID to 1 if not set
+        const avatarId = selectedAvatarId.value || 1;
+
         console.log(`Preparing to register player with details:
           Username: ${username.value}
-          Avatar ID: ${selectedAvatarId.value}
+          Avatar ID: ${avatarId}
           Referral Code: ${referralCode.value || 'None'}
           Language: ${languageStore.currentLanguage}
         `);
@@ -145,7 +160,7 @@
         try {
           const [ok, maybePlayer, msg] = await cosmicrafts.signup(
             username.value,
-            selectedAvatarId.value,
+            avatarId,
             referralCode.value ? [referralCode.value] : [],
             languageStore.currentLanguage // Pass the language from the store
           );

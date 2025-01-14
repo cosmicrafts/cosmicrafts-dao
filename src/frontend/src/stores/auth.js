@@ -77,7 +77,7 @@ export const useAuthStore = defineStore('auth', {
       const keyPair = deriveKeysFromSeedPhrase(seedPhrase);
       identity = createIdentityFromKeyPair(keyPair);
     
-      console.log('Identity Principal:', identity.getPrincipal().toText());
+      console.log('Identity initialized:', identity.getPrincipal().toText());
       this.authenticated = true;
     
       this.seedPhrase = seedPhrase;
