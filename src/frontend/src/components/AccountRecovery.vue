@@ -9,15 +9,18 @@ const authStore = useAuthStore();
 const modalStore = useModalStore();
 const { t } = useI18n();
 
+
 // Validate each word individually
 const validateWord = (word) => {
   return bip39.wordlists.english.includes(word.toLowerCase());
+  
 };
 
 const isWordValid = (index) => {
   const word = seedWords.value[index];
   const result = validateWord(word);
   return result;
+  
 };
 
 
@@ -36,6 +39,7 @@ const isSeedPhraseValid = computed(() => {
 const handlePaste = (event) => {
   event.preventDefault();
   const pasteText = (event.clipboardData || window.clipboardData).getData('text').trim();
+  console.log('Seed phrase pasted');
   const words = pasteText.split(/\s+/); // Split by spaces
 
   if (words.length === 12) {
@@ -43,6 +47,7 @@ const handlePaste = (event) => {
     errorMessage.value = '';
   } else {
     errorMessage.value = t('login.invalidSeedLength');
+    console.log('Invalid seed lenght');
   }
 };
 
@@ -58,10 +63,13 @@ const handleKeyDown = (event, index) => {
   isWordValid(index);
 };
 
-
 // Handle account recovery
 const handleAccountRecovery = async () => {
+  const seedPhrase = seedWords.value.join(' ').trim();
+  console.log('Attempting account recovery with seed phrase:', seedPhrase);
+
   if (!isSeedPhraseValid.value) {
+    console.warn('Invalid seed phrase provided:', seedPhrase);
     errorMessage.value = t('login.invalidSeedPhrase');
     return;
   }
@@ -70,8 +78,13 @@ const handleAccountRecovery = async () => {
   errorMessage.value = '';
 
   try {
-    await authStore.recoverAccount(seedWords.value.join(' ').trim());
+    await authStore.recoverAccount(seedPhrase);
+    console.log('Account recovery successful!');
+
+    // Close the modal after successful recovery
+    modalStore.closeModal();
   } catch (error) {
+    console.error('Account recovery failed:', error.message || error);
     errorMessage.value = error.message || t('login.recoveryFailed');
   } finally {
     loading.value = false;

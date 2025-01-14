@@ -1,10 +1,43 @@
-import { createApp } from 'vue';
+import { createApp, watch } from 'vue';
 import App from './App.vue';
 import router from './router';
 import { createPinia } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
-import { useLanguageStore, i18n } from '@/stores/language';
+import { useLanguageStore } from '@/stores/language';
+import { createI18n } from 'vue-i18n';
 import './style.css';
+import en from '@/locales/en.json';
+import es from '@/locales/es.json';
+import fr from '@/locales/fr.json';
+import de from '@/locales/de.json';
+import pt from '@/locales/pt.json';
+import ru from '@/locales/ru.json';
+import ar from '@/locales/ar.json';
+import vi from '@/locales/vi.json';
+import ko from '@/locales/ko.json';
+import ja from '@/locales/ja.json';
+import zh from '@/locales/zh.json';
+import tr from '@/locales/tr.json';
+
+const i18n = createI18n({
+  legacy: false,
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages: {
+    en,
+    es,
+    fr,
+    de,
+    pt,
+    ru,
+    ar,
+    vi,
+    ko,
+    ja,
+    zh,
+    tr,
+  },
+});
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -15,12 +48,20 @@ const languageStore = useLanguageStore();
 
 // Load stored state and language
 await authStore.loadStateFromLocalStorage();
+
+// Watch for changes in the current language and update i18n
+watch(
+  () => languageStore.currentLanguage,
+  (newLang) => {
+    i18n.global.locale.value = newLang; // Update i18n locale
+    console.log(`i18n locale updated to: ${newLang}`);
+  },
+  { immediate: true } // Ensure this runs immediately after language initialization
+);
+
+// Initialize the language using languageStore logic
 await languageStore.loadLanguage();
 
 app.use(i18n);
 app.use(router);
-
-console.log('AuthStore instance:', authStore, Object.keys(authStore));
-console.log('LanguageStore instance:', languageStore, Object.keys(languageStore));
-
 app.mount('#app');
