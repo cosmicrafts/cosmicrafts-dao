@@ -1,10 +1,17 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLanguageStore } from '@/stores/language';
 
 const isDropdownOpen = ref(false);
-const languageStore = useLanguageStore(); // Access the language store
-const currentLanguage = languageStore.currentLanguage; // Reactive ref from the store
+const languageStore = useLanguageStore();
+
+// Use a computed property for currentLanguage
+const currentLanguage = computed(() => languageStore.currentLanguage);
+
+// Use a computed property for the language label
+const currentLanguageLabel = computed(() => {
+  return languages.find((lang) => lang.code === currentLanguage.value)?.label || 'English';
+});
 
 const languages = [
   { code: 'en', label: 'English' },
@@ -60,7 +67,7 @@ onBeforeUnmount(() => {
   <div class="language-selector" @click="toggleDropdown">
     <img src="@/assets/icons/lang.svg" alt="Language Icon" class="lang-icon" />
     <span class="lang-label">
-      {{ languages.find((lang) => lang.code === currentLanguage)?.label }}
+      {{ currentLanguageLabel }}
     </span>
 
     <!-- Dropdown Menu -->
