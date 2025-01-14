@@ -20,7 +20,7 @@ const handleGuestLogin = async () => {
   loading.value = true;
   try {
     const { username } = await authStore.createGuestAccount();
-    console.log(`Guest account created with username: ${username}`);
+    console.log(`Guest account created`);
     await handleAfterLogin();
   } catch (error) {
     console.error('Error during guest login:', error);

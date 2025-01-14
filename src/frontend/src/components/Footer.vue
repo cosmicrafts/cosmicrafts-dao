@@ -1,17 +1,18 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
+import { useLanguageStore } from '@/stores/language'; // Import languageStore
 import LanguageSelector from '@/components/LanguageSelector.vue';
-import { inject } from 'vue';
-const selectedLanguage = inject('selectedLanguage');
-const { locale } = useI18n();
 
+// Access languageStore and i18n
+const languageStore = useLanguageStore();
+const { t } = useI18n();
 </script>
 
 <template>
   <footer>
     <!-- Social Media & Title -->
     <div class="social-section">
-      <h3>{{ $t('footer.stayConnected') }}</h3>
+      <h3>{{ t('footer.stayConnected') }}</h3>
       <ul class="social-links">
         <li><a href="#"><img src="@/assets/icons/discord.svg" alt="Discord" /></a></li>
         <li><a href="#"><img src="@/assets/icons/x.svg" alt="Twitter" /></a></li>
@@ -29,27 +30,26 @@ const { locale } = useI18n();
     <!-- Horizontal Links & Branding -->
     <div class="footer-nav">
       <ul class="links">
-        <li><a href="#">{{ $t('footer.careers') }}</a></li>
-        <li><a href="#">{{ $t('footer.about') }}</a></li>
-        <li><a href="#">{{ $t('footer.support') }}</a></li>
-        <li><a href="#">{{ $t('footer.press') }}</a></li>
-        <li><a href="#">{{ $t('footer.creators') }}</a></li>
+        <li><a href="#">{{ t('footer.careers') }}</a></li>
+        <li><a href="#">{{ t('footer.about') }}</a></li>
+        <li><a href="#">{{ t('footer.support') }}</a></li>
+        <li><a href="#">{{ t('footer.press') }}</a></li>
+        <li><a href="#">{{ t('footer.creators') }}</a></li>
       </ul>
 
       <!-- Logo and Trademark -->
       <div class="branding">
-  <img src="@/assets/icons/wou.svg" alt="World of Unreal Logo" />
-  <p>©2025 World of Unreal, LLC.<br>{{ $t('footer.trademarks') }}</p>
-</div>
-
+        <img src="@/assets/icons/wou.svg" alt="World of Unreal Logo" />
+        <p>©2025 World of Unreal, LLC.<br>{{ t('footer.trademarks') }}</p>
+      </div>
 
       <!-- Legal Links -->
       <ul class="legal-links">
-        <li><a href="#">{{ $t('footer.privacy') }}</a></li>
-        <li><a href="#">{{ $t('footer.legal') }}</a></li>
-        <li><a href="#">{{ $t('footer.terms') }}</a></li>
-        <li><a href="#">{{ $t('footer.cookiePolicy') }}</a></li>
-        <li><a href="#">{{ $t('footer.cookieSettings') }}</a></li>
+        <li><a href="#">{{ t('footer.privacy') }}</a></li>
+        <li><a href="#">{{ t('footer.legal') }}</a></li>
+        <li><a href="#">{{ t('footer.terms') }}</a></li>
+        <li><a href="#">{{ t('footer.cookiePolicy') }}</a></li>
+        <li><a href="#">{{ t('footer.cookieSettings') }}</a></li>
       </ul>
     </div>
   </footer>
@@ -58,10 +58,9 @@ const { locale } = useI18n();
 <style scoped>
 footer {
   padding: 2rem;
- border-top: 1px solid #3a3a3a;
+  border-top: 1px solid #3a3a3a;
   text-align: center;
   color: #e2e8f0;
-
 }
 
 .social-section {

@@ -1,4 +1,3 @@
-// Import BIP39
 import * as bip39 from 'bip39';
 
 /**
@@ -51,81 +50,76 @@ function generateName() {
     return validateLength(name); // Fallback to original name
   };
 
-  // Algorithm 1: Combine 2 random words if combined length <= 12
-  const algorithm1 = () => {
-    let word1 = words[Math.floor(Math.random() * words.length)];
-    let word2 = words[Math.floor(Math.random() * words.length)];
-    if ((word1.length + word2.length) <= 12) {
-      return addAffixes(word1 + word2);
-    }
-    return validateLength(word1) || validateLength(word2);
-  };
-
-  // Algorithm 2: Single word + random number if within limit
-  const algorithm2 = () => {
-    const word = words[Math.floor(Math.random() * words.length)];
-    const number = Math.floor(Math.random() * 10000).toString();
-    const combined = word + number;
-    return addAffixes(validateLength(combined) || validateLength(word));
-  };
-
-  // Algorithm 3: Acronym from 3 random words, always <= 12
-  const algorithm3 = () => {
-    const word1 = words[Math.floor(Math.random() * words.length)];
-    const word2 = words[Math.floor(Math.random() * words.length)];
-    const word3 = words[Math.floor(Math.random() * words.length)];
-    return addAffixes((word1[0] + word2[0] + word3[0]).toUpperCase() + Math.floor(Math.random() * 10));
-  };
-
-  // Algorithm 4: Shuffle letters of a word if <= 12
-  const algorithm4 = () => {
-    const word = words[Math.floor(Math.random() * words.length)].split('');
-    for (let i = word.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [word[i], word[j]] = [word[j], word[i]];
-    }
-    return addAffixes(validateLength(word.join('')));
-  };
-
-  // Algorithm 5: Compress a word by removing vowels, ensuring <= 12
-  const algorithm5 = () => {
-    const word = words[Math.floor(Math.random() * words.length)];
-    const compressed = word.replace(/[aeiou]/g, '');
-    return addAffixes(validateLength(compressed));
-  };
-
-  // Algorithm 6: Syllable-based name generation
-  const algorithm6 = () => {
-    const syllables = ["ba", "be", "bi", "bo", "bu", "da", "de", "di", "do", "du", "ka", "ke", "ki", "ko", "ku", "xa", "xe", "xi", "xo", "xu"];
-    let name = '';
-    while (name.length <= 12) {
-      name += syllables[Math.floor(Math.random() * syllables.length)];
-    }
-    return addAffixes(validateLength(name));
-  };
-
-  // Algorithm 7: Synonym pair combination
-  const algorithm7 = () => {
-    const pair = synonymPairs[Math.floor(Math.random() * synonymPairs.length)];
-    const combined = pair[0] + pair[1];
-    return addAffixes(validateLength(combined) || validateLength(pair[0]) || validateLength(pair[1]));
-  };
-
   // Randomly choose an algorithm
-  const algorithms = [algorithm1, algorithm2, algorithm3, algorithm4, algorithm5, algorithm6, algorithm7];
-  let generatedName;
+  const algorithms = [
+    // Combine 2 random words if combined length <= 12
+    () => {
+      let word1 = words[Math.floor(Math.random() * words.length)];
+      let word2 = words[Math.floor(Math.random() * words.length)];
+      if ((word1.length + word2.length) <= 12) {
+        return addAffixes(word1 + word2);
+      }
+      return validateLength(word1) || validateLength(word2);
+    },
 
+    // Single word + random number if within limit
+    () => {
+      const word = words[Math.floor(Math.random() * words.length)];
+      const number = Math.floor(Math.random() * 10000).toString();
+      const combined = word + number;
+      return addAffixes(validateLength(combined) || validateLength(word));
+    },
+
+    // Acronym from 3 random words, always <= 12
+    () => {
+      const word1 = words[Math.floor(Math.random() * words.length)];
+      const word2 = words[Math.floor(Math.random() * words.length)];
+      const word3 = words[Math.floor(Math.random() * words.length)];
+      return addAffixes((word1[0] + word2[0] + word3[0]).toUpperCase() + Math.floor(Math.random() * 10));
+    },
+
+    // Shuffle letters of a word if <= 12
+    () => {
+      const word = words[Math.floor(Math.random() * words.length)].split('');
+      for (let i = word.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [word[i], word[j]] = [word[j], word[i]];
+      }
+      return addAffixes(validateLength(word.join('')));
+    },
+
+    // Compress a word by removing vowels, ensuring <= 12
+    () => {
+      const word = words[Math.floor(Math.random() * words.length)];
+      const compressed = word.replace(/[aeiou]/g, '');
+      return addAffixes(validateLength(compressed));
+    },
+
+    // Syllable-based name generation
+    () => {
+      const syllables = ["ba", "be", "bi", "bo", "bu", "da", "de", "di", "do", "du", "ka", "ke", "ki", "ko", "ku", "xa", "xe", "xi", "xo", "xu"];
+      let name = '';
+      while (name.length <= 12) {
+        name += syllables[Math.floor(Math.random() * syllables.length)];
+      }
+      return addAffixes(validateLength(name));
+    },
+
+    // Synonym pair combination
+    () => {
+      const pair = synonymPairs[Math.floor(Math.random() * synonymPairs.length)];
+      const combined = pair[0] + pair[1];
+      return addAffixes(validateLength(combined) || validateLength(pair[0]) || validateLength(pair[1]));
+    },
+  ];
+
+  let generatedName;
   do {
     const chosenAlgorithm = algorithms[Math.floor(Math.random() * algorithms.length)];
     generatedName = chosenAlgorithm();
   } while (!generatedName || !isValidName(generatedName)); // Ensure valid name is returned
 
   return generatedName;
-}
-
-// Example usage
-for (let i = 0; i < 20; i++) {
-  console.log(generateName());
 }
 
 export { generateName };

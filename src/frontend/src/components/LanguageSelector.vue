@@ -1,38 +1,36 @@
 <script setup>
-import { ref, inject, watch, onMounted, onBeforeUnmount } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { useLanguageStore } from '@/stores/language';
 
-const { locale } = useI18n();
 const isDropdownOpen = ref(false);
+const languageStore = useLanguageStore(); // Access the language store
+const currentLanguage = languageStore.currentLanguage; // Reactive ref from the store
 
-// Inject the centralized language state
-const selectedLanguage = inject('selectedLanguage');
 const languages = [
-  { code: "en", label: "English" },
-  { code: "es", label: "Español" },
-  { code: "fr", label: "Français" },
-  { code: "de", label: "Deutsch" },
-  { code: "pt", label: "Português" },
-  { code: "ru", label: "Русский" },
-  { code: "ar", label: "العربية" }, 
-  { code: "tr", label: "Türkçe" },
-  { code: "vi", label: "Tiếng Việt" },
-  { code: "ko", label: "한국어" },
-  { code: "ja", label: "日本語" },
-  { code: "zh", label: "中文" },
+  { code: 'en', label: 'English' },
+  { code: 'es', label: 'Español' },
+  { code: 'fr', label: 'Français' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'pt', label: 'Português' },
+  { code: 'ru', label: 'Русский' },
+  { code: 'ar', label: 'العربية' },
+  { code: 'tr', label: 'Türkçe' },
+  { code: 'vi', label: 'Tiếng Việt' },
+  { code: 'ko', label: '한국어' },
+  { code: 'ja', label: '日本語' },
+  { code: 'zh', label: '中文' },
 ];
 
 // Define props for dropdown direction
 const props = defineProps({
   direction: {
     type: String,
-    default: "up-right"
-  }
+    default: 'up-right',
+  },
 });
 
 const changeLanguage = (languageCode) => {
-  selectedLanguage.value = languageCode;
-  locale.value = languageCode;
+  languageStore.setLanguage(languageCode); // Use the store method to update language
   isDropdownOpen.value = false;
 };
 
@@ -56,30 +54,30 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside);
 });
-
-// Watch for changes in the global language state and update locale accordingly
-watch(selectedLanguage, (newLang) => {
-  locale.value = newLang;
-});
 </script>
-
 
 <template>
   <div class="language-selector" @click="toggleDropdown">
     <img src="@/assets/icons/lang.svg" alt="Language Icon" class="lang-icon" />
-    <span class="lang-label">{{ languages.find(lang => lang.code === selectedLanguage).label }}</span>
+    <span class="lang-label">
+      {{ languages.find((lang) => lang.code === currentLanguage)?.label }}
+    </span>
 
     <!-- Dropdown Menu -->
     <transition name="dropdown">
-      <ul v-if="isDropdownOpen" :class="['dropdown-menu', direction]">
-        <li v-for="(lang, index) in languages" :key="lang.code" :style="{ '--index': index }" @click.stop="changeLanguage(lang.code)">
+      <ul v-if="isDropdownOpen" :class="['dropdown-menu', props.direction]">
+        <li
+          v-for="(lang, index) in languages"
+          :key="lang.code"
+          :style="{ '--index': index }"
+          @click.stop="changeLanguage(lang.code)"
+        >
           {{ lang.label }}
         </li>
       </ul>
     </transition>
   </div>
 </template>
-
 
 <style scoped>
 .language-selector {

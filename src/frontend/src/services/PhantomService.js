@@ -17,7 +17,7 @@ class PhantomService {
         return null;
       }
     } else {
-      alert('Phantom Wallet not found.');
+      alert('Phantom Wallet is not installed.');
       return null;
     }
   }

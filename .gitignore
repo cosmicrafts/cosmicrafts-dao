@@ -2,6 +2,7 @@
 .vscode/
 .idea/
 **/*~
+.github/workflows
 
 # Mac OSX temporary files
 .DS_Store

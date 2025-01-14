@@ -6,6 +6,7 @@ export default class PlugService {
     
       static async connect() {
         if (!window.ic?.plug) {
+          alert('Plug Wallet is not installed.');
           throw new Error('Plug Wallet is not installed.');
         }
     
@@ -15,12 +16,14 @@ export default class PlugService {
         await window.ic.plug.requestConnect({ whitelist, host });
     
         if (!(await this.isConnected())) {
+          alert('Plug Wallet is not connected.');
           throw new Error('Failed to connect to Plug Wallet.');
         }
       }
     
       static async getPrincipal() {
         if (!(await this.isConnected())) {
+          alert('Plug Wallet is not connected.');
           throw new Error('Plug Wallet is not connected.');
         }
     
@@ -29,6 +32,7 @@ export default class PlugService {
     
       static async signMessage(message) {
         if (!(await this.isConnected())) {
+          alert('Plug Wallet is not connected.');
           throw new Error('Plug Wallet is not connected.');
         }
     

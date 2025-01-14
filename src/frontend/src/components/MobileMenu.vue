@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useLanguageStore } from '@/stores/language';
 import LanguageSelector from '@/components/LanguageSelector.vue';
 
 // Import logos explicitly for each language
@@ -10,10 +11,9 @@ import logoKR from '@/assets/icons/logo-kr.svg';
 import logoJP from '@/assets/icons/logo-jp.svg';
 import logoRU from '@/assets/icons/logo-ru.svg';
 import logoAR from '@/assets/icons/logo-ar.svg';
-import { inject } from 'vue';
-const selectedLanguage = inject('selectedLanguage');
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
+const languageStore = useLanguageStore();
 const emit = defineEmits(['closeMenu']);
 const props = defineProps({
   isOpen: {
@@ -29,26 +29,28 @@ const additionalLogoMap = {
   ja: logoJP,
   ru: logoRU,
   ar: logoAR,
-  default: defaultLogo
+  default: defaultLogo,
 };
-
-const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-};
-
 
 // Computed property to get the additional logo source based on the current language
 const additionalLogoSrc = computed(() => {
-  return additionalLogoMap[locale.value] || additionalLogoMap.default;
+  return additionalLogoMap[languageStore.currentLanguage] || additionalLogoMap.default;
 });
 
+// Close the menu
 const closeMenu = () => {
   emit('closeMenu');
 };
+
+// Scroll to top
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+};
 </script>
+
 
 <template>
   <!-- Overlay to close the menu, conditionally rendered -->

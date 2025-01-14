@@ -98,22 +98,27 @@ watch(
   () => authStore.player,
   async (newPlayer) => {
     if (newPlayer?.avatar !== undefined && newPlayer?.avatar !== null) {
+      // Unload the previous avatar
+      playerAvatar.value = null;
+
       const avatarId = newPlayer.avatar.toString().padStart(2, '0'); // Ensure two-digit format
 
       // Dynamically import the avatar
       try {
         const avatarModule = await avatarMap[avatarId]();
-        playerAvatar.value = avatarModule.default; // Set the avatar URL
+        playerAvatar.value = avatarModule.default; // Set the new avatar URL
       } catch (error) {
         console.error('Failed to load avatar:', error);
         playerAvatar.value = null; // Fallback to no avatar
       }
     } else {
-      playerAvatar.value = null; // No avatar selected
+      // Unload any existing avatar if no avatar is set
+      playerAvatar.value = null;
     }
   },
   { immediate: true }
 );
+
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;

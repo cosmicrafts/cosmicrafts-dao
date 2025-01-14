@@ -29,7 +29,7 @@ module Types {
     level: Level;
     elo: Float;
     friends: [FriendDetails];
-    language: Nat8;
+    language: Text;
   };
 
   public type FriendDetails = {

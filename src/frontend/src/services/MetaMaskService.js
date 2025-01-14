@@ -7,6 +7,7 @@ class MetaMaskService {
   async getEthereumAddress() {
     console.log('Getting Ethereum address...');
     if (!(await this.isMetaMaskInstalled())) {
+      alert('MetaMask is not installed.');
       throw new Error('MetaMask is not installed');
     }
 
@@ -18,7 +19,8 @@ class MetaMaskService {
     }
 
     if (accounts.length === 0) {
-      throw new Error('No accounts found even after unlocking MetaMask. Please connect to MetaMask.');
+      alert('Metamask is locked.');
+      throw new Error('Metamask is locked.');
     }
 
     console.log('Ethereum address:', accounts[0]);
@@ -28,6 +30,7 @@ class MetaMaskService {
   async signMessage(message) {
     console.log('Signing message...');
     if (!(await this.isMetaMaskInstalled())) {
+      alert('MetaMask is not installed.');
       throw new Error('MetaMask is not installed');
     }
 
