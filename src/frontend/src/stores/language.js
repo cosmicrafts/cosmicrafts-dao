@@ -45,14 +45,30 @@ const API_URLS = [
 export const useLanguageStore = defineStore('language', () => {
   const currentLanguage = ref('en'); // Default language
 
+  const languageMapping = {
+    vi: 'vi',
+    en: 'en',
+    es: 'es',
+    fr: 'fr',
+    de: 'de',
+    pt: 'pt',
+    ru: 'ru',
+    ar: 'ar',
+    ko: 'ko',
+    ja: 'ja',
+    zh: 'zh',
+    tr: 'tr',
+  };
+
   // Watch for changes in `currentLanguage` and sync with `i18n.global.locale`
   watch(currentLanguage, (newLang) => {
     i18n.global.locale = newLang; // Update the locale for i18n
   });
 
-  /**
-   * Detect the user's preferred language based on IP geolocation.
-   */
+  function mapLanguageCode(code) {
+    return languageMapping[code] || 'en'; // Fallback to English
+  }
+
   async function detectLanguage() {
     for (const url of API_URLS) {
       try {
@@ -69,48 +85,11 @@ export const useLanguageStore = defineStore('language', () => {
     return detectBrowserLanguage(); // Fallback to browser language
   }
 
-  /**
-   * Map a country code to a language code.
-   */
-  function mapLanguageByCountry(countryCode) {
-    const languageCountryMapping = {
-      en: ['US', 'GB', 'AU', 'CA', 'NZ', 'IE'],
-      es: ['ES', 'MX', 'AR', 'CO', 'CL', 'PE', 'VE'],
-      fr: ['FR', 'CA', 'BE', 'CH'],
-      de: ['DE', 'AT', 'CH'],
-      pt: ['PT', 'BR', 'AO', 'MZ'],
-      ru: ['RU', 'BY', 'KZ'],
-      ar: ['AE', 'SA', 'EG', 'IQ', 'DZ'],
-      vi: ['VN'],
-      ko: ['KR'],
-      ja: ['JP'],
-      zh: ['CN', 'HK', 'TW'],
-      tr: ['TR'],
-    };
-    return Object.entries(languageCountryMapping).find(([, countries]) =>
-      countries.includes(countryCode)
-    )?.[0];
-  }
-
-  /**
-   * Detect the browser's preferred language.
-   */
-  function detectBrowserLanguage() {
-    const browserLang = navigator.language || navigator.languages[0];
-    return browserLang?.split('-')[0];
-  }
-
-  /**
-   * Set the application's language and persist it.
-   */
   function setLanguage(lang) {
     currentLanguage.value = lang; // Update the language state
     localStorage.setItem('preferredLanguage', lang); // Persist language
   }
 
-  /**
-   * Load the language: from local storage, detect, or use the default.
-   */
   async function loadLanguage() {
     const storedLanguage = localStorage.getItem('preferredLanguage');
     if (storedLanguage) {
@@ -121,5 +100,10 @@ export const useLanguageStore = defineStore('language', () => {
     }
   }
 
-  return { currentLanguage, loadLanguage, setLanguage };
+  return {
+    currentLanguage,
+    loadLanguage,
+    setLanguage,
+    mapLanguageCode, // Export the mapping function
+  };
 });
