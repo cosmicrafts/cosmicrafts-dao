@@ -47,6 +47,7 @@ const languageMapping = {
   zh: 'zh',
   tr: 'tr',
 };
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     authenticated: false,
@@ -71,51 +72,51 @@ export const useAuthStore = defineStore('auth', {
       if (!validateMnemonic(seedPhrase)) {
         throw new Error('Invalid seed phrase.');
       }
-
+    
       // Derive keys and create identity
       const keyPair = deriveKeysFromSeedPhrase(seedPhrase);
       identity = createIdentityFromKeyPair(keyPair);
-
+    
       console.log('Identity Principal:', identity.getPrincipal().toText());
       this.authenticated = true;
-
+    
       this.seedPhrase = seedPhrase;
       this.saveStateToLocalStorage();
-
+    
       try {
         console.log('Loading player data...');
         const canister = useCanisterStore();
         const cosmicrafts = await canister.get('cosmicrafts');
-
+    
         if (!cosmicrafts) {
           console.error('Canister not initialized');
           throw new Error('Could not connect to the server.');
         }
-
+    
         const playerArr = await cosmicrafts.getPlayer();
         console.log('getPlayer() response:', playerArr);
-
+    
         if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0]) {
           console.log('Player exists. Updating state...');
           this.registered = true;
-
+    
           const safePlayer = JSON.parse(
             JSON.stringify(playerArr[0], (key, value) =>
               typeof value === 'bigint' ? value.toString() : value
             )
           );
-
+    
           this.$patch((state) => {
             state.player = safePlayer;
           });
-
+    
           // Use the language store to update the language dynamically
-          const languageStore = useLanguageStore();
-          const language = languageStore.mapLanguageCode(safePlayer.language);
+          const languageStore = useLanguageStore(); // Access the language store
+          const language = languageMapping[safePlayer.language] || 'en';
           console.log(`Updating language from player data: ${safePlayer.language}`);
           languageStore.setLanguage(language); // Update the language
           console.log(`Language updated to: ${language}`);
-
+    
           this.redirectToHome();
         } else {
           console.log('Player does not exist. Redirecting to registration...');
@@ -358,6 +359,30 @@ export const useAuthStore = defineStore('auth', {
         throw new Error('Login failed.');
       }
     },
+    async updateLanguageFromPlayer() {
+      if (this.player?.language) {
+        console.log('Updating language from player data:', this.player.language);
+        
+        // Map the backend language code to the frontend locale
+        const language = languageMapping[this.player.language] || 'en';
+
+        // Update the language globally
+        const languageStore = useLanguageStore();
+        languageStore.setLanguage(language);
+      } else {
+        console.warn('No language found in player data. Defaulting to "en".');
+        
+        // Default to English if no language is found
+        const languageStore = useLanguageStore();
+        languageStore.setLanguage('en');
+      }
+    },
+    async logout() {
+      identity = null;
+      this.authenticated = false;
+      this.registered = false;
+      localStorage.removeItem('authStore');
+    },
     saveStateToLocalStorage() {
       const replacer = (key, value) => {
         if (typeof value === 'bigint') {
@@ -369,9 +394,9 @@ export const useAuthStore = defineStore('auth', {
       // Stringify state with replacer
       const serializedState = JSON.stringify(this.$state, replacer);
       localStorage.setItem('authStore', serializedState);
-      console.log('User data synchronized locally.');
+      console.log('User data synchronized locally:', this.$state); // Log the entire state
     },
-    loadStateFromLocalStorage() {
+    async loadStateFromLocalStorage() {
       const stored = localStorage.getItem('authStore');
       if (stored) {
         const parsed = JSON.parse(stored, (key, value) => {
@@ -393,6 +418,10 @@ export const useAuthStore = defineStore('auth', {
         if (parsed.seedPhrase) {
           const keyPair = deriveKeysFromSeedPhrase(parsed.seedPhrase);
           identity = createIdentityFromKeyPair(keyPair);
+          console.log('Identity reinitialized from seed phrase:', identity.getPrincipal().toText());
+    
+          // Call handleLoginFlow to fetch player data and restore session
+          await this.handleLoginFlow(parsed.seedPhrase);
         }
     
         // Log the username if player data exists
@@ -401,8 +430,11 @@ export const useAuthStore = defineStore('auth', {
         } else {
           console.log('No username found in the stored player data.');
         }
+    
+        return true; // Indicate that user data was found
       } else {
         console.log('No user data stored found.');
+        return false; // Indicate that no user data was found
       }
     },
     redirectToHome() {
@@ -421,28 +453,6 @@ export const useAuthStore = defineStore('auth', {
         modalStore.openModal(Registration); // Open the registration modal
         //console.log('Modal State After Opening Registration:', modalStore.isOpen);
       }, 0); // Add a slight delay to ensure Vue processes the close event
-    },
-    async updateLanguageFromPlayer() {
-      const languageStore = useLanguageStore();
-      if (this.player?.language) {
-        console.log('Updating language from player data:', this.player.language);
-
-        const language = languageStore.mapLanguageCode(this.player.language);
-        languageStore.setLanguage(language);
-        console.log(`Language updated to: ${language}`);
-      } else {
-        console.warn('No language found in player data. Defaulting to "en".');
-        languageStore.setLanguage('en');
-      }
-    },
-    /**
-     * Logout
-     */
-    async logout() {
-      identity = null;
-      this.authenticated = false;
-      this.registered = false;
-      localStorage.removeItem('authStore');
     },
   },
 });

@@ -31,7 +31,7 @@ class PhantomService {
     try {
       const encodedMessage = new TextEncoder().encode(message);
       const signedMessage = await window.solana.signMessage(encodedMessage, 'utf8');
-      console.log('Signed Message:', signedMessage.signature);
+      console.log('Phantom Handshake');
       return signedMessage.signature;
     } catch (err) {
       console.error('Error signing message with Phantom Wallet:', err);

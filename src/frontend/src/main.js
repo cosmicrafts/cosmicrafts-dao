@@ -47,20 +47,27 @@ const authStore = useAuthStore();
 const languageStore = useLanguageStore();
 
 // Load stored state and language
-await authStore.loadStateFromLocalStorage();
+const hasUserData = await authStore.loadStateFromLocalStorage();
+
+if (!hasUserData) {
+  console.log('No user data found in local storage. Detecting language...');
+  const detectedLanguage = await languageStore.detectLanguage();
+  languageStore.setLanguage(detectedLanguage || 'en');
+} else {
+  console.log('User data found in local storage. Skipping language detection.');
+  // If user data is found, load the language from the store
+  await languageStore.loadLanguage();
+}
 
 // Watch for changes in the current language and update i18n
 watch(
   () => languageStore.currentLanguage,
   (newLang) => {
-    i18n.global.locale.value = newLang; // Update i18n locale
+    i18n.global.locale.value = newLang;
     console.log(`i18n locale updated to: ${newLang}`);
   },
-  { immediate: true } // Ensure this runs immediately after language initialization
+  { immediate: true }
 );
-
-// Initialize the language using languageStore logic
-await languageStore.loadLanguage();
 
 app.use(i18n);
 app.use(router);
