@@ -235,8 +235,8 @@ header {
 /* Logo Styling */
 .logo img {
   width: 2.5rem;
-  cursor: pointer; /* Cursor pointer to indicate it's clickable */
-  transition: transform 0.5s ease, filter 0.1s ease;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.1s ease;
 }
 
 .logo img:hover {

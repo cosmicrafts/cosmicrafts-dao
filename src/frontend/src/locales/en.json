@@ -56,7 +56,8 @@
     "login": "Login",
     "myProfile": "My Profile",
     "settings": "Settings",
-    "signout": "Sign out"
+    "signout": "Sign out",
+    "profile": "Profile"
   },
   "hero": {
     "slides": [
