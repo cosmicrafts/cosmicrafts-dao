@@ -55,8 +55,14 @@
   "login": "登录",
   "myProfile": "我的资料",
   "settings": "设置",
-  "signout": "退出"
+  "signout": "退出",
+  "profile": "个人资料"
 },
+"error": {
+      "title": "哇塞!",
+      "description": "偏离航线了！",
+      "homeButton": "⏪ 返回"
+    },
   "hero": {
     "slides": [
       {

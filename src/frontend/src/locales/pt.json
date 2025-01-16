@@ -55,8 +55,14 @@
   "login": "Entrar",
   "myProfile": "Meu Perfil",
   "settings": "Configurações",
-  "signout": "Sair"
+  "signout": "Sair",
+  "profile": "Perfil"
 },
+"error": {
+      "title": "Eita!",
+      "description": "Você saiu do curso!",
+      "homeButton": "⏪ Voltar"
+    },
   "hero": {
     "slides": [
       {

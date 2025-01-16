@@ -55,8 +55,14 @@
   "login": "Войти",
   "myProfile": "Мой Профиль",
   "settings": "Настройки",
-  "signout": "Выйти"
+  "signout": "Выйти",
+  "profile": "Профиль"
 },
+"error": {
+      "title": "Опа!",
+      "description": "Вы сбились с курса!",
+      "homeButton": "⏪ Назад"
+    },
   "hero": {
     "slides": [
       {

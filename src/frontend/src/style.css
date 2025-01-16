@@ -63,7 +63,6 @@ a:hover {
 
 /* Universal Button Styles */
 .button {
-  font-family: 'Montserrat', sans-serif;
   font-weight: 500;
   color: var(--button-font-color);
   background-color: var(--button-bg);

@@ -67,7 +67,6 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
-  font-family: 'Arial', sans-serif;
   overflow: hidden;
 }
 

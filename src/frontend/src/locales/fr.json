@@ -55,8 +55,14 @@
   "login": "Connexion",
   "myProfile": "Mon Profil",
   "settings": "Paramètres",
-  "signout": "Se déconnecter"
+  "signout": "Se déconnecter",
+  "profile": "Profil"
 },
+"error": {
+      "title": "Oh là là!",
+      "description": "Vous avez dévié de votre route !",
+      "homeButton": "⏪ Retour"
+    },
   "hero": {
     "slides": [
       {

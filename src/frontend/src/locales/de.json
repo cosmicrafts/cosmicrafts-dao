@@ -55,8 +55,14 @@
   "login": "Anmelden",
   "myProfile": "Mein Profil",
   "settings": "Einstellungen",
-  "signout": "Abmelden"
+  "signout": "Abmelden",
+  "profile": "Profil"
 },
+"error": {
+      "title": "Hoppla!",
+      "description": "Kurs verlassen!",
+      "homeButton": "⏪ Zurück"
+    },
   "hero": {
     "slides": [
       {

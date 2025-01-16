@@ -55,8 +55,14 @@
   "login": "로그인",
   "myProfile": "내 프로필",
   "settings": "설정",
-  "signout": "로그아웃"
+  "signout": "로그아웃",
+  "profile": "프로필"
 },
+"error": {
+      "title": "아이고!",
+      "description": "경로를 벗어났습니다!",
+      "homeButton": "⏪ 돌아가기"
+    },
   "hero": {
     "slides": [
       {

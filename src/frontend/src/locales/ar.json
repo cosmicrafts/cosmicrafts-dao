@@ -55,8 +55,14 @@
   "login": "تسجيل الدخول",
   "myProfile": "ملفي الشخصي",
   "settings": "الإعدادات",
-  "signout": "تسجيل الخروج"
+  "signout": "تسجيل الخروج",
+  "profile": "الملف الشخصي"
 },
+"error": {
+      "title": "!يا للهول",
+      "description": "انحرفت عن المسار!",
+      "homeButton": "⏪ العودة"
+    },
   "hero": {
     "slides": [
       {

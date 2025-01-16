@@ -55,8 +55,15 @@
   "login": "Iniciar sesión",
   "myProfile": "Mi Perfil",
   "settings": "Configuración",
-  "signout": "Cerrar sesión"
+  "signout": "Cerrar sesión",
+  "profile": "Perfil"
 },
+    "error": {
+      "title": "Upsi!",
+      "description": "¡Te has desviado del rumbo!",
+      "homeButton": "⏪ Volver"
+    },
+
   "hero": {
     "slides": [
       {

@@ -55,8 +55,14 @@
   "login": "Giriş Yap",
   "myProfile": "Profilim",
   "settings": "Ayarlar",
-  "signout": "Çıkış Yap"
+  "signout": "Çıkış Yap",
+  "profile": "Profil"
 },
+"error": {
+      "title": "Vay canına!",
+      "description": "Rotadan çıktınız!",
+      "homeButton": "⏪ Geri Dön"
+    },
   "hero": {
     "slides": [
       {

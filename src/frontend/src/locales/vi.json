@@ -55,8 +55,15 @@
   "login": "Đăng Nhập",
   "myProfile": "Hồ Sơ Của Tôi",
   "settings": "Cài Đặt",
-  "signout": "Đăng Xuất"
+  "signout": "Đăng Xuất",
+  "profile": "Hồ sơ"
 },
+    "error": {
+      "title": "Trời!",
+      "description": "Đi chệch hướng!",
+      "homeButton": "⏪ Trở về"
+    },
+
   "hero": {
     "slides": [
       {

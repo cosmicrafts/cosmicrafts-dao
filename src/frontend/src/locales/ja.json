@@ -55,8 +55,14 @@
   "login": "ログイン",
   "myProfile": "私のプロフィール",
   "settings": "設定",
-  "signout": "ログアウト"
+  "signout": "ログアウト",
+  "profile": "プロフィール"
 },
+"error": {
+      "title": "やだ!",
+      "description": "コースを外れました！",
+      "homeButton": "⏪ 戻る"
+    },
   "hero": {
     "slides": [
       {

@@ -59,6 +59,11 @@
     "signout": "Sign out",
     "profile": "Profile"
   },
+  "error": {
+    "title": "Whoa!",
+    "description": "Cosmic Anomaly Detected!",
+    "homeButton": "⏪ Warp Back"
+  },
   "hero": {
     "slides": [
       {
