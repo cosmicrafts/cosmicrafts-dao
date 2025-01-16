@@ -40,39 +40,12 @@ export default {
   components: {
     Starfield,
   },
-  setup() {
-    const { t } = useI18n();
-
-    // Handle mouse movement to create wave effect
-    const handleHover = (event) => {
-      const target = event.target;
-      const rect = target.getBoundingClientRect();
-      const x = event.clientX - rect.left; // X position within the element
-      const y = event.clientY - rect.top; // Y position within the element
-
-      // Apply wave effect via transform
-      target.style.setProperty(
-        "--wave-x",
-        `${(x - rect.width / 2) / 20}px`
-      );
-      target.style.setProperty(
-        "--wave-y",
-        `${(y - rect.height / 2) / 20}px`
-      );
-    };
-
-    // Reset wave effect when mouse leaves the element
-    const resetWave = (event) => {
-      const target = event.target;
-      target.style.setProperty("--wave-x", "0px");
-      target.style.setProperty("--wave-y", "0px");
-    };
-
-    return { t, handleHover, resetWave };
-  },
+setup() {
+      const { t } = useI18n();
+},
   methods: {
     goHome() {
-      this.$router.push("/"); // Navigate back to the home page
+      this.$router.push("/");
     },
   },
 };

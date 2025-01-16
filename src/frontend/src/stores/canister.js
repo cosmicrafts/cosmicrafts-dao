@@ -31,7 +31,7 @@ export const useCanisterStore = defineStore('canister', {
 
       // Check if the identity has changed
       if (identity !== currentIdentity) {
-        console.log('New identity. Reinitializing actor...');
+        console.log('Initializing actor...');
         currentIdentity = identity; // Update the current identity
         canisters[canisterName] = null; // Reset the actor for the canister
         initializing = true; // Set initializing flag
@@ -45,7 +45,11 @@ export const useCanisterStore = defineStore('canister', {
         // Always use the authenticated identity for the HttpAgent
         const agent = new HttpAgent({ identity, host });
 
-        
+        // Fetch root key for local development
+        if (isLocal) {
+          console.log('Fetching root key for local development...');
+          await agent.fetchRootKey();
+        }
 
         console.log(`Creating actor for canister: ${this.canisterIds[canisterName]}`);
         canisters[canisterName] = createActor(this.canisterIds[canisterName], { agent });

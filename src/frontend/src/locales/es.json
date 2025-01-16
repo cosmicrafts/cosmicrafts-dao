@@ -50,7 +50,7 @@
   "spiral": "Spiral",
   "dao": "DAO",
   "dashboard": "Tablero",
-  "connect": "Conectar",
+  "connect": "Enchúfate",
   "whitepaper": "Documento técnico",
   "login": "Iniciar sesión",
   "myProfile": "Mi Perfil",
@@ -60,7 +60,7 @@
 },
     "error": {
       "title": "Opsi!",
-      "description": "Fue solo un error, lo prometo",
+      "description": "Esa página ya no existe",
       "homeButton": "⏪ Volver"
     },
 
