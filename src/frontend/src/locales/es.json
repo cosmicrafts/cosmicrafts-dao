@@ -59,8 +59,8 @@
   "profile": "Perfil"
 },
     "error": {
-      "title": "Upsi!",
-      "description": "¡Te has desviado del rumbo!",
+      "title": "Opsi!",
+      "description": "Fue solo un error, lo prometo",
       "homeButton": "⏪ Volver"
     },
 

@@ -60,7 +60,8 @@
 },
 "error": {
       "title": "哇塞!",
-      "description": "偏离航线了！",
+      "description": "这个页面好像去太空旅行了！"
+,
       "homeButton": "⏪ 返回"
     },
   "hero": {

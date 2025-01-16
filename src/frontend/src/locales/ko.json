@@ -60,7 +60,7 @@
 },
 "error": {
       "title": "아이고!",
-      "description": "경로를 벗어났습니다!",
+      "description": "그 페이지가 블랙홀로 빨려들어갔어요!",
       "homeButton": "⏪ 돌아가기"
     },
   "hero": {

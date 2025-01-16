@@ -60,7 +60,7 @@
 },
 "error": {
       "title": "Hoppla!",
-      "description": "Kurs verlassen!",
+      "description": "Irgendwas ist hier komplett daneben gegangen.",
       "homeButton": "⏪ Zurück"
     },
   "hero": {

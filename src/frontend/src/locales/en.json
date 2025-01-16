@@ -60,8 +60,8 @@
     "profile": "Profile"
   },
   "error": {
-    "title": "Whoa!",
-    "description": "Cosmic Anomaly Detected!",
+    "title": "Whoah!",
+    "description": "That page doesn't exist, yet!",
     "homeButton": "⏪ Warp Back"
   },
   "hero": {

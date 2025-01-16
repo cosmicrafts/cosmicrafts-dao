@@ -4,21 +4,6 @@ import { ref } from 'vue';
 export const useLanguageStore = defineStore('language', () => {
   const currentLanguage = ref('en'); // Default language
 
-  const languageMapping = {
-    vi: 'vi',
-    en: 'en',
-    es: 'es',
-    fr: 'fr',
-    de: 'de',
-    pt: 'pt',
-    ru: 'ru',
-    ar: 'ar',
-    ko: 'ko',
-    ja: 'ja',
-    zh: 'zh',
-    tr: 'tr',
-  };
-
   const languageCountryMapping = {
     en: ['US', 'GB', 'AU', 'CA'],
     es: ['ES', 'MX', 'AR'],
@@ -35,7 +20,7 @@ export const useLanguageStore = defineStore('language', () => {
   };
 
   const API_URLS = [
-    //'https://ipapi.co/json/',
+    'https://ipapi.co/json/',
     'https://ipwhois.app/json/',
     'https://geolocation-db.com/json/',
   ];

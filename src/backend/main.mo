@@ -2542,16 +2542,44 @@ shared actor class Cosmicrafts() = Self {
         stable var _mutualFriendships: [((PlayerId, PlayerId), MutualFriendship)] = [];
         stable var _notifications: [(PlayerId, [Notification])] = [];
         stable var _updateTimestamps: [(PlayerId, UpdateTimestamps)] = [];
+        stable var _loginLogs: [(PlayerId, { timestamp: Nat64; country: ?Text })] = [];
 
         // Initialize HashMaps using the stable lists
         var players: HashMap.HashMap<PlayerId, Player> = HashMap.fromIter(_players.vals(), 0, Principal.equal, Principal.hash);
-
         var friendRequests: HashMap.HashMap<PlayerId, [FriendRequest]> = HashMap.fromIter(_friendRequests.vals(), 0, Principal.equal, Principal.hash);
         var privacySettings: HashMap.HashMap<PlayerId, PrivacySetting> = HashMap.fromIter(_privacySettings.vals(), 0, Principal.equal, Principal.hash);
         var blockedUsers: HashMap.HashMap<PlayerId, [PlayerId]> = HashMap.fromIter(_blockedUsers.vals(), 0, Principal.equal, Principal.hash);
         var mutualFriendships: HashMap.HashMap<(PlayerId, PlayerId), MutualFriendship> = HashMap.fromIter(_mutualFriendships.vals(), 0, Utils.tupleEqual, Utils.tupleHash);
         var notifications: HashMap.HashMap<PlayerId, [Notification]> = HashMap.fromIter(_notifications.vals(), 0, Principal.equal, Principal.hash);
         var updateTimestamps: HashMap.HashMap<PlayerId, UpdateTimestamps> = HashMap.fromIter(_updateTimestamps.vals(), 0, Principal.equal, Principal.hash);
+        var loginLogs: HashMap.HashMap<PlayerId, { timestamp: Nat64; country: ?Text }> = HashMap.fromIter(_loginLogs.vals(), 0, Principal.equal, Principal.hash);
+
+    // Function to log player login
+    public shared ({ caller: PlayerId }) func login(country: ?Text) : async (Bool, Text) {
+        let playerId = caller;
+
+        // Ensure the player exists
+        switch (players.get(playerId)) {
+            case (null) {
+                return (false, "User record does not exist");
+            };
+            case (?_) {
+                // Get the current timestamp
+                let timestamp: Nat64 = Nat64.fromIntWrap(Time.now());
+
+                // Update the player's login information
+                loginLogs.put(playerId, { timestamp = timestamp; country = country });
+                _loginLogs := Iter.toArray(loginLogs.entries());
+
+                return (true, "Login logged successfully");
+            };
+        };
+    };
+
+    // Query function to get last login information
+    public query func getLastLogin(playerId: PlayerId) : async ?{ timestamp: Nat64; country: ?Text } {
+        return loginLogs.get(playerId);
+    };
 
     public shared ({ caller: PlayerId }) func deleteAccount() : async (Bool, Text) {
         let playerId = caller;
@@ -3215,7 +3243,7 @@ shared actor class Cosmicrafts() = Self {
 
     public query func getTotalPlayers() : async Nat {
     return players.size();
-};
+    };
 
 //--
 // Statistics

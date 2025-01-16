@@ -11,6 +11,11 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
   },
+  esbuild: {
+    supported: {
+      'top-level-await': true, // Explicitly enable Top-level await
+    },
+  },
   optimizeDeps: {
     esbuildOptions: {
       define: {

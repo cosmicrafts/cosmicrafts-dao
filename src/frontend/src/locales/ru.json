@@ -60,7 +60,7 @@
 },
 "error": {
       "title": "Опа!",
-      "description": "Вы сбились с курса!",
+      "description": "Эта страница ушла в гиперпрыжок.",
       "homeButton": "⏪ Назад"
     },
   "hero": {

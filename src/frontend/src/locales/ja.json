@@ -60,7 +60,7 @@
 },
 "error": {
       "title": "やだ!",
-      "description": "コースを外れました！",
+      "description": "おっと！そのページは宇宙の彼方へ消えました。",
       "homeButton": "⏪ 戻る"
     },
   "hero": {
