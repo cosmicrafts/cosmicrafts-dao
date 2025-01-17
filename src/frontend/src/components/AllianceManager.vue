@@ -1,14 +1,14 @@
 <template>
-      <div class="p-6 bg-gray-700 rounded-lg">
-        <h2 class="text-xl font-bold mb-4">Alliances</h2>
+      <div class="component">
+        <h2 class="text-xl font-bold mb-4 text-center">Alliances</h2>
         <input 
           v-model="allianceName" 
           placeholder="Enter alliance name" 
-          class="p-2 bg-gray-600 rounded-lg w-full" 
+          class="p-3 bg-gray-600 rounded-lg w-full mb-4 text-center" 
         />
         <button 
           @click="createAlliance" 
-          class="mt-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 rounded-lg">
+          class="w-full px-4 py-3 bg-purple-500 hover:bg-purple-600 rounded-lg text-white font-bold">
           Create Alliance
         </button>
       </div>
@@ -28,4 +28,15 @@
       }
     };
     </script>
+    
+    <style scoped>
+    .component {
+      width: 100%; /* Full width for mobile */
+      background-color: #1f2937; /* Dark gray background */
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      overflow-y: auto; /* Allow vertical scrolling */
+    }
+    </style>
     

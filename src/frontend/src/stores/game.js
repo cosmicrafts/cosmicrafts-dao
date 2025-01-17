@@ -12,8 +12,9 @@ export const useGameStore = defineStore('game', {
       shipyard: 0,
     },
     fleet: [],
-    alliances: [], // New state for alliances
-    galaxyMap: [ // New state for galaxy map
+    alliances: [],
+    playerId: 'player1',
+    galaxyMap: [
       { name: 'Planet Alpha', description: 'Rich in Energy', type: 'planet' },
       { name: 'Asteroid Belt', description: 'Mine for Credits', type: 'asteroid' },
       { name: 'Space Anomaly', description: 'Unknown', type: 'anomaly' },
@@ -36,22 +37,22 @@ export const useGameStore = defineStore('game', {
         this.fleet.push({ type: 'scout', health: 100 });
       }
     },
-    // New action for exploring locations
     explore(location) {
       if (this.fleet.length > 0) {
-        const reward = { energy: 50, credits: 20 }; // Example rewards
-        this.resources.energy += reward.energy;
-        this.resources.credits += reward.credits;
-        alert(`Explored ${location.name}! Gained ${reward.energy} Energy and ${reward.credits} Credits.`);
+        const rewards = { energy: 30, credits: 15 }; // Example rewards
+        this.resources.energy += rewards.energy;
+        this.resources.credits += rewards.credits;
+        alert(`Explored ${location.name}! Gained ${rewards.energy} Energy and ${rewards.credits} Credits.`);
       } else {
-        alert('You need at least 1 ship to explore!');
+        alert('You need at least one ship to explore!');
       }
     },
-    // New action for creating alliances
     createAlliance(name) {
-      if (name.trim()) {
-        this.alliances.push({ name: name.trim(), members: ['player1'] }); // Example player ID
-        alert(`Alliance ${name.trim()} created!`);
+      if (!this.alliances.some((alliance) => alliance.name === name)) {
+        this.alliances.push({ name, members: [this.playerId] });
+        alert(`Alliance "${name}" created successfully!`);
+      } else {
+        alert('An alliance with this name already exists!');
       }
     },
   },

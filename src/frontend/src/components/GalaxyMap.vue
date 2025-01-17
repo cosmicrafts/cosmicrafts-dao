@@ -1,14 +1,14 @@
 <template>
-      <div class="p-6 bg-gray-700 rounded-lg">
-        <h2 class="text-xl font-bold mb-4">Galaxy Map</h2>
-        <div class="grid grid-cols-3 gap-4">
+      <div class="component">
+        <h2 class="text-xl font-bold mb-4 text-center">Galaxy Map</h2>
+        <div class="grid gap-4">
           <div 
             v-for="(location, index) in galaxyMap" 
             :key="index" 
             @click="exploreLocation(location)"
-            class="p-4 bg-gray-600 rounded-lg cursor-pointer hover:bg-gray-500 transition-colors">
+            class="p-4 bg-gray-600 rounded-lg cursor-pointer hover:bg-gray-500 transition-colors text-center">
             <h3 class="font-bold">{{ location.name }}</h3>
-            <p>{{ location.description }}</p>
+            <p class="text-sm text-gray-300">{{ location.description }}</p>
           </div>
         </div>
       </div>
@@ -34,4 +34,15 @@
       }
     };
     </script>
+    
+    <style scoped>
+    .component {
+      width: 100%; /* Full width for mobile */
+      background-color: #1f2937; /* Dark gray background */
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      overflow-y: auto; /* Allow vertical scrolling */
+    }
+    </style>
     
