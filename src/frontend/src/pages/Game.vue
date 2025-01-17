@@ -15,25 +15,73 @@
         </div>
       </div>
 
-      <!-- Galaxy Map -->
+      <!-- Tabs -->
       <div class="tabs mt-16 p-4 space-y-4">
+        <!-- Buildings Tab -->
+        <div class="tab">
+          <h2 class="text-xl font-bold text-center mb-4">Buildings</h2>
+          <div class="p-6 bg-gray-700 rounded-lg">
+            <div class="flex items-center justify-between mb-4">
+              <span>Mines: {{ buildings.mine }}</span>
+              <img src="@/assets/icons/mine.svg" alt="Mine" class="w-8 h-8" />
+            </div>
+            <button
+              @click="buildMine"
+              :disabled="resources.matter < 50"
+              class="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg disabled:bg-gray-500">
+              Build Mine (50 Matter)
+            </button>
+          </div>
+        </div>
+
+        <!-- Fleet Tab -->
+        <div class="tab">
+          <h2 class="text-xl font-bold text-center mb-4">Fleet</h2>
+          <div class="p-6 bg-gray-700 rounded-lg">
+            <div v-for="(ship, index) in fleet" :key="index" class="flex items-center justify-between mb-2">
+              <span>Ship {{ index + 1 }}: {{ ship.type }} ({{ ship.health }} HP)</span>
+              <img src="@/assets/icons/ship.svg" alt="Ship" class="w-8 h-8" />
+            </div>
+            <button
+              @click="buildShip"
+              :disabled="resources.matter < 100"
+              class="w-full px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg disabled:bg-gray-500">
+              Build Scout (100 Matter)
+            </button>
+          </div>
+        </div>
+
+        <!-- Galaxy Map Tab -->
         <div class="tab">
           <h2 class="text-xl font-bold text-center mb-4">Galaxy Map</h2>
           <div class="p-6 bg-gray-700 rounded-lg">
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 gap-4">
               <div
-                v-for="(location, key) in visibleLocations"
-                :key="key"
-                @click="travelToLocation(location)"
-                :class="[
-                  'p-4 rounded-lg text-center cursor-pointer transition-colors',
-                  location ? 'bg-gray-600 hover:bg-gray-500' : 'bg-gray-800',
-                ]"
-              >
-                <h3 v-if="location" class="font-bold">{{ location.name }}</h3>
-                <p v-else class="text-gray-400">Empty Space</p>
+                v-for="(location, index) in galaxyMap"
+                :key="index"
+                @click="explore(location)"
+                class="p-4 bg-gray-600 rounded-lg cursor-pointer hover:bg-gray-500 text-center">
+                <h3 class="font-bold">{{ location.name }}</h3>
+                <p class="text-sm text-gray-300">{{ location.description }}</p>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Alliances Tab -->
+        <div class="tab">
+          <h2 class="text-xl font-bold text-center mb-4">Alliances</h2>
+          <div class="p-6 bg-gray-700 rounded-lg">
+            <input
+              v-model="allianceName"
+              placeholder="Enter alliance name"
+              class="p-2 bg-gray-600 rounded-lg w-full mb-4 text-center"
+            />
+            <button
+              @click="createAlliance"
+              class="w-full px-4 py-2 bg-purple-500 hover:bg-purple-600 rounded-lg text-white font-bold">
+              Create Alliance
+            </button>
           </div>
         </div>
       </div>
@@ -43,7 +91,7 @@
 
 <script>
 import { useGameStore } from '@/stores/game';
-import { computed, onMounted } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 
 export default {
   setup() {
@@ -51,50 +99,48 @@ export default {
 
     // Reactive state from Pinia store
     const resources = computed(() => gameStore.resources);
+    const buildings = computed(() => gameStore.buildings);
+    const fleet = computed(() => gameStore.fleet);
+    const galaxyMap = computed(() => gameStore.galaxyMap);
 
-    // Compute visible locations dynamically
-    const visibleLocations = computed(() => {
-      const { x, y } = gameStore.player;
-      const neighbors = [
-        { x: x, y: y + 1 },
-        { x: x, y: y - 1 },
-        { x: x + 1, y: y },
-        { x: x - 1, y: y },
-      ];
+    // Alliances
+    const allianceName = ref('');
 
-      return neighbors.reduce((acc, loc) => {
-        const key = `${loc.x},${loc.y}`;
-        acc[key] = gameStore.galaxyMap[key] || null;
-        return acc;
-      }, {});
-    });
+    // Actions from the store
+    const buildMine = gameStore.buildMine;
+    const buildShip = gameStore.buildShip;
+    const explore = gameStore.explore;
+    const createAlliance = () => {
+      if (allianceName.value.trim()) {
+        gameStore.createAlliance(allianceName.value.trim());
+        allianceName.value = '';
+      }
+    };
 
-    // Initialize galaxy on first mount
+    // Automate resource collection every 10 seconds
     onMounted(() => {
       if (!Object.keys(gameStore.galaxyMap).length) {
         gameStore.initializeGalaxy(42, 10); // Seed and range
       }
+      setInterval(() => {
+        gameStore.collectResources();
+      }, 10000);
     });
-
-    // Handle travel to a new location
-    const travelToLocation = (location) => {
-      if (location) {
-        const [x, y] = location.name.match(/\(([^)]+)\)/)[1].split(',').map(Number); // Extract coordinates from name
-        gameStore.exploreLocation(x, y);
-      } else {
-        alert('You cannot travel to empty space!');
-      }
-    };
 
     return {
       resources,
-      visibleLocations,
-      travelToLocation,
+      buildings,
+      fleet,
+      galaxyMap,
+      allianceName,
+      buildMine,
+      buildShip,
+      explore,
+      createAlliance,
     };
   },
 };
 </script>
-z
 
 <style scoped>
 /* General Game Container */
