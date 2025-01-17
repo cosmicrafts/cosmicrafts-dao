@@ -8,6 +8,7 @@ import Modal from '@/components/Modal.vue';
 
 const route = useRoute();
 const isWhitepaper = computed(() => route.path === '/whitepaper');
+const isGame = computed(() => route.path === '/game');
 </script>
 
 <template>
@@ -15,7 +16,7 @@ const isWhitepaper = computed(() => route.path === '/whitepaper');
     <Header />
     <Modal />
     <router-view />
-    <Footer v-if="!isWhitepaper" />
+    <Footer v-if="!isWhitepaper && !isGame" />
   </main>
 </template>
 
