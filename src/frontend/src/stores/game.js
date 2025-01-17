@@ -1,11 +1,10 @@
-// src/stores/game.js
 import { defineStore } from 'pinia';
 
 export const useGameStore = defineStore('game', {
   state: () => ({
     resources: {
       energy: 100,
-      credits: 50,
+      matter: 50,
     },
     buildings: {
       mine: 1,
@@ -13,46 +12,57 @@ export const useGameStore = defineStore('game', {
     },
     fleet: [],
     alliances: [],
-    playerId: 'player1',
-    galaxyMap: [
-      { name: 'Planet Alpha', description: 'Rich in Energy', type: 'planet' },
-      { name: 'Asteroid Belt', description: 'Mine for Credits', type: 'asteroid' },
-      { name: 'Space Anomaly', description: 'Unknown', type: 'anomaly' },
-    ],
+    player: { x: 0, y: 0 }, // Current player position
+    galaxyMap: {}, // Dynamically populated map
   }),
   actions: {
-    collectResources() {
-      this.resources.energy += this.buildings.mine * 10; // Mines generate 10 energy per level
-      this.resources.credits += this.buildings.mine * 5; // Mines generate 5 credits per level
-    },
-    buildMine() {
-      if (this.resources.credits >= 50) {
-        this.resources.credits -= 50;
-        this.buildings.mine += 1;
+    // Initialize galaxy with procedural generation
+    initializeGalaxy(seed = 42, range = 10) {
+      const rng = this.seededRandom(seed); // Seeded RNG
+      const types = ['planet', 'asteroid', 'anomaly'];
+
+      for (let i = -range; i <= range; i++) {
+        for (let j = -range; j <= range; j++) {
+          const key = `${i},${j}`;
+          if (i === 0 && j === 0) {
+            this.galaxyMap[key] = { name: 'Home Base', type: 'base', explored: true };
+          } else if (rng() > 0.6) {
+            const type = types[Math.floor(rng() * types.length)];
+            this.galaxyMap[key] = {
+              name: `${type.charAt(0).toUpperCase() + type.slice(1)} at (${i}, ${j})`,
+              type,
+              explored: false,
+            };
+          }
+        }
       }
     },
-    buildShip() {
-      if (this.resources.credits >= 100) {
-        this.resources.credits -= 100;
-        this.fleet.push({ type: 'scout', health: 100 });
-      }
+
+    // Seeded RNG
+    seededRandom(seed) {
+      let x = seed;
+      return () => {
+        x = Math.sin(x++) * 10000;
+        return x - Math.floor(x);
+      };
     },
-    explore(location) {
-      if (this.fleet.length > 0) {
-        const rewards = { energy: 30, credits: 15 }; // Example rewards
-        this.resources.energy += rewards.energy;
-        this.resources.credits += rewards.credits;
-        alert(`Explored ${location.name}! Gained ${rewards.energy} Energy and ${rewards.credits} Credits.`);
+
+    // Explore a specific location
+    exploreLocation(x, y) {
+      const key = `${x},${y}`;
+      if (this.galaxyMap[key]) {
+        const location = this.galaxyMap[key];
+        if (!location.explored) {
+          location.explored = true;
+          this.resources.energy += 30;
+          this.resources.matter += 15;
+          alert(`Explored ${location.name}! Rewards: 30 Energy, 15 Matter`);
+        } else {
+          alert(`${location.name} is already explored.`);
+        }
+        this.player = { x, y };
       } else {
-        alert('You need at least one ship to explore!');
-      }
-    },
-    createAlliance(name) {
-      if (!this.alliances.some((alliance) => alliance.name === name)) {
-        this.alliances.push({ name, members: [this.playerId] });
-        alert(`Alliance "${name}" created successfully!`);
-      } else {
-        alert('An alliance with this name already exists!');
+        alert('This is empty space. Nothing to explore here.');
       }
     },
   },

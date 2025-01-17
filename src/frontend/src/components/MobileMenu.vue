@@ -73,7 +73,7 @@ const scrollToTop = () => {
     <div class="nav-container">
       <ul class="nav-links">
         <li v-for="(item, index) in [
-          { label: 'header.games', path: '/games' },
+          { label: 'header.games', path: '/game' },
           { label: 'header.dao', path: '/dao' },
           { label: 'header.whitepaper', path: '/whitepaper' },
           { label: 'header.dashboard', path: '/dashboard' }

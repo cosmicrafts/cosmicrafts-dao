@@ -10,78 +10,30 @@
           </div>
           <div class="flex items-center space-x-2">
             <img src="@/assets/icons/matter.svg" alt="Matter" class="w-6 h-6" />
-            <span>Credits: {{ resources.credits }}</span>
+            <span>Matter: {{ resources.matter }}</span>
           </div>
         </div>
       </div>
 
-      <!-- Tabs -->
+      <!-- Galaxy Map -->
       <div class="tabs mt-16 p-4 space-y-4">
-        <!-- Buildings Tab -->
-        <div class="tab">
-          <h2 class="text-xl font-bold text-center mb-4">Buildings</h2>
-          <div class="p-6 bg-gray-700 rounded-lg">
-            <div class="flex items-center justify-between mb-4">
-              <span>Mines: {{ buildings.mine }}</span>
-              <img src="@/assets/icons/mine.svg" alt="Mine" class="w-8 h-8" />
-            </div>
-            <button
-              @click="buildMine"
-              :disabled="resources.credits < 50"
-              class="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg disabled:bg-gray-500">
-              Build Mine (50 Credits)
-            </button>
-          </div>
-        </div>
-
-        <!-- Fleet Tab -->
-        <div class="tab">
-          <h2 class="text-xl font-bold text-center mb-4">Fleet</h2>
-          <div class="p-6 bg-gray-700 rounded-lg">
-            <div v-for="(ship, index) in fleet" :key="index" class="flex items-center justify-between mb-2">
-              <span>Ship {{ index + 1 }}: {{ ship.type }} ({{ ship.health }} HP)</span>
-              <img src="@/assets/icons/ship.svg" alt="Ship" class="w-8 h-8" />
-            </div>
-            <button
-              @click="buildShip"
-              :disabled="resources.credits < 100"
-              class="w-full px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg disabled:bg-gray-500">
-              Build Scout (100 Credits)
-            </button>
-          </div>
-        </div>
-
-        <!-- Galaxy Map Tab -->
         <div class="tab">
           <h2 class="text-xl font-bold text-center mb-4">Galaxy Map</h2>
           <div class="p-6 bg-gray-700 rounded-lg">
-            <div class="grid grid-cols-1 gap-4">
+            <div class="grid grid-cols-3 gap-4">
               <div
-                v-for="(location, index) in galaxyMap"
-                :key="index"
-                @click="explore(location)"
-                class="p-4 bg-gray-600 rounded-lg cursor-pointer hover:bg-gray-500 text-center">
-                <h3 class="font-bold">{{ location.name }}</h3>
-                <p class="text-sm text-gray-300">{{ location.description }}</p>
+                v-for="(location, key) in visibleLocations"
+                :key="key"
+                @click="travelToLocation(location)"
+                :class="[
+                  'p-4 rounded-lg text-center cursor-pointer transition-colors',
+                  location ? 'bg-gray-600 hover:bg-gray-500' : 'bg-gray-800',
+                ]"
+              >
+                <h3 v-if="location" class="font-bold">{{ location.name }}</h3>
+                <p v-else class="text-gray-400">Empty Space</p>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Alliances Tab -->
-        <div class="tab">
-          <h2 class="text-xl font-bold text-center mb-4">Alliances</h2>
-          <div class="p-6 bg-gray-700 rounded-lg">
-            <input
-              v-model="allianceName"
-              placeholder="Enter alliance name"
-              class="p-2 bg-gray-600 rounded-lg w-full mb-4 text-center"
-            />
-            <button
-              @click="createAlliance"
-              class="w-full px-4 py-2 bg-purple-500 hover:bg-purple-600 rounded-lg text-white font-bold">
-              Create Alliance
-            </button>
           </div>
         </div>
       </div>
@@ -91,7 +43,7 @@
 
 <script>
 import { useGameStore } from '@/stores/game';
-import { computed, ref, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 
 export default {
   setup() {
@@ -99,59 +51,57 @@ export default {
 
     // Reactive state from Pinia store
     const resources = computed(() => gameStore.resources);
-    const buildings = computed(() => gameStore.buildings);
-    const fleet = computed(() => gameStore.fleet);
-    const galaxyMap = computed(() => gameStore.galaxyMap);
 
-    // Alliances
-    const allianceName = ref('');
+    // Compute visible locations dynamically
+    const visibleLocations = computed(() => {
+      const { x, y } = gameStore.player;
+      const neighbors = [
+        { x: x, y: y + 1 },
+        { x: x, y: y - 1 },
+        { x: x + 1, y: y },
+        { x: x - 1, y: y },
+      ];
 
-    // Actions from the store
-    const buildMine = gameStore.buildMine;
-    const buildShip = gameStore.buildShip;
-    const explore = gameStore.explore;
-    const createAlliance = () => {
-      if (allianceName.value.trim()) {
-        gameStore.createAlliance(allianceName.value.trim());
-        allianceName.value = '';
+      return neighbors.reduce((acc, loc) => {
+        const key = `${loc.x},${loc.y}`;
+        acc[key] = gameStore.galaxyMap[key] || null;
+        return acc;
+      }, {});
+    });
+
+    // Initialize galaxy on first mount
+    onMounted(() => {
+      if (!Object.keys(gameStore.galaxyMap).length) {
+        gameStore.initializeGalaxy(42, 10); // Seed and range
+      }
+    });
+
+    // Handle travel to a new location
+    const travelToLocation = (location) => {
+      if (location) {
+        const [x, y] = location.name.match(/\(([^)]+)\)/)[1].split(',').map(Number); // Extract coordinates from name
+        gameStore.exploreLocation(x, y);
+      } else {
+        alert('You cannot travel to empty space!');
       }
     };
 
-    // Automate resource collection every 10 seconds
-    onMounted(() => {
-      setInterval(() => {
-        gameStore.collectResources();
-      }, 10000);
-    });
-
     return {
       resources,
-      buildings,
-      fleet,
-      galaxyMap,
-      allianceName,
-      buildMine,
-      buildShip,
-      explore,
-      createAlliance,
+      visibleLocations,
+      travelToLocation,
     };
   },
 };
 </script>
+z
 
 <style scoped>
 /* General Game Container */
 .game {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  overflow-y: auto; /* Enable vertical scrolling */
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(to left, #1b212b, #11161d, #1b212b); /* Smooth gradient */
-  color: white; /* Ensure text is readable */
-  padding-bottom: 16px; /* Space for scrolling past the last section */
 }
 
 /* Fixed Resource Bar */
@@ -168,19 +118,19 @@ export default {
 
 /* Tabs Container */
 .tabs {
-  width: 100%;
-  padding-top: 6rem; /* Offset for the fixed header */
+  padding-top: 5.5rem; /* Offset for the fixed header */
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: .25rem;
+  padding-bottom: 6rem;
+  width: 100vw;
 }
 
 /* Individual Tab Section */
 .tab {
-  width: 100%;
+  vertical-align: middle;
   padding: 2rem;
-  background-color: #2d3748; /* Dark background for sections */
-
+  background-color: #272e38; /* Dark background for sections */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle depth */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -192,15 +142,16 @@ export default {
 
 /* Section Headings */
 .tab h2 {
-  font-size: 1.25rem; /* Larger heading for better readability */
+  font-size: 2rem;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 16px;
-  color: #edf2f7; /* Light gray text */
+  margin-bottom: 1rem;
+  color: #ffffff;
 }
 
 /* Buttons */
 button {
+  margin-top: 1rem;
   width: 100%; /* Full width for touch usability */
   padding: 12px;
   font-size: 1rem; /* Legible text size */
@@ -208,17 +159,17 @@ button {
   color: white;
   border: none;
   border-radius: 8px;
-  background: #4299e1; /* Default blue */
+  background: #008cff; /* Default blue */
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
 button:hover:enabled {
-  background: #2b6cb0; /* Darker blue on hover */
+  background: rgb(69, 159, 255); /* Darker blue on hover */
   transform: scale(1.02); /* Slight scale for feedback */
 }
 
 button:disabled {
-  background: #718096; /* Gray for disabled buttons */
+  background: #a8a8a8;
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -229,7 +180,7 @@ input {
   padding: 12px;
   font-size: 1rem;
   color: white;
-  background: #4a5568; /* Darker gray background */
+  background: #252a33; /* Darker gray background */
   border: none;
   border-radius: 8px;
   text-align: center;
@@ -243,13 +194,15 @@ input::placeholder {
 img {
   display: inline-block;
   vertical-align: middle;
-  width: 2rem; /* Consistent size for icons */
+  width: 4rem; /* Consistent size for icons */
   height: 2rem;
-  transition: transform 0.2s ease;
+  transition: transform 0.35s ease-out;
 }
 
 img:hover {
-  transform: scale(1.1); /* Subtle scaling on hover */
+  transform: scale(2);
+  transform: translateY(-8px);
+
 }
 
 /* Grid Items (Galaxy Map Locations) */
