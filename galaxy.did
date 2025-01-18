@@ -11,11 +11,13 @@ type Planet = record {
   moons : vec Moon;
   resources : vec Resource;
   name : text;
+  system_id : nat64;
   orbiting_fleets : vec nat64;
-  owner_id : opt nat64;
+  owner_id : opt principal;
   planet_type : text;
   buildings : vec Building;
 };
+type Player = record { id : principal; name : text };
 type Resource = record { resource_type : ResourceType; amount : nat64 };
 type ResourceType = variant { Energy };
 type Result = variant { Ok; Err : text };
@@ -41,18 +43,18 @@ service : {
   add_moon_to_planet : (nat64, nat64, Moon) -> (Result);
   add_planet_to_system : (nat64, Planet) -> (Result);
   add_star_to_system : (nat64, Star) -> (Result);
-  build_ship : (nat64, nat64, ShipType) -> (Result_1);
-  build_structure : (nat64, nat64, BuildingType) -> (Result_1);
-  claim_planet : (nat64, nat64) -> (Result);
-  create_fleet : (nat64) -> (Result_1);
-  create_planet : (text) -> (Planet);
+  build_ship : (nat64, ShipType) -> (Result_1);
+  build_structure : (nat64, BuildingType) -> (Result_1);
+  claim_planet : (nat64) -> (Result);
+  create_fleet : () -> (Result_1);
+  create_planet : (text, nat64) -> (Planet);
   generate_star_system : (text) -> (nat64);
   get_planet : (nat64) -> (opt Planet) query;
-  get_player : (nat64) -> (opt Moon) query;
+  get_player : () -> (opt Player) query;
   get_star_system : (nat64) -> (opt StarSystem) query;
   get_tick_count : () -> (nat64) query;
   init_game : () -> ();
-  register_player : (text) -> (nat64);
+  register_player : (text) -> (text);
   remove_asteroid_belt_from_system : (nat64, nat64) -> (Result);
   remove_moon_from_planet : (nat64, nat64, nat64) -> (Result);
   remove_planet_from_system : (nat64, nat64) -> (Result);
@@ -60,5 +62,5 @@ service : {
   remove_star_system : (nat64) -> (Result);
   start_tick : () -> ();
   stop_tick : () -> ();
-  upgrade_building : (nat64, nat64, nat64) -> (Result);
+  upgrade_building : (nat64, nat64) -> (Result);
 }
