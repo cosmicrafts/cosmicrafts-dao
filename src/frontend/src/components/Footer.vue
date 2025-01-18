@@ -87,7 +87,7 @@ footer {
 }
 
 .social-links img:hover {
-  transform: scale(1.1);
+  transform: scale(1.5);
 }
 
 /* Language Section */
@@ -122,9 +122,7 @@ footer {
 
 .links a:hover,
 .legal-links a:hover {
-  color: #7cb3ff;
-  font-weight: 800;
-  text-decoration: underline;
+  color: #ffffff;
 }
 
 /* Branding and Logo */
