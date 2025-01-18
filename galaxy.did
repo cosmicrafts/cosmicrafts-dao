@@ -1,12 +1,26 @@
 type AsteroidBelt = record { id : nat64; name : text };
+type Building = record {
+  id : nat64;
+  level : nat64;
+  building_type : BuildingType;
+};
+type BuildingType = variant { Mine; Shipyard };
 type Moon = record { id : nat64; name : text };
 type Planet = record {
   id : nat64;
   moons : vec Moon;
+  resources : vec Resource;
   name : text;
+  orbiting_fleets : vec nat64;
+  owner_id : opt nat64;
   planet_type : text;
+  buildings : vec Building;
 };
+type Resource = record { resource_type : ResourceType; amount : nat64 };
+type ResourceType = variant { Energy };
 type Result = variant { Ok; Err : text };
+type Result_1 = variant { Ok : nat64; Err : text };
+type ShipType = variant { Scout };
 type Star = record {
   id : nat64;
   luminosity : float64;
@@ -27,11 +41,24 @@ service : {
   add_moon_to_planet : (nat64, nat64, Moon) -> (Result);
   add_planet_to_system : (nat64, Planet) -> (Result);
   add_star_to_system : (nat64, Star) -> (Result);
+  build_ship : (nat64, nat64, ShipType) -> (Result_1);
+  build_structure : (nat64, nat64, BuildingType) -> (Result_1);
+  claim_planet : (nat64, nat64) -> (Result);
+  create_fleet : (nat64) -> (Result_1);
+  create_planet : (text) -> (Planet);
   generate_star_system : (text) -> (nat64);
+  get_planet : (nat64) -> (opt Planet) query;
+  get_player : (nat64) -> (opt Moon) query;
   get_star_system : (nat64) -> (opt StarSystem) query;
+  get_tick_count : () -> (nat64) query;
+  init_game : () -> ();
+  register_player : (text) -> (nat64);
   remove_asteroid_belt_from_system : (nat64, nat64) -> (Result);
   remove_moon_from_planet : (nat64, nat64, nat64) -> (Result);
   remove_planet_from_system : (nat64, nat64) -> (Result);
   remove_star_from_system : (nat64, nat64) -> (Result);
   remove_star_system : (nat64) -> (Result);
+  start_tick : () -> ();
+  stop_tick : () -> ();
+  upgrade_building : (nat64, nat64, nat64) -> (Result);
 }
