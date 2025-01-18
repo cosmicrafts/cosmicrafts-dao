@@ -1,0 +1,17 @@
+[package]
+name = "galaxy"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+ic-cdk = "0.16"
+ic-cdk-macros = "0.17.1"
+candid = "0.10"
+serde = "1.0"
+uuid = { version = "1.2", features = ["v4"] }
+getrandom = { version = "0.2", features = ["js"] }
+
+ic-cdk-timers = "0.10"

@@ -1,0 +1,37 @@
+type AsteroidBelt = record { id : nat64; name : text };
+type Moon = record { id : nat64; name : text };
+type Planet = record {
+  id : nat64;
+  moons : vec Moon;
+  name : text;
+  planet_type : text;
+};
+type Result = variant { Ok; Err : text };
+type Star = record {
+  id : nat64;
+  luminosity : float64;
+  name : text;
+  spectral_type : text;
+};
+type StarSystem = record {
+  id : nat64;
+  moons : vec Moon;
+  asteroid_belts : vec Moon;
+  name : text;
+  last_updated : nat64;
+  planets : vec Planet;
+  stars : vec Star;
+};
+service : {
+  add_asteroid_belt_to_system : (nat64, AsteroidBelt) -> (Result);
+  add_moon_to_planet : (nat64, nat64, Moon) -> (Result);
+  add_planet_to_system : (nat64, Planet) -> (Result);
+  add_star_to_system : (nat64, Star) -> (Result);
+  generate_star_system : (text) -> (nat64);
+  get_star_system : (nat64) -> (opt StarSystem) query;
+  remove_asteroid_belt_from_system : (nat64, nat64) -> (Result);
+  remove_moon_from_planet : (nat64, nat64, nat64) -> (Result);
+  remove_planet_from_system : (nat64, nat64) -> (Result);
+  remove_star_from_system : (nat64, nat64) -> (Result);
+  remove_star_system : (nat64) -> (Result);
+}
