@@ -5,6 +5,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use ic_cdk_timers::{TimerId, set_timer_interval};
 
+
 // --- Data Structures ---
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
@@ -41,7 +42,8 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
     #[derive(CandidType, Deserialize, Clone, Debug)]
     struct Fleet {
         id: u64,
-        owner_id: Principal, // Change to Principal
+        owner_id: Principal,
+        coordinates: (f64, f64), // or entity orbiting
         ships: Vec<Ship>,
     }
 
@@ -62,6 +64,7 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
         id: u64,
         name: String,
         system_id: u64,
+        coordinates: (f64, f64),
         planet_category: String,
         planet_subcategory: String,
         planet_size: String,
@@ -78,20 +81,27 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
         orbiting_fleets: Vec<u64>,
     }
 
-
     #[derive(CandidType, Deserialize, Clone, Debug)]
     struct Star {
-    id: u64,
-    name: String,
-    spectral_type: String,
-    luminosity: f64,
-    // Add more properties as needed
+        id: u64,
+        name: String,
+        coordinates: (f64, f64),
+        spectral_type: String, // e.g., "G2V" for a Sun-like star
+        luminosity: f64,       // Relative to the Sun (1.0 = Sun's luminosity)
+        mass: f64,             // Relative to the Sun (1.0 = Sun's mass)
+        radius: f64,           // Relative to the Sun (1.0 = Sun's radius)
+        age: f64,              // Age in billions of years
+        temperature: f64,      // Surface temperature in Kelvin
+        stellar_class: String, // e.g., "Main Sequence", "Giant", "Supergiant"
+        is_binary: bool,       // Whether the star is part of a binary system
+        companion_star_id: Option<u64>, // ID of the companion star (if binary)
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
     struct Moon {
     id: u64,
     name: String,
+    coordinates: (f64, f64),
     // Add more properties as needed
     }
 
@@ -111,7 +121,14 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
         moons: Vec<Moon>,
         asteroid_belts: Vec<AsteroidBelt>,
         last_updated: u64,
+        coordinates: (i64, i64),
+        number_of_stars: u64,
+        number_of_planets: u64,
+        number_of_moons: u64,
+        number_of_asteroid_belts: u64,
     }
+
+// --- Database
 
     thread_local! {
         static PLAYERS: RefCell<HashMap<Principal, Player>> = RefCell::new(HashMap::new());
@@ -125,6 +142,7 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
         static NEXT_SHIP_ID: RefCell<u64> = RefCell::new(1);
         static NEXT_STAR_SYSTEM_ID: RefCell<u64> = RefCell::new(1);
         static NEXT_PLANET_ID: RefCell<u64> = RefCell::new(1);
+        static NEXT_STAR_ID: RefCell<u64> = RefCell::new(1);
 
         static STAR_SYSTEMS: RefCell<HashMap<u64, StarSystem>> = RefCell::new(HashMap::new());
         static PLANETS: RefCell<HashMap<u64, Planet>> = RefCell::new(HashMap::new());
@@ -400,33 +418,172 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 
 // --- Star System Management ---
 
+    fn generate_random_star(system_coordinates: (i64, i64)) -> Star {
+        let spectral_types = vec!["O", "B", "A", "F", "G", "K", "M"];
+        let stellar_classes = vec!["Main Sequence", "Giant", "Supergiant"];
+
+        let random_spectral_index = generate_random_in_range(0, (spectral_types.len() - 1) as u64) as usize;
+        let random_class_index = generate_random_in_range(0, (stellar_classes.len() - 1) as u64) as usize;
+
+        let spectral_type = format!(
+            "{}{}",
+            spectral_types[random_spectral_index],
+            generate_random_in_range(0, 9) // Subclass (e.g., G2)
+        );
+
+        let luminosity = match spectral_types[random_spectral_index] {
+            "O" => generate_random_in_range_f64(10_000.0, 1_000_000.0),
+            "B" => generate_random_in_range_f64(100.0, 10_000.0),
+            "A" => generate_random_in_range_f64(10.0, 100.0),
+            "F" => generate_random_in_range_f64(2.0, 10.0),
+            "G" => generate_random_in_range_f64(0.6, 1.5), // Sun-like
+            "K" => generate_random_in_range_f64(0.1, 0.6),
+            "M" => generate_random_in_range_f64(0.01, 0.1),
+            _ => 1.0,
+        };
+
+        let mass = match spectral_types[random_spectral_index] {
+            "O" => generate_random_in_range_f64(15.0, 100.0),
+            "B" => generate_random_in_range_f64(2.0, 15.0),
+            "A" => generate_random_in_range_f64(1.5, 2.0),
+            "F" => generate_random_in_range_f64(1.1, 1.5),
+            "G" => generate_random_in_range_f64(0.8, 1.1), // Sun-like
+            "K" => generate_random_in_range_f64(0.5, 0.8),
+            "M" => generate_random_in_range_f64(0.1, 0.5),
+            _ => 1.0,
+        };
+
+        let radius = match spectral_types[random_spectral_index] {
+            "O" => generate_random_in_range_f64(10.0, 20.0),
+            "B" => generate_random_in_range_f64(3.0, 10.0),
+            "A" => generate_random_in_range_f64(1.5, 3.0),
+            "F" => generate_random_in_range_f64(1.2, 1.5),
+            "G" => generate_random_in_range_f64(0.9, 1.2), // Sun-like
+            "K" => generate_random_in_range_f64(0.7, 0.9),
+            "M" => generate_random_in_range_f64(0.3, 0.7),
+            _ => 1.0,
+        };
+
+        let age = generate_random_in_range_f64(1.0, 13.0); // Age in billions of years
+        let temperature = match spectral_types[random_spectral_index] {
+            "O" => generate_random_in_range_f64(30_000.0, 50_000.0),
+            "B" => generate_random_in_range_f64(10_000.0, 30_000.0),
+            "A" => generate_random_in_range_f64(7_500.0, 10_000.0),
+            "F" => generate_random_in_range_f64(6_000.0, 7_500.0),
+            "G" => generate_random_in_range_f64(5_000.0, 6_000.0), // Sun-like
+            "K" => generate_random_in_range_f64(3_500.0, 5_000.0),
+            "M" => generate_random_in_range_f64(2_500.0, 3_500.0),
+            _ => 5_778.0, // Sun's temperature
+        };
+
+        let system_x = system_coordinates.0 as f64;
+        let system_y = system_coordinates.1 as f64;
+
+        Star {
+            id: NEXT_STAR_ID.with(|id| {
+                let mut id = id.borrow_mut();
+                let current_id = *id;
+                *id += 1;
+                current_id
+            }),
+            name: format!("Star {}", generate_random_in_range(1, 1000)),
+            coordinates: (
+                system_x + generate_random_in_range_f64(-0.5, 0.5),
+                system_y + generate_random_in_range_f64(-0.5, 0.5),
+            ),
+            spectral_type,
+            luminosity,
+            mass,
+            radius,
+            age,
+            temperature,
+            stellar_class: stellar_classes[random_class_index].to_string(),
+            is_binary: generate_random_in_range(0, 1) == 1, // 50% chance of being binary
+            companion_star_id: None, // Will be set if binary
+        }
+    }
+
     #[update]
     fn generate_star_system(name: String) -> u64 {
         let system_id = NEXT_STAR_SYSTEM_ID.with(|id| {
-    let mut id = id.borrow_mut();
-    let current_id = *id;
-    *id += 1;
-    current_id
+            let mut id = id.borrow_mut();
+            let current_id = *id;
+            *id += 1;
+            current_id
         });
-
-        // Correct initialization of `StarSystem`
+    
+        // Define the probabilities for single, binary, and higher-order systems
+        let probabilities = vec![
+            (1, 55), // 55% chance of a single-star system
+            (2, 35), // 35% chance of a binary-star system
+            (3, 10), // 10% chance of a triple-star system
+        ];
+    
+        // Randomly select the number of stars based on the probabilities
+        let num_stars = weighted_random_selection(&probabilities);
+    
+        // Generate coordinates for the star system
+        let system_coordinates = (
+            generate_random_in_range(0, 1000) as i64,
+            generate_random_in_range(0, 1000) as i64,
+        );
+    
+        // Generate stars with the system's coordinates
+        let mut stars: Vec<Star> = (0..num_stars)
+            .map(|_| generate_random_star(system_coordinates))
+            .collect();
+    
+        // If the system has multiple stars, mark them as binary or triple
+        if stars.len() > 1 {
+            for i in 0..stars.len() {
+                if i < stars.len() - 1 {
+                    stars[i].is_binary = true;
+                    stars[i].companion_star_id = Some(stars[i + 1].id);
+                }
+            }
+        }
+    
+        // Create the new star system
         let new_system = StarSystem {
-    id: system_id,
-    name,
-    stars: vec![],
-    planets: vec![],
-    moons: vec![],
-    asteroid_belts: vec![],
-    last_updated: time(),
+            id: system_id,
+            name,
+            stars,
+            planets: vec![],
+            moons: vec![],
+            asteroid_belts: vec![],
+            coordinates: system_coordinates,
+            number_of_stars: num_stars as u64,
+            number_of_planets: 0,
+            number_of_moons: 0,
+            number_of_asteroid_belts: 0,
+            last_updated: time(),
         };
-
+    
+        // Insert the new system into the database
         STAR_SYSTEMS.with(|systems| {
-    systems.borrow_mut().insert(system_id, new_system);
+            systems.borrow_mut().insert(system_id, new_system);
         });
-
+    
         system_id
     }
-
+    
+    // Helper function for weighted random selection
+    fn weighted_random_selection(probabilities: &[(u64, u64)]) -> u64 {
+        let total_weight: u64 = probabilities.iter().map(|(_, weight)| weight).sum();
+        let random_value = generate_random_in_range(1, total_weight);
+    
+        let mut cumulative_weight = 0;
+        for (value, weight) in probabilities {
+            cumulative_weight += weight;
+            if random_value <= cumulative_weight {
+                return *value;
+            }
+        }
+    
+        // Default to single-star system if no selection is made
+        1
+    }
+    
     #[query]
     fn get_star_system(system_id: u64) -> Option<StarSystem> {
     STAR_SYSTEMS.with(|systems| systems.borrow().get(&system_id).cloned())
@@ -435,45 +592,45 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 // --- Planet Management ---
 
     fn calculate_habitability(
-        temperature_range: (f64, f64),
-        gravity: f64,
-        atmosphere: &str,
-    ) -> String {
-        let mut score = 0.0;
+            temperature_range: (f64, f64),
+            gravity: f64,
+            atmosphere: &str,
+        ) -> String {
+            let mut score = 0.0;
 
-        // Temperature scoring
-        if (10.0..=35.0).contains(&temperature_range.0) && (10.0..=35.0).contains(&temperature_range.1) {
-            score += 1.5; // Ideal temperature
-        } else if (-50.0..=50.0).contains(&temperature_range.0) && (-50.0..=50.0).contains(&temperature_range.1) {
-            score += 1.0; // Moderate with a wider range
-        } else if (-150.0..=100.0).contains(&temperature_range.0) && (-150.0..=100.0).contains(&temperature_range.1) {
-            score += 0.5; // Harsh but survivable with tech
-        } // Uninhabitable is default for extreme temperatures
+            // Temperature scoring
+            if (10.0..=35.0).contains(&temperature_range.0) && (10.0..=35.0).contains(&temperature_range.1) {
+                score += 1.5; // Ideal temperature
+            } else if (-50.0..=50.0).contains(&temperature_range.0) && (-50.0..=50.0).contains(&temperature_range.1) {
+                score += 1.0; // Moderate with a wider range
+            } else if (-150.0..=100.0).contains(&temperature_range.0) && (-150.0..=100.0).contains(&temperature_range.1) {
+                score += 0.5; // Harsh but survivable with tech
+            } // Uninhabitable is default for extreme temperatures
 
-        // Gravity scoring
-        if (0.8..=1.2).contains(&gravity) {
-            score += 1.5; // Ideal gravity
-        } else if (0.5..=2.0).contains(&gravity) {
-            score += 1.0; // Moderate gravity range
-        } else if (0.3..=3.0).contains(&gravity) {
-            score += 0.5; // Harsh gravity but potentially survivable
-        } // Uninhabitable for gravity outside 0.3–3.0
+            // Gravity scoring
+            if (0.8..=1.2).contains(&gravity) {
+                score += 1.5; // Ideal gravity
+            } else if (0.5..=2.0).contains(&gravity) {
+                score += 1.0; // Moderate gravity range
+            } else if (0.3..=3.0).contains(&gravity) {
+                score += 0.5; // Harsh gravity but potentially survivable
+            } // Uninhabitable for gravity outside 0.3–3.0
 
-        // Atmosphere scoring
-        match atmosphere {
-            "Moderate" => score += 1.5, // Ideal atmosphere
-            "Thick" | "Thin" => score += 1.0, // Moderate atmosphere
-            "None" | "Toxic" => score += 0.5, // Harsh atmosphere
-            _ => (), // Uninhabitable for anything worse
-        }
+            // Atmosphere scoring
+            match atmosphere {
+                "Moderate" => score += 1.5, // Ideal atmosphere
+                "Thick" | "Thin" => score += 1.0, // Moderate atmosphere
+                "None" | "Toxic" => score += 0.5, // Harsh atmosphere
+                _ => (), // Uninhabitable for anything worse
+            }
 
-        // Final categorization
-        match score {
-            s if s >= 4.0 => "Ideal".to_string(),
-            s if s >= 2.5 => "Moderate".to_string(),
-            s if s >= 1.5 => "Harsh".to_string(),
-            _ => "Uninhabitable".to_string(),
-        }
+            // Final categorization
+            match score {
+                s if s >= 4.0 => "Ideal".to_string(),
+                s if s >= 2.5 => "Moderate".to_string(),
+                s if s >= 1.5 => "Harsh".to_string(),
+                _ => "Uninhabitable".to_string(),
+            }
     }
 
     #[update]
@@ -484,6 +641,17 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
             *id += 1;
             current_id
         });
+
+         // Get system coordinates
+        let system_coordinates = STAR_SYSTEMS.with(|systems| {
+            systems.borrow().get(&system_id).map(|s| s.coordinates).unwrap_or((0, 0))
+        });
+
+        // Calculate planet coordinates
+        let coordinates = (
+            system_coordinates.0 as f64 + generate_random_in_range_f64(-10.0, 10.0),
+            system_coordinates.1 as f64 + generate_random_in_range_f64(-10.0, 10.0),
+        );
 
         // Categories and Subcategories
         let categories = vec![
@@ -564,6 +732,7 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
             id: planet_id,
             name,
             system_id,
+            coordinates,
             planet_category,
             planet_subcategory,
             planet_size,
@@ -634,68 +803,68 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 
     #[update]
     fn build_structure(planet_id: u64, building_type: BuildingType) -> Result<u64, String> {
-        let caller = ic_cdk::caller();
+            let caller = ic_cdk::caller();
 
-        // Reject anonymous calls
-        if caller == Principal::anonymous() {
-    return Err("Anonymous users cannot build structures.".to_string());
-        }
+            // Reject anonymous calls
+            if caller == Principal::anonymous() {
+        return Err("Anonymous users cannot build structures.".to_string());
+            }
 
-        // Check if the player is registered
-        if !PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
-    return Err("Player not registered.".to_string());
-        }
+            // Check if the player is registered
+            if !PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
+        return Err("Player not registered.".to_string());
+            }
 
-        // Check if the player owns the planet
-        let is_owner = PLANETS.with(|planets| {
-    planets.borrow().get(&planet_id).map(|planet| planet.owner_id) == Some(Some(caller))
-        });
+            // Check if the player owns the planet
+            let is_owner = PLANETS.with(|planets| {
+        planets.borrow().get(&planet_id).map(|planet| planet.owner_id) == Some(Some(caller))
+            });
 
-        if !is_owner {
-    return Err("Player does not own this planet.".to_string());
-        }
+            if !is_owner {
+        return Err("Player does not own this planet.".to_string());
+            }
 
-        // Proceed with building the structure
-        let building_id = NEXT_BUILDING_ID.with(|id| {
-    let mut id = id.borrow_mut();
-    let current_id = *id;
-    *id += 1;
-    current_id
-        });
+            // Proceed with building the structure
+            let building_id = NEXT_BUILDING_ID.with(|id| {
+        let mut id = id.borrow_mut();
+        let current_id = *id;
+        *id += 1;
+        current_id
+            });
 
-        let cost = match building_type {
-    BuildingType::Mine => 500,
-    BuildingType::Shipyard => 1000,
+            let cost = match building_type {
+        BuildingType::Mine => 500,
+        BuildingType::Shipyard => 1000,
+            };
+
+            PLANETS.with(|planets| {
+        let mut planets = planets.borrow_mut();
+        if let Some(planet) = planets.get_mut(&planet_id) {
+            // Check if the planet has enough resources
+            let has_enough_resources = planet.resources.iter()
+        .filter(|r| r.resource_type == ResourceType::Energy)
+        .map(|r| r.amount)
+        .sum::<u64>() >= cost;
+
+            if has_enough_resources {
+        // Deduct the resources
+        deplete_resource(planet, ResourceType::Energy, cost)?;
+
+        let building = Building {
+            id: building_id,
+            building_type,
+            level: 1,
         };
+        planet.buildings.push(building);
 
-        PLANETS.with(|planets| {
-    let mut planets = planets.borrow_mut();
-    if let Some(planet) = planets.get_mut(&planet_id) {
-        // Check if the planet has enough resources
-        let has_enough_resources = planet.resources.iter()
-    .filter(|r| r.resource_type == ResourceType::Energy)
-    .map(|r| r.amount)
-    .sum::<u64>() >= cost;
-
-        if has_enough_resources {
-    // Deduct the resources
-    deplete_resource(planet, ResourceType::Energy, cost)?;
-
-    let building = Building {
-        id: building_id,
-        building_type,
-        level: 1,
-    };
-    planet.buildings.push(building);
-
-    Ok(building_id)
+        Ok(building_id)
+            } else {
+        Err("Insufficient resources to build structure.".to_string())
+            }
         } else {
-    Err("Insufficient resources to build structure.".to_string())
+            Err("Planet not found.".to_string())
         }
-    } else {
-        Err("Planet not found.".to_string())
-    }
-        })
+            })
     }
 
     #[update]
@@ -704,52 +873,52 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 
         // Check if the player is registered
         if !PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
-    return Err("Player not registered.".to_string());
+            return Err("Player not registered.".to_string());
         }
 
         // Check if the player owns the planet
         let is_owner = PLANETS.with(|planets| {
-    planets.borrow().get(&planet_id).map(|planet| planet.owner_id) == Some(Some(caller))
+            planets.borrow().get(&planet_id).map(|planet| planet.owner_id) == Some(Some(caller))
         });
 
         if !is_owner {
-    return Err("Player does not own this planet.".to_string());
+            return Err("Player does not own this planet.".to_string());
         }
 
         PLANETS.with(|planets| {
-    let mut planets = planets.borrow_mut();
-    if let Some(planet) = planets.get_mut(&planet_id) {
-        if let Some(building) = planet.buildings.iter_mut().find(|b| b.id == building_id) {
-    let upgrade_cost = match building.building_type {
-        BuildingType::Mine => 250, // Example upgrade cost
-        BuildingType::Shipyard => 500, // Example upgrade cost
-    };
+        let mut planets = planets.borrow_mut();
+        if let Some(planet) = planets.get_mut(&planet_id) {
+            if let Some(building) = planet.buildings.iter_mut().find(|b| b.id == building_id) {
+        let upgrade_cost = match building.building_type {
+            BuildingType::Mine => 250, // Example upgrade cost
+            BuildingType::Shipyard => 500, // Example upgrade cost
+        };
 
-    // Check if the planet has enough resources
-    let total_energy = planet.resources.iter()
-        .filter(|r| r.resource_type == ResourceType::Energy)
-        .map(|r| r.amount)
-        .sum::<u64>();
+        // Check if the planet has enough resources
+        let total_energy = planet.resources.iter()
+            .filter(|r| r.resource_type == ResourceType::Energy)
+            .map(|r| r.amount)
+            .sum::<u64>();
 
-    if total_energy >= upgrade_cost {
-        // Deduct the resources
-        if let Some(resource) = planet.resources.iter_mut()
-    .find(|r| r.resource_type == ResourceType::Energy) {
-    resource.amount -= upgrade_cost;
-        }
+        if total_energy >= upgrade_cost {
+            // Deduct the resources
+            if let Some(resource) = planet.resources.iter_mut()
+        .find(|r| r.resource_type == ResourceType::Energy) {
+        resource.amount -= upgrade_cost;
+            }
 
-        building.level += 1;
-        Ok(())
-    } else {
-        Err("Insufficient resources to upgrade building.".to_string())
-    }
+            building.level += 1;
+            Ok(())
         } else {
-    Err("Building not found.".to_string())
+            Err("Insufficient resources to upgrade building.".to_string())
         }
-    } else {
-        Err("Planet not found.".to_string())
-    }
-        })
+            } else {
+        Err("Building not found.".to_string())
+            }
+        } else {
+            Err("Planet not found.".to_string())
+        }
+            })
     }
 
 // --- Fleet and Ship Management ---
@@ -760,97 +929,98 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 
         // Check if the player is registered
         if !PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
-    return Err("Player not registered.".to_string());
+        return Err("Player not registered.".to_string());
+            }
+
+            // Check if the player owns the planet and if the planet has a shipyard
+            let has_shipyard = PLANETS.with(|planets| {
+        planets.borrow().get(&planet_id).map(|planet| {
+            planet.owner_id == Some(caller) &&
+            planet.buildings.iter().any(|b| b.building_type == BuildingType::Shipyard)
+        }) == Some(true)
+            });
+
+            if !has_shipyard {
+        return Err("Player does not own this planet or there is no shipyard.".to_string());
+            }
+
+            // Get the cost for the ship type
+            let cost = match ship_type {
+        ShipType::Scout => 100, // Example cost for a scout
+            };
+
+            // Check if the planet has enough resources
+            let has_enough_resources = PLANETS.with(|planets| {
+        planets.borrow().get(&planet_id).map(|planet| {
+            planet.resources.iter()
+        .filter(|r| r.resource_type == ResourceType::Energy)
+        .map(|r| r.amount)
+        .sum::<u64>() >= cost
+        }) == Some(true)
+            });
+
+            if !has_enough_resources {
+        return Err("Insufficient resources to build ship.".to_string());
+            }
+
+            // Deduct the resources from the planet
+            PLANETS.with(|planets| {
+        let mut planets = planets.borrow_mut();
+        if let Some(planet) = planets.get_mut(&planet_id) {
+            deplete_resource(planet, ResourceType::Energy, cost)?;
         }
+        Ok::<(), String>(()) // Indicate success
+            })?;
 
-        // Check if the player owns the planet and if the planet has a shipyard
-        let has_shipyard = PLANETS.with(|planets| {
-    planets.borrow().get(&planet_id).map(|planet| {
-        planet.owner_id == Some(caller) &&
-        planet.buildings.iter().any(|b| b.building_type == BuildingType::Shipyard)
-    }) == Some(true)
-        });
-
-        if !has_shipyard {
-    return Err("Player does not own this planet or there is no shipyard.".to_string());
-        }
-
-        // Get the cost for the ship type
-        let cost = match ship_type {
-    ShipType::Scout => 100, // Example cost for a scout
-        };
-
-        // Check if the planet has enough resources
-        let has_enough_resources = PLANETS.with(|planets| {
-    planets.borrow().get(&planet_id).map(|planet| {
-        planet.resources.iter()
-    .filter(|r| r.resource_type == ResourceType::Energy)
-    .map(|r| r.amount)
-    .sum::<u64>() >= cost
-    }) == Some(true)
-        });
-
-        if !has_enough_resources {
-    return Err("Insufficient resources to build ship.".to_string());
-        }
-
-        // Deduct the resources from the planet
-        PLANETS.with(|planets| {
-    let mut planets = planets.borrow_mut();
-    if let Some(planet) = planets.get_mut(&planet_id) {
-        deplete_resource(planet, ResourceType::Energy, cost)?;
-    }
-    Ok::<(), String>(()) // Indicate success
-        })?;
-
-        // Create a new ship
-        let ship_id = NEXT_SHIP_ID.with(|id| {
-    let mut id = id.borrow_mut();
-    let current_id = *id;
-    *id += 1;
-    current_id
-        });
-
-        let new_ship = Ship {
-    id: ship_id,
-    ship_type,
-    health: 100, // Example health for a scout
-        };
-
-        // Add the ship to the player's fleet
-        let fleet_id_result = FLEETS.with(|fleets| {
-    let mut fleets = fleets.borrow_mut();
-    let fleet_ids: Vec<u64> = fleets.keys().cloned().collect();
-
-    for fleet_id in fleet_ids {
-        if let Some(fleet) = fleets.get_mut(&fleet_id) {
-    if fleet.owner_id == caller {
-        fleet.ships.push(new_ship);
-        return Ok(fleet_id);
-    }
-        }
-    }
-
-    // If no existing fleet is found, create a new one
-    let new_fleet_id = NEXT_FLEET_ID.with(|id| {
+            // Create a new ship
+            let ship_id = NEXT_SHIP_ID.with(|id| {
         let mut id = id.borrow_mut();
         let current_id = *id;
         *id += 1;
         current_id
-    });
+            });
 
-    let mut new_fleet = Fleet {
-        id: new_fleet_id,
-        owner_id: caller,
-        ships: vec![],
-    };
+            let new_ship = Ship {
+        id: ship_id,
+        ship_type,
+        health: 100, // Example health for a scout
+            };
 
-    new_fleet.ships.push(new_ship);
-    fleets.insert(new_fleet_id, new_fleet);
-    Ok(new_fleet_id)
+            // Add the ship to the player's fleet
+            let fleet_id_result = FLEETS.with(|fleets| {
+        let mut fleets = fleets.borrow_mut();
+        let fleet_ids: Vec<u64> = fleets.keys().cloned().collect();
+
+        for fleet_id in fleet_ids {
+            if let Some(fleet) = fleets.get_mut(&fleet_id) {
+        if fleet.owner_id == caller {
+            fleet.ships.push(new_ship);
+            return Ok(fleet_id);
+        }
+            }
+        }
+
+        // If no existing fleet is found, create a new one
+        let new_fleet_id = NEXT_FLEET_ID.with(|id| {
+            let mut id = id.borrow_mut();
+            let current_id = *id;
+            *id += 1;
+            current_id
         });
 
-        fleet_id_result
+        let mut new_fleet = Fleet {
+            id: new_fleet_id,
+            owner_id: caller,
+            coordinates: (0.0, 0.0),
+            ships: vec![],
+        };
+
+        new_fleet.ships.push(new_ship);
+        fleets.insert(new_fleet_id, new_fleet);
+        Ok(new_fleet_id)
+            });
+
+            fleet_id_result
     }
 
     #[update]
@@ -859,37 +1029,43 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 
         // Check if the player is registered
         if !PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
-    return Err("Player not registered.".to_string());
-        }
+        return Err("Player not registered.".to_string());
+            }
 
-        // Create a new fleet
-        let fleet_id = NEXT_FLEET_ID.with(|id| {
-    let mut id = id.borrow_mut();
-    let current_id = *id;
-    *id += 1;
-    current_id
-        });
+            // Create a new fleet
+            let fleet_id = NEXT_FLEET_ID.with(|id| {
+            let mut id = id.borrow_mut();
+            let current_id = *id;
+            *id += 1;
+            current_id
+            });
+            let coordinates = (0.0, 0.0);
+            let new_fleet = Fleet {
+            id: fleet_id,
+            owner_id: caller,
+            coordinates,
+            ships: Vec::new(),
+                };
 
-        let new_fleet = Fleet {
-    id: fleet_id,
-    owner_id: caller, // Set the owner of the fleet
-    ships: Vec::new(),
-        };
+                FLEETS.with(|fleets| {
+            fleets.borrow_mut().insert(fleet_id, new_fleet);
+                });
 
-        FLEETS.with(|fleets| {
-    fleets.borrow_mut().insert(fleet_id, new_fleet);
-        });
-
-        Ok(fleet_id)
+            Ok(fleet_id)
     }
 
-// Export the Candid interface
-ic_cdk::export_candid!();
 
-fn generate_random_in_range(min: u64, max: u64) -> u64 {
-    let current_time = ic_cdk::api::time(); // Nanoseconds since the Unix epoch
-    min + (current_time as u64 % (max - min + 1))
-}
+// Utils
+    fn generate_random_in_range(min: u64, max: u64) -> u64 {
+        let current_time = ic_cdk::api::time(); // Nanoseconds since the Unix epoch
+        min + (current_time as u64 % (max - min + 1))
+    }
+
+    fn generate_random_in_range_f64(min: f64, max: f64) -> f64 {
+        let current_time = ic_cdk::api::time(); // Nanoseconds since the Unix epoch
+        min + (current_time as f64 % (max - min + 1.0))
+    }
+
 // Tests
     #[cfg(test)]
     mod tests {
@@ -911,3 +1087,6 @@ fn generate_random_in_range(min: u64, max: u64) -> u64 {
             assert!(result.is_err());
             }
     }
+
+// Export the Candid interface
+ic_cdk::export_candid!();

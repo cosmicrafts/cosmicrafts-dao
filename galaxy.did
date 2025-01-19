@@ -5,7 +5,11 @@ type Building = record {
   building_type : BuildingType;
 };
 type BuildingType = variant { Mine; Shipyard };
-type Moon = record { id : nat64; name : text };
+type Moon = record {
+  id : nat64;
+  name : text;
+  coordinates : record { float64; float64 };
+};
 type Planet = record {
   id : nat64;
   moons : vec Moon;
@@ -23,6 +27,7 @@ type Planet = record {
   planet_subcategory : text;
   orbital_period_days : nat64;
   planet_category : text;
+  coordinates : record { float64; float64 };
   buildings : vec Building;
 };
 type Player = record { id : principal; name : text };
@@ -34,18 +39,31 @@ type Result_2 = variant { Ok : text; Err : text };
 type ShipType = variant { Scout };
 type Star = record {
   id : nat64;
+  age : float64;
   luminosity : float64;
+  temperature : float64;
+  mass : float64;
   name : text;
   spectral_type : text;
+  stellar_class : text;
+  is_binary : bool;
+  companion_star_id : opt nat64;
+  radius : float64;
+  coordinates : record { float64; float64 };
 };
 type StarSystem = record {
   id : nat64;
+  number_of_moons : nat64;
+  number_of_planets : nat64;
   moons : vec Moon;
-  asteroid_belts : vec Moon;
+  asteroid_belts : vec AsteroidBelt;
   name : text;
   last_updated : nat64;
+  number_of_stars : nat64;
   planets : vec Planet;
   stars : vec Star;
+  number_of_asteroid_belts : nat64;
+  coordinates : record { int64; int64 };
 };
 service : {
   add_asteroid_belt_to_system : (nat64, AsteroidBelt) -> (Result);
