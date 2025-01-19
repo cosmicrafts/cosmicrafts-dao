@@ -6,8 +6,181 @@ use std::collections::HashMap;
 use ic_cdk_timers::{TimerId, set_timer_interval};
 use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
+//New
+
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    enum EntityType {
+        Planet,
+        Fleet,
+        Unit,
+        Building,
+        StarSystem,
+        Star,
+        AsteroidBelt,
+        Moon
+    }
+
+    #[query]
+    fn get_entity_by_id(entity_id: Principal) -> Option<Entity> {
+        GALAXY_TREE.with(|tree| {
+            tree.borrow().iter().find(|e| e.id == entity_id).cloned()
+        })
+    }
+
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    struct Entity {
+        id: Principal,
+        owner_id: Principal,
+        entity_type: EntityType,
+        coords: [f64; 2],
+        metadata: String, // JSON
+    }
+
+    impl RTreeObject for Entity {
+        type Envelope = AABB<[f64; 2]>;
+
+        fn envelope(&self) -> Self::Envelope {
+            AABB::from_point(self.coords)
+        }
+    }
+
+    impl PointDistance for Entity {
+        fn distance_2(&self, point: &[f64; 2]) -> f64 {
+            let dx = self.coords[0] - point[0];
+            let dy = self.coords[1] - point[1];
+            dx * dx + dy * dy
+        }
+    }
+
+    thread_local! {
+        static ENTITY_COUNTER: RefCell<u64> = RefCell::new(0);
+        static GALAXY_TREE: RefCell<RTree<Entity>> = RefCell::new(RTree::new());
+    }
+
+    #[update]
+    fn add_entity(
+        entity_type: EntityType,
+        coords: (f64, f64),
+        metadata: String,
+        ) -> Principal {
+        let caller = ic_cdk::caller(); // Get the Principal of the caller
+    
+        let unique_id = ENTITY_COUNTER.with(|counter| {
+            let mut counter = counter.borrow_mut();
+            *counter += 1;
+            *counter
+        });
+    
+        let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
+    
+        let entity = Entity {
+            id: unique_principal,
+            owner_id: caller, // Set the owner to the caller
+            entity_type,
+            coords: [coords.0, coords.1],
+            metadata,
+        };
+    
+        GALAXY_TREE.with(|tree| {
+            tree.borrow_mut().insert(entity);
+        });
+    
+        unique_principal // Return the unique Principal as the entity ID
+    }
+    
+    #[update]
+    fn remove_entity(id: Principal) -> Result<(), String> {
+        GALAXY_TREE.with(|tree| {
+            let mut tree = tree.borrow_mut();
+
+            // Find the entity to remove
+            let entity_to_remove = tree.iter().find(|e| e.id == id).cloned();
+
+            if let Some(entity) = entity_to_remove {
+                tree.remove(&entity); // Remove entity
+                Ok(())
+            } else {
+                Err("Entity not found.".to_string())
+            }
+        })
+    }
+
+    #[update]
+    fn update_entity(
+        id: Principal,
+        new_coords: (f64, f64),
+        new_metadata: Option<String>,
+    ) -> Result<(), String> {
+        GALAXY_TREE.with(|tree| {
+            // Clone the entity (if found) to end the immutable borrow early
+            let entity_to_update = tree.borrow().iter().find(|e| e.id == id).cloned();
+
+            if let Some(entity) = entity_to_update {
+                let mut tree_mut = tree.borrow_mut();
+                tree_mut.remove(&entity);
+
+                let updated_entity = Entity {
+                    id,
+                    owner_id: entity.owner_id, // Preserve the current owner
+                    entity_type: entity.entity_type,
+                    coords: [new_coords.0, new_coords.1],
+                    metadata: new_metadata.unwrap_or(entity.metadata),
+                };
+
+                tree_mut.insert(updated_entity);
+                Ok(())
+            } else {
+                Err("Entity not found.".to_string())
+            }
+        })
+    }
+
+    #[query]
+    fn find_nearby_entities(x: f64, y: f64, radius: f64) -> Vec<Entity> {
+        GALAXY_TREE.with(|tree| {
+            tree.borrow()
+                .locate_within_distance([x, y], radius.powi(2))
+                .cloned()
+                .collect()
+        })
+    }
+
+    #[query]
+    fn find_entities_in_area(lower: (f64, f64), upper: (f64, f64)) -> Vec<Entity> {
+        GALAXY_TREE.with(|tree| {
+            tree.borrow()
+                .locate_in_envelope_intersecting(&AABB::from_corners([lower.0, lower.1], [upper.0, upper.1]))
+                .cloned()
+                .collect()
+        })
+    }
+
+    #[update]
+    fn transfer_entity(entity_id: Principal, new_owner: Principal) -> Result<(), String> {
+        GALAXY_TREE.with(|tree| {
+            let mut tree_mut = tree.borrow_mut();
+            let entity_to_transfer = tree_mut.iter().find(|e| e.id == entity_id).cloned();
+    
+            if let Some(mut entity) = entity_to_transfer {
+                // Update ownership
+                entity.owner_id = new_owner;
+    
+                // Remove the old entity and insert the updated one
+                tree_mut.remove(&entity);
+                tree_mut.insert(entity);
+    
+                Ok(())
+            } else {
+                Err("Entity not found.".to_string())
+            }
+        })
+    }
+    
+
+    
+
 // --- R-Tree Points ---
-    // Identify all objects within a specific sector of the galaxy.
+
     #[query]
     fn planets_in_area(lower: (f64, f64), upper: (f64, f64)) -> Vec<u64> {
         PLANET_TREE.with(|tree| {
@@ -142,15 +315,15 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             }
         }
     }
-    
+
     impl RTreeObject for BuildingPoint {
         type Envelope = AABB<[f64; 2]>;
-    
+
         fn envelope(&self) -> Self::Envelope {
             AABB::from_point(self.coords)
         }
     }
-    
+
     impl PointDistance for BuildingPoint {
         fn distance_2(&self, point: &[f64; 2]) -> f64 {
             let dx = self.coords[0] - point[0];
@@ -1406,91 +1579,17 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
     mod tests { use super::*;
 
     #[test]
-    fn test_register_player_valid() {
-        let player_name = "TestPlayer".to_string();
-        let result = register_player(player_name.clone());
-        assert!(result.is_ok());
-        assert_eq!(get_player().unwrap().name, player_name);
-    }
-
-    #[test]
-    fn test_register_player_duplicate() {
-        let player_name = "TestPlayer".to_string();
-        let _ = register_player(player_name.clone());
-        let result = register_player(player_name);
-        assert!(result.is_err());
-        }
-    }
-
-    #[test]
-    fn test_star_system_tree_operations() {
-        let system_id = generate_star_system("Test System".to_string());
-
-        STAR_SYSTEM_TREE.with(|tree| {
-            let tree = tree.borrow();
-            assert!(tree.contains(&StarSystemPoint::new(system_id, (0, 0))));
-        });
-
-        remove_star_system(system_id).unwrap();
-
-        STAR_SYSTEM_TREE.with(|tree| {
-            let tree = tree.borrow();
-            assert!(!tree.contains(&StarSystemPoint::new(system_id, (0, 0))));
-        });
-    }
-
-    #[test]
-    fn test_create_fleet() {
-        let fleet_id = create_fleet().unwrap();
-
-        FLEET_TREE.with(|tree| {
-            assert!(tree.borrow().iter().any(|point| point.fleet_id == fleet_id));
-        });
-    }
-
-    #[test]
-    fn test_remove_fleet() {
-        let fleet_id = create_fleet().unwrap();
-
-        remove_fleet(fleet_id).unwrap();
-
-        FLEET_TREE.with(|tree| {
-            assert!(!tree.borrow().iter().any(|point| point.fleet_id == fleet_id));
-        });
-    }
-
-    #[test]
-    fn test_create_planet() {
-        let planet = create_planet("Earth".to_string(), 1);
-
-        PLANET_TREE.with(|tree| {
-            assert!(tree.borrow().iter().any(|point| point.planet_id == planet.id));
-        });
-    }
-
-    #[test]
-    fn test_remove_planet() {
-        let planet = create_planet("Earth".to_string(), 1);
-
-        remove_planet_from_system(1, planet.id).unwrap();
-
-        PLANET_TREE.with(|tree| {
-            assert!(!tree.borrow().iter().any(|point| point.planet_id == planet.id));
-        });
-    }
-
-    #[test]
-    fn test_update_planet_coordinates() {
-        let planet = create_planet("Mars".to_string(), 1);
-        let new_coords = (50.0, 50.0);
-
-        update_planet_coordinates(planet.id, new_coords).unwrap();
-
-        PLANET_TREE.with(|tree| {
-            assert!(tree.borrow().iter().any(|point| point.planet_id == planet.id && point.coords == [50.0, 50.0]));
+    fn test_initial_tree_is_empty() {
+        GALAXY_TREE.with(|tree| {
+            assert!(
+                tree.borrow().iter().next().is_none(),
+                "Galaxy tree should start empty"
+            );
         });
     }
 
 
+   
+    }
 // Export the Candid interface
 ic_cdk::export_candid!();

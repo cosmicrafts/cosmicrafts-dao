@@ -5,9 +5,34 @@ type Building = record {
   building_type : BuildingType;
 };
 type BuildingType = variant { Mine; Shipyard };
+type Entity = record {
+  id : principal;
+  metadata : text;
+  owner_id : principal;
+  entity_type : EntityType;
+  coords : vec float64;
+};
+type EntityType = variant {
+  AsteroidBelt;
+  Building;
+  Moon;
+  Star;
+  Unit;
+  StarSystem;
+  Planet;
+  Fleet;
+};
 type Moon = record {
   id : nat64;
+  is_rogue : bool;
+  habitability : text;
   name : text;
+  temperature_range : record { float64; float64 };
+  gravity : float64;
+  owner_id : opt principal;
+  atmosphere : vec text;
+  planet_id : nat64;
+  moon_type : text;
   coordinates : record { float64; float64 };
 };
 type Planet = record {
@@ -53,20 +78,17 @@ type Star = record {
 };
 type StarSystem = record {
   id : nat64;
-  number_of_moons : nat64;
-  number_of_planets : nat64;
   moons : vec Moon;
   asteroid_belts : vec AsteroidBelt;
   name : text;
   last_updated : nat64;
-  number_of_stars : nat64;
   planets : vec Planet;
   stars : vec Star;
-  number_of_asteroid_belts : nat64;
   coordinates : record { int64; int64 };
 };
 service : {
   add_asteroid_belt_to_system : (nat64, AsteroidBelt) -> (Result);
+  add_entity : (EntityType, record { float64; float64 }, text) -> (principal);
   add_moon_to_planet : (nat64, nat64, Moon) -> (Result);
   add_planet_to_system : (nat64, Planet) -> (Result);
   add_star_to_system : (nat64, Star) -> (Result);
@@ -75,7 +97,13 @@ service : {
   claim_planet : (nat64) -> (Result);
   create_fleet : () -> (Result_1);
   create_planet : (text, nat64) -> (Planet);
+  find_entities_in_area : (
+      record { float64; float64 },
+      record { float64; float64 },
+    ) -> (vec Entity) query;
+  find_nearby_entities : (float64, float64, float64) -> (vec Entity) query;
   generate_star_system : (text) -> (nat64);
+  get_entity_by_id : (principal) -> (opt Entity) query;
   get_planet : (nat64) -> (opt Planet) query;
   get_player : () -> (opt Player) query;
   get_star_system : (nat64) -> (opt StarSystem) query;
@@ -94,6 +122,7 @@ service : {
   register_player : (text) -> (Result_2);
   remove_asteroid_belt_from_system : (nat64, nat64) -> (Result);
   remove_building : (nat64) -> (Result);
+  remove_entity : (principal) -> (Result);
   remove_fleet : (nat64) -> (Result);
   remove_moon_from_planet : (nat64, nat64, nat64) -> (Result);
   remove_planet_from_system : (nat64, nat64) -> (Result);
@@ -101,6 +130,10 @@ service : {
   remove_star_system : (nat64) -> (Result);
   start_tick : () -> ();
   stop_tick : () -> ();
+  transfer_entity_ownership : (principal, principal) -> (Result);
+  update_entity : (principal, record { float64; float64 }, opt text) -> (
+      Result,
+    );
   update_planet_coordinates : (nat64, record { float64; float64 }) -> (Result);
   update_star_system : (nat64, record { int64; int64 }) -> (Result);
   upgrade_building : (nat64, nat64) -> (Result);

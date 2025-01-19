@@ -9,10 +9,14 @@ crate-type = ["cdylib"]
 [dependencies]
 ic-cdk = "0.16"
 ic-cdk-macros = "0.17.1"
+ic-cdk-timers = "0.10"
 candid = "0.10"
+
 serde = "1.0"
-uuid = { version = "1.2", features = ["v4"] }
+serde_json = "1.0.136"
+
 getrandom = { version = "0.2", features = ["js"] }
 
-ic-cdk-timers = "0.10"
 rstar = "0.12.2"
+ulid = "1.1.4"
+
