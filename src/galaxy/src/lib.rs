@@ -4,14 +4,193 @@ use ic_cdk::{update, query};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use ic_cdk_timers::{TimerId, set_timer_interval};
+use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
+// --- R-Tree Points ---
+    // Identify all objects within a specific sector of the galaxy.
+    #[query]
+    fn planets_in_area(lower: (f64, f64), upper: (f64, f64)) -> Vec<u64> {
+        PLANET_TREE.with(|tree| {
+            tree.borrow()
+                .locate_in_envelope_intersecting(&AABB::from_corners([lower.0, lower.1], [upper.0, upper.1]))
+                .map(|point| point.planet_id)
+                .collect()
+        })
+    }
+    // Locate nearby habitable planets, mining opportunities, or potential conflicts.
+    #[query]
+    fn nearby_planets(x: f64, y: f64, radius: f64) -> Vec<u64> {
+        PLANET_TREE.with(|tree| {
+            tree.borrow()
+                .locate_within_distance([x, y], radius.powi(2))
+                .map(|point| point.planet_id)
+                .collect()
+        })
+    }
+
+    #[query]
+    fn nearby_buildings(x: f64, y: f64, radius: f64) -> Vec<u64> {
+        BUILDING_TREE.with(|tree| {
+            tree.borrow()
+                .locate_within_distance([x, y], radius.powi(2))
+                .map(|point| point.building_id)
+                .collect()
+        })
+    }
+
+    // When navigating the galaxy or placing a new object.
+    #[query]
+    fn nearest_star_system(x: f64, y: f64) -> Option<u64> {
+        STAR_SYSTEM_TREE.with(|tree| {
+            tree.borrow()
+                .nearest_neighbor(&[x, y])
+                .map(|point| point.system_id)
+        })
+    }
+
+    // Identify fleets in proximity for combat, trade, or exploration.
+    #[query]
+    fn nearby_fleets(x: f64, y: f64, radius: f64) -> Vec<u64> {
+        FLEET_TREE.with(|tree| {
+            tree.borrow()
+                .locate_within_distance([x, y], radius.powi(2))
+                .map(|point| point.fleet_id)
+                .collect()
+        })
+    }
+
+    impl StarSystemPoint {
+        fn new(system_id: u64, coords: (i64, i64)) -> Self {
+            StarSystemPoint {
+                system_id,
+                coords: [coords.0 as f64, coords.1 as f64],
+            }
+        }
+    }
+
+    impl RTreeObject for StarSystemPoint {
+        type Envelope = AABB<[f64; 2]>;
+
+        fn envelope(&self) -> Self::Envelope {
+            AABB::from_point(self.coords)
+        }
+    }
+
+    impl PointDistance for StarSystemPoint {
+        fn distance_2(&self, point: &[f64; 2]) -> f64 {
+            let dx = self.coords[0] - point[0];
+            let dy = self.coords[1] - point[1];
+            dx * dx + dy * dy
+        }
+    }
+
+    impl FleetPoint {
+        fn new(fleet_id: u64, coords: (f64, f64)) -> Self {
+            FleetPoint {
+                fleet_id,
+                coords: [coords.0, coords.1],
+            }
+        }
+    }
+
+    impl RTreeObject for FleetPoint {
+        type Envelope = AABB<[f64; 2]>;
+
+        fn envelope(&self) -> Self::Envelope {
+            AABB::from_point(self.coords)
+        }
+    }
+
+    impl PointDistance for FleetPoint {
+        fn distance_2(&self, point: &[f64; 2]) -> f64 {
+            let dx = self.coords[0] - point[0];
+            let dy = self.coords[1] - point[1];
+            dx * dx + dy * dy
+        }
+    }
+
+    impl PlanetPoint {
+        fn new(planet_id: u64, coords: (f64, f64)) -> Self {
+            PlanetPoint {
+                planet_id,
+                coords: [coords.0, coords.1],
+            }
+        }
+    }
+
+    impl RTreeObject for PlanetPoint {
+        type Envelope = AABB<[f64; 2]>;
+
+        fn envelope(&self) -> Self::Envelope {
+            AABB::from_point(self.coords)
+        }
+    }
+
+    impl PointDistance for PlanetPoint {
+        fn distance_2(&self, point: &[f64; 2]) -> f64 {
+            let dx = self.coords[0] - point[0];
+            let dy = self.coords[1] - point[1];
+            dx * dx + dy * dy
+        }
+    }
+
+    impl BuildingPoint {
+        fn new(building_id: u64, coords: (f64, f64)) -> Self {
+            BuildingPoint {
+                building_id,
+                coords: [coords.0, coords.1],
+            }
+        }
+    }
+    
+    impl RTreeObject for BuildingPoint {
+        type Envelope = AABB<[f64; 2]>;
+    
+        fn envelope(&self) -> Self::Envelope {
+            AABB::from_point(self.coords)
+        }
+    }
+    
+    impl PointDistance for BuildingPoint {
+        fn distance_2(&self, point: &[f64; 2]) -> f64 {
+            let dx = self.coords[0] - point[0];
+            let dy = self.coords[1] - point[1];
+            dx * dx + dy * dy
+        }
+    }
 
 // --- Data Structures ---
+    
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    struct StarSystemPoint {
+        system_id: u64,
+        coords: [f64; 2],
+    }
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+
+    struct FleetPoint {
+        fleet_id: u64,
+        coords: [f64; 2],
+    }
+
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+
+    struct PlanetPoint {
+        planet_id: u64,
+        coords: [f64; 2],
+    }
+
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    struct BuildingPoint {
+        building_id: u64,
+        coords: [f64; 2],
+    }
+
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
     struct Player {
-    id: Principal,
-    name: String,
+        id: Principal,
+        name: String,
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
@@ -43,7 +222,7 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
     struct Fleet {
         id: u64,
         owner_id: Principal,
-        coordinates: (f64, f64), // or entity orbiting
+        coordinates: (f64, f64),
         ships: Vec<Ship>,
     }
 
@@ -99,17 +278,24 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
     struct Moon {
-    id: u64,
-    name: String,
-    coordinates: (f64, f64),
-    // Add more properties as needed
+        id: u64,
+        name: String,
+        planet_id: u64, // The planet this moon orbits
+        coordinates: (f64, f64), // Relative to the planet
+        moon_type: String, // Rocky, Ice, Volcanic, etc.
+        atmosphere: Vec<String>,
+        temperature_range: (f64, f64),
+        gravity: f64,
+        habitability: String,
+        owner_id: Option<Principal>, // If players can claim moons
+        is_rogue: bool, // True if it's a rogue moon
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
     struct AsteroidBelt {
-    id: u64,
-    name: String,
-    // Add more properties as needed
+        id: u64,
+        name: String,
+        // Add more properties as needed
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
@@ -122,10 +308,6 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
         asteroid_belts: Vec<AsteroidBelt>,
         last_updated: u64,
         coordinates: (i64, i64),
-        number_of_stars: u64,
-        number_of_planets: u64,
-        number_of_moons: u64,
-        number_of_asteroid_belts: u64,
     }
 
 // --- Database
@@ -147,6 +329,11 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
         static STAR_SYSTEMS: RefCell<HashMap<u64, StarSystem>> = RefCell::new(HashMap::new());
         static PLANETS: RefCell<HashMap<u64, Planet>> = RefCell::new(HashMap::new());
         static FLEETS: RefCell<HashMap<u64, Fleet>> = RefCell::new(HashMap::new());
+
+        static STAR_SYSTEM_TREE: RefCell<RTree<StarSystemPoint>> = RefCell::new(RTree::new());
+        static FLEET_TREE: RefCell<RTree<FleetPoint>> = RefCell::new(RTree::new());
+        static PLANET_TREE: RefCell<RTree<PlanetPoint>> = RefCell::new(RTree::new());
+        static BUILDING_TREE: RefCell<RTree<BuildingPoint>> = RefCell::new(RTree::new());
     }
 
 // --- Initialization ---
@@ -228,27 +415,27 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 
         // Reject anonymous calls
         if caller == Principal::anonymous() {
-    return Err("Anonymous users cannot register.".to_string());
-        }
+        return Err("Anonymous users cannot register.".to_string());
+            }
 
-        // Prevent duplicate names
-        let existing_player = PLAYERS.with(|players| {
-    players.borrow().values().find(|player| player.name == name).cloned()
-        });
+            // Prevent duplicate names
+            let existing_player = PLAYERS.with(|players| {
+        players.borrow().values().find(|player| player.name == name).cloned()
+            });
 
-        if existing_player.is_some() {
-    return Err("Player with that name already exists.".to_string());
-        }
+            if existing_player.is_some() {
+        return Err("Player with that name already exists.".to_string());
+            }
 
-        // Register the player
-        let player = Player {
-    id: caller,
-    name,
-        };
+            // Register the player
+            let player = Player {
+        id: caller,
+        name,
+            };
 
-        PLAYERS.with(|players| {
-    players.borrow_mut().insert(caller, player);
-        });
+            PLAYERS.with(|players| {
+        players.borrow_mut().insert(caller, player);
+            });
 
         Ok(caller.to_string())
     }
@@ -263,76 +450,100 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
     #[update]
     fn add_star_to_system(system_id: u64, star: Star) -> Result<(), String> {
         STAR_SYSTEMS.with(|systems| {
-    let mut systems = systems.borrow_mut();
-    if let Some(system) = systems.get_mut(&system_id) {
-        system.stars.push(star);
-        system.last_updated = time();
-        Ok(())
-    } else {
-        Err("Star system not found.".to_string())
-    }
-        })
+        let mut systems = systems.borrow_mut();
+        if let Some(system) = systems.get_mut(&system_id) {
+            system.stars.push(star);
+            system.last_updated = time();
+            Ok(())
+        } else {
+            Err("Star system not found.".to_string())
+        }
+            })
     }
 
     // Function to add a planet to a star system
     #[update]
     fn add_planet_to_system(system_id: u64, planet: Planet) -> Result<(), String> {
         STAR_SYSTEMS.with(|systems| {
-    let mut systems = systems.borrow_mut();
-    if let Some(system) = systems.get_mut(&system_id) {
-        system.planets.push(planet);
-        system.last_updated = time();
-        Ok(())
-    } else {
-        Err("Star system not found.".to_string())
-    }
-        })
+        let mut systems = systems.borrow_mut();
+        if let Some(system) = systems.get_mut(&system_id) {
+            system.planets.push(planet);
+            system.last_updated = time();
+            Ok(())
+        } else {
+            Err("Star system not found.".to_string())
+        }
+            })
     }
 
     // Function to add a moon to a planet in a star system
     #[update]
     fn add_moon_to_planet(system_id: u64, planet_id: u64, moon: Moon) -> Result<(), String> {
         STAR_SYSTEMS.with(|systems| {
-    let mut systems = systems.borrow_mut();
-    if let Some(system) = systems.get_mut(&system_id) {
-        if let Some(planet) = system.planets.iter_mut().find(|p| p.id == planet_id) {
-    planet.moons.push(moon);
-    system.last_updated = time();
-    Ok(())
+        let mut systems = systems.borrow_mut();
+        if let Some(system) = systems.get_mut(&system_id) {
+            if let Some(planet) = system.planets.iter_mut().find(|p| p.id == planet_id) {
+        planet.moons.push(moon);
+        system.last_updated = time();
+        Ok(())
+            } else {
+        Err(format!("Planet with ID {} not found in star system ID {}.", planet_id, system_id))
+            }
         } else {
-    Err(format!("Planet with ID {} not found in star system ID {}.", planet_id, system_id))
+            Err(format!("Star system with ID {} not found.", system_id))
         }
-    } else {
-        Err(format!("Star system with ID {} not found.", system_id))
-    }
-        })
+            })
     }
 
-    // Function to add an asteroid belt to a star system
     #[update]
     fn add_asteroid_belt_to_system(system_id: u64, asteroid_belt: AsteroidBelt) -> Result<(), String> {
         STAR_SYSTEMS.with(|systems| {
-    let mut systems = systems.borrow_mut();
-    if let Some(system) = systems.get_mut(&system_id) {
-        system.asteroid_belts.push(asteroid_belt);
-        system.last_updated = time();
-        Ok(())
-    } else {
-        Err("Star system not found.".to_string())
-    }
-        })
+        let mut systems = systems.borrow_mut();
+        if let Some(system) = systems.get_mut(&system_id) {
+            system.asteroid_belts.push(asteroid_belt);
+            system.last_updated = time();
+            Ok(())
+        } else {
+            Err("Star system not found.".to_string())
         }
-
-        // Update function to remove a star system
-        #[update]
-        fn remove_star_system(id: u64) -> Result<(), String> {
-        STAR_SYSTEMS.with(|systems| {
-    let mut systems = systems.borrow_mut();
-    if systems.remove(&id).is_some() {
-        Ok(())
-    } else {
-        Err("Star system not found.".to_string())
+        })
     }
+
+    #[update]
+    fn remove_star_system(id: u64) -> Result<(), String> {
+        STAR_SYSTEMS.with(|systems| {
+            let mut systems = systems.borrow_mut();
+            if let Some(system) = systems.remove(&id) {
+                // Remove from STAR_SYSTEM_TREE
+                STAR_SYSTEM_TREE.with(|tree| {
+                    tree.borrow_mut().remove(&StarSystemPoint::new(id, system.coordinates));
+                });
+                Ok(())
+            } else {
+                Err("Star system not found.".to_string())
+            }
+        })
+    }
+    
+    #[update]
+    fn update_star_system(id: u64, new_coordinates: (i64, i64)) -> Result<(), String> {
+        STAR_SYSTEMS.with(|systems| {
+            let mut systems = systems.borrow_mut();
+            if let Some(system) = systems.get_mut(&id) {
+                let old_coordinates = system.coordinates;
+                system.coordinates = new_coordinates;
+
+                // Remove old point and insert updated point
+                STAR_SYSTEM_TREE.with(|tree| {
+                    let mut tree = tree.borrow_mut();
+                    tree.remove(&StarSystemPoint::new(id, old_coordinates));
+                    tree.insert(StarSystemPoint::new(id, new_coordinates));
+                });
+
+                Ok(())
+            } else {
+                Err("Star system not found.".to_string())
+            }
         })
     }
 
@@ -340,39 +551,51 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
     #[update]
     fn remove_star_from_system(system_id: u64, star_id: u64) -> Result<(), String> {
         STAR_SYSTEMS.with(|systems| {
-    let mut systems = systems.borrow_mut();
-    if let Some(system) = systems.get_mut(&system_id) {
-        if let Some(index) = system.stars.iter().position(|s| s.id == star_id) {
-    system.stars.remove(index);
-    system.last_updated = time();
-    Ok(())
+        let mut systems = systems.borrow_mut();
+        if let Some(system) = systems.get_mut(&system_id) {
+            if let Some(index) = system.stars.iter().position(|s| s.id == star_id) {
+        system.stars.remove(index);
+        system.last_updated = time();
+        Ok(())
+            } else {
+        Err("Star not found in this star system.".to_string())
+            }
         } else {
-    Err("Star not found in this star system.".to_string())
+            Err("Star system not found.".to_string())
         }
-    } else {
-        Err("Star system not found.".to_string())
-    }
-        })
+            })
     }
 
     // Function to remove a planet from a star system
     #[update]
     fn remove_planet_from_system(system_id: u64, planet_id: u64) -> Result<(), String> {
         STAR_SYSTEMS.with(|systems| {
-    let mut systems = systems.borrow_mut();
-    if let Some(system) = systems.get_mut(&system_id) {
-        if let Some(index) = system.planets.iter().position(|p| p.id == planet_id) {
-    system.planets.remove(index);
-    system.last_updated = time();
-    Ok(())
-        } else {
-    Err("Planet not found in this star system.".to_string())
-        }
-    } else {
-        Err("Star system not found.".to_string())
-    }
+            let mut systems = systems.borrow_mut();
+            if let Some(system) = systems.get_mut(&system_id) {
+                if let Some(index) = system.planets.iter().position(|p| p.id == planet_id) {
+                    // Get planet coordinates before removing
+                    let planet_coordinates = system.planets[index].coordinates;
+    
+                    // Remove the planet from the star system
+                    system.planets.remove(index);
+                    system.last_updated = time();
+    
+                    // Remove from PLANET_TREE
+                    PLANET_TREE.with(|tree| {
+                        tree.borrow_mut().remove(&PlanetPoint::new(planet_id, planet_coordinates));
+                    });
+    
+                    Ok(())
+                } else {
+                    Err("Planet not found in this star system.".to_string())
+                }
+            } else {
+                Err("Star system not found.".to_string())
+            }
         })
     }
+    
+    
 
     // Function to remove a moon from a planet in a star system
     #[update]
@@ -417,6 +640,28 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
     }
 
 // --- Star System Management ---
+    
+    #[update]
+    fn update_planet_coordinates(planet_id: u64, new_coordinates: (f64, f64)) -> Result<(), String> {
+        PLANETS.with(|planets| {
+            let mut planets = planets.borrow_mut();
+            if let Some(planet) = planets.get_mut(&planet_id) {
+                let old_coordinates = planet.coordinates;
+                planet.coordinates = new_coordinates;
+
+                // Update the R-Tree
+                PLANET_TREE.with(|tree| {
+                    let mut tree = tree.borrow_mut();
+                    tree.remove(&PlanetPoint::new(planet_id, old_coordinates)); // Remove old position
+                    tree.insert(PlanetPoint::new(planet_id, new_coordinates)); // Add new position
+                });
+
+                Ok(())
+            } else {
+                Err("Planet not found.".to_string())
+            }
+        })
+    }
 
     fn generate_random_star(system_coordinates: (i64, i64)) -> Star {
         let spectral_types = vec!["O", "B", "A", "F", "G", "K", "M"];
@@ -512,38 +757,13 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
             current_id
         });
     
-        // Define the probabilities for single, binary, and higher-order systems
-        let probabilities = vec![
-            (1, 55), // 55% chance of a single-star system
-            (2, 35), // 35% chance of a binary-star system
-            (3, 10), // 10% chance of a triple-star system
-        ];
-    
-        // Randomly select the number of stars based on the probabilities
-        let num_stars = weighted_random_selection(&probabilities);
-    
-        // Generate coordinates for the star system
         let system_coordinates = (
             generate_random_in_range(0, 1000) as i64,
             generate_random_in_range(0, 1000) as i64,
         );
     
-        // Generate stars with the system's coordinates
-        let mut stars: Vec<Star> = (0..num_stars)
-            .map(|_| generate_random_star(system_coordinates))
-            .collect();
+        let stars = vec![generate_random_star(system_coordinates)];
     
-        // If the system has multiple stars, mark them as binary or triple
-        if stars.len() > 1 {
-            for i in 0..stars.len() {
-                if i < stars.len() - 1 {
-                    stars[i].is_binary = true;
-                    stars[i].companion_star_id = Some(stars[i + 1].id);
-                }
-            }
-        }
-    
-        // Create the new star system
         let new_system = StarSystem {
             id: system_id,
             name,
@@ -552,36 +772,19 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
             moons: vec![],
             asteroid_belts: vec![],
             coordinates: system_coordinates,
-            number_of_stars: num_stars as u64,
-            number_of_planets: 0,
-            number_of_moons: 0,
-            number_of_asteroid_belts: 0,
             last_updated: time(),
         };
     
-        // Insert the new system into the database
         STAR_SYSTEMS.with(|systems| {
             systems.borrow_mut().insert(system_id, new_system);
         });
     
+        // Add to STAR_SYSTEM_TREE
+        STAR_SYSTEM_TREE.with(|tree| {
+            tree.borrow_mut().insert(StarSystemPoint::new(system_id, system_coordinates));
+        });
+    
         system_id
-    }
-    
-    // Helper function for weighted random selection
-    fn weighted_random_selection(probabilities: &[(u64, u64)]) -> u64 {
-        let total_weight: u64 = probabilities.iter().map(|(_, weight)| weight).sum();
-        let random_value = generate_random_in_range(1, total_weight);
-    
-        let mut cumulative_weight = 0;
-        for (value, weight) in probabilities {
-            cumulative_weight += weight;
-            if random_value <= cumulative_weight {
-                return *value;
-            }
-        }
-    
-        // Default to single-star system if no selection is made
-        1
     }
     
     #[query]
@@ -642,21 +845,24 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
             current_id
         });
 
-         // Get system coordinates
+        // Get system coordinates
         let system_coordinates = STAR_SYSTEMS.with(|systems| {
-            systems.borrow().get(&system_id).map(|s| s.coordinates).unwrap_or((0, 0))
+            systems.borrow()
+                .get(&system_id)
+                .map(|s| s.coordinates)
+                .unwrap_or((0, 0))
         });
 
-        // Calculate planet coordinates
+        // Generate planet coordinates
         let coordinates = (
             system_coordinates.0 as f64 + generate_random_in_range_f64(-10.0, 10.0),
             system_coordinates.1 as f64 + generate_random_in_range_f64(-10.0, 10.0),
         );
 
-        // Categories and Subcategories
+        // Planet attributes
         let categories = vec![
             "Terrestrial", "Gas Giant", "Ice World", "Desert", "Ocean World",
-            "Lava World", "Dwarf Planet", "Super-Earth", "Carbon Planet", 
+            "Lava World", "Dwarf Planet", "Super-Earth", "Carbon Planet",
             "Iron Planet", "Chthonian Planet", "Rogue",
         ];
         let subcategories = vec![
@@ -675,12 +881,13 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
         ];
         let random_category_index = generate_random_in_range(0, (categories.len() - 1) as u64) as usize;
         let planet_category = categories[random_category_index].to_string();
-        let planet_subcategory = subcategories[random_category_index][generate_random_in_range(0, (subcategories[random_category_index].len() - 1) as u64) as usize].to_string();
+        let planet_subcategory = subcategories[random_category_index][generate_random_in_range(
+            0,
+            (subcategories[random_category_index].len() - 1) as u64,
+        ) as usize]
+            .to_string();
 
-        // Determine if the planet is a rogue planet
-        let is_rogue = planet_category == "Rogue";
-
-        // Planet Size
+        // Planet size
         let planet_size_options = vec!["Tiny", "Small", "Medium", "Large", "Huge"];
         let random_size_index = generate_random_in_range(0, (planet_size_options.len() - 1) as u64) as usize;
         let planet_size = planet_size_options[random_size_index].to_string();
@@ -693,15 +900,19 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
             vec!["Thick", "Toxic"],
             vec!["Toxic", "Superdense"],
         ];
-        let atmosphere = atmosphere_options[random_size_index][generate_random_in_range(0, (atmosphere_options[random_size_index].len() - 1) as u64) as usize].to_string();
+        let atmosphere = atmosphere_options[random_size_index][generate_random_in_range(
+            0,
+            (atmosphere_options[random_size_index].len() - 1) as u64,
+        ) as usize]
+            .to_string();
 
         // Temperature Range
         let base_temperature_ranges = vec![
-            (-88.0, 58.0), // Earth-like
+            (-88.0, 58.0),   // Earth-like
             (-200.0, -100.0), // Frozen
-            (-100.0, 0.0), // Cold
-            (100.0, 500.0), // Hot
-            (430.0, 700.0), // Scorching
+            (-100.0, 0.0),   // Cold
+            (100.0, 500.0),  // Hot
+            (430.0, 700.0),  // Scorching
         ];
         let random_temp_index = generate_random_in_range(0, (base_temperature_ranges.len() - 1) as u64) as usize;
         let base_temperature_range = base_temperature_ranges[random_temp_index];
@@ -722,13 +933,17 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
         let gravity = base_gravity + generate_random_in_range(0, 50) as f64 / 100.0;
 
         // Orbital Period
-        let orbital_period_days = if is_rogue { 0 } else { generate_random_in_range(50, 1000) };
+        let orbital_period_days = if planet_category == "Rogue" {
+            0
+        } else {
+            generate_random_in_range(50, 1000)
+        };
 
         // Habitability
         let habitability = calculate_habitability(temperature_range, gravity, &atmosphere);
 
-        // Create Planet
-        Planet {
+        // Create the planet
+        let planet = Planet {
             id: planet_id,
             name,
             system_id,
@@ -741,130 +956,158 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
             gravity,
             orbital_period_days,
             resources: vec![],
-            max_miner_capacity: 0,
+            max_miner_capacity: 100,
             moons: vec![],
             habitability,
             owner_id: None,
             buildings: vec![],
             orbiting_fleets: vec![],
-        }
+        };
+
+        PLANETS.with(|planets| {
+            planets.borrow_mut().insert(planet_id, planet.clone());
+        });
+
+        // Add to PLANET_TREE using PlanetPoint
+        PLANET_TREE.with(|tree| {
+            tree.borrow_mut().insert(PlanetPoint::new(planet_id, coordinates));
+        });
+
+        planet
     }
 
     #[query]
     fn get_planet(planet_id: u64) -> Option<Planet> {
         PLANETS.with(|planets| planets.borrow().get(&planet_id).cloned())
+    }
+
+    #[update]
+    fn claim_planet(planet_id: u64) -> Result<(), String> {
+        let caller = ic_cdk::caller();
+
+        // Reject anonymous calls
+        if caller == Principal::anonymous() {
+            return Err("Anonymous users cannot claim planets.".to_string());
         }
 
-        #[update]
-        fn claim_planet(planet_id: u64) -> Result<(), String> {
-            let caller = ic_cdk::caller();
-
-            // Reject anonymous calls
-            if caller == Principal::anonymous() {
-        return Err("Anonymous users cannot claim planets.".to_string());
-            }
-
-            // Check if the player is registered
-            if !PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
-        return Err("Player not registered.".to_string());
+        // Check if the player is registered
+        if !PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
+            return Err("Player not registered.".to_string());
         }
-            // Claim the planet
-            PLANETS.with(|planets| {
+
+        PLANETS.with(|planets| {
             let mut planets = planets.borrow_mut();
             if let Some(planet) = planets.get_mut(&planet_id) {
                 if planet.owner_id.is_none() {
-            planet.owner_id = Some(caller); // Assign the caller's Principal
-            Ok(())
+                    planet.owner_id = Some(caller); // Assign the caller's Principal
+
+                    // Update the R-Tree to reflect ownership change
+                    PLANET_TREE.with(|tree| {
+                        let mut tree = tree.borrow_mut();
+                        tree.remove(&PlanetPoint::new(planet_id, planet.coordinates));
+                        tree.insert(PlanetPoint::new(planet_id, planet.coordinates));
+                    });
+
+                    Ok(())
                 } else {
-            Err("Planet is already owned.".to_string())
+                    Err("Planet is already owned.".to_string())
                 }
             } else {
                 Err("Planet not found.".to_string())
             }
-            })
+        })
     }
 
-    // --- Resource Management ---
+
+// --- Resource Management ---
 
     fn deplete_resource(planet: &mut Planet, resource_type: ResourceType, amount: u64) -> Result<(), String> {
         if let Some(resource) = planet.resources.iter_mut().find(|r| r.resource_type == resource_type) {
-    if resource.amount >= amount {
-        resource.amount -= amount;
-        Ok(())
-    } else {
-        Err("Insufficient resources.".to_string())
-    }
+        if resource.amount >= amount {
+            resource.amount -= amount;
+            Ok(())
         } else {
-    Err("Resource type not found on planet.".to_string())
+            Err("Insufficient resources.".to_string())
         }
+            } else {
+        Err("Resource type not found on planet.".to_string())
+            }
     }
 
-    // --- Building Management ---
+// --- Building Management ---
 
     #[update]
     fn build_structure(planet_id: u64, building_type: BuildingType) -> Result<u64, String> {
-            let caller = ic_cdk::caller();
+        let caller = ic_cdk::caller();
 
-            // Reject anonymous calls
-            if caller == Principal::anonymous() {
-        return Err("Anonymous users cannot build structures.".to_string());
-            }
-
-            // Check if the player is registered
-            if !PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
-        return Err("Player not registered.".to_string());
-            }
-
-            // Check if the player owns the planet
-            let is_owner = PLANETS.with(|planets| {
-        planets.borrow().get(&planet_id).map(|planet| planet.owner_id) == Some(Some(caller))
-            });
-
-            if !is_owner {
-        return Err("Player does not own this planet.".to_string());
-            }
-
-            // Proceed with building the structure
-            let building_id = NEXT_BUILDING_ID.with(|id| {
-        let mut id = id.borrow_mut();
-        let current_id = *id;
-        *id += 1;
-        current_id
-            });
-
-            let cost = match building_type {
-        BuildingType::Mine => 500,
-        BuildingType::Shipyard => 1000,
-            };
-
-            PLANETS.with(|planets| {
-        let mut planets = planets.borrow_mut();
-        if let Some(planet) = planets.get_mut(&planet_id) {
-            // Check if the planet has enough resources
-            let has_enough_resources = planet.resources.iter()
-        .filter(|r| r.resource_type == ResourceType::Energy)
-        .map(|r| r.amount)
-        .sum::<u64>() >= cost;
-
-            if has_enough_resources {
-        // Deduct the resources
-        deplete_resource(planet, ResourceType::Energy, cost)?;
-
-        let building = Building {
-            id: building_id,
-            building_type,
-            level: 1,
-        };
-        planet.buildings.push(building);
-
-        Ok(building_id)
-            } else {
-        Err("Insufficient resources to build structure.".to_string())
-            }
-        } else {
-            Err("Planet not found.".to_string())
+        // Reject anonymous calls
+        if caller == Principal::anonymous() {
+            return Err("Anonymous users cannot build structures.".to_string());
         }
-            })
+
+        // Check if the player is registered
+        if !PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
+            return Err("Player not registered.".to_string());
+        }
+
+        // Check if the player owns the planet
+        let is_owner = PLANETS.with(|planets| {
+            planets.borrow().get(&planet_id).map(|planet| planet.owner_id) == Some(Some(caller))
+        });
+
+        if !is_owner {
+            return Err("Player does not own this planet.".to_string());
+        }
+
+        // Generate building ID
+        let building_id = NEXT_BUILDING_ID.with(|id| {
+            let mut id = id.borrow_mut();
+            let current_id = *id;
+            *id += 1;
+            current_id
+        });
+
+        let cost = match building_type {
+            BuildingType::Mine => 500,
+            BuildingType::Shipyard => 1000,
+        };
+
+        PLANETS.with(|planets| {
+            let mut planets = planets.borrow_mut();
+            if let Some(planet) = planets.get_mut(&planet_id) {
+                // Check if the planet has enough resources
+                let has_enough_resources = planet.resources.iter()
+                    .filter(|r| r.resource_type == ResourceType::Energy)
+                    .map(|r| r.amount)
+                    .sum::<u64>() >= cost;
+
+                if has_enough_resources {
+                    // Deduct the resources
+                    deplete_resource(planet, ResourceType::Energy, cost)?;
+
+                    // Add the building
+                    let building = Building {
+                        id: building_id,
+                        building_type,
+                        level: 1,
+                    };
+
+                    planet.buildings.push(building);
+
+                    // Add to BUILDING_TREE
+                    let building_coords = planet.coordinates; // Use planet's coordinates for the building
+                    BUILDING_TREE.with(|tree| {
+                        tree.borrow_mut().insert(BuildingPoint::new(building_id, building_coords));
+                    });
+
+                    Ok(building_id)
+                } else {
+                    Err("Insufficient resources to build structure.".to_string())
+                }
+            } else {
+                Err("Planet not found.".to_string())
+            }
+        })
     }
 
     #[update]
@@ -921,6 +1164,51 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
             })
     }
 
+    #[update]
+    fn move_building(building_id: u64, new_coords: (f64, f64)) -> Result<(), String> {
+        BUILDING_TREE.with(|tree| {
+            let mut tree = tree.borrow_mut();
+    
+            // First, find the building point (immutable borrow)
+            let point_to_move = tree.iter()
+                .find(|point| point.building_id == building_id)
+                .cloned();
+    
+            if let Some(point) = point_to_move {
+                // Remove the old position (mutable borrow)
+                tree.remove(&point);
+    
+                // Insert the new position (mutable borrow)
+                tree.insert(BuildingPoint::new(building_id, new_coords));
+    
+                Ok(())
+            } else {
+                Err("Building not found.".to_string())
+            }
+        })
+    }
+
+    #[update]
+    fn remove_building(building_id: u64) -> Result<(), String> {
+        BUILDING_TREE.with(|tree| {
+            let mut tree = tree.borrow_mut();
+
+            // First, find the building point (immutable borrow)
+            let point_to_remove = tree.iter()
+                .find(|point| point.building_id == building_id)
+                .cloned();
+
+            if let Some(point) = point_to_remove {
+                // Remove the building point (mutable borrow)
+                tree.remove(&point);
+                Ok(())
+            } else {
+                Err("Building not found.".to_string())
+            }
+        })
+    }
+
+
 // --- Fleet and Ship Management ---
 
     #[update]
@@ -929,98 +1217,104 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 
         // Check if the player is registered
         if !PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
-        return Err("Player not registered.".to_string());
-            }
-
-            // Check if the player owns the planet and if the planet has a shipyard
-            let has_shipyard = PLANETS.with(|planets| {
-        planets.borrow().get(&planet_id).map(|planet| {
-            planet.owner_id == Some(caller) &&
-            planet.buildings.iter().any(|b| b.building_type == BuildingType::Shipyard)
-        }) == Some(true)
-            });
-
-            if !has_shipyard {
-        return Err("Player does not own this planet or there is no shipyard.".to_string());
-            }
-
-            // Get the cost for the ship type
-            let cost = match ship_type {
-        ShipType::Scout => 100, // Example cost for a scout
-            };
-
-            // Check if the planet has enough resources
-            let has_enough_resources = PLANETS.with(|planets| {
-        planets.borrow().get(&planet_id).map(|planet| {
-            planet.resources.iter()
-        .filter(|r| r.resource_type == ResourceType::Energy)
-        .map(|r| r.amount)
-        .sum::<u64>() >= cost
-        }) == Some(true)
-            });
-
-            if !has_enough_resources {
-        return Err("Insufficient resources to build ship.".to_string());
-            }
-
-            // Deduct the resources from the planet
-            PLANETS.with(|planets| {
-        let mut planets = planets.borrow_mut();
-        if let Some(planet) = planets.get_mut(&planet_id) {
-            deplete_resource(planet, ResourceType::Energy, cost)?;
-        }
-        Ok::<(), String>(()) // Indicate success
-            })?;
-
-            // Create a new ship
-            let ship_id = NEXT_SHIP_ID.with(|id| {
-        let mut id = id.borrow_mut();
-        let current_id = *id;
-        *id += 1;
-        current_id
-            });
-
-            let new_ship = Ship {
-        id: ship_id,
-        ship_type,
-        health: 100, // Example health for a scout
-            };
-
-            // Add the ship to the player's fleet
-            let fleet_id_result = FLEETS.with(|fleets| {
-        let mut fleets = fleets.borrow_mut();
-        let fleet_ids: Vec<u64> = fleets.keys().cloned().collect();
-
-        for fleet_id in fleet_ids {
-            if let Some(fleet) = fleets.get_mut(&fleet_id) {
-        if fleet.owner_id == caller {
-            fleet.ships.push(new_ship);
-            return Ok(fleet_id);
-        }
-            }
+            return Err("Player not registered.".to_string());
         }
 
-        // If no existing fleet is found, create a new one
-        let new_fleet_id = NEXT_FLEET_ID.with(|id| {
+        // Check if the player owns the planet and if the planet has a shipyard
+        let has_shipyard = PLANETS.with(|planets| {
+            planets.borrow().get(&planet_id).map(|planet| {
+                planet.owner_id == Some(caller)
+                    && planet.buildings.iter().any(|b| b.building_type == BuildingType::Shipyard)
+            }) == Some(true)
+        });
+
+        if !has_shipyard {
+            return Err("Player does not own this planet or there is no shipyard.".to_string());
+        }
+
+        // Get the cost for the ship type
+        let cost = match ship_type {
+            ShipType::Scout => 100, // Example cost for a scout
+        };
+
+        // Check if the planet has enough resources
+        let has_enough_resources = PLANETS.with(|planets| {
+            planets.borrow().get(&planet_id).map(|planet| {
+                planet.resources.iter()
+                    .filter(|r| r.resource_type == ResourceType::Energy)
+                    .map(|r| r.amount)
+                    .sum::<u64>() >= cost
+            }) == Some(true)
+        });
+
+        if !has_enough_resources {
+            return Err("Insufficient resources to build ship.".to_string());
+        }
+
+        // Deduct the resources from the planet
+        PLANETS.with(|planets| {
+            let mut planets = planets.borrow_mut();
+            if let Some(planet) = planets.get_mut(&planet_id) {
+                deplete_resource(planet, ResourceType::Energy, cost)?;
+            }
+            Ok::<(), String>(())
+        })?;
+
+        // Create a new ship
+        let ship_id = NEXT_SHIP_ID.with(|id| {
             let mut id = id.borrow_mut();
             let current_id = *id;
             *id += 1;
             current_id
         });
 
-        let mut new_fleet = Fleet {
-            id: new_fleet_id,
-            owner_id: caller,
-            coordinates: (0.0, 0.0),
-            ships: vec![],
+        let new_ship = Ship {
+            id: ship_id,
+            ship_type,
+            health: 100, // Example health for a scout
         };
 
-        new_fleet.ships.push(new_ship);
-        fleets.insert(new_fleet_id, new_fleet);
-        Ok(new_fleet_id)
+        // Add the ship to the player's fleet
+        let fleet_id_result = FLEETS.with(|fleets| {
+            let mut fleets = fleets.borrow_mut();
+            let fleet_ids: Vec<u64> = fleets.keys().cloned().collect();
+
+            for fleet_id in fleet_ids {
+                if let Some(fleet) = fleets.get_mut(&fleet_id) {
+                    if fleet.owner_id == caller {
+                        fleet.ships.push(new_ship);
+                        return Ok(fleet_id);
+                    }
+                }
+            }
+
+            // If no existing fleet is found, create a new one
+            let new_fleet_id = NEXT_FLEET_ID.with(|id| {
+                let mut id = id.borrow_mut();
+                let current_id = *id;
+                *id += 1;
+                current_id
             });
 
-            fleet_id_result
+            let coordinates = (0.0, 0.0); // Default coordinates for a new fleet
+            let new_fleet = Fleet {
+                id: new_fleet_id,
+                owner_id: caller,
+                coordinates,
+                ships: vec![new_ship],
+            };
+
+            fleets.insert(new_fleet_id, new_fleet);
+
+            // Add to FLEET_TREE
+            FLEET_TREE.with(|tree| {
+                tree.borrow_mut().insert(FleetPoint::new(new_fleet_id, coordinates));
+            });
+
+            Ok(new_fleet_id)
+        });
+
+        fleet_id_result
     }
 
     #[update]
@@ -1029,31 +1323,72 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 
         // Check if the player is registered
         if !PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
-        return Err("Player not registered.".to_string());
-            }
+            return Err("Player not registered.".to_string());
+        }
 
-            // Create a new fleet
-            let fleet_id = NEXT_FLEET_ID.with(|id| {
+        // Create a new fleet
+        let fleet_id = NEXT_FLEET_ID.with(|id| {
             let mut id = id.borrow_mut();
             let current_id = *id;
             *id += 1;
             current_id
-            });
-            let coordinates = (0.0, 0.0);
-            let new_fleet = Fleet {
+        });
+        let coordinates = (0.0, 0.0);
+        let new_fleet = Fleet {
             id: fleet_id,
             owner_id: caller,
             coordinates,
             ships: Vec::new(),
-                };
+        };
 
-                FLEETS.with(|fleets| {
+        FLEETS.with(|fleets| {
             fleets.borrow_mut().insert(fleet_id, new_fleet);
-                });
+        });
 
-            Ok(fleet_id)
+        // Add to FLEET_TREE
+        FLEET_TREE.with(|tree| {
+            tree.borrow_mut().insert(FleetPoint::new(fleet_id, coordinates));
+        });
+
+        Ok(fleet_id)
     }
 
+    #[update]
+    fn move_fleet(fleet_id: u64, new_coords: (f64, f64)) -> Result<(), String> {
+        FLEETS.with(|fleets| {
+            let mut fleets = fleets.borrow_mut();
+            if let Some(fleet) = fleets.get_mut(&fleet_id) {
+                // Update the R-Tree
+                FLEET_TREE.with(|tree| {
+                    let mut tree = tree.borrow_mut();
+                    tree.remove(&FleetPoint::new(fleet_id, fleet.coordinates)); // Remove old position
+                    tree.insert(FleetPoint::new(fleet_id, new_coords)); // Add new position
+                });
+    
+                // Update the fleet's coordinates
+                fleet.coordinates = new_coords;
+                Ok(())
+            } else {
+                Err("Fleet not found.".to_string())
+            }
+        })
+    }
+    
+    #[update]
+    fn remove_fleet(fleet_id: u64) -> Result<(), String> {
+        FLEETS.with(|fleets| {
+            let mut fleets = fleets.borrow_mut();
+            if let Some(fleet) = fleets.remove(&fleet_id) {
+                // Remove from FLEET_TREE
+                FLEET_TREE.with(|tree| {
+                    tree.borrow_mut().remove(&FleetPoint::new(fleet_id, fleet.coordinates));
+                });
+                Ok(())
+            } else {
+                Err("Fleet not found.".to_string())
+            }
+        })
+    }
 
 // Utils
     fn generate_random_in_range(min: u64, max: u64) -> u64 {
@@ -1068,25 +1403,94 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 
 // Tests
     #[cfg(test)]
-    mod tests {
-        use super::*;
+    mod tests { use super::*;
 
-        #[test]
-        fn test_register_player_valid() {
-    let player_name = "TestPlayer".to_string();
-    let result = register_player(player_name.clone());
-    assert!(result.is_ok());
-    assert_eq!(get_player().unwrap().name, player_name);
-        }
-
-        #[test]
-        fn test_register_player_duplicate() {
-            let player_name = "TestPlayer".to_string();
-            let _ = register_player(player_name.clone());
-            let result = register_player(player_name);
-            assert!(result.is_err());
-            }
+    #[test]
+    fn test_register_player_valid() {
+        let player_name = "TestPlayer".to_string();
+        let result = register_player(player_name.clone());
+        assert!(result.is_ok());
+        assert_eq!(get_player().unwrap().name, player_name);
     }
+
+    #[test]
+    fn test_register_player_duplicate() {
+        let player_name = "TestPlayer".to_string();
+        let _ = register_player(player_name.clone());
+        let result = register_player(player_name);
+        assert!(result.is_err());
+        }
+    }
+
+    #[test]
+    fn test_star_system_tree_operations() {
+        let system_id = generate_star_system("Test System".to_string());
+
+        STAR_SYSTEM_TREE.with(|tree| {
+            let tree = tree.borrow();
+            assert!(tree.contains(&StarSystemPoint::new(system_id, (0, 0))));
+        });
+
+        remove_star_system(system_id).unwrap();
+
+        STAR_SYSTEM_TREE.with(|tree| {
+            let tree = tree.borrow();
+            assert!(!tree.contains(&StarSystemPoint::new(system_id, (0, 0))));
+        });
+    }
+
+    #[test]
+    fn test_create_fleet() {
+        let fleet_id = create_fleet().unwrap();
+
+        FLEET_TREE.with(|tree| {
+            assert!(tree.borrow().iter().any(|point| point.fleet_id == fleet_id));
+        });
+    }
+
+    #[test]
+    fn test_remove_fleet() {
+        let fleet_id = create_fleet().unwrap();
+
+        remove_fleet(fleet_id).unwrap();
+
+        FLEET_TREE.with(|tree| {
+            assert!(!tree.borrow().iter().any(|point| point.fleet_id == fleet_id));
+        });
+    }
+
+    #[test]
+    fn test_create_planet() {
+        let planet = create_planet("Earth".to_string(), 1);
+
+        PLANET_TREE.with(|tree| {
+            assert!(tree.borrow().iter().any(|point| point.planet_id == planet.id));
+        });
+    }
+
+    #[test]
+    fn test_remove_planet() {
+        let planet = create_planet("Earth".to_string(), 1);
+
+        remove_planet_from_system(1, planet.id).unwrap();
+
+        PLANET_TREE.with(|tree| {
+            assert!(!tree.borrow().iter().any(|point| point.planet_id == planet.id));
+        });
+    }
+
+    #[test]
+    fn test_update_planet_coordinates() {
+        let planet = create_planet("Mars".to_string(), 1);
+        let new_coords = (50.0, 50.0);
+
+        update_planet_coordinates(planet.id, new_coords).unwrap();
+
+        PLANET_TREE.with(|tree| {
+            assert!(tree.borrow().iter().any(|point| point.planet_id == planet.id && point.coords == [50.0, 50.0]));
+        });
+    }
+
 
 // Export the Candid interface
 ic_cdk::export_candid!();

@@ -81,13 +81,27 @@ service : {
   get_star_system : (nat64) -> (opt StarSystem) query;
   get_tick_count : () -> (nat64) query;
   init_game : () -> ();
+  move_building : (nat64, record { float64; float64 }) -> (Result);
+  move_fleet : (nat64, record { float64; float64 }) -> (Result);
+  nearby_buildings : (float64, float64, float64) -> (vec nat64) query;
+  nearby_fleets : (float64, float64, float64) -> (vec nat64) query;
+  nearby_planets : (float64, float64, float64) -> (vec nat64) query;
+  nearest_star_system : (float64, float64) -> (opt nat64) query;
+  planets_in_area : (
+      record { float64; float64 },
+      record { float64; float64 },
+    ) -> (vec nat64) query;
   register_player : (text) -> (Result_2);
   remove_asteroid_belt_from_system : (nat64, nat64) -> (Result);
+  remove_building : (nat64) -> (Result);
+  remove_fleet : (nat64) -> (Result);
   remove_moon_from_planet : (nat64, nat64, nat64) -> (Result);
   remove_planet_from_system : (nat64, nat64) -> (Result);
   remove_star_from_system : (nat64, nat64) -> (Result);
   remove_star_system : (nat64) -> (Result);
   start_tick : () -> ();
   stop_tick : () -> ();
+  update_planet_coordinates : (nat64, record { float64; float64 }) -> (Result);
+  update_star_system : (nat64, record { int64; int64 }) -> (Result);
   upgrade_building : (nat64, nat64) -> (Result);
 }

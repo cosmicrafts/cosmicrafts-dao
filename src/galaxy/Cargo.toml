@@ -15,3 +15,4 @@ uuid = { version = "1.2", features = ["v4"] }
 getrandom = { version = "0.2", features = ["js"] }
 
 ic-cdk-timers = "0.10"
+rstar = "0.12.2"

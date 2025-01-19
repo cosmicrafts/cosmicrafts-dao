@@ -1,19 +1,5 @@
 {
   "canisters": {
-    "backend": {
-      "main": "src/backend/main.mo",
-      "type": "motoko"
-    },
-    "frontend": {
-      "dependencies": [
-        "backend"
-      ],
-      "source": [
-        "src/frontend/dist"
-      ],
-      "type": "assets",
-      "workspace": "frontend"
-    },
     "galaxy": {
       "type": "rust",
       "package": "galaxy",
