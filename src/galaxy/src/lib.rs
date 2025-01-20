@@ -17,7 +17,11 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         StarSystem,
         Star,
         AsteroidBelt,
-        Moon
+        Moon,
+        Nebulae, // Areas with unique resources or visual effects.
+        BlackHole, // High-risk, high-reward areas.
+        AncientRuins, //  Provide lore, unique technologies, or resources.
+        Artifacts,
     }
 
     #[query]
@@ -237,23 +241,45 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
     #[update]
     fn spawn_entities_auto_batched(total: u64) -> u64 {
-        let max_batch_size = 1_000_000; // Maximum entities per batch
-        let radius_step = 10.0; // Incremental radius for spreading entities
+        let max_batch_size = 1_000; // Maximum entities per batch
+        let a = 10.0; // Initial radius for the spiral
+        let mut b = 2.0; // Distance between spiral loops
+        let deviation_min = -2.0; // Minimum random deviation
+        let deviation_max = 2.0;  // Maximum random deviation
         let mut created = 0;
-        let mut current_radius = 10.0; // Start radius for the galaxy center
+    
+        // Persistent angle tracker (doesn't reset between batches)
+        static mut CURRENT_THETA: f64 = -std::f64::consts::PI; // Start at -π
+        let theta_increment = 0.05; // Small angle increment for smooth spiral
     
         GALAXY_TREE.with(|tree| {
             let mut tree_mut = tree.borrow_mut();
     
             while created < total {
-                // Calculate the remaining entities to spawn
                 let batch_size = std::cmp::min(max_batch_size, total - created);
     
-                for i in 0..batch_size {
-                    let angle = (i as f64 / batch_size as f64) * std::f64::consts::TAU; // Spread evenly in a circle
-                    let x = current_radius * angle.cos();
-                    let y = current_radius * angle.sin();
+                for _ in 0..batch_size {
+                    // Increment angle for spiral progression
+                    unsafe {
+                        CURRENT_THETA += theta_increment;
+                        // Wrap around to ensure continuous spiral
+                        if CURRENT_THETA > 2.0 * std::f64::consts::PI {
+                            CURRENT_THETA -= 2.0 * std::f64::consts::PI; // Reset to keep within [-π, π]
+                        }
+                    }
     
+                    // Spiral radius using Archimedean spiral formula
+                    let radius = a + b * unsafe { CURRENT_THETA }; // Remove .abs() to allow negative radii
+    
+                    // Add slight random deviation to avoid perfect alignment
+                    let deviation = generate_random_in_range_f64(deviation_min, deviation_max);
+                    let adjusted_radius = radius + deviation;
+    
+                    // Convert polar coordinates (r, theta) to Cartesian (x, y)
+                    let x = adjusted_radius * unsafe { CURRENT_THETA.cos() };
+                    let y = adjusted_radius * unsafe { CURRENT_THETA.sin() };
+    
+                    // Generate a unique entity ID
                     let unique_id = ENTITY_COUNTER.with(|counter| {
                         let mut counter = counter.borrow_mut();
                         *counter += 1;
@@ -267,17 +293,15 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                         owner_id: ic_cdk::caller(),
                         entity_type: EntityType::Planet,
                         coords: [x, y],
-                        metadata: format!("Entity {}", created + i),
+                        metadata: format!("Entity {}", created),
                     };
     
                     tree_mut.insert(entity);
+                    created += 1;
                 }
     
-                // Increment created count
-                created += batch_size;
-    
-                // Increment radius for the next batch
-                current_radius += radius_step;
+                // Gradually increase loop spacing for dynamic growth
+                b += 0.05; // Incrementally expand loop spacing
             }
         });
     
@@ -475,36 +499,50 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         coords: [f64; 2],
     }
 
-
     #[derive(CandidType, Deserialize, Clone, Debug)]
     struct Player {
         id: Principal,
-        name: String,
+        username: String,
+        avatar: u32, // Assuming AvatarID is a u32
+        title: String,
+        description: String,
+        registration_date: u64, // Assuming RegistrationDate is a timestamp (u64)
+        level: u32,
+        elo: f64,
+        friends: Vec<FriendDetails>, // Assuming FriendDetails is another struct
+        language: String,
+    }
+
+    #[derive(CandidType, Deserialize, Clone, Debug)]
+    struct FriendDetails {
+        id: Principal,
+        username: String,
+        avatar: u32
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
     enum ResourceType {
-    Energy,
-    Matter
+        Energy,
+        Matter
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
     struct Resource {
-    resource_type: ResourceType,
-    amount: u64,
+        resource_type: ResourceType,
+        amount: u64,
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
     struct Building {
-    id: u64,
-    building_type: BuildingType,
-    level: u64,
+        id: u64,
+        building_type: BuildingType,
+        level: u64,
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
     enum BuildingType {
-    Mine,
-    Shipyard,
+        Mine,
+        Shipyard,
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
@@ -517,14 +555,14 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
     #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
     enum ShipType {
-    Scout,
+        Scout,
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
     struct Ship {
-    id: u64,
-    ship_type: ShipType,
-    health: u64,
+        id: u64,
+        ship_type: ShipType,
+        health: u64,
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
@@ -599,10 +637,20 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         coordinates: (i64, i64),
     }
 
+    #[derive(CandidType, Deserialize)]
+    enum ReferralCodeResult {
+        Ok(String),
+        Err(String),
+    }
+
 // --- Database
 
     thread_local! {
         static PLAYERS: RefCell<HashMap<Principal, Player>> = RefCell::new(HashMap::new());
+        static MULTIPLIER_BY_PLAYER: RefCell<HashMap<Principal, f64>> = RefCell::new(HashMap::new());
+        static AVAILABLE_AVATARS: RefCell<HashMap<Principal, Vec<u32>>> = RefCell::new(HashMap::new());
+        static AVAILABLE_TITLES: RefCell<HashMap<Principal, Vec<u32>>> = RefCell::new(HashMap::new());
+
 
         static TICK_TIMER: RefCell<Option<TimerId>> = RefCell::new(None);
         static TICK_COUNT: RefCell<u64> = RefCell::new(0);
@@ -698,43 +746,101 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
 // --- Player Management ---
 
-    #[update]
-    fn register_player(name: String) -> Result<String, String> {
-        let caller = ic_cdk::caller();
-
-        // Reject anonymous calls
-        if caller == Principal::anonymous() {
-        return Err("Anonymous users cannot register.".to_string());
-            }
-
-            // Prevent duplicate names
-            let existing_player = PLAYERS.with(|players| {
-        players.borrow().values().find(|player| player.name == name).cloned()
-            });
-
-            if existing_player.is_some() {
-        return Err("Player with that name already exists.".to_string());
-            }
-
-            // Register the player
-            let player = Player {
-        id: caller,
-        name,
-            };
-
-            PLAYERS.with(|players| {
-        players.borrow_mut().insert(caller, player);
-            });
-
-        Ok(caller.to_string())
-    }
-
     #[query]
     fn get_player() -> Option<Player> {
         let caller = ic_cdk::caller();
         PLAYERS.with(|players| players.borrow().get(&caller).cloned())
     }
+    #[update]
+    async fn signup(
+        username: String,
+        avatar: u32,
+        referral_code: Option<String>,
+        language: String,
+        ) -> Result<(bool, Option<Player>, String), String> {
+        let caller = ic_cdk::caller();
 
+        // Reject anonymous calls
+        if caller == Principal::anonymous() {
+            return Err("Anonymous users cannot register.".to_string());
+        }
+
+        // Check if the username is valid
+        if username.len() > 12 {
+            return Err("Username must be 12 characters or less".to_string());
+        }
+
+        // Check if the player is already registered
+        if PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
+            let existing_player = PLAYERS.with(|players| players.borrow().get(&caller).cloned());
+            return Ok((false, existing_player, "User is already registered.".to_string()));
+        }
+
+        // Handle referral code scenarios
+        let final_code = match referral_code {
+            Some(code) => {
+                // Simulate referral code assignment logic
+                match assign_unassigned_referral_code(caller, code).await {
+                    ReferralCodeResult::Ok(assigned_code) => assigned_code,
+                    ReferralCodeResult::Err(err_msg) => return Err(err_msg),
+                }
+            }
+            None => {
+                // Generate a new referral code
+                let (new_code, _) = assign_referral_code(caller, None).await;
+                new_code
+            }
+        };
+
+        // Proceed with player registration
+        let new_player = Player {
+            id: caller,
+            username,
+            avatar,
+            title: "Starbound Initiate".to_string(),
+            description: "".to_string(),
+            registration_date: time(),
+            level: 1,
+            elo: 1200.0,
+            friends: Vec::new(),
+            language,
+        };
+
+        PLAYERS.with(|players| {
+            players.borrow_mut().insert(caller, new_player.clone());
+        });
+
+        // Initialize the player's multiplier
+        MULTIPLIER_BY_PLAYER.with(|multiplier| {
+            multiplier.borrow_mut().insert(caller, 1.0);
+        });
+
+        // Assign default avatars and titles
+        AVAILABLE_AVATARS.with(|avatars| {
+            avatars.borrow_mut().insert(caller, (1..=12).collect());
+        });
+
+        AVAILABLE_TITLES.with(|titles| {
+            titles.borrow_mut().insert(caller, vec![1]);
+        });
+
+        Ok((true, Some(new_player), format!("User registered successfully with referral code {}", final_code)))
+    }
+
+    // Mock functions for referral code handling
+    async fn assign_unassigned_referral_code(player_id: Principal, code: String) -> ReferralCodeResult {
+        // Simulate referral code assignment logic
+        ReferralCodeResult::Ok(code)
+    }
+
+    async fn assign_referral_code(player_id: Principal, code: Option<String>) -> (String, bool) {
+        // Simulate referral code generation logic
+        ("generated_code".to_string(), true)
+    }
+
+    
+
+// --- Star System Management ---
     // Update function to add a star to a star system
     #[update]
     fn add_star_to_system(system_id: u64, star: Star) -> Result<(), String> {
@@ -928,8 +1034,6 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         })
     }
 
-// --- Star System Management ---
-    
     #[update]
     fn update_planet_coordinates(planet_id: u64, new_coordinates: (f64, f64)) -> Result<(), String> {
         PLANETS.with(|planets| {

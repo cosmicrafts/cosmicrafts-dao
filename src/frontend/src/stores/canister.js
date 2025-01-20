@@ -1,14 +1,15 @@
 import { defineStore } from 'pinia';
 import { HttpAgent } from '@dfinity/agent';
-import { createActor, canisterId as backendCanisterId } from '../../../declarations/backend';
+import { createActor as createGalaxyActor, canisterId as galaxyCanisterId } from '../../../declarations/galaxy'; // Update the import path as needed
+import { createActor as createBackendActor, canisterId as backendCanisterId } from '../../../declarations/backend'; // Existing backend canister
 import useAuthStore from './auth.js';
 
 let canisters = {
   cosmicrafts: null,
+  galaxy: null,
 };
 let currentIdentity = null; // Track the current identity
 let initializing = false; // Track initialization state
-
 
 const MANUAL_ENV = 'ic'; // 'ic' for IC, 'local' for local development
 const isLocal = MANUAL_ENV === 'local';
@@ -21,6 +22,7 @@ export const useCanisterStore = defineStore('canister', {
   state: () => ({
     canisterIds: {
       cosmicrafts: backendCanisterId,
+      galaxy: galaxyCanisterId, // Add the galaxy canister ID
     },
   }),
 
@@ -51,6 +53,8 @@ export const useCanisterStore = defineStore('canister', {
           await agent.fetchRootKey();
         }
 
+        const createActor = canisterName === 'galaxy' ? createGalaxyActor : createBackendActor;
+
         console.log(`Creating actor for canister: ${this.canisterIds[canisterName]}`);
         canisters[canisterName] = createActor(this.canisterIds[canisterName], { agent });
         initializing = false; // Reset initializing flag
@@ -58,7 +62,7 @@ export const useCanisterStore = defineStore('canister', {
 
       // Wait for initialization to complete
       while (initializing) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
       return canisters[canisterName];

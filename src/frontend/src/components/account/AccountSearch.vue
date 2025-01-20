@@ -53,7 +53,7 @@ export default {
       try {
         let result;
         if (this.isPrincipal(query)) {
-          result = await cosmicrafts.getPlayer(Principal.fromText(query));
+          result = await cosmicrafts.get_player(Principal.fromText(query));
         } else {
           result = await cosmicrafts.getPlayerByUsername(query);
         }

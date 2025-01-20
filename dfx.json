@@ -1,11 +1,20 @@
 {
   "canisters": {
-
-    "galaxy": {
+    "backend": {
       "type": "rust",
       "package": "galaxy",
       "candid": "galaxy.did",
       "build": "make build"
+    },
+    "frontend": {
+      "dependencies": [
+        "backend"
+      ],
+      "source": [
+        "src/frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "frontend"
     }
   },
   "defaults": {

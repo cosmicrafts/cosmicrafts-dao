@@ -93,7 +93,7 @@ export const useAuthStore = defineStore('auth', {
           throw new Error('Could not connect to the server.');
         }
     
-        const playerArr = await cosmicrafts.getPlayer();
+        const playerArr = await cosmicrafts.get_player();
         console.log('getPlayer() response:', playerArr);
     
         if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0]) {
@@ -160,7 +160,7 @@ export const useAuthStore = defineStore('auth', {
         const cosmicrafts = await canisterStore.get('cosmicrafts');
     
         // Check if the identity is already registered
-        const playerArr = await cosmicrafts.getPlayer();
+        const playerArr = await cosmicrafts.get_player();
         if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0] !== null) {
           throw new Error('User is already registered.');
         }
@@ -211,7 +211,7 @@ export const useAuthStore = defineStore('auth', {
           return false;
         }
 
-        const playerArr = await cosmicrafts.getPlayer();
+        const playerArr = await cosmicrafts.get_player();
         console.log('getPlayer() response:', playerArr);
 
         if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0]) {

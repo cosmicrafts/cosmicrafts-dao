@@ -158,14 +158,20 @@
         `);
 
         try {
-          const [ok, maybePlayer, msg] = await cosmicrafts.signup(
+          // Call the signup method and log the full response
+          const response = await cosmicrafts.signup(
             username.value,
             avatarId,
             referralCode.value ? [referralCode.value] : [],
             languageStore.currentLanguage // Pass the language from the store
           );
 
-          if (ok) {
+          console.log("Signup response:", response);
+
+          // Handle the variant response
+          if (response.Ok) {
+            // Success case
+            const [ok, maybePlayer, msg] = response.Ok;
             console.log('Registration successful:', maybePlayer);
             registerResult.value = t('register.successMessage', {
               username: maybePlayer[0]?.username || t('register.newPlayer'),
@@ -173,10 +179,28 @@
             await authStore.isPlayerRegistered();
             modalStore.closeModal();
             router.push('/');
+          } else if (response.Err) {
+            // Error case
+            const errorMessage = response.Err;
+            console.log('Registration failed:', errorMessage);
+            registerResult.value = errorMessage || t('register.failureMessage');
           } else {
-            registerResult.value = msg || t('register.failureMessage');
+            // Unexpected response format
+            console.error("Unexpected response format:", response);
+            registerResult.value = t('register.failureMessage');
           }
         } catch (error) {
+          console.error("Error during registration:", error);
+
+          // Log the full error object for debugging
+          if (error instanceof Error) {
+            console.error("Error details:", {
+              message: error.message,
+              stack: error.stack,
+              name: error.name,
+            });
+          }
+
           registerResult.value = t('login.guestLoginError', {
             error: error.message || t('register.failureMessage'),
           });

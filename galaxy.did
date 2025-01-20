@@ -22,6 +22,7 @@ type EntityType = variant {
   Planet;
   Fleet;
 };
+type FriendDetails = record { id : principal; username : text; avatar : nat32 };
 type Moon = record {
   id : nat64;
   is_rogue : bool;
@@ -55,12 +56,23 @@ type Planet = record {
   coordinates : record { float64; float64 };
   buildings : vec Building;
 };
-type Player = record { id : principal; name : text };
+type Player = record {
+  id : principal;
+  elo : float64;
+  title : text;
+  registration_date : nat64;
+  username : text;
+  description : text;
+  level : nat32;
+  language : text;
+  friends : vec FriendDetails;
+  avatar : nat32;
+};
 type Resource = record { resource_type : ResourceType; amount : nat64 };
 type ResourceType = variant { Energy; Matter };
 type Result = variant { Ok; Err : text };
 type Result_1 = variant { Ok : nat64; Err : text };
-type Result_2 = variant { Ok : text; Err : text };
+type Result_2 = variant { Ok : record { bool; opt Player; text }; Err : text };
 type ShipType = variant { Scout };
 type Star = record {
   id : nat64;
@@ -121,7 +133,6 @@ service : {
       record { float64; float64 },
       record { float64; float64 },
     ) -> (vec nat64) query;
-  register_player : (text) -> (Result_2);
   remove_asteroid_belt_from_system : (nat64, nat64) -> (Result);
   remove_building : (nat64) -> (Result);
   remove_entity : (principal) -> (Result);
@@ -130,6 +141,7 @@ service : {
   remove_planet_from_system : (nat64, nat64) -> (Result);
   remove_star_from_system : (nat64, nat64) -> (Result);
   remove_star_system : (nat64) -> (Result);
+  signup : (text, nat32, opt text, text) -> (Result_2);
   spawn_entities_auto_batched : (nat64) -> (nat64);
   spawn_test_entities : (nat64) -> ();
   start_tick : () -> ();
