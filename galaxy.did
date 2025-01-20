@@ -92,11 +92,13 @@ service : {
   add_moon_to_planet : (nat64, nat64, Moon) -> (Result);
   add_planet_to_system : (nat64, Planet) -> (Result);
   add_star_to_system : (nat64, Star) -> (Result);
+  benchmark_spawn : (nat64) -> (nat64);
   build_ship : (nat64, ShipType) -> (Result_1);
   build_structure : (nat64, BuildingType) -> (Result_1);
   claim_planet : (nat64) -> (Result);
   create_fleet : () -> (Result_1);
   create_planet : (text, nat64) -> (Planet);
+  export_entities : () -> (vec record { float64; float64; text }) query;
   find_entities_in_area : (
       record { float64; float64 },
       record { float64; float64 },
@@ -128,9 +130,11 @@ service : {
   remove_planet_from_system : (nat64, nat64) -> (Result);
   remove_star_from_system : (nat64, nat64) -> (Result);
   remove_star_system : (nat64) -> (Result);
+  spawn_entities_auto_batched : (nat64) -> (nat64);
+  spawn_test_entities : (nat64) -> ();
   start_tick : () -> ();
   stop_tick : () -> ();
-  transfer_entity_ownership : (principal, principal) -> (Result);
+  transfer_entity : (principal, principal) -> (Result);
   update_entity : (principal, record { float64; float64 }, opt text) -> (
       Result,
     );

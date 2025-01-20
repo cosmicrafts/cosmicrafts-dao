@@ -135,6 +135,27 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         })
     }
 
+    #[update]
+    fn transfer_entity(entity_id: Principal, new_owner: Principal) -> Result<(), String> {
+        GALAXY_TREE.with(|tree| {
+            let mut tree_mut = tree.borrow_mut();
+            let entity_to_transfer = tree_mut.iter().find(|e| e.id == entity_id).cloned();
+    
+            if let Some(mut entity) = entity_to_transfer {
+                // Update ownership
+                entity.owner_id = new_owner;
+    
+                // Remove the old entity and insert the updated one
+                tree_mut.remove(&entity);
+                tree_mut.insert(entity);
+    
+                Ok(())
+            } else {
+                Err("Entity not found.".to_string())
+            }
+        })
+    }
+
     #[query]
     fn find_nearby_entities(x: f64, y: f64, radius: f64) -> Vec<Entity> {
         GALAXY_TREE.with(|tree| {
@@ -156,29 +177,124 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
     }
 
     #[update]
-    fn transfer_entity(entity_id: Principal, new_owner: Principal) -> Result<(), String> {
+    fn spawn_test_entities(count: u64) {
+        let caller = ic_cdk::caller(); // Use the caller's Principal as the owner
+
         GALAXY_TREE.with(|tree| {
             let mut tree_mut = tree.borrow_mut();
-            let entity_to_transfer = tree_mut.iter().find(|e| e.id == entity_id).cloned();
-    
-            if let Some(mut entity) = entity_to_transfer {
-                // Update ownership
-                entity.owner_id = new_owner;
-    
-                // Remove the old entity and insert the updated one
-                tree_mut.remove(&entity);
+            for i in 0..count {
+                let unique_id = ENTITY_COUNTER.with(|counter| {
+                    let mut counter = counter.borrow_mut();
+                    *counter += 1;
+                    *counter
+                });
+
+                let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
+
+                let entity = Entity {
+                    id: unique_principal,
+                    owner_id: caller,
+                    entity_type: EntityType::Planet, // For simplicity, spawn as Planets
+                    coords: [i as f64 * 10.0, i as f64 * 5.0], // Spread them out
+                    metadata: format!("Test Entity {}", i),
+                };
+
                 tree_mut.insert(entity);
-    
-                Ok(())
-            } else {
-                Err("Entity not found.".to_string())
             }
-        })
+        });
+    }
+
+    #[update]
+    fn benchmark_spawn(count: u64) -> u64 {
+        let start = ic_cdk::api::performance_counter(0);
+
+        GALAXY_TREE.with(|tree| {
+            let mut tree_mut = tree.borrow_mut();
+            for i in 0..count {
+                let unique_id = ENTITY_COUNTER.with(|counter| {
+                    let mut counter = counter.borrow_mut();
+                    *counter += 1;
+                    *counter
+                });
+
+                let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
+
+                let entity = Entity {
+                    id: unique_principal,
+                    owner_id: ic_cdk::caller(),
+                    entity_type: EntityType::Planet,
+                    coords: [i as f64 * 10.0, i as f64 * 5.0],
+                    metadata: format!("Entity {}", i),
+                };
+
+                tree_mut.insert(entity);
+            }
+        });
+
+        let end = ic_cdk::api::performance_counter(0);
+        end - start // Return the instructions used
+    }
+
+    #[update]
+    fn spawn_entities_auto_batched(total: u64) -> u64 {
+        let max_batch_size = 1_000_000; // Maximum entities per batch
+        let radius_step = 10.0; // Incremental radius for spreading entities
+        let mut created = 0;
+        let mut current_radius = 10.0; // Start radius for the galaxy center
+    
+        GALAXY_TREE.with(|tree| {
+            let mut tree_mut = tree.borrow_mut();
+    
+            while created < total {
+                // Calculate the remaining entities to spawn
+                let batch_size = std::cmp::min(max_batch_size, total - created);
+    
+                for i in 0..batch_size {
+                    let angle = (i as f64 / batch_size as f64) * std::f64::consts::TAU; // Spread evenly in a circle
+                    let x = current_radius * angle.cos();
+                    let y = current_radius * angle.sin();
+    
+                    let unique_id = ENTITY_COUNTER.with(|counter| {
+                        let mut counter = counter.borrow_mut();
+                        *counter += 1;
+                        *counter
+                    });
+    
+                    let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
+    
+                    let entity = Entity {
+                        id: unique_principal,
+                        owner_id: ic_cdk::caller(),
+                        entity_type: EntityType::Planet,
+                        coords: [x, y],
+                        metadata: format!("Entity {}", created + i),
+                    };
+    
+                    tree_mut.insert(entity);
+                }
+    
+                // Increment created count
+                created += batch_size;
+    
+                // Increment radius for the next batch
+                current_radius += radius_step;
+            }
+        });
+    
+        created
     }
     
+    #[query]
+    fn export_entities() -> Vec<(f64, f64, String)> {
+        GALAXY_TREE.with(|tree| {
+            tree.borrow()
+                .iter()
+                .map(|entity| (entity.coords[0], entity.coords[1], entity.metadata.clone()))
+                .collect()
+        })
+    }
 
-    
-
+//--
 // --- R-Tree Points ---
 
     #[query]
