@@ -115,7 +115,7 @@ const secondaryMethods = [
     />
 
     <div class="login-panel" v-if="!loading">
-      <img src="@/assets/icons/Cosmicrafts_Logo.svg" class="full-logo" alt="Cosmicrafts Logo" />
+      <img src="@/assets/icons/cosmicrafts.svg" class="full-logo" alt="Cosmicrafts Logo" />
       <label class="cosmic-label-connect">{{ t('login.connectWith') }}</label>
 
       <!-- Main Buttons -->

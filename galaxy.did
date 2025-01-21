@@ -77,6 +77,8 @@ type ResourceType = variant { Energy; Matter };
 type Result = variant { Ok; Err : text };
 type Result_1 = variant { Ok : nat64; Err : text };
 type Result_2 = variant { Ok : record { bool; opt Player; text }; Err : text };
+type Result_3 = variant { Ok : record { float64; float64 }; Err : text };
+type Result_4 = variant { Ok : bool; Err : text };
 type ShipType = variant { Scout };
 type Star = record {
   id : nat64;
@@ -112,8 +114,26 @@ service : {
   build_ship : (nat64, ShipType) -> (Result_1);
   build_structure : (nat64, BuildingType) -> (Result_1);
   claim_planet : (nat64) -> (Result);
+  create_asteroid_belt : (
+      record { float64; float64 },
+      principal,
+      principal,
+    ) -> (Result);
   create_fleet : () -> (Result_1);
-  create_planet : (text, nat64) -> (Planet);
+  create_open_star_cluster : (record { float64; float64 }, principal) -> (
+      Result,
+    );
+  create_planet : (record { float64; float64 }, principal, principal) -> (
+      Result,
+    );
+  create_planetary_system : (
+      record { float64; float64 },
+      principal,
+      principal,
+    ) -> (Result);
+  create_rogue_moon : (record { float64; float64 }, principal) -> (Result);
+  create_star : (record { float64; float64 }, principal) -> (Result);
+  create_star_cluster : (record { float64; float64 }, principal) -> (Result);
   export_entities : () -> (vec record { float64; float64; text }) query;
   find_entities_in_area : (
       record { float64; float64 },
@@ -126,7 +146,6 @@ service : {
   get_player : () -> (opt Player) query;
   get_star_system : (nat64) -> (opt StarSystem) query;
   get_tick_count : () -> (nat64) query;
-  init_game : () -> ();
   move_building : (nat64, record { float64; float64 }) -> (Result);
   move_fleet : (nat64, record { float64; float64 }) -> (Result);
   nearby_buildings : (float64, float64, float64) -> (vec nat64) query;
@@ -146,7 +165,8 @@ service : {
   remove_star_from_system : (nat64, nat64) -> (Result);
   remove_star_system : (nat64) -> (Result);
   signup : (text, nat32, opt text, text) -> (Result_2);
-  spawn_entities_auto_batched : (nat64) -> (Result_1);
+  spawn_entities_auto_batched : (nat64) -> (Result_3);
+  spawn_entities_auto_batched_backup : (nat64) -> (Result_1);
   spawn_test_entities : (nat64) -> ();
   start_tick : () -> ();
   stop_tick : () -> ();
@@ -157,4 +177,5 @@ service : {
   update_planet_coordinates : (nat64, record { float64; float64 }) -> (Result);
   update_star_system : (nat64, record { int64; int64 }) -> (Result);
   upgrade_building : (nat64, nat64) -> (Result);
+  validate_entity_distances : (principal, float64) -> (Result_4) query;
 }

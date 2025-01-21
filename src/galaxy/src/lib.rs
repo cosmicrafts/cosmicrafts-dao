@@ -8,6 +8,290 @@ use ic_cdk_timers::{TimerId, set_timer_interval};
 use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
 
+
+#[query]
+fn validate_entity_distances(parent_id: Principal, max_distance: f64) -> Result<bool, String> {
+    let parent_entity = get_entity_by_id(parent_id).ok_or("Parent entity not found")?;
+    let nearby_entities = find_nearby_entities(parent_entity.coords[0], parent_entity.coords[1], max_distance);
+
+    for entity in nearby_entities {
+        let distance = ((parent_entity.coords[0] - entity.coords[0]).powi(2)
+            + (parent_entity.coords[1] - entity.coords[1]).powi(2))
+        .sqrt();
+        if distance > max_distance {
+            return Err(format!(
+                "Entity {} exceeds max distance of {} from parent {}",
+                entity.id, max_distance, parent_id
+            ));
+        }
+    }
+
+    Ok(true)
+}
+
+
+fn randomize_within_cluster(cluster_coords: (f64, f64)) -> (f64, f64) {
+    let offset_x = generate_random_in_range_f64(-0.00000001, 0.00000001);
+    let offset_y = generate_random_in_range_f64(-0.00000001, 0.00000001);
+    (cluster_coords.0 + offset_x, cluster_coords.1 + offset_y)
+}
+
+fn random_orbit(parent_coords: (f64, f64), min_radius: f64, max_radius: f64) -> (f64, f64) {
+    let radius = generate_random_in_range_f64(min_radius, max_radius);
+    let angle = generate_random_in_range_f64(-0.0000000000000001, 0.0000000000000001 * std::f64::consts::PI);
+    (
+        parent_coords.0 + radius * angle.cos(),
+        parent_coords.1 + radius * angle.sin(),
+    )
+}
+
+
+fn random_star_type() -> String {
+    // Spectral types and classes
+    let spectral_types = vec!["O", "B", "A", "F", "G", "K", "M"];
+    let stellar_classes = vec!["Main Sequence", "Giant", "Supergiant"];
+
+    // Randomly select spectral type and subclass
+    let spectral_index = generate_random_in_range(0, (spectral_types.len() - 1) as u64) as usize;
+    let subclass = generate_random_in_range(0, 9); // Subclass (e.g., G2)
+    let spectral_type = format!("{}{}", spectral_types[spectral_index], subclass);
+
+    // Randomly select stellar class
+    let class_index = generate_random_in_range(0, (stellar_classes.len() - 1) as u64) as usize;
+    let stellar_class = stellar_classes[class_index].to_string();
+
+    // Combine type and class
+    format!("{} {}", spectral_type, stellar_class)
+}
+
+fn random_planet_type() -> (String, String, String) {
+    // Categories and subcategories
+    let categories = vec![
+        "Terrestrial", "Gas Giant", "Ice World", "Desert", "Ocean World",
+        "Lava World", "Dwarf Planet", "Super-Earth", "Carbon Planet",
+        "Iron Planet", "Chthonian Planet", "Rogue",
+    ];
+    let subcategories = vec![
+        vec!["Rocky", "Volcanic", "Metallic"],
+        vec!["Jovian", "Neptunian"],
+        vec!["Frozen", "Cryovolcanic"],
+        vec!["Arid", "Sandy"],
+        vec!["Water", "Ice-Covered"],
+        vec!["Molten", "Magma"],
+        vec!["Rocky", "Icy"],
+        vec!["Rocky", "Oceanic"],
+        vec!["Graphite", "Diamond"],
+        vec!["Metallic", "Magnetic"],
+        vec!["Core Remnant", "Evaporated"],
+        vec!["Wandering"],
+    ];
+
+    // Randomly select a category and subcategory
+    let category_index = generate_random_in_range(0, (categories.len() - 1) as u64) as usize;
+    let category = categories[category_index].to_string();
+    let subcategory = subcategories[category_index][generate_random_in_range(
+        0,
+        (subcategories[category_index].len() - 1) as u64,
+    ) as usize]
+        .to_string();
+
+    // Randomly assign planet size
+    let sizes = vec!["Tiny", "Small", "Medium", "Large", "Huge"];
+    let size = sizes[generate_random_in_range(0, (sizes.len() - 1) as u64) as usize].to_string();
+
+    (category, subcategory, size)
+}
+
+fn generate_unique_id() -> Principal {
+    let unique_id = ENTITY_COUNTER.with(|counter| {
+        let mut counter = counter.borrow_mut();
+        *counter += 1;
+        *counter
+    });
+
+    Principal::self_authenticating(&unique_id.to_be_bytes())
+}
+
+//New New..
+
+    #[update]
+    async fn create_open_star_cluster(cluster_coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
+        let num_stars = generate_random_in_range(5, 15); // Randomize number of stars (5-15)
+        let cluster_radius = 100.0; // Define cluster radius for stars
+
+        for _ in 0..num_stars {
+            let star_coords = random_orbit(cluster_coords, 10.0, cluster_radius);
+            create_star(star_coords, owner_id).await?;
+        }
+
+        Ok(())
+    }
+
+
+
+
+    #[update]
+    async fn create_star_cluster(cluster_coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
+        let num_stars = generate_random_in_range(3, 10); // Randomize the number of stars (3-10)
+        for _ in 0..num_stars {
+            let star_coords = randomize_within_cluster(cluster_coords); // Offset star within cluster
+            create_star(star_coords, owner_id).await?;
+        }
+        Ok(())
+    }
+
+
+    #[update]
+    async fn create_star(star_coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
+        // Generate random star type
+        let star_type = random_star_type();
+        
+        // Generate unique ID for the star
+        let star_id = generate_unique_id();
+
+        // Create the star entity
+        let star = Entity {
+            id: star_id,
+            owner_id,
+            entity_type: EntityType::Star,
+            coords: [star_coords.0, star_coords.1],
+            metadata: format!("Type: {}", star_type),
+        };
+
+        // Insert star into GALAXY_TREE
+        GALAXY_TREE.with(|tree| {
+            tree.borrow_mut().insert(star);
+        });
+
+        // Create planetary system around the star
+        create_planetary_system(star_coords, star_id, owner_id).await?;
+        Ok(())
+    }
+
+
+
+    #[update]
+    async fn create_planetary_system(
+        star_coords: (f64, f64),
+        star_id: Principal,
+        owner_id: Principal,
+        ) -> Result<(), String> {
+        let num_planets = generate_random_in_range(1, 8); // Randomize number of planets (1-8)
+        let num_asteroid_belts = generate_random_in_range(1, 3); // Randomize asteroid belts (1-3)
+        let planet_orbit_range = (50.0, 200.0); // Define range for planets
+        let belt_orbit_range = (200.0, 300.0); // Define range for asteroid belts
+
+        for _ in 0..num_planets {
+            let planet_coords = random_orbit(star_coords, planet_orbit_range.0, planet_orbit_range.1);
+            create_planet(planet_coords, star_id, owner_id).await?;
+        }
+
+        for _ in 0..num_asteroid_belts {
+            let belt_coords = random_orbit(star_coords, belt_orbit_range.0, belt_orbit_range.1);
+            create_asteroid_belt(belt_coords, star_id, owner_id).await?;
+        }
+
+        Ok(())
+    }
+
+
+    #[update]
+    async fn create_asteroid_belt(
+        belt_coords: (f64, f64),
+        star_id: Principal, // Use this to tie the belt to its parent star
+        owner_id: Principal,
+    ) -> Result<(), String> {
+        let belt_id = generate_unique_id();
+    
+        let belt = Entity {
+            id: belt_id,
+            owner_id,
+            entity_type: EntityType::AsteroidBelt,
+            coords: [belt_coords.0, belt_coords.1],
+            metadata: format!("Parent: {}", star_id), // Reference parent star
+        };
+    
+        GALAXY_TREE.with(|tree| {
+            tree.borrow_mut().insert(belt);
+        });
+    
+        Ok(())
+    }
+
+
+    #[update]
+    async fn create_planet(
+        planet_coords: (f64, f64),
+        star_id: Principal, // Tie the planet to the star
+        owner_id: Principal,
+    ) -> Result<(), String> {
+        let (category, subcategory, size) = random_planet_type();
+        let planet_id = generate_unique_id(); // Unique ID for the planet
+        
+        let planet = Entity {
+            id: planet_id,
+            owner_id,
+            entity_type: EntityType::Planet,
+            coords: [planet_coords.0, planet_coords.1],
+            metadata: format!(
+                "Parent: {}, Category: {}, Subcategory: {}, Size: {}",
+                star_id, category, subcategory, size
+            ), // Reference the parent star in metadata
+        };
+        
+        // Insert the planet into the galaxy tree
+        GALAXY_TREE.with(|tree| {
+            tree.borrow_mut().insert(planet);
+        });
+        
+        // Define orbit range for moons
+        let moon_orbit_range = (5.0, 50.0); // Moons orbit close to the planet
+        let num_moons = generate_random_in_range(0, 3); // Randomize number of moons (0-3)
+        
+        // Create moons tied to this planet
+        for _ in 0..num_moons {
+            let moon_coords = random_orbit(planet_coords, moon_orbit_range.0, moon_orbit_range.1);
+            create_moon(moon_coords, planet_id, owner_id).await?;
+        }
+        
+        Ok(())
+    }
+    
+
+    async fn create_moon(
+        moon_coords: (f64, f64),
+        _planet_id: Principal,
+        owner_id: Principal,
+    ) -> Result<(), String> {
+        let moon_id = generate_unique_id(); // Unique ID for the moon
+    
+        let moon = Entity {
+            id: moon_id,
+            owner_id,
+            entity_type: EntityType::Moon,
+            coords: [moon_coords.0, moon_coords.1],
+            metadata: format!("Parent: {}", _planet_id), // Tie the moon to its parent planet
+        };
+    
+        // Insert the moon into the galaxy tree
+        GALAXY_TREE.with(|tree| {
+            tree.borrow_mut().insert(moon);
+        });
+    
+        Ok(())
+    }
+    
+    
+    #[update]
+    async fn create_rogue_moon(moon_coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
+        create_moon(moon_coords, Principal::anonymous(), owner_id).await
+    }
+    
+
+
+
+
+//--
 //New
 
     #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
@@ -237,10 +521,10 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
     }
 
     #[update]
-    async fn spawn_entities_auto_batched(total: u64) -> Result<u64, String> {
-        let max_batch_size = 1_000; // Maximum entities per batch
-        let safe_zone_inner_radius = 500.0; // Inner radius of the Safe Zone
-        let safe_zone_outer_radius = 1000.0; // Outer radius of the Safe Zone
+    async fn spawn_entities_auto_batched_backup(total: u64) -> Result<u64, String> {
+        let max_batch_size = 50; // Maximum entities per batch
+        let safe_zone_inner_radius = 1000.0; // Inner radius of the Safe Zone
+        let safe_zone_outer_radius = 1010.0; // Outer radius of the Safe Zone
         let mut created = 0; // Counter for created entities
     
         while created < total {
@@ -298,6 +582,75 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
     
         Ok(created)
     }
+
+     #[update]
+    async fn spawn_entities_auto_batched(total: u64) -> Result<(f64, f64), String> {
+        let max_batch_size = 50; // Maximum entities per batch
+        let safe_zone_inner_radius = 1000.0; // Inner radius of the Safe Zone
+        let safe_zone_outer_radius = 1010.0; // Outer radius of the Safe Zone
+        let mut created = 0; // Counter for created entities
+        let mut cluster_coords = (0.0, 0.0); // Coordinates for the first entity
+
+        while created < total {
+            let batch_size = std::cmp::min(max_batch_size, total - created);
+
+            // Generate random bytes for the entire batch in advance
+            let mut random_batches = Vec::new();
+            for _ in 0..batch_size {
+                let random_bytes = match raw_rand().await {
+                    Ok((bytes,)) => bytes,
+                    Err(_) => return Err("Failed to fetch randomness.".to_string()),
+                };
+                random_batches.push(random_bytes);
+            }
+
+            GALAXY_TREE.with(|tree| {
+                let mut tree_mut = tree.borrow_mut();
+
+                for (i, random_bytes) in random_batches.iter().enumerate() {
+                    // Extract two random values from the bytes
+                    let radius_rand = u64::from_le_bytes(random_bytes[0..8].try_into().unwrap());
+                    let angle_rand = u64::from_le_bytes(random_bytes[8..16].try_into().unwrap());
+
+                    // Map random values to the desired ranges
+                    let radius = map_to_range(radius_rand, safe_zone_inner_radius, safe_zone_outer_radius);
+                    let angle = map_to_range(angle_rand, 0.0, 2.0 * std::f64::consts::PI);
+
+                    // Convert polar coordinates to Cartesian (x, y)
+                    let x = radius * angle.cos();
+                    let y = radius * angle.sin();
+
+                    if created == 0 && i == 0 {
+                        cluster_coords = (x, y); // Save the coordinates of the first entity
+                    }
+
+                    // Generate a unique entity ID
+                    let unique_id = ENTITY_COUNTER.with(|counter| {
+                        let mut counter = counter.borrow_mut();
+                        *counter += 1;
+                        *counter
+                    });
+
+                    let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
+
+                    // Create the entity
+                    let entity = Entity {
+                        id: unique_principal,
+                        owner_id: ic_cdk::caller(),
+                        entity_type: EntityType::Planet,
+                        coords: [x, y],
+                        metadata: format!("Entity {}", created),
+                    };
+
+                    tree_mut.insert(entity);
+                    created += 1;
+                }
+            });
+        }
+
+        Ok(cluster_coords) // Return the first entity's coordinates
+    }
+
     
     // Helper function to map a u64 random value to a floating-point range
     fn map_to_range(random_value: u64, min: f64, max: f64) -> f64 {
@@ -729,18 +1082,18 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
 
 
-    #[update]
-    fn init_game() {
-        // Create an initial star system with some planets
-        let initial_system_id = generate_star_system("Sol System".to_string());
+    // #[update]
+    // fn init_game() {
+    //     // Create an initial star system with some planets
+    //     let initial_system_id = generate_star_system("Sol System".to_string());
 
-        // Add a few planets to the initial system
-        let planet_names = vec!["Earth", "Mars", "Venus"];
-        for name in planet_names {
-    let planet = create_planet(name.to_string(), initial_system_id);
-    add_planet_to_system(initial_system_id, planet).expect("Failed to add planet to system");
-        }
-    }
+    //     // Add a few planets to the initial system
+    //     let planet_names = vec!["Earth", "Mars", "Venus"];
+    //     for name in planet_names {
+    // let planet = create_planet(name.to_string(), initial_system_id);
+    // add_planet_to_system(initial_system_id, planet).expect("Failed to add planet to system");
+    //     }
+    // }
 
 
 // --- Player Management ---
@@ -750,31 +1103,32 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         let caller = ic_cdk::caller();
         PLAYERS.with(|players| players.borrow().get(&caller).cloned())
     }
+
     #[update]
     async fn signup(
         username: String,
         avatar: u32,
         referral_code: Option<String>,
         language: String,
-        ) -> Result<(bool, Option<Player>, String), String> {
+    ) -> Result<(bool, Option<Player>, String), String> {
         let caller = ic_cdk::caller();
-
+    
         // Reject anonymous calls
         if caller == Principal::anonymous() {
             return Err("Anonymous users cannot register.".to_string());
         }
-
+    
         // Check if the username is valid
         if username.len() > 12 {
             return Err("Username must be 12 characters or less".to_string());
         }
-
+    
         // Check if the player is already registered
         if PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
             let existing_player = PLAYERS.with(|players| players.borrow().get(&caller).cloned());
             return Ok((false, existing_player, "User is already registered.".to_string()));
         }
-
+    
         // Handle referral code scenarios
         let final_code = match referral_code {
             Some(code) => {
@@ -790,8 +1144,33 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 new_code
             }
         };
-
-        // Proceed with player registration
+    
+        // Create an open star cluster for the player
+        let cluster_coords = spawn_entities_auto_batched(1).await?;
+        create_open_star_cluster(cluster_coords, caller).await?;
+    
+        // Generate a home planet for the player
+        let (planet_category, planet_subcategory, planet_size) = random_planet_type();
+        let planet_coords = random_orbit(cluster_coords, 10.0, 50.0); // Set logical range for planet orbits
+        let planet_id = generate_unique_id();
+    
+        let home_planet = Entity {
+            id: planet_id,
+            owner_id: caller,
+            entity_type: EntityType::Planet,
+            coords: [planet_coords.0, planet_coords.1],
+            metadata: format!(
+                "Category: {}, Subcategory: {}, Size: {}",
+                planet_category, planet_subcategory, planet_size
+            ),
+        };
+    
+        // Insert the home planet into the galaxy tree
+        GALAXY_TREE.with(|tree| {
+            tree.borrow_mut().insert(home_planet.clone());
+        });
+    
+        // Register the player
         let new_player = Player {
             id: caller,
             username,
@@ -804,28 +1183,36 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             friends: Vec::new(),
             language,
         };
-
+    
         PLAYERS.with(|players| {
             players.borrow_mut().insert(caller, new_player.clone());
         });
-
+    
         // Initialize the player's multiplier
         MULTIPLIER_BY_PLAYER.with(|multiplier| {
             multiplier.borrow_mut().insert(caller, 1.0);
         });
-
+    
         // Assign default avatars and titles
         AVAILABLE_AVATARS.with(|avatars| {
             avatars.borrow_mut().insert(caller, (1..=12).collect());
         });
-
+    
         AVAILABLE_TITLES.with(|titles| {
             titles.borrow_mut().insert(caller, vec![1]);
         });
-
-        Ok((true, Some(new_player), format!("User registered successfully with referral code {}", final_code)))
+    
+        Ok((
+            true,
+            Some(new_player),
+            format!(
+                "User registered successfully with referral code {} and assigned a home planet at {:?}",
+                final_code, planet_coords
+            ),
+        ))
     }
-
+    
+    
     // Mock functions for referral code handling
     async fn assign_unassigned_referral_code(_player_id: Principal, code: String) -> ReferralCodeResult {
         // Simulate referral code assignment logic
@@ -988,49 +1375,47 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             }
         })
     }
-    
-    
 
     // Function to remove a moon from a planet in a star system
     #[update]
     fn remove_moon_from_planet(system_id: u64, planet_id: u64, moon_id: u64) -> Result<(), String> {
         STAR_SYSTEMS.with(|systems| {
-    let mut systems = systems.borrow_mut();
-    if let Some(system) = systems.get_mut(&system_id) {
-        if let Some(planet) = system.planets.iter_mut().find(|p| p.id == planet_id) {
-    if let Some(index) = planet.moons.iter().position(|m| m.id == moon_id) {
-        planet.moons.remove(index); // Remove the moon by its ID
-        system.last_updated = time();
-        Ok(())
-    } else {
-        Err("Moon not found on this planet.".to_string())
-    }
+        let mut systems = systems.borrow_mut();
+        if let Some(system) = systems.get_mut(&system_id) {
+            if let Some(planet) = system.planets.iter_mut().find(|p| p.id == planet_id) {
+        if let Some(index) = planet.moons.iter().position(|m| m.id == moon_id) {
+            planet.moons.remove(index); // Remove the moon by its ID
+            system.last_updated = time();
+            Ok(())
         } else {
-    Err("Planet not found in this star system.".to_string())
+            Err("Moon not found on this planet.".to_string())
         }
-    } else {
-        Err("Star system not found.".to_string())
-    }
-        })
+            } else {
+        Err("Planet not found in this star system.".to_string())
+            }
+        } else {
+            Err("Star system not found.".to_string())
+        }
+            })
     }
 
     // Function to remove an asteroid belt from a star system
     #[update]
     fn remove_asteroid_belt_from_system(system_id: u64, belt_id: u64) -> Result<(), String> {
         STAR_SYSTEMS.with(|systems| {
-    let mut systems = systems.borrow_mut();
-    if let Some(system) = systems.get_mut(&system_id) {
-        if let Some(index) = system.asteroid_belts.iter().position(|ab| ab.id == belt_id) {
-    system.asteroid_belts.remove(index);
-    system.last_updated = time();
-    Ok(())
+        let mut systems = systems.borrow_mut();
+        if let Some(system) = systems.get_mut(&system_id) {
+            if let Some(index) = system.asteroid_belts.iter().position(|ab| ab.id == belt_id) {
+        system.asteroid_belts.remove(index);
+        system.last_updated = time();
+        Ok(())
+            } else {
+        Err("Asteroid belt not found in this star system.".to_string())
+            }
         } else {
-    Err("Asteroid belt not found in this star system.".to_string())
+            Err("Star system not found.".to_string())
         }
-    } else {
-        Err("Star system not found.".to_string())
-    }
-        })
+            })
     }
 
     #[update]
@@ -1186,187 +1571,187 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
 // --- Planet Management ---
 
-    fn calculate_habitability(
-            temperature_range: (f64, f64),
-            gravity: f64,
-            atmosphere: &str,
-        ) -> String {
-            let mut score = 0.0;
+    // fn calculate_habitability(
+    //         temperature_range: (f64, f64),
+    //         gravity: f64,
+    //         atmosphere: &str,
+    //     ) -> String {
+    //         let mut score = 0.0;
 
-            // Temperature scoring
-            if (10.0..=35.0).contains(&temperature_range.0) && (10.0..=35.0).contains(&temperature_range.1) {
-                score += 1.5; // Ideal temperature
-            } else if (-50.0..=50.0).contains(&temperature_range.0) && (-50.0..=50.0).contains(&temperature_range.1) {
-                score += 1.0; // Moderate with a wider range
-            } else if (-150.0..=100.0).contains(&temperature_range.0) && (-150.0..=100.0).contains(&temperature_range.1) {
-                score += 0.5; // Harsh but survivable with tech
-            } // Uninhabitable is default for extreme temperatures
+    //         // Temperature scoring
+    //         if (10.0..=35.0).contains(&temperature_range.0) && (10.0..=35.0).contains(&temperature_range.1) {
+    //             score += 1.5; // Ideal temperature
+    //         } else if (-50.0..=50.0).contains(&temperature_range.0) && (-50.0..=50.0).contains(&temperature_range.1) {
+    //             score += 1.0; // Moderate with a wider range
+    //         } else if (-150.0..=100.0).contains(&temperature_range.0) && (-150.0..=100.0).contains(&temperature_range.1) {
+    //             score += 0.5; // Harsh but survivable with tech
+    //         } // Uninhabitable is default for extreme temperatures
 
-            // Gravity scoring
-            if (0.8..=1.2).contains(&gravity) {
-                score += 1.5; // Ideal gravity
-            } else if (0.5..=2.0).contains(&gravity) {
-                score += 1.0; // Moderate gravity range
-            } else if (0.3..=3.0).contains(&gravity) {
-                score += 0.5; // Harsh gravity but potentially survivable
-            } // Uninhabitable for gravity outside 0.3–3.0
+    //         // Gravity scoring
+    //         if (0.8..=1.2).contains(&gravity) {
+    //             score += 1.5; // Ideal gravity
+    //         } else if (0.5..=2.0).contains(&gravity) {
+    //             score += 1.0; // Moderate gravity range
+    //         } else if (0.3..=3.0).contains(&gravity) {
+    //             score += 0.5; // Harsh gravity but potentially survivable
+    //         } // Uninhabitable for gravity outside 0.3–3.0
 
-            // Atmosphere scoring
-            match atmosphere {
-                "Moderate" => score += 1.5, // Ideal atmosphere
-                "Thick" | "Thin" => score += 1.0, // Moderate atmosphere
-                "None" | "Toxic" => score += 0.5, // Harsh atmosphere
-                _ => (), // Uninhabitable for anything worse
-            }
+    //         // Atmosphere scoring
+    //         match atmosphere {
+    //             "Moderate" => score += 1.5, // Ideal atmosphere
+    //             "Thick" | "Thin" => score += 1.0, // Moderate atmosphere
+    //             "None" | "Toxic" => score += 0.5, // Harsh atmosphere
+    //             _ => (), // Uninhabitable for anything worse
+    //         }
 
-            // Final categorization
-            match score {
-                s if s >= 4.0 => "Ideal".to_string(),
-                s if s >= 2.5 => "Moderate".to_string(),
-                s if s >= 1.5 => "Harsh".to_string(),
-                _ => "Uninhabitable".to_string(),
-            }
-    }
+    //         // Final categorization
+    //         match score {
+    //             s if s >= 4.0 => "Ideal".to_string(),
+    //             s if s >= 2.5 => "Moderate".to_string(),
+    //             s if s >= 1.5 => "Harsh".to_string(),
+    //             _ => "Uninhabitable".to_string(),
+    //         }
+    // }
 
-    #[update]
-    fn create_planet(name: String, system_id: u64) -> Planet {
-        let planet_id = NEXT_PLANET_ID.with(|id| {
-            let mut id = id.borrow_mut();
-            let current_id = *id;
-            *id += 1;
-            current_id
-        });
+    // #[update]
+    // fn create_planet(name: String, system_id: u64) -> Planet {
+    //     let planet_id = NEXT_PLANET_ID.with(|id| {
+    //         let mut id = id.borrow_mut();
+    //         let current_id = *id;
+    //         *id += 1;
+    //         current_id
+    //     });
 
-        // Get system coordinates
-        let system_coordinates = STAR_SYSTEMS.with(|systems| {
-            systems.borrow()
-                .get(&system_id)
-                .map(|s| s.coordinates)
-                .unwrap_or((0, 0))
-        });
+    //     // Get system coordinates
+    //     let system_coordinates = STAR_SYSTEMS.with(|systems| {
+    //         systems.borrow()
+    //             .get(&system_id)
+    //             .map(|s| s.coordinates)
+    //             .unwrap_or((0, 0))
+    //     });
 
-        // Generate planet coordinates
-        let coordinates = (
-            system_coordinates.0 as f64 + generate_random_in_range_f64(-10.0, 10.0),
-            system_coordinates.1 as f64 + generate_random_in_range_f64(-10.0, 10.0),
-        );
+    //     // Generate planet coordinates
+    //     let coordinates = (
+    //         system_coordinates.0 as f64 + generate_random_in_range_f64(-10.0, 10.0),
+    //         system_coordinates.1 as f64 + generate_random_in_range_f64(-10.0, 10.0),
+    //     );
 
-        // Planet attributes
-        let categories = vec![
-            "Terrestrial", "Gas Giant", "Ice World", "Desert", "Ocean World",
-            "Lava World", "Dwarf Planet", "Super-Earth", "Carbon Planet",
-            "Iron Planet", "Chthonian Planet", "Rogue",
-        ];
-        let subcategories = vec![
-            vec!["Rocky", "Volcanic", "Metallic"],
-            vec!["Jovian", "Neptunian"],
-            vec!["Frozen", "Cryovolcanic"],
-            vec!["Arid", "Sandy"],
-            vec!["Water", "Ice-Covered"],
-            vec!["Molten", "Magma"],
-            vec!["Rocky", "Icy"],
-            vec!["Rocky", "Oceanic"],
-            vec!["Graphite", "Diamond"],
-            vec!["Metallic", "Magnetic"],
-            vec!["Core Remnant", "Evaporated"],
-            vec!["Wandering"],
-        ];
-        let random_category_index = generate_random_in_range(0, (categories.len() - 1) as u64) as usize;
-        let planet_category = categories[random_category_index].to_string();
-        let planet_subcategory = subcategories[random_category_index][generate_random_in_range(
-            0,
-            (subcategories[random_category_index].len() - 1) as u64,
-        ) as usize]
-            .to_string();
+    //     // Planet attributes
+    //     let categories = vec![
+    //         "Terrestrial", "Gas Giant", "Ice World", "Desert", "Ocean World",
+    //         "Lava World", "Dwarf Planet", "Super-Earth", "Carbon Planet",
+    //         "Iron Planet", "Chthonian Planet", "Rogue",
+    //     ];
+    //     let subcategories = vec![
+    //         vec!["Rocky", "Volcanic", "Metallic"],
+    //         vec!["Jovian", "Neptunian"],
+    //         vec!["Frozen", "Cryovolcanic"],
+    //         vec!["Arid", "Sandy"],
+    //         vec!["Water", "Ice-Covered"],
+    //         vec!["Molten", "Magma"],
+    //         vec!["Rocky", "Icy"],
+    //         vec!["Rocky", "Oceanic"],
+    //         vec!["Graphite", "Diamond"],
+    //         vec!["Metallic", "Magnetic"],
+    //         vec!["Core Remnant", "Evaporated"],
+    //         vec!["Wandering"],
+    //     ];
+    //     let random_category_index = generate_random_in_range(0, (categories.len() - 1) as u64) as usize;
+    //     let planet_category = categories[random_category_index].to_string();
+    //     let planet_subcategory = subcategories[random_category_index][generate_random_in_range(
+    //         0,
+    //         (subcategories[random_category_index].len() - 1) as u64,
+    //     ) as usize]
+    //         .to_string();
 
-        // Planet size
-        let planet_size_options = vec!["Tiny", "Small", "Medium", "Large", "Huge"];
-        let random_size_index = generate_random_in_range(0, (planet_size_options.len() - 1) as u64) as usize;
-        let planet_size = planet_size_options[random_size_index].to_string();
+    //     // Planet size
+    //     let planet_size_options = vec!["Tiny", "Small", "Medium", "Large", "Huge"];
+    //     let random_size_index = generate_random_in_range(0, (planet_size_options.len() - 1) as u64) as usize;
+    //     let planet_size = planet_size_options[random_size_index].to_string();
 
-        // Atmosphere Composition
-        let atmosphere_options = vec![
-            vec!["None"],
-            vec!["Thin", "Moderate"],
-            vec!["Moderate", "Thick"],
-            vec!["Thick", "Toxic"],
-            vec!["Toxic", "Superdense"],
-        ];
-        let atmosphere = atmosphere_options[random_size_index][generate_random_in_range(
-            0,
-            (atmosphere_options[random_size_index].len() - 1) as u64,
-        ) as usize]
-            .to_string();
+    //     // Atmosphere Composition
+    //     let atmosphere_options = vec![
+    //         vec!["None"],
+    //         vec!["Thin", "Moderate"],
+    //         vec!["Moderate", "Thick"],
+    //         vec!["Thick", "Toxic"],
+    //         vec!["Toxic", "Superdense"],
+    //     ];
+    //     let atmosphere = atmosphere_options[random_size_index][generate_random_in_range(
+    //         0,
+    //         (atmosphere_options[random_size_index].len() - 1) as u64,
+    //     ) as usize]
+    //         .to_string();
 
-        // Temperature Range
-        let base_temperature_ranges = vec![
-            (-88.0, 58.0),   // Earth-like
-            (-200.0, -100.0), // Frozen
-            (-100.0, 0.0),   // Cold
-            (100.0, 500.0),  // Hot
-            (430.0, 700.0),  // Scorching
-        ];
-        let random_temp_index = generate_random_in_range(0, (base_temperature_ranges.len() - 1) as u64) as usize;
-        let base_temperature_range = base_temperature_ranges[random_temp_index];
-        let temperature_range = (
-            base_temperature_range.0 - generate_random_in_range(0, 20) as f64,
-            base_temperature_range.1 + generate_random_in_range(0, 20) as f64,
-        );
+    //     // Temperature Range
+    //     let base_temperature_ranges = vec![
+    //         (-88.0, 58.0),   // Earth-like
+    //         (-200.0, -100.0), // Frozen
+    //         (-100.0, 0.0),   // Cold
+    //         (100.0, 500.0),  // Hot
+    //         (430.0, 700.0),  // Scorching
+    //     ];
+    //     let random_temp_index = generate_random_in_range(0, (base_temperature_ranges.len() - 1) as u64) as usize;
+    //     let base_temperature_range = base_temperature_ranges[random_temp_index];
+    //     let temperature_range = (
+    //         base_temperature_range.0 - generate_random_in_range(0, 20) as f64,
+    //         base_temperature_range.1 + generate_random_in_range(0, 20) as f64,
+    //     );
 
-        // Gravity
-        let base_gravity = match planet_size.as_str() {
-            "Tiny" => 0.5,
-            "Small" => 1.0,
-            "Medium" => 1.5,
-            "Large" => 2.0,
-            "Huge" => 2.5,
-            _ => 1.0,
-        };
-        let gravity = base_gravity + generate_random_in_range(0, 50) as f64 / 100.0;
+    //     // Gravity
+    //     let base_gravity = match planet_size.as_str() {
+    //         "Tiny" => 0.5,
+    //         "Small" => 1.0,
+    //         "Medium" => 1.5,
+    //         "Large" => 2.0,
+    //         "Huge" => 2.5,
+    //         _ => 1.0,
+    //     };
+    //     let gravity = base_gravity + generate_random_in_range(0, 50) as f64 / 100.0;
 
-        // Orbital Period
-        let orbital_period_days = if planet_category == "Rogue" {
-            0
-        } else {
-            generate_random_in_range(50, 1000)
-        };
+    //     // Orbital Period
+    //     let orbital_period_days = if planet_category == "Rogue" {
+    //         0
+    //     } else {
+    //         generate_random_in_range(50, 1000)
+    //     };
 
-        // Habitability
-        let habitability = calculate_habitability(temperature_range, gravity, &atmosphere);
+    //     // Habitability
+    //     let habitability = calculate_habitability(temperature_range, gravity, &atmosphere);
 
-        // Create the planet
-        let planet = Planet {
-            id: planet_id,
-            name,
-            system_id,
-            coordinates,
-            planet_category,
-            planet_subcategory,
-            planet_size,
-            atmosphere: vec![atmosphere],
-            temperature_range,
-            gravity,
-            orbital_period_days,
-            resources: vec![],
-            max_miner_capacity: 100,
-            moons: vec![],
-            habitability,
-            owner_id: None,
-            buildings: vec![],
-            orbiting_fleets: vec![],
-        };
+    //     // Create the planet
+    //     let planet = Planet {
+    //         id: planet_id,
+    //         name,
+    //         system_id,
+    //         coordinates,
+    //         planet_category,
+    //         planet_subcategory,
+    //         planet_size,
+    //         atmosphere: vec![atmosphere],
+    //         temperature_range,
+    //         gravity,
+    //         orbital_period_days,
+    //         resources: vec![],
+    //         max_miner_capacity: 100,
+    //         moons: vec![],
+    //         habitability,
+    //         owner_id: None,
+    //         buildings: vec![],
+    //         orbiting_fleets: vec![],
+    //     };
 
-        PLANETS.with(|planets| {
-            planets.borrow_mut().insert(planet_id, planet.clone());
-        });
+    //     PLANETS.with(|planets| {
+    //         planets.borrow_mut().insert(planet_id, planet.clone());
+    //     });
 
-        // Add to PLANET_TREE using PlanetPoint
-        PLANET_TREE.with(|tree| {
-            tree.borrow_mut().insert(PlanetPoint::new(planet_id, coordinates));
-        });
+    //     // Add to PLANET_TREE using PlanetPoint
+    //     PLANET_TREE.with(|tree| {
+    //         tree.borrow_mut().insert(PlanetPoint::new(planet_id, coordinates));
+    //     });
 
-        planet
-    }
+    //     planet
+    // }
 
     #[query]
     fn get_planet(planet_id: u64) -> Option<Planet> {

@@ -22,6 +22,8 @@
 <script>
 import * as d3 from "d3";
 import { useCanisterStore } from "@/stores/canister";
+import entityIcon from "@/assets/icons/entity.svg";
+
 
 export default {
   name: "MetaverseMap",
@@ -60,67 +62,142 @@ export default {
       return entitiesData.map(([x, y, name]) => ({ x, y, name }));
     },
     renderMap(entities) {
-      const svg = d3.select(this.$refs.svgCanvas);
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+  const svg = d3.select(this.$refs.svgCanvas);
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const aspectRatio = width / height;
 
-      svg.attr("width", width).attr("height", height).selectAll("*").remove();
+  svg.attr("width", width).attr("height", height).selectAll("*").remove();
 
-      const xScale = d3
-        .scaleLinear()
-        .domain(d3.extent(entities, (d) => d.x))
-        .range([50, width - 50]);
+  // Define gradients and patterns in <defs>
+  const defs = svg.append("defs");
 
-      const yScale = d3
-        .scaleLinear()
-        .domain(d3.extent(entities, (d) => d.y))
-        .range([height - 50, 50]);
+  // Galaxy gradient
+  defs.append("radialGradient")
+    .attr("id", "galaxy-gradient")
+    .attr("cx", "50%")
+    .attr("cy", "50%")
+    .attr("r", "50%")
+    .selectAll("stop")
+    .data([
+      { offset: "0%", color: "#000000", opacity: 1 }, // Black hole center
+      { offset: "16%", color: "#000000", opacity: 0 },
+      { offset: "28%", color: "#611F6B", opacity: 0.3 },
+      { offset: "64%", color: "#333FB3", opacity: 0.25 },
+      { offset: "88%", color: "#000000", opacity: 0.4 },
+      { offset: "100%", color: "0876F4", opacity: 0 }, // Fade to black
+    ])
+    .join("stop")
+    .attr("offset", (d) => d.offset)
+    .attr("stop-color", (d) => d.color)
+    .attr("stop-opacity", (d) => d.opacity);
 
-      const container = svg.append("g");
+  // Create the zoomable container group
+  const container = svg.append("g");
 
-      this.renderEntities(container, entities, xScale, yScale);
+  // Add the galaxy background to the zoomable container
+  container.append("rect")
+    .attr("x", -width) // Make the background larger than the viewport for better visuals
+    .attr("y", -height)
+    .attr("width", 3 * width)
+    .attr("height", 3 * height)
+    .attr("fill", "url(#galaxy-gradient)");
 
-      // Zoom behavior
-      this.zoomBehavior = d3
-        .zoom()
-        .scaleExtent([0.5, 20])
-        .translateExtent([
-          [-width, -height],
-          [2 * width, 2 * height],
-        ])
-        .on("zoom", (event) => {
-          container.attr("transform", event.transform);
-        });
+  // Determine the coordinate bounds
+  const xDomain = d3.extent(entities, (d) => d.x);
+  const yDomain = d3.extent(entities, (d) => d.y);
 
-      svg.call(this.zoomBehavior);
+  // Adjust scales to maintain aspect ratio
+  const xScale = d3
+    .scaleLinear()
+    .domain(xDomain)
+    .range(aspectRatio >= 1 ? [50, width - 50] : [50, width - 50 * aspectRatio]);
 
-      // Initialize zoom level
-      const initialTransform = d3.zoomIdentity.translate(width / 2, height / 2).scale(1.5);
-      svg.call(this.zoomBehavior.transform, initialTransform);
-    },
+  const yScale = d3
+    .scaleLinear()
+    .domain(yDomain)
+    .range(aspectRatio >= 1 ? [height - 50, 50] : [height - 50 * aspectRatio, 50]);
+
+  // Render entities in the container
+  this.renderEntities(container, entities, xScale, yScale);
+
+  // Initialize zoom behavior
+  this.zoomBehavior = d3
+    .zoom()
+    .scaleExtent([0.5, 20])
+    .translateExtent([
+      [-width, -height],
+      [2 * width, 2 * height],
+    ])
+    .on("zoom", (event) => {
+      container.attr("transform", event.transform); // Scale and move the container (and background)
+    });
+
+  svg.call(this.zoomBehavior);
+
+  // Reset the camera (initial transform)
+  this.resetZoom();
+
+  // Update on resize
+  window.addEventListener("resize", () => {
+    const newWidth = window.innerWidth;
+    const newHeight = window.innerHeight;
+    const newAspectRatio = newWidth / newHeight;
+
+    svg.attr("width", newWidth).attr("height", newHeight);
+
+    // Update background dimensions
+    container.selectAll("rect")
+      .attr("x", -newWidth)
+      .attr("y", -newHeight)
+      .attr("width", 3 * newWidth)
+      .attr("height", 3 * newHeight);
+
+    // Adjust scales to maintain aspect ratio
+    const newXScale = d3
+      .scaleLinear()
+      .domain(xDomain)
+      .range(
+        newAspectRatio >= 1
+          ? [50, newWidth - 50]
+          : [50, newWidth - 50 * newAspectRatio]
+      );
+
+    const newYScale = d3
+      .scaleLinear()
+      .domain(yDomain)
+      .range(
+        newAspectRatio >= 1
+          ? [newHeight - 50, 50]
+          : [newHeight - 50 * newAspectRatio, 50]
+      );
+
+    // Re-render entities with updated scales
+    this.renderEntities(container, entities, newXScale, newYScale);
+  });
+},
     renderEntities(container, entities, xScale, yScale) {
       container
         .selectAll(".entity")
         .data(entities)
-        .join("circle")
+        .join("image")
         .attr("class", "entity")
-        .attr("cx", (d) => xScale(d.x))
-        .attr("cy", (d) => yScale(d.y))
-        .attr("r", this.entitySize) // Use the entitySize for radius
-        .attr("fill", "blue")
-        .attr("stroke", "white")
-        .attr("stroke-width", 1)
+        .attr("x", (d) => xScale(d.x) - this.entitySize / 2) // Center the SVG
+        .attr("y", (d) => yScale(d.y) - this.entitySize / 2) // Center the SVG
+        .attr("width", this.entitySize) // Dynamically set width
+        .attr("height", this.entitySize) // Dynamically set height
+        .attr("xlink:href", entityIcon) // Use imported SVG
         .on("mouseover", (event, d) => {
           d3.select("#tooltip")
             .style("opacity", 1)
             .html(`Entity: ${d.name}<br>X: ${d.x}<br>Y: ${d.y}`)
             .style("left", `${event.pageX + 1}px`)
-            .style("top", `${event.pageY - 200}px`);
+            .style("top", `${event.pageY - 30}px`);
         })
         .on("mousemove", (event) => {
           d3.select("#tooltip")
             .style("left", `${event.pageX + 1}px`)
-            .style("top", `${event.pageY - 200}px`);
+            .style("top", `${event.pageY - 30}px`);
         })
         .on("mouseout", () => {
           d3.select("#tooltip").style("opacity", 0);
