@@ -19,8 +19,12 @@ type EntityType = variant {
   Star;
   Unit;
   StarSystem;
+  AncientRuins;
   Planet;
   Fleet;
+  BlackHole;
+  Nebulae;
+  Artifacts;
 };
 type FriendDetails = record { id : principal; username : text; avatar : nat32 };
 type Moon = record {
@@ -142,7 +146,7 @@ service : {
   remove_star_from_system : (nat64, nat64) -> (Result);
   remove_star_system : (nat64) -> (Result);
   signup : (text, nat32, opt text, text) -> (Result_2);
-  spawn_entities_auto_batched : (nat64) -> (nat64);
+  spawn_entities_auto_batched : (nat64) -> (Result_1);
   spawn_test_entities : (nat64) -> ();
   start_tick : () -> ();
   stop_tick : () -> ();

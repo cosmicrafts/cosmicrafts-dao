@@ -3,20 +3,33 @@
     <svg ref="svgCanvas"></svg>
     <div id="tooltip" style="opacity: 0;"></div>
     <button id="reset-zoom" @click="resetZoom">Reset Zoom</button>
+    <!-- Sliders for dynamic size control -->
+    <div id="size-control">
+      <label for="entity-size">Entity Size:</label>
+      <input
+        type="range"
+        id="entity-size"
+        min="0.01"
+        max="30"
+        v-model="entitySize"
+        @input="updateSizes"
+      />
+    </div>
   </div>
 </template>
 
+
 <script>
 import * as d3 from "d3";
-import { useCanisterStore } from '@/stores/canister';
+import { useCanisterStore } from "@/stores/canister";
 
 export default {
   name: "MetaverseMap",
   data() {
     return {
-      rawEntities: "", // Raw data fetched from canister
+      rawEntities: "", // Raw data fetched from the canister
       zoomBehavior: null,
-      isClustered: true, // Determines whether to show clusters or individual entities
+      entitySize: 5, // Default size for entities
     };
   },
   mounted() {
@@ -27,40 +40,24 @@ export default {
       try {
         // Get the Cosmicrafts canister instance
         const canisterStore = useCanisterStore();
-        const cosmicrafts = await canisterStore.get('cosmicrafts');
+        const cosmicrafts = await canisterStore.get("cosmicrafts");
 
-        // Call the export_entities method from the canister
+        // Fetch entities from the canister
         const entitiesData = await cosmicrafts.export_entities();
-
-        // Log the returned data for debugging
-        //console.log("Entities data from canister:", JSON.stringify(entitiesData, null, 2));
-
-        // Render the map with the parsed entities
+        this.rawEntities = entitiesData; // Store raw data
         const parsedEntities = this.parseEntities(entitiesData);
         this.renderMap(parsedEntities);
       } catch (error) {
-        console.error("Error fetching or parsing entities from canister:", error);
+        console.error("Error fetching or parsing entities:", error);
       }
     },
     parseEntities(entitiesData) {
-      try {
-        // Ensure the data is an array
-        if (!Array.isArray(entitiesData)) {
-          throw new Error("Expected an array of entities.");
-        }
-
-        // Map the data to the expected format
-        return entitiesData.map((entity) => {
-          return {
-            x: entity[0], // First element is x (number)
-            y: entity[1], // Second element is y (number)
-            name: entity[2], // Third element is name (string)
-          };
-        });
-      } catch (error) {
-        console.error("Failed to parse entities:", error);
+      // Ensure data is an array and map to usable format
+      if (!Array.isArray(entitiesData)) {
+        console.error("Invalid entity data format");
         return [];
       }
+      return entitiesData.map(([x, y, name]) => ({ x, y, name }));
     },
     renderMap(entities) {
       const svg = d3.select(this.$refs.svgCanvas);
@@ -81,9 +78,9 @@ export default {
 
       const container = svg.append("g");
 
-      // Initial rendering of clusters
-      this.renderClusters(container, entities, xScale, yScale);
+      this.renderEntities(container, entities, xScale, yScale);
 
+      // Zoom behavior
       this.zoomBehavior = d3
         .zoom()
         .scaleExtent([0.5, 20])
@@ -93,65 +90,13 @@ export default {
         ])
         .on("zoom", (event) => {
           container.attr("transform", event.transform);
-
-          const zoomLevel = event.transform.k;
-          if (zoomLevel > 5 && this.isClustered) {
-            this.isClustered = false;
-            this.renderEntities(container, entities, xScale, yScale);
-          } else if (zoomLevel <= 5 && !this.isClustered) {
-            this.isClustered = true;
-            this.renderClusters(container, entities, xScale, yScale);
-          }
         });
 
       svg.call(this.zoomBehavior);
 
-      // Initialize with a medium zoom level
+      // Initialize zoom level
       const initialTransform = d3.zoomIdentity.translate(width / 2, height / 2).scale(1.5);
       svg.call(this.zoomBehavior.transform, initialTransform);
-    },
-    clusterEntities(entities) {
-      const clusterSize = 0.05; // Adjust for more/less clustering
-      const clusters = {};
-
-      entities.forEach((entity) => {
-        const key = `${Math.round(entity.x / clusterSize)},${Math.round(entity.y / clusterSize)}`;
-        if (!clusters[key]) {
-          clusters[key] = { x: entity.x, y: entity.y, count: 0 };
-        }
-        clusters[key].count += 1;
-      });
-
-      return Object.values(clusters);
-    },
-    renderClusters(container, entities, xScale, yScale) {
-      const clusters = this.clusterEntities(entities);
-
-      container
-        .selectAll(".cluster")
-        .data(clusters)
-        .join("circle")
-        .attr("class", "cluster")
-        .attr("cx", (d) => xScale(d.x))
-        .attr("cy", (d) => yScale(d.y))
-        .attr("r", (d) => Math.sqrt(d.count) * 5) // Radius scales with count
-        .attr("fill", "blue")
-        .attr("opacity", 0.7)
-        .on("mouseover", (event, d) => {
-          d3.select("#tooltip")
-            .style("opacity", 1)
-            .html(`Cluster Size: ${d.count}`)
-            .style("left", `${event.pageX + 10}px`)
-            .style("top", `${event.pageY - 28}px`);
-        })
-        .on("mousemove", (event) => {
-          d3.select("#tooltip")
-            .style("left", `${event.pageX + 10}px`)
-            .style("top", `${event.pageY - 28}px`);
-        })
-        .on("mouseout", () => {
-          d3.select("#tooltip").style("opacity", 0);
-        });
     },
     renderEntities(container, entities, xScale, yScale) {
       container
@@ -161,7 +106,7 @@ export default {
         .attr("class", "entity")
         .attr("cx", (d) => xScale(d.x))
         .attr("cy", (d) => yScale(d.y))
-        .attr("r", 5)
+        .attr("r", this.entitySize) // Use the entitySize for radius
         .attr("fill", "blue")
         .attr("stroke", "white")
         .attr("stroke-width", 1)
@@ -169,26 +114,45 @@ export default {
           d3.select("#tooltip")
             .style("opacity", 1)
             .html(`Entity: ${d.name}<br>X: ${d.x}<br>Y: ${d.y}`)
-            .style("left", `${event.pageX + 10}px`)
-            .style("top", `${event.pageY - 28}px`);
+            .style("left", `${event.pageX + 1}px`)
+            .style("top", `${event.pageY - 200}px`);
         })
         .on("mousemove", (event) => {
           d3.select("#tooltip")
-            .style("left", `${event.pageX + 10}px`)
-            .style("top", `${event.pageY - 28}px`);
+            .style("left", `${event.pageX + 1}px`)
+            .style("top", `${event.pageY - 200}px`);
         })
         .on("mouseout", () => {
           d3.select("#tooltip").style("opacity", 0);
         });
     },
+    updateSizes() {
+      // Re-render entities with the updated size
+      const svg = d3.select(this.$refs.svgCanvas);
+      const container = svg.select("g");
+      const entities = this.parseEntities(this.rawEntities);
+
+      const xScale = d3
+        .scaleLinear()
+        .domain(d3.extent(entities, (d) => d.x))
+        .range([50, window.innerWidth - 50]);
+
+      const yScale = d3
+        .scaleLinear()
+        .domain(d3.extent(entities, (d) => d.y))
+        .range([window.innerHeight - 50, 50]);
+
+      this.renderEntities(container, entities, xScale, yScale);
+    },
     resetZoom() {
+      // Reset zoom to initial state
       const svg = d3.select(this.$refs.svgCanvas);
       svg.call(this.zoomBehavior.transform, d3.zoomIdentity);
     },
   },
 };
-</script>
 
+</script>
 <style scoped>
 #metaverse-map {
   position: relative;
@@ -223,4 +187,20 @@ svg {
 #reset-zoom:hover {
   background-color: #555;
 }
+#size-control {
+  position: absolute;
+  bottom: 50px;
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 8px;
+}
+#size-control label {
+  font-size: 14px;
+  color: #333;
+}
+#size-control input {
+  margin-left: 10px;
+}
+
 </style>

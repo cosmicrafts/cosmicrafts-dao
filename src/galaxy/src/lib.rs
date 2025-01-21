@@ -1,10 +1,12 @@
 use candid::{CandidType, Deserialize, Principal};
-use ic_cdk::api::time;
 use ic_cdk::{update, query};
+use ic_cdk::api::time;
+use ic_cdk::api::management_canister::main::raw_rand;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use ic_cdk_timers::{TimerId, set_timer_interval};
 use rstar::{RTree, RTreeObject, AABB, PointDistance};
+
 
 //New
 
@@ -54,11 +56,6 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             let dy = self.coords[1] - point[1];
             dx * dx + dy * dy
         }
-    }
-
-    thread_local! {
-        static ENTITY_COUNTER: RefCell<u64> = RefCell::new(0);
-        static GALAXY_TREE: RefCell<RTree<Entity>> = RefCell::new(RTree::new());
     }
 
     #[update]
@@ -240,44 +237,40 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
     }
 
     #[update]
-    fn spawn_entities_auto_batched(total: u64) -> u64 {
+    async fn spawn_entities_auto_batched(total: u64) -> Result<u64, String> {
         let max_batch_size = 1_000; // Maximum entities per batch
-        let a = 10.0; // Initial radius for the spiral
-        let mut b = 2.0; // Distance between spiral loops
-        let deviation_min = -2.0; // Minimum random deviation
-        let deviation_max = 2.0;  // Maximum random deviation
-        let mut created = 0;
+        let safe_zone_inner_radius = 500.0; // Inner radius of the Safe Zone
+        let safe_zone_outer_radius = 1000.0; // Outer radius of the Safe Zone
+        let mut created = 0; // Counter for created entities
     
-        // Persistent angle tracker (doesn't reset between batches)
-        static mut CURRENT_THETA: f64 = -std::f64::consts::PI; // Start at -π
-        let theta_increment = 0.05; // Small angle increment for smooth spiral
+        while created < total {
+            let batch_size = std::cmp::min(max_batch_size, total - created);
     
-        GALAXY_TREE.with(|tree| {
-            let mut tree_mut = tree.borrow_mut();
+            // Generate random bytes for the entire batch in advance
+            let mut random_batches = Vec::new();
+            for _ in 0..batch_size {
+                let random_bytes = match raw_rand().await {
+                    Ok((bytes,)) => bytes,
+                    Err(_) => return Err("Failed to fetch randomness.".to_string()),
+                };
+                random_batches.push(random_bytes);
+            }
     
-            while created < total {
-                let batch_size = std::cmp::min(max_batch_size, total - created);
+            GALAXY_TREE.with(|tree| {
+                let mut tree_mut = tree.borrow_mut();
     
-                for _ in 0..batch_size {
-                    // Increment angle for spiral progression
-                    unsafe {
-                        CURRENT_THETA += theta_increment;
-                        // Wrap around to ensure continuous spiral
-                        if CURRENT_THETA > 2.0 * std::f64::consts::PI {
-                            CURRENT_THETA -= 2.0 * std::f64::consts::PI; // Reset to keep within [-π, π]
-                        }
-                    }
+                for random_bytes in random_batches {
+                    // Extract two random values from the bytes
+                    let radius_rand = u64::from_le_bytes(random_bytes[0..8].try_into().unwrap());
+                    let angle_rand = u64::from_le_bytes(random_bytes[8..16].try_into().unwrap());
     
-                    // Spiral radius using Archimedean spiral formula
-                    let radius = a + b * unsafe { CURRENT_THETA }; // Remove .abs() to allow negative radii
+                    // Map random values to the desired ranges
+                    let radius = map_to_range(radius_rand, safe_zone_inner_radius, safe_zone_outer_radius);
+                    let angle = map_to_range(angle_rand, 0.0, 2.0 * std::f64::consts::PI);
     
-                    // Add slight random deviation to avoid perfect alignment
-                    let deviation = generate_random_in_range_f64(deviation_min, deviation_max);
-                    let adjusted_radius = radius + deviation;
-    
-                    // Convert polar coordinates (r, theta) to Cartesian (x, y)
-                    let x = adjusted_radius * unsafe { CURRENT_THETA.cos() };
-                    let y = adjusted_radius * unsafe { CURRENT_THETA.sin() };
+                    // Convert polar coordinates to Cartesian (x, y)
+                    let x = radius * angle.cos();
+                    let y = radius * angle.sin();
     
                     // Generate a unique entity ID
                     let unique_id = ENTITY_COUNTER.with(|counter| {
@@ -288,6 +281,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
     
                     let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
     
+                    // Create the entity
                     let entity = Entity {
                         id: unique_principal,
                         owner_id: ic_cdk::caller(),
@@ -299,15 +293,18 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                     tree_mut.insert(entity);
                     created += 1;
                 }
+            });
+        }
     
-                // Gradually increase loop spacing for dynamic growth
-                b += 0.05; // Incrementally expand loop spacing
-            }
-        });
-    
-        created
+        Ok(created)
     }
     
+    // Helper function to map a u64 random value to a floating-point range
+    fn map_to_range(random_value: u64, min: f64, max: f64) -> f64 {
+        let fraction = (random_value as f64) / (u64::MAX as f64); // Normalize to [0, 1]
+        min + fraction * (max - min) // Scale to [min, max]
+    }
+
     #[query]
     fn export_entities() -> Vec<(f64, f64, String)> {
         GALAXY_TREE.with(|tree| {
@@ -646,11 +643,13 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 // --- Database
 
     thread_local! {
+        static ENTITY_COUNTER: RefCell<u64> = RefCell::new(0);
+        static GALAXY_TREE: RefCell<RTree<Entity>> = RefCell::new(RTree::new());
+
         static PLAYERS: RefCell<HashMap<Principal, Player>> = RefCell::new(HashMap::new());
         static MULTIPLIER_BY_PLAYER: RefCell<HashMap<Principal, f64>> = RefCell::new(HashMap::new());
         static AVAILABLE_AVATARS: RefCell<HashMap<Principal, Vec<u32>>> = RefCell::new(HashMap::new());
         static AVAILABLE_TITLES: RefCell<HashMap<Principal, Vec<u32>>> = RefCell::new(HashMap::new());
-
 
         static TICK_TIMER: RefCell<Option<TimerId>> = RefCell::new(None);
         static TICK_COUNT: RefCell<u64> = RefCell::new(0);
@@ -828,12 +827,12 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
     }
 
     // Mock functions for referral code handling
-    async fn assign_unassigned_referral_code(player_id: Principal, code: String) -> ReferralCodeResult {
+    async fn assign_unassigned_referral_code(_player_id: Principal, code: String) -> ReferralCodeResult {
         // Simulate referral code assignment logic
         ReferralCodeResult::Ok(code)
     }
 
-    async fn assign_referral_code(player_id: Principal, code: Option<String>) -> (String, bool) {
+    async fn assign_referral_code(_player_id: Principal, _code: Option<String>) -> (String, bool) {
         // Simulate referral code generation logic
         ("generated_code".to_string(), true)
     }
