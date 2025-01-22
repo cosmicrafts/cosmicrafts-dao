@@ -28,60 +28,41 @@ use serde_json::json;
         Artifacts,
     }
 
-    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
-    struct Zone {
-        id: u32,
-        name: String,
-        inner_radius: f64, // In light-years
-        outer_radius: f64, // In light-years
-    }
+    // #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    // struct Zone {
+    //     id: u32,
+    //     name: String,
+    //     inner_radius: f64, // In light-years
+    //     outer_radius: f64, // In light-years
+    // }
 
-    fn define_zones() -> Vec<Zone> {
-        vec![
-            Zone {
-                id: 0,
-                name: "Galactic Core".to_string(),
-                inner_radius: 0.0,
-                outer_radius: 100.0
-            },
-            Zone {
-                id: 1,
-                name: "First Spiral Arm".to_string(),
-                inner_radius: 100.0,
-                outer_radius: 101.0
-            },
-            Zone {
-                id: 2,
-                name: "Local Bubble".to_string(),
-                inner_radius: 101.0,
-                outer_radius: 102.0
-            },
-        ]
-    }
+    // fn define_zones() -> Vec<Zone> {
+    //     vec![
+    //         Zone {
+    //             id: 0,
+    //             name: "Galactic Core".to_string(),
+    //             inner_radius: 0.0,
+    //             outer_radius: 100.0
+    //         },
+    //         Zone {
+    //             id: 1,
+    //             name: "First Spiral Arm".to_string(),
+    //             inner_radius: 100.0,
+    //             outer_radius: 101.0
+    //         },
+    //         Zone {
+    //             id: 2,
+    //             name: "Local Bubble".to_string(),
+    //             inner_radius: 101.0,
+    //             outer_radius: 102.0
+    //         },
+    //     ]
+    // }
 
     fn validate_metadata(metadata: &str) -> Result<(), String> {
         serde_json::from_str::<serde_json::Value>(metadata)
             .map_err(|e| format!("Invalid metadata: {}", e))?;
         Ok(())
-    }
-
-    async fn random_coords_in_zone(zone: &Zone) -> Result<(f64, f64), String> {
-        // Fetch randomness from the management canister
-        let random_bytes = match raw_rand().await {
-            Ok((bytes,)) => bytes,
-            Err(_) => return Err("Failed to fetch randomness.".to_string()),
-        };
-
-        // Extract random values for radius and angle
-        let radius_rand = u64::from_le_bytes(random_bytes[0..8].try_into().unwrap());
-        let angle_rand = u64::from_le_bytes(random_bytes[8..16].try_into().unwrap());
-
-        // Map the random values to the desired ranges
-        let radius = map_to_range(radius_rand, zone.inner_radius, zone.outer_radius);
-        let angle = map_to_range(angle_rand, 0.0, 2.0 * std::f64::consts::PI);
-
-        // Convert polar to Cartesian coordinates
-        Ok((radius * angle.cos(), radius * angle.sin()))
     }
 
     async fn random_orbit(parent_coords: (f64, f64), min_radius: f64, max_radius: f64) -> Result<(f64, f64), String> {
@@ -159,22 +140,6 @@ use serde_json::json;
         (category, subcategory, size)
     }
 
-
-     
-    #[update]
-    async fn create_star_cluster(zone_id: u32, owner_id: Principal) -> Result<(), String> {
-        let zones = define_zones();
-        let zone = zones.iter().find(|z| z.id == zone_id).ok_or("Zone not found")?;
-    
-        let num_stars = ((zone.outer_radius - zone.inner_radius).powi(2)) as u32;
-    
-        for _ in 0..num_stars {
-            let star_coords = random_coords_in_zone(zone).await?;
-            create_star(star_coords, owner_id).await?;
-        }
-    
-        Ok(())
-    }
 
     #[update]
     async fn create_planetary_system(
@@ -624,27 +589,13 @@ use serde_json::json;
         while created < total {
             let batch_size = std::cmp::min(max_batch_size, total - created);
     
-            // Generate random bytes for the entire batch in advance
-            let mut random_batches = Vec::new();
-            for _ in 0..batch_size {
-                let random_bytes = match raw_rand().await {
-                    Ok((bytes,)) => bytes,
-                    Err(_) => return Err("Failed to fetch randomness.".to_string()),
-                };
-                random_batches.push(random_bytes);
-            }
-    
             GALAXY_TREE.with(|tree| {
                 let mut tree_mut = tree.borrow_mut();
     
-                for random_bytes in random_batches {
-                    // Extract two random values from the bytes
-                    let radius_rand = u64::from_le_bytes(random_bytes[0..8].try_into().unwrap());
-                    let angle_rand = u64::from_le_bytes(random_bytes[8..16].try_into().unwrap());
-    
-                    // Map random values to the desired ranges
-                    let radius = map_to_range(radius_rand, safe_zone_inner_radius, safe_zone_outer_radius);
-                    let angle = map_to_range(angle_rand, 0.0, 2.0 * std::f64::consts::PI);
+                for _ in 0..batch_size {
+                    // Generate random radius and angle using the utility functions
+                    let radius = generate_random_in_range_f64(safe_zone_inner_radius, safe_zone_outer_radius);
+                    let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
     
                     // Convert polar coordinates to Cartesian (x, y)
                     let x = radius * angle.cos();
@@ -678,74 +629,133 @@ use serde_json::json;
     }
 
     #[update]
-    async fn create_open_star_cluster(zone_id: u32, owner_id: Principal) -> Result<(), String> {
-        // Define fixed boundaries for the zones
-        let zones = define_zones();
-        let zone = zones.iter().find(|z| z.id == zone_id)
-            .ok_or("Zone not found")?;
-        
-        // Generate random starting coordinates for the cluster
-        let random_bytes = match raw_rand().await {
-            Ok((bytes,)) => bytes,
-            Err(_) => return Err("Failed to fetch randomness.".to_string()),
-        };
-    
-        // Extract random values for radius and angle
-        let radius_rand = u64::from_le_bytes(random_bytes[0..8].try_into().unwrap());
-        let angle_rand = u64::from_le_bytes(random_bytes[8..16].try_into().unwrap());
-    
-        // Map random values to the desired ranges
-        let radius = map_to_range(radius_rand, zone.inner_radius, zone.outer_radius);
-        let angle = map_to_range(angle_rand, 0.0, 2.0 * std::f64::consts::PI);
-    
-        // Convert polar coordinates to Cartesian (x, y)
-        let cluster_coords = (radius * angle.cos(), radius * angle.sin());
-    
-        // Generate stars around the cluster
-        let num_stars = generate_random_in_range(1, 4); // Randomize number of stars (1-4)
-        let cluster_radius = 1.0; // Scale to light-years
-    
-        for _ in 0..num_stars {
-            // Generate random star coordinates within the cluster
-            let star_coords = random_orbit(cluster_coords, 0.1, cluster_radius).await?;
-    
-            // Adjust resources based on the number of stars
-            let resources = if num_stars == 1 {
-                vec!["Rich in resources".to_string()]
-            } else {
-                vec!["Balanced resources".to_string()]
-            };
-    
-            // Create the star with metadata
-            let star_id = generate_principal();
-            let metadata = json!({
-                "id": star_id.to_text(),
-                "type": "Star",
-                "coords": { "x": star_coords.0, "y": star_coords.1 },
-                "category": "Stellar Object",
-                "subcategory": "Star",
-                "size": "N/A",
-                "parent": "None",
-                "owner": owner_id.to_text(),
-                "timestamp": time(),
-                "resources": resources
-            }).to_string();
-    
-            let star = Entity {
-                id: star_id,
-                owner_id,
-                entity_type: EntityType::Star,
-                coords: [star_coords.0, star_coords.1],
-                metadata,
-            };
-    
-            // Insert the star into the galaxy tree
-            GALAXY_TREE.with(|tree| tree.borrow_mut().insert(star));
+    async fn spawn_entity(total: u64) -> Result<u64, String> {
+        let max_batch_size = 50; // Maximum entities per batch
+        let safe_zone_inner_radius = 1000.0; // Inner radius of the Safe Zone
+        let safe_zone_outer_radius = 1010.0; // Outer radius of the Safe Zone
+        let mut created = 0; // Counter for created entities
+
+        while created < total {
+            let batch_size = std::cmp::min(max_batch_size, total - created);
+
+            GALAXY_TREE.with(|tree| {
+                let mut tree_mut = tree.borrow_mut();
+
+                for _ in 0..batch_size {
+                    // Generate random radius and angle using the utility functions
+                    let radius = generate_random_in_range_f64(safe_zone_inner_radius, safe_zone_outer_radius);
+                    let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
+
+                    // Convert polar coordinates to Cartesian (x, y)
+                    let x = radius * angle.cos();
+                    let y = radius * angle.sin();
+
+                    // Generate a unique entity ID
+                    let unique_id = ENTITY_COUNTER.with(|counter| {
+                        let mut counter = counter.borrow_mut();
+                        *counter += 1;
+                        *counter
+                    });
+
+                    let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
+
+                    // Create metadata for the entity
+                    let metadata = json!({
+                        "id": unique_principal.to_text(),
+                        "type": "Planet",
+                        "coords": { "x": x, "y": y },
+                        "category": "Celestial Object",
+                        "subcategory": "Planet",
+                        "size": "Standard",
+                        "parent": "Safe Zone",
+                        "owner": ic_cdk::caller().to_text(),
+                        "timestamp": time()
+                    }).to_string();
+
+                    // Create the entity
+                    let entity = Entity {
+                        id: unique_principal,
+                        owner_id: ic_cdk::caller(),
+                        entity_type: EntityType::Planet,
+                        coords: [x, y],
+                        metadata: metadata.clone(),
+                    };
+
+                    // Print metadata for debugging
+                    ic_cdk::println!("Entity created: {}", metadata);
+
+                    // Insert the entity into the tree
+                    tree_mut.insert(entity);
+                    created += 1;
+                }
+            });
         }
-    
-        Ok(())
+
+        Ok(created)
     }
 
+    async fn spawn_entities_with_metadata(
+        total: u64,
+        entity_type: EntityType,
+        metadata_template: serde_json::Value, // A JSON template for metadata
+        owner_id: Principal,
+    ) -> Result<u64, String> {
+        // Define the boundaries for the spawning area (same as in spawn_entities_auto_batched_backup)
+        let inner_radius = 1000.0; // Inner radius of the spawning area
+        let outer_radius = 1010.0; // Outer radius of the spawning area
+    
+        let max_batch_size = 50; // Maximum entities per batch
+        let mut created = 0; // Counter for created entities
+    
+        while created < total {
+            let batch_size = std::cmp::min(max_batch_size, total - created);
+    
+            GALAXY_TREE.with(|tree| {
+                let mut tree_mut = tree.borrow_mut();
+    
+                for _ in 0..batch_size {
+                    // Generate random radius and angle using the utility functions (same as in spawn_entities_auto_batched_backup)
+                    let radius = generate_random_in_range_f64(inner_radius, outer_radius);
+                    let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
+    
+                    // Convert polar coordinates to Cartesian (x, y) (same as in spawn_entities_auto_batched_backup)
+                    let x = radius * angle.cos();
+                    let y = radius * angle.sin();
+    
+                    // Generate a unique entity ID
+                    let unique_id = ENTITY_COUNTER.with(|counter| {
+                        let mut counter = counter.borrow_mut();
+                        *counter += 1;
+                        *counter
+                    });
+    
+                    let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
+    
+                    // Customize metadata based on the template
+                    let mut metadata = metadata_template.clone();
+                    metadata["id"] = json!(unique_principal.to_text());
+                    metadata["coords"] = json!({ "x": x, "y": y });
+                    metadata["owner"] = json!(owner_id.to_text());
+                    metadata["timestamp"] = json!(time());
+    
+                    // Create the entity
+                    let entity = Entity {
+                        id: unique_principal,
+                        owner_id,
+                        entity_type: entity_type.clone(),
+                        coords: [x, y],
+                        metadata: metadata.to_string(),
+                    };
+    
+                    tree_mut.insert(entity);
+                    created += 1;
+                }
+            });
+        }
+    
+        Ok(created)
+    }
+    
     
     // Helper function to map a u64 random value to a floating-point range
     fn map_to_range(random_value: u64, min: f64, max: f64) -> f64 {
@@ -772,6 +782,7 @@ use serde_json::json;
     }
 
 
+
 // --- Player Management ---
 
     #[query]
@@ -788,23 +799,23 @@ use serde_json::json;
         language: String,
     ) -> Result<(bool, Option<Player>, String), String> {
         let caller = ic_cdk::caller();
-
+    
         // Reject anonymous calls
         if caller == Principal::anonymous() {
             return Err("Anonymous users cannot register.".to_string());
         }
-
+    
         // Check if the username is valid
         if username.len() > 12 {
             return Err("Username must be 12 characters or less".to_string());
         }
-
+    
         // Check if the player is already registered
         if PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
             let existing_player = PLAYERS.with(|players| players.borrow().get(&caller).cloned());
             return Ok((false, existing_player, "User is already registered.".to_string()));
         }
-
+    
         // Handle referral code scenarios
         let final_code = match referral_code {
             Some(code) => {
@@ -820,11 +831,29 @@ use serde_json::json;
                 new_code
             }
         };
-
-        // Create an open star cluster for the player in a predefined zone
-        let default_zone_id = 1; // Example: "First Spiral Arm"
-        create_open_star_cluster(default_zone_id, caller).await?;
-
+    
+        // Call spawn_entities_with_metadata with the correct data
+        let total_entities = 1; // Number of entities to spawn
+        let entity_type = EntityType::Star; // Type of entity to spawn
+        let metadata_template = json!({
+            "type": "Star",
+            "category": "Stellar Object",
+            "subcategory": "Star",
+            "size": "N/A",
+            "parent": "None",
+            "resources": [], // Default resources
+        });
+    
+        // Spawn the entities (without zone_id)
+        spawn_entities_with_metadata(
+            total_entities,
+            entity_type,
+            metadata_template,
+            caller,
+        )
+        .await
+        .map_err(|e| format!("Failed to create star: {}", e))?;
+    
         // Register the player
         let new_player = Player {
             id: caller,
@@ -838,25 +867,25 @@ use serde_json::json;
             friends: Vec::new(),
             language,
         };
-
+    
         PLAYERS.with(|players| {
             players.borrow_mut().insert(caller, new_player.clone());
         });
-
+    
         // Initialize the player's multiplier
         MULTIPLIER_BY_PLAYER.with(|multiplier| {
             multiplier.borrow_mut().insert(caller, 1.0);
         });
-
+    
         // Assign default avatars and titles
         AVAILABLE_AVATARS.with(|avatars| {
             avatars.borrow_mut().insert(caller, (1..=12).collect());
         });
-
+    
         AVAILABLE_TITLES.with(|titles| {
             titles.borrow_mut().insert(caller, vec![1]);
         });
-
+    
         Ok((
             true,
             Some(new_player),

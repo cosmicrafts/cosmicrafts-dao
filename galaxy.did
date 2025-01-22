@@ -118,13 +118,11 @@ service : {
   create_fleet : () -> (Result_1);
   create_moon : (principal, principal) -> (Result);
   create_nebula : (record { float64; float64 }, principal) -> (Result);
-  create_open_star_cluster : (nat32, principal) -> (Result);
   create_planet : (principal, principal, record { float64; float64 }) -> (
       Result,
     );
   create_planetary_system : (principal, principal) -> (Result);
   create_star : (record { float64; float64 }, principal) -> (Result);
-  create_star_cluster : (nat32, principal) -> (Result);
   export_entities : () -> (vec record { float64; float64; text }) query;
   find_entities_in_area : (
       record { float64; float64 },
@@ -157,6 +155,7 @@ service : {
   remove_star_system : (nat64) -> (Result);
   signup : (text, nat32, opt text, text) -> (Result_2);
   spawn_entities_auto_batched_backup : (nat64) -> (Result_1);
+  spawn_entity : (nat64) -> (Result_1);
   start_tick : () -> ();
   stop_tick : () -> ();
   transfer_entity : (principal, principal) -> (Result);

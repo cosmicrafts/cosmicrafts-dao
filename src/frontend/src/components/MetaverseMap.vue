@@ -45,7 +45,7 @@ export default {
 
     // Fetch entities from the canister
     const entitiesData = await cosmicrafts.export_entities();
-    console.log("Fetched raw entities:", entitiesData);
+   //console.log("Fetched raw entities:", entitiesData);
 
     this.rawEntities = entitiesData; // Store raw data
     const parsedEntities = this.parseEntities(entitiesData);
@@ -55,7 +55,6 @@ export default {
   }
 },
 
-
 parseEntities(entitiesData) {
   if (!Array.isArray(entitiesData)) {
     console.error("Invalid entity data format. Expected an array.");
@@ -63,7 +62,7 @@ parseEntities(entitiesData) {
   }
 
   return entitiesData.map(([x, y, metadata], index) => {
-    console.log(`Raw metadata for entity ${index}:`, metadata); // Log raw metadata
+    //console.log(`Raw metadata for entity ${index}:`, metadata); // Log raw metadata
 
     let parsedMetadata;
     try {
