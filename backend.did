@@ -47,6 +47,43 @@ type Moon = record {
   moon_type : text;
   coordinates : record { float64; float64 };
 };
+type Phenomenon = variant {
+  DarkMatterHalo;
+  Supernova;
+  SupernovaRemnant;
+  XRayEmission;
+  XRayBinary;
+  Kilonova;
+  Nova;
+  StellarCollisions;
+  DarkMatterAnnihilation;
+  MassLoss;
+  CosmicJets;
+  XRaySources;
+  PulsarWindNebula;
+  StellarWinds;
+  BlueStragglers;
+  Microquasar;
+  GravitationalWaves;
+  BlackHoleAccretionDisk;
+  Nebula;
+  InfraredEmission;
+  ProtostellarDisk;
+  GammaRayEmission;
+  RelativisticJets;
+  GammaRaySources;
+  GammaRayBurst;
+  AccretionDisk;
+  StarburstActivity;
+  ThermalPulses;
+  InfraredSources;
+  Hypernova;
+  MagnetarFlares;
+  PolarJets;
+  CoronalMassEjections;
+  CataclysmicVariable;
+  StellarFlares;
+};
 type Planet = record {
   id : nat64;
   moons : vec Moon;
@@ -88,58 +125,128 @@ type Result_3 = variant { Ok : record { bool; opt Player; text }; Err : text };
 type Result_4 = variant { Ok : bool; Err : text };
 type ShipType = variant { Scout };
 type Star = record {
-  id : nat64;
+  id : principal;
   age : float64;
+  star_type : StarType;
+  phenomena : vec Phenomenon;
   luminosity : float64;
   temperature : float64;
   mass : float64;
-  name : text;
-  spectral_type : text;
-  stellar_class : text;
+  spectral_class : text;
+  life_stage : text;
+  rotation_speed : float64;
+  metallicity : float64;
+  parent_cluster_id : principal;
   is_binary : bool;
-  companion_star_id : opt nat64;
+  companion_star_id : opt principal;
   radius : float64;
-  coordinates : record { float64; float64 };
+  coords : vec float64;
 };
 type StarClusterType = variant {
   GlobularCluster : record {
     age : float64;
+    phenomena : vec text;
     star_types : vec text;
-    size : nat64;
+    max_stars : nat64;
+    min_stars : nat64;
   };
-  Asterism : record { star_types : vec text; size : nat64 };
-  DarkMatterStar : record { mass : float64; description : text };
-  QuasiStar : record { mass : float64; description : text };
-  OpenCluster : record { star_types : vec text; size : nat64 };
-  EmbeddedCluster : record {
+  Asterism : record {
+    phenomena : vec text;
     star_types : vec text;
-    size : nat64;
+    max_stars : nat64;
+    min_stars : nat64;
+  };
+  DarkMatterStar : record {
+    phenomena : vec text;
+    mass : float64;
+    description : text;
+  };
+  QuasiStar : record {
+    phenomena : vec text;
+    mass : float64;
+    description : text;
+  };
+  OpenCluster : record {
+    phenomena : vec text;
+    star_types : vec text;
+    max_stars : nat64;
+    min_stars : nat64;
+  };
+  EmbeddedCluster : record {
+    phenomena : vec text;
+    star_types : vec text;
+    max_stars : nat64;
+    min_stars : nat64;
     embedded_in_nebula : bool;
   };
   StellarAssociation : record {
+    phenomena : vec text;
     subtype : AssociationType;
     star_types : vec text;
-    size : nat64;
+    max_stars : nat64;
+    min_stars : nat64;
   };
-  CompactOpenCluster : record { star_types : vec text; size : nat64 };
-  SuperStarCluster : record { star_types : vec text; size : nat64 };
-  GalacticNucleus : record {
+  CompactOpenCluster : record {
+    phenomena : vec text;
     star_types : vec text;
-    size : nat64;
+    max_stars : nat64;
+    min_stars : nat64;
+  };
+  SuperStarCluster : record {
+    phenomena : vec text;
+    star_types : vec text;
+    max_stars : nat64;
+    min_stars : nat64;
+  };
+  GalacticNucleus : record {
+    phenomena : vec text;
+    star_types : vec text;
+    max_stars : nat64;
+    min_stars : nat64;
     has_supermassive_black_hole : bool;
   };
-  StellarComplex : record { size : nat64; regions : vec StarClusterType };
-  YoungMassiveCluster : record { star_types : vec text; size : nat64 };
+  StellarComplex : record {
+    phenomena : vec text;
+    regions : vec StarClusterType;
+    max_stars : nat64;
+    min_stars : nat64;
+  };
+  YoungMassiveCluster : record {
+    phenomena : vec text;
+    star_types : vec text;
+    max_stars : nat64;
+    min_stars : nat64;
+  };
 };
-type StarSystem = record {
-  id : nat64;
-  moons : vec Moon;
-  asteroid_belts : vec AsteroidBelt;
-  name : text;
-  last_updated : nat64;
-  planets : vec Planet;
-  stars : vec Star;
-  coordinates : record { int64; int64 };
+type StarType = variant {
+  A;
+  B;
+  F;
+  G;
+  K;
+  M;
+  O;
+  Protostar;
+  QuarkStar;
+  BrownDwarf;
+  GiantMolecularCloud;
+  HerbigAeBe;
+  WhiteDwarf;
+  TTauri;
+  WolfRayet;
+  Subgiant;
+  LuminousBlueVariable;
+  BlackDwarf;
+  Pulsar;
+  PreonStar;
+  Magnetar;
+  BosonStar;
+  BokGlobule;
+  HorizontalBranch;
+  RedGiant;
+  NeutronStar;
+  AsymptoticGiant;
+  StellarMassBlackHole;
 };
 service : {
   add_asteroid_belt_to_system : (nat64, AsteroidBelt) -> (Result);
@@ -169,11 +276,9 @@ service : {
       record { float64; float64 },
     ) -> (vec Entity) query;
   find_nearby_entities : (float64, float64, float64) -> (vec Entity) query;
-  generate_star_system : (text) -> (nat64);
   get_entity_by_id : (principal) -> (opt Entity) query;
   get_planet : (nat64) -> (opt Planet) query;
   get_player : () -> (opt Player) query;
-  get_star_system : (nat64) -> (opt StarSystem) query;
   get_tick_count : () -> (nat64) query;
   move_building : (nat64, record { float64; float64 }) -> (Result);
   move_fleet : (nat64, record { float64; float64 }) -> (Result);
@@ -191,7 +296,6 @@ service : {
   remove_fleet : (nat64) -> (Result);
   remove_moon_from_planet : (nat64, nat64, nat64) -> (Result);
   remove_planet_from_system : (nat64, nat64) -> (Result);
-  remove_star_from_system : (nat64, nat64) -> (Result);
   remove_star_system : (nat64) -> (Result);
   signup : (text, nat32, opt text, text) -> (Result_3);
   spawn_entities_auto_batched_backup : (nat64) -> (Result_2);

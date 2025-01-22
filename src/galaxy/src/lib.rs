@@ -9,8 +9,142 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 use serde_json::json;
 
 
+fn generate_star_cluster(
+    cluster_type: &StarClusterType,
+    cluster_coords: (f64, f64),
+) -> Result<Vec<Principal>, String> {
+    // Determine the number of stars
+    let star_count = match cluster_type {
+        StarClusterType::Asterism { min_stars, max_stars, .. }
+        | StarClusterType::StellarAssociation { min_stars, max_stars, .. }
+        | StarClusterType::CompactOpenCluster { min_stars, max_stars, .. }
+        | StarClusterType::OpenCluster { min_stars, max_stars, .. }
+        | StarClusterType::EmbeddedCluster { min_stars, max_stars, .. }
+        | StarClusterType::SuperStarCluster { min_stars, max_stars, .. }
+        | StarClusterType::YoungMassiveCluster { min_stars, max_stars, .. }
+        | StarClusterType::GlobularCluster { min_stars, max_stars, .. }
+        | StarClusterType::StellarComplex { min_stars, max_stars, .. }
+        | StarClusterType::GalacticNucleus { min_stars, max_stars, .. } => {
+            generate_random_in_range_f64(*min_stars as f64, *max_stars as f64).round() as usize
+        }
+        _ => 0, // Hypothetical cases do not generate stars
+    };
+
+    // Get star types for the cluster
+    let star_types = match cluster_type {
+        StarClusterType::Asterism { star_types, .. }
+        | StarClusterType::StellarAssociation { star_types, .. }
+        | StarClusterType::CompactOpenCluster { star_types, .. }
+        | StarClusterType::OpenCluster { star_types, .. }
+        | StarClusterType::EmbeddedCluster { star_types, .. }
+        | StarClusterType::SuperStarCluster { star_types, .. }
+        | StarClusterType::YoungMassiveCluster { star_types, .. }
+        | StarClusterType::GlobularCluster { star_types, .. }
+        | StarClusterType::GalacticNucleus { star_types, .. } => star_types,
+        _ => &vec![],
+    };
+
+    let mut stars = Vec::new();
+    for _ in 0..star_count {
+        let radius = generate_random_in_range_f64(0.0, 10.0); // Scatter stars within 10 units
+        let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
+        let star_coords = (
+            cluster_coords.0 + radius * angle.cos(),
+            cluster_coords.1 + radius * angle.sin(),
+        );
+
+        // Choose a random star type using time-based randomness
+        let star_type = if !star_types.is_empty() {
+            let current_time_nanos = ic_cdk::api::time() as u64;
+            let index = (current_time_nanos % star_types.len() as u64) as usize;
+            star_types[index].clone()
+        } else {
+            "Unknown".to_string()
+        };
+        
+        let metadata = serde_json::json!({
+            "type": "Star",
+            "spectral_class": star_type,
+            "coords": { "x": star_coords.0, "y": star_coords.1 },
+            "luminosity": generate_random_in_range_f64(0.1, 10.0), // Example range
+            "temperature": generate_random_in_range_f64(3000.0, 30000.0), // Example range in Kelvin
+        })
+        .to_string();
+
+        if let Ok(star_id) = add_entity(
+            EntityType::Star,
+            LocationParams::Proximity {
+                center: [star_coords.0, star_coords.1],
+                max_distance: 0.0,
+            },
+            Some(metadata),
+            None,
+        ) {
+            stars.push(star_id);
+        }
+    }
+    Ok(stars)
+}
+
 
 //New 
+
+    #[update]
+    fn add_entity(
+        entity_type: EntityType,
+        location_params: LocationParams,
+        metadata: Option<String>,
+        star_cluster_type: Option<StarClusterType>,
+    ) -> Result<Principal, String> {
+        let caller = ic_cdk::caller();
+
+        if entity_type == EntityType::StarCluster && star_cluster_type.is_none() {
+            return Err("StarCluster requires a valid StarClusterType".to_string());
+        }
+
+        let unique_id = ENTITY_COUNTER.with(|counter| {
+            let mut counter = counter.borrow_mut();
+            *counter += 1;
+            *counter
+        });
+
+        let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
+
+        let coords = match location_params {
+            LocationParams::Ring { inner_radius, outer_radius } => {
+                let radius = generate_random_in_range_f64(inner_radius, outer_radius);
+                let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
+                (radius * angle.cos(), radius * angle.sin())
+            }
+            _ => return Err("Unsupported location type".to_string()),
+        };
+
+        if let Some(cluster_type) = &star_cluster_type {
+            if entity_type == EntityType::StarCluster {
+                let stars = generate_star_cluster(cluster_type, coords)?;
+                ic_cdk::println!(
+                    "Generated {} stars for cluster {:?}",
+                    stars.len(),
+                    cluster_type
+                );
+            }
+        }
+
+        let entity = Entity {
+            id: unique_principal,
+            owner_id: caller,
+            entity_type,
+            coords: [coords.0, coords.1],
+            metadata: metadata.unwrap_or_default(),
+        };
+
+        GALAXY_TREE.with(|tree| {
+            tree.borrow_mut().insert(entity);
+        });
+
+        Ok(unique_principal)
+    }
+
 
     #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
     struct Entity {
@@ -45,6 +179,225 @@ use serde_json::json;
         Random { x_range: [f64; 2], y_range: [f64; 2] },
     }
 
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    enum StarClusterType {
+        // Small Clusters
+        Asterism {
+            min_stars: usize, // Minimum number of stars, typically < 10
+            max_stars: usize, // Maximum number of stars, typically < 10
+            star_types: Vec<String>, // Example: ["G", "K", "M"]
+            phenomena: Vec<String>, // Example: ["Nebula", "Black Hole"]
+        },
+        StellarAssociation {
+            min_stars: usize, // Minimum number of stars, typically dozens to a few hundred
+            max_stars: usize, // Maximum number of stars, typically dozens to a few hundred
+            star_types: Vec<String>, // Example: ["O", "B", "A"]
+            subtype: AssociationType, // OB, T, or R
+            phenomena: Vec<String>, // Example: ["Stellar Winds", "Protostars"]
+        },
+        CompactOpenCluster {
+            min_stars: usize, // Minimum number of stars, typically < 200
+            max_stars: usize, // Maximum number of stars, typically < 200
+            star_types: Vec<String>, // Example: ["A", "F", "G"]
+            phenomena: Vec<String>, // Example: ["Binary Stars", "Planetary Systems"]
+        },
+    
+        // Medium Clusters
+        OpenCluster {
+            min_stars: usize, // Minimum number of stars, typically hundreds to thousands
+            max_stars: usize, // Maximum number of stars, typically hundreds to thousands
+            star_types: Vec<String>, // Example: ["A", "F", "G", "K"]
+            phenomena: Vec<String>, // Example: ["Stellar Collisions", "Supernovae"]
+        },
+        EmbeddedCluster {
+            min_stars: usize, // Minimum number of stars, typically hundreds to thousands
+            max_stars: usize, // Maximum number of stars, typically hundreds to thousands
+            star_types: Vec<String>, // Example: ["O", "B", "T Tauri"]
+            embedded_in_nebula: bool, // Indicates if it's still in a molecular cloud
+            phenomena: Vec<String>, // Example: ["Protostellar Disks", "Infrared Emission"]
+        },
+    
+        // Large Clusters
+        SuperStarCluster {
+            min_stars: usize, // Minimum number of stars, typically 10,000+
+            max_stars: usize, // Maximum number of stars, typically 10,000+
+            star_types: Vec<String>, // Example: ["O", "B", "A", "F"]
+            phenomena: Vec<String>, // Example: ["Starburst Activity", "Gamma-Ray Bursts"]
+        },
+        YoungMassiveCluster {
+            min_stars: usize, // Minimum number of stars, typically 10,000+
+            max_stars: usize, // Maximum number of stars, typically 10,000+
+            star_types: Vec<String>, // Example: ["O", "B", "A", "F"]
+            phenomena: Vec<String>, // Example: ["Massive Star Formation", "Supernova Remnants"]
+        },
+        GlobularCluster {
+            min_stars: usize, // Minimum number of stars, typically 10,000 to millions
+            max_stars: usize, // Maximum number of stars, typically 10,000 to millions
+            star_types: Vec<String>, // Example: ["G", "K", "M"]
+            age: f64, // Age in billions of years
+            phenomena: Vec<String>, // Example: ["X-Ray Sources", "Blue Stragglers"]
+        },
+    
+        // Larger Structures
+        StellarComplex {
+            min_stars: usize, // Minimum number of stars (can span multiple clusters)
+            max_stars: usize, // Maximum number of stars (can span multiple clusters)
+            regions: Vec<StarClusterType>, // Nested smaller clusters
+            phenomena: Vec<String>, // Example: ["Star Formation Regions", "Superbubbles"]
+        },
+        GalacticNucleus {
+            min_stars: usize, // Minimum number of stars, millions to billions
+            max_stars: usize, // Maximum number of stars, millions to billions
+            star_types: Vec<String>, // Example: ["O", "B", "A", "F"]
+            has_supermassive_black_hole: bool, // True if a black hole exists at the center
+            phenomena: Vec<String>, // Example: ["Active Galactic Nucleus", "Relativistic Jets"]
+        },
+    
+        // Hypothetical Cases
+        QuasiStar {
+            mass: f64, // In solar masses
+            description: String, // Details about its hypothetical properties
+            phenomena: Vec<String>, // Example: ["Primordial Black Hole", "Super-Eddington Luminosity"]
+        },
+        DarkMatterStar {
+            mass: f64, // In solar masses
+            description: String, // Details about its hypothetical properties
+            phenomena: Vec<String>, // Example: ["Dark Matter Annihilation", "Neutrino Emission"]
+        },
+    }
+
+    #[derive(CandidType, Deserialize, Debug, Clone, PartialEq)]
+    enum AssociationType {
+        OB, // Contains O and B-type stars
+        T,  // Contains T Tauri stars
+        R,  // Associated with reflection nebulae
+    }
+
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    enum StarType {
+        // Star Formation & Early Stages
+        GiantMolecularCloud, // Vast, cold, dense clouds of gas and dust, star birthplaces
+        BokGlobule,          // Small, dark clouds of gas and dust, precursors to protostars
+        Protostar,           // Young stars still accumulating mass, no nuclear fusion yet
+        TTauri,              // Low-mass pre-main sequence stars with strong stellar winds
+        HerbigAeBe,          // Intermediate-mass pre-main sequence stars with disks
+    
+        // Main Sequence Stars
+        O, // Blue, very hot, massive stars with short lifespans
+        B, // Blue-white stars, hot and luminous
+        A, // White stars, hotter and more massive than the Sun
+        F, // Yellow-white stars, intermediate temperature
+        G, // Yellow stars like the Sun, stable hydrogen fusion
+        K, // Orange stars, cooler and less massive than the Sun
+        M, // Red dwarfs, small, cool, and very long-lived
+    
+        // Evolved Stars
+        Subgiant,            // Transitioning from main sequence to red giant
+        RedGiant,            // Large, cooler stars in late life stages
+        HorizontalBranch,    // Stars fusing helium in their cores after the red giant phase
+        AsymptoticGiant,     // Late-stage stars with helium and hydrogen burning shells
+        WolfRayet,           // Hot, massive stars losing outer hydrogen layers
+        LuminousBlueVariable, // Unstable massive stars with episodic mass loss
+    
+        // Stellar Remnants
+        WhiteDwarf,          // Dense remnants of low- to intermediate-mass stars
+        BlackDwarf,          // Hypothetical, completely cooled white dwarfs
+        NeutronStar,         // Extremely dense remnants of massive stars
+        Pulsar,              // Rotating neutron stars emitting electromagnetic beams
+        Magnetar,            // Neutron stars with extremely powerful magnetic fields
+        StellarMassBlackHole, // Formed from the collapse of very massive stars
+    
+        // Other Objects
+        BrownDwarf,          // "Failed stars," insufficient mass for hydrogen fusion
+        QuarkStar,           // Hypothetical compact stars made of quark matter
+        PreonStar,           // Hypothetical stars made of subcomponents of quarks
+        BosonStar,           // Hypothetical stars made of bosonic particles
+    }
+    
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    enum Phenomenon {
+        // Stellar Formation Phenomena
+        Nebula,              // Glowing clouds of gas and dust
+        ProtostellarDisk,    // Disk of material around a forming star
+        StellarWinds,        // Flows of gas ejected by stars
+        StarburstActivity,   // Regions of intense star formation
+    
+        // Explosive Events
+        Supernova,           // Explosive death of a massive star
+        Hypernova,           // Extremely energetic supernovae
+        Kilonova,            // Merger of neutron stars or neutron star-black hole systems
+        Nova,                // Thermonuclear explosions on white dwarf surfaces
+        GammaRayBurst,       // The most energetic electromagnetic events in the universe
+    
+        // Supernova Remnants
+        SupernovaRemnant,    // Expanding gas and dust clouds after a supernova
+        PulsarWindNebula,    // Nebula powered by pulsar winds
+    
+        // Compact Object Phenomena
+        XRayBinary,          // Compact object accreting matter from a companion star
+        Microquasar,         // Black holes or neutron stars with relativistic jets
+        CataclysmicVariable, // Binary systems with recurring outbursts
+    
+        // High-Energy Phenomena
+        RelativisticJets,    // High-energy particle jets from compact objects
+        GammaRayEmission,    // Intense gamma-ray emission
+        XRayEmission,        // High-energy X-ray radiation
+        InfraredEmission,    // Infrared radiation from star-forming regions
+    
+        // Stellar Instabilities
+        StellarCollisions,   // Collisions between stars
+        MassLoss,            // Ejection of material from stars
+        ThermalPulses,       // Episodic energy surges in evolved stars
+    
+        // Exotic Phenomena
+        BlueStragglers,      // Stars that appear younger and hotter in clusters
+        XRaySources,         // Compact objects emitting X-rays
+        InfraredSources,     // Bright objects in infrared wavelengths
+        GammaRaySources,     // Sources of gamma-ray emission
+        DarkMatterAnnihilation, // Hypothetical emission from dark matter interactions
+    
+        // Gravitational Events
+        GravitationalWaves,  // Ripples in spacetime from massive object mergers
+        BlackHoleAccretionDisk, // Bright, energetic disk around black holes
+    
+        // Accretion Phenomena
+        AccretionDisk,       // Disk of material falling into compact objects
+        PolarJets,           // Jets of material ejected along magnetic poles
+    
+        // Unique Stellar Phenomena
+        MagnetarFlares,      // Energetic bursts from magnetars
+        StellarFlares,       // Sudden brightness increases in stars
+        CoronalMassEjections, // Large plasma ejections from stellar coronae
+    
+        // Cosmological Phenomena
+        DarkMatterHalo,      // Hypothetical halo of dark matter around galaxies
+        CosmicJets,          // Large-scale particle jets in the universe
+    }  
+
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    struct Star {
+        id: Principal,                // Unique ID for the star
+        star_type: StarType,          // Enum for the type of star
+        coords: [f64; 2],             // Coordinates within the cluster
+        temperature: f64,             // Star surface temperature (Kelvin)
+        luminosity: f64,              // Relative to the Sun (1.0 = Sun's luminosity)
+        mass: f64,                    // Relative to the Sun (1.0 = Sun's mass)
+        radius: f64,                  // Relative to the Sun (1.0 = Sun's radius)
+        age: f64,                     // Age of the star in billions of years
+        parent_cluster_id: Principal, // ID of the parent star cluster
+        metallicity: f64,             // Fraction of the star's mass made up of elements heavier than helium
+        rotation_speed: f64,          // Surface rotation speed (km/s)
+        phenomena: Vec<Phenomenon>,   // Associated phenomena (from the Phenomenon enum)
+        is_binary: bool,              // Whether the star is part of a binary system
+        companion_star_id: Option<Principal>, // ID of the companion star if it's part of a binary system
+        spectral_class: String,       // Detailed spectral classification (e.g., "G2V")
+        life_stage: String,           // Life stage description (e.g., "Main Sequence", "Red Giant")
+        hp: u64,                    // Hitpoints (required)
+        shield: Option<u64>,        // Optional shield for defense
+        can_move: Option<bool>,     // Optional flag for movement capability
+        can_attack: Option<bool>,   // Optional flag for attack capability
+    }
+    
 
     // #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
     // struct Zone {
@@ -92,99 +445,7 @@ use serde_json::json;
             dx * dx + dy * dy
         }
     }
-    impl EntityType {
-        fn as_str(&self) -> &'static str {
-            match self {
-                EntityType::StarCluster => "StarCluster",
-                EntityType::PlanetarySystem => "PlanetarySystem",
-                EntityType::Star => "Star",
-                EntityType::Planet => "Planet",
-                EntityType::AsteroidBelt => "AsteroidBelt",
-                EntityType::Moon => "Moon",
-                EntityType::Nebulae => "Nebulae",
-                EntityType::BlackHole => "BlackHole",
-                EntityType::AncientRuins => "AncientRuins",
-                EntityType::Artifacts => "Artifacts",
-                EntityType::Fleet => "Fleet",
-                EntityType::Unit => "Unit",
-                EntityType::Building => "Building",
-            }
-        }
-    }
-    
-    #[update]
-    fn add_entity(
-        entity_type: EntityType,
-        location_params: LocationParams, // Strongly-typed location parameters
-        metadata: Option<String>,
-    ) -> Result<Principal, String> {
-        let caller = ic_cdk::caller();
-    
-        // Generate a unique entity ID
-        let unique_id = ENTITY_COUNTER.with(|counter| {
-            let mut counter = counter.borrow_mut();
-            *counter += 1;
-            *counter
-        });
-    
-        let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
-    
-        // Determine coordinates based on location parameters
-        let coords = match location_params {
-            LocationParams::Ring {
-                inner_radius,
-                outer_radius,
-            } => {
-                let radius = generate_random_in_range_f64(inner_radius, outer_radius);
-                let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
-                (radius * angle.cos(), radius * angle.sin())
-            }
-            LocationParams::Proximity {
-                center,
-                max_distance,
-            } => {
-                let radius = generate_random_in_range_f64(0.0, max_distance);
-                let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
-                (center[0] + radius * angle.cos(), center[1] + radius * angle.sin())
-            }
-            LocationParams::Random { x_range, y_range } => {
-                let x = generate_random_in_range_f64(x_range[0], x_range[1]);
-                let y = generate_random_in_range_f64(y_range[0], y_range[1]);
-                (x, y)
-            }
-        };
-    
-        // Create metadata, if provided
-        let final_metadata = metadata.unwrap_or_else(|| {
-            json!({
-                "id": unique_principal.to_text(),
-                "type": entity_type.as_str(),
-                "coords": { "x": coords.0, "y": coords.1 },
-                "owner": caller.to_text(),
-                "timestamp": time()
-            })
-            .to_string()
-        });
-    
-        // Validate metadata
-        validate_metadata(&final_metadata)?;
-    
-        // Create and insert the entity
-        let entity = Entity {
-            id: unique_principal,
-            owner_id: caller,
-            entity_type,
-            coords: [coords.0, coords.1],
-            metadata: final_metadata,
-        };
-    
-        GALAXY_TREE.with(|tree| {
-            tree.borrow_mut().insert(entity);
-        });
-    
-        Ok(unique_principal)
-    }
-    
+   
     
     #[update]
     fn remove_entity(id: Principal) -> Result<(), String> {
@@ -843,7 +1104,7 @@ use serde_json::json;
             }
         };
     
-        // Spawn a StarCluster in ring mode
+        // Create a StarCluster of type Asterism in ring mode
         add_entity(
             EntityType::StarCluster,
             LocationParams::Ring {
@@ -851,6 +1112,12 @@ use serde_json::json;
                 outer_radius: 1100.0,
             },
             None, // No additional metadata
+            Some(StarClusterType::Asterism {
+                min_stars: 5, // Minimum number of stars
+                max_stars: 10, // Maximum number of stars
+                star_types: vec!["G".to_string(), "K".to_string(), "M".to_string()], // Example star types
+                phenomena: vec!["Nebula".to_string(), "Black Hole".to_string()], // Example phenomena
+            }),
         )
         .map_err(|e| format!("Failed to create StarCluster: {}", e))?;
     
@@ -895,6 +1162,7 @@ use serde_json::json;
             ),
         ))
     }
+    
 
     // Mock functions for referral code handling
     async fn assign_unassigned_referral_code(_player_id: Principal, code: String) -> ReferralCodeResult {
@@ -1201,22 +1469,6 @@ use serde_json::json;
     }
 
     #[derive(CandidType, Deserialize, Clone, Debug)]
-    struct Star {
-        id: u64,
-        name: String,
-        coordinates: (f64, f64),
-        spectral_type: String, // e.g., "G2V" for a Sun-like star
-        luminosity: f64,       // Relative to the Sun (1.0 = Sun's luminosity)
-        mass: f64,             // Relative to the Sun (1.0 = Sun's mass)
-        radius: f64,           // Relative to the Sun (1.0 = Sun's radius)
-        age: f64,              // Age in billions of years
-        temperature: f64,      // Surface temperature in Kelvin
-        stellar_class: String, // e.g., "Main Sequence", "Giant", "Supergiant"
-        is_binary: bool,       // Whether the star is part of a binary system
-        companion_star_id: Option<u64>, // ID of the companion star (if binary)
-    }
-
-    #[derive(CandidType, Deserialize, Clone, Debug)]
     struct Moon {
         id: u64,
         name: String,
@@ -1463,24 +1715,24 @@ use serde_json::json;
         })
     }
 
-    // Function to remove a star from a star system
-    #[update]
-    fn remove_star_from_system(system_id: u64, star_id: u64) -> Result<(), String> {
-        STAR_SYSTEMS.with(|systems| {
-        let mut systems = systems.borrow_mut();
-        if let Some(system) = systems.get_mut(&system_id) {
-            if let Some(index) = system.stars.iter().position(|s| s.id == star_id) {
-        system.stars.remove(index);
-        system.last_updated = time();
-        Ok(())
-            } else {
-        Err("Star not found in this star system.".to_string())
-            }
-        } else {
-            Err("Star system not found.".to_string())
-        }
-            })
-    }
+    // // Function to remove a star from a star system
+    // #[update]
+    // fn remove_star_from_system(system_id: u64, star_id: u64) -> Result<(), String> {
+    //     STAR_SYSTEMS.with(|systems| {
+    //     let mut systems = systems.borrow_mut();
+    //     if let Some(system) = systems.get_mut(&system_id) {
+    //         if let Some(index) = system.stars.iter().position(|s| s.id == star_id) {
+    //     system.stars.remove(index);
+    //     system.last_updated = time();
+    //     Ok(())
+    //         } else {
+    //     Err("Star not found in this star system.".to_string())
+    //         }
+    //     } else {
+    //         Err("Star system not found.".to_string())
+    //     }
+    //         })
+    // }
 
     // Function to remove a planet from a star system
     #[update]
@@ -1575,134 +1827,7 @@ use serde_json::json;
         })
     }
 
-    fn generate_random_star(system_coordinates: (i64, i64)) -> Star {
-        let spectral_types = vec!["O", "B", "A", "F", "G", "K", "M"];
-        let stellar_classes = vec!["Main Sequence", "Giant", "Supergiant"];
 
-        let random_spectral_index = generate_random_in_range(0, (spectral_types.len() - 1) as u64) as usize;
-        let random_class_index = generate_random_in_range(0, (stellar_classes.len() - 1) as u64) as usize;
-
-        let spectral_type = format!(
-            "{}{}",
-            spectral_types[random_spectral_index],
-            generate_random_in_range(0, 9) // Subclass (e.g., G2)
-        );
-
-        let luminosity = match spectral_types[random_spectral_index] {
-            "O" => generate_random_in_range_f64(10_000.0, 1_000_000.0),
-            "B" => generate_random_in_range_f64(100.0, 10_000.0),
-            "A" => generate_random_in_range_f64(10.0, 100.0),
-            "F" => generate_random_in_range_f64(2.0, 10.0),
-            "G" => generate_random_in_range_f64(0.6, 1.5), // Sun-like
-            "K" => generate_random_in_range_f64(0.1, 0.6),
-            "M" => generate_random_in_range_f64(0.01, 0.1),
-            _ => 1.0,
-        };
-
-        let mass = match spectral_types[random_spectral_index] {
-            "O" => generate_random_in_range_f64(15.0, 100.0),
-            "B" => generate_random_in_range_f64(2.0, 15.0),
-            "A" => generate_random_in_range_f64(1.5, 2.0),
-            "F" => generate_random_in_range_f64(1.1, 1.5),
-            "G" => generate_random_in_range_f64(0.8, 1.1), // Sun-like
-            "K" => generate_random_in_range_f64(0.5, 0.8),
-            "M" => generate_random_in_range_f64(0.1, 0.5),
-            _ => 1.0,
-        };
-
-        let radius = match spectral_types[random_spectral_index] {
-            "O" => generate_random_in_range_f64(10.0, 20.0),
-            "B" => generate_random_in_range_f64(3.0, 10.0),
-            "A" => generate_random_in_range_f64(1.5, 3.0),
-            "F" => generate_random_in_range_f64(1.2, 1.5),
-            "G" => generate_random_in_range_f64(0.9, 1.2), // Sun-like
-            "K" => generate_random_in_range_f64(0.7, 0.9),
-            "M" => generate_random_in_range_f64(0.3, 0.7),
-            _ => 1.0,
-        };
-
-        let age = generate_random_in_range_f64(1.0, 13.0); // Age in billions of years
-        let temperature = match spectral_types[random_spectral_index] {
-            "O" => generate_random_in_range_f64(30_000.0, 50_000.0),
-            "B" => generate_random_in_range_f64(10_000.0, 30_000.0),
-            "A" => generate_random_in_range_f64(7_500.0, 10_000.0),
-            "F" => generate_random_in_range_f64(6_000.0, 7_500.0),
-            "G" => generate_random_in_range_f64(5_000.0, 6_000.0), // Sun-like
-            "K" => generate_random_in_range_f64(3_500.0, 5_000.0),
-            "M" => generate_random_in_range_f64(2_500.0, 3_500.0),
-            _ => 5_778.0, // Sun's temperature
-        };
-
-        let system_x = system_coordinates.0 as f64;
-        let system_y = system_coordinates.1 as f64;
-
-        Star {
-            id: NEXT_STAR_ID.with(|id| {
-                let mut id = id.borrow_mut();
-                let current_id = *id;
-                *id += 1;
-                current_id
-            }),
-            name: format!("Star {}", generate_random_in_range(1, 1000)),
-            coordinates: (
-                system_x + generate_random_in_range_f64(-0.5, 0.5),
-                system_y + generate_random_in_range_f64(-0.5, 0.5),
-            ),
-            spectral_type,
-            luminosity,
-            mass,
-            radius,
-            age,
-            temperature,
-            stellar_class: stellar_classes[random_class_index].to_string(),
-            is_binary: generate_random_in_range(0, 1) == 1, // 50% chance of being binary
-            companion_star_id: None, // Will be set if binary
-        }
-    }
-
-    #[update]
-    fn generate_star_system(name: String) -> u64 {
-        let system_id = NEXT_STAR_SYSTEM_ID.with(|id| {
-            let mut id = id.borrow_mut();
-            let current_id = *id;
-            *id += 1;
-            current_id
-        });
-    
-        let system_coordinates = (
-            generate_random_in_range(0, 1000) as i64,
-            generate_random_in_range(0, 1000) as i64,
-        );
-    
-        let stars = vec![generate_random_star(system_coordinates)];
-    
-        let new_system = StarSystem {
-            id: system_id,
-            name,
-            stars,
-            planets: vec![],
-            moons: vec![],
-            asteroid_belts: vec![],
-            coordinates: system_coordinates,
-            last_updated: time(),
-        };
-    
-        STAR_SYSTEMS.with(|systems| {
-            systems.borrow_mut().insert(system_id, new_system);
-        });
-    
-        // Add to STAR_SYSTEM_TREE
-        STAR_SYSTEM_TREE.with(|tree| {
-            tree.borrow_mut().insert(StarSystemPoint::new(system_id, system_coordinates));
-        });
-    
-        system_id
-    }
-    
-    #[query]
-    fn get_star_system(system_id: u64) -> Option<StarSystem> {
-    STAR_SYSTEMS.with(|systems| systems.borrow().get(&system_id).cloned())
-    }
 
 // --
 // --- Planet Management ---
