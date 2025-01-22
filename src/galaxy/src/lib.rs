@@ -38,6 +38,14 @@ use serde_json::json;
         Building,
     }
 
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    enum LocationParams {
+        Ring { inner_radius: f64, outer_radius: f64 },
+        Proximity { center: [f64; 2], max_distance: f64 },
+        Random { x_range: [f64; 2], y_range: [f64; 2] },
+    }
+
+
     // #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
     // struct Zone {
     //     id: u32,
@@ -105,83 +113,47 @@ use serde_json::json;
     }
     
     #[update]
-    fn new_spawn_entity(
-        entity_type: EntityType,
-        location_type: String,
-        location_params: String, // JSON string to match serde_json::Value
-        metadata: Option<String>,
-    ) -> Result<Principal, String> {
-        // Parse location_params from JSON string
-        let location_params: serde_json::Value = serde_json::from_str(&location_params)
-            .map_err(|e| format!("Invalid location_params JSON: {}", e))?;
-
-        // Call the `add_entity` function
-        add_entity(entity_type, location_type, location_params, metadata)
-    }
-
     fn add_entity(
         entity_type: EntityType,
-        location_type: String, // "ring", "proximity", or "random"
-        location_params: serde_json::Value, // Parameters for location type (e.g., inner/outer radius)
+        location_params: LocationParams, // Strongly-typed location parameters
         metadata: Option<String>,
     ) -> Result<Principal, String> {
         let caller = ic_cdk::caller();
-
+    
         // Generate a unique entity ID
         let unique_id = ENTITY_COUNTER.with(|counter| {
             let mut counter = counter.borrow_mut();
             *counter += 1;
             *counter
         });
-
+    
         let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
-
-        // Determine coordinates based on location type
-        let coords = match location_type.as_str() {
-            "ring" => {
-                let inner_radius = location_params["inner_radius"]
-                    .as_f64()
-                    .ok_or("Missing or invalid inner_radius")?;
-                let outer_radius = location_params["outer_radius"]
-                    .as_f64()
-                    .ok_or("Missing or invalid outer_radius")?;
+    
+        // Determine coordinates based on location parameters
+        let coords = match location_params {
+            LocationParams::Ring {
+                inner_radius,
+                outer_radius,
+            } => {
                 let radius = generate_random_in_range_f64(inner_radius, outer_radius);
                 let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
                 (radius * angle.cos(), radius * angle.sin())
             }
-            "proximity" => {
-                let center_x = location_params["center"]["x"]
-                    .as_f64()
-                    .ok_or("Missing or invalid center x-coordinate")?;
-                let center_y = location_params["center"]["y"]
-                    .as_f64()
-                    .ok_or("Missing or invalid center y-coordinate")?;
-                let max_distance = location_params["max_distance"]
-                    .as_f64()
-                    .ok_or("Missing or invalid max_distance")?;
+            LocationParams::Proximity {
+                center,
+                max_distance,
+            } => {
                 let radius = generate_random_in_range_f64(0.0, max_distance);
-                let angle = generate_random_in_range_f64(0.0, 0.00001 * std::f64::consts::PI);
-                (center_x + radius * angle.cos(), center_y + radius * angle.sin())
+                let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
+                (center[0] + radius * angle.cos(), center[1] + radius * angle.sin())
             }
-            "random" => {
-                let x_range = location_params["x_range"]
-                    .as_array()
-                    .ok_or("Missing or invalid x_range")?;
-                let y_range = location_params["y_range"]
-                    .as_array()
-                    .ok_or("Missing or invalid y_range")?;
-                let x_min = x_range[0].as_f64().ok_or("Invalid x_range[0]")?;
-                let x_max = x_range[1].as_f64().ok_or("Invalid x_range[1]")?;
-                let y_min = y_range[0].as_f64().ok_or("Invalid y_range[0]")?;
-                let y_max = y_range[1].as_f64().ok_or("Invalid y_range[1]")?;
-                (
-                    generate_random_in_range_f64(x_min, x_max),
-                    generate_random_in_range_f64(y_min, y_max),
-                )
+            LocationParams::Random { x_range, y_range } => {
+                let x = generate_random_in_range_f64(x_range[0], x_range[1]);
+                let y = generate_random_in_range_f64(y_range[0], y_range[1]);
+                (x, y)
             }
-            _ => return Err("Invalid location type".to_string()),
         };
-
+    
         // Create metadata, if provided
         let final_metadata = metadata.unwrap_or_else(|| {
             json!({
@@ -193,10 +165,10 @@ use serde_json::json;
             })
             .to_string()
         });
-
+    
         // Validate metadata
         validate_metadata(&final_metadata)?;
-
+    
         // Create and insert the entity
         let entity = Entity {
             id: unique_principal,
@@ -205,13 +177,14 @@ use serde_json::json;
             coords: [coords.0, coords.1],
             metadata: final_metadata,
         };
-
+    
         GALAXY_TREE.with(|tree| {
             tree.borrow_mut().insert(entity);
         });
-
+    
         Ok(unique_principal)
     }
+    
     
     #[update]
     fn remove_entity(id: Principal) -> Result<(), String> {
@@ -820,68 +793,6 @@ use serde_json::json;
         Ok(created)
     }
 
-    async fn spawn_entities_with_metadata(
-        total: u64,
-        entity_type: EntityType,
-        metadata_template: serde_json::Value, // A JSON template for metadata
-        owner_id: Principal,
-    ) -> Result<u64, String> {
-        // Define the boundaries for the spawning area (same as in spawn_entities_auto_batched_backup)
-        let inner_radius = 1000.0; // Inner radius of the spawning area
-        let outer_radius = 1001.0; // Outer radius of the spawning area
-    
-        let max_batch_size = 50; // Maximum entities per batch
-        let mut created = 0; // Counter for created entities
-    
-        while created < total {
-            let batch_size = std::cmp::min(max_batch_size, total - created);
-    
-            GALAXY_TREE.with(|tree| {
-                let mut tree_mut = tree.borrow_mut();
-    
-                for _ in 0..batch_size {
-                    // Generate random radius and angle using the utility functions (same as in spawn_entities_auto_batched_backup)
-                    let radius = generate_random_in_range_f64(inner_radius, outer_radius);
-                    let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
-    
-                    // Convert polar coordinates to Cartesian (x, y) (same as in spawn_entities_auto_batched_backup)
-                    let x = radius * angle.cos();
-                    let y = radius * angle.sin();
-    
-                    // Generate a unique entity ID
-                    let unique_id = ENTITY_COUNTER.with(|counter| {
-                        let mut counter = counter.borrow_mut();
-                        *counter += 1;
-                        *counter
-                    });
-    
-                    let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
-    
-                    // Customize metadata based on the template
-                    let mut metadata = metadata_template.clone();
-                    metadata["id"] = json!(unique_principal.to_text());
-                    metadata["coords"] = json!({ "x": x, "y": y });
-                    metadata["owner"] = json!(owner_id.to_text());
-                    metadata["timestamp"] = json!(time());
-    
-                    // Create the entity
-                    let entity = Entity {
-                        id: unique_principal,
-                        owner_id,
-                        entity_type: entity_type.clone(),
-                        coords: [x, y],
-                        metadata: metadata.to_string(),
-                    };
-    
-                    tree_mut.insert(entity);
-                    created += 1;
-                }
-            });
-        }
-    
-        Ok(created)
-    }
-
 //--
 // --- Player Management ---
 
@@ -932,27 +843,16 @@ use serde_json::json;
             }
         };
     
-        // Call spawn_entities_with_metadata with the correct data
-        let total_entities = 1; // Number of entities to spawn
-        let entity_type = EntityType::Star; // Type of entity to spawn
-        let metadata_template = json!({
-            "type": "Star",
-            "category": "Stellar Object",
-            "subcategory": "Star",
-            "size": "N/A",
-            "parent": "None",
-            "resources": [], // Default resources
-        });
-    
-        // Spawn the entities (without zone_id)
-        spawn_entities_with_metadata(
-            total_entities,
-            entity_type,
-            metadata_template,
-            caller,
+        // Spawn a StarCluster in ring mode
+        add_entity(
+            EntityType::StarCluster,
+            LocationParams::Ring {
+                inner_radius: 1000.0,
+                outer_radius: 1100.0,
+            },
+            None, // No additional metadata
         )
-        .await
-        .map_err(|e| format!("Failed to create star: {}", e))?;
+        .map_err(|e| format!("Failed to create StarCluster: {}", e))?;
     
         // Register the player
         let new_player = Player {
@@ -995,7 +895,6 @@ use serde_json::json;
             ),
         ))
     }
-
 
     // Mock functions for referral code handling
     async fn assign_unassigned_referral_code(_player_id: Principal, code: String) -> ReferralCodeResult {
@@ -1395,46 +1294,46 @@ use serde_json::json;
     fn start_tick() {
         // Check if a timer is already running to prevent duplicates
         TICK_TIMER.with(|timer| {
-    if timer.borrow().is_none() {
-        let timer_id = set_timer_interval(std::time::Duration::from_secs(1), || {
-    // Call your batch operations here
-    ic_cdk::println!("Tick: Updating resources and processing operations...");
-    perform_tick_operations();
-        });
-        *timer.borrow_mut() = Some(timer_id);
-        ic_cdk::println!("Tick timer started.");
-    } else {
-        ic_cdk::println!("Tick timer is already running.");
-    }
-        });
+        if timer.borrow().is_none() {
+            let timer_id = set_timer_interval(std::time::Duration::from_secs(1), || {
+        // Call your batch operations here
+        ic_cdk::println!("Tick: Updating resources and processing operations...");
+        perform_tick_operations();
+            });
+            *timer.borrow_mut() = Some(timer_id);
+            ic_cdk::println!("Tick timer started.");
+        } else {
+            ic_cdk::println!("Tick timer is already running.");
+        }
+            });
     }
 
     #[update]
     fn stop_tick() {
         TICK_TIMER.with(|timer| {
-    if let Some(timer_id) = timer.borrow_mut().take() {
-        ic_cdk_timers::clear_timer(timer_id);
-        ic_cdk::println!("Tick timer stopped.");
-    } else {
-        ic_cdk::println!("No tick timer is currently running.");
-    }
-        });
+        if let Some(timer_id) = timer.borrow_mut().take() {
+            ic_cdk_timers::clear_timer(timer_id);
+            ic_cdk::println!("Tick timer stopped.");
+        } else {
+            ic_cdk::println!("No tick timer is currently running.");
+        }
+            });
     }
 
     fn perform_tick_operations() {
         TICK_COUNT.with(|count| {
-    let mut count = count.borrow_mut();
-    *count += 1;
-        });
+        let mut count = count.borrow_mut();
+        *count += 1;
+            });
 
-        PLANETS.with(|planets| {
-    let mut planets = planets.borrow_mut();
-    for planet in planets.values_mut() {
-        if let Some(resource) = planet.resources.iter_mut().find(|r| r.resource_type == ResourceType::Energy) {
-    resource.amount += 10;
+            PLANETS.with(|planets| {
+        let mut planets = planets.borrow_mut();
+        for planet in planets.values_mut() {
+            if let Some(resource) = planet.resources.iter_mut().find(|r| r.resource_type == ResourceType::Energy) {
+        resource.amount += 10;
+            }
         }
-    }
-        });
+            });
 
         ic_cdk::println!("Tick operations performed.");
     }
@@ -1461,6 +1360,7 @@ use serde_json::json;
 
 
 
+// --
 // --- Star System Management ---
     // Update function to add a star to a star system
     #[update]
@@ -1804,6 +1704,7 @@ use serde_json::json;
     STAR_SYSTEMS.with(|systems| systems.borrow().get(&system_id).cloned())
     }
 
+// --
 // --- Planet Management ---
 
     // fn calculate_habitability(
@@ -2031,6 +1932,7 @@ use serde_json::json;
     }
 
 
+// --
 // --- Resource Management ---
 
     fn deplete_resource(planet: &mut Planet, resource_type: ResourceType, amount: u64) -> Result<(), String> {
@@ -2046,6 +1948,7 @@ use serde_json::json;
             }
     }
 
+// --
 // --- Building Management ---
 
     #[update]
@@ -2221,6 +2124,7 @@ use serde_json::json;
     }
 
 
+//--
 // --- Fleet and Ship Management ---
 
     #[update]
@@ -2403,6 +2307,8 @@ use serde_json::json;
     }
 
 
+
+//--
 // Tests
     #[cfg(test)]
     mod tests { use super::*;
@@ -2420,5 +2326,6 @@ use serde_json::json;
 
    
     }
+// --
 // Export the Candid interface
 ic_cdk::export_candid!();

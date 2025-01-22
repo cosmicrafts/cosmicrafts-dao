@@ -1,3 +1,4 @@
+type AssociationType = variant { R; T; OB };
 type AsteroidBelt = record { id : nat64; name : text };
 type Building = record {
   id : nat64;
@@ -28,6 +29,11 @@ type EntityType = variant {
   Artifacts;
 };
 type FriendDetails = record { id : principal; username : text; avatar : nat32 };
+type LocationParams = variant {
+  Proximity : record { center : vec float64; max_distance : float64 };
+  Ring : record { outer_radius : float64; inner_radius : float64 };
+  Random : record { x_range : vec float64; y_range : vec float64 };
+};
 type Moon = record {
   id : nat64;
   is_rogue : bool;
@@ -76,8 +82,8 @@ type Player = record {
 type Resource = record { resource_type : ResourceType; amount : nat64 };
 type ResourceType = variant { Energy; Matter };
 type Result = variant { Ok; Err : text };
-type Result_1 = variant { Ok : nat64; Err : text };
-type Result_2 = variant { Ok : principal; Err : text };
+type Result_1 = variant { Ok : principal; Err : text };
+type Result_2 = variant { Ok : nat64; Err : text };
 type Result_3 = variant { Ok : record { bool; opt Player; text }; Err : text };
 type Result_4 = variant { Ok : bool; Err : text };
 type ShipType = variant { Scout };
@@ -95,6 +101,36 @@ type Star = record {
   radius : float64;
   coordinates : record { float64; float64 };
 };
+type StarClusterType = variant {
+  GlobularCluster : record {
+    age : float64;
+    star_types : vec text;
+    size : nat64;
+  };
+  Asterism : record { star_types : vec text; size : nat64 };
+  DarkMatterStar : record { mass : float64; description : text };
+  QuasiStar : record { mass : float64; description : text };
+  OpenCluster : record { star_types : vec text; size : nat64 };
+  EmbeddedCluster : record {
+    star_types : vec text;
+    size : nat64;
+    embedded_in_nebula : bool;
+  };
+  StellarAssociation : record {
+    subtype : AssociationType;
+    star_types : vec text;
+    size : nat64;
+  };
+  CompactOpenCluster : record { star_types : vec text; size : nat64 };
+  SuperStarCluster : record { star_types : vec text; size : nat64 };
+  GalacticNucleus : record {
+    star_types : vec text;
+    size : nat64;
+    has_supermassive_black_hole : bool;
+  };
+  StellarComplex : record { size : nat64; regions : vec StarClusterType };
+  YoungMassiveCluster : record { star_types : vec text; size : nat64 };
+};
 type StarSystem = record {
   id : nat64;
   moons : vec Moon;
@@ -107,16 +143,19 @@ type StarSystem = record {
 };
 service : {
   add_asteroid_belt_to_system : (nat64, AsteroidBelt) -> (Result);
+  add_entity : (EntityType, LocationParams, opt text, opt StarClusterType) -> (
+      Result_1,
+    );
   add_moon_to_planet : (nat64, nat64, Moon) -> (Result);
   add_planet_to_system : (nat64, Planet) -> (Result);
   add_star_to_system : (nat64, Star) -> (Result);
   benchmark_spawn : (nat64) -> (nat64);
-  build_ship : (nat64, ShipType) -> (Result_1);
-  build_structure : (nat64, BuildingType) -> (Result_1);
+  build_ship : (nat64, ShipType) -> (Result_2);
+  build_structure : (nat64, BuildingType) -> (Result_2);
   claim_planet : (nat64) -> (Result);
   create_asteroid_belt : (principal, principal) -> (Result);
   create_black_hole : (record { float64; float64 }, principal) -> (Result);
-  create_fleet : () -> (Result_1);
+  create_fleet : () -> (Result_2);
   create_moon : (principal, principal) -> (Result);
   create_nebula : (record { float64; float64 }, principal) -> (Result);
   create_planet : (principal, principal, record { float64; float64 }) -> (
@@ -142,7 +181,6 @@ service : {
   nearby_fleets : (float64, float64, float64) -> (vec nat64) query;
   nearby_planets : (float64, float64, float64) -> (vec nat64) query;
   nearest_star_system : (float64, float64) -> (opt nat64) query;
-  new_spawn_entity : (EntityType, text, text, opt text) -> (Result_2);
   planets_in_area : (
       record { float64; float64 },
       record { float64; float64 },
@@ -156,8 +194,8 @@ service : {
   remove_star_from_system : (nat64, nat64) -> (Result);
   remove_star_system : (nat64) -> (Result);
   signup : (text, nat32, opt text, text) -> (Result_3);
-  spawn_entities_auto_batched_backup : (nat64) -> (Result_1);
-  spawn_entity : (nat64) -> (Result_1);
+  spawn_entities_auto_batched_backup : (nat64) -> (Result_2);
+  spawn_entity : (nat64) -> (Result_2);
   start_tick : () -> ();
   stop_tick : () -> ();
   transfer_entity : (principal, principal) -> (Result);
