@@ -18,4 +18,4 @@ run_command() {
 
 # Clean up old data (if applicable)
 log "Cleaning up old data"
-run_command "cargo build --target wasm32-unknown-unknown --release -p galaxy && candid-extractor target/wasm32-unknown-unknown/release/galaxy.wasm > galaxy.did && dfx canister uninstall-code backend --ic && dfx canister install backend --ic"
+run_command "cargo build --target wasm32-unknown-unknown --release -p backend && candid-extractor target/wasm32-unknown-unknown/release/backend.wasm > backend.did && dfx canister uninstall-code backend --ic && dfx canister install backend --ic"

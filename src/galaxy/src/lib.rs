@@ -13,19 +13,29 @@ use serde_json::json;
 //New 
 
     #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    struct Entity {
+        id: Principal,
+        owner_id: Principal,
+        entity_type: EntityType,
+        coords: [f64; 2],
+        metadata: String, // JSON
+    }
+
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
     enum EntityType {
-        Planet,
-        Fleet,
-        Unit,
-        Building,
-        StarSystem,
+        StarCluster,
+        PlanetarySystem,
         Star,
+        Planet,
         AsteroidBelt,
         Moon,
         Nebulae, // Areas with unique resources or visual effects.
         BlackHole, // High-risk, high-reward areas.
         AncientRuins, //  Provide lore, unique technologies, or resources.
         Artifacts,
+        Fleet,
+        Unit,
+        Building,
     }
 
     // #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
@@ -58,6 +68,291 @@ use serde_json::json;
     //         },
     //     ]
     // }
+
+    impl RTreeObject for Entity {
+        type Envelope = AABB<[f64; 2]>;
+
+        fn envelope(&self) -> Self::Envelope {
+            AABB::from_point(self.coords)
+        }
+    }
+
+    impl PointDistance for Entity {
+        fn distance_2(&self, point: &[f64; 2]) -> f64 {
+            let dx = self.coords[0] - point[0];
+            let dy = self.coords[1] - point[1];
+            dx * dx + dy * dy
+        }
+    }
+    impl EntityType {
+        fn as_str(&self) -> &'static str {
+            match self {
+                EntityType::StarCluster => "StarCluster",
+                EntityType::PlanetarySystem => "PlanetarySystem",
+                EntityType::Star => "Star",
+                EntityType::Planet => "Planet",
+                EntityType::AsteroidBelt => "AsteroidBelt",
+                EntityType::Moon => "Moon",
+                EntityType::Nebulae => "Nebulae",
+                EntityType::BlackHole => "BlackHole",
+                EntityType::AncientRuins => "AncientRuins",
+                EntityType::Artifacts => "Artifacts",
+                EntityType::Fleet => "Fleet",
+                EntityType::Unit => "Unit",
+                EntityType::Building => "Building",
+            }
+        }
+    }
+    
+    #[update]
+    fn new_spawn_entity(
+        entity_type: EntityType,
+        location_type: String,
+        location_params: String, // JSON string to match serde_json::Value
+        metadata: Option<String>,
+    ) -> Result<Principal, String> {
+        // Parse location_params from JSON string
+        let location_params: serde_json::Value = serde_json::from_str(&location_params)
+            .map_err(|e| format!("Invalid location_params JSON: {}", e))?;
+
+        // Call the `add_entity` function
+        add_entity(entity_type, location_type, location_params, metadata)
+    }
+
+    fn add_entity(
+        entity_type: EntityType,
+        location_type: String, // "ring", "proximity", or "random"
+        location_params: serde_json::Value, // Parameters for location type (e.g., inner/outer radius)
+        metadata: Option<String>,
+    ) -> Result<Principal, String> {
+        let caller = ic_cdk::caller();
+
+        // Generate a unique entity ID
+        let unique_id = ENTITY_COUNTER.with(|counter| {
+            let mut counter = counter.borrow_mut();
+            *counter += 1;
+            *counter
+        });
+
+        let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
+
+        // Determine coordinates based on location type
+        let coords = match location_type.as_str() {
+            "ring" => {
+                let inner_radius = location_params["inner_radius"]
+                    .as_f64()
+                    .ok_or("Missing or invalid inner_radius")?;
+                let outer_radius = location_params["outer_radius"]
+                    .as_f64()
+                    .ok_or("Missing or invalid outer_radius")?;
+                let radius = generate_random_in_range_f64(inner_radius, outer_radius);
+                let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
+                (radius * angle.cos(), radius * angle.sin())
+            }
+            "proximity" => {
+                let center_x = location_params["center"]["x"]
+                    .as_f64()
+                    .ok_or("Missing or invalid center x-coordinate")?;
+                let center_y = location_params["center"]["y"]
+                    .as_f64()
+                    .ok_or("Missing or invalid center y-coordinate")?;
+                let max_distance = location_params["max_distance"]
+                    .as_f64()
+                    .ok_or("Missing or invalid max_distance")?;
+                let radius = generate_random_in_range_f64(0.0, max_distance);
+                let angle = generate_random_in_range_f64(0.0, 0.00001 * std::f64::consts::PI);
+                (center_x + radius * angle.cos(), center_y + radius * angle.sin())
+            }
+            "random" => {
+                let x_range = location_params["x_range"]
+                    .as_array()
+                    .ok_or("Missing or invalid x_range")?;
+                let y_range = location_params["y_range"]
+                    .as_array()
+                    .ok_or("Missing or invalid y_range")?;
+                let x_min = x_range[0].as_f64().ok_or("Invalid x_range[0]")?;
+                let x_max = x_range[1].as_f64().ok_or("Invalid x_range[1]")?;
+                let y_min = y_range[0].as_f64().ok_or("Invalid y_range[0]")?;
+                let y_max = y_range[1].as_f64().ok_or("Invalid y_range[1]")?;
+                (
+                    generate_random_in_range_f64(x_min, x_max),
+                    generate_random_in_range_f64(y_min, y_max),
+                )
+            }
+            _ => return Err("Invalid location type".to_string()),
+        };
+
+        // Create metadata, if provided
+        let final_metadata = metadata.unwrap_or_else(|| {
+            json!({
+                "id": unique_principal.to_text(),
+                "type": entity_type.as_str(),
+                "coords": { "x": coords.0, "y": coords.1 },
+                "owner": caller.to_text(),
+                "timestamp": time()
+            })
+            .to_string()
+        });
+
+        // Validate metadata
+        validate_metadata(&final_metadata)?;
+
+        // Create and insert the entity
+        let entity = Entity {
+            id: unique_principal,
+            owner_id: caller,
+            entity_type,
+            coords: [coords.0, coords.1],
+            metadata: final_metadata,
+        };
+
+        GALAXY_TREE.with(|tree| {
+            tree.borrow_mut().insert(entity);
+        });
+
+        Ok(unique_principal)
+    }
+    
+    #[update]
+    fn remove_entity(id: Principal) -> Result<(), String> {
+        GALAXY_TREE.with(|tree| {
+            let mut tree = tree.borrow_mut();
+
+            // Find the entity to remove
+            let entity_to_remove = tree.iter().find(|e| e.id == id).cloned();
+
+            if let Some(entity) = entity_to_remove {
+                tree.remove(&entity); // Remove entity
+                Ok(())
+            } else {
+                Err("Entity not found.".to_string())
+            }
+        })
+    }
+
+    #[update]
+    fn update_entity(
+        id: Principal,
+        new_coords: (f64, f64),
+        new_metadata: Option<String>,
+    ) -> Result<(), String> {
+        GALAXY_TREE.with(|tree| {
+            // Clone the entity (if found) to end the immutable borrow early
+            let entity_to_update = tree.borrow().iter().find(|e| e.id == id).cloned();
+
+            if let Some(entity) = entity_to_update {
+                let mut tree_mut = tree.borrow_mut();
+                tree_mut.remove(&entity);
+
+                let updated_entity = Entity {
+                    id,
+                    owner_id: entity.owner_id, // Preserve the current owner
+                    entity_type: entity.entity_type,
+                    coords: [new_coords.0, new_coords.1],
+                    metadata: new_metadata.unwrap_or(entity.metadata),
+                };
+
+                tree_mut.insert(updated_entity);
+                Ok(())
+            } else {
+                Err("Entity not found.".to_string())
+            }
+        })
+    }
+
+    #[update]
+    fn transfer_entity(entity_id: Principal, new_owner: Principal) -> Result<(), String> {
+        GALAXY_TREE.with(|tree| {
+            let mut tree_mut = tree.borrow_mut();
+            let entity_to_transfer = tree_mut.iter().find(|e| e.id == entity_id).cloned();
+    
+            if let Some(mut entity) = entity_to_transfer {
+                // Update ownership
+                entity.owner_id = new_owner;
+    
+                // Remove the old entity and insert the updated one
+                tree_mut.remove(&entity);
+                tree_mut.insert(entity);
+    
+                Ok(())
+            } else {
+                Err("Entity not found.".to_string())
+            }
+        })
+    }
+
+    //Queries
+    #[query]
+    fn find_nearby_entities(x: f64, y: f64, radius: f64) -> Vec<Entity> {
+        GALAXY_TREE.with(|tree| {
+            tree.borrow()
+                .locate_within_distance([x, y], radius.powi(2))
+                .cloned()
+                .collect()
+        })
+    }
+
+    #[query]
+    fn find_entities_in_area(lower: (f64, f64), upper: (f64, f64)) -> Vec<Entity> {
+        GALAXY_TREE.with(|tree| {
+            tree.borrow()
+                .locate_in_envelope_intersecting(&AABB::from_corners([lower.0, lower.1], [upper.0, upper.1]))
+                .cloned()
+                .collect()
+        })
+    }
+
+    #[query]
+    fn export_entities() -> Vec<(f64, f64, String)> {
+        GALAXY_TREE.with(|tree| {
+            tree.borrow()
+                .iter()
+                .map(|entity| {
+                    ic_cdk::println!(
+                        "Entity ID: {}, Type: {:?}, Metadata: {}",
+                        entity.id,
+                        entity.entity_type,
+                        entity.metadata
+                    );
+                    (entity.coords[0], entity.coords[1], entity.metadata.clone())
+                })
+                .collect()
+        })
+    }
+
+    #[query]
+    fn validate_entity_distances(parent_id: Principal, max_distance: f64) -> Result<bool, String> {
+        let parent_entity = get_entity_by_id(parent_id).ok_or("Parent entity not found")?;
+        let nearby_entities = find_nearby_entities(parent_entity.coords[0], parent_entity.coords[1], max_distance);
+
+        for entity in nearby_entities {
+            let distance = ((parent_entity.coords[0] - entity.coords[0]).powi(2)
+                + (parent_entity.coords[1] - entity.coords[1]).powi(2))
+            .sqrt();
+            if distance > max_distance {
+                return Err(format!(
+                    "Entity {} exceeds max distance of {} from parent {}",
+                    entity.id, max_distance, parent_id
+                ));
+            }
+        }
+
+        Ok(true)
+    }
+    
+    #[query]
+    fn get_entity_by_id(entity_id: Principal) -> Option<Entity> {
+        GALAXY_TREE.with(|tree| {
+            tree.borrow().iter().find(|e| e.id == entity_id).cloned()
+        })
+    }
+
+        
+    // Helpers
+    fn map_to_range(random_value: u64, min: f64, max: f64) -> f64 {
+        let fraction = (random_value as f64) / (u64::MAX as f64); // Normalize to [0, 1]
+        min + fraction * (max - min) // Scale to [min, max]
+    }
 
     fn validate_metadata(metadata: &str) -> Result<(), String> {
         serde_json::from_str::<serde_json::Value>(metadata)
@@ -140,7 +435,6 @@ use serde_json::json;
         (category, subcategory, size)
     }
 
-
     #[update]
     async fn create_planetary_system(
         star_id: Principal, // Parent star's ID
@@ -165,6 +459,7 @@ use serde_json::json;
         Ok(())
     }
     
+    //Updates
     #[update]
     async fn create_star(star_coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
         let star_type = random_star_type();
@@ -325,6 +620,8 @@ use serde_json::json;
         Ok(())
     }
 
+    
+
     #[update]
     async fn create_black_hole(coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
         let black_hole_id = generate_principal();
@@ -375,177 +672,6 @@ use serde_json::json;
 
         GALAXY_TREE.with(|tree| tree.borrow_mut().insert(nebula));
         Ok(())
-    }
-
-    #[query]
-    fn validate_entity_distances(parent_id: Principal, max_distance: f64) -> Result<bool, String> {
-        let parent_entity = get_entity_by_id(parent_id).ok_or("Parent entity not found")?;
-        let nearby_entities = find_nearby_entities(parent_entity.coords[0], parent_entity.coords[1], max_distance);
-
-        for entity in nearby_entities {
-            let distance = ((parent_entity.coords[0] - entity.coords[0]).powi(2)
-                + (parent_entity.coords[1] - entity.coords[1]).powi(2))
-            .sqrt();
-            if distance > max_distance {
-                return Err(format!(
-                    "Entity {} exceeds max distance of {} from parent {}",
-                    entity.id, max_distance, parent_id
-                ));
-            }
-        }
-
-        Ok(true)
-    }
-    
-    #[query]
-    fn get_entity_by_id(entity_id: Principal) -> Option<Entity> {
-        GALAXY_TREE.with(|tree| {
-            tree.borrow().iter().find(|e| e.id == entity_id).cloned()
-        })
-    }
-
-    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
-    struct Entity {
-        id: Principal,
-        owner_id: Principal,
-        entity_type: EntityType,
-        coords: [f64; 2],
-        metadata: String, // JSON
-    }
-
-    impl RTreeObject for Entity {
-        type Envelope = AABB<[f64; 2]>;
-
-        fn envelope(&self) -> Self::Envelope {
-            AABB::from_point(self.coords)
-        }
-    }
-
-    impl PointDistance for Entity {
-        fn distance_2(&self, point: &[f64; 2]) -> f64 {
-            let dx = self.coords[0] - point[0];
-            let dy = self.coords[1] - point[1];
-            dx * dx + dy * dy
-        }
-    }
-
-    #[update]
-    fn add_entity(
-        entity_type: EntityType,
-        coords: (f64, f64),
-        metadata: String,
-        ) -> Principal {
-        let caller = ic_cdk::caller(); // Get the Principal of the caller
-    
-        let unique_id = ENTITY_COUNTER.with(|counter| {
-            let mut counter = counter.borrow_mut();
-            *counter += 1;
-            *counter
-        });
-    
-        let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
-    
-        let entity = Entity {
-            id: unique_principal,
-            owner_id: caller, // Set the owner to the caller
-            entity_type,
-            coords: [coords.0, coords.1],
-            metadata,
-        };
-    
-        GALAXY_TREE.with(|tree| {
-            tree.borrow_mut().insert(entity);
-        });
-    
-        unique_principal // Return the unique Principal as the entity ID
-    }
-    
-    #[update]
-    fn remove_entity(id: Principal) -> Result<(), String> {
-        GALAXY_TREE.with(|tree| {
-            let mut tree = tree.borrow_mut();
-
-            // Find the entity to remove
-            let entity_to_remove = tree.iter().find(|e| e.id == id).cloned();
-
-            if let Some(entity) = entity_to_remove {
-                tree.remove(&entity); // Remove entity
-                Ok(())
-            } else {
-                Err("Entity not found.".to_string())
-            }
-        })
-    }
-
-    #[update]
-    fn update_entity(
-        id: Principal,
-        new_coords: (f64, f64),
-        new_metadata: Option<String>,
-    ) -> Result<(), String> {
-        GALAXY_TREE.with(|tree| {
-            // Clone the entity (if found) to end the immutable borrow early
-            let entity_to_update = tree.borrow().iter().find(|e| e.id == id).cloned();
-
-            if let Some(entity) = entity_to_update {
-                let mut tree_mut = tree.borrow_mut();
-                tree_mut.remove(&entity);
-
-                let updated_entity = Entity {
-                    id,
-                    owner_id: entity.owner_id, // Preserve the current owner
-                    entity_type: entity.entity_type,
-                    coords: [new_coords.0, new_coords.1],
-                    metadata: new_metadata.unwrap_or(entity.metadata),
-                };
-
-                tree_mut.insert(updated_entity);
-                Ok(())
-            } else {
-                Err("Entity not found.".to_string())
-            }
-        })
-    }
-
-    #[update]
-    fn transfer_entity(entity_id: Principal, new_owner: Principal) -> Result<(), String> {
-        GALAXY_TREE.with(|tree| {
-            let mut tree_mut = tree.borrow_mut();
-            let entity_to_transfer = tree_mut.iter().find(|e| e.id == entity_id).cloned();
-    
-            if let Some(mut entity) = entity_to_transfer {
-                // Update ownership
-                entity.owner_id = new_owner;
-    
-                // Remove the old entity and insert the updated one
-                tree_mut.remove(&entity);
-                tree_mut.insert(entity);
-    
-                Ok(())
-            } else {
-                Err("Entity not found.".to_string())
-            }
-        })
-    }
-
-    #[query]
-    fn find_nearby_entities(x: f64, y: f64, radius: f64) -> Vec<Entity> {
-        GALAXY_TREE.with(|tree| {
-            tree.borrow()
-                .locate_within_distance([x, y], radius.powi(2))
-                .cloned()
-                .collect()
-        })
-    }
-
-    #[query]
-    fn find_entities_in_area(lower: (f64, f64), upper: (f64, f64)) -> Vec<Entity> {
-        GALAXY_TREE.with(|tree| {
-            tree.borrow()
-                .locate_in_envelope_intersecting(&AABB::from_corners([lower.0, lower.1], [upper.0, upper.1]))
-                .cloned()
-                .collect()
-        })
     }
 
     #[update]
@@ -702,7 +828,7 @@ use serde_json::json;
     ) -> Result<u64, String> {
         // Define the boundaries for the spawning area (same as in spawn_entities_auto_batched_backup)
         let inner_radius = 1000.0; // Inner radius of the spawning area
-        let outer_radius = 1010.0; // Outer radius of the spawning area
+        let outer_radius = 1001.0; // Outer radius of the spawning area
     
         let max_batch_size = 50; // Maximum entities per batch
         let mut created = 0; // Counter for created entities
@@ -755,34 +881,8 @@ use serde_json::json;
     
         Ok(created)
     }
-    
-    
-    // Helper function to map a u64 random value to a floating-point range
-    fn map_to_range(random_value: u64, min: f64, max: f64) -> f64 {
-        let fraction = (random_value as f64) / (u64::MAX as f64); // Normalize to [0, 1]
-        min + fraction * (max - min) // Scale to [min, max]
-    }
 
-    #[query]
-    fn export_entities() -> Vec<(f64, f64, String)> {
-        GALAXY_TREE.with(|tree| {
-            tree.borrow()
-                .iter()
-                .map(|entity| {
-                    ic_cdk::println!(
-                        "Entity ID: {}, Type: {:?}, Metadata: {}",
-                        entity.id,
-                        entity.entity_type,
-                        entity.metadata
-                    );
-                    (entity.coords[0], entity.coords[1], entity.metadata.clone())
-                })
-                .collect()
-        })
-    }
-
-
-
+//--
 // --- Player Management ---
 
     #[query]
