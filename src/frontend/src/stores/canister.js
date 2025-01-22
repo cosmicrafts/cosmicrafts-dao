@@ -11,7 +11,7 @@ let canisters = {
 let currentIdentity = null; // Track the current identity
 let initializing = false; // Track initialization state
 
-const MANUAL_ENV = 'ic'; // 'ic' for IC, 'local' for local development
+const MANUAL_ENV = 'local'; // 'ic' for IC, 'local' for local development
 const isLocal = MANUAL_ENV === 'local';
 const host = isLocal ? 'http://127.0.0.1:4943' : 'https://ic0.app';
 

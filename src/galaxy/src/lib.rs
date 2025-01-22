@@ -6,293 +6,11 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use ic_cdk_timers::{TimerId, set_timer_interval};
 use rstar::{RTree, RTreeObject, AABB, PointDistance};
+use serde_json::json;
 
 
 
-#[query]
-fn validate_entity_distances(parent_id: Principal, max_distance: f64) -> Result<bool, String> {
-    let parent_entity = get_entity_by_id(parent_id).ok_or("Parent entity not found")?;
-    let nearby_entities = find_nearby_entities(parent_entity.coords[0], parent_entity.coords[1], max_distance);
-
-    for entity in nearby_entities {
-        let distance = ((parent_entity.coords[0] - entity.coords[0]).powi(2)
-            + (parent_entity.coords[1] - entity.coords[1]).powi(2))
-        .sqrt();
-        if distance > max_distance {
-            return Err(format!(
-                "Entity {} exceeds max distance of {} from parent {}",
-                entity.id, max_distance, parent_id
-            ));
-        }
-    }
-
-    Ok(true)
-}
-
-
-fn randomize_within_cluster(cluster_coords: (f64, f64)) -> (f64, f64) {
-    let offset_x = generate_random_in_range_f64(-0.00000001, 0.00000001);
-    let offset_y = generate_random_in_range_f64(-0.00000001, 0.00000001);
-    (cluster_coords.0 + offset_x, cluster_coords.1 + offset_y)
-}
-
-fn random_orbit(parent_coords: (f64, f64), min_radius: f64, max_radius: f64) -> (f64, f64) {
-    let radius = generate_random_in_range_f64(min_radius, max_radius);
-    let angle = generate_random_in_range_f64(-0.0000000000000001, 0.0000000000000001 * std::f64::consts::PI);
-    (
-        parent_coords.0 + radius * angle.cos(),
-        parent_coords.1 + radius * angle.sin(),
-    )
-}
-
-
-fn random_star_type() -> String {
-    // Spectral types and classes
-    let spectral_types = vec!["O", "B", "A", "F", "G", "K", "M"];
-    let stellar_classes = vec!["Main Sequence", "Giant", "Supergiant"];
-
-    // Randomly select spectral type and subclass
-    let spectral_index = generate_random_in_range(0, (spectral_types.len() - 1) as u64) as usize;
-    let subclass = generate_random_in_range(0, 9); // Subclass (e.g., G2)
-    let spectral_type = format!("{}{}", spectral_types[spectral_index], subclass);
-
-    // Randomly select stellar class
-    let class_index = generate_random_in_range(0, (stellar_classes.len() - 1) as u64) as usize;
-    let stellar_class = stellar_classes[class_index].to_string();
-
-    // Combine type and class
-    format!("{} {}", spectral_type, stellar_class)
-}
-
-fn random_planet_type() -> (String, String, String) {
-    // Categories and subcategories
-    let categories = vec![
-        "Terrestrial", "Gas Giant", "Ice World", "Desert", "Ocean World",
-        "Lava World", "Dwarf Planet", "Super-Earth", "Carbon Planet",
-        "Iron Planet", "Chthonian Planet", "Rogue",
-    ];
-    let subcategories = vec![
-        vec!["Rocky", "Volcanic", "Metallic"],
-        vec!["Jovian", "Neptunian"],
-        vec!["Frozen", "Cryovolcanic"],
-        vec!["Arid", "Sandy"],
-        vec!["Water", "Ice-Covered"],
-        vec!["Molten", "Magma"],
-        vec!["Rocky", "Icy"],
-        vec!["Rocky", "Oceanic"],
-        vec!["Graphite", "Diamond"],
-        vec!["Metallic", "Magnetic"],
-        vec!["Core Remnant", "Evaporated"],
-        vec!["Wandering"],
-    ];
-
-    // Randomly select a category and subcategory
-    let category_index = generate_random_in_range(0, (categories.len() - 1) as u64) as usize;
-    let category = categories[category_index].to_string();
-    let subcategory = subcategories[category_index][generate_random_in_range(
-        0,
-        (subcategories[category_index].len() - 1) as u64,
-    ) as usize]
-        .to_string();
-
-    // Randomly assign planet size
-    let sizes = vec!["Tiny", "Small", "Medium", "Large", "Huge"];
-    let size = sizes[generate_random_in_range(0, (sizes.len() - 1) as u64) as usize].to_string();
-
-    (category, subcategory, size)
-}
-
-fn generate_unique_id() -> Principal {
-    let unique_id = ENTITY_COUNTER.with(|counter| {
-        let mut counter = counter.borrow_mut();
-        *counter += 1;
-        *counter
-    });
-
-    Principal::self_authenticating(&unique_id.to_be_bytes())
-}
-
-//New New..
-
-    #[update]
-    async fn create_open_star_cluster(cluster_coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
-        let num_stars = generate_random_in_range(5, 15); // Randomize number of stars (5-15)
-        let cluster_radius = 100.0; // Define cluster radius for stars
-
-        for _ in 0..num_stars {
-            let star_coords = random_orbit(cluster_coords, 10.0, cluster_radius);
-            create_star(star_coords, owner_id).await?;
-        }
-
-        Ok(())
-    }
-
-
-
-
-    #[update]
-    async fn create_star_cluster(cluster_coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
-        let num_stars = generate_random_in_range(3, 10); // Randomize the number of stars (3-10)
-        for _ in 0..num_stars {
-            let star_coords = randomize_within_cluster(cluster_coords); // Offset star within cluster
-            create_star(star_coords, owner_id).await?;
-        }
-        Ok(())
-    }
-
-
-    #[update]
-    async fn create_star(star_coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
-        // Generate random star type
-        let star_type = random_star_type();
-        
-        // Generate unique ID for the star
-        let star_id = generate_unique_id();
-
-        // Create the star entity
-        let star = Entity {
-            id: star_id,
-            owner_id,
-            entity_type: EntityType::Star,
-            coords: [star_coords.0, star_coords.1],
-            metadata: format!("Type: {}", star_type),
-        };
-
-        // Insert star into GALAXY_TREE
-        GALAXY_TREE.with(|tree| {
-            tree.borrow_mut().insert(star);
-        });
-
-        // Create planetary system around the star
-        create_planetary_system(star_coords, star_id, owner_id).await?;
-        Ok(())
-    }
-
-
-
-    #[update]
-    async fn create_planetary_system(
-        star_coords: (f64, f64),
-        star_id: Principal,
-        owner_id: Principal,
-        ) -> Result<(), String> {
-        let num_planets = generate_random_in_range(1, 8); // Randomize number of planets (1-8)
-        let num_asteroid_belts = generate_random_in_range(1, 3); // Randomize asteroid belts (1-3)
-        let planet_orbit_range = (50.0, 200.0); // Define range for planets
-        let belt_orbit_range = (200.0, 300.0); // Define range for asteroid belts
-
-        for _ in 0..num_planets {
-            let planet_coords = random_orbit(star_coords, planet_orbit_range.0, planet_orbit_range.1);
-            create_planet(planet_coords, star_id, owner_id).await?;
-        }
-
-        for _ in 0..num_asteroid_belts {
-            let belt_coords = random_orbit(star_coords, belt_orbit_range.0, belt_orbit_range.1);
-            create_asteroid_belt(belt_coords, star_id, owner_id).await?;
-        }
-
-        Ok(())
-    }
-
-
-    #[update]
-    async fn create_asteroid_belt(
-        belt_coords: (f64, f64),
-        star_id: Principal, // Use this to tie the belt to its parent star
-        owner_id: Principal,
-    ) -> Result<(), String> {
-        let belt_id = generate_unique_id();
-    
-        let belt = Entity {
-            id: belt_id,
-            owner_id,
-            entity_type: EntityType::AsteroidBelt,
-            coords: [belt_coords.0, belt_coords.1],
-            metadata: format!("Parent: {}", star_id), // Reference parent star
-        };
-    
-        GALAXY_TREE.with(|tree| {
-            tree.borrow_mut().insert(belt);
-        });
-    
-        Ok(())
-    }
-
-
-    #[update]
-    async fn create_planet(
-        planet_coords: (f64, f64),
-        star_id: Principal, // Tie the planet to the star
-        owner_id: Principal,
-    ) -> Result<(), String> {
-        let (category, subcategory, size) = random_planet_type();
-        let planet_id = generate_unique_id(); // Unique ID for the planet
-        
-        let planet = Entity {
-            id: planet_id,
-            owner_id,
-            entity_type: EntityType::Planet,
-            coords: [planet_coords.0, planet_coords.1],
-            metadata: format!(
-                "Parent: {}, Category: {}, Subcategory: {}, Size: {}",
-                star_id, category, subcategory, size
-            ), // Reference the parent star in metadata
-        };
-        
-        // Insert the planet into the galaxy tree
-        GALAXY_TREE.with(|tree| {
-            tree.borrow_mut().insert(planet);
-        });
-        
-        // Define orbit range for moons
-        let moon_orbit_range = (5.0, 50.0); // Moons orbit close to the planet
-        let num_moons = generate_random_in_range(0, 3); // Randomize number of moons (0-3)
-        
-        // Create moons tied to this planet
-        for _ in 0..num_moons {
-            let moon_coords = random_orbit(planet_coords, moon_orbit_range.0, moon_orbit_range.1);
-            create_moon(moon_coords, planet_id, owner_id).await?;
-        }
-        
-        Ok(())
-    }
-    
-
-    async fn create_moon(
-        moon_coords: (f64, f64),
-        _planet_id: Principal,
-        owner_id: Principal,
-    ) -> Result<(), String> {
-        let moon_id = generate_unique_id(); // Unique ID for the moon
-    
-        let moon = Entity {
-            id: moon_id,
-            owner_id,
-            entity_type: EntityType::Moon,
-            coords: [moon_coords.0, moon_coords.1],
-            metadata: format!("Parent: {}", _planet_id), // Tie the moon to its parent planet
-        };
-    
-        // Insert the moon into the galaxy tree
-        GALAXY_TREE.with(|tree| {
-            tree.borrow_mut().insert(moon);
-        });
-    
-        Ok(())
-    }
-    
-    
-    #[update]
-    async fn create_rogue_moon(moon_coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
-        create_moon(moon_coords, Principal::anonymous(), owner_id).await
-    }
-    
-
-
-
-
-//--
-//New
+//New 
 
     #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
     enum EntityType {
@@ -310,6 +28,410 @@ fn generate_unique_id() -> Principal {
         Artifacts,
     }
 
+    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    struct Zone {
+        id: u32,
+        name: String,
+        inner_radius: f64, // In light-years
+        outer_radius: f64, // In light-years
+    }
+
+    fn define_zones() -> Vec<Zone> {
+        vec![
+            Zone {
+                id: 0,
+                name: "Galactic Core".to_string(),
+                inner_radius: 0.0,
+                outer_radius: 100.0
+            },
+            Zone {
+                id: 1,
+                name: "First Spiral Arm".to_string(),
+                inner_radius: 100.0,
+                outer_radius: 101.0
+            },
+            Zone {
+                id: 2,
+                name: "Local Bubble".to_string(),
+                inner_radius: 101.0,
+                outer_radius: 102.0
+            },
+        ]
+    }
+
+    fn validate_metadata(metadata: &str) -> Result<(), String> {
+        serde_json::from_str::<serde_json::Value>(metadata)
+            .map_err(|e| format!("Invalid metadata: {}", e))?;
+        Ok(())
+    }
+
+    async fn random_coords_in_zone(zone: &Zone) -> Result<(f64, f64), String> {
+        // Fetch randomness from the management canister
+        let random_bytes = match raw_rand().await {
+            Ok((bytes,)) => bytes,
+            Err(_) => return Err("Failed to fetch randomness.".to_string()),
+        };
+
+        // Extract random values for radius and angle
+        let radius_rand = u64::from_le_bytes(random_bytes[0..8].try_into().unwrap());
+        let angle_rand = u64::from_le_bytes(random_bytes[8..16].try_into().unwrap());
+
+        // Map the random values to the desired ranges
+        let radius = map_to_range(radius_rand, zone.inner_radius, zone.outer_radius);
+        let angle = map_to_range(angle_rand, 0.0, 2.0 * std::f64::consts::PI);
+
+        // Convert polar to Cartesian coordinates
+        Ok((radius * angle.cos(), radius * angle.sin()))
+    }
+
+    async fn random_orbit(parent_coords: (f64, f64), min_radius: f64, max_radius: f64) -> Result<(f64, f64), String> {
+        let random_bytes = match raw_rand().await {
+            Ok((bytes,)) => bytes,
+            Err(_) => return Err("Failed to fetch randomness.".to_string()),
+        };
+    
+        let radius_rand = u64::from_le_bytes(random_bytes[0..8].try_into().unwrap());
+        let angle_rand = u64::from_le_bytes(random_bytes[8..16].try_into().unwrap());
+    
+        // Scale to light-years
+        let radius = map_to_range(radius_rand, min_radius, max_radius);
+        let angle = map_to_range(angle_rand, 0.0, 2.0 * std::f64::consts::PI);
+    
+        Ok((
+            parent_coords.0 + radius * angle.cos(),
+            parent_coords.1 + radius * angle.sin(),
+        ))
+    }
+
+    fn random_star_type() -> String {
+        // Spectral types and classes
+        let spectral_types = vec!["O", "B", "A", "F", "G", "K", "M"];
+        let stellar_classes = vec!["Main Sequence", "Giant", "Supergiant"];
+
+        // Randomly select spectral type and subclass
+        let spectral_index = generate_random_in_range(0, (spectral_types.len() - 1) as u64) as usize;
+        let subclass = generate_random_in_range(0, 9); // Subclass (e.g., G2)
+        let spectral_type = format!("{}{}", spectral_types[spectral_index], subclass);
+
+        // Randomly select stellar class
+        let class_index = generate_random_in_range(0, (stellar_classes.len() - 1) as u64) as usize;
+        let stellar_class = stellar_classes[class_index].to_string();
+
+        // Combine type and class
+        format!("{} {}", spectral_type, stellar_class)
+    }
+
+    fn random_planet_type() -> (String, String, String) {
+        // Categories and subcategories
+        let categories = vec![
+            "Terrestrial", "Gas Giant", "Ice World", "Desert", "Ocean World",
+            "Lava World", "Dwarf Planet", "Super-Earth", "Carbon Planet",
+            "Iron Planet", "Chthonian Planet", "Rogue",
+        ];
+        let subcategories = vec![
+            vec!["Rocky", "Volcanic", "Metallic"],
+            vec!["Jovian", "Neptunian"],
+            vec!["Frozen", "Cryovolcanic"],
+            vec!["Arid", "Sandy"],
+            vec!["Water", "Ice-Covered"],
+            vec!["Molten", "Magma"],
+            vec!["Rocky", "Icy"],
+            vec!["Rocky", "Oceanic"],
+            vec!["Graphite", "Diamond"],
+            vec!["Metallic", "Magnetic"],
+            vec!["Core Remnant", "Evaporated"],
+            vec!["Wandering"],
+        ];
+
+        // Randomly select a category and subcategory
+        let category_index = generate_random_in_range(0, (categories.len() - 1) as u64) as usize;
+        let category = categories[category_index].to_string();
+        let subcategory = subcategories[category_index][generate_random_in_range(
+            0,
+            (subcategories[category_index].len() - 1) as u64,
+        ) as usize]
+            .to_string();
+
+        // Randomly assign planet size
+        let sizes = vec!["Tiny", "Small", "Medium", "Large", "Huge"];
+        let size = sizes[generate_random_in_range(0, (sizes.len() - 1) as u64) as usize].to_string();
+
+        (category, subcategory, size)
+    }
+
+
+     
+    #[update]
+    async fn create_star_cluster(zone_id: u32, owner_id: Principal) -> Result<(), String> {
+        let zones = define_zones();
+        let zone = zones.iter().find(|z| z.id == zone_id).ok_or("Zone not found")?;
+    
+        let num_stars = ((zone.outer_radius - zone.inner_radius).powi(2)) as u32;
+    
+        for _ in 0..num_stars {
+            let star_coords = random_coords_in_zone(zone).await?;
+            create_star(star_coords, owner_id).await?;
+        }
+    
+        Ok(())
+    }
+
+    #[update]
+    async fn create_planetary_system(
+        star_id: Principal, // Parent star's ID
+        owner_id: Principal,
+    ) -> Result<(), String> {
+        // Fetch the parent star's coordinates
+        let star = get_entity_by_id(star_id).ok_or("Parent star not found")?;
+        let star_coords = (star.coords[0], star.coords[1]);
+    
+        let num_planets = generate_random_in_range(1, 8); // Random number of planets
+        for i in 0..num_planets {
+            // Scale to light-years
+            let min_orbit = 0.00001 + i as f64 * 0.00001; // Start at ~1 AU
+            let max_orbit = min_orbit + 0.00001; // Range for each orbit
+    
+            // Generate planet coordinates
+            let planet_coords = random_orbit(star_coords, min_orbit, max_orbit).await?;
+    
+            // Pass planet_coords to create_planet
+            create_planet(star_id, owner_id, planet_coords).await?;
+        }
+        Ok(())
+    }
+    
+    #[update]
+    async fn create_star(star_coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
+        let star_type = random_star_type();
+        let star_id = generate_principal();
+    
+        let metadata = json!({
+            "id": star_id.to_text(),
+            "type": "Star",
+            "coords": { "x": star_coords.0, "y": star_coords.1 },
+            "category": "Stellar Object",
+            "subcategory": star_type,
+            "owner": owner_id.to_text(),
+            "timestamp": time()
+        }).to_string();
+    
+        let star = Entity {
+            id: star_id,
+            owner_id,
+            entity_type: EntityType::Star,
+            coords: [star_coords.0, star_coords.1],
+            metadata,
+        };
+    
+        GALAXY_TREE.with(|tree| tree.borrow_mut().insert(star));
+    
+        // Call create_planetary_system with the updated signature
+        create_planetary_system(star_id, owner_id).await?;
+        Ok(())
+    }
+    
+    #[update]
+    async fn create_planet(
+        star_id: Principal,          // Parent star's ID
+        owner_id: Principal,         // Owner ID
+        planet_coords: (f64, f64),   // Planet's coordinates
+    ) -> Result<(), String> {
+        // Generate planet metadata
+        let (category, subcategory, size) = random_planet_type();
+        let planet_id = generate_principal();
+    
+        let metadata = json!({
+            "id": planet_id.to_text(),
+            "type": "Planet",
+            "coords": { "x": planet_coords.0, "y": planet_coords.1 },
+            "category": category,
+            "subcategory": subcategory,
+            "size": size,
+            "parent": star_id.to_text(),
+            "owner": owner_id.to_text(),
+            "timestamp": time()
+        }).to_string();
+    
+        // Create the planet entity
+        let planet = Entity {
+            id: planet_id,
+            owner_id,
+            entity_type: EntityType::Planet,
+            coords: [planet_coords.0, planet_coords.1],
+            metadata,
+        };
+    
+        // Insert the planet into the galaxy tree
+        GALAXY_TREE.with(|tree| tree.borrow_mut().insert(planet));
+    
+        // Create moons
+        let num_moons = generate_random_in_range(0, 3);
+        for _ in 0..num_moons {
+            create_moon(planet_id, owner_id).await?; // Pass planet_id to create_moon
+        }
+    
+        Ok(())
+    }
+
+    #[update]
+    async fn create_moon(
+        planet_id: Principal, // Parent planet's ID
+        owner_id: Principal,
+    ) -> Result<(), String> {
+        // Fetch the parent planet's coordinates
+        let planet = get_entity_by_id(planet_id).ok_or("Parent planet not found")?;
+        let planet_coords = (planet.coords[0], planet.coords[1]);
+    
+        // Generate moon coordinates in orbit around the planet
+        let moon_coords = random_orbit(planet_coords, 0.00000004, 0.00000005).await?;
+    
+        // Generate a unique ID for the moon
+        let moon_id = generate_principal();
+    
+        // Create structured metadata
+        let metadata = json!({
+            "id": moon_id.to_text(),
+            "type": "Moon",
+            "coords": { "x": moon_coords.0, "y": moon_coords.1 },
+            "category": "Natural Satellite",
+            "subcategory": "Moon",
+            "size": "Small",
+            "parent": planet_id.to_text(),
+            "owner": owner_id.to_text(),
+            "timestamp": time()
+        }).to_string();
+    
+        // Validate metadata
+        validate_metadata(&metadata)?;
+    
+        // Create the moon entity
+        let moon = Entity {
+            id: moon_id,
+            owner_id,
+            entity_type: EntityType::Moon,
+            coords: [moon_coords.0, moon_coords.1],
+            metadata,
+        };
+    
+        // Insert the moon into the galaxy tree
+        GALAXY_TREE.with(|tree| tree.borrow_mut().insert(moon));
+    
+        Ok(())
+    }
+
+    #[update]
+    async fn create_asteroid_belt(
+        star_id: Principal, // Parent star's ID
+        owner_id: Principal,
+    ) -> Result<(), String> {
+        // Fetch the parent star's coordinates
+        let star = get_entity_by_id(star_id).ok_or("Parent star not found")?;
+        let star_coords = (star.coords[0], star.coords[1]);
+    
+        // Generate asteroid belt coordinates
+        let belt_coords = random_orbit(star_coords, 0.0002, 0.0003).await?;
+    
+        // Create metadata
+        let belt_id = generate_principal();
+        let metadata = json!({
+            "id": belt_id.to_text(),
+            "type": "Asteroid Belt",
+            "coords": { "x": belt_coords.0, "y": belt_coords.1 },
+            "category": "Planetary Ring",
+            "subcategory": "Asteroid Belt",
+            "size": "Large",
+            "parent": star_id.to_text(),
+            "owner": owner_id.to_text(),
+            "timestamp": time()
+        }).to_string();
+    
+        // Create the asteroid belt entity
+        let belt = Entity {
+            id: belt_id,
+            owner_id,
+            entity_type: EntityType::AsteroidBelt,
+            coords: [belt_coords.0, belt_coords.1],
+            metadata,
+        };
+    
+        // Insert into the galaxy tree
+        GALAXY_TREE.with(|tree| tree.borrow_mut().insert(belt));
+    
+        Ok(())
+    }
+
+    #[update]
+    async fn create_black_hole(coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
+        let black_hole_id = generate_principal();
+    
+        let metadata = json!({
+            "id": black_hole_id.to_text(),
+            "type": "Black Hole",
+            "coords": { "x": coords.0, "y": coords.1 },
+            "category": "Stellar Phenomenon",
+            "subcategory": "Black Hole",
+            "owner": owner_id.to_text(),
+            "timestamp": time()
+        }).to_string();
+    
+        let black_hole = Entity {
+            id: black_hole_id,
+            owner_id,
+            entity_type: EntityType::BlackHole,
+            coords: [coords.0, coords.1],
+            metadata,
+        };
+    
+        GALAXY_TREE.with(|tree| tree.borrow_mut().insert(black_hole));
+        Ok(())
+    }
+
+    #[update]
+    async fn create_nebula(coords: (f64, f64), owner_id: Principal) -> Result<(), String> {
+        let nebula_id = generate_principal();
+
+        let metadata = json!({
+            "id": nebula_id.to_text(),
+            "type": "Nebula",
+            "coords": { "x": coords.0, "y": coords.1 },
+            "category": "Stellar Phenomenon",
+            "subcategory": "Nebula",
+            "owner": owner_id.to_text(),
+            "timestamp": time()
+        }).to_string();
+
+        let nebula = Entity {
+            id: nebula_id,
+            owner_id,
+            entity_type: EntityType::Nebulae,
+            coords: [coords.0, coords.1],
+            metadata,
+        };
+
+        GALAXY_TREE.with(|tree| tree.borrow_mut().insert(nebula));
+        Ok(())
+    }
+
+    #[query]
+    fn validate_entity_distances(parent_id: Principal, max_distance: f64) -> Result<bool, String> {
+        let parent_entity = get_entity_by_id(parent_id).ok_or("Parent entity not found")?;
+        let nearby_entities = find_nearby_entities(parent_entity.coords[0], parent_entity.coords[1], max_distance);
+
+        for entity in nearby_entities {
+            let distance = ((parent_entity.coords[0] - entity.coords[0]).powi(2)
+                + (parent_entity.coords[1] - entity.coords[1]).powi(2))
+            .sqrt();
+            if distance > max_distance {
+                return Err(format!(
+                    "Entity {} exceeds max distance of {} from parent {}",
+                    entity.id, max_distance, parent_id
+                ));
+            }
+        }
+
+        Ok(true)
+    }
+    
     #[query]
     fn get_entity_by_id(entity_id: Principal) -> Option<Entity> {
         GALAXY_TREE.with(|tree| {
@@ -462,34 +584,6 @@ fn generate_unique_id() -> Principal {
     }
 
     #[update]
-    fn spawn_test_entities(count: u64) {
-        let caller = ic_cdk::caller(); // Use the caller's Principal as the owner
-
-        GALAXY_TREE.with(|tree| {
-            let mut tree_mut = tree.borrow_mut();
-            for i in 0..count {
-                let unique_id = ENTITY_COUNTER.with(|counter| {
-                    let mut counter = counter.borrow_mut();
-                    *counter += 1;
-                    *counter
-                });
-
-                let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
-
-                let entity = Entity {
-                    id: unique_principal,
-                    owner_id: caller,
-                    entity_type: EntityType::Planet, // For simplicity, spawn as Planets
-                    coords: [i as f64 * 10.0, i as f64 * 5.0], // Spread them out
-                    metadata: format!("Test Entity {}", i),
-                };
-
-                tree_mut.insert(entity);
-            }
-        });
-    }
-
-    #[update]
     fn benchmark_spawn(count: u64) -> u64 {
         let start = ic_cdk::api::performance_counter(0);
 
@@ -583,72 +677,73 @@ fn generate_unique_id() -> Principal {
         Ok(created)
     }
 
-     #[update]
-    async fn spawn_entities_auto_batched(total: u64) -> Result<(f64, f64), String> {
-        let max_batch_size = 50; // Maximum entities per batch
-        let safe_zone_inner_radius = 1000.0; // Inner radius of the Safe Zone
-        let safe_zone_outer_radius = 1010.0; // Outer radius of the Safe Zone
-        let mut created = 0; // Counter for created entities
-        let mut cluster_coords = (0.0, 0.0); // Coordinates for the first entity
-
-        while created < total {
-            let batch_size = std::cmp::min(max_batch_size, total - created);
-
-            // Generate random bytes for the entire batch in advance
-            let mut random_batches = Vec::new();
-            for _ in 0..batch_size {
-                let random_bytes = match raw_rand().await {
-                    Ok((bytes,)) => bytes,
-                    Err(_) => return Err("Failed to fetch randomness.".to_string()),
-                };
-                random_batches.push(random_bytes);
-            }
-
-            GALAXY_TREE.with(|tree| {
-                let mut tree_mut = tree.borrow_mut();
-
-                for (i, random_bytes) in random_batches.iter().enumerate() {
-                    // Extract two random values from the bytes
-                    let radius_rand = u64::from_le_bytes(random_bytes[0..8].try_into().unwrap());
-                    let angle_rand = u64::from_le_bytes(random_bytes[8..16].try_into().unwrap());
-
-                    // Map random values to the desired ranges
-                    let radius = map_to_range(radius_rand, safe_zone_inner_radius, safe_zone_outer_radius);
-                    let angle = map_to_range(angle_rand, 0.0, 2.0 * std::f64::consts::PI);
-
-                    // Convert polar coordinates to Cartesian (x, y)
-                    let x = radius * angle.cos();
-                    let y = radius * angle.sin();
-
-                    if created == 0 && i == 0 {
-                        cluster_coords = (x, y); // Save the coordinates of the first entity
-                    }
-
-                    // Generate a unique entity ID
-                    let unique_id = ENTITY_COUNTER.with(|counter| {
-                        let mut counter = counter.borrow_mut();
-                        *counter += 1;
-                        *counter
-                    });
-
-                    let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
-
-                    // Create the entity
-                    let entity = Entity {
-                        id: unique_principal,
-                        owner_id: ic_cdk::caller(),
-                        entity_type: EntityType::Planet,
-                        coords: [x, y],
-                        metadata: format!("Entity {}", created),
-                    };
-
-                    tree_mut.insert(entity);
-                    created += 1;
-                }
-            });
+    #[update]
+    async fn create_open_star_cluster(zone_id: u32, owner_id: Principal) -> Result<(), String> {
+        // Define fixed boundaries for the zones
+        let zones = define_zones();
+        let zone = zones.iter().find(|z| z.id == zone_id)
+            .ok_or("Zone not found")?;
+        
+        // Generate random starting coordinates for the cluster
+        let random_bytes = match raw_rand().await {
+            Ok((bytes,)) => bytes,
+            Err(_) => return Err("Failed to fetch randomness.".to_string()),
+        };
+    
+        // Extract random values for radius and angle
+        let radius_rand = u64::from_le_bytes(random_bytes[0..8].try_into().unwrap());
+        let angle_rand = u64::from_le_bytes(random_bytes[8..16].try_into().unwrap());
+    
+        // Map random values to the desired ranges
+        let radius = map_to_range(radius_rand, zone.inner_radius, zone.outer_radius);
+        let angle = map_to_range(angle_rand, 0.0, 2.0 * std::f64::consts::PI);
+    
+        // Convert polar coordinates to Cartesian (x, y)
+        let cluster_coords = (radius * angle.cos(), radius * angle.sin());
+    
+        // Generate stars around the cluster
+        let num_stars = generate_random_in_range(1, 4); // Randomize number of stars (1-4)
+        let cluster_radius = 1.0; // Scale to light-years
+    
+        for _ in 0..num_stars {
+            // Generate random star coordinates within the cluster
+            let star_coords = random_orbit(cluster_coords, 0.1, cluster_radius).await?;
+    
+            // Adjust resources based on the number of stars
+            let resources = if num_stars == 1 {
+                vec!["Rich in resources".to_string()]
+            } else {
+                vec!["Balanced resources".to_string()]
+            };
+    
+            // Create the star with metadata
+            let star_id = generate_principal();
+            let metadata = json!({
+                "id": star_id.to_text(),
+                "type": "Star",
+                "coords": { "x": star_coords.0, "y": star_coords.1 },
+                "category": "Stellar Object",
+                "subcategory": "Star",
+                "size": "N/A",
+                "parent": "None",
+                "owner": owner_id.to_text(),
+                "timestamp": time(),
+                "resources": resources
+            }).to_string();
+    
+            let star = Entity {
+                id: star_id,
+                owner_id,
+                entity_type: EntityType::Star,
+                coords: [star_coords.0, star_coords.1],
+                metadata,
+            };
+    
+            // Insert the star into the galaxy tree
+            GALAXY_TREE.with(|tree| tree.borrow_mut().insert(star));
         }
-
-        Ok(cluster_coords) // Return the first entity's coordinates
+    
+        Ok(())
     }
 
     
@@ -663,10 +758,150 @@ fn generate_unique_id() -> Principal {
         GALAXY_TREE.with(|tree| {
             tree.borrow()
                 .iter()
-                .map(|entity| (entity.coords[0], entity.coords[1], entity.metadata.clone()))
+                .map(|entity| {
+                    ic_cdk::println!(
+                        "Entity ID: {}, Type: {:?}, Metadata: {}",
+                        entity.id,
+                        entity.entity_type,
+                        entity.metadata
+                    );
+                    (entity.coords[0], entity.coords[1], entity.metadata.clone())
+                })
                 .collect()
         })
     }
+
+
+// --- Player Management ---
+
+    #[query]
+    fn get_player() -> Option<Player> {
+        let caller = ic_cdk::caller();
+        PLAYERS.with(|players| players.borrow().get(&caller).cloned())
+    }
+
+    #[update]
+    async fn signup(
+        username: String,
+        avatar: u32,
+        referral_code: Option<String>,
+        language: String,
+    ) -> Result<(bool, Option<Player>, String), String> {
+        let caller = ic_cdk::caller();
+
+        // Reject anonymous calls
+        if caller == Principal::anonymous() {
+            return Err("Anonymous users cannot register.".to_string());
+        }
+
+        // Check if the username is valid
+        if username.len() > 12 {
+            return Err("Username must be 12 characters or less".to_string());
+        }
+
+        // Check if the player is already registered
+        if PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
+            let existing_player = PLAYERS.with(|players| players.borrow().get(&caller).cloned());
+            return Ok((false, existing_player, "User is already registered.".to_string()));
+        }
+
+        // Handle referral code scenarios
+        let final_code = match referral_code {
+            Some(code) => {
+                // Simulate referral code assignment logic
+                match assign_unassigned_referral_code(caller, code).await {
+                    ReferralCodeResult::Ok(assigned_code) => assigned_code,
+                    ReferralCodeResult::Err(err_msg) => return Err(err_msg),
+                }
+            }
+            None => {
+                // Generate a new referral code
+                let (new_code, _) = assign_referral_code(caller, None).await;
+                new_code
+            }
+        };
+
+        // Create an open star cluster for the player in a predefined zone
+        let default_zone_id = 1; // Example: "First Spiral Arm"
+        create_open_star_cluster(default_zone_id, caller).await?;
+
+        // Register the player
+        let new_player = Player {
+            id: caller,
+            username,
+            avatar,
+            title: "Starbound Initiate".to_string(),
+            description: "".to_string(),
+            registration_date: time(),
+            level: 1,
+            elo: 1200.0,
+            friends: Vec::new(),
+            language,
+        };
+
+        PLAYERS.with(|players| {
+            players.borrow_mut().insert(caller, new_player.clone());
+        });
+
+        // Initialize the player's multiplier
+        MULTIPLIER_BY_PLAYER.with(|multiplier| {
+            multiplier.borrow_mut().insert(caller, 1.0);
+        });
+
+        // Assign default avatars and titles
+        AVAILABLE_AVATARS.with(|avatars| {
+            avatars.borrow_mut().insert(caller, (1..=12).collect());
+        });
+
+        AVAILABLE_TITLES.with(|titles| {
+            titles.borrow_mut().insert(caller, vec![1]);
+        });
+
+        Ok((
+            true,
+            Some(new_player),
+            format!(
+                "User registered successfully with referral code {}",
+                final_code
+            ),
+        ))
+    }
+
+
+    // Mock functions for referral code handling
+    async fn assign_unassigned_referral_code(_player_id: Principal, code: String) -> ReferralCodeResult {
+        // Simulate referral code assignment logic
+        ReferralCodeResult::Ok(code)
+    }
+
+    async fn assign_referral_code(_player_id: Principal, _code: Option<String>) -> (String, bool) {
+        // Simulate referral code generation logic
+        ("generated_code".to_string(), true)
+    }
+
+
+//--
+// Utils
+    fn generate_random_in_range(min: u64, max: u64) -> u64 {
+        let current_time = ic_cdk::api::time(); // Nanoseconds since the Unix epoch
+        min + (current_time as u64 % (max - min + 1))
+    }
+
+    fn generate_random_in_range_f64(min: f64, max: f64) -> f64 {
+        let current_time = ic_cdk::api::time(); // Nanoseconds since the Unix epoch
+        min + (current_time as f64 % (max - min + 1.0))
+    }
+
+    fn generate_principal() -> Principal {
+        let unique_id = ENTITY_COUNTER.with(|counter| {
+            let mut counter = counter.borrow_mut();
+            *counter += 1;
+            *counter
+        });
+
+        Principal::self_authenticating(&unique_id.to_be_bytes())
+    }
+
 
 //--
 // --- R-Tree Points ---
@@ -1096,135 +1331,6 @@ fn generate_unique_id() -> Principal {
     // }
 
 
-// --- Player Management ---
-
-    #[query]
-    fn get_player() -> Option<Player> {
-        let caller = ic_cdk::caller();
-        PLAYERS.with(|players| players.borrow().get(&caller).cloned())
-    }
-
-    #[update]
-    async fn signup(
-        username: String,
-        avatar: u32,
-        referral_code: Option<String>,
-        language: String,
-    ) -> Result<(bool, Option<Player>, String), String> {
-        let caller = ic_cdk::caller();
-    
-        // Reject anonymous calls
-        if caller == Principal::anonymous() {
-            return Err("Anonymous users cannot register.".to_string());
-        }
-    
-        // Check if the username is valid
-        if username.len() > 12 {
-            return Err("Username must be 12 characters or less".to_string());
-        }
-    
-        // Check if the player is already registered
-        if PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
-            let existing_player = PLAYERS.with(|players| players.borrow().get(&caller).cloned());
-            return Ok((false, existing_player, "User is already registered.".to_string()));
-        }
-    
-        // Handle referral code scenarios
-        let final_code = match referral_code {
-            Some(code) => {
-                // Simulate referral code assignment logic
-                match assign_unassigned_referral_code(caller, code).await {
-                    ReferralCodeResult::Ok(assigned_code) => assigned_code,
-                    ReferralCodeResult::Err(err_msg) => return Err(err_msg),
-                }
-            }
-            None => {
-                // Generate a new referral code
-                let (new_code, _) = assign_referral_code(caller, None).await;
-                new_code
-            }
-        };
-    
-        // Create an open star cluster for the player
-        let cluster_coords = spawn_entities_auto_batched(1).await?;
-        create_open_star_cluster(cluster_coords, caller).await?;
-    
-        // Generate a home planet for the player
-        let (planet_category, planet_subcategory, planet_size) = random_planet_type();
-        let planet_coords = random_orbit(cluster_coords, 10.0, 50.0); // Set logical range for planet orbits
-        let planet_id = generate_unique_id();
-    
-        let home_planet = Entity {
-            id: planet_id,
-            owner_id: caller,
-            entity_type: EntityType::Planet,
-            coords: [planet_coords.0, planet_coords.1],
-            metadata: format!(
-                "Category: {}, Subcategory: {}, Size: {}",
-                planet_category, planet_subcategory, planet_size
-            ),
-        };
-    
-        // Insert the home planet into the galaxy tree
-        GALAXY_TREE.with(|tree| {
-            tree.borrow_mut().insert(home_planet.clone());
-        });
-    
-        // Register the player
-        let new_player = Player {
-            id: caller,
-            username,
-            avatar,
-            title: "Starbound Initiate".to_string(),
-            description: "".to_string(),
-            registration_date: time(),
-            level: 1,
-            elo: 1200.0,
-            friends: Vec::new(),
-            language,
-        };
-    
-        PLAYERS.with(|players| {
-            players.borrow_mut().insert(caller, new_player.clone());
-        });
-    
-        // Initialize the player's multiplier
-        MULTIPLIER_BY_PLAYER.with(|multiplier| {
-            multiplier.borrow_mut().insert(caller, 1.0);
-        });
-    
-        // Assign default avatars and titles
-        AVAILABLE_AVATARS.with(|avatars| {
-            avatars.borrow_mut().insert(caller, (1..=12).collect());
-        });
-    
-        AVAILABLE_TITLES.with(|titles| {
-            titles.borrow_mut().insert(caller, vec![1]);
-        });
-    
-        Ok((
-            true,
-            Some(new_player),
-            format!(
-                "User registered successfully with referral code {} and assigned a home planet at {:?}",
-                final_code, planet_coords
-            ),
-        ))
-    }
-    
-    
-    // Mock functions for referral code handling
-    async fn assign_unassigned_referral_code(_player_id: Principal, code: String) -> ReferralCodeResult {
-        // Simulate referral code assignment logic
-        ReferralCodeResult::Ok(code)
-    }
-
-    async fn assign_referral_code(_player_id: Principal, _code: Option<String>) -> (String, bool) {
-        // Simulate referral code generation logic
-        ("generated_code".to_string(), true)
-    }
-
-    
 
 // --- Star System Management ---
     // Update function to add a star to a star system
@@ -2167,16 +2273,6 @@ fn generate_unique_id() -> Principal {
         })
     }
 
-// Utils
-    fn generate_random_in_range(min: u64, max: u64) -> u64 {
-        let current_time = ic_cdk::api::time(); // Nanoseconds since the Unix epoch
-        min + (current_time as u64 % (max - min + 1))
-    }
-
-    fn generate_random_in_range_f64(min: f64, max: f64) -> f64 {
-        let current_time = ic_cdk::api::time(); // Nanoseconds since the Unix epoch
-        min + (current_time as f64 % (max - min + 1.0))
-    }
 
 // Tests
     #[cfg(test)]

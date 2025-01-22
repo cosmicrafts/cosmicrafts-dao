@@ -39,28 +39,95 @@ export default {
   },
   methods: {
     async fetchEntities() {
-      try {
-        // Get the Cosmicrafts canister instance
-        const canisterStore = useCanisterStore();
-        const cosmicrafts = await canisterStore.get("cosmicrafts");
+  try {
+    const canisterStore = useCanisterStore();
+    const cosmicrafts = await canisterStore.get("cosmicrafts");
 
-        // Fetch entities from the canister
-        const entitiesData = await cosmicrafts.export_entities();
-        this.rawEntities = entitiesData; // Store raw data
-        const parsedEntities = this.parseEntities(entitiesData);
-        this.renderMap(parsedEntities);
-      } catch (error) {
-        console.error("Error fetching or parsing entities:", error);
-      }
-    },
-    parseEntities(entitiesData) {
-      // Ensure data is an array and map to usable format
-      if (!Array.isArray(entitiesData)) {
-        console.error("Invalid entity data format");
-        return [];
-      }
-      return entitiesData.map(([x, y, name]) => ({ x, y, name }));
-    },
+    // Fetch entities from the canister
+    const entitiesData = await cosmicrafts.export_entities();
+    console.log("Fetched raw entities:", entitiesData);
+
+    this.rawEntities = entitiesData; // Store raw data
+    const parsedEntities = this.parseEntities(entitiesData);
+    this.renderMap(parsedEntities);
+  } catch (error) {
+    console.error("Error fetching or parsing entities:", error);
+  }
+},
+
+
+parseEntities(entitiesData) {
+  if (!Array.isArray(entitiesData)) {
+    console.error("Invalid entity data format. Expected an array.");
+    return [];
+  }
+
+  return entitiesData.map(([x, y, metadata], index) => {
+    console.log(`Raw metadata for entity ${index}:`, metadata); // Log raw metadata
+
+    let parsedMetadata;
+    try {
+      // Attempt to parse metadata as JSON
+      parsedMetadata = typeof metadata === "string" ? JSON.parse(metadata) : metadata;
+    } catch (e) {
+      console.warn(`Metadata for entity ${index} is not valid JSON. Falling back to manual parsing.`, metadata);
+
+      // If metadata is not valid JSON, treat it as a plain string and parse it manually
+      parsedMetadata = this.parsePlainMetadata(metadata);
+    }
+
+    // Return the parsed entity
+    return {
+      x,
+      y,
+      id: parsedMetadata.id || `Entity-${index}`,
+      type: parsedMetadata.type || "Unknown",
+      category: parsedMetadata.category || "Uncategorized",
+      subcategory: parsedMetadata.subcategory || "",
+      size: parsedMetadata.size || "Unknown",
+      owner: parsedMetadata.owner || "Unknown",
+      timestamp: parsedMetadata.timestamp || null,
+      zone: parsedMetadata.zone || "Unknown",
+      resources: parsedMetadata.attributes?.resources || [],
+      tags: parsedMetadata.attributes?.tags || [],
+      parent: parsedMetadata.parent || "None",
+    };
+  });
+},
+
+parsePlainMetadata(metadata) {
+  // If metadata is not a string, return it as-is
+  if (typeof metadata !== "string") {
+    return metadata;
+  }
+
+  // Attempt to parse plain string metadata (e.g., "Parent: r3rsz-p63rl-iduno-glman-l2mi5-4cnok-nktnr-yivow-yp7sl-adcf2-xqe")
+  const metadataParts = metadata.split(":");
+  if (metadataParts.length === 2) {
+    const [key, value] = metadataParts;
+    return {
+      [key.trim().toLowerCase()]: value.trim(),
+    };
+  }
+
+  // If the metadata cannot be parsed, return a default object
+  return {
+    id: `Invalid-Metadata-${Math.random().toString(36).substring(7)}`,
+    type: "Unknown",
+    category: "Uncategorized",
+    subcategory: "",
+    size: "Unknown",
+    owner: "Unknown",
+    timestamp: null,
+    zone: "Unknown",
+    resources: [],
+    tags: [],
+    parent: "None",
+  };
+}
+
+
+,
     renderMap(entities) {
   const svg = d3.select(this.$refs.svgCanvas);
   const width = window.innerWidth;
@@ -188,12 +255,23 @@ export default {
         .attr("height", this.entitySize) // Dynamically set height
         .attr("xlink:href", entityIcon) // Use imported SVG
         .on("mouseover", (event, d) => {
-          d3.select("#tooltip")
-            .style("opacity", 1)
-            .html(`Entity: ${d.name}<br>X: ${d.x}<br>Y: ${d.y}`)
-            .style("left", `${event.pageX + 1}px`)
-            .style("top", `${event.pageY - 30}px`);
-        })
+  d3.select("#tooltip")
+    .style("opacity", 1)
+    .html(`
+      <b>ID:</b> ${d.id}<br>
+      <b>Type:</b> ${d.type}<br>
+      <b>Category:</b> ${d.category} - ${d.subcategory}<br>
+      <b>Size:</b> ${d.size}<br>
+      <b>Zone:</b> ${d.zone}<br>
+      <b>Owner:</b> ${d.owner}<br>
+      <b>Resources:</b> ${d.resources.length > 0 ? d.resources.join(", ") : "None"}<br>
+      <b>Tags:</b> ${d.tags.length > 0 ? d.tags.join(", ") : "None"}<br>
+      <b>Coordinates:</b> (${d.x}, ${d.y})
+    `)
+    .style("left", `${event.pageX + 10}px`)
+    .style("top", `${event.pageY - 50}px`);
+})
+
         .on("mousemove", (event) => {
           d3.select("#tooltip")
             .style("left", `${event.pageX + 1}px`)
