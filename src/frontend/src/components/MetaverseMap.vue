@@ -62,37 +62,45 @@ parseEntities(entitiesData) {
   }
 
   return entitiesData.map(([x, y, metadata], index) => {
-    //console.log(`Raw metadata for entity ${index}:`, metadata); // Log raw metadata
-
     let parsedMetadata;
+
     try {
-      // Attempt to parse metadata as JSON
+      // Parse metadata as JSON
       parsedMetadata = typeof metadata === "string" ? JSON.parse(metadata) : metadata;
     } catch (e) {
-      console.warn(`Metadata for entity ${index} is not valid JSON. Falling back to manual parsing.`, metadata);
-
-      // If metadata is not valid JSON, treat it as a plain string and parse it manually
-      parsedMetadata = this.parsePlainMetadata(metadata);
+      console.warn(
+        `Failed to parse metadata for entity ${index}. Using fallback.`,
+        metadata
+      );
+      return this.defaultEntity(x, y, index);
     }
 
-    // Return the parsed entity
+    // Extract entity type and details (e.g., Star, StarCluster)
+    const [entityType, entityDetails] = Object.entries(parsedMetadata)[0] || ["Unknown", {}];
+
+    // Return the parsed entity with detailed information
     return {
       x,
       y,
-      id: parsedMetadata.id || `Entity-${index}`,
-      type: parsedMetadata.type || "Unknown",
-      category: parsedMetadata.category || "Uncategorized",
-      subcategory: parsedMetadata.subcategory || "",
-      size: parsedMetadata.size || "Unknown",
-      owner: parsedMetadata.owner || "Unknown",
-      timestamp: parsedMetadata.timestamp || null,
-      zone: parsedMetadata.zone || "Unknown",
-      resources: parsedMetadata.attributes?.resources || [],
-      tags: parsedMetadata.attributes?.tags || [],
-      parent: parsedMetadata.parent || "None",
+      id: entityDetails.id || `Entity-${index}`,
+      name: entityDetails.name || "Unnamed Entity",
+      description: entityDetails.description || "No description available",
+      type: entityType, // e.g., "Star" or "StarCluster"
+      category: entityDetails.category || "Uncategorized",
+      subcategory: entityDetails.subcategory || "",
+      size: entityDetails.size || entityDetails.radius || "Unknown",
+      owner: entityDetails.owner || "Unknown",
+      coords: entityDetails.coords || [x, y],
+      zone: entityDetails.zone || "Unknown",
+      resources: entityDetails.resources || [],
+      tags: entityDetails.tags || [],
+      phenomena: entityDetails.phenomena || [],
+      timestamp: entityDetails.timestamp || null,
+      additionalData: entityDetails, // Preserve the rest of the metadata
     };
   });
 },
+
 
 parsePlainMetadata(metadata) {
   // If metadata is not a string, return it as-is
@@ -254,22 +262,23 @@ parsePlainMetadata(metadata) {
         .attr("height", this.entitySize) // Dynamically set height
         .attr("xlink:href", entityIcon) // Use imported SVG
         .on("mouseover", (event, d) => {
-  d3.select("#tooltip")
-    .style("opacity", 1)
-    .html(`
-      <b>ID:</b> ${d.id}<br>
-      <b>Type:</b> ${d.type}<br>
-      <b>Category:</b> ${d.category} - ${d.subcategory}<br>
-      <b>Size:</b> ${d.size}<br>
-      <b>Zone:</b> ${d.zone}<br>
-      <b>Owner:</b> ${d.owner}<br>
-      <b>Resources:</b> ${d.resources.length > 0 ? d.resources.join(", ") : "None"}<br>
-      <b>Tags:</b> ${d.tags.length > 0 ? d.tags.join(", ") : "None"}<br>
-      <b>Coordinates:</b> (${d.x}, ${d.y})
-    `)
-    .style("left", `${event.pageX + 10}px`)
-    .style("top", `${event.pageY - 50}px`);
-})
+          d3.select("#tooltip")
+            .style("opacity", 1)
+            .html(`
+              <b>ID:</b> ${d.id}<br>
+              <b>Name:</b> ${d.name}<br>
+              <b>Type:</b> ${d.type}<br>
+              <b>Description:</b> ${d.description}<br>
+              <b>Size:</b> ${d.size}<br>
+              <b>Zone:</b> ${d.zone}<br>
+              <b>Owner:</b> ${d.owner}<br>
+              <b>Resources:</b> ${d.resources.length > 0 ? d.resources.join(", ") : "None"}<br>
+              <b>Phenomena:</b> ${d.phenomena.length > 0 ? d.phenomena.join(", ") : "None"}<br>
+              <b>Coordinates:</b> (${d.coords[0]}, ${d.coords[1]})
+            `)
+            .style("left", `${event.pageX + 10}px`)
+            .style("top", `${event.pageY - 50}px`);
+        })
 
         .on("mousemove", (event) => {
           d3.select("#tooltip")

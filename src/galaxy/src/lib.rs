@@ -4,8 +4,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use ic_cdk_timers::TimerId;
 use rstar::{RTree, RTreeObject, AABB, PointDistance};
-
-//New 
+use serde::Serialize;
 
     fn generate_star_cluster(
         cluster_type: &StarClusterType,
@@ -98,7 +97,6 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         Ok(stars)
     }
 
-    #[update]
     fn add_entity(
         entity_type: EntityType,
         location_params: LocationParams,
@@ -106,20 +104,30 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         star_cluster_type: Option<StarClusterType>,
     ) -> Result<Principal, String> {
         let caller = ic_cdk::caller();
-
+    
         if entity_type == EntityType::StarCluster && star_cluster_type.is_none() {
             return Err("StarCluster requires a valid StarClusterType".to_string());
         }
-
+    
+        // Validate metadata
+        let entity_metadata = metadata.ok_or_else(|| "Metadata is required for the entity".to_string())?;
+    
+        // Ensure metadata matches the entity type
+        match (&entity_type, &entity_metadata) {
+            (EntityType::StarCluster, Metadata::StarCluster(_)) => {} // Valid case
+            (EntityType::Star, Metadata::Star(_)) => {} // Add validation for other entity types
+            _ => return Err("Mismatched metadata type for entity".to_string()),
+        }
+    
+        // Create a unique entity ID
         let unique_id = ENTITY_COUNTER.with(|counter| {
             let mut counter = counter.borrow_mut();
             *counter += 1;
             *counter
         });
-
         let unique_principal = Principal::self_authenticating(&unique_id.to_be_bytes());
-
-        // Generate coordinates
+    
+        // Generate coordinates based on location_params
         let coords = match location_params {
             LocationParams::Ring { inner_radius, outer_radius } => {
                 let radius = generate_random_in_range_f64(inner_radius, outer_radius);
@@ -139,7 +147,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 y: generate_random_in_range_f64(y_range[0], y_range[1]),
             },
         };
-
+    
         // If it's a StarCluster, generate stars
         if let Some(cluster_type) = &star_cluster_type {
             if entity_type == EntityType::StarCluster {
@@ -151,11 +159,8 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 );
             }
         }
-
-        // Ensure metadata is provided and matches the entity type
-        let entity_metadata = metadata.ok_or_else(|| "Metadata is required for the entity".to_string())?;
-
-        // Create the entity
+    
+        // Create and store the entity
         let entity = Entity {
             id: unique_principal,
             owner_id: caller,
@@ -163,19 +168,17 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             coords: coords.to_array(),
             metadata: entity_metadata,
         };
-
-        // Insert entity into the GALAXY_TREE
+    
         GALAXY_TREE.with(|tree| {
             tree.borrow_mut().insert(entity);
         });
-
+    
         Ok(unique_principal)
     }
-
-
+    
 // --- Data Structures ---
     
-    #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+    #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
     enum ResourceType {
         Energy,
         Matter
@@ -188,7 +191,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
     // Types
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum EntityType {
             StarCluster,
             Star,
@@ -207,7 +210,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             Player, // Real-world players
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum Metadata {
             StarCluster(StarCluster),
             Star(Star),
@@ -225,7 +228,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             Player(Player),
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum StarClusterType {
             // Small Clusters
             Asterism {
@@ -312,14 +315,14 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             },
         }
 
-        #[derive(CandidType, Deserialize, Debug, Clone, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Debug, Clone, PartialEq)]
         enum AssociationType {
             OB, // Contains O and B-type stars
             T,  // Contains T Tauri stars
             R,  // Associated with reflection nebulae
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum StarType {
             // Star Formation & Early Stages
             GiantMolecularCloud, // Vast, cold, dense clouds of gas and dust, star birthplaces
@@ -360,7 +363,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             BosonStar,           // Hypothetical stars made of bosonic particles
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum PlanetType {
             // --- Terrestrial Planets (Rocky) ---
             // Based on composition and characteristics
@@ -422,7 +425,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             TrojanPlanet,          // A planet that orbits in the L4 or L5 Lagrange point of another, more massive planet.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum MoonType {
             // --- Regular Moons ---
             // Generally formed in orbit around a planet
@@ -465,7 +468,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum AsteroidType {
             // --- Main Belt Asteroid Types (Compositional) ---
             CType, // Carbonaceous: dark, low albedo, rich in carbon, most common Type (e.g., Ceres, before its reclassification)
@@ -513,7 +516,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             Icy,     // Asteroids containing significant amounts of ice.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum PhenomenonType {
             // --- Ancient Ruins Phenomena ---
             PsionicMonuments,        // Ruins emanating psychic energy, influencing mental states.
@@ -649,7 +652,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             CosmicConsciousness,     // The idea that the universe itself is conscious.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum NebulaType {
             // --- Formation Nebulae ---
             DarkNebula,            // Dense clouds of gas and dust that block visible light (e.g., Horsehead Nebula)
@@ -715,7 +718,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             ReionizationNebula,     // Nebulae from the reionization era of the universe
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum BlackHoleType {
             // --- Based on Mass ---
             StellarMassBlackHole,      // Formed from the collapse of massive stars, typically 3-20 solar masses
@@ -796,7 +799,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             UltraMassiveBlackHole,     // Extremely large black holes beyond the typical supermassive range (>100 billion solar masses)
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum ColonyType {
             // --- Current and Near-Future Scales ---
             Hamlet,        // Less than 100 people, tiny rural collection of homes.
@@ -845,7 +848,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             QuantumHabitat,    // Hypothetical, leveraging quantum phenomena to exist in multiple locations or dimensions simultaneously.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum AncientRuinsType {
             // --- Earth-Like Civilization Ruins (Generalized for Cosmic Scales) ---
             StoneMonoliths,            // Gigantic monoliths arranged in mysterious patterns (e.g., Stonehenge).
@@ -953,7 +956,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             InterstellarGraveyards,   // Burial grounds for intergalactic species, spanning entire planets.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum ArtifactType {
             // --- Earth-Inspired Artifacts (Generalized for Cosmic Scales) ---
             StoneRelic,              // Simple carved stones with symbols or inscriptions.
@@ -1084,7 +1087,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             CivilizationCodex,       // Documents an entire civilization’s history and culture.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum BuildingType {
             // --- Earth-Inspired Building Types ---
             VillageHut,              // Small, simple shelters for basic living.
@@ -1215,7 +1218,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             MemoryCrypt,                // Structures storing the preserved memories of a civilization.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum UnitType {
             // --- Infantry Units (Basic Ground Forces) ---
             WorkerDrone,             // Basic labor unit for resource gathering and construction.
@@ -1320,7 +1323,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             WormholeColossus,       // Unit capable of creating wormholes for strategic travel or destruction.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum FleetType {
             // --- Small-Scale Fleets ---
             ScoutFleet,             // Small fleet for reconnaissance and exploration.
@@ -1420,7 +1423,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             GodmakerFleet,          // Fleet with the capability to create or destroy celestial bodies at will.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum ShipType {
             Fighter,                // Small, fast ships for dogfighting.
             Cruiser,                // Medium-sized ships for multi-purpose roles.
@@ -1432,7 +1435,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             Support,                // Ships providing repair, refueling, or medical aid.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum NPCType {
             // --- Basic Civilian NPCs ---
             Civilian,               // Generic non-combatant living in settlements or colonies.
@@ -1563,7 +1566,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             Archivist,              // Custodian of vast libraries or data repositories.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum PlayerType {
             // --- Core Playstyles ---
             Explorer,              // Focuses on discovering new planets, systems, or phenomena.
@@ -1667,7 +1670,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
     //--
     // Metadata
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Entity {
             id: Principal,
             owner_id: Principal,
@@ -1675,7 +1678,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             coords: [f64; 2],
             metadata: Metadata,
         }
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct StarCluster {
             name: String,                       // Name of the star cluster
             description: String,                // Brief description of the star cluster
@@ -1697,7 +1700,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             can_attack: Option<bool>,           // Optional flag for attack capability
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Star {
             name: String,
             description: String,
@@ -1720,7 +1723,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             can_attack: Option<bool>,   // Optional flag for attack capability
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Planet {
             name: String,                       // Name of the planet
             description: String,                // Brief description of the planet
@@ -1749,7 +1752,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             can_attack: Option<bool>,           // Optional flag for attack capability
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Moon {
             name: String,                       // Name of the moon
             description: String,                // Brief description of the moon
@@ -1778,7 +1781,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             can_attack: Option<bool>,           // Optional flag for attack capability
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Asteroid {
             name: String,                       // Name of the asteroid
             description: String,                // Brief description of the asteroid
@@ -1806,7 +1809,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             can_attack: Option<bool>,           // Optional flag for attack capability
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Phenomenon {
             name: String,                       // Name of the phenomenon
             description: String,                // Brief description of the phenomenon
@@ -1827,7 +1830,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             can_attack: Option<bool>,           // Optional flag for attack capability
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Nebula {
             name: String,                       // Name of the nebula
             description: String,                // Brief description of the nebula
@@ -1847,7 +1850,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             can_attack: Option<bool>,           // Optional flag for attack capability
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct BlackHole {
             name: String,                       // Name of the black hole
             description: String,                // Brief description of the black hole
@@ -1870,7 +1873,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         }
 
         // Colony
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             struct Colony {
                 name: String,                       // Name of the colony
                 description: String,                // Brief description of the colony
@@ -1893,7 +1896,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             }
 
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             struct Infrastructure {
                 housing_capacity: u64,              // Total housing capacity
                 transportation: Transportation,     // Transportation systems
@@ -1903,7 +1906,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 education: Education,               // Education facilities
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             enum Transportation {
                 Ground,     // Ground-based transportation (e.g., roads, railways)
                 Air,        // Air-based transportation (e.g., aircraft, drones)
@@ -1912,7 +1915,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 Teleportation, // Hypothetical teleportation systems
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             enum EnergySource {
                 Solar,      // Solar energy
                 Nuclear,    // Nuclear energy
@@ -1922,34 +1925,34 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 DarkMatter, // Hypothetical dark matter energy
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             struct Communication {
                 network_type: NetworkType, // Type of communication network
                 bandwidth: f64,            // Bandwidth in terabits per second
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             enum NetworkType {
                 Wired,      // Wired communication networks
                 Wireless,   // Wireless communication networks
                 Quantum,    // Quantum communication networks
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             struct Healthcare {
                 hospitals: u64,            // Number of hospitals
                 clinics: u64,              // Number of clinics
                 medical_technology_level: u8, // Medical technology level (1-10 scale)
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             struct Education {
                 schools: u64,              // Number of schools
                 universities: u64,         // Number of universities
                 education_technology_level: u8, // Education technology level (1-10 scale)
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             struct Economy {
                 gdp: f64,                  // Gross Domestic Product in credits
                 currency: String,          // Currency used in the colony
@@ -1957,7 +1960,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 trade_partners: Vec<Principal>, // IDs of trade partner colonies
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             enum Industry {
                 Agriculture,    // Agricultural industry
                 Mining,         // Mining industry
@@ -1968,7 +1971,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 Military,       // Military industry
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             struct Governance {
                 government_type: GovernmentType, // Type of government
                 leader: Principal,               // ID of the leader
@@ -1976,7 +1979,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 stability: u8,                   // Stability level (1-10 scale)
             }
             
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             enum GovernmentType {
                 Democracy,      // Democratic government
                 Monarchy,       // Monarchical government
@@ -1987,7 +1990,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 Technocracy,    // Technocratic government
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             struct Culture {
                 language: String,           // Primary language
                 religion: Option<String>,   // Primary religion (if any)
@@ -1996,7 +1999,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 festivals: Vec<String>,     // List of festivals
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             struct Defenses {
                 military_units: u64,        // Number of military units
                 defense_technology_level: u8, // Defense technology level (1-10 scale)
@@ -2006,7 +2009,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
         //--
         
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Unit {
             name: String,                       // Name of the unit
             description: String,                // Brief description of the unit
@@ -2030,7 +2033,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             can_attack: bool,                   // Flag for attack capability
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Artifact {
             name: String,                       // Name of the artifact
             description: String,                // Brief description of the artifact
@@ -2054,7 +2057,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         }
 
         //AncientRuins
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct AncientRuins {
             name: String,                       // Name of the ancient ruins
             description: String,                // Brief description of the ruins
@@ -2079,7 +2082,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             dangers: Vec<Danger>,               // List of dangers or hazards in the ruins
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Fleet {
             name: String,                       // Name of the fleet
             description: String,                // Brief description of the fleet
@@ -2106,7 +2109,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             ships: Vec<Ship>,                   // List of ships in the fleet
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Ship {
             name: String,           // Name of the ship
             ship_type: ShipType,    // Type of ship (e.g., Fighter, Cruiser, Carrier)
@@ -2118,7 +2121,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             range: f64,             // Range of the ship's operations in light-years
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Building {
             name: String,                       // Name of the building
             description: String,                // Brief description of the building
@@ -2141,7 +2144,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             modules: Vec<BuildingModule>,       // List of modules or features of the building
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct BuildingModule {
             name: String,           // Name of the module
             description: String,    // Brief description of the module
@@ -2149,7 +2152,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             energy_cost: u64,       // Energy required to operate the module
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct NPC {
             name: String,                       // Name of the NPC
             description: String,                // Brief description of the NPC
@@ -2171,7 +2174,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             can_attack: Option<bool>,           // Optional flag for attack capability
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Player {
             id: Principal,
             username: String,
@@ -2186,7 +2189,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             associated_entities: Vec<Principal>, // IDs of associated entities (e.g., factions, colonies, fleets)
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Ability {
             name: String,                       // Name of the ability
             description: String,                // Brief description of the ability
@@ -2196,7 +2199,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             energy_cost: u64,                   // Energy cost of the ability
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum ItemType {
             Weapon,                 // Items used for combat.
             Tool,                   // Items used for utility or crafting.
@@ -2207,7 +2210,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             Key,                    // Items used to unlock doors or containers.
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Item {
             name: String,           // Name of the item
             description: String,    // Brief description of the item
@@ -2215,7 +2218,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             quantity: u32,          // Quantity of the item
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Danger {
             name: String,           // Name of the danger
             description: String,    // Brief description of the danger
@@ -2224,7 +2227,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         }
 
         // SpaceStation
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             struct SpaceStation {
                 name: String,                       // Name of the space station
                 description: String,                // Brief description of the station
@@ -2246,7 +2249,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 lore: Vec<String>,                  // Lore or historical records about the station
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             enum SpaceStationType {
                 TradeHub,               // Station focused on commerce and trade.
                 ResearchLab,            // Station dedicated to scientific research.
@@ -2260,7 +2263,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
                 TerraformingControl,    // Station managing planetary terraforming efforts.
             }
 
-            #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+            #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
             struct StationModule {
                 name: String,           // Name of the module
                 description: String,    // Brief description of the module
@@ -2270,27 +2273,27 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 
         //--
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Atmosphere {
             composition: Vec<(String, f64)>, // List of gases and their percentages (e.g., [("Nitrogen", 78.0), ("Oxygen", 21.0)])
             pressure: f64,                   // Surface pressure in Earth atmospheres (1.0 = Earth's pressure)
             albedo: f64,                     // Reflectivity of the planet (0 = absorbs all light, 1 = reflects all light)
             greenhouse_effect: f64,          // Greenhouse effect factor (1.0 = Earth-like)
         }
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct TemperatureRange {
             min: f64, // Minimum temperature in Kelvin
             max: f64, // Maximum temperature in Kelvin
             average: f64, // Average temperature in Kelvin
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Hydrosphere {
             water_coverage: f64, // Percentage of the surface covered by water (0.0 to 1.0)
             other_liquids: Vec<(String, f64)>, // Other liquids and their coverage percentages
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Geology {
             crust_composition: Vec<(String, f64)>, // Composition of the crust (e.g., [("Silicate", 60.0), ("Basalt", 40.0)])
             tectonic_activity: TectonicActivity,   // Level of tectonic activity
@@ -2298,7 +2301,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             magnetic_field: f64,                   // Magnetic field strength relative to Earth (1.0 = Earth's field)
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum TectonicActivity {
             None,       // No tectonic activity
             Low,        // Minor tectonic activity
@@ -2307,7 +2310,7 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             Extreme,    // Extreme tectonic activity
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum VolcanicActivity {
             None,       // No volcanic activity
             Low,        // Minor volcanic activity
@@ -2316,21 +2319,21 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             Extreme,    // Extreme volcanic activity
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Biosphere {
             life_type: LifeType, // Type of life (e.g., Carbon-based, Silicon-based)
             biodiversity: f64,   // Biodiversity index (0.0 to 1.0)
             intelligence: Option<IntelligenceLevel>, // Level of intelligence (if any)
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum LifeType {
             CarbonBased, // Life based on carbon
             SiliconBased, // Life based on silicon
             Other(String), // Other types of life
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum IntelligenceLevel {
             None,       // No intelligent life
             Primitive,  // Primitive intelligence (e.g., early humans)
@@ -2338,14 +2341,14 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             HighlyAdvanced, // Highly advanced intelligence (e.g., interstellar civilizations)
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Resource {
             name: String,       // Name of the resource (e.g., "Iron", "Water")
             abundance: f64,     // Abundance of the resource (0.0 to 1.0)
             accessibility: f64, // Accessibility of the resource (0.0 to 1.0)
         }
 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Composition {
             metals: f64,        // Percentage of metals (e.g., iron, nickel)
             silicates: f64,     // Percentage of silicate minerals
@@ -2358,14 +2361,14 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
 //--
 
     // Coordinates 
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         enum LocationParams {
             Ring { inner_radius: f64, outer_radius: f64 },
             Proximity { center: [f64; 2], max_distance: f64 },
             Random { x_range: [f64; 2], y_range: [f64; 2] },
         }
             
-        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
         struct Coordinates {
             x: f64,
             y: f64,
@@ -2435,43 +2438,21 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             })
         }
 
-        fn metadata_to_string(metadata: &Metadata) -> String {
-            match metadata {
-                Metadata::StarCluster(data) => format!("StarCluster: {:?}", data),
-                Metadata::Star(data) => format!("Star: {:?}", data),
-                Metadata::Planet(data) => format!("Planet: {:?}", data),
-                Metadata::Asteroid(data) => format!("Asteroid: {:?}", data),
-                Metadata::Moon(data) => format!("Moon: {:?}", data),
-                Metadata::Nebula(data) => format!("Nebula: {:?}", data),
-                Metadata::BlackHole(data) => format!("BlackHole: {:?}", data),
-                Metadata::AncientRuins(data) => format!("AncientRuins: {:?}", data),
-                Metadata::Artifacts(data) => format!("Artifacts: {:?}", data),
-                Metadata::Fleet(data) => format!("Fleet: {:?}", data),
-                Metadata::Unit(data) => format!("Unit: {:?}", data),
-                Metadata::Building(data) => format!("Building: {:?}", data),
-                Metadata::NPC(data) => format!("NPC: {:?}", data),
-                Metadata::Player(data) => format!("Player: {:?}", data),
-            }
-        }
-        
         #[query]
         fn export_entities() -> Vec<(f64, f64, String)> {
             GALAXY_TREE.with(|tree| {
                 tree.borrow()
                     .iter()
                     .map(|entity| {
-                        // Use the custom metadata_to_string function
-                        let metadata_str = metadata_to_string(&entity.metadata);
-        
+                        let metadata_json = serde_json::to_string(&entity.metadata)
+                            .unwrap_or_else(|_| "{}".to_string()); // Convert &str to String
                         ic_cdk::println!(
                             "Entity ID: {}, Type: {:?}, Metadata: {}",
                             entity.id,
                             entity.entity_type,
-                            metadata_str
+                            metadata_json
                         );
-        
-                        // Return the coordinates and metadata string
-                        (entity.coords[0], entity.coords[1], metadata_str)
+                        (entity.coords[0], entity.coords[1], metadata_json)
                     })
                     .collect()
             })
@@ -3080,19 +3061,60 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
             }
         };
     
-        // Create a StarCluster of type Asterism in ring mode
+        // Create metadata for the StarCluster
+        let star_cluster_metadata = Metadata::StarCluster(StarCluster {
+            name: "Asterism Cluster".to_string(),
+            description: "A beautiful cluster of stars".to_string(),
+            cluster_type: StarClusterType::Asterism {
+                min_stars: 5,
+                max_stars: 10,
+                star_types: vec!["G".to_string(), "K".to_string(), "M".to_string()],
+                phenomena: vec!["Nebula".to_string(), "Black Hole".to_string()], // Remains as Vec<String>
+            },
+            coords: [500.0, 800.0],
+            parent_galaxy_id: caller,
+            radius: 50.0,
+            mass: 1000.0,
+            age: 5.0,
+            star_count: 10,
+            star_types: vec!["G".to_string(), "K".to_string(), "M".to_string()],
+            phenomena: vec![
+                PhenomenonType::Nebula,
+                PhenomenonType::PsionicMonuments
+            ], // Now uses PhenomenonType enum
+            composition: Composition { // Initialized as struct instead of enum
+                metals: 0.1,
+                silicates: 0.3,
+                carbon: 0.2,
+                ice: 0.1,
+                organics: 0.05,
+                other: vec![("Gas".to_string(), 0.25)]
+            },
+            temperature: TemperatureRange {
+                min: 3000.0,
+                max: 6000.0,
+                average: 4500.0, // Added average field
+            },
+            associated_entities: vec![],
+            hp: 5000,
+            shield: Some(1000),
+            can_move: Some(false),
+            can_attack: Some(false),
+        });
+    
+        // Create the StarCluster entity
         add_entity(
             EntityType::StarCluster,
             LocationParams::Ring {
                 inner_radius: 1000.0,
                 outer_radius: 1100.0,
             },
-            None, // No additional metadata
+            Some(star_cluster_metadata), // Pass the metadata here
             Some(StarClusterType::Asterism {
-                min_stars: 5, // Minimum number of stars
-                max_stars: 10, // Maximum number of stars
-                star_types: vec!["G".to_string(), "K".to_string(), "M".to_string()], // Example star types
-                phenomena: vec!["Nebula".to_string(), "Black Hole".to_string()], // Example phenomena
+                min_stars: 5,
+                max_stars: 10,
+                star_types: vec!["G".to_string(), "K".to_string(), "M".to_string()],
+                phenomena: vec!["Nebula".to_string(), "Black Hole".to_string()],
             }),
         )
         .map_err(|e| format!("Failed to create StarCluster: {}", e))?;
@@ -3140,8 +3162,6 @@ use rstar::{RTree, RTreeObject, AABB, PointDistance};
         ))
     }
     
-    
-
     // Mock functions for referral code handling
     async fn assign_unassigned_referral_code(_player_id: Principal, code: String) -> ReferralCodeResult {
         // Simulate referral code assignment logic

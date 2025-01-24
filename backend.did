@@ -700,11 +700,6 @@ type ItemType = variant {
   Clothing;
 };
 type LifeType = variant { SiliconBased; CarbonBased; Other : text };
-type LocationParams = variant {
-  Proximity : record { center : vec float64; max_distance : float64 };
-  Ring : record { outer_radius : float64; inner_radius : float64 };
-  Random : record { x_range : vec float64; y_range : vec float64 };
-};
 type Metadata = variant {
   NPC : NPC;
   Asteroid : Asteroid;
@@ -1186,9 +1181,8 @@ type Resource = record {
   abundance : float64;
   accessibility : float64;
 };
-type Result = variant { Ok : principal; Err : text };
-type Result_1 = variant { Ok : record { bool; opt Player; text }; Err : text };
-type Result_2 = variant { Ok : bool; Err : text };
+type Result = variant { Ok : record { bool; opt Player; text }; Err : text };
+type Result_1 = variant { Ok : bool; Err : text };
 type Ship = record {
   shield : opt nat64;
   name : text;
@@ -1385,12 +1379,6 @@ type Unit = record {
   health : nat64;
 };
 service : {
-  add_entity : (
-      EntityType,
-      LocationParams,
-      opt Metadata,
-      opt StarClusterType,
-    ) -> (Result);
   export_entities : () -> (vec record { float64; float64; text }) query;
   find_entities_in_area : (
       record { float64; float64 },
@@ -1402,6 +1390,6 @@ service : {
   get_player_empire_borders : (principal) -> (
       opt record { record { float64; float64 }; record { float64; float64 } },
     ) query;
-  signup : (text, nat32, opt text, text) -> (Result_1);
-  validate_entity_distances : (principal, float64) -> (Result_2) query;
+  signup : (text, nat32, opt text, text) -> (Result);
+  validate_entity_distances : (principal, float64) -> (Result_1) query;
 }
