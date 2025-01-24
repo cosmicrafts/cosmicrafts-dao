@@ -569,6 +569,13 @@ type EntityType = variant {
   Artifacts;
   Colony;
 };
+type ExportedEntity = record {
+  id : principal;
+  metadata : text;
+  owner_id : principal;
+  entity_type : EntityType;
+  coords : vec float64;
+};
 type Fleet = record {
   parent_galaxy_id : principal;
   phenomena : vec PhenomenonType;
@@ -1379,7 +1386,7 @@ type Unit = record {
   health : nat64;
 };
 service : {
-  export_entities : () -> (vec record { float64; float64; text }) query;
+  export_entities : () -> (vec ExportedEntity) query;
   find_entities_in_area : (
       record { float64; float64 },
       record { float64; float64 },

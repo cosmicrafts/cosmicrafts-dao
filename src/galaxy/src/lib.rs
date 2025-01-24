@@ -2438,21 +2438,30 @@ use serde::Serialize;
             })
         }
 
+        #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+        struct ExportedEntity {
+            id: Principal,
+            owner_id: Principal,
+            entity_type: EntityType,
+            coords: [f64; 2],
+            metadata: String,
+        }
+
         #[query]
-        fn export_entities() -> Vec<(f64, f64, String)> {
+        fn export_entities() -> Vec<ExportedEntity> {
             GALAXY_TREE.with(|tree| {
                 tree.borrow()
                     .iter()
                     .map(|entity| {
                         let metadata_json = serde_json::to_string(&entity.metadata)
-                            .unwrap_or_else(|_| "{}".to_string()); // Convert &str to String
-                        ic_cdk::println!(
-                            "Entity ID: {}, Type: {:?}, Metadata: {}",
-                            entity.id,
-                            entity.entity_type,
-                            metadata_json
-                        );
-                        (entity.coords[0], entity.coords[1], metadata_json)
+                            .unwrap_or_else(|_| "{}".to_string());
+                        ExportedEntity {
+                            id: entity.id,
+                            owner_id: entity.owner_id,
+                            entity_type: entity.entity_type.clone(),
+                            coords: entity.coords,
+                            metadata: metadata_json,
+                        }
                     })
                     .collect()
             })
