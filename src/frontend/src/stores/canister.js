@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { HttpAgent } from '@dfinity/agent';
-import { createActor as createGalaxyActor, canisterId as galaxyCanisterId } from '../../../declarations/galaxy'; // Update the import path as needed
 import { createActor as createBackendActor, canisterId as backendCanisterId } from '../../../declarations/backend'; // Existing backend canister
 import useAuthStore from './auth.js';
 
