@@ -1,18 +1,29 @@
 <template>
   <div id="metaverse-map">
-    <svg ref="svgCanvas"></svg>
-    <div id="tooltip" style="opacity: 0;"></div>
+    <!-- Background Layer -->
+    <Stars :count="1000" class="layer background-stars" />
+    
+    <!-- Nebula Layer -->
+    <Nebula class="layer nebulas" />
+    
+    <!-- Main Map Canvas -->
+    <svg ref="svgCanvas" class="layer main-map"></svg>
+    
+    <!-- UI Overlay -->
+    <div class="layer ui-overlay">
+      <div id="tooltip" style="opacity: 0;"></div>
     <button id="reset-zoom" @click="resetZoom">Reset Zoom</button>
     <div id="size-control">
       <label for="entity-size">Entity Size:</label>
       <input
         type="range"
         id="entity-size"
-        min="0.01"
+        min="0.1"
         max="30"
         v-model="entitySize"
         @input="updateSizes"
       />
+    </div>
     </div>
   </div>
 </template>
@@ -20,36 +31,48 @@
 <script>
 import * as d3 from "d3";
 import { useCanisterStore } from "@/stores/canister";
-import entityIcon from "@/assets/icons/entity.svg";
+import entityIcon from "@/assets/webp/map/planet.webp";
+import Stars from "@/components/Map/Stars.vue";
+import Nebula from "@/components/Map/Nebula.vue";
 
 export default {
+  components: { Stars, Nebula },
   name: "MetaverseMap",
   data() {
     return {
-      rawEntities: "", // Raw data fetched from the canister
+      rawEntities: "",
       zoomBehavior: null,
-      entitySize: 5, // Default size for entities
+      entitySize: 5,
+      currentTransform: d3.zoomIdentity,
     };
   },
   mounted() {
     this.fetchEntities();
+    this.initializeZoom();
   },
   methods: {
     async fetchEntities() {
       try {
         const canisterStore = useCanisterStore();
         const cosmicrafts = await canisterStore.get("cosmicrafts");
-
-        // Fetch entities from the canister
         const entitiesData = await cosmicrafts.export_entities();
-        console.log("Fetched raw entities:", entitiesData);
-
-        this.rawEntities = entitiesData; // Store raw data
+        this.rawEntities = entitiesData;
         const parsedEntities = this.parseEntities(entitiesData);
         this.renderMap(parsedEntities);
       } catch (error) {
         console.error("Error fetching or parsing entities:", error);
       }
+    },
+
+    initializeZoom() {
+      this.zoomBehavior = d3.zoom()
+        .scaleExtent([0.1, 20])
+        .on('zoom', (event) => {
+          this.currentTransform = event.transform;
+          d3.select('.background-stars').attr('transform', event.transform);
+          d3.select('.nebulas').attr('transform', event.transform);
+          d3.select('.main-map').attr('transform', event.transform);
+        });
     },
 
     parseEntities(entitiesData) {
@@ -60,8 +83,6 @@ export default {
 
       return entitiesData.map((entity) => {
         const { id, metadata, owner_id, entity_type, coords } = entity;
-
-        // Handle metadata parsing if it's JSON or structured text
         let parsedMetadata;
         try {
           parsedMetadata = JSON.parse(metadata);
@@ -70,69 +91,17 @@ export default {
         }
 
         return {
-          id, // Principal as entity ID
+          id,
           x: coords[0] || 0,
           y: coords[1] || 0,
-          type: Object.keys(entity_type)[0], // Extract variant key
+          type: Object.keys(entity_type)[0],
           name: parsedMetadata.name || "Unnamed Entity",
           description: parsedMetadata.description || "No description available",
-          owner: owner_id.toText(), // Convert Principal to text for display
+          owner: owner_id.toText(),
           resources: parsedMetadata.resources || [],
           size: parsedMetadata.size || 10,
         };
       });
-    },
-
-    extractMetadataDetails(entityType, entityDetails, index) {
-      // Base entity with common fields, handling missing data gracefully
-      const baseEntity = {
-        name: entityDetails.name || "Unnamed Entity",
-        description: entityDetails.description || "No description available",
-        type: entityType,
-        category: "Celestial",
-        subcategory: entityType || "Unknown",
-        size: entityDetails.radius || entityDetails.mass || "Unknown",
-        owner: "Unknown", // Owner information not available in the provided data
-        coords: entityDetails.coords || [0, 0], // Default to [0, 0] if not available
-        zone: "Unknown", // Zone information not available in the provided data
-        resources: entityDetails.resources || [],
-        tags: [], // Tags information not directly available
-        phenomena: entityDetails.phenomena || [],
-        parent: entityDetails.parent_cluster_id || entityDetails.parent_galaxy_id || "None",
-        hp: entityDetails.hp || 0,
-        shield: entityDetails.shield || 0,
-        can_move: entityDetails.can_move || false,
-        can_attack: entityDetails.can_attack || false,
-      };
-
-      // Add specific fields based on entity type
-      switch (entityType) {
-        case "Star":
-          return {
-            ...baseEntity,
-            star_type: entityDetails.star_type,
-            temperature: entityDetails.temperature,
-            luminosity: entityDetails.luminosity,
-            mass: entityDetails.mass,
-            radius: entityDetails.radius,
-            age: entityDetails.age,
-            spectral_class: entityDetails.spectral_class,
-            life_stage: entityDetails.life_stage,
-          };
-        case "StarCluster":
-          return {
-            ...baseEntity,
-            cluster_type: entityDetails.cluster_type,
-            star_count: entityDetails.star_count,
-            star_types: entityDetails.star_types,
-            composition: entityDetails.composition,
-            temperature: entityDetails.temperature,
-          };
-        // Add cases for other entity types (Planet, Moon, Asteroid) similarly
-        // ... (cases for Planet, Moon, Asteroid, etc.)
-        default:
-          return baseEntity;
-      }
     },
 
     renderMap(entities) {
@@ -143,200 +112,157 @@ export default {
 
       svg.attr("width", width).attr("height", height).selectAll("*").remove();
 
-      // Define gradients and patterns in <defs>
       const defs = svg.append("defs");
-
-      // Galaxy gradient
-      defs
-        .append("radialGradient")
+      defs.append("radialGradient")
         .attr("id", "galaxy-gradient")
         .attr("cx", "50%")
         .attr("cy", "50%")
         .attr("r", "50%")
         .selectAll("stop")
         .data([
-          { offset: "0%", color: "#000000", opacity: 1 }, // Black hole center
+          { offset: "0%", color: "#000000", opacity: 1 },
           { offset: "16%", color: "#000000", opacity: 0 },
           { offset: "28%", color: "#611F6B", opacity: 0.3 },
           { offset: "64%", color: "#333FB3", opacity: 0.25 },
           { offset: "88%", color: "#000000", opacity: 0.4 },
-          { offset: "100%", color: "0876F4", opacity: 0 }, // Fade to black
+          { offset: "100%", color: "0876F4", opacity: 0 },
         ])
         .join("stop")
         .attr("offset", (d) => d.offset)
         .attr("stop-color", (d) => d.color)
         .attr("stop-opacity", (d) => d.opacity);
 
-      // Create the zoomable container group
       const container = svg.append("g");
-
-      // Add the galaxy background to the zoomable container
-      container
-        .append("rect")
-        .attr("x", -width) // Make the background larger than the viewport for better visuals
+      container.append("rect")
+        .attr("x", -width)
         .attr("y", -height)
         .attr("width", 3 * width)
         .attr("height", 3 * height)
         .attr("fill", "url(#galaxy-gradient)");
 
-      // Determine the coordinate bounds
       const xDomain = d3.extent(entities, (d) => d.x);
       const yDomain = d3.extent(entities, (d) => d.y);
 
-      // Adjust scales to maintain aspect ratio
-      const xScale = d3
-        .scaleLinear()
+      const xScale = d3.scaleLinear()
         .domain(xDomain)
-        .range(
-          aspectRatio >= 1
-            ? [50, width - 50]
-            : [50, width - 50 * aspectRatio]
-        );
+        .range(aspectRatio >= 1 ? [50, width - 50] : [50, width - 50 * aspectRatio]);
 
-      const yScale = d3
-        .scaleLinear()
+      const yScale = d3.scaleLinear()
         .domain(yDomain)
-        .range(
-          aspectRatio >= 1
-            ? [height - 50, 50]
-            : [height - 50 * aspectRatio, 50]
-        );
+        .range(aspectRatio >= 1 ? [height - 50, 50] : [height - 50 * aspectRatio, 50]);
 
-      // Render entities in the container
       this.renderEntities(container, entities, xScale, yScale);
-
-      // Initialize zoom behavior
-      this.zoomBehavior = d3
-        .zoom()
-        .scaleExtent([0.5, 20])
-        .translateExtent([
-          [-width, -height],
-          [2 * width, 2 * height],
-        ])
-        .on("zoom", (event) => {
-          container.attr("transform", event.transform); // Scale and move the container (and background)
-        });
-
       svg.call(this.zoomBehavior);
 
-      // Reset the camera (initial transform)
-      this.resetZoom();
-
-      // Update on resize
-      window.addEventListener("resize", () => {
-        const newWidth = window.innerWidth;
-        const newHeight = window.innerHeight;
-        const newAspectRatio = newWidth / newHeight;
-
-        svg.attr("width", newWidth).attr("height", newHeight);
-
-        // Update background dimensions
-        container
-          .selectAll("rect")
-          .attr("x", -newWidth)
-          .attr("y", -newHeight)
-          .attr("width", 3 * newWidth)
-          .attr("height", 3 * newHeight);
-
-        // Adjust scales to maintain aspect ratio
-        const newXScale = d3
-          .scaleLinear()
-          .domain(xDomain)
-          .range(
-            newAspectRatio >= 1
-              ? [50, newWidth - 50]
-              : [50, newWidth - 50 * newAspectRatio]
-          );
-
-        const newYScale = d3
-          .scaleLinear()
-          .domain(yDomain)
-          .range(
-            newAspectRatio >= 1
-              ? [newHeight - 50, 50]
-              : [newHeight - 50 * newAspectRatio, 50]
-          );
-
-        // Re-render entities with updated scales
-        this.renderEntities(container, entities, newXScale, newYScale);
-      });
+      window.addEventListener("resize", () => this.handleResize(entities, xDomain, yDomain));
     },
 
     renderEntities(container, entities, xScale, yScale) {
-      container
-        .selectAll(".entity")
+      const tooltip = d3.select("#tooltip");
+      const tooltipPadding = 10;
+      const tooltipWidth = 300;
+      const tooltipHeight = 150;
+
+      container.selectAll(".entity")
         .data(entities)
         .join("image")
         .attr("class", "entity")
-        .attr("x", (d) => xScale(d.x) - this.entitySize / 2) // Center the SVG
-        .attr("y", (d) => yScale(d.y) - this.entitySize / 2) // Center the SVG
-        .attr("width", this.entitySize) // Dynamically set width
-        .attr("height", this.entitySize) // Dynamically set height
-        .attr("xlink:href", entityIcon) // Use imported SVG
+        .attr("x", (d) => xScale(d.x) - this.entitySize / 2)
+        .attr("y", (d) => yScale(d.y) - this.entitySize / 2)
+        .attr("width", this.entitySize)
+        .attr("height", this.entitySize)
+        .attr("xlink:href", entityIcon)
         .on("mouseover", (event, d) => {
-
-          // Add additional fields for specific entity types
-          if (d.type === "Star") {
-            tooltipContent += `
-              <b>Star Type:</b> ${d.star_type}<br>
-              <b>Temperature:</b> ${d.temperature} K<br>
-              <b>Luminosity:</b> ${d.luminosity}<br>
-              <b>Mass:</b> ${d.mass} solar masses<br>
-              <b>Radius:</b> ${d.radius} solar radii<br>
-              <b>Age:</b> ${d.age} billion years<br>
-              <b>Spectral Class:</b> ${d.spectral_class}<br>
-              <b>Life Stage:</b> ${d.life_stage}<br>
-            `;
-          } else if (d.type === "StarCluster") {
-            tooltipContent += `
-              <b>Cluster Type:</b> ${d.cluster_type}<br>
-              <b>Radius:</b> ${d.radius} light-years<br>
-              <b>Mass:</b> ${d.mass} solar masses<br>
-              <b>Age:</b> ${d.age} billion years<br>
-              <b>Star Count:</b> ${d.star_count}<br>
-              <b>Star Types:</b> ${d.star_types.join(", ")}<br>
-              <b>Composition:</b> ${JSON.stringify(d.composition)}<br>
-            `;
+          const [x, y] = d3.pointer(event);
+          const transformed = this.currentTransform.invert([x, y]);
+          
+          let tooltipContent = this.generateTooltipContent(d);
+          
+          // Calculate position considering viewport boundaries
+          let left = event.pageX + tooltipPadding;
+          let top = event.pageY - tooltipPadding;
+          
+          if (left + tooltipWidth > window.innerWidth) {
+            left = event.pageX - tooltipWidth - tooltipPadding;
+          }
+          if (top + tooltipHeight > window.innerHeight) {
+            top = event.pageY - tooltipHeight - tooltipPadding;
           }
 
-          d3.select("#tooltip")
+          tooltip
             .style("opacity", 1)
             .html(tooltipContent)
-            .style("left", `${event.pageX + 10}px`)
-            .style("top", `${event.pageY - 50}px`);
+            .style("left", `${left}px`)
+            .style("top", `${top}px`);
         })
-        .on("mouseover", (event, d) => {
-          const tooltipContent = `
-            <b>ID:</b> ${d.id}<br>
-            <b>Name:</b> ${d.name}<br>
-            <b>Type:</b> ${d.type}<br>
-            <b>Description:</b> ${d.description}<br>
-            <b>Size:</b> ${d.size}<br>
-            <b>Owner:</b> ${d.owner}<br>
-            <b>Coordinates:</b> (${d.x}, ${d.y})<br>
-          `;
-          d3.select("#tooltip")
-            .style("opacity", 1)
-            .html(tooltipContent)
-            .style("left", `${event.pageX + 10}px`)
-            .style("top", `${event.pageY - 50}px`);
+        .on("mouseout", () => {
+          tooltip.style("opacity", 0);
         });
+    },
 
+    generateTooltipContent(d) {
+      let content = `
+        <b>ID:</b> ${d.id}<br>
+        <b>Name:</b> ${d.name}<br>
+        <b>Type:</b> ${d.type}<br>
+        <b>Description:</b> ${d.description}<br>
+        <b>Size:</b> ${d.size}<br>
+        <b>Owner:</b> ${d.owner}<br>
+        <b>Coordinates:</b> (${d.x}, ${d.y})<br>
+      `;
+
+      if (d.type === "Star") {
+        content += `
+          <b>Star Type:</b> ${d.star_type}<br>
+          <b>Temperature:</b> ${d.temperature} K<br>
+          <b>Luminosity:</b> ${d.luminosity}<br>
+        `;
+      } else if (d.type === "StarCluster") {
+        content += `
+          <b>Cluster Type:</b> ${d.cluster_type}<br>
+          <b>Radius:</b> ${d.radius} light-years<br>
+        `;
+      }
+
+      return content;
+    },
+
+    handleResize(entities, xDomain, yDomain) {
+      const svg = d3.select(this.$refs.svgCanvas);
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+      const newAspectRatio = newWidth / newHeight;
+
+      svg.attr("width", newWidth).attr("height", newHeight);
+
+      const container = svg.select("g");
+      container.select("rect")
+        .attr("x", -newWidth)
+        .attr("y", -newHeight)
+        .attr("width", 3 * newWidth)
+        .attr("height", 3 * newHeight);
+
+      const newXScale = d3.scaleLinear()
+        .domain(xDomain)
+        .range(newAspectRatio >= 1 ? [50, newWidth - 50] : [50, newWidth - 50 * newAspectRatio]);
+
+      const newYScale = d3.scaleLinear()
+        .domain(yDomain)
+        .range(newAspectRatio >= 1 ? [newHeight - 50, 50] : [newHeight - 50 * newAspectRatio, 50]);
+
+      this.renderEntities(container, entities, newXScale, newYScale);
     },
 
     updateSizes() {
-      // Re-render entities with the updated size
       const svg = d3.select(this.$refs.svgCanvas);
       const container = svg.select("g");
       const entities = this.parseEntities(this.rawEntities);
 
-      const xScale = d3
-        .scaleLinear()
+      const xScale = d3.scaleLinear()
         .domain(d3.extent(entities, (d) => d.x))
         .range([50, window.innerWidth - 50]);
 
-      const yScale = d3
-        .scaleLinear()
+      const yScale = d3.scaleLinear()
         .domain(d3.extent(entities, (d) => d.y))
         .range([window.innerHeight - 50, 50]);
 
@@ -344,7 +270,6 @@ export default {
     },
 
     resetZoom() {
-      // Reset zoom to initial state
       const svg = d3.select(this.$refs.svgCanvas);
       svg.call(this.zoomBehavior.transform, d3.zoomIdentity);
     },
@@ -354,25 +279,46 @@ export default {
 
 <style scoped>
 #metaverse-map {
-  position: relative;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+  
+}
+
+.layer {
+
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+}
+
+.background-stars { z-index: 1; }
+.nebulas { z-index: 2; }
+.main-map { z-index: 3; }
+.ui-overlay { z-index: 4; }
+
+.nebula {
+  mix-blend-mode: screen;
 }
 
 svg {
-  border: 1px solid #444;
+  mix-blend-mode: screen;
 }
 
 #tooltip {
   position: absolute;
   padding: 10px;
   background: rgba(255, 255, 255, 0.9);
+  background: #222222;
   border: 1px solid #333;
   border-radius: 8px;
   pointer-events: none;
-  font-size: 12px;
-  color: black;
+  font-size: 1rem;
+  color: rgb(255, 255, 255);
 }
 
 #reset-zoom {
@@ -388,7 +334,7 @@ svg {
 }
 
 #reset-zoom:hover {
-  background-color: #555;
+  background-color: #ffffff;
 }
 
 #size-control {

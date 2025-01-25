@@ -16,6 +16,7 @@
     "src/frontend"
   ],
   "dependencies": {
-    "d3": "^7.9.0"
+    "d3": "^7.9.0",
+    "phaser": "^3.87.0"
   }
 }

@@ -1,32 +1,30 @@
-<script setup>
-import { useI18n } from 'vue-i18n';
-
-const { t } = useI18n();
-</script>
-
 <template>
-  <section class="dashboard">
-    <h1>{{ t('header.dashboard') }}</h1>
-    <p>{{ t('header.dashboard') }}</p>
-    <!-- Add your dashboard content here -->
-  </section>
+  <div class="space-scene">
+    <Stars :count="1000" />
+    <Nebula
+      :noiseFrequency="0.03"
+      :displacementScale="80"
+      colorStart="rgba(150, 100, 255, 0.9)"
+      colorEnd="rgba(80, 60, 200, 0.1)"
+    />
+  </div>
 </template>
 
-<style scoped>
-.dashboard {
-  padding: 2rem;
-  text-align: center;
-}
+<script>
+import Stars from "@/components/Map/Stars.vue";
+import Nebula from "@/components/Map/Nebula.vue";
 
-.dashboard h1 {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #fff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-}
+export default {
+  components: { Stars, Nebula },
+};
+</script>
 
-.dashboard p {
-  font-size: 1.2rem;
-  color: #ddd;
+<style>
+.space-scene {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  position: relative;
+  overflow: hidden;
 }
 </style>
