@@ -1,5 +1,6 @@
 [workspace]
 members = [
-    "src/galaxy"
+    "src/galaxy",
+    "src/game"
 ]
 resolver = "2"

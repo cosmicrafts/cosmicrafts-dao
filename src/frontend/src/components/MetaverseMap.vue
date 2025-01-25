@@ -65,14 +65,46 @@ export default {
     },
 
     initializeZoom() {
+      const svg = d3.select(this.$refs.svgCanvas);
+      
       this.zoomBehavior = d3.zoom()
-        .scaleExtent([0.1, 20])
-        .on('zoom', (event) => {
+        .scaleExtent([0.1, 20]) // Min and max zoom levels
+        .translateExtent([
+          [-window.innerWidth, -window.innerHeight], // Min bounds
+          [2 * window.innerWidth, 2 * window.innerHeight], // Max bounds
+        ])
+        .on("zoom", (event) => {
           this.currentTransform = event.transform;
-          d3.select('.background-stars').attr('transform', event.transform);
-          d3.select('.nebulas').attr('transform', event.transform);
-          d3.select('.main-map').attr('transform', event.transform);
+          this.applyZoomTransform(event.transform);
         });
+
+      // Apply the initial zoom transform
+      svg.call(this.zoomBehavior);
+    },
+
+    applyZoomTransform(transform) {
+      // Apply the same transform to all layers
+      d3.select('.background-stars').attr('transform', transform);
+      d3.select('.nebulas').attr('transform', transform);
+      d3.select('.main-map').attr('transform', transform);
+
+      // Update entity positions relative to the zoom transform
+      this.updateEntityPositions(transform);
+    },
+
+    updateEntityPositions(transform) {
+      const entities = d3.selectAll(".entity");
+      entities.attr("transform", (d) => {
+        const [x, y] = transform.apply([d.x, d.y]);
+        return `translate(${x - this.entitySize / 2}, ${y - this.entitySize / 2})`;
+      });
+    },
+
+    resetZoom() {
+      const svg = d3.select(this.$refs.svgCanvas);
+      svg.transition()
+        .duration(750) // Smooth transition
+        .call(this.zoomBehavior.transform, d3.zoomIdentity); // Reset to initial state
     },
 
     parseEntities(entitiesData) {
@@ -120,12 +152,12 @@ export default {
         .attr("r", "50%")
         .selectAll("stop")
         .data([
-          { offset: "0%", color: "#000000", opacity: 1 },
-          { offset: "16%", color: "#000000", opacity: 0 },
-          { offset: "28%", color: "#611F6B", opacity: 0.3 },
-          { offset: "64%", color: "#333FB3", opacity: 0.25 },
-          { offset: "88%", color: "#000000", opacity: 0.4 },
-          { offset: "100%", color: "0876F4", opacity: 0 },
+          { offset: "0%", color: "#000000", opacity: .1 },
+          { offset: "16%", color: "#000000", opacity: 1 },
+          { offset: "28%", color: "#611F6B", opacity: 1 },
+          { offset: "64%", color: "#333FB3", opacity: 1 },
+          { offset: "88%", color: "#000000", opacity: 1 },
+          { offset: "100%", color: "0876F4", opacity: 1 },
         ])
         .join("stop")
         .attr("offset", (d) => d.offset)
@@ -269,10 +301,6 @@ export default {
       this.renderEntities(container, entities, xScale, yScale);
     },
 
-    resetZoom() {
-      const svg = d3.select(this.$refs.svgCanvas);
-      svg.call(this.zoomBehavior.transform, d3.zoomIdentity);
-    },
   },
 };
 </script>
