@@ -4,3 +4,10 @@ members = [
     "src/game"
 ]
 resolver = "2"
+
+[profile.release]
+opt-level = 'z'        # Optimize for smallest size
+lto = "thin"           # Link-Time Optimization
+debug = false          # Strip debug symbols
+panic = "abort"        # No panic strings
+codegen-units = 1      # Slower builds but better optimizations

@@ -2,6 +2,7 @@ use bevy::input::mouse::{MouseMotion, MouseScrollUnit, MouseWheel};
 use bevy::prelude::*;
 use wasm_bindgen::prelude::*;
 
+
 // Components
 #[derive(Component, Debug)]
 struct Position {

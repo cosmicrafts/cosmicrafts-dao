@@ -6,11 +6,15 @@
       "candid": "backend.did",
       "build": "make build"
     },
-    "game": {
-      "type": "rust",
-      "package": "game",
-      "candid": "backend.did",
-      "build": "make build"
+    "frontend": {
+      "dependencies": [
+        "backend"
+      ],
+      "source": [
+        "src/frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "frontend"
     }
   },
   "defaults": {
