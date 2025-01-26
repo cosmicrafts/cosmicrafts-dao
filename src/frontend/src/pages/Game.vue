@@ -1,48 +1,50 @@
 <template>
   <div class="game">
-    <MetaverseMap :rawEntities="rawEntities" />
+    <canvas id="game-canvas"></canvas>
   </div>
 </template>
 
 <script>
-import MetaverseMap from "@/components/MetaverseMap.vue";
 import { ref, onMounted } from "vue";
 
 export default {
-  components: {
-    MetaverseMap,
-  },
+  name: "GameView",
   setup() {
-    const rawEntities = ref(null);
-
     onMounted(async () => {
       try {
-        const response = await fetch("/entities.json");
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        rawEntities.value = await response.text(); // Fetch raw text
+        // Dynamically import the Wasm module
+        const wasmModule = await import("@/assets/game.js");
+
+        // Initialize the Wasm module
+        await wasmModule.default();
+
+        // Call your exported Rust function to start the game
+        wasmModule.start_game();
+
+        console.log("WASM game initialized successfully!");
       } catch (error) {
-        console.error("Failed to fetch entities:", error);
+        console.error("Failed to load or initialize WASM game:", error);
       }
     });
-
-    return {
-      rawEntities,
-    };
   },
 };
-
 </script>
 
 <style scoped>
-/* Minimal styling */
 .game {
   width: 100vw;
   height: 100vh;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #000;
+  background-color: #000;
+}
+
+#game-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 </style>
