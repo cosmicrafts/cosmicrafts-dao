@@ -161,14 +161,14 @@ fn zoom_camera(
           .add_plugins(DefaultPlugins.set(WindowPlugin {
               primary_window: Some(Window {
                   fit_canvas_to_parent: true,
+                  prevent_default_event_handling: false, // Allow default event handling
+                  canvas: Some("#game-canvas".to_string()), // Ensure Bevy targets the correct canvas
                   ..default()
               }),
               ..default()
           }))
           .insert_resource(ZoomLevel(1.0))
           .add_systems(Startup, setup)
-          .add_systems(Update, (move_camera, zoom_camera, sync_position, log_entity_data)) // Add log_entity_data
+          .add_systems(Update, (move_camera, zoom_camera, sync_position, log_entity_data))
           .run();
   }
-  
-
