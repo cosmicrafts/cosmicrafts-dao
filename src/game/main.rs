@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use wasm_bindgen::prelude::*;
 use bevy_pancam::{PanCam, PanCamPlugin};
+use bevy_enoki::prelude::*;
 
 // Components
 #[derive(Component, Debug)]
@@ -22,7 +23,11 @@ fn sync_position(mut query: Query<(&mut Position, &Transform)>) {
     }
 }
 
-fn setup(mut commands: Commands) {
+fn setup(
+    mut commands: Commands,
+    mut materials: ResMut<Assets<SpriteParticle2dMaterial>>,
+    server: Res<AssetServer>,
+) {
     // Spawn the main camera with PanCam
     commands.spawn((
         Camera2d,
@@ -35,8 +40,8 @@ fn setup(mut commands: Commands) {
         },
     ));
 
-      // Spawn star
-      commands.spawn((
+    // Spawn star
+    commands.spawn((
         Position { x: 0.0, y: 0.0 },
         EntityType::Star,
         Sprite {
@@ -60,6 +65,13 @@ fn setup(mut commands: Commands) {
         Transform::from_translation(Vec3::new(50.0, 20.0, 0.0)),
         Visibility::default(),
     ));
+
+    // Spawn particle system near the star
+    commands.spawn((
+        ParticleSpawner::default(),
+        ParticleEffectHandle(server.load("firework.particle.ron")),
+        Transform::from_translation(Vec3::new(10.0, 0.0, 0.0)), // Position the particle system near the star
+    ));
 }
 
 #[wasm_bindgen]
@@ -75,7 +87,8 @@ pub fn start_game() {
                 }),
                 ..default()
             }),
-            PanCamPlugin::default(), // Add the PanCam plugin
+            PanCamPlugin::default(),
+            EnokiPlugin,
         ))
         .add_systems(Startup, setup)
         .add_systems(Update, sync_position)
