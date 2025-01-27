@@ -69,7 +69,7 @@ fn setup(
     // Spawn particle system near the star
     commands.spawn((
         ParticleSpawner::default(),
-        ParticleEffectHandle(server.load("firework.particle.ron")),
+        ParticleEffectHandle(server.load("1.ron")),
         Transform::from_translation(Vec3::new(10.0, 0.0, 0.0)), // Position the particle system near the star
     ));
 }
