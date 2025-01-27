@@ -6,6 +6,7 @@ use ic_cdk_timers::TimerId;
 use rstar::{RTree, RTreeObject, AABB, PointDistance};
 use serde::Serialize;
 
+
 fn generate_star_cluster(
     cluster_type: &StarClusterType,
     cluster_coords: Coordinates, // Use the Coordinates struct
@@ -100,6 +101,7 @@ fn generate_star_cluster(
     Ok(stars)
 }
 
+    
     fn add_entity(
         entity_type: EntityType,
         location_params: LocationParams,
