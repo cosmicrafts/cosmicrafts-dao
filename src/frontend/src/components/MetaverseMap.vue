@@ -70,7 +70,7 @@ export default {
     startPolling() {
       this.pollingInterval = setInterval(() => {
         this.fetchEntities(); // Fetch data every second
-      }, 1000);
+      }, 100);
     },
 
     startSimulation() {
