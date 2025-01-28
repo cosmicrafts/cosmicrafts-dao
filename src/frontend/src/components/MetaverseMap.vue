@@ -40,9 +40,10 @@ export default {
     };
   },
   mounted() {
-    this.fetchEntities();
+    this.fetchEntities(); // Initial fetch
     this.initializeZoom();
     this.startPolling();
+    this.startSimulation(); // Start interpolation loop
   },
   methods: {
     async fetchEntities() {
@@ -68,8 +69,49 @@ export default {
 
     startPolling() {
       this.pollingInterval = setInterval(() => {
-        this.fetchEntities();
+        this.fetchEntities(); // Fetch data every second
       }, 1000);
+    },
+
+    startSimulation() {
+      const fps = 60; // Frames per second
+      const dt = 1 / fps; // Time step per frame (in seconds)
+
+      const simulateMovement = () => {
+        this.rawEntities.forEach((entity) => {
+          // Skip entities without a target position
+          if (!entity.target_position || entity.target_position.length === 0) return;
+
+          const target = entity.target_position[0];
+          const dx = target.x - entity.position.x;
+          const dy = target.y - entity.position.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance > 0) {
+            const moveX = (dx / distance) * Math.min(entity.speed * dt, distance);
+            const moveY = (dy / distance) * Math.min(entity.speed * dt, distance);
+
+            // Update position
+            entity.position.x += moveX;
+            entity.position.y += moveY;
+
+            // Snap to target if close enough
+            if (distance <= entity.speed * dt) {
+              entity.position.x = target.x;
+              entity.position.y = target.y;
+              entity.target_position = []; // Clear target once reached
+            }
+          }
+        });
+
+        // Re-render entities
+        this.renderEntities(this.rawEntities);
+
+        // Continue simulation
+        requestAnimationFrame(simulateMovement);
+      };
+
+      simulateMovement(); // Start the simulation loop
     },
 
     updateEntities(newEntities) {
@@ -79,41 +121,28 @@ export default {
         const previous = this.previousEntities.get(entity.id);
 
         if (previous) {
-          // Interpolate movement if target_position exists and is not empty
-          if (entity.target_position && entity.target_position.length > 0) {
-            const target = entity.target_position[0];
-            const dx = target.x - previous.position.x;
-            const dy = target.y - previous.position.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+          // Correct the position if there's a large discrepancy
+          const dx = entity.position.x - previous.position.x;
+          const dy = entity.position.y - previous.position.y;
+          const discrepancy = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance > 0) {
-              const moveX = (dx / distance) * Math.min(entity.speed, distance);
-              const moveY = (dy / distance) * Math.min(entity.speed, distance);
-
-              entity.position.x = previous.position.x + moveX;
-              entity.position.y = previous.position.y + moveY;
-            }
+          if (discrepancy > entity.speed) {
+            // Snap to backend position if too far off
+            previous.position.x = entity.position.x;
+            previous.position.y = entity.position.y;
           }
-        }
 
-        // Correct position if it diverges too much from the backend
-        const backendX = entity.position.x;
-        const backendY = entity.position.y;
-        if (
-          previous &&
-          Math.abs(previous.position.x - backendX) > 1 &&
-          Math.abs(previous.position.y - backendY) > 1
-        ) {
-          entity.position.x = backendX;
-          entity.position.y = backendY;
+          // Retain previous position for smooth interpolation
+          entity.position.x = previous.position.x;
+          entity.position.y = previous.position.y;
         }
 
         entityMap.set(entity.id, entity);
       });
 
+      // Update memory
       this.previousEntities = entityMap;
       this.rawEntities = Array.from(entityMap.values());
-      this.renderEntities(this.rawEntities);
     },
 
     renderEntities(entitiesData) {
@@ -182,6 +211,7 @@ export default {
 
 
 <style scoped>
+/* Same CSS as before */
 #metaverse-map {
   width: 100vw;
   height: 100vh;
@@ -198,8 +228,13 @@ export default {
   height: 100%;
 }
 
-.main-map { z-index: 1; }
-.ui-overlay { z-index: 2; }
+.main-map {
+  z-index: 1;
+}
+
+.ui-overlay {
+  z-index: 2;
+}
 
 #tooltip {
   position: absolute;
