@@ -1,9 +1,6 @@
 <template>
   <div id="metaverse-map">
-    <!-- Main Map Canvas -->
     <svg ref="svgCanvas" class="layer main-map"></svg>
-    
-    <!-- UI Overlay -->
     <div class="layer ui-overlay">
       <div id="tooltip" style="opacity: 0;"></div>
       <button id="reset-zoom" @click="resetZoom">Reset Zoom</button>
@@ -27,23 +24,25 @@ import * as d3 from "d3";
 import { useCanisterStore } from "@/stores/canister";
 import entityIcon from "@/assets/webp/map/planet.webp";
 
-// Define MAP_WIDTH and MAP_HEIGHT
-const MAP_WIDTH = 1000; // Match the value from your Rust backend
-const MAP_HEIGHT = 1000; // Match the value from your Rust backend
+const MAP_WIDTH = 1000;
+const MAP_HEIGHT = 1000;
 
 export default {
   name: "MetaverseMap",
   data() {
     return {
       rawEntities: [],
+      previousEntities: new Map(),
       zoomBehavior: null,
       entitySize: 5,
       currentTransform: d3.zoomIdentity,
+      pollingInterval: null,
     };
   },
   mounted() {
     this.fetchEntities();
     this.initializeZoom();
+    this.startPolling();
   },
   methods: {
     async fetchEntities() {
@@ -51,8 +50,8 @@ export default {
         const canisterStore = useCanisterStore();
         const cosmicrafts = await canisterStore.get("cosmicrafts");
         const entitiesData = await cosmicrafts.export_entities();
-        this.rawEntities = entitiesData;
-        this.renderEntities(entitiesData);
+
+        this.updateEntities(entitiesData);
       } catch (error) {
         console.error("Error fetching entities:", error);
       }
@@ -61,10 +60,60 @@ export default {
     initializeZoom() {
       this.zoomBehavior = d3.zoom()
         .scaleExtent([0.1, 20])
-        .on('zoom', (event) => {
+        .on("zoom", (event) => {
           this.currentTransform = event.transform;
-          d3.select('.main-map').attr('transform', event.transform);
+          d3.select(".main-map").attr("transform", event.transform);
         });
+    },
+
+    startPolling() {
+      this.pollingInterval = setInterval(() => {
+        this.fetchEntities();
+      }, 1000);
+    },
+
+    updateEntities(newEntities) {
+      const entityMap = new Map();
+
+      newEntities.forEach((entity) => {
+        const previous = this.previousEntities.get(entity.id);
+
+        if (previous) {
+          // Interpolate movement if target_position exists and is not empty
+          if (entity.target_position && entity.target_position.length > 0) {
+            const target = entity.target_position[0];
+            const dx = target.x - previous.position.x;
+            const dy = target.y - previous.position.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance > 0) {
+              const moveX = (dx / distance) * Math.min(entity.speed, distance);
+              const moveY = (dy / distance) * Math.min(entity.speed, distance);
+
+              entity.position.x = previous.position.x + moveX;
+              entity.position.y = previous.position.y + moveY;
+            }
+          }
+        }
+
+        // Correct position if it diverges too much from the backend
+        const backendX = entity.position.x;
+        const backendY = entity.position.y;
+        if (
+          previous &&
+          Math.abs(previous.position.x - backendX) > 1 &&
+          Math.abs(previous.position.y - backendY) > 1
+        ) {
+          entity.position.x = backendX;
+          entity.position.y = backendY;
+        }
+
+        entityMap.set(entity.id, entity);
+      });
+
+      this.previousEntities = entityMap;
+      this.rawEntities = Array.from(entityMap.values());
+      this.renderEntities(this.rawEntities);
     },
 
     renderEntities(entitiesData) {
@@ -76,17 +125,13 @@ export default {
 
       const container = svg.append("g");
 
-      const xScale = d3.scaleLinear()
-        .domain([0, MAP_WIDTH]) // Use MAP_WIDTH
-        .range([0, width]);
-
-      const yScale = d3.scaleLinear()
-        .domain([0, MAP_HEIGHT]) // Use MAP_HEIGHT
-        .range([height, 0]);
+      const xScale = d3.scaleLinear().domain([0, MAP_WIDTH]).range([0, width]);
+      const yScale = d3.scaleLinear().domain([0, MAP_HEIGHT]).range([height, 0]);
 
       const tooltip = d3.select("#tooltip");
 
-      container.selectAll(".entity")
+      container
+        .selectAll(".entity")
         .data(entitiesData)
         .join("image")
         .attr("class", "entity")
@@ -127,8 +172,14 @@ export default {
       svg.call(this.zoomBehavior.transform, d3.zoomIdentity);
     },
   },
+  beforeDestroy() {
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
+    }
+  },
 };
 </script>
+
 
 <style scoped>
 #metaverse-map {
@@ -181,14 +232,14 @@ export default {
   position: absolute;
   bottom: 50px;
   right: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.023);
   padding: 10px;
   border-radius: 8px;
 }
 
 #size-control label {
   font-size: 14px;
-  color: #333;
+  color: #ffffff;
 }
 
 #size-control input {
