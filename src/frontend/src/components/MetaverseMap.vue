@@ -1,7 +1,7 @@
 <template>
   <div id="metaverse-map">
     <!-- Background Layer -->
-    <Stars :count="1000" class="layer background-stars" />
+    <Stars :count="1600" class="layer background-stars" />
     
     <!-- Nebula Layer -->
     <Nebula class="layer nebulas" />
