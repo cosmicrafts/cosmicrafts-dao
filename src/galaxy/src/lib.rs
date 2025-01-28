@@ -1,15 +1,53 @@
-mod types;
 use ic_cdk::{query, update};
-use rstar::{RTree, AABB};
+use ic_cdk_timers::TimerId;
 use std::cell::RefCell;
-use types::{Acceleration, Entity, EntityId, EntityType, Position, Velocity};
+use std::time::Duration;
+use std::collections::HashMap;
+use candid::{CandidType, Deserialize};
 
-thread_local! {
-    static ENTITY_COUNTER: RefCell<EntityId> = RefCell::new(0);
-    static GALAXY_TREE: RefCell<RTree<Entity>> = RefCell::new(RTree::new());
+// Simplified Entity and Component Types
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+struct Position {
+    x: f64,
+    y: f64,
 }
 
-fn next_entity_id() -> EntityId {
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+struct Velocity {
+    dx: f64,
+    dy: f64,
+}
+
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+pub enum EntityType {
+    Planet,
+    Star,
+    Ship,
+    Mine,
+    Player,
+}
+
+
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+struct Entity {
+    id: u64,
+    entity_type: EntityType,
+    position: Position,
+    velocity: Velocity, 
+}
+
+// Constants
+const MAP_WIDTH: f64 = 1000.0;
+const MAP_HEIGHT: f64 = 1000.0;
+
+thread_local! {
+    static ENTITIES: RefCell<HashMap<u64, Entity>> = RefCell::new(HashMap::new());
+    static ENTITY_COUNTER: RefCell<u64> = RefCell::new(0);
+    static TIMER_ID: RefCell<Option<TimerId>> = RefCell::new(None);
+}
+
+// Deterministic ID Generation
+fn next_entity_id() -> u64 {
     ENTITY_COUNTER.with(|counter| {
         let mut counter = counter.borrow_mut();
         *counter += 1;
@@ -17,139 +55,95 @@ fn next_entity_id() -> EntityId {
     })
 }
 
+// Deterministic Position Generation (using time and entity ID)
+fn generate_deterministic_position(entity_id: u64) -> Position {
+    let current_time = ic_cdk::api::time();
+    let x = (current_time as f64 * entity_id as f64) % MAP_WIDTH;
+    let y = (current_time as f64 / (entity_id as f64 + 1.0)) % MAP_HEIGHT; 
+    Position { x, y }
+}
+
+// Simplified Spawn Function
 #[update]
-fn add_entity(entity_type: EntityType, position: Position) -> EntityId {
+fn spawn_entity(entity_type: EntityType) -> u64 {
     let entity_id = next_entity_id();
+    let position = generate_deterministic_position(entity_id);
+
     let entity = Entity {
         id: entity_id,
         entity_type,
         position,
-        velocity: None,
-        acceleration: None,
+        velocity: Velocity { dx: 0.0, dy: 0.0 }, // Initial velocity
     };
 
-    GALAXY_TREE.with(|tree| {
-        tree.borrow_mut().insert(entity);
+    ENTITIES.with(|entities| {
+        entities.borrow_mut().insert(entity_id, entity);
     });
 
     entity_id
 }
 
+// Movement Update
 #[update]
-fn move_entity(entity_id: EntityId, target: Position, duration: f64) -> Result<(), String> {
-    GALAXY_TREE.with(|tree| {
-        let mut galaxy_tree = tree.borrow_mut();
+fn move_entity(entity_id: u64, target_x: f64, target_y: f64) -> Result<(), String> {
+    ENTITIES.with(|entities| {
+        let mut entities = entities.borrow_mut();
+        if let Some(entity) = entities.get_mut(&entity_id) {
+            // Simple velocity calculation (you can add smoothing/acceleration here)
+            let dx = target_x - entity.position.x;
+            let dy = target_y - entity.position.y;
+            let distance = (dx * dx + dy * dy).sqrt();
+            let speed = 10.0;
 
-        // Find the entity and clone it (immutable borrow)
-        let entity = galaxy_tree
-            .iter()
-            .find(|e| e.id == entity_id)
-            .ok_or("Entity not found")?
-            .clone();
-
-        // Calculate required velocity
-        let dx = target.x - entity.position.x;
-        let dy = target.y - entity.position.y;
-
-        let velocity = Velocity {
-            dx: dx / duration,
-            dy: dy / duration,
-        };
-
-        // Create updated entity
-        let mut updated_entity = entity.clone();
-        updated_entity.velocity = Some(velocity);
-        updated_entity.acceleration = None;
-
-        // Remove the old entity and insert the updated one (mutable borrow)
-        galaxy_tree.remove(&entity);
-        galaxy_tree.insert(updated_entity);
-
-        Ok(())
-    })
-}
-
-/// Automatic position updater (call this periodically)
-#[update]
-fn update_positions(dt: f64) {
-    GALAXY_TREE.with(|tree| {
-        let mut galaxy_tree = tree.borrow_mut();
-
-        // Collect updated entities into a Vec
-        let updated_entities: Vec<Entity> = galaxy_tree
-            .iter()
-            .map(|entity| {
-                let mut updated = entity.clone();
-
-                // Apply velocity
-                if let Some(vel) = &updated.velocity {
-                    updated.position.x += vel.dx * dt;
-                    updated.position.y += vel.dy * dt;
+            entity.velocity = if distance > 1.0 {
+                Velocity {
+                    dx: dx / distance * speed,
+                    dy: dy / distance * speed,
                 }
+            } else {
+                Velocity { dx: 0.0, dy: 0.0 }
+            };
 
-                updated
-            })
-            .collect();
-
-        // Replace the old tree with a new tree containing the updated entities
-        *galaxy_tree = RTree::bulk_load(updated_entities);
-    });
-}
-
-#[query]
-fn export_entities() -> Vec<Entity> {
-    GALAXY_TREE.with(|tree| tree.borrow().iter().cloned().collect())
-}
-
-#[query]
-fn entities_in_area(lower: Position, upper: Position) -> Vec<Entity> {
-    GALAXY_TREE.with(|tree| {
-        tree.borrow()
-            .locate_in_envelope_intersecting(&AABB::from_corners(
-                [lower.x, lower.y],
-                [upper.x, upper.y],
-            ))
-            .cloned()
-            .collect()
-    })
-}
-
-#[query]
-fn entities_within_radius(center: Position, radius: f64) -> Vec<Entity> {
-    GALAXY_TREE.with(|tree| {
-        tree.borrow()
-            .locate_within_distance([center.x, center.y], radius.powi(2))
-            .cloned()
-            .collect()
-    })
-}
-
-#[update]
-
-fn add_movement(
-    entity_id: EntityId,
-    velocity: Option<Velocity>,
-    acceleration: Option<Acceleration>,
-) -> Result<(), String> {
-    GALAXY_TREE.with(|tree| {
-        let mut galaxy_tree = tree.borrow_mut();
-
-        // Find the entity first without mutating the tree
-        let entity_opt = galaxy_tree.iter().find(|e| e.id == entity_id).cloned();
-
-        if let Some(entity) = entity_opt {
-            let mut updated_entity = entity.clone();
-            updated_entity.velocity = velocity;
-            updated_entity.acceleration = acceleration;
-
-            // Mutate the tree after the iterator's borrow ends
-            galaxy_tree.remove(&entity);
-            galaxy_tree.insert(updated_entity);
             Ok(())
         } else {
             Err("Entity not found".to_string())
         }
     })
 }
+
+// Game Loop
+fn update_world(dt: f64) {
+    ENTITIES.with(|entities| {
+        let mut entities = entities.borrow_mut();
+        for entity in entities.values_mut() {
+            entity.position.x += entity.velocity.dx * dt;
+            entity.position.y += entity.velocity.dy * dt;
+
+            // Keep entity within bounds
+            entity.position.x = entity.position.x.max(0.0).min(MAP_WIDTH);
+            entity.position.y = entity.position.y.max(0.0).min(MAP_HEIGHT);
+        }
+    });
+}
+
+#[update]
+fn start_game_loop() {
+    let timer_id = ic_cdk_timers::set_timer_interval(Duration::from_millis(100), || {
+        ic_cdk::spawn(async {
+            update_world(0.1); 
+        });
+    });
+    TIMER_ID.with(|id| {
+        *id.borrow_mut() = Some(timer_id);
+    });
+}
+
+// Export Entities
+#[query]
+fn export_entities() -> Vec<Entity> {
+    ENTITIES.with(|entities| entities.borrow().values().cloned().collect())
+}
+
+//... (Simplified spatial queries if needed)
 
 ic_cdk::export_candid!();

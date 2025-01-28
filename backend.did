@@ -1,21 +1,16 @@
-type Acceleration = record { ax : float64; ay : float64 };
 type Entity = record {
   id : nat64;
-  velocity : opt Velocity;
-  acceleration : opt Acceleration;
+  velocity : Velocity;
   entity_type : EntityType;
   position : Position;
 };
-type EntityType = variant { Mine; Ship; Star; Planet };
+type EntityType = variant { Mine; Ship; Star; Planet; Player };
 type Position = record { x : float64; y : float64 };
 type Result = variant { Ok; Err : text };
 type Velocity = record { dx : float64; dy : float64 };
 service : {
-  add_entity : (EntityType, Position) -> (nat64);
-  add_movement : (nat64, opt Velocity, opt Acceleration) -> (Result);
-  entities_in_area : (Position, Position) -> (vec Entity) query;
-  entities_within_radius : (Position, float64) -> (vec Entity) query;
   export_entities : () -> (vec Entity) query;
-  move_entity : (nat64, Position, float64) -> (Result);
-  update_positions : (float64) -> ();
+  move_entity : (nat64, float64, float64) -> (Result);
+  spawn_entity : (EntityType) -> (nat64);
+  start_game_loop : () -> ();
 }
