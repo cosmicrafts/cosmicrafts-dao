@@ -2,7 +2,6 @@
 import Phaser from 'phaser';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { MainGame } from '@/pages/game/scenes/MainGame';
-import { Events } from 'phaser';
 import { EventBus } from '@/pages/game/EventBus';
 
 const gameContainer = ref();
@@ -15,10 +14,10 @@ onMounted(() => {
     width: window.innerWidth,
     height: window.innerHeight,
     scale: {
-      mode: Phaser.Scale.RESIZE, // Ensures it fills the screen
+      mode: Phaser.Scale.RESIZE,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [new MainGame()], // ✅ No need for multiple scenes
+    scene: [MainGame],
     physics: {
       default: 'arcade',
       arcade: { debug: false }
@@ -41,16 +40,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div id="game-container"></div>
+  <div id="game-container" ref="gameContainer"></div>
 </template>
 
 <style scoped>
 #game-container {
-  width: 100vw;
-  height: 100vh;
-  position: fixed; /* Fix to viewport */
-  top: 0;
-  left: 0;
-  overflow: hidden; /* Prevent any internal scrolling */
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    pointer-events: all;
 }
 </style>
