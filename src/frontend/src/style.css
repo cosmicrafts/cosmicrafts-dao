@@ -37,6 +37,13 @@
   --button-padding: 0.6em 1.2em;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
 html, body {
   font-family: var(--font-family-default);
   height: 100%;
@@ -50,6 +57,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow: hidden;
 }
 
 
