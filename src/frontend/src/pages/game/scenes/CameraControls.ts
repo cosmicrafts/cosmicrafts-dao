@@ -21,42 +21,40 @@ export function enableCameraControls(scene: Scene) {
         }
     });
 
-    // ✅ Use native event listener for precise zooming centered on screen
+    // ✅ Use native event listener for smooth zooming centered on cursor
     scene.input.mouse!.enabled = true;
     scene.input.manager.canvas.addEventListener("wheel", (event: WheelEvent) => {
-      event.preventDefault();
-  
-      const minZoom = 0.1;
-      const maxZoom = 3;
-      const zoomFactor = 0.1;
-  
-      let newZoom = camera.zoom + (event.deltaY > 0 ? -zoomFactor : zoomFactor);
-      newZoom = Phaser.Math.Clamp(newZoom, minZoom, maxZoom);
-  
-      // ✅ Get the WORLD POINT under the mouse cursor before zooming
-      const worldBeforeZoom = camera.getWorldPoint(event.clientX, event.clientY);
-  
-      // Apply the new zoom
-      camera.setZoom(newZoom);
-  
-      // ✅ Get the WORLD POINT under the mouse cursor after zooming
-      const worldAfterZoom = camera.getWorldPoint(event.clientX, event.clientY);
-  
-      // ✅ Adjust the camera scroll to keep the mouse target pinned
-      camera.scrollX += worldBeforeZoom.x - worldAfterZoom.x;
-      camera.scrollY += worldBeforeZoom.y - worldAfterZoom.y;
-  });
-  
-  
+        event.preventDefault();
 
-    // Keyboard camera movement (WASD / Arrow keys)
-    scene.input.keyboard?.on('keydown-W', () => { camera.scrollY -= 50 / camera.zoom; });
-    scene.input.keyboard?.on('keydown-S', () => { camera.scrollY += 50 / camera.zoom; });
-    scene.input.keyboard?.on('keydown-A', () => { camera.scrollX -= 50 / camera.zoom; });
-    scene.input.keyboard?.on('keydown-D', () => { camera.scrollX += 50 / camera.zoom; });
+        const minZoom = 0.1;
+        const maxZoom = 3;
+        const zoomFactor = 0.1;
 
-    scene.input.keyboard?.on('keydown-UP', () => { camera.scrollY -= 50 / camera.zoom; });
-    scene.input.keyboard?.on('keydown-DOWN', () => { camera.scrollY += 50 / camera.zoom; });
-    scene.input.keyboard?.on('keydown-LEFT', () => { camera.scrollX -= 50 / camera.zoom; });
-    scene.input.keyboard?.on('keydown-RIGHT', () => { camera.scrollX += 50 / camera.zoom; });
+        // ✅ Get the WORLD COORDINATES under the cursor before zooming
+        const worldPointBeforeZoom = camera.getWorldPoint(event.clientX, event.clientY);
+
+        // ✅ Apply the new zoom
+        let newZoom = camera.zoom + (event.deltaY > 0 ? -zoomFactor : zoomFactor);
+        newZoom = Phaser.Math.Clamp(newZoom, minZoom, maxZoom);
+        camera.setZoom(newZoom);
+
+        // ✅ Get the WORLD COORDINATES after zooming
+        const worldPointAfterZoom = camera.getWorldPoint(event.clientX, event.clientY);
+
+        // ✅ Adjust scroll to keep zoom centered on cursor
+        camera.scrollX += worldPointBeforeZoom.x - worldPointAfterZoom.x;
+        camera.scrollY += worldPointBeforeZoom.y - worldPointAfterZoom.y;
+    });
+
+    // ✅ Keyboard camera movement (WASD / Arrow keys)
+    const keySpeed = 50;
+    scene.input.keyboard?.on('keydown-W', () => camera.scrollY -= keySpeed / camera.zoom);
+    scene.input.keyboard?.on('keydown-S', () => camera.scrollY += keySpeed / camera.zoom);
+    scene.input.keyboard?.on('keydown-A', () => camera.scrollX -= keySpeed / camera.zoom);
+    scene.input.keyboard?.on('keydown-D', () => camera.scrollX += keySpeed / camera.zoom);
+
+    scene.input.keyboard?.on('keydown-UP', () => camera.scrollY -= keySpeed / camera.zoom);
+    scene.input.keyboard?.on('keydown-DOWN', () => camera.scrollY += keySpeed / camera.zoom);
+    scene.input.keyboard?.on('keydown-LEFT', () => camera.scrollX -= keySpeed / camera.zoom);
+    scene.input.keyboard?.on('keydown-RIGHT', () => camera.scrollX += keySpeed / camera.zoom);
 }

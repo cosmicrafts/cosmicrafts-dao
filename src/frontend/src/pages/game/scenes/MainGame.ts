@@ -3,10 +3,11 @@ import { Scene } from 'phaser';
 import { preloadGame, createGame } from './GameSetup';
 import { enableCameraControls } from './CameraControls';
 import { GridRenderer } from './GridRenderer';
+import { BackgroundRenderer } from './BackgroundRenderer'; // ✅ Import new renderer
 
 export class MainGame extends Scene {
     camera!: Phaser.Cameras.Scene2D.Camera;
-    background!: Phaser.GameObjects.Image;
+    backgroundRenderer!: BackgroundRenderer;
     gridRenderer!: GridRenderer;
 
     constructor() {
@@ -26,11 +27,15 @@ export class MainGame extends Scene {
         createGame(this);
         enableCameraControls(this);
 
-        // Initialize the grid renderer
+        // ✅ Initialize the background renderer
+        this.backgroundRenderer = new BackgroundRenderer(this);
+
+        // ✅ Initialize the grid renderer
         this.gridRenderer = new GridRenderer(this);
     }
 
     update() {
-        this.gridRenderer.updateGrid(); // ✅ Redraw only when necessary
+        this.gridRenderer.updateGrid(); // ✅ Update grid only when needed
+        this.backgroundRenderer.update(); // ✅ Ensure the background tiles correctly
     }
 }
