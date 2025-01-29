@@ -30,7 +30,7 @@ export function enableCameraControls(scene: Scene) {
 
         const minZoom = 0.1;
         const maxZoom = 10;
-        const baseZoomFactor = 0.01; // Base zoom speed
+        const baseZoomFactor = 0.05; // Base zoom speed
         const accelerationFactor = 0.005; // How much faster it gets per scroll
         const maxAcceleration = 0.1; // Maximum zoom speed
 

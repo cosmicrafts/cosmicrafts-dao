@@ -3,7 +3,7 @@ import { Scene } from 'phaser';
 export class BackgroundRenderer {
     private tileSprite!: Phaser.GameObjects.TileSprite;
     private scene: Scene;
-    private tileSize: number = 1024; // Default tile size (change as needed)
+    private tileSize: number = 2048;
 
     constructor(scene: Scene) {
         this.scene = scene;
@@ -23,8 +23,8 @@ export class BackgroundRenderer {
         this.tileSprite = this.scene.add.tileSprite(
             camera.worldView.centerX,  // Centered on camera
             camera.worldView.centerY,
-            camera.worldView.width * 2, // Covers a large area
-            camera.worldView.height * 2,
+            camera.worldView.width * 10, // Covers a large area
+            camera.worldView.height * 10,
             'background'
         ).setOrigin(0.5, 0.5);
 
