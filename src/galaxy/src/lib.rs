@@ -47,7 +47,7 @@ struct Entity {
 // Constants
 const MAP_WIDTH: f64 = 1000.0;
 const MAP_HEIGHT: f64 = 1000.0;
-const DEFAULT_ENTITY_SPEED: f64 = 55.0; // 1 unit per second
+const DEFAULT_ENTITY_SPEED: f64 = 155.0; // 1 unit per second
 
 
 thread_local! {
