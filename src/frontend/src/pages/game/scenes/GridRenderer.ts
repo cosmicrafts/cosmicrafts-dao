@@ -8,15 +8,16 @@ export class GridRenderer {
 
     constructor(private scene: Scene) {
         this.graphics = scene.add.graphics();
+        this.graphics.setName('gridGraphics'); // Give the graphics object a name
     }
 
     updateGrid() {
         const camera = this.scene.cameras.main;
 
-        // Avoid unnecessary redraws unless camera moved or zoom changed
+        // Avoid unnecessary redraws
         if (
-            Math.abs(camera.scrollX - this.lastCameraX) < 5 &&
-            Math.abs(camera.scrollY - this.lastCameraY) < 5 &&
+            Math.abs(camera.scrollX - this.lastCameraX) < 1 && // Reduced threshold
+            Math.abs(camera.scrollY - this.lastCameraY) < 1 && // Reduced threshold
             camera.zoom === this.lastZoom
         ) {
             return;
@@ -33,28 +34,40 @@ export class GridRenderer {
         const camera = this.scene.cameras.main;
         this.graphics.clear();
 
-        // Set base grid size (scales based on zoom)
-        let baseGridSize = 100;
-        if (camera.zoom > 2) baseGridSize = 50; // More detailed grid when zoomed in
-        if (camera.zoom > 3) baseGridSize = 25; // Even smaller grid for ultra zoom
-        if (camera.zoom < 1) baseGridSize = 200; // Less detail when zoomed out
-        if (camera.zoom < 0.5) baseGridSize = 400;
+        // Define grid levels based on zoom
+        const gridLevels = [
+            { minZoom: 0.1, size: 400, alpha: 0.2 },
+            { minZoom: 0.3, size: 200, alpha: 0.3 },
+            { minZoom: 0.7, size: 100, alpha: 0.4 },
+            { minZoom: 1.2, size: 50, alpha: 0.5 },
+            { minZoom: 2.0, size: 25, alpha: 0.6 },
+        ];
+
+        // Select appropriate grid level
+        let selectedLevel = gridLevels[0];
+        for (const level of gridLevels) {
+            if (camera.zoom >= level.minZoom) {
+                selectedLevel = level;
+            }
+        }
+
+        const { size, alpha } = selectedLevel;
 
         // Get camera viewport bounds
-        const left = Math.floor(camera.worldView.x / baseGridSize) * baseGridSize;
-        const right = Math.ceil((camera.worldView.x + camera.worldView.width) / baseGridSize) * baseGridSize;
-        const top = Math.floor(camera.worldView.y / baseGridSize) * baseGridSize;
-        const bottom = Math.ceil((camera.worldView.y + camera.worldView.height) / baseGridSize) * baseGridSize;
+        const left = Math.floor(camera.worldView.x / size) * size;
+        const right = Math.ceil((camera.worldView.x + camera.worldView.width) / size) * size;
+        const top = Math.floor(camera.worldView.y / size) * size;
+        const bottom = Math.ceil((camera.worldView.y + camera.worldView.height) / size) * size;
 
         // Draw grid lines
-        this.graphics.lineStyle(0.5, 0x555555, 0.5);
+        this.graphics.lineStyle(0.5, 0x555555, alpha); // Use alpha from grid level
 
-        for (let x = left; x <= right; x += baseGridSize) {
+        for (let x = left; x <= right; x += size) {
             this.graphics.moveTo(x, top);
             this.graphics.lineTo(x, bottom);
         }
 
-        for (let y = top; y <= bottom; y += baseGridSize) {
+        for (let y = top; y <= bottom; y += size) {
             this.graphics.moveTo(left, y);
             this.graphics.lineTo(right, y);
         }

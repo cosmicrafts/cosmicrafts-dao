@@ -21,30 +21,33 @@ export function enableCameraControls(scene: Scene) {
         }
     });
 
-    // ✅ Use native event listener for mouse wheel
-    scene.input.mouse!.enabled = true; 
+    // ✅ Use native event listener for precise zooming centered on screen
+    scene.input.mouse!.enabled = true;
     scene.input.manager.canvas.addEventListener("wheel", (event: WheelEvent) => {
-        event.preventDefault();
-        console.log("📜 Native Mouse Wheel Event: deltaY =", event.deltaY);
-
-        const minZoom = 0.5;
-        const maxZoom = 3;
-        const zoomFactor = 0.1;
-
-        let newZoom = camera.zoom + (event.deltaY > 0 ? -zoomFactor : zoomFactor);
-        newZoom = Phaser.Math.Clamp(newZoom, minZoom, maxZoom);
-
-        // Get world point under cursor before zooming
-        const worldPoint = camera.getWorldPoint(event.clientX, event.clientY);
-
-        // Apply new zoom
-        camera.setZoom(newZoom);
-
-        // Adjust scroll to keep zoom centered on cursor
-        const newWorldPoint = camera.getWorldPoint(event.clientX, event.clientY);
-        camera.scrollX += worldPoint.x - newWorldPoint.x;
-        camera.scrollY += worldPoint.y - newWorldPoint.y;
-    });
+      event.preventDefault();
+  
+      const minZoom = 0.1;
+      const maxZoom = 3;
+      const zoomFactor = 0.1;
+  
+      let newZoom = camera.zoom + (event.deltaY > 0 ? -zoomFactor : zoomFactor);
+      newZoom = Phaser.Math.Clamp(newZoom, minZoom, maxZoom);
+  
+      // ✅ Get the WORLD POINT under the mouse cursor before zooming
+      const worldBeforeZoom = camera.getWorldPoint(event.clientX, event.clientY);
+  
+      // Apply the new zoom
+      camera.setZoom(newZoom);
+  
+      // ✅ Get the WORLD POINT under the mouse cursor after zooming
+      const worldAfterZoom = camera.getWorldPoint(event.clientX, event.clientY);
+  
+      // ✅ Adjust the camera scroll to keep the mouse target pinned
+      camera.scrollX += worldBeforeZoom.x - worldAfterZoom.x;
+      camera.scrollY += worldBeforeZoom.y - worldAfterZoom.y;
+  });
+  
+  
 
     // Keyboard camera movement (WASD / Arrow keys)
     scene.input.keyboard?.on('keydown-W', () => { camera.scrollY -= 50 / camera.zoom; });
