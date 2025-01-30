@@ -1,9 +1,10 @@
 import { EventBus } from '../EventBus';
 import { Scene, Math as PhaserMath } from 'phaser';
-import { preloadGame, createGame, EntityManager } from './GameSetup';
+import { preloadGame, createGame } from './GameSetup';
 import { enableCameraControls } from './CameraControls';
 import { GridRenderer } from './GridRenderer';
 import { BackgroundRenderer } from './BackgroundRenderer';
+import { EntityManager } from './EntityManager'; // Import from the new file
 
 export class MainGame extends Scene {
     camera!: Phaser.Cameras.Scene2D.Camera;
