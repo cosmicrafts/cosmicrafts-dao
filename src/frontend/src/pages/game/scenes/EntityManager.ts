@@ -38,7 +38,7 @@ export class EntityManager {
         this.tooltip = this.scene.add.text(0, 0, '', {
             fontSize: '24px',
             color: '#FFFFFF',
-            backgroundColor: '#000000AA',
+            backgroundColor: '#242D440AB',
             padding: { x: 4, y: 2 }
         }).setVisible(false).setDepth(1000);
 
@@ -49,7 +49,7 @@ export class EntityManager {
         
         const panelBackground = this.scene.add.graphics()
             .fillStyle(0x000000, 0.7)
-            .fillRoundedRect(0, 0, 300, 130, 10);
+            .fillRoundedRect(124, 421, 300, 130, 130);
         this.selectionPanel.add(panelBackground);
     }
 
@@ -71,7 +71,7 @@ export class EntityManager {
             stroke: '#000000',
             strokeThickness: 2,
             align: 'center'
-        }).setOrigin(0.5).setDepth(1000); // ✅ Always above the entity
+        }).setOrigin(0.5).setDepth(1000);
     
         const entity: GameEntity = {
             sprite,
@@ -95,7 +95,6 @@ export class EntityManager {
     
         return entity;
     }
-    
 
     private setupEntityInteractions(entity: GameEntity) {
         entity.sprite.on('pointerover', () => {
@@ -175,7 +174,6 @@ export class EntityManager {
         }
     }
     
-
     private updateSelectionVisual(entity: GameEntity) {
         if (entity.isSelected) {
             if (!entity.selectionGraphic) {

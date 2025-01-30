@@ -1,69 +1,43 @@
 import { Scene } from 'phaser';
+
 export function enableCameraControls(scene: Scene) {
     const camera = scene.cameras.main;
+    let velocityX = 0, velocityY = 0;
+    const speed = 1000;
     let dragStartX = 0, dragStartY = 0;
 
-    // Custom property to track the last wheel event time
-    let lastWheelTime = Date.now();
-
-    // Panning with mouse drag
-    scene.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-        if (!pointer.rightButtonDown()) {
-            dragStartX = pointer.x;
-            dragStartY = pointer.y;
-        }
+    scene.input.keyboard!.on('keydown', (event) => {
+        if (event.key === 'w' || event.key === 'ArrowUp') velocityY = -speed;
+        if (event.key === 's' || event.key === 'ArrowDown') velocityY = speed;
+        if (event.key === 'a' || event.key === 'ArrowLeft') velocityX = -speed;
+        if (event.key === 'd' || event.key === 'ArrowRight') velocityX = speed;
     });
-
-    scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
-        if (pointer.isDown && !pointer.rightButtonDown()) {
-            camera.scrollX -= (pointer.x - dragStartX) / camera.zoom;
-            camera.scrollY -= (pointer.y - dragStartY) / camera.zoom;
-            dragStartX = pointer.x;
-            dragStartY = pointer.y;
-        }
+    
+    scene.input.keyboard.on('keyup', (event) => {
+        if (['w', 'ArrowUp', 's', 'ArrowDown'].includes(event.key)) velocityY = 0;
+        if (['a', 'ArrowLeft', 'd', 'ArrowRight'].includes(event.key)) velocityX = 0;
     });
-
-    // Smooth zooming centered on cursor
-    scene.input.mouse!.enabled = true;
-    scene.input.manager.canvas.addEventListener("wheel", (event: WheelEvent) => {
-        event.preventDefault();
-
-        const minZoom = 0.1;
-        const maxZoom = 10;
-        const baseZoomFactor = 0.01; // Base zoom speed
-        const accelerationFactor = 0.005; // How much faster it gets per scroll
-        const maxAcceleration = 0.1; // Maximum zoom speed
-
-        // Calculate time since the last scroll event
-        const now = Date.now();
-        const timeSinceLastScroll = now - lastWheelTime;
-        lastWheelTime = now;
-
-        // Calculate acceleration based on scroll speed
-        let zoomSpeed = baseZoomFactor + (accelerationFactor * (1 / Math.max(1, timeSinceLastScroll)));
-        zoomSpeed = Math.min(zoomSpeed, maxAcceleration); // Cap the speed
-
-        // Apply zoom
-        const worldPointBeforeZoom = camera.getWorldPoint(event.clientX, event.clientY);
-        const zoomDelta = (event.deltaY > 0 ? -zoomSpeed : zoomSpeed); // Use zoomSpeed instead of fixed zoomFactor
-        let newZoom = Phaser.Math.Clamp(camera.zoom + zoomDelta, minZoom, maxZoom);
-        camera.setZoom(newZoom);
-
-        // Adjust scroll to keep zoom centered on cursor
-        const worldPointAfterZoom = camera.getWorldPoint(event.clientX, event.clientY);
-        camera.scrollX += worldPointBeforeZoom.x - worldPointAfterZoom.x;
-        camera.scrollY += worldPointBeforeZoom.y - worldPointAfterZoom.y;
+    
+    scene.events.on('update', (_, delta) => {
+        const factor = delta / 1000;
+        camera.scrollX += velocityX * factor;
+        camera.scrollY += velocityY * factor;
     });
-
-    // Keyboard camera movement (WASD / Arrow keys)
-    const keySpeed = 50;
-    scene.input.keyboard?.on('keydown-W', () => camera.scrollY -= keySpeed / camera.zoom);
-    scene.input.keyboard?.on('keydown-S', () => camera.scrollY += keySpeed / camera.zoom);
-    scene.input.keyboard?.on('keydown-A', () => camera.scrollX -= keySpeed / camera.zoom);
-    scene.input.keyboard?.on('keydown-D', () => camera.scrollX += keySpeed / camera.zoom);
-
-    scene.input.keyboard?.on('keydown-UP', () => camera.scrollY -= keySpeed / camera.zoom);
-    scene.input.keyboard?.on('keydown-DOWN', () => camera.scrollY += keySpeed / camera.zoom);
-    scene.input.keyboard?.on('keydown-LEFT', () => camera.scrollX -= keySpeed / camera.zoom);
-    scene.input.keyboard?.on('keydown-RIGHT', () => camera.scrollX += keySpeed / camera.zoom);
+    
+    scene.input.on('wheel', (event) => {
+        camera.setZoom(Phaser.Math.Clamp(camera.zoom * (event.deltaY > 0 ? 0.9 : 1.1), 0.1, 100));
+    });
+    
+    scene.input.on('pointerdown', (pointer) => {
+        dragStartX = pointer.x;
+        dragStartY = pointer.y;
+    });
+    
+    scene.input.on('pointermove', (pointer) => {
+        if (!pointer.isDown) return;
+        camera.scrollX -= (pointer.x - dragStartX) / camera.zoom;
+        camera.scrollY -= (pointer.y - dragStartY) / camera.zoom;
+        dragStartX = pointer.x;
+        dragStartY = pointer.y;
+    });
 }
