@@ -1,4 +1,5 @@
 import { Scene, GameObjects, Tweens } from 'phaser';
+import { EventBus } from '../EventBus';
 
 export interface GameEntity {
     sprite: GameObjects.Sprite;
@@ -133,21 +134,25 @@ export class EntityManager {
 
     private handleSelection(entity: GameEntity, pointer: Phaser.Input.Pointer) {
         const shiftKey = this.scene.input.keyboard?.addKey('SHIFT')?.isDown;
-
+    
         if (!shiftKey) {
             this.clearSelections();
         }
-
+    
         entity.isSelected = !entity.isSelected;
         this.updateSelectionVisual(entity);
-
+    
         if (entity.isSelected) {
             this.selectedEntities.push(entity);
-            this.showSelectionPanel(entity);
+            EventBus.emit('entity-selected', entity.data); // ✅ Emit event to Vue
         } else {
             this.selectedEntities = this.selectedEntities.filter(e => e !== entity);
+            if (this.selectedEntities.length === 0) {
+                EventBus.emit('clear-selection'); // ✅ Clear UI if no selection
+            }
         }
     }
+    
 
     private updateSelectionVisual(entity: GameEntity) {
         if (entity.isSelected) {
@@ -168,12 +173,12 @@ export class EntityManager {
                 entity.selectionTween = this.scene.tweens.add({
                     targets: entity.selectionGraphic,
                     alpha: { from: 0, to: 1 },
-                    scaleX: { from: 0.8, to: 1.2 },
-                    scaleY: { from: 0.8, to: 1.2 },
+                    scaleX: { from: 0.4, to: 0.6 },
+                    scaleY: { from: 0.4, to: 0.6 },
                     duration: 600,
                     yoyo: true,
                     repeat: -1,
-                    ease: 'Sine.easeInOut'
+                    ease: 'Sine.circinOut'
                 });
             }
         } else {
@@ -183,8 +188,8 @@ export class EntityManager {
                     alpha: 0,
                     scaleX: 0.25,
                     scaleY: 0.25,
-                    duration: 600,
-                    ease: 'Sine.easeOut',
+                    duration: 400,
+                    ease: 'Sine.BackinOut',
                     onComplete: () => {
                         entity.selectionGraphic?.destroy();
                         entity.selectionGraphic = undefined;

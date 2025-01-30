@@ -1,5 +1,12 @@
+<template>
+  <div id="game-container" ref="gameContainer"></div>
+  <ResetCameraButton />
+  <EntityPanel />
+</template>
+
 <script setup lang="ts">
 import ResetCameraButton from '@/components/ResetCameraButton.vue';
+import EntityPanel from '@/components/EntityPanel.vue'; // ✅ Import panel
 import Phaser from 'phaser';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { MainGame } from '@/pages/game/scenes/MainGame';
@@ -39,20 +46,3 @@ onUnmounted(() => {
   }
 });
 </script>
-
-<template>
-  <div id="game-container" ref="gameContainer"></div>
-  <ResetCameraButton />
-</template>
-
-<style scoped>
-#game-container {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-    pointer-events: all;
-}
-</style>
