@@ -8,6 +8,7 @@ export interface GameEntity {
     selectionGraphic?: GameObjects.Graphics;
     selectionTween?: Tweens.Tween;
     glowSprite?: GameObjects.Sprite; // ✅ Glow effect reference
+    nameText?: GameObjects.Text; // ✅ Name tag reference
 }
 
 export class EntityManager {
@@ -56,24 +57,45 @@ export class EntityManager {
         const sprite = this.scene.add.sprite(x, y, texture)
             .setInteractive({ cursor: 'pointer' })
             .setDataEnabled();
-
+    
         // Set default scale based on texture type
         const scale = texture === 'ship' ? 0.05 : 0.5;
         sprite.setScale(scale);
-
+    
+        // ✅ Create floating name tag
+        const nameText = this.scene.add.text(x, y - sprite.displayHeight * 0.6, data.type, {
+            fontSize: '36px',
+            fontStyle: "bold",
+            color: '#00FF00', // Green color
+            fontFamily: 'Montserrat',
+            stroke: '#000000',
+            strokeThickness: 2,
+            align: 'center'
+        }).setOrigin(0.5).setDepth(1000); // ✅ Always above the entity
+    
         const entity: GameEntity = {
             sprite,
             isSelected: false,
             data,
             selectionGraphic: undefined,
             selectionTween: undefined,
-            glowSprite: undefined
+            glowSprite: undefined,
+            nameText // ✅ Store reference
         };
-
+    
         this.setupEntityInteractions(entity);
         this.entities.push(entity);
+    
+        // ✅ Make sure name follows entity movement
+        this.scene.events.on('update', () => {
+            if (entity.nameText) {
+                entity.nameText.setPosition(entity.sprite.x, entity.sprite.y - entity.sprite.displayHeight * 0.6);
+            }
+        });
+    
         return entity;
     }
+    
 
     private setupEntityInteractions(entity: GameEntity) {
         entity.sprite.on('pointerover', () => {
