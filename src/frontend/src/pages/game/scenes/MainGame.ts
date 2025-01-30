@@ -1,14 +1,15 @@
 import { EventBus } from '../EventBus';
-import { Scene } from 'phaser';
-import { preloadGame, createGame } from './GameSetup';
+import { Scene, Math as PhaserMath } from 'phaser';
+import { preloadGame, createGame, EntityManager } from './GameSetup';
 import { enableCameraControls } from './CameraControls';
 import { GridRenderer } from './GridRenderer';
-import { BackgroundRenderer } from './BackgroundRenderer'; // ✅ Import new renderer
+import { BackgroundRenderer } from './BackgroundRenderer';
 
 export class MainGame extends Scene {
     camera!: Phaser.Cameras.Scene2D.Camera;
     backgroundRenderer!: BackgroundRenderer;
     gridRenderer!: GridRenderer;
+    private entityManager = EntityManager.getInstance();
 
     constructor() {
         super('MainGame');
@@ -32,10 +33,27 @@ export class MainGame extends Scene {
 
         // ✅ Initialize the grid renderer
         this.gridRenderer = new GridRenderer(this);
+
+        // ✅ Listen for reset event
+        EventBus.on('reset-camera', () => {
+            this.resetCamera();
+        });
     }
 
     update() {
+        this.entityManager.update();
         this.gridRenderer.updateGrid(); // ✅ Update grid only when needed
         this.backgroundRenderer.update(); // ✅ Ensure the background tiles correctly
+    }
+
+    resetCamera() {
+        this.tweens.add({
+            targets: this.camera,
+            scrollX: 0,
+            scrollY: 0,
+            zoom: 1,
+            duration: 1000, // Smooth transition in ms
+            ease: PhaserMath.Easing.Cubic.Out
+        });
     }
 }

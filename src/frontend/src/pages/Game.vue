@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ResetCameraButton from '@/components/ResetCameraButton.vue';
 import Phaser from 'phaser';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { MainGame } from '@/pages/game/scenes/MainGame';
@@ -41,6 +42,7 @@ onUnmounted(() => {
 
 <template>
   <div id="game-container" ref="gameContainer"></div>
+  <ResetCameraButton />
 </template>
 
 <style scoped>
