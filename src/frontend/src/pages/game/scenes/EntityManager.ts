@@ -1,10 +1,12 @@
-import { Scene, GameObjects } from 'phaser';
+import { Scene, GameObjects, Tweens } from 'phaser';
 
 export interface GameEntity {
     sprite: GameObjects.Sprite;
     isSelected: boolean;
-    data: any; // Custom data for your entity
+    data: any;
     selectionGraphic?: GameObjects.Graphics;
+    selectionTween?: Tweens.Tween;
+    glowSprite?: GameObjects.Sprite; // ✅ Glow effect reference
 }
 
 export class EntityManager {
@@ -62,7 +64,9 @@ export class EntityManager {
             sprite,
             isSelected: false,
             data,
-            selectionGraphic: undefined
+            selectionGraphic: undefined,
+            selectionTween: undefined,
+            glowSprite: undefined
         };
 
         this.setupEntityInteractions(entity);
@@ -71,22 +75,44 @@ export class EntityManager {
     }
 
     private setupEntityInteractions(entity: GameEntity) {
-        // Hover effects
         entity.sprite.on('pointerover', () => {
-            // Show tooltip
             this.showTooltip(entity);
-        
-            // Apply hologram effect
-            entity.sprite.setTint(0x5FFF6F); // Green tint
+
+            // ✅ Add glow effect
+            entity.sprite.setTint(0xA5FFAE); // Light green tint
             entity.sprite.setBlendMode(Phaser.BlendModes.ADD);
+
+            if (!entity.glowSprite) {
+                entity.glowSprite = this.scene.add.sprite(entity.sprite.x, entity.sprite.y, entity.sprite.texture.key)
+                    .setTint(0xffffff) // Pure white glow
+                    .setAlpha(0.5)
+                    .setBlendMode(Phaser.BlendModes.ADD)
+                    .setScale(entity.sprite.scaleX * 1.2)
+                    .setDepth(entity.sprite.depth - 1);
+
+                this.scene.tweens.add({
+                    targets: entity.glowSprite,
+                    scaleX: { from: entity.sprite.scaleX * 1.1, to: entity.sprite.scaleX * 1.3 },
+                    scaleY: { from: entity.sprite.scaleY * 1.1, to: entity.sprite.scaleY * 1.3 },
+                    alpha: { from: 0.6, to: 0.3 },
+                    duration: 600,
+                    yoyo: true,
+                    repeat: -1
+                });
+            }
         });
 
         entity.sprite.on('pointerout', () => {
             this.tooltip.setVisible(false);
             entity.sprite.clearTint();
+            entity.sprite.setBlendMode(Phaser.BlendModes.NORMAL);
+
+            if (entity.glowSprite) {
+                entity.glowSprite.destroy();
+                entity.glowSprite = undefined;
+            }
         });
 
-        // Click handling
         entity.sprite.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
             if (pointer.leftButtonDown()) {
                 this.handleSelection(entity, pointer);
@@ -95,14 +121,13 @@ export class EntityManager {
     }
 
     private showTooltip(entity: GameEntity) {
-        const worldPoint = entity.sprite.getCenter();
-        const screenPoint = this.scene.cameras.main.getWorldPoint(worldPoint.x, worldPoint.y);
+        const { x, y } = entity.sprite.getCenter();
         
         this.tooltip.setText([
             `Type: ${entity.data.type}`,
             `Health: ${entity.data.health}`,
             `Owner: ${entity.data.owner}`
-        ]).setPosition(screenPoint.x + 20, screenPoint.y + 20)
+        ]).setPosition(x + 20, y + 20)
           .setVisible(true);
     }
 
@@ -127,22 +152,48 @@ export class EntityManager {
     private updateSelectionVisual(entity: GameEntity) {
         if (entity.isSelected) {
             if (!entity.selectionGraphic) {
-                // ✅ FIX: Instead of `sprite.add()`, manually position selection ring
                 entity.selectionGraphic = this.scene.add.graphics()
                     .lineStyle(2, 0x00FF00, 1)
                     .strokeCircle(0, 0, entity.sprite.displayWidth * 1.1)
-                    .setDepth(entity.sprite.depth - 1);
-                
-                // ✅ Make sure selection follows entity
+                    .setDepth(entity.sprite.depth - 1)
+                    .setAlpha(0.75);
+
                 this.scene.events.on('update', () => {
                     if (entity.isSelected && entity.selectionGraphic) {
                         entity.selectionGraphic.setPosition(entity.sprite.x, entity.sprite.y);
                     }
                 });
+
+                // ✅ Smooth animation
+                entity.selectionTween = this.scene.tweens.add({
+                    targets: entity.selectionGraphic,
+                    alpha: { from: 0, to: 1 },
+                    scaleX: { from: 0.8, to: 1.2 },
+                    scaleY: { from: 0.8, to: 1.2 },
+                    duration: 600,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: 'Sine.easeInOut'
+                });
             }
         } else {
-            entity.selectionGraphic?.destroy();
-            entity.selectionGraphic = undefined;
+            if (entity.selectionGraphic) {
+                this.scene.tweens.add({
+                    targets: entity.selectionGraphic,
+                    alpha: 0,
+                    scaleX: 0.25,
+                    scaleY: 0.25,
+                    duration: 600,
+                    ease: 'Sine.easeOut',
+                    onComplete: () => {
+                        entity.selectionGraphic?.destroy();
+                        entity.selectionGraphic = undefined;
+                    }
+                });
+
+                entity.selectionTween?.stop();
+                entity.selectionTween = undefined;
+            }
         }
     }
 
@@ -157,24 +208,12 @@ export class EntityManager {
 
     private showSelectionPanel(entity: GameEntity) {
         this.selectionPanel.setVisible(true);
-        // Update panel content based on selected entity
         const content = this.scene.add.text(20, 20, [
             `Selected: ${entity.data.type}`,
             `Position: ${Math.round(entity.sprite.x)}, ${Math.round(entity.sprite.y)}`,
             `Status: ${entity.data.status}`
-        ], {
-            fontSize: '16px',
-            color: '#FFFFFF'
-        });
-        
-        this.selectionPanel.add(content);
-    }
+        ], { fontSize: '16px', color: '#FFFFFF' });
 
-    update() {
-        // Update tooltip position if visible
-        if (this.tooltip.visible) {
-            const pointer = this.scene.input.activePointer;
-            this.tooltip.setPosition(pointer.x + 20, pointer.y + 20);
-        }
+        this.selectionPanel.add(content);
     }
 }

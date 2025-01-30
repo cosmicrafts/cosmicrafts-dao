@@ -4,13 +4,13 @@ import { preloadGame, createGame } from './GameSetup';
 import { enableCameraControls } from './CameraControls';
 import { GridRenderer } from './GridRenderer';
 import { BackgroundRenderer } from './BackgroundRenderer';
-import { EntityManager } from './EntityManager'; // Import from the new file
+import { EntityManager } from './EntityManager'; // ✅ Correct Import
 
 export class MainGame extends Scene {
     camera!: Phaser.Cameras.Scene2D.Camera;
     backgroundRenderer!: BackgroundRenderer;
     gridRenderer!: GridRenderer;
-    private entityManager = EntityManager.getInstance();
+    private entityManager!: EntityManager; // ✅ Now declared properly
 
     constructor() {
         super('MainGame');
@@ -35,6 +35,10 @@ export class MainGame extends Scene {
         // ✅ Initialize the grid renderer
         this.gridRenderer = new GridRenderer(this);
 
+        // ✅ Initialize EntityManager properly
+        this.entityManager = EntityManager.getInstance();
+        this.entityManager.initialize(this); // ✅ Initialize it with the scene
+
         // ✅ Listen for reset event
         EventBus.on('reset-camera', () => {
             this.resetCamera();
@@ -42,7 +46,6 @@ export class MainGame extends Scene {
     }
 
     update() {
-        this.entityManager.update();
         this.gridRenderer.updateGrid(); // ✅ Update grid only when needed
         this.backgroundRenderer.update(); // ✅ Ensure the background tiles correctly
     }
