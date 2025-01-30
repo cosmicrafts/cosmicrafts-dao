@@ -62,10 +62,10 @@ export class EntityManager {
     private createUIElements() {
         // Tooltip
         this.tooltip = this.scene.add.text(0, 0, '', {
-            fontSize: '14px',
+            fontSize: '24px',
             color: '#FFFFFF',
             backgroundColor: '#000000AA',
-            padding: { x: 10, y: 5 }
+            padding: { x: 4, y: 2 }
         }).setVisible(false).setDepth(1000);
 
         // Selection Panel
@@ -103,8 +103,12 @@ export class EntityManager {
     private setupEntityInteractions(entity: GameEntity) {
         // Hover effects
         entity.sprite.on('pointerover', () => {
+            // Show tooltip
             this.showTooltip(entity);
-            entity.sprite.setTint(0x00FF00);
+        
+            // Apply hologram effect
+            entity.sprite.setTint(0x5FFF6F); // Green tint
+            entity.sprite.setBlendMode(Phaser.BlendModes.ADD);
         });
 
         entity.sprite.on('pointerout', () => {
