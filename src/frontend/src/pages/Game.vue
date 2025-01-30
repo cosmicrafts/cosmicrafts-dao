@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="game">
     <canvas id="game-canvas"></canvas>
@@ -28,9 +29,57 @@ export default {
     });
   },
 };
+=======
+<script setup lang="ts">
+import ResetCameraButton from '@/components/ResetCameraButton.vue';
+import Phaser from 'phaser';
+import { onMounted, onUnmounted, ref } from 'vue';
+import { MainGame } from '@/pages/game/scenes/MainGame';
+import { EventBus } from '@/pages/game/EventBus';
+
+const gameContainer = ref();
+let game: Phaser.Game | null = null;
+
+onMounted(() => {
+  game = new Phaser.Game({
+    type: Phaser.AUTO,
+    parent: gameContainer.value,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    scale: {
+      mode: Phaser.Scale.RESIZE,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
+    },
+    scene: [MainGame],
+    physics: {
+      default: 'arcade',
+      arcade: { debug: false }
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (game) {
+      game.scale.resize(window.innerWidth, window.innerHeight);
+    }
+  });
+});
+
+onUnmounted(() => {
+  if (game) {
+    game.destroy(true);
+    game = null;
+  }
+});
+>>>>>>> Vue
 </script>
 
+<template>
+  <div id="game-container" ref="gameContainer"></div>
+  <ResetCameraButton />
+</template>
+
 <style scoped>
+<<<<<<< HEAD
 /* Ensure the .game container takes up the full viewport without causing overflow */
 .game {
   width: 100vw;
@@ -42,6 +91,16 @@ export default {
   justify-content: center;
   align-items: center;
   background-color: #000;
+=======
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    pointer-events: all;
+>>>>>>> Vue
 }
 
 /* Ensure the canvas takes up the full size of the .game container */

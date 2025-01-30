@@ -1,33 +1,6 @@
-<template>
-  <div id="metaverse-map">
-    <!-- Background Layer -->
-    <Stars :count="1000" class="layer background-stars" />
-    
-    <!-- Nebula Layer -->
-    <Nebula class="layer nebulas" />
-    
-    <!-- Main Map Canvas -->
-    <svg ref="svgCanvas" class="layer main-map"></svg>
-    
-    <!-- UI Overlay -->
-    <div class="layer ui-overlay">
-      <div id="tooltip" style="opacity: 0;"></div>
-    <button id="reset-zoom" @click="resetZoom">Reset Zoom</button>
-    <div id="size-control">
-      <label for="entity-size">Entity Size:</label>
-      <input
-        type="range"
-        id="entity-size"
-        min="0.1"
-        max="30"
-        v-model="entitySize"
-        @input="updateSizes"
-      />
-    </div>
-    </div>
-  </div>
-</template>
+<script setup lang="ts">
 
+<<<<<<< HEAD
 <script>
 import * as d3 from "d3";
 import { useCanisterStore } from "@/stores/canister";
@@ -303,83 +276,19 @@ export default {
 
   },
 };
+=======
+>>>>>>> Vue
 </script>
 
+<template>
+  <div ref="gameContainer" class="game-container"></div>
+</template>
+
 <style scoped>
-#metaverse-map {
+.game-container {
   width: 100vw;
   height: 100vh;
-  background: #000;
-  position: relative;
   overflow: hidden;
-  
-}
-
-.layer {
-
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-}
-
-.background-stars { z-index: 1; }
-.nebulas { z-index: 2; }
-.main-map { z-index: 3; }
-.ui-overlay { z-index: 4; }
-
-.nebula {
-  mix-blend-mode: screen;
-}
-
-svg {
-  mix-blend-mode: screen;
-}
-
-#tooltip {
-  position: absolute;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.9);
-  background: #222222;
-  border: 1px solid #333;
-  border-radius: 8px;
-  pointer-events: none;
-  font-size: 1rem;
-  color: rgb(255, 255, 255);
-}
-
-#reset-zoom {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  padding: 8px 16px;
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#reset-zoom:hover {
-  background-color: #ffffff;
-}
-
-#size-control {
-  position: absolute;
-  bottom: 50px;
-  right: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  border-radius: 8px;
-}
-
-#size-control label {
-  font-size: 14px;
-  color: #333;
-}
-
-#size-control input {
-  margin-left: 10px;
+  background: #000;
 }
 </style>
