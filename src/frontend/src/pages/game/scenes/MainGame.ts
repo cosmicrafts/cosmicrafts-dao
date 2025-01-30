@@ -4,7 +4,7 @@ import { preloadGame, createGame } from './GameSetup';
 import { enableCameraControls } from './CameraControls';
 import { GridRenderer } from './GridRenderer';
 import { BackgroundRenderer } from './BackgroundRenderer';
-import { EntityManager } from './EntityManager'; // Import from the new file
+import { EntityManager } from './EntityManager';
 
 export class MainGame extends Scene {
     camera!: Phaser.Cameras.Scene2D.Camera;

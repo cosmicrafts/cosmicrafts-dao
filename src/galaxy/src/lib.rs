@@ -6,114 +6,6 @@ use serde::Serialize;
 use candid::{CandidType, Deserialize, Principal};
 use ic_cdk_macros::init;
 
-<<<<<<< HEAD
-
-fn generate_star_cluster(
-    cluster_type: &StarClusterType,
-    cluster_coords: Coordinates, // Use the Coordinates struct
-) -> Result<Vec<Principal>, String> {
-    // Determine the number of stars based on cluster type
-    let star_count = match cluster_type {
-        StarClusterType::Asterism { min_stars, max_stars, .. }
-        | StarClusterType::StellarAssociation { min_stars, max_stars, .. }
-        | StarClusterType::CompactOpenCluster { min_stars, max_stars, .. }
-        | StarClusterType::OpenCluster { min_stars, max_stars, .. }
-        | StarClusterType::EmbeddedCluster { min_stars, max_stars, .. }
-        | StarClusterType::SuperStarCluster { min_stars, max_stars, .. }
-        | StarClusterType::YoungMassiveCluster { min_stars, max_stars, .. }
-        | StarClusterType::GlobularCluster { min_stars, max_stars, .. }
-        | StarClusterType::StellarComplex { min_stars, max_stars, .. }
-        | StarClusterType::GalacticNucleus { min_stars, max_stars, .. } => {
-            generate_random_in_range_f64(*min_stars as f64, *max_stars as f64).round() as usize
-        }
-        _ => 0, // Hypothetical clusters do not generate stars
-    };
-
-    // Create a vector to hold the star types
-    let empty_star_types = vec![];
-
-    // Get star types from the cluster type
-    let star_types = match cluster_type {
-        StarClusterType::Asterism { star_types, .. }
-        | StarClusterType::StellarAssociation { star_types, .. }
-        | StarClusterType::CompactOpenCluster { star_types, .. }
-        | StarClusterType::OpenCluster { star_types, .. }
-        | StarClusterType::EmbeddedCluster { star_types, .. }
-        | StarClusterType::SuperStarCluster { star_types, .. }
-        | StarClusterType::YoungMassiveCluster { star_types, .. }
-        | StarClusterType::GlobularCluster { star_types, .. }
-        | StarClusterType::GalacticNucleus { star_types, .. } => star_types,
-        _ => &empty_star_types,
-    };
-
-    // Generate stars
-    let mut stars = Vec::new();
-    for _ in 0..star_count {
-        let radius = generate_random_in_range_f64(0.0, 10.0); // Scatter stars within 10 units
-        let angle = generate_random_in_range_f64(0.0, 2.0 * std::f64::consts::PI);
-        let star_coords = cluster_coords.offset(&Coordinates::from_polar(radius, angle)); // Use offset with polar coordinates
-
-        // Pick a random star type
-        let star_type = if !star_types.is_empty() {
-            let current_time_nanos = ic_cdk::api::time() as u64;
-            let index = (current_time_nanos % star_types.len() as u64) as usize;
-            star_types[index].clone()
-        } else {
-            "Unknown".to_string()
-        };
-
-        // Construct the Metadata::Star variant with all required fields
-        let star_metadata = Metadata::Star(Star {
-            name: "Unnamed Star".to_string(),
-            description: "A procedurally generated star".to_string(),
-            star_type: StarType::G, // Default to a G-type star; adjust based on star_type if needed
-            coords: [star_coords.x, star_coords.y],
-            parent_cluster_id: Principal::anonymous(), // Replace with the actual cluster Principal ID
-            temperature: generate_random_in_range_f64(3000.0, 30000.0), // Example range in Kelvin
-            luminosity: generate_random_in_range_f64(0.1, 10.0), // Relative to the Sun
-            mass: generate_random_in_range_f64(0.1, 50.0), // Relative to the Sun
-            radius: generate_random_in_range_f64(0.1, 10.0), // Relative to the Sun
-            age: generate_random_in_range_f64(0.01, 10.0), // Example: Age in billions of years
-            metallicity: generate_random_in_range_f64(0.001, 0.03), // Metallicity fraction
-            rotation_speed: generate_random_in_range_f64(1.0, 500.0), // Example: Rotation speed in km/s
-            phenomena: vec![], // Default to no phenomena; can add based on logic
-            spectral_class: star_type.clone(),
-            life_stage: "Main Sequence".to_string(), // Default to main sequence; adjust if needed
-            hp: 1000, // Default HP for stars
-            shield: if star_type == "O" { Some(500) } else { None }, // Example shield logic
-            can_move: Some(false),
-            can_attack: Some(false),
-        });
-
-        // Add each star as an entity
-        if let Ok(star_id) = add_entity(
-            EntityType::Star,
-            LocationParams::Proximity {
-                center: [star_coords.x, star_coords.y],
-                max_distance: 10.0,
-            },
-            Some(star_metadata),
-            None,
-        ) {
-            stars.push(star_id);
-        }
-    }
-
-    Ok(stars)
-}
-
-    
-    fn add_entity(
-        entity_type: EntityType,
-        location_params: LocationParams,
-        metadata: Option<Metadata>,
-        star_cluster_type: Option<StarClusterType>,
-    ) -> Result<Principal, String> {
-        let caller = ic_cdk::caller();
-    
-        if entity_type == EntityType::StarCluster && star_cluster_type.is_none() {
-            return Err("StarCluster requires a valid StarClusterType".to_string());
-=======
 #[init]
 fn init() {
     ic_cdk::println!("Init function executed.");
@@ -259,7 +151,6 @@ fn update_world(dt: f64) {
             if let Some(entity) = entities.get_mut(&entity_id) {
                 entity.target_position = None;
             }
->>>>>>> Vue
         }
     });
 }
