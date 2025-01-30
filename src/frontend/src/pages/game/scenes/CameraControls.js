@@ -1,13 +1,13 @@
 import { Scene } from 'phaser';
 
-export function enableCameraControls(scene: Scene) {
+export function enableCameraControls(scene) {
     const camera = scene.cameras.main;
     let velocityX = 0, velocityY = 0;
     const speed = 1000;
     let dragStartX = 0, dragStartY = 0;
     let tileSprite;
 
-    scene.input.keyboard!.on('keydown', (event) => {
+    scene.input.keyboard.on('keydown', (event) => {
         if (event.key === 'w' || event.key === 'ArrowUp') velocityY = -speed;
         if (event.key === 's' || event.key === 'ArrowDown') velocityY = speed;
         if (event.key === 'a' || event.key === 'ArrowLeft') velocityX = -speed;

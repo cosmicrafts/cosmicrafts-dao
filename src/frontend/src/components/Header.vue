@@ -187,7 +187,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 2rem;
+  padding: 2rem 2rem;
   border: 1px solid #ffffff12;
   background: linear-gradient(to bottom, rgba(30, 43, 56, 0.2), rgba(23, 33, 43, 0.4));
   position: fixed;
@@ -226,6 +226,7 @@ header {
 }
 
 .logo-wrapper {
+  margin-top: .35rem;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -234,7 +235,9 @@ header {
 
 /* Logo Styling */
 .logo img {
-  width: 2.5rem;
+  margin-left: -1rem;
+
+  width: 2.75rem;
   cursor: pointer;
   transition: transform 0.2s ease, filter 0.1s ease;
 }
@@ -247,8 +250,8 @@ header {
 
 @keyframes pulse {
   from {
-    filter: drop-shadow(0px 0px 6px rgba(0, 195, 255, 0.8));
-    transform: translateY(-1px); /* Start slightly above */
+    filter: drop-shadow(0px 0px 2px rgba(0, 195, 255, 0.25));
+    transform: translateY(-4px); /* Start slightly above */
   }
   to {
     filter: drop-shadow(0px 0px 12px rgba(0, 195, 255, 1));
@@ -258,7 +261,7 @@ header {
 
 /* Additional Logo Styling */
 .additional-logo img {
-  width: 4rem;
+  width: 5rem;
   margin-left: 0.55rem; /* Add space between the two logos */
   transition: transform 0.25s ease, filter 0.1s ease;
 }
