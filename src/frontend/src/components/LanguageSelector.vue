@@ -73,15 +73,17 @@ onBeforeUnmount(() => {
     <!-- Dropdown Menu -->
     <transition name="dropdown">
       <ul v-if="isDropdownOpen" :class="['dropdown-menu', props.direction]">
-        <li
-          v-for="(lang, index) in languages"
-          :key="lang.code"
-          :style="{ '--index': index }"
-          @click.stop="changeLanguage(lang.code)"
-        >
-          {{ lang.label }}
-        </li>
-      </ul>
+  <li
+    v-for="(lang, index) in languages"
+    :key="lang.code"
+    :style="{ '--index': index }"
+    class="u-hover"
+    @click.stop="changeLanguage(lang.code)"
+  >
+    {{ lang.label }}
+  </li>
+</ul>
+
     </transition>
   </div>
 </template>
@@ -123,18 +125,20 @@ onBeforeUnmount(() => {
 .dropdown-menu {
   position: absolute;
   display: grid;
+  
   grid-template-columns: repeat(2, 3fr);
-  gap: 0.9rem;
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.98), rgba(23, 33, 43, 0.99));
+  gap: 1rem;
+  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.95), rgba(23, 33, 43, 0.85));
   border: 1px solid #3a3a3a;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   list-style: none;
   margin: 0;
-  padding: 0.5rem;
+  padding: 1rem;
   font-weight: 700;
   border: 0.25px solid rgba(255, 255, 255, 0.086);
-  border-radius: 10px;
-  transform-origin: top left;
+  border-radius: 24px;
+
+
 }
 
 /* Positioning for up-right */
@@ -154,7 +158,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem;
+  padding: 0.25rem;
   color: #e2e8f0;
   font-size: 0.9rem;
   cursor: pointer;
@@ -165,10 +169,7 @@ onBeforeUnmount(() => {
   animation-delay: calc(0.05s * var(--index)); /* Stagger each item */
 }
 
-/* Animation on hover */
-.dropdown-menu li:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-}
+
 
 @keyframes fadeIn {
   to {

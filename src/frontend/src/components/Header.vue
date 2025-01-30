@@ -20,12 +20,13 @@
     <!-- Navigation Links (Desktop Only) -->
     <nav class="nav-links">
       <ul>
-        <li><router-link to="/game">{{ t('header.games') }}</router-link></li>
-        <li><router-link to="/dao">{{ t('header.dao') }}</router-link></li>
-        <li><router-link to="/whitepaper">{{ t('header.whitepaper') }}</router-link></li>
-        <li><router-link to="/dashboard">{{ t('header.dashboard') }}</router-link></li>
+        <li><router-link to="/game" class="u-hover">{{ t('header.games') }}</router-link></li>
+        <li><router-link to="/dao" class="u-hover">{{ t('header.dao') }}</router-link></li>
+        <li><router-link to="/whitepaper" class="u-hover">{{ t('header.whitepaper') }}</router-link></li>
+        <li><router-link to="/dashboard" class="u-hover">{{ t('header.dashboard') }}</router-link></li>
       </ul>
     </nav>
+
 
     <!-- Flex Container for Connect Button and Language Selector -->
     <div class="connect-container">
@@ -187,17 +188,17 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2rem 2rem;
+  padding: 0rem 1.75rem;
   border: 1px solid #ffffff12;
   background: linear-gradient(to bottom, rgba(30, 43, 56, 0.2), rgba(23, 33, 43, 0.4));
   position: fixed;
   z-index: 12;
-  border-radius: 16px;
+  border-radius: 24px;
   margin: auto;
   top: 1%;
   left: 0.5rem;
   right: 0.5rem;
-  height: 1rem;
+  height: 4rem;
   backdrop-filter: blur(8px);
 }
 
@@ -250,87 +251,42 @@ header {
 
 @keyframes pulse {
   from {
-    filter: drop-shadow(0px 0px 2px rgba(0, 195, 255, 0.25));
+    filter: drop-shadow(0px 0px 4px rgba(0, 195, 255, 0.45));
     transform: translateY(-4px); /* Start slightly above */
   }
   to {
-    filter: drop-shadow(0px 0px 12px rgba(0, 195, 255, 1));
+    filter: drop-shadow(0px 0px 8px rgba(0, 195, 255, .65));
     transform: translateY(1px); /* Move slightly below */
   }
 }
 
 /* Additional Logo Styling */
 .additional-logo img {
-  width: 5rem;
+  width: 4.5rem;
   margin-left: 0.55rem; /* Add space between the two logos */
   transition: transform 0.25s ease, filter 0.1s ease;
 }
 
 .additional-logo img:hover {
   transform: scale(1.1) rotate(-2deg);
-  filter: drop-shadow(0px 0px 16px rgba(0, 195, 255, 0.58));
+  filter: drop-shadow(0px 0px 8px rgba(22, 154, 255, 0.58));
 }
-
 /* Navigation Links */
 .nav-links ul {
   position: absolute;
   left: 8rem;
-  top: 1.5%;
+  top: 5%;
   display: flex;
   gap: 2rem;
   list-style: none;
 }
 
+/* Apply Universal Hover Effect */
 .nav-links a {
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  display: inline-block;
-  position: relative;
-  transition: color 0.25s ease-in-out, transform 0.25s ease-in-out, text-shadow 0.25s ease-in-out;
   padding: 0.2rem 0.5rem;
 }
 
-.nav-links a:hover {
-  color: #00c3ff;
-  border-bottom: 1px solid #00c3ff;
-  border-top: 1px solid #00c3ff;
-  padding-bottom: 0.2rem; /* Adjust padding to account for the new border */
-  text-shadow: 0px 0px 2px rgba(0, 191, 255, 0.686);
-}
 
-/* Line Animation */
-.nav-links a::before,
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  height: 1.5px;
-  width: 50%;
-  background-color: #ffa200;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  box-shadow: 0px 0px 5px rgba(255, 162, 0, 0);
-  transform: scaleX(0); /* Start hidden */
-}
-
-.nav-links a::before {
-  top: -1px; /* Offset top line above text */
-  left: -4%; /* Adjust horizontal offset for breathing room */
-  transform-origin: left; /* Line grows from the left */
-}
-
-.nav-links a::after {
-  bottom: -1px; /* Offset bottom line below text */
-  right: -4%; /* Adjust horizontal offset for breathing room */
-  transform-origin: right; /* Line grows from the right */
-}
-
-/* Hover Effect */
-.nav-links a:hover::before,
-.nav-links a:hover::after {
-  transform: scaleX(1.5);
-  box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.6);
-}
 
 .connect-container {
   display: flex;
@@ -339,6 +295,7 @@ header {
   position: absolute;
   right: 1rem;
   top: 50%;
+  margin-top: -.1rem;
   transform: translateY(-45%);
 }
 
