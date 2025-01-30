@@ -5,6 +5,7 @@ export function enableCameraControls(scene: Scene) {
     let velocityX = 0, velocityY = 0;
     const speed = 1000;
     let dragStartX = 0, dragStartY = 0;
+    let tileSprite;
 
     scene.input.keyboard!.on('keydown', (event) => {
         if (event.key === 'w' || event.key === 'ArrowUp') velocityY = -speed;
@@ -22,6 +23,12 @@ export function enableCameraControls(scene: Scene) {
         const factor = delta / 1000;
         camera.scrollX += velocityX * factor;
         camera.scrollY += velocityY * factor;
+        if (tileSprite) {
+            tileSprite.x = camera.scrollX + camera.width / 2;
+            tileSprite.y = camera.scrollY + camera.height / 2;
+            tileSprite.tilePositionX = camera.scrollX;
+            tileSprite.tilePositionY = camera.scrollY;
+        }
     });
     
     scene.input.on('wheel', (event) => {
@@ -40,4 +47,15 @@ export function enableCameraControls(scene: Scene) {
         dragStartX = pointer.x;
         dragStartY = pointer.y;
     });
+    
+    // Background Renderer Integration
+    const texture = scene.textures.get('background');
+    const tileSize = texture ? texture.getSourceImage().width : 2048;
+    tileSprite = scene.add.tileSprite(
+        camera.scrollX + camera.width / 2,
+        camera.scrollY + camera.height / 2,
+        camera.width * 10,
+        camera.height * 10,
+        'background'
+    ).setOrigin(0.5, 0.5).setDepth(-1);
 }
