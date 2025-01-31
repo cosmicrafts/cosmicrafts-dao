@@ -1,11 +1,11 @@
 import { EventBus } from '../EventBus';
 import { Scene, Math as PhaserMath } from 'phaser';
-import { preloadGame } from './GameSetup'; // Only keeping `preloadGame`
+import { preloadGame } from './GameSetup';
 import { enableCameraControls } from './CameraControls';
 import { GridRenderer } from './GridRenderer';
 import { BackgroundRenderer } from './BackgroundRenderer';
 import { EntityManager } from './EntityManager';
-import { EntityFetcher } from './EntityFetcher';
+import { EntityService } from './EntityService';
 
 export class MainGame extends Scene {
     camera!: Phaser.Cameras.Scene2D.Camera;
@@ -39,7 +39,7 @@ export class MainGame extends Scene {
         this.gridRenderer = new GridRenderer(this);
 
         // ✅ Start entity polling
-        EntityFetcher.startPolling(this);
+        EntityService.startPolling(this);
 
         // ✅ Listen for reset event
         EventBus.on('reset-camera', () => {

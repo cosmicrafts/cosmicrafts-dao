@@ -1,6 +1,18 @@
 import { Scene, GameObjects, Tweens } from 'phaser';
 
-export class EntityVisuals {
+export class EntityGraphics {
+    private static textureMap: { [key: string]: string } = {
+        'Planet': 'planet',
+        'Ship': 'ship',
+        'Star': 'star',
+        'Mine': 'mine',
+        'Player': 'player'
+    };
+
+    static getTextureForEntity(entityType: string): string {
+        return this.textureMap[entityType] || 'ship';
+    }
+
     static attachVisuals(scene: Scene, entity: any) {
         // ✅ Create floating name tag
         entity.nameText = scene.add.text(

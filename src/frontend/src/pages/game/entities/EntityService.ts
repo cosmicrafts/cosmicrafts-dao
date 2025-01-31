@@ -11,7 +11,7 @@ const backendActor = createActor(canisterId) as ActorSubclass<_SERVICE>;
 
 type EntityType = _SERVICE['export_entities'] extends () => Promise<Array<infer T>> ? T : never;
 
-export class EntityFetcher {
+export class EntityService {
     private static pollingInterval: number = 1000; // 100ms polling
     private static intervalId: NodeJS.Timeout | null = null;
 

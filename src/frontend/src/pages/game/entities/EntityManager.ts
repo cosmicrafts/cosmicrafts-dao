@@ -1,6 +1,6 @@
 import { Scene, GameObjects, Tweens } from 'phaser';
 import { EventBus } from '../EventBus';
-import { EntityVisuals } from './EntityVisuals';
+import { EntityGraphics } from './EntityGraphics';
 import { EntityMovement } from './EntityMovement';
 
 export interface GameEntity {
@@ -37,7 +37,7 @@ export class EntityManager {
         sprite.setScale(scale);
 
         const entity: GameEntity = { sprite, isSelected: false, data };
-        EntityVisuals.attachVisuals(this.scene, entity);
+        EntityGraphics.attachVisuals(this.scene, entity);
         this.setupEntityInteractions(entity);
 
         this.entityMap.set(data.id.toString(), entity);
@@ -97,12 +97,12 @@ export class EntityManager {
                     ? `(${entity.data.targetPosition.x}, ${entity.data.targetPosition.y})`
                     : 'None'
             });
-            EntityVisuals.onHover(entity);
+            EntityGraphics.onHover(entity);
         });
 
         entity.sprite.on('pointerout', () => {
             EventBus.emit('hide-tooltip');
-            EntityVisuals.onHoverEnd(entity);
+            EntityGraphics.onHoverEnd(entity);
         });
 
         entity.sprite.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
@@ -117,7 +117,7 @@ export class EntityManager {
         if (!shiftKey) this.clearSelections();
 
         entity.isSelected = !entity.isSelected;
-        EntityVisuals.onSelect(entity, entity.isSelected);
+        EntityGraphics.onSelect(entity, entity.isSelected);
 
         if (entity.isSelected) {
             EventBus.emit('entity-selected', entity.data);
@@ -129,7 +129,7 @@ export class EntityManager {
     private clearSelections() {
         this.entityMap.forEach(entity => {
             entity.isSelected = false;
-            EntityVisuals.onSelect(entity, false);
+            EntityGraphics.onSelect(entity, false);
         });
     }
 

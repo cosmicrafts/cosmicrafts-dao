@@ -332,8 +332,6 @@ a:hover {
   border-bottom: 1px solid #00c3ff;
   border-top: 1px solid #00c3ff;
   text-shadow: 0px 0px 2px rgba(0, 191, 255, 0.686);
-  padding-bottom: 0.5rem;
-
 }
 
 /* Orange Line Animation (Like Header Nav) */
@@ -341,7 +339,7 @@ a:hover {
 .u-hover::after {
   content: '';
   position: absolute;
-  height: 1.5px;
+  height: .15rem;
   width: 50%;
   background-color: #ffa200;
   transition: transform 0.45s ease, box-shadow 0.65s ease;
@@ -351,7 +349,7 @@ a:hover {
 
 /* Orange Line - Top & Bottom */
 .u-hover::before {
-  top: -1px; /* Orange line above text */
+  top: -.1rem; /* Orange line above text */
   left: -4%;
   transform-origin: left;
 }
@@ -365,6 +363,6 @@ a:hover {
 /* Expand Orange Lines on Hover */
 .u-hover:hover::before,
 .u-hover:hover::after {
-  transform: scaleX(1.5);
+  transform: scaleX(1.25);
   box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.936);
 }

@@ -8,7 +8,7 @@
     </div>
 
     <!-- Logo -->
-    <div class="logo-wrapper" @click="scrollToTop">
+    <div class="logo-wrapper " @click="scrollToTop">
       <div class="logo">
         <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts Logo" />
       </div>
@@ -193,9 +193,9 @@ header {
   background: linear-gradient(to bottom, rgba(30, 43, 56, 0.2), rgba(23, 33, 43, 0.4));
   position: fixed;
   z-index: 12;
-  border-radius: 24px;
+  border-radius: 90px;
   margin: auto;
-  top: 1%;
+  margin-top: .5%;
   left: 0.5rem;
   right: 0.5rem;
   height: 4rem;
@@ -210,21 +210,24 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 4px;
   width: 2rem;
   height: 2rem;
   background-color: rgba(30, 43, 56, 0.9);
-  border-radius: 8px;
+  border-radius: 90px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+  transition: 
+    transform 0.3s ease-out, 
+    background-color 0.4s ease-out, /* ⏳ Slow fade-out */
+    box-shadow 0.6s ease-out; /* ⏳ Longer glow fade */
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
 }
 
 /* Hover effect */
 .desktop-language-selector:hover {
   background-color: rgba(0, 195, 255, 0.862); /* Lighter blue background on hover */
-  box-shadow: 0 6px 12px rgba(0, 195, 255, 0.2); 
+  box-shadow: 0 4px 16px rgba(0, 208, 255, 0.896);
 }
+
 
 .logo-wrapper {
   margin-top: .35rem;
@@ -233,44 +236,38 @@ header {
   cursor: pointer;
 }
 
-
 /* Logo Styling */
 .logo img {
   margin-left: -1rem;
-
-  width: 2.75rem;
+  width: 2.5rem;
   cursor: pointer;
-  transition: transform 0.2s ease, filter 0.1s ease;
+  transition: transform 0.4s ease, filter 0.25s ease;
 }
 
 .logo img:hover {
-  transform: scale(1.1) rotate(-4deg);
-  filter: drop-shadow(0px 0px 6px rgba(0, 195, 255, 0.8));
-  animation: pulse 0.8s infinite alternate;
-}
+  transform: scale(1.25) rotate(-4deg);
+  filter: 
+  brightness(1.45)
+  hue-rotate(120deg)
 
-@keyframes pulse {
-  from {
-    filter: drop-shadow(0px 0px 4px rgba(0, 195, 255, 0.45));
-    transform: translateY(-4px); /* Start slightly above */
-  }
-  to {
-    filter: drop-shadow(0px 0px 8px rgba(0, 195, 255, .65));
-    transform: translateY(1px); /* Move slightly below */
-  }
+  drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.8));
 }
 
 /* Additional Logo Styling */
 .additional-logo img {
-  width: 4.5rem;
-  margin-left: 0.55rem; /* Add space between the two logos */
-  transition: transform 0.25s ease, filter 0.1s ease;
+  width: 4.25rem;
+  margin-left: 0.5rem; /* Add space between the two logos */
+  transition: transform 0.55s ease, filter 0.1s ease;
 }
 
 .additional-logo img:hover {
   transform: scale(1.1) rotate(-2deg);
-  filter: drop-shadow(0px 0px 8px rgba(22, 154, 255, 0.58));
+  filter: 
+  brightness(1.65)
+  saturate(0)
+  drop-shadow(0px 0px 8px rgba(22, 154, 255, 0.58));
 }
+
 /* Navigation Links */
 .nav-links ul {
   position: absolute;
@@ -286,39 +283,16 @@ header {
   padding: 0.2rem 0.5rem;
 }
 
-
-
 .connect-container {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: .5rem;
   position: absolute;
-  right: 1rem;
-  top: 50%;
-  margin-top: -.1rem;
-  transform: translateY(-45%);
-}
-
-/* Log In Button Styling */
-.login-button {
-  position: absolute;
-  right: 1rem;
+  right: .5rem;
   top: 50%;
   transform: translateY(-50%);
-  background: linear-gradient(to bottom, #00C0FC, #0056BA);
-  color: #fff;
-  border: 1px solid #25252529;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 1rem;
-  height: 2.5rem;
 }
 
-.login-button:hover {
-  background: linear-gradient(to bottom, #50b3d1, #32649d);
-  border-color: #f7f7f778;
-}
 
 /* Burger Menu Styling */
 .burger {
@@ -357,10 +331,11 @@ header {
 
 /* Player Avatar Styling */
 .player-avatar {
+  margin-top: .4rem;
   width: 48px;
   height: 48px;
-  border-radius: 8px;
-  border: 1px solid #00c3ff;
+  border-radius: 24px;
+  border: 1px solid #00c3ff88;
 }
 
 .player-placeholder {
