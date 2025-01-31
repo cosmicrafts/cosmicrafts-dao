@@ -23,7 +23,7 @@ import EntityPanel from '@/components/EntityPanel.vue'; // ✅ Import panel
 import Phaser from 'phaser';
 import { onMounted, onUnmounted, ref } from 'vue';
 import EntityTooltip from '@/components/GameTooltip.vue';
-import { MainGame } from '@/pages/game/scenes/MainGame';
+import { MainGame } from '@/pages/game/entities/MainGame';
 
 const gameContainer = ref();
 let game: Phaser.Game | null = null;

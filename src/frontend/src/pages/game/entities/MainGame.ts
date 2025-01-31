@@ -1,6 +1,6 @@
 import { EventBus } from '../EventBus';
 import { Scene, Math as PhaserMath } from 'phaser';
-import { preloadGame, createGame } from './GameSetup';
+import { preloadGame } from './GameSetup'; // Only keeping `preloadGame`
 import { enableCameraControls } from './CameraControls';
 import { GridRenderer } from './GridRenderer';
 import { BackgroundRenderer } from './BackgroundRenderer';
@@ -18,7 +18,7 @@ export class MainGame extends Scene {
     }
 
     preload() {
-        preloadGame(this);
+        preloadGame(this); // ✅ Keep assets separate for better organization
     }
 
     create() {
@@ -27,7 +27,9 @@ export class MainGame extends Scene {
         this.camera.setBackgroundColor(0x000000);
         this.camera.setZoom(1);
 
-        createGame(this);
+        // ✅ Move `createGame` logic here directly
+        this.createGame();
+
         enableCameraControls(this);
 
         // ✅ Initialize the background renderer
@@ -36,10 +38,9 @@ export class MainGame extends Scene {
         // ✅ Initialize the grid renderer
         this.gridRenderer = new GridRenderer(this);
 
-        // ✅ Initialize EntityManager properly
-        this.entityManager = EntityManager.getInstance();
-        this.entityManager.initialize(this); // ✅ Initialize it with the scene
-        EntityFetcher.fetchAndCreateEntities(this);
+        // ✅ Start entity polling
+        EntityFetcher.startPolling(this);
+
         // ✅ Listen for reset event
         EventBus.on('reset-camera', () => {
             this.resetCamera();
@@ -60,5 +61,11 @@ export class MainGame extends Scene {
             duration: 1000, // Smooth transition in ms
             ease: PhaserMath.Easing.Cubic.Out
         });
+    }
+
+    // ✅ `createGame` moved inside `MainGame`
+    private createGame() {
+        this.entityManager = EntityManager.getInstance();
+        this.entityManager.initialize(this);
     }
 }

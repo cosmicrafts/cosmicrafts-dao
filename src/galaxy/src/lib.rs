@@ -27,21 +27,21 @@ struct TargetPosition {
 }
 
 #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
-pub enum EntityType {
-    Planet,
-    Star,
-    Ship,
-    Mine,
-    Player,
-}
-
-#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
 struct Entity {
     id: u64,
     entity_type: EntityType,
     position: Position,
     target_position: Option<TargetPosition>, // Where the entity is moving towards
     speed: f64, // Base speed of the entity
+}
+
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+pub enum EntityType {
+    Planet,
+    Star,
+    Ship,
+    Mine,
+    Player,
 }
 
 // Constants
