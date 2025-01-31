@@ -30,27 +30,10 @@ export class EntityManager {
 
     initialize(scene: Scene) {
         this.scene = scene;
-        this.createUIElements();
-    }
-
-    private createUIElements() {
-        // Tooltip
-        this.tooltip = this.scene.add.text(0, 0, '', {
-            fontSize: '24px',
-            color: '#FFFFFF',
-            backgroundColor: '#242D440AB',
-            padding: { x: 4, y: 2 }
-        }).setVisible(false).setDepth(1000);
-
-        // Selection Panel
+            // ✅ Add selection panel initialization
         this.selectionPanel = this.scene.add.container(20, this.scene.cameras.main.height - 150)
-            .setVisible(false)
-            .setDepth(1000);
-        
-        const panelBackground = this.scene.add.graphics()
-            .fillStyle(0x000000, 0.7)
-            .fillRoundedRect(124, 421, 300, 130, 130);
-        this.selectionPanel.add(panelBackground);
+        .setVisible(false)
+        .setDepth(1000);
     }
 
     createEntity(x: number, y: number, texture: string, data: any): GameEntity {
@@ -125,7 +108,7 @@ export class EntityManager {
         });
 
         entity.sprite.on('pointerout', () => {
-            this.tooltip.setVisible(false);
+            EventBus.emit('hide-tooltip');
             entity.sprite.clearTint();
             entity.sprite.setBlendMode(Phaser.BlendModes.NORMAL);
 
@@ -143,16 +126,13 @@ export class EntityManager {
     }
 
     private showTooltip(entity: GameEntity) {
-        const { x, y } = entity.sprite.getCenter();
-        
-        this.tooltip.setText([
-            `Type: ${entity.data.type}`,
-            `Health: ${entity.data.health}`,
-            `Owner: ${entity.data.owner}`
-        ]).setPosition(x + 20, y + 20)
-          .setVisible(true);
+        EventBus.emit('show-tooltip', {
+            type: entity.data.type,
+            health: entity.data.health,
+            owner: entity.data.owner
+        });
     }
-
+    
     private handleSelection(entity: GameEntity, pointer: Phaser.Input.Pointer) {
         const shiftKey = this.scene.input.keyboard?.addKey('SHIFT')?.isDown;
     
@@ -231,14 +211,4 @@ export class EntityManager {
         this.selectionPanel.setVisible(false);
     }
 
-    private showSelectionPanel(entity: GameEntity) {
-        this.selectionPanel.setVisible(true);
-        const content = this.scene.add.text(20, 20, [
-            `Selected: ${entity.data.type}`,
-            `Position: ${Math.round(entity.sprite.x)}, ${Math.round(entity.sprite.y)}`,
-            `Status: ${entity.data.status}`
-        ], { fontSize: '16px', color: '#FFFFFF' });
-
-        this.selectionPanel.add(content);
-    }
 }

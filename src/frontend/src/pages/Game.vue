@@ -2,6 +2,7 @@
   <div id="game-container" ref="gameContainer"></div>
   <ResetCameraButton />
   <EntityPanel />
+  <EntityTooltip />
 </template>
 
 <script setup lang="ts">
@@ -9,8 +10,8 @@ import ResetCameraButton from '@/components/ResetCameraButton.vue';
 import EntityPanel from '@/components/EntityPanel.vue'; // ✅ Import panel
 import Phaser from 'phaser';
 import { onMounted, onUnmounted, ref } from 'vue';
+import EntityTooltip from '@/components/GameTooltip.vue';
 import { MainGame } from '@/pages/game/scenes/MainGame';
-import { EventBus } from '@/pages/game/EventBus';
 
 const gameContainer = ref();
 let game: Phaser.Game | null = null;
