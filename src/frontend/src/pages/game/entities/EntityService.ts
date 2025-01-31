@@ -33,7 +33,7 @@ export class EntityService {
             const cosmicrafts = await canisterStore.get("cosmicrafts");
 
             const entitiesData: EntityType[] = await cosmicrafts.export_entities();
-            console.log("📌 Entities Response:", entitiesData);
+           // console.log("📌 Entities Response:", entitiesData);
 
             const parsedEntities = entitiesData.map(entity => this.parseEntity(entity)).filter(e => e);
             EntityManager.getInstance().updateEntities(parsedEntities);
@@ -47,7 +47,7 @@ export class EntityService {
 
         return {
             id: Number(entity.id), // Convert bigint to number
-            type: Object.keys(entity.entity_type)[0], // Extracts "Planet" or "Ship"
+            type: Object.keys(entity.entity_type)[0],
             speed: entity.speed,
             x: entity.position.x,
             y: entity.position.y,

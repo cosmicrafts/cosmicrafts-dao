@@ -2,6 +2,7 @@ import { Scene, GameObjects, Tweens } from 'phaser';
 import { EventBus } from '../EventBus';
 import { EntityGraphics } from './EntityGraphics';
 import { EntityMovement } from './EntityMovement';
+import { textureSizes } from './Preload';
 
 export interface GameEntity {
     sprite: GameObjects.Sprite;
@@ -32,14 +33,19 @@ export class EntityManager {
         const sprite = this.scene.add.sprite(x, y, texture)
             .setInteractive({ cursor: 'pointer' })
             .setDataEnabled();
-
-        const scale = texture === 'ship' ? 0.01 : 0.1;
-        sprite.setScale(scale);
-
+    
+        // Fetch predefined size from `textureSizes`
+        const baseSize = textureSizes[texture] || { width: 64, height: 64 };  // Default size if not found
+        const scaleFactor = 0.1;  // Adjust as needed
+    
+        sprite.setDisplaySize(baseSize.width * scaleFactor, baseSize.height * scaleFactor);
+    
+        console.log(`${data.type} - Display Size: ${sprite.displayWidth}x${sprite.displayHeight}`);
+    
         const entity: GameEntity = { sprite, isSelected: false, data };
         EntityGraphics.attachVisuals(this.scene, entity);
         this.setupEntityInteractions(entity);
-
+    
         this.entityMap.set(data.id.toString(), entity);
         return entity;
     }

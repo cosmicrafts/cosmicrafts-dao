@@ -1,6 +1,6 @@
 import { EventBus } from '../EventBus';
 import { Scene, Math as PhaserMath } from 'phaser';
-import { preloadGame } from './GameSetup';
+import { preload } from './Preload';
 import { enableCameraControls } from './CameraControls';
 import { GridRenderer } from './GridRenderer';
 import { BackgroundRenderer } from './BackgroundRenderer';
@@ -18,7 +18,7 @@ export class MainGame extends Scene {
     }
 
     preload() {
-        preloadGame(this); // ✅ Keep assets separate for better organization
+        preload(this); // ✅ Keep assets separate for better organization
     }
 
     create() {

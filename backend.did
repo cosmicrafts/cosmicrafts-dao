@@ -27,5 +27,6 @@ service : () -> {
   move_entity : (nat64, float64, float64) -> (Result);
   signup : (text, nat32, opt text, text) -> (Result_1);
   spawn_entity : (EntityType) -> (nat64);
+  spawn_multiple_entities : (EntityType, nat64) -> (vec nat64);
   start_game_loop : () -> ();
 }

@@ -1,41 +1,31 @@
 import { Scene, GameObjects, Tweens } from 'phaser';
 
 export class EntityGraphics {
-    private static textureMap: { [key: string]: string } = {
-        'Planet': 'planet',
-        'Ship': 'ship',
-        'Star': 'star',
-        'Mine': 'mine',
-        'Player': 'player'
-    };
 
-    static getTextureForEntity(entityType: string): string {
-        return this.textureMap[entityType] || 'ship';
-    }
 
     static attachVisuals(scene: Scene, entity: any) {
         // ✅ Create floating name tag
         entity.nameText = scene.add.text(
             entity.sprite.x, 
-            entity.sprite.y - entity.sprite.displayHeight * 0.6, 
+            entity.sprite.y - entity.sprite.displayHeight * 1, 
             entity.data.type, 
             {
-                fontSize: '36px',
+                fontSize: Math.max(1, entity.sprite.displayWidth * 1),
                 fontStyle: "bold",
                 color: '#00FF00',
                 fontFamily: 'Montserrat',
                 stroke: '#000000',
-                strokeThickness: 2,
+                strokeThickness: 1,
                 align: 'center'
             }
-        ).setOrigin(0.5).setDepth(1000);
+        ).setOrigin(0.5).setDepth(100);
 
         // ✅ Make sure name follows entity movement
         scene.events.on('update', () => {
             if (entity.nameText) {
                 entity.nameText.setPosition(
                     entity.sprite.x, 
-                    entity.sprite.y - entity.sprite.displayHeight * 0.6
+                    entity.sprite.y - entity.sprite.displayHeight * 1
                 );
             }
         });

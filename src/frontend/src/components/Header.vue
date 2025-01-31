@@ -36,7 +36,7 @@
       </div>
 
       <!-- Avatar and Dropdown Menu -->
-      <div v-if="authStore.isAuthenticated()" class="avatar-container">
+      <div v-if="authStore.player" class="avatar-container">
         <img
           v-if="computedPlayerAvatar"
           :src="computedPlayerAvatar"
@@ -193,9 +193,9 @@ header {
   background: linear-gradient(to bottom, rgba(30, 43, 56, 0.2), rgba(23, 33, 43, 0.4));
   position: fixed;
   z-index: 12;
-  border-radius: 90px;
+  border-radius: 12px;
   margin: auto;
-  margin-top: .5%;
+  margin-top: .7%;
   left: 0.5rem;
   right: 0.5rem;
   height: 4rem;
@@ -213,7 +213,7 @@ header {
   width: 2rem;
   height: 2rem;
   background-color: rgba(30, 43, 56, 0.9);
-  border-radius: 90px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: 
     transform 0.3s ease-out, 
@@ -227,7 +227,6 @@ header {
   background-color: rgba(0, 195, 255, 0.862); /* Lighter blue background on hover */
   box-shadow: 0 4px 16px rgba(0, 208, 255, 0.896);
 }
-
 
 .logo-wrapper {
   margin-top: .35rem;
@@ -334,8 +333,8 @@ header {
   margin-top: .4rem;
   width: 48px;
   height: 48px;
-  border-radius: 24px;
-  border: 1px solid #00c3ff88;
+  border-radius: 8px;
+  border: 1px solid #00c3ffc4;
 }
 
 .player-placeholder {
@@ -398,6 +397,10 @@ header {
   .burger {
     display: flex; /* Visible on mobile */
   }
+  .connect-container {
+  right: 1.25rem;
+
+}
 
   .nav-links {
     display: none; /* Hide nav-links on mobile */

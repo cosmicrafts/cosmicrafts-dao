@@ -45,9 +45,9 @@ pub enum EntityType {
 }
 
 // Constants
-const MAP_WIDTH: f64 = 1000.0;
-const MAP_HEIGHT: f64 = 1000.0;
-const DEFAULT_ENTITY_SPEED: f64 = 155.0; // 1 unit per second
+const MAP_WIDTH: f64 = 100000.0;
+const MAP_HEIGHT: f64 = 100000.0;
+const DEFAULT_ENTITY_SPEED: f64 = 100.0;
 
 
 thread_local! {
@@ -160,7 +160,7 @@ fn start_game_loop() {
     ic_cdk::println!("Game loop started.");
     let timer_id = ic_cdk_timers::set_timer_interval(Duration::from_millis(100), || {
         ic_cdk::spawn(async {
-            ic_cdk::println!("Updating world...");
+           // ic_cdk::println!("Updating world...");
             update_world(0.1); // Update every 100ms (0.1 seconds)
         });
     });
@@ -299,6 +299,33 @@ fn export_entities() -> Vec<Entity> {
         Ok(String),
         _Err(String),
     }
+
+    #[ic_cdk::update]
+    fn spawn_multiple_entities(entity_type: EntityType, count: u64) -> Vec<u64> {
+        let mut entity_ids = Vec::new();
+
+        ENTITIES.with(|entities| {
+            let mut entities = entities.borrow_mut();
+            for _ in 0..count {
+                let entity_id = next_entity_id();
+                let position = generate_deterministic_position(entity_id);
+
+                let entity = Entity {
+                    id: entity_id,
+                    entity_type: entity_type.clone(),
+                    position,
+                    target_position: None,
+                    speed: DEFAULT_ENTITY_SPEED,
+                };
+
+                entities.insert(entity_id, entity);
+                entity_ids.push(entity_id);
+            }
+        });
+
+        entity_ids
+    }
+
 
     //... (Simplified spatial queries if needed)
 
