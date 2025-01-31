@@ -5,6 +5,18 @@
   <EntityTooltip />
 </template>
 
+<style scoped>
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    pointer-events: all;
+}
+</style>
+
 <script setup lang="ts">
 import ResetCameraButton from '@/components/ResetCameraButton.vue';
 import EntityPanel from '@/components/EntityPanel.vue'; // ✅ Import panel
