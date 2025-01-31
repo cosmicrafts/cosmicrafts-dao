@@ -1,8 +1,10 @@
 <template>
   <div v-if="visible" :style="tooltipStyle" class="game-tooltip">
+    <p><strong>ID:</strong> {{ tooltipData.id }}</p>
     <p><strong>Type:</strong> {{ tooltipData.type }}</p>
-    <p><strong>Health:</strong> {{ tooltipData.health }}</p>
-    <p><strong>Owner:</strong> {{ tooltipData.owner }}</p>
+    <p><strong>Speed:</strong> {{ tooltipData.speed }}</p>
+    <p><strong>Position:</strong> {{ tooltipData.position }}</p>
+    <p><strong>Target:</strong> {{ tooltipData.target }}</p>
   </div>
 </template>
 
