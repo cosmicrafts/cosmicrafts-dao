@@ -12,13 +12,14 @@ export class MainGame extends Scene {
     backgroundRenderer!: BackgroundRenderer;
     gridRenderer!: GridRenderer;
     private entityManager!: EntityManager;
+    private fpsText!: Phaser.GameObjects.Text; // Add FPS text element
 
     constructor() {
         super('MainGame');
     }
 
     preload() {
-        preload(this); // ✅ Keep assets separate for better organization
+        preload(this);
     }
 
     create() {
@@ -27,29 +28,32 @@ export class MainGame extends Scene {
         this.camera.setBackgroundColor(0x000000);
         this.camera.setZoom(1);
 
-        // ✅ Move `createGame` logic here directly
         this.createGame();
-
         enableCameraControls(this);
-
-        // ✅ Initialize the background renderer
         this.backgroundRenderer = new BackgroundRenderer(this);
-
-        // ✅ Initialize the grid renderer
         this.gridRenderer = new GridRenderer(this);
-
-        // ✅ Start entity polling
         EntityService.startPolling(this);
 
-        // ✅ Listen for reset event
         EventBus.on('reset-camera', () => {
             this.resetCamera();
         });
+
+        // Add FPS text overlay
+        this.fpsText = this.add.text(10, 10, 'FPS: 0', {
+            font: '14px Arial',
+            fill: '#00FF00',
+            stroke: '#000',
+            strokeThickness: 3
+        }).setScrollFactor(0); // Ensure it stays in place
     }
 
-    update() {
-        this.gridRenderer.updateGrid(); // ✅ Update grid only when needed
-        this.backgroundRenderer.update(); // ✅ Ensure the background tiles correctly
+    update(time: number, delta: number) {
+        this.gridRenderer.updateGrid();
+        this.backgroundRenderer.update();
+
+        // Update FPS dynamically
+        const fps = (1000 / delta).toFixed(1);
+        this.fpsText.setText(`FPS: ${fps}`);
     }
 
     resetCamera() {
@@ -58,12 +62,11 @@ export class MainGame extends Scene {
             scrollX: 0,
             scrollY: 0,
             zoom: 1,
-            duration: 1000, // Smooth transition in ms
+            duration: 1000,
             ease: PhaserMath.Easing.Cubic.Out
         });
     }
 
-    // ✅ `createGame` moved inside `MainGame`
     private createGame() {
         this.entityManager = EntityManager.getInstance();
         this.entityManager.initialize(this);

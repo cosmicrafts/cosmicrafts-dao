@@ -69,27 +69,28 @@ export class EntityService {
                 const frames: GameFrame[] = await cosmicrafts.get_frames_since(this.lastFrame);
                 
                 frames.forEach(frame => {
-                    console.log(`🛠 Processing Frame: ${frame.frame_number}`, frame.entities);
-                    
                     const parsedEntities = frame.entities.map(entity => this.parseEntity(entity)).filter(e => e);
-                    console.log(`🎨 Parsed Entities for Frame ${frame.frame_number}:`, parsedEntities);
     
-                    // ✅ Store frames for future playback
-                    EntityManager.getInstance().storeFrame(parsedEntities);
+                    // ✅ Store the whole frame for playback
+                    EntityManager.getInstance().storeFrame({
+                        frameNumber: frame.frame_number,
+                        timestamp: frame.timestamp,
+                        entities: parsedEntities
+                    });
     
-                    // ✅ Immediately update entities to keep graphics running
-                    EntityManager.getInstance().updateEntities(parsedEntities);
-    
-                    // Keep track of the last processed frame
                     this.lastFrame = frame.frame_number;
                 });
     
-                console.log(`📆 Updated to Frame: ${this.lastFrame}`);
+                // Start playback once we have enough buffered frames
+                if (EntityManager.getInstance().getBufferedFrameCount() >= 5) {
+                    EntityManager.getInstance().startPlayback();
+                }
             }
         } catch (error) {
             console.error("❌ Error fetching frames:", error);
         }
     }
+    
 
     private static parseEntity(entity: RawEntity) {
         console.log("🔍 Raw Entity:", entity);

@@ -1,4 +1,4 @@
-import { Scene, GameObjects, Tweens } from 'phaser';
+import { Scene, GameObjects, Tweens, Math } from 'phaser';
 import { EventBus } from '../EventBus';
 import { EntityGraphics } from './EntityGraphics';
 import { EntityMovement } from './EntityMovement';
@@ -52,16 +52,65 @@ export class EntityManager {
         this.playbackFrames.push(frame);
     }
 
+    private lastUpdateTime: number = 0; // Track the last update time
+
     private playNextFrame() {
-        if (this.playbackFrames.length === 0) return;
-
+        if (this.playbackFrames.length < 10) return; // Need at least 2 frames to interpolate
+    
+        const currentTime = Date.now();
+        if (!this.lastUpdateTime) this.lastUpdateTime = currentTime;
+    
+        const elapsedTime = currentTime - this.lastUpdateTime;
+        const frameDuration = this.playbackInterval; // How long we expect a frame to last (33ms for 30 FPS)
+    
+        const t = window.Math.min(elapsedTime / frameDuration, 1);
+    
         const currentFrame = this.playbackFrames[this.playbackIndex];
-        this.updateEntities(currentFrame);
-
-        this.playbackIndex++;
-        if (this.playbackIndex >= this.playbackFrames.length) {
-            this.playbackIndex = this.playbackFrames.length - 1;  // Hold at last frame
+        const nextFrame = this.playbackFrames[this.playbackIndex + 1];
+    
+        if (nextFrame) {
+            this.interpolateEntities(currentFrame, nextFrame, t);
         }
+    
+        // If we've fully interpolated to the next frame, move to it
+        if (t >= 1) {
+            this.playbackIndex++;
+            this.lastUpdateTime = currentTime;
+    
+            // If at the last frame, stop playback or loop (depending on your goal)
+            if (this.playbackIndex >= this.playbackFrames.length - 1) {
+                this.playbackIndex = this.playbackFrames.length - 2;  // Stay on the last two frames
+            }
+        }
+    }
+    
+    
+    private interpolateEntities(currentFrame: any, nextFrame: any, t: number) {
+        currentFrame.entities.forEach((currentEntity: any) => {
+            const nextEntity = nextFrame.entities.find((e: any) => e.id === currentEntity.id);
+            if (nextEntity) {
+                const interpolatedEntity = this.interpolatePosition(currentEntity, nextEntity, t);
+                this.updateEntities([interpolatedEntity]);
+            }
+        });
+    }
+    
+    private interpolatePosition(current: any, next: any, t: number) {
+        const interpolatedX = Math.Linear(current.x, next.x, t);
+        const interpolatedY = Math.Linear(current.y, next.y, t);
+    
+        return {
+            ...current,
+            x: interpolatedX,
+            y: interpolatedY
+        };
+    }
+    
+    
+
+    // Get the count of buffered frames
+    getBufferedFrameCount(): number {
+        return this.playbackFrames.length;
     }
 
     createEntity(x: number, y: number, texture: string, data: any): GameEntity {
