@@ -15,6 +15,10 @@ export class EntityManager {
     private static instance: EntityManager;
     private scene!: Scene;
     private entityMap: Map<string, GameEntity> = new Map();
+    private playbackFrames: any[] = [];  // Store all frames for playback
+    private playbackIndex: number = 0;   // Current frame index
+    private playbackInterval: number = 1000 / 30; // 30 FPS playback
+    private playbackTimer: NodeJS.Timeout | null = null;
 
     private constructor() {}
 
@@ -29,18 +33,45 @@ export class EntityManager {
         this.scene = scene;
     }
 
+    startPlayback() {
+        if (this.playbackTimer) return;  // Prevent multiple intervals
+
+        this.playbackTimer = setInterval(() => {
+            this.playNextFrame();
+        }, this.playbackInterval);
+    }
+
+    stopPlayback() {
+        if (this.playbackTimer) {
+            clearInterval(this.playbackTimer);
+            this.playbackTimer = null;
+        }
+    }
+
+    storeFrame(frame: any) {
+        this.playbackFrames.push(frame);
+    }
+
+    private playNextFrame() {
+        if (this.playbackFrames.length === 0) return;
+
+        const currentFrame = this.playbackFrames[this.playbackIndex];
+        this.updateEntities(currentFrame);
+
+        this.playbackIndex++;
+        if (this.playbackIndex >= this.playbackFrames.length) {
+            this.playbackIndex = this.playbackFrames.length - 1;  // Hold at last frame
+        }
+    }
+
     createEntity(x: number, y: number, texture: string, data: any): GameEntity {
         const sprite = this.scene.add.sprite(x, y, texture)
             .setInteractive({ cursor: 'pointer' })
             .setDataEnabled();
     
-        // Fetch predefined size from `textureSizes`
-        const baseSize = textureSizes[texture] || { width: 64, height: 64 };  // Default size if not found
-        const scaleFactor = 0.1;  // Adjust as needed
-    
+        const baseSize = textureSizes[texture] || { width: 64, height: 64 };  
+        const scaleFactor = 0.1;  
         sprite.setDisplaySize(baseSize.width * scaleFactor, baseSize.height * scaleFactor);
-    
-        //console.log(`${data.type} - Display Size: ${sprite.displayWidth}x${sprite.displayHeight}`);
     
         const entity: GameEntity = { sprite, isSelected: false, data };
         EntityGraphics.attachVisuals(this.scene, entity);
@@ -51,48 +82,44 @@ export class EntityManager {
     }
 
     updateEntities(parsedEntities: any[]) {
-        console.log("🚀 Updating Entities with:", parsedEntities); // Add this to confirm incoming entities
-    
         const newEntityIds = new Set(parsedEntities.map(e => e.id.toString()));
-    
-        // Remove entities not in the latest fetch
+
         this.entityMap.forEach((entity, id) => {
             if (!newEntityIds.has(id)) {
-                console.log(`❌ Removing Entity ID: ${id}`); // Log removals
                 this.removeEntity(id);
             }
         });
-    
+
         parsedEntities.forEach(parsedEntity => {
             const existingEntity = this.entityMap.get(parsedEntity.id.toString());
-    
+
             if (!existingEntity) {
-                console.log(`🆕 Creating New Entity: ${parsedEntity.id}`); // Log new creations
                 const newEntity = this.createEntity(parsedEntity.x, parsedEntity.y, parsedEntity.texture, parsedEntity);
                 if (parsedEntity.targetPosition) {
                     this.startEntityTween(newEntity, parsedEntity.targetPosition, parsedEntity.speed);
                 }
             } else {
-                console.log(`🔄 Updating Existing Entity: ${parsedEntity.id}`); // Log updates
-                existingEntity.sprite.setPosition(parsedEntity.x, parsedEntity.y);
-    
-                if (parsedEntity.targetPosition) {
-                    if (!existingEntity.data.targetPosition ||
-                        existingEntity.data.targetPosition.x !== parsedEntity.targetPosition.x ||
-                        existingEntity.data.targetPosition.y !== parsedEntity.targetPosition.y) {
-                        this.startEntityTween(existingEntity, parsedEntity.targetPosition, parsedEntity.speed);
-                    }
-                } else {
-                    if (existingEntity.tween) {
-                        existingEntity.tween.stop();
-                        existingEntity.tween = undefined;
-                    }
-                }
-                existingEntity.data = parsedEntity;
+                this.updateExistingEntity(existingEntity, parsedEntity);
             }
         });
     }
-    
+
+    private updateExistingEntity(existingEntity: GameEntity, parsedEntity: any) {
+        existingEntity.sprite.setPosition(parsedEntity.x, parsedEntity.y);
+
+        if (parsedEntity.targetPosition) {
+            if (!existingEntity.data.targetPosition ||
+                existingEntity.data.targetPosition.x !== parsedEntity.targetPosition.x ||
+                existingEntity.data.targetPosition.y !== parsedEntity.targetPosition.y) {
+                this.startEntityTween(existingEntity, parsedEntity.targetPosition, parsedEntity.speed);
+            }
+        } else if (existingEntity.tween) {
+            existingEntity.tween.stop();
+            existingEntity.tween = undefined;
+        }
+
+        existingEntity.data = parsedEntity;
+    }
 
     private setupEntityInteractions(entity: GameEntity) {
         entity.sprite.on('pointerover', () => {
@@ -143,14 +170,13 @@ export class EntityManager {
 
     private startEntityTween(entity: GameEntity, target: { x: number; y: number }, speed: number) {
         if (!entity || !target) return;
-    
+
         if (entity.tween) {
             entity.tween.stop();
             entity.tween = undefined;
         }
-    
-        // ✅ Use EntityMovement logic instead of a blind tween
-        const dt = 0.01; // Match backend frame timing
+
+        const dt = 0.01;
         EntityMovement.moveEntity(entity, target, speed, dt);
     }
 
@@ -161,6 +187,4 @@ export class EntityManager {
             this.entityMap.delete(id);
         }
     }
-
-    
 }

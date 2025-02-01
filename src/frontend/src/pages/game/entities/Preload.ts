@@ -2,7 +2,7 @@ import { Scene } from 'phaser';
 
 export function preload(scene: Scene) {
     scene.load.image('background', 'assets/space-bg.png');
-    scene.load.image('planet', 'assets/planet3.webp');
+    scene.load.image('planet', 'assets/planet.webp');
     scene.load.image('ship', 'assets/ship.png');
 }
 

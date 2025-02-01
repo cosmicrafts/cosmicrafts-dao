@@ -49,9 +49,9 @@ pub enum EntityType {
 // Constants
 const MAP_WIDTH: f64 = 1000.0;
 const MAP_HEIGHT: f64 = 1000.0;
-const DEFAULT_ENTITY_SPEED: f64 = 100.0;
+const DEFAULT_ENTITY_SPEED: f64 = 10.0;
 thread_local! {
-    static GAME_FRAMES: RefCell<VecDeque<GameFrame>> = RefCell::new(VecDeque::with_capacity(200));
+    static GAME_FRAMES: RefCell<VecDeque<GameFrame>> = RefCell::new(VecDeque::with_capacity(400));
     static FRAME_NUMBER: RefCell<u64> = RefCell::new(0);
 
 
@@ -208,7 +208,7 @@ fn start_game_loop() {
     let timer_id = ic_cdk_timers::set_timer_interval(Duration::from_millis(100), || {
         ic_cdk::spawn(async {
            // ic_cdk::println!("Updating world...");
-            update_world(0.1); // Update every 100ms (0.1 seconds)
+            update_world(0.05);
         });
     });
     TIMER_ID.with(|id| {

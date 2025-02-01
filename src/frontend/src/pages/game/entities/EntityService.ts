@@ -1,13 +1,10 @@
 import { Scene } from 'phaser';
 import { useCanisterStore } from '@/stores/canister';
 import { EntityManager } from './EntityManager';
-import { createActor, canisterId } from '../../../../../declarations/backend';
-
 import type { ActorSubclass } from '@dfinity/agent';
 import type { backend } from '../../../../../declarations/backend';
 
 type _SERVICE = typeof backend extends ActorSubclass<infer T> ? T : never;
-const backendActor = createActor(canisterId) as ActorSubclass<_SERVICE>;
 
 type EntityType = _SERVICE['export_entities'] extends () => Promise<Array<infer T>> ? T : never;
 
@@ -15,7 +12,7 @@ type RawEntity = {
     id: bigint;
     entity_type: any;
     position: { x: number; y: number };
-    target_position: { x: number; y: number } | null;
+    target_position: [] | [{ x: number; y: number }];
     speed: number;
 };
 
@@ -26,7 +23,7 @@ type GameFrame = {
 };
 
 export class EntityService {
-    private static pollingInterval: number = 1000; // 1 second polling
+    private static pollingInterval: number = 100; // .1 second polling
     private static intervalId: NodeJS.Timeout | null = null;
     private static lastFrame = 0n; // Track last processed frame
 
@@ -66,19 +63,27 @@ export class EntityService {
         try {
             const canisterStore = useCanisterStore();
             const cosmicrafts = await canisterStore.get("cosmicrafts");
-
+    
             const latestFrame: bigint = BigInt(await cosmicrafts.get_latest_frame_number());
             if (latestFrame > this.lastFrame) {
                 const frames: GameFrame[] = await cosmicrafts.get_frames_since(this.lastFrame);
-                frames.forEach(frame => {
-                    console.log(`🛠 Processing Frame: ${frame.frame_number}`, frame.entities); // Add this line
-                    const parsedEntities = frame.entities.map(entity => this.parseEntity(entity)).filter(e => e);
-                    console.log(`🎨 Parsed Entities for Frame ${frame.frame_number}:`, parsedEntities); // Add this line
                 
+                frames.forEach(frame => {
+                    console.log(`🛠 Processing Frame: ${frame.frame_number}`, frame.entities);
+                    
+                    const parsedEntities = frame.entities.map(entity => this.parseEntity(entity)).filter(e => e);
+                    console.log(`🎨 Parsed Entities for Frame ${frame.frame_number}:`, parsedEntities);
+    
+                    // ✅ Store frames for future playback
+                    EntityManager.getInstance().storeFrame(parsedEntities);
+    
+                    // ✅ Immediately update entities to keep graphics running
                     EntityManager.getInstance().updateEntities(parsedEntities);
+    
+                    // Keep track of the last processed frame
                     this.lastFrame = frame.frame_number;
                 });
-                
+    
                 console.log(`📆 Updated to Frame: ${this.lastFrame}`);
             }
         } catch (error) {
@@ -87,21 +92,19 @@ export class EntityService {
     }
 
     private static parseEntity(entity: RawEntity) {
-        console.log("🔍 Raw Entity:", entity); // Add this to inspect raw entity structure
-    
+        console.log("🔍 Raw Entity:", entity);
         if (!entity.position) return null;
-    
         return {
-            id: Number(entity.id), // Convert bigint to number
+            id: Number(entity.id),
             type: Object.keys(entity.entity_type)[0],
             speed: entity.speed,
             x: entity.position.x,
             y: entity.position.y,
-            targetPosition: entity.target_position || null,
+            targetPosition: (Array.isArray(entity.target_position) && entity.target_position.length > 0 ? entity.target_position[0] : null),
             texture: this.getTextureForEntity(Object.keys(entity.entity_type)[0])
         };
     }
-    
+
 
     private static getTextureForEntity(entityType: string): string {
         const textureMap: { [key: string]: string } = {
