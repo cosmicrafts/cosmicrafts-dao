@@ -7,8 +7,8 @@ export function preload(scene: Scene) {
 }
 
 export const textureSizes: { [key: string]: { width: number; height: number } } = {
-    'planet': { width: 1024, height: 1024 },  // Adjust as needed
-    'ship': { width: 128, height: 128 },
-    'star': { width: 128, height: 128 },
+    'planet': { width: 256, height: 256 },  // Adjust as needed
+    'ship': { width: 32, height: 32 },
+    'star': { width: 1024, height: 1024 },
     'mine': { width: 80, height: 80 }
 };

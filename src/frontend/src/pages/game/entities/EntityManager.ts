@@ -40,7 +40,7 @@ export class EntityManager {
     
         sprite.setDisplaySize(baseSize.width * scaleFactor, baseSize.height * scaleFactor);
     
-        console.log(`${data.type} - Display Size: ${sprite.displayWidth}x${sprite.displayHeight}`);
+        //console.log(`${data.type} - Display Size: ${sprite.displayWidth}x${sprite.displayHeight}`);
     
         const entity: GameEntity = { sprite, isSelected: false, data };
         EntityGraphics.attachVisuals(this.scene, entity);
@@ -51,46 +51,48 @@ export class EntityManager {
     }
 
     updateEntities(parsedEntities: any[]) {
+        console.log("🚀 Updating Entities with:", parsedEntities); // Add this to confirm incoming entities
+    
         const newEntityIds = new Set(parsedEntities.map(e => e.id.toString()));
-
+    
         // Remove entities not in the latest fetch
         this.entityMap.forEach((entity, id) => {
             if (!newEntityIds.has(id)) {
+                console.log(`❌ Removing Entity ID: ${id}`); // Log removals
                 this.removeEntity(id);
             }
         });
-
+    
         parsedEntities.forEach(parsedEntity => {
             const existingEntity = this.entityMap.get(parsedEntity.id.toString());
-
+    
             if (!existingEntity) {
-                // New entity
+                console.log(`🆕 Creating New Entity: ${parsedEntity.id}`); // Log new creations
                 const newEntity = this.createEntity(parsedEntity.x, parsedEntity.y, parsedEntity.texture, parsedEntity);
                 if (parsedEntity.targetPosition) {
                     this.startEntityTween(newEntity, parsedEntity.targetPosition, parsedEntity.speed);
                 }
             } else {
-                // Update existing entity
+                console.log(`🔄 Updating Existing Entity: ${parsedEntity.id}`); // Log updates
                 existingEntity.sprite.setPosition(parsedEntity.x, parsedEntity.y);
-                
+    
                 if (parsedEntity.targetPosition) {
-                    if (!existingEntity.data.targetPosition || 
-                        existingEntity.data.targetPosition.x !== parsedEntity.targetPosition.x || 
+                    if (!existingEntity.data.targetPosition ||
+                        existingEntity.data.targetPosition.x !== parsedEntity.targetPosition.x ||
                         existingEntity.data.targetPosition.y !== parsedEntity.targetPosition.y) {
                         this.startEntityTween(existingEntity, parsedEntity.targetPosition, parsedEntity.speed);
                     }
                 } else {
-                    // Target cleared, stop movement
                     if (existingEntity.tween) {
                         existingEntity.tween.stop();
                         existingEntity.tween = undefined;
                     }
                 }
-
                 existingEntity.data = parsedEntity;
             }
         });
     }
+    
 
     private setupEntityInteractions(entity: GameEntity) {
         entity.sprite.on('pointerover', () => {

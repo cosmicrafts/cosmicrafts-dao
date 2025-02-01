@@ -6,6 +6,11 @@ type Entity = record {
   target_position : opt Position;
 };
 type EntityType = variant { Mine; Ship; Star; Planet; Player };
+type GameFrame = record {
+  entities : vec Entity;
+  timestamp : nat64;
+  frame_number : nat64;
+};
 type Player = record {
   id : principal;
   elo : float64;
@@ -23,6 +28,8 @@ type Result = variant { Ok; Err : text };
 type Result_1 = variant { Ok : record { bool; opt Player; text }; Err : text };
 service : () -> {
   export_entities : () -> (vec Entity) query;
+  get_frames_since : (nat64) -> (vec GameFrame) query;
+  get_latest_frame_number : () -> (nat64) query;
   get_player : () -> (opt Player) query;
   move_entity : (nat64, float64, float64) -> (Result);
   signup : (text, nat32, opt text, text) -> (Result_1);
