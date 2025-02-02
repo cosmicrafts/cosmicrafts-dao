@@ -1,5 +1,6 @@
 <template>
-  <div v-if="isVisible" class="dialogue-box">
+  <!-- The click event is added to the outer container so that clicking anywhere triggers nextDialogue -->
+  <div v-if="isVisible" class="dialogue-box" @click="nextDialogue">
     <!-- Background Avatar (fills height and is centered) -->
     <img class="background-avatar" :src="avatar" alt="Background Avatar" />
 
@@ -7,7 +8,7 @@
     <div class="background-overlay"></div>
 
     <!-- Dialogue Content -->
-    <div class="dialogue-content">
+    <div class="dialogue-content" @click.stop>
       <!-- Avatar & Name Plate Container -->
       <div class="avatar-name-container">
         <img class="avatar" :src="avatar" alt="Avatar" />
@@ -17,9 +18,11 @@
       <!-- Lottie Orbit Animation Container (talking animation) -->
       <div class="orbit-animation" ref="lottieContainer"></div>
 
-      <!-- Dialogue Text (Typewriter Effect) & Button -->
+      <!-- Dialogue Text (Typewriter Effect) -->
       <p class="dialogue-text">{{ displayedDialogue }}</p>
-      <button @click="nextDialogue" class="dialogue-button" :disabled="typingInProgress">
+
+      <!-- (Optional) Next button if you still want one visible -->
+      <button class="dialogue-button" :disabled="typingInProgress" @click.stop="nextDialogue">
         Next
       </button>
     </div>
@@ -112,9 +115,20 @@ function generateDialogue() {
   typeDialogue(fullDialogue.value, 0);
 }
 
+// The nextDialogue function is now used for both skipping the current typewriter animation
+// (if still in progress) and advancing to the next dialogue.
 function nextDialogue() {
-  // Prevent clicking "Next" while typing is in progress.
-  if (typingInProgress.value) return;
+  // If typing is still in progress, immediately finish the text.
+  if (typingInProgress.value) {
+    displayedDialogue.value = fullDialogue.value;
+    typingInProgress.value = false;
+    if (lottieInstance && typeof lottieInstance.pause === 'function') {
+      lottieInstance.pause();
+    }
+    return;
+  }
+
+  // Otherwise, go to the next dialogue.
   dialogueIndex++;
   if (dialogueIndex < dialogues.length) {
     generateDialogue();
@@ -136,7 +150,7 @@ onMounted(() => {
       container: lottieContainer.value, // The DOM element that will contain the animation.
       renderer: 'svg',
       loop: true,
-      autoplay: false, // Do not autoplay; we control playback with the typewriter effect.
+      autoplay: false, // Do not autoplay; control playback with typewriter effect.
       animationData: lottieAnimationData,
     });
   }
