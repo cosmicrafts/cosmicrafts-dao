@@ -1,3 +1,4 @@
+// MainGame.ts
 import { EventBus } from '../EventBus';
 import { Scene, Math as PhaserMath } from 'phaser';
 import { preload } from './Preload';
@@ -12,7 +13,6 @@ export class MainGame extends Scene {
     backgroundRenderer!: BackgroundRenderer;
     gridRenderer!: GridRenderer;
     private entityManager!: EntityManager;
-    private fpsText!: Phaser.GameObjects.Text; // Add FPS text element
 
     constructor() {
         super('MainGame');
@@ -37,23 +37,15 @@ export class MainGame extends Scene {
         EventBus.on('reset-camera', () => {
             this.resetCamera();
         });
-
-        // Add FPS text overlay
-        this.fpsText = this.add.text(10, 10, 'FPS: 0', {
-            font: '14px Arial',
-            fill: '#00FF00',
-            stroke: '#000',
-            strokeThickness: 3
-        }).setScrollFactor(0); // Ensure it stays in place
     }
 
     update(time: number, delta: number) {
         this.gridRenderer.updateGrid();
         this.backgroundRenderer.update();
 
-        // Update FPS dynamically
+        // Calculate FPS and emit it via the EventBus.
         const fps = (1000 / delta).toFixed(1);
-        this.fpsText.setText(`FPS: ${fps}`);
+        EventBus.emit('update-fps', fps);
     }
 
     resetCamera() {
