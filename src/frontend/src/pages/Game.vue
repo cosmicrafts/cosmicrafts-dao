@@ -1,6 +1,5 @@
 <template>
   <div id="game-container" ref="gameContainer"></div>
-  <DialogueBox /> <!-- Adding our dialogue system -->
   <ResetCameraButton />
   <EntityPanel />
   <EntityTooltip />

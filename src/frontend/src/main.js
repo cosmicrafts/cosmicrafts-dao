@@ -18,6 +18,8 @@ import ko from '@/locales/ko.json';
 import ja from '@/locales/ja.json';
 import zh from '@/locales/zh.json';
 import tr from '@/locales/tr.json';
+import { registerSW } from 'virtual:pwa-register';
+
 
 const i18n = createI18n({
   legacy: false,
@@ -46,6 +48,17 @@ app.use(pinia);
 const authStore = useAuthStore();
 const languageStore = useLanguageStore();
 
+const updateSW = registerSW({
+  onNeedRefresh() {
+    if (confirm("New version available. Reload to update?")) {
+      updateSW(true);
+    }
+  },
+  onOfflineReady() {
+    console.log("App is ready to work offline!");
+  },
+});
+
 // Load stored state and language
 const hasUserData = await authStore.loadStateFromLocalStorage();
 
@@ -68,6 +81,8 @@ watch(
   },
   { immediate: true }
 );
+
+
 
 app.use(i18n);
 app.use(router);

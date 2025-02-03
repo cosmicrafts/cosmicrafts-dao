@@ -4,6 +4,7 @@ import environment from 'vite-plugin-environment';
 import vue from '@vitejs/plugin-vue';
 import dotenv from 'dotenv';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { VitePWA } from 'vite-plugin-pwa';
 
 dotenv.config({ path: '../../.env' });
 
@@ -13,7 +14,7 @@ export default defineConfig({
   },
   esbuild: {
     supported: {
-      'top-level-await': true, // Explicitly enable Top-level await
+      'top-level-await': true,
     },
   },
   optimizeDeps: {
@@ -35,14 +36,40 @@ export default defineConfig({
   plugins: [
     vue(),
     nodePolyfills({
-      // Polyfill specific Node.js globals and modules
       globals: {
-        Buffer: true, // Enable Buffer polyfill
-        process: true, // Enable process polyfill
+        Buffer: true,
+        process: true,
       },
     }),
     environment('all', { prefix: 'CANISTER_' }),
     environment('all', { prefix: 'DFX_' }),
+    VitePWA({
+      registerType: 'autoUpdate',
+      injectRegister: 'auto',
+      manifest: {
+        name: 'Cosmicrafts DAO',
+        short_name: 'Cosmicrafts',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#000000',
+        theme_color: '#1a1a1a',
+        icons: [
+          {
+            src: 'icons/icon-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: 'icons/icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          }
+        ]
+      },
+      workbox: {
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024  // Increase to 10MB
+      }
+    })
   ],
   resolve: {
     alias: [

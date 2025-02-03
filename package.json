@@ -15,7 +15,7 @@
   "workspaces": [
     "src/frontend"
   ],
-  "dependencies": {
-    "lottie-web": "^5.12.2"
+  "devDependencies": {
+    "vite-plugin-pwa": "^0.21.1"
   }
 }

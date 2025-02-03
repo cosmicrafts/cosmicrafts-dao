@@ -44,6 +44,8 @@
     "vite-plugin-node-polyfills": "^0.22.0",
     "vue": "^3.5.12",
     "vue-i18n": "^9.14.1",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "lottie-web": "^5.12.2",
+    "vite-plugin-pwa": "^0.21.1"
   }
 }
