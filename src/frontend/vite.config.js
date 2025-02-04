@@ -18,6 +18,10 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
+    exclude: [
+      'brotli-wasm',
+      'brotli-wasm/pkg.bundler/brotli_wasm_bg.wasm'
+    ],
     esbuildOptions: {
       define: {
         global: 'globalThis',
