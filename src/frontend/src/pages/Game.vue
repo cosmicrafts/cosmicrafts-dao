@@ -9,6 +9,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
+// Declare global function and extend the Window interface:
+declare const createUnityInstance: (canvas: Element | null, config: any) => Promise<any>;
+
+declare global {
+  interface Window {
+    gameInstance?: any;
+  }
+}
+
 const loading = ref(true);
 const error = ref<string | null>(null);
 
@@ -37,7 +46,7 @@ onMounted(async () => {
         createUnityInstance(document.querySelector('#unity-canvas'), config)
           .then((unityInstance: any) => {
             loading.value = false;
-            // Optionally store the instance (e.g., on window) for later use.
+            // Optionally store the instance on window for later use.
             window.gameInstance = unityInstance;
             console.log('Juego cargado exitosamente!', unityInstance);
           })
@@ -60,7 +69,6 @@ onMounted(async () => {
     console.error(err);
   }
 });
-
 </script>
 
 <style scoped>
