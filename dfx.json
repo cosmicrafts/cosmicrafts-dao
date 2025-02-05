@@ -14,13 +14,17 @@
         "src/frontend/dist"
       ],
       "type": "assets",
-      "workspace": "frontend"
+      "workspace": "frontend",
+      "headers": {
+        "**/*.br": {
+          "Content-Encoding": "br"
+        }
+      }
     }
   },
   "defaults": {
     "build": {
-      "args": "",
-      "packtool": "mops sources"
+      "args": ""
     }
   },
   "output_env_file": ".env",
