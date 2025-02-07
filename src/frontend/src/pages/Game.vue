@@ -35,18 +35,39 @@ const config = {
 
 onMounted(async () => {
   try {
-    // Dynamically create a script element to load the Unity loader
+    // Fully mock ReactUnityWebGL with required functions
+    if (typeof (window as any).ReactUnityWebGL === 'undefined') {
+      (window as any).ReactUnityWebGL = {
+        DashboardStarts: () => console.log("DashboardStarts called"),
+        SaveScore: (score: number) => console.log(`SaveScore called with: ${score}`),
+        SavePlayerConfig: (json: string) => console.log(`SavePlayerConfig called with: ${json}`),
+        SavePlayerCharacter: (nftid: number) => console.log(`SavePlayerCharacter called with: ${nftid}`),
+        SendMasterData: (json: string) => console.log(`SendMasterData called with: ${json}`),
+        SendClientData: (json: string) => console.log(`SendClientData called with: ${json}`),
+        GameStarts: () => console.log("GameStarts called"),
+        ExitGame: () => console.log("ExitGame called"),
+        SearchGame: (json: string) => console.log(`SearchGame called with: ${json}`),
+        CancelGame: (gameId: number) => console.log(`CancelGame called with: ${gameId}`),
+        JSLoginPanel: (json: string) => console.log(`JSLoginPanel called with: ${json}`),
+        JSWalletsLogin: (walletName: string) => console.log(`JSWalletsLogin called with: ${walletName}`),
+        JSAnvilConnect: () => console.log("JSAnvilConnect called"),
+        JSGetAnvilNfts: (json: string) => console.log(`JSGetAnvilNfts called with: ${json}`),
+        JSClaimNft: (index: number) => console.log(`JSClaimNft called with: ${index}`),
+        JSClaimAllNft: (indexArray: string) => console.log(`JSClaimAllNft called with: ${indexArray}`),
+        JSGoToMenu: () => console.log("JSGoToMenu called"),
+      };
+    }
+
+    // Load Unity loader script
     const script = document.createElement('script');
-    script.src = '/Cosmicrafts/Cosmicrafts.loader.js';  // Absolute path from public folder
+    script.src = '/Cosmicrafts/Cosmicrafts.loader.js';
     script.async = true;
+
     script.onload = () => {
-      // Check if the global createUnityInstance function is available.
       if (typeof createUnityInstance === 'function') {
-        // Create the Unity instance on the canvas with id "unity-canvas"
         createUnityInstance(document.querySelector('#unity-canvas'), config)
           .then((unityInstance: any) => {
             loading.value = false;
-            // Optionally store the instance on window for later use.
             window.gameInstance = unityInstance;
             console.log('Juego cargado exitosamente!', unityInstance);
           })
@@ -59,16 +80,20 @@ onMounted(async () => {
         console.error('createUnityInstance no encontrado en Cosmicrafts.loader.js');
       }
     };
+
     script.onerror = () => {
       error.value = 'Error al cargar el loader de Unity.';
       console.error('No se pudo cargar Cosmicrafts.loader.js');
     };
+
     document.head.appendChild(script);
   } catch (err: any) {
     error.value = 'Error al importar el loader de Unity.';
     console.error(err);
   }
 });
+
+
 </script>
 
 <style scoped>

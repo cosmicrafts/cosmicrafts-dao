@@ -42,7 +42,7 @@ export const useLanguageStore = defineStore('language', () => {
   async function detectLanguage() {
     for (const url of API_URLS) {
       try {
-        console.log(`Trying to fetch language data from: ${url}`);
+       // console.log(`Trying to fetch language data from: ${url}`);
         const response = await fetch(url);
 
         if (!response.ok) {
@@ -51,13 +51,13 @@ export const useLanguageStore = defineStore('language', () => {
         }
 
         const data = await response.json();
-        console.log(`Localization ready from ${url}:`, data);
+       // console.log(`Localization ready from ${url}:`, data);
 
         const countryCode = data.country_code || data.countryCode || data.location?.country_code;
         const language = mapLanguageByCountry(countryCode);
 
         if (language) {
-          console.log(`Language detected from ${url}: ${language}`);
+        //  console.log(`Language detected from ${url}: ${language}`);
           return language;
         }
       } catch (error) {
