@@ -5,6 +5,7 @@ use std::collections::HashMap;
 use serde::Serialize;
 use candid::{CandidType, Deserialize, Principal};
 use ic_cdk_macros::init;
+use std::collections::VecDeque;
 
 #[init]
 fn init() {
@@ -12,29 +13,23 @@ fn init() {
     start_game_loop();
     spawn_entity(EntityType::Ship);
 }
-
 // Simplified Entity and Component Types
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+struct GameFrame {
+    frame_number: u64,
+    timestamp: u64,          // Time in nanoseconds at the end of this frame
+    entities: Vec<Entity>,   // Snapshot of all entities
+}
 #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
 struct Position {
     x: f64,
     y: f64,
 }
-
 #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
 struct TargetPosition {
     x: f64,
     y: f64,
 }
-
-#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
-pub enum EntityType {
-    Planet,
-    Star,
-    Ship,
-    Mine,
-    Player,
-}
-
 #[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
 struct Entity {
     id: u64,
@@ -43,14 +38,23 @@ struct Entity {
     target_position: Option<TargetPosition>, // Where the entity is moving towards
     speed: f64, // Base speed of the entity
 }
-
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+pub enum EntityType {
+    Planet,
+    Star,
+    Ship,
+    Mine,
+    Player,
+}
 // Constants
 const MAP_WIDTH: f64 = 1000.0;
 const MAP_HEIGHT: f64 = 1000.0;
-const DEFAULT_ENTITY_SPEED: f64 = 155.0; // 1 unit per second
-
-
+const DEFAULT_ENTITY_SPEED: f64 = 10.0;
 thread_local! {
+    static GAME_FRAMES: RefCell<VecDeque<GameFrame>> = RefCell::new(VecDeque::with_capacity(400));
+    static FRAME_NUMBER: RefCell<u64> = RefCell::new(0);
+
+
     static ENTITIES: RefCell<HashMap<u64, Entity>> = RefCell::new(HashMap::new());
     static ENTITY_COUNTER: RefCell<u64> = RefCell::new(0);
     static TIMER_ID: RefCell<Option<TimerId>> = RefCell::new(None);
@@ -61,8 +65,6 @@ thread_local! {
     static AVAILABLE_TITLES: RefCell<HashMap<Principal, Vec<u32>>> = RefCell::new(HashMap::new());
 
 }
-
-// Deterministic ID Generation
 fn next_entity_id() -> u64 {
     ENTITY_COUNTER.with(|counter| {
         let mut counter = counter.borrow_mut();
@@ -70,16 +72,12 @@ fn next_entity_id() -> u64 {
         *counter
     })
 }
-
-// Deterministic Position Generation (using time and entity ID)
 fn generate_deterministic_position(entity_id: u64) -> Position {
     let current_time = ic_cdk::api::time();
     let x = (current_time as f64 * entity_id as f64) % MAP_WIDTH;
     let y = (current_time as f64 / (entity_id as f64 + 1.0)) % MAP_HEIGHT;
     Position { x, y }
 }
-
-// Simplified Spawn Function
 #[ic_cdk::update]
 fn spawn_entity(entity_type: EntityType) -> u64 {
     let entity_id = next_entity_id();
@@ -99,8 +97,31 @@ fn spawn_entity(entity_type: EntityType) -> u64 {
 
     entity_id
 }
+#[ic_cdk::update]
+fn spawn_multiple_entities(entity_type: EntityType, count: u64) -> Vec<u64> {
+    let mut entity_ids = Vec::new();
 
-// Movement Update - Now sets a target position
+    ENTITIES.with(|entities| {
+        let mut entities = entities.borrow_mut();
+        for _ in 0..count {
+            let entity_id = next_entity_id();
+            let position = generate_deterministic_position(entity_id);
+
+            let entity = Entity {
+                id: entity_id,
+                entity_type: entity_type.clone(),
+                position,
+                target_position: None,
+                speed: DEFAULT_ENTITY_SPEED,
+            };
+
+            entities.insert(entity_id, entity);
+            entity_ids.push(entity_id);
+        }
+    });
+
+    entity_ids
+}
 #[ic_cdk::update]
 fn move_entity(entity_id: u64, target_x: f64, target_y: f64) -> Result<(), String> {
     ENTITIES.with(|entities| {
@@ -117,31 +138,26 @@ fn move_entity(entity_id: u64, target_x: f64, target_y: f64) -> Result<(), Strin
     })
 }
 
-// Game Loop - Moves entities towards their target positions
 fn update_world(dt: f64) {
     ENTITIES.with(|entities| {
         let mut entities = entities.borrow_mut();
-        let mut to_remove = Vec::new();
 
+        // (1) update positions as you do now
+        let mut to_remove = Vec::new();
         for (entity_id, entity) in entities.iter_mut() {
             if let Some(target_pos) = &entity.target_position {
                 let dx = target_pos.x - entity.position.x;
                 let dy = target_pos.y - entity.position.y;
-                let distance = (dx * dx + dy * dy).sqrt();
-
+                let distance = (dx*dx + dy*dy).sqrt();
                 if distance <= entity.speed * dt {
-                    // Entity has reached the target
                     entity.position.x = target_pos.x;
                     entity.position.y = target_pos.y;
                     to_remove.push(*entity_id);
                 } else {
-                    // Move entity towards the target
                     let move_x = dx / distance * entity.speed * dt;
                     let move_y = dy / distance * entity.speed * dt;
                     entity.position.x += move_x;
                     entity.position.y += move_y;
-
-                    // Keep entity within bounds
                     entity.position.x = entity.position.x.max(0.0).min(MAP_WIDTH);
                     entity.position.y = entity.position.y.max(0.0).min(MAP_HEIGHT);
                 }
@@ -153,15 +169,46 @@ fn update_world(dt: f64) {
             }
         }
     });
+
+    // (2) increment FRAME_NUMBER
+    let current_frame = FRAME_NUMBER.with(|f| {
+        let mut frame = f.borrow_mut();
+        *frame += 1;
+        *frame
+    });
+
+    // (3) snapshot the entire entity list
+    let timestamp = ic_cdk::api::time();
+    let snapshot = ENTITIES.with(|entities| {
+        entities.borrow().values().cloned().collect::<Vec<Entity>>()
+    });
+
+    let game_frame = GameFrame {
+        frame_number: current_frame,
+        timestamp,
+        entities: snapshot,
+    };
+
+    // (4) store the frame
+    GAME_FRAMES.with(|frames| {
+        let mut frames = frames.borrow_mut();
+        frames.push_back(game_frame);
+
+        // if we exceed capacity, pop the oldest
+        if frames.len() > 200 {
+            frames.pop_front();
+        }
+    });
 }
+
 
 #[ic_cdk::update]
 fn start_game_loop() {
     ic_cdk::println!("Game loop started.");
     let timer_id = ic_cdk_timers::set_timer_interval(Duration::from_millis(100), || {
         ic_cdk::spawn(async {
-            ic_cdk::println!("Updating world...");
-            update_world(0.1); // Update every 100ms (0.1 seconds)
+           // ic_cdk::println!("Updating world...");
+            update_world(0.05);
         });
     });
     TIMER_ID.with(|id| {
@@ -170,12 +217,29 @@ fn start_game_loop() {
 }
 
 
-// Export Entities
+
 #[ic_cdk::query]
 fn export_entities() -> Vec<Entity> {
     ENTITIES.with(|entities| entities.borrow().values().cloned().collect())
 }
 
+// Return all frames AFTER a given frame number (exclusive)
+#[ic_cdk::query]
+fn get_frames_since(frame_number: u64) -> Vec<GameFrame> {
+    GAME_FRAMES.with(|frames| {
+        frames
+            .borrow()
+            .iter()
+            .filter(|f| f.frame_number > frame_number)
+            .cloned()
+            .collect()
+    })
+}
+
+#[ic_cdk::query]
+fn get_latest_frame_number() -> u64 {
+    FRAME_NUMBER.with(|f| *f.borrow())
+}
 
 // User reg
 
@@ -299,6 +363,7 @@ fn export_entities() -> Vec<Entity> {
         Ok(String),
         _Err(String),
     }
+
 
     //... (Simplified spatial queries if needed)
 

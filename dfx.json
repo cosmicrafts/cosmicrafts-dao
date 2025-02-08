@@ -5,12 +5,26 @@
       "package": "backend",
       "candid": "backend.did",
       "build": "make build"
+    },
+    "frontend": {
+      "dependencies": [
+        "backend"
+      ],
+      "source": [
+        "src/frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "frontend",
+      "headers": {
+        "**/*.br": {
+          "Content-Encoding": "br"
+        }
+      }
     }
   },
   "defaults": {
     "build": {
-      "args": "",
-      "packtool": "mops sources"
+      "args": ""
     }
   },
   "output_env_file": ".env",

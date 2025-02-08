@@ -378,6 +378,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async logout() {
+      this.$reset();
       identity = null;
       this.authenticated = false;
       this.registered = false;

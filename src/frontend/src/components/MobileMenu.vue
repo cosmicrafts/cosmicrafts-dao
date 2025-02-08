@@ -85,9 +85,10 @@ const scrollToTop = () => {
       </ul>
     </div>
     
-    <div class="language-selector-container">
-      <LanguageSelector />
-    </div>
+    <div class="language-selector-container u-hover">
+  <LanguageSelector />
+</div>
+
   </nav>
 </template>
   
@@ -245,9 +246,10 @@ const scrollToTop = () => {
   transform: rotate(-45deg) translate(5px, -5px);
 }
   .language-selector-container {
-    position: flex;
+    position: absolute;
     justify-content: right;
-    padding: 2rem 0;
+    bottom: 12%;
+    margin-bottom: 2rem;
   }
 
 
