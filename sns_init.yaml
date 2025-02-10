@@ -1,0 +1,131 @@
+name: Rock Out
+
+description: >
+    A poem co-written with ChatGPT
+
+    In a realm of code, a beacon forth surges,
+    a wondrous app on the Internet Computer emerges.
+    Born of inspiration divine,
+    This marvel of technology brilliantly shines.
+
+    With each line of code, a world takes flight,
+    A symphony of bits, a chorus of bytes.
+    Built on chainkey cryptography, secure and true,
+    An app that transcends, all we once knew...
+
+logo: logo.png
+
+url: https://forum.dfinity.org/thread-where-this-sns-is-discussed
+
+NnsProposal:
+    title: "NNS Proposal to create an SNS named 'Rock Out'"
+    url: "https://forum.dfinity.org"
+    summary: >
+        Proposal to create an SNS for the project XX.
+        The SNS will be initialized with the following neurons:
+        ...
+
+fallback_controller_principals:
+    - p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
+
+dapp_canisters:
+    - bkyz2-fmaaa-aaaaa-qaaaq-cai
+
+Token:
+    name: Rock Out Token
+    symbol: ROT
+    transaction_fee: 10_000 e8s
+    logo: logo.png
+
+Proposals:
+    rejection_fee: 1 token
+    initial_voting_period: 4 days
+    maximum_wait_for_quiet_deadline_extension: 1 day
+
+Neurons:
+    minimum_creation_stake: 1 tokens
+
+Voting:
+    minimum_dissolve_delay: 1 month
+    MaximumVotingPowerBonuses:
+        DissolveDelay:
+            duration: 1 years
+            bonus: 100%
+        Age:
+            duration: 1 years
+            bonus: 25%
+    RewardRate:
+        initial: 10%
+        final: 2.25%
+        transition_duration: 12 years
+
+Distribution:
+    Neurons:
+        - principal: uts47-wa2j2-xuhf2-er2vb-mbrfc-6xslp-fbhfx-lbcfp-rmqqz-xce7m-sqe
+          stake: 2_000_000 tokens
+          memo: 0
+          dissolve_delay: 1 month
+          vesting_period: 0 years
+        - principal: uts47-wa2j2-xuhf2-er2vb-mbrfc-6xslp-fbhfx-lbcfp-rmqqz-xce7m-sqe
+          stake: 2_000_000 tokens
+          memo: 1
+          dissolve_delay: 1 month
+          vesting_period: 1 years
+        - principal: uts47-wa2j2-xuhf2-er2vb-mbrfc-6xslp-fbhfx-lbcfp-rmqqz-xce7m-sqe
+          stake: 2_000_000 tokens
+          memo: 2
+          dissolve_delay: 1 month
+          vesting_period: 2 years  
+        - principal: lhagm-ve5wu-psx3d-vq4hy-zdlsu-jvqkt-d6r3h-cmmjm-4g7er-metrd-uae
+          stake: 2_000_000 tokens
+          memo: 3
+          dissolve_delay: 1 month
+          vesting_period: 0 years
+        - principal: lhagm-ve5wu-psx3d-vq4hy-zdlsu-jvqkt-d6r3h-cmmjm-4g7er-metrd-uae
+          stake: 2_000_000 tokens
+          memo: 4
+          dissolve_delay: 1 month
+          vesting_period: 1 years
+        - principal: lhagm-ve5wu-psx3d-vq4hy-zdlsu-jvqkt-d6r3h-cmmjm-4g7er-metrd-uae
+          stake: 2_000_000 tokens
+          memo: 5
+          dissolve_delay: 1 month
+          vesting_period: 2 years  
+        - principal: jsx3b-ithej-si25s-y3yjl-wbyfy-uv2qi-rqolr-swsnz-7dg25-6bpuv-eqe
+          stake: 2_000_000 tokens
+          memo: 6
+          dissolve_delay: 1 month
+          vesting_period: 0 years
+        - principal: jsx3b-ithej-si25s-y3yjl-wbyfy-uv2qi-rqolr-swsnz-7dg25-6bpuv-eqe
+          stake: 2_000_000 tokens
+          memo: 7
+          dissolve_delay: 1 month
+          vesting_period: 1 years  
+        - principal: jsx3b-ithej-si25s-y3yjl-wbyfy-uv2qi-rqolr-swsnz-7dg25-6bpuv-eqe
+          stake: 2_000_000 tokens
+          memo: 8
+          dissolve_delay: 1 month
+          vesting_period: 2 years  
+        - principal: d2mxt-gj74b-qugzd-5tqo7-oxrfb-iw7eb-jnynn-pjgvd-7d4jy-c2tbt-sae
+          stake: 5_000_000 tokens
+          memo: 9
+          dissolve_delay: 1 month
+          vesting_period: 1 years
+    InitialBalances:
+        governance: 52_000_000 tokens
+        swap: 25_000_000 tokens
+    total: 100_000_000 tokens
+
+Swap:
+    minimum_participants: 57
+    minimum_direct_participation_icp: 20_000 tokens
+    maximum_direct_participation_icp: 190_000 tokens
+    minimum_participant_icp:     10 tokens
+    maximum_participant_icp: 100_000 tokens
+    restricted_countries:
+        - AQ
+    VestingSchedule:
+        events: 5
+        interval: 91 days
+    duration: 7 days
+    neurons_fund_participation: true
