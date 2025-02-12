@@ -1,4 +1,4 @@
-name: Rock Out
+name: Cosmicrafts
 
 description: >
     A poem co-written with ChatGPT
@@ -15,15 +15,38 @@ description: >
 
 logo: logo.png
 
-url: https://forum.dfinity.org/thread-where-this-sns-is-discussed
+url: https://cosmicrafts.com
 
 NnsProposal:
-    title: "NNS Proposal to create an SNS named 'Rock Out'"
-    url: "https://forum.dfinity.org"
-    summary: >
-        Proposal to create an SNS for the project XX.
-        The SNS will be initialized with the following neurons:
-        ...
+    title: "NNS Proposal to create an SNS named 'Cosmicrafts'"
+    url: "https://forum.dfinity.org/thread-where-this-sns-is-discussed"
+    summary:  |
+      # Summary
+      Proposal to create an SNS DAO for FomoWell.
+
+      # About
+      FomoWell leverages the power of ICP to offer a range of features for meme creators and communities: fully built on IC architecture for high-performance and scalability, enhanced security through decentralized architecture, cross-chain compatibility for broader trading, AI agent integration for intelligent automation, and community customization with DAO support.
+      
+      [FOMOWELL](https://fomowell.com/)
+      
+      ## Token distribution
+      **Distribution**
+      * Total token supply -  1 Billion
+      * Allocated to treasury -  65%
+      * Allocated to decentralization sale -  20%
+      * Allocated to developer neurons -  15%
+      * The Ledger Transaction fee is 0.001 WELL
+      
+      **Decentralization SWAP**
+      * Min participation - 1 ICP
+      * Min participants -  100
+      * Min to be raised -  20,000 ICP
+      * Max to be raised -  100,000 ICP
+
+      **Learn more**
+      * [Whitepaper](https://github.com/NovaICLabs/fomowell_sns/raw/refs/heads/main/FomoWell%20Whitepaper%20vison1.0.pdf)
+      * [Github](https://github.com/NovaICLabs/fomowell_app)
+      * [Website](https://fomowell.com/ )
 
 fallback_controller_principals:
     - p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
@@ -32,27 +55,27 @@ dapp_canisters:
     - bkyz2-fmaaa-aaaaa-qaaaq-cai
 
 Token:
-    name: Rock Out Token
-    symbol: ROT
-    transaction_fee: 10_000 e8s
+    name: Spiral
+    symbol: SPIRAL
+    transaction_fee: 1_000_000 e8s
     logo: logo.png
 
 Proposals:
-    rejection_fee: 1 token
-    initial_voting_period: 4 days
+    rejection_fee: 1000 tokens
+    initial_voting_period: 3 days
     maximum_wait_for_quiet_deadline_extension: 1 day
 
 Neurons:
-    minimum_creation_stake: 1 tokens
+    minimum_creation_stake: 1000 tokens
 
 Voting:
     minimum_dissolve_delay: 1 month
     MaximumVotingPowerBonuses:
         DissolveDelay:
-            duration: 1 years
+            duration: 8 years
             bonus: 100%
         Age:
-            duration: 1 years
+            duration: 4 years
             bonus: 25%
     RewardRate:
         initial: 10%
@@ -61,71 +84,26 @@ Voting:
 
 Distribution:
     Neurons:
-        - principal: uts47-wa2j2-xuhf2-er2vb-mbrfc-6xslp-fbhfx-lbcfp-rmqqz-xce7m-sqe
-          stake: 2_000_000 tokens
+        - principal: p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
+          stake: 1_000 tokens
           memo: 0
-          dissolve_delay: 1 month
-          vesting_period: 0 years
-        - principal: uts47-wa2j2-xuhf2-er2vb-mbrfc-6xslp-fbhfx-lbcfp-rmqqz-xce7m-sqe
-          stake: 2_000_000 tokens
-          memo: 1
-          dissolve_delay: 1 month
-          vesting_period: 1 years
-        - principal: uts47-wa2j2-xuhf2-er2vb-mbrfc-6xslp-fbhfx-lbcfp-rmqqz-xce7m-sqe
-          stake: 2_000_000 tokens
-          memo: 2
-          dissolve_delay: 1 month
-          vesting_period: 2 years  
-        - principal: lhagm-ve5wu-psx3d-vq4hy-zdlsu-jvqkt-d6r3h-cmmjm-4g7er-metrd-uae
-          stake: 2_000_000 tokens
-          memo: 3
-          dissolve_delay: 1 month
-          vesting_period: 0 years
-        - principal: lhagm-ve5wu-psx3d-vq4hy-zdlsu-jvqkt-d6r3h-cmmjm-4g7er-metrd-uae
-          stake: 2_000_000 tokens
-          memo: 4
-          dissolve_delay: 1 month
-          vesting_period: 1 years
-        - principal: lhagm-ve5wu-psx3d-vq4hy-zdlsu-jvqkt-d6r3h-cmmjm-4g7er-metrd-uae
-          stake: 2_000_000 tokens
-          memo: 5
-          dissolve_delay: 1 month
-          vesting_period: 2 years  
-        - principal: jsx3b-ithej-si25s-y3yjl-wbyfy-uv2qi-rqolr-swsnz-7dg25-6bpuv-eqe
-          stake: 2_000_000 tokens
-          memo: 6
-          dissolve_delay: 1 month
-          vesting_period: 0 years
-        - principal: jsx3b-ithej-si25s-y3yjl-wbyfy-uv2qi-rqolr-swsnz-7dg25-6bpuv-eqe
-          stake: 2_000_000 tokens
-          memo: 7
-          dissolve_delay: 1 month
-          vesting_period: 1 years  
-        - principal: jsx3b-ithej-si25s-y3yjl-wbyfy-uv2qi-rqolr-swsnz-7dg25-6bpuv-eqe
-          stake: 2_000_000 tokens
-          memo: 8
-          dissolve_delay: 1 month
-          vesting_period: 2 years  
-        - principal: d2mxt-gj74b-qugzd-5tqo7-oxrfb-iw7eb-jnynn-pjgvd-7d4jy-c2tbt-sae
-          stake: 5_000_000 tokens
-          memo: 9
-          dissolve_delay: 1 month
-          vesting_period: 1 years
+          dissolve_delay: 2 years
+          vesting_period: 4 years
     InitialBalances:
-        governance: 52_000_000 tokens
-        swap: 25_000_000 tokens
-    total: 100_000_000 tokens
+        treasury: 2_000_000 tokens
+        swap: 500_000 tokens
+    total: 2_501_000 tokens
 
 Swap:
-    minimum_participants: 57
-    minimum_direct_participation_icp: 20_000 tokens
-    maximum_direct_participation_icp: 190_000 tokens
-    minimum_participant_icp:     10 tokens
-    maximum_participant_icp: 100_000 tokens
+    minimum_participants: 1
+    minimum_direct_participation_icp: 1_000 tokens
+    maximum_direct_participation_icp: 1_000_000 tokens
+    minimum_participant_icp: 100 tokens
+    maximum_participant_icp: 1_000_000 tokens
     restricted_countries:
         - AQ
     VestingSchedule:
-        events: 5
-        interval: 91 days
-    duration: 7 days
-    neurons_fund_participation: true
+        events: 2
+        interval: 1 month
+    duration: 3 days
+    neurons_fund_participation: false

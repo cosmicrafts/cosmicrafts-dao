@@ -1,0 +1,49 @@
+Sending message with
+
+  Call type:   update
+  Sender:      p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
+  Canister id: ryjl3-tyaaa-aaaaa-aaaba-cai
+  Method name: transfer
+  Arguments:   (
+  record {
+    to = blob "\08\46\85\73\8f\b5\02\87\6f\86\ce\f4\78\8d\82\3d\0a\e3\e3\90\84\01\58\81\67\17\7c\f1\0b\c5\59\9e";
+    fee = record { e8s = 10_000 : nat64 };
+    memo = 109_330_329_069_923 : nat64;
+    from_subaccount = null;
+    created_at_time = opt record {
+      timestamp_nanos = 1_739_373_603_213_061_328 : nat64;
+    };
+    amount = record { e8s = 10_000_000_000 : nat64 };
+  },
+)
+Request ID: 0x59d7a79a7250ff18c4c76a1dd2b9bc5585f74a7e192befb55854ee22ed0a1f3e
+The request is being processed...
+The request is being processed...
+Transfer error: the debit account doesn't have enough funds to complete the transaction, current balance: 0.00000000 Token
+Sending message with
+
+  Call type:   update
+  Sender:      2vxsx-fae
+  Canister id: rrkah-fqaaa-aaaaa-aaaaq-cai
+  Method name: manage_neuron
+  Arguments:   (
+  record {
+    id = null;
+    command = opt variant {
+      ClaimOrRefresh = record {
+        by = opt variant {
+          MemoAndController = record {
+            controller = opt principal "p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae";
+            memo = 109_330_329_069_923 : nat64;
+          }
+        };
+      }
+    };
+    neuron_id_or_subaccount = null;
+  },
+)
+Request ID: 0xeddb084f25686a90da9bbf921dfd394733c4cc241d39de634a92c4a751485a15
+The request is being processed...
+The request is being processed...
+The request is being processed...
+NNS error: Account does not have enough funds to stake a neuron. Please make sure that account has at least 100000000 e8s (was 0 e8s)
