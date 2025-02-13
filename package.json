@@ -13,7 +13,8 @@
   },
   "type": "module",
   "workspaces": [
-    "src/frontend"
+    "src/frontend",
+    "src/icp-minting"
   ],
   "devDependencies": {
   }

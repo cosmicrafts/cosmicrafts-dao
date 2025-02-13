@@ -43,16 +43,17 @@
       "wasm": ""
     },
     "nns-ledger": {
+      "type": "custom",
       "build": "",
-      "candid": "candid/nns-ledger.did",
+      "candid": "icp_ledger.did",
+      "wasm" : "icp_ledger.wasm.gz",
       "remote": {
         "id": {
           "ic": "ryjl3-tyaaa-aaaaa-aaaba-cai",
           "local": "ryjl3-tyaaa-aaaaa-aaaba-cai"
         }
       },
-      "type": "custom",
-      "wasm": ""
+      "init_arg" : "(variant { Init = record { minting_account = \"4fc5b63f18432d73dc3c1e027408611472ee78c1fdb2400f3767f9eb1349b4fe\"; initial_values = vec { record { \"9950203f312693095c94d84cc02fb2cc474a762b8f13cb81b8dd83b73aa33fc4\"; record { e8s = 10_000_000_000 : nat64; }; }; }; send_whitelist = vec {}; transfer_fee = opt record { e8s = 10_000 : nat64; }; token_symbol = opt \"LICP\"; token_name = opt \"Local ICP\"; } })"
     },
     "nns-lifeline": {
       "build": "",

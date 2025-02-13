@@ -10,6 +10,7 @@ NEURON_ID=""
 install_nns() {
   echo "Installing NNS..."
   dfx nns install
+  ./bin/icp_transfer
   dfx deploy backend
 }
 
