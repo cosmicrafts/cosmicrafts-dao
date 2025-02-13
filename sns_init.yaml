@@ -96,10 +96,10 @@ Distribution:
 
 Swap:
     minimum_participants: 1
-    minimum_direct_participation_icp: 100_000 tokens
+    minimum_direct_participation_icp: 1_000 tokens
     maximum_direct_participation_icp: 1_000_000 tokens
     minimum_participant_icp: 100 tokens
-    maximum_participant_icp: 1_000_000 tokens
+    maximum_participant_icp: 100_000 tokens
     restricted_countries:
         - AQ
     VestingSchedule:

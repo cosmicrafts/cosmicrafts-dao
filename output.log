@@ -1,22 +1,22 @@
 Sending message with
 
   Call type:   update
-  Sender:      p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
+  Sender:      lhagm-ve5wu-psx3d-vq4hy-zdlsu-jvqkt-d6r3h-cmmjm-4g7er-metrd-uae
   Canister id: ryjl3-tyaaa-aaaaa-aaaba-cai
   Method name: transfer
   Arguments:   (
   record {
-    to = blob "\08\46\85\73\8f\b5\02\87\6f\86\ce\f4\78\8d\82\3d\0a\e3\e3\90\84\01\58\81\67\17\7c\f1\0b\c5\59\9e";
+    to = blob "\33\8e\86\8f\62\05\fc\c5\45\10\eb\20\27\fe\9f\02\f9\2a\5c\43\9c\79\35\00\76\9c\cd\e8\58\b3\c9\9f";
     fee = record { e8s = 10_000 : nat64 };
     memo = 109_330_329_069_923 : nat64;
     from_subaccount = null;
     created_at_time = opt record {
-      timestamp_nanos = 1_739_473_090_815_848_619 : nat64;
+      timestamp_nanos = 1_739_477_323_650_213_022 : nat64;
     };
     amount = record { e8s = 10_000_000_000 : nat64 };
   },
 )
-Request ID: 0x4740276438895444975dc82a7878c6b0224368c7566437fd1887e355a4461b21
+Request ID: 0x214b7616887838f9b35062f81482f50a26e5932f2acfc5123c08336f42e2149b
 The request is being processed...
 The request is being processed...
 The request is being processed...
@@ -34,7 +34,7 @@ Sending message with
       ClaimOrRefresh = record {
         by = opt variant {
           MemoAndController = record {
-            controller = opt principal "p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae";
+            controller = opt principal "lhagm-ve5wu-psx3d-vq4hy-zdlsu-jvqkt-d6r3h-cmmjm-4g7er-metrd-uae";
             memo = 109_330_329_069_923 : nat64;
           }
         };
@@ -43,8 +43,8 @@ Sending message with
     neuron_id_or_subaccount = null;
   },
 )
-Request ID: 0xae43e51d47089be2cb9e23a4ff2b7ce6af183eec84f134d49dff8a275df5cb86
+Request ID: 0xc416ab8248128b378254dd78215125f6e2ed623e805a07eca11309e90b6680cb
 The request is being processed...
 The request is being processed...
 The request is being processed...
-Successfully staked ICP in neuron 15569956696093105171
+Successfully staked ICP in neuron 16037243735624046702
