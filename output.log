@@ -11,15 +11,17 @@ Sending message with
     memo = 109_330_329_069_923 : nat64;
     from_subaccount = null;
     created_at_time = opt record {
-      timestamp_nanos = 1_739_373_603_213_061_328 : nat64;
+      timestamp_nanos = 1_739_412_496_998_450_437 : nat64;
     };
     amount = record { e8s = 10_000_000_000 : nat64 };
   },
 )
-Request ID: 0x59d7a79a7250ff18c4c76a1dd2b9bc5585f74a7e192befb55854ee22ed0a1f3e
+Request ID: 0xe2ae7df8c1d2491f84c618a743ede1d4cff774c58965db2f2a3934bde4543588
 The request is being processed...
 The request is being processed...
-Transfer error: the debit account doesn't have enough funds to complete the transaction, current balance: 0.00000000 Token
+The request is being processed...
+The request is being processed...
+Transfer sent at block index 12
 Sending message with
 
   Call type:   update
@@ -42,8 +44,10 @@ Sending message with
     neuron_id_or_subaccount = null;
   },
 )
-Request ID: 0xeddb084f25686a90da9bbf921dfd394733c4cc241d39de634a92c4a751485a15
+Request ID: 0xcc2bbbd46bf0ada0a98d5f3df9ccc89e8c45d9f2482a15d25ba3e141d0fe8213
 The request is being processed...
 The request is being processed...
 The request is being processed...
-NNS error: Account does not have enough funds to stake a neuron. Please make sure that account has at least 100000000 e8s (was 0 e8s)
+The request is being processed...
+The request is being processed...
+Successfully staked ICP in neuron 13635812364308265941

@@ -45,8 +45,8 @@ NnsProposal:
 
       **Learn more**
       * [Whitepaper](https://github.com/NovaICLabs/fomowell_sns/raw/refs/heads/main/FomoWell%20Whitepaper%20vison1.0.pdf)
-      * [Github](https://github.com/NovaICLabs/fomowell_app)
-      * [Website](https://fomowell.com/ )
+      * [Github](https://github.com/cosmicrafts)
+      * [Website](https://cosmicrafts.com/ )
 
 fallback_controller_principals:
     - p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
@@ -57,16 +57,16 @@ dapp_canisters:
 Token:
     name: Spiral
     symbol: SPIRAL
-    transaction_fee: 1_000_000 e8s
+    transaction_fee: 10_000 e8s
     logo: logo.png
 
 Proposals:
-    rejection_fee: 1000 tokens
-    initial_voting_period: 3 days
+    rejection_fee: 1 token
+    initial_voting_period: 4 days
     maximum_wait_for_quiet_deadline_extension: 1 day
 
 Neurons:
-    minimum_creation_stake: 1000 tokens
+    minimum_creation_stake: 1 tokens
 
 Voting:
     minimum_dissolve_delay: 1 month
@@ -96,7 +96,7 @@ Distribution:
 
 Swap:
     minimum_participants: 1
-    minimum_direct_participation_icp: 1_000 tokens
+    minimum_direct_participation_icp: 100_000 tokens
     maximum_direct_participation_icp: 1_000_000 tokens
     minimum_participant_icp: 100 tokens
     maximum_participant_icp: 1_000_000 tokens
