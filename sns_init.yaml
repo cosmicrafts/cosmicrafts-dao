@@ -22,12 +22,12 @@ NnsProposal:
     url: "https://forum.dfinity.org/thread-where-this-sns-is-discussed"
     summary:  |
       # Summary
-      Proposal to create an SNS DAO for FomoWell.
+      Proposal to create an SNS DAO for Cosmicrafts.
 
       # About
       FomoWell leverages the power of ICP to offer a range of features for meme creators and communities: fully built on IC architecture for high-performance and scalability, enhanced security through decentralized architecture, cross-chain compatibility for broader trading, AI agent integration for intelligent automation, and community customization with DAO support.
       
-      [FOMOWELL](https://fomowell.com/)
+      [Cosmicrafts](https://cosmicrafts.com/)
       
       ## Token distribution
       **Distribution**
@@ -98,8 +98,8 @@ Swap:
     minimum_participants: 1
     minimum_direct_participation_icp: 1_000 tokens
     maximum_direct_participation_icp: 1_000_000 tokens
-    minimum_participant_icp: 100 tokens
-    maximum_participant_icp: 100_000 tokens
+    minimum_participant_icp: 10 tokens
+    maximum_participant_icp: 500_000 tokens
     restricted_countries:
         - AQ
     VestingSchedule:
