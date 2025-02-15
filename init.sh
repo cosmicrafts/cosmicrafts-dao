@@ -30,9 +30,8 @@ get_identity_pem() {
 }
 
 install_nns() {
-  log "Installing NNS..."
+  log "Installing NNS, Dapp and transferring ICP..."
   dfx nns install
-
   # Create participant identities and get account IDs
   log "Creating and funding participant accounts..."
   > participant_accounts.txt  # Reset file
@@ -132,44 +131,63 @@ submit_sns_proposal() {
 }
 
 participate_sns() {
-  log "🔄 Participating in SNS Sale..."
+  log "🔄 Waiting for SNS Swap Canister ($SNS_SWAP_CANISTER_ID) to be ready..."
+  
+  # Maximum wait time: 5 minutes (300 seconds)
+  MAX_WAIT_TIME=300
+  WAIT_INTERVAL=10
+  ELAPSED_TIME=0
 
-  # 🔹 SNS Swap Canister ID (Constant)
+  while true; do
+    RESPONSE=$(dfx canister call "$SNS_SWAP_CANISTER_ID" get_state "(record {})" 2>&1)
+    
+    # Check if response contains valid lifecycle (instead of being null)
+    if echo "$RESPONSE" | grep -q "lifecycle"; then
+      log "✅ SNS Swap Canister is ready!"
+      break
+    fi
+
+    # Timeout handling
+    if [ "$ELAPSED_TIME" -ge "$MAX_WAIT_TIME" ]; then
+      log "❌ ERROR: SNS Swap Canister is still not available after 5 minutes. Something might have gone wrong!"
+      exit 1
+    fi
+
+    log "⏳ Canister not ready yet... retrying in $WAIT_INTERVAL seconds."
+    sleep $WAIT_INTERVAL
+    ELAPSED_TIME=$((ELAPSED_TIME + WAIT_INTERVAL))
+  done
+
+  log "🔄 Participating in SNS Sale..."
   SNS_SWAP_CANISTER_ID="b77ix-eeaaa-aaaaa-qaada-cai"
   log "✅ Using SNS Swap Canister ID: $SNS_SWAP_CANISTER_ID"
 
   while read -r line; do
     PARTICIPANT=$(echo "$line" | awk '{print $1}')
-
+    
     log "🔹 Switching to identity: $PARTICIPANT"
     dfx identity use "$PARTICIPANT"
 
-    # 🔹 Get the participant's Principal
     PRINCIPAL_ID=$(dfx identity get-principal)
     log "✅ Principal ID: $PRINCIPAL_ID"
 
-    # 🔹 Derive Swap Canister Account ID (Subaccount)
     SWAP_CANISTER_ACCOUNT_ID=$(dfx ledger account-id --of-canister "$SNS_SWAP_CANISTER_ID" --subaccount-from-principal "$PRINCIPAL_ID")
     log "✅ Derived Swap Canister Account ID: $SWAP_CANISTER_ACCOUNT_ID"
 
-    # 🔹 Ensure participant has enough ICP
     BALANCE=$(dfx ledger balance | awk '{print $1}')
-    MIN_REQUIRED_ICP=100000  # 100,000 ICP
+    MIN_REQUIRED_ICP=100000
+
     if (( $(echo "$BALANCE < $MIN_REQUIRED_ICP" | bc -l) )); then
       log "❌ ERROR: $PARTICIPANT has insufficient ICP balance ($BALANCE ICP). Needs at least $MIN_REQUIRED_ICP ICP!"
       exit 1
     fi
     log "✅ $PARTICIPANT has sufficient balance: $BALANCE ICP"
 
-    # 🔹 Convert ICP to e8s (100,000 ICP)
-    ICP_PER_PARTICIPANT_E8S=10000000000000  # 100,000 ICP in e8s
+    ICP_PER_PARTICIPANT_E8S=10000000000000
 
-    # 🔹 Request SNS sale ticket
     log "🎟️ Requesting SNS Sale Ticket..."
-    RESPONSE=$(dfx canister call "$SNS_SWAP_CANISTER_ID" new_sale_ticket \
-      "(record {subaccount=null; amount_icp_e8s=${ICP_PER_PARTICIPANT_E8S}})")
+    RESPONSE=$(dfx canister call "$SNS_SWAP_CANISTER_ID" new_sale_ticket "(record {subaccount=null; amount_icp_e8s=${ICP_PER_PARTICIPANT_E8S}})")
 
-    # 🔹 Extract ticket creation time & ID
     TICKET_CREATION_TIME=$(echo "$RESPONSE" | grep -oP 'creation_time = \K[0-9_]+' | tr -d '_')
     TICKET_ID=$(echo "$RESPONSE" | grep -oP 'ticket_id = \K[0-9_]+' | tr -d '_')
 
@@ -180,7 +198,6 @@ participate_sns() {
     fi
     log "✅ Ticket ($TICKET_ID) created with creation time: $TICKET_CREATION_TIME"
 
-    # 🔹 Send ICP to the Swap Canister using derived account ID
     log "💸 Sending ${ICP_PER_PARTICIPANT_E8S} e8s (100,000 ICP) to Swap Canister..."
     TRANSFER_RESPONSE=$(dfx ledger transfer --memo "$TICKET_ID" --amount 100000 "$SWAP_CANISTER_ACCOUNT_ID")
 
@@ -191,9 +208,8 @@ participate_sns() {
     fi
     log "✅ $PARTICIPANT successfully sent ICP."
 
-    # 🔹 Notify Participation (refresh_buyer_tokens)
     log "🔄 Notifying SNS Swap about the payment..."
-    NOTIFY_RESPONSE=$(dfx canister call b77ix-eeaaa-aaaaa-qaada-cai refresh_buyer_tokens "(record {confirmation_text=null; buyer=\"$(dfx identity get-principal)\"})")
+    NOTIFY_RESPONSE=$(dfx canister call "$SNS_SWAP_CANISTER_ID" refresh_buyer_tokens "(record {confirmation_text=null; buyer=\"$(dfx identity get-principal)\"})")
 
     if [[ $? -ne 0 ]]; then
       log "❌ ERROR: Failed to notify SNS Swap!"
@@ -204,16 +220,14 @@ participate_sns() {
 
   done < participant_accounts.txt
 
-  # 🔹 Restore to default identity
   dfx identity use default
   log "🎉 All participants have successfully joined the SNS Sale!"
 }
 
 
-
 run_from_step() {
   case $1 in
-    1) install_nns; stake_neuron; set_dissolve_delay; top_up_canister; deposit_cycles; prepare_nns_root; submit_sns_proposal ;;
+    1) install_nns; stake_neuron; set_dissolve_delay; top_up_canister; deposit_cycles; prepare_nns_root; submit_sns_proposal; participate_sns ;;
     2) stake_neuron; set_dissolve_delay; top_up_canister; deposit_cycles; prepare_nns_root; submit_sns_proposal ;;
     3) set_dissolve_delay; top_up_canister; deposit_cycles; prepare_nns_root; submit_sns_proposal ;;
     4) top_up_canister; deposit_cycles; prepare_nns_root; submit_sns_proposal ;;

@@ -10,10 +10,9 @@ crate-type = ["cdylib"]
 ic-cdk = "0.16"
 ic-cdk-macros = "0.17.1"
 ic-cdk-timers = "0.10"
-candid = "0.10"
+candid = { version = "0.10", features = ["value"] }
 
 serde = "1.0"
 getrandom = { version = "0.2", features = ["js"] }
+
 rstar = "0.12.2"
-
-

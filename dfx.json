@@ -6,6 +6,10 @@
       "package": "backend",
       "type": "rust"
     },
+    "database": {
+      "main": "src/database/main.mo",
+      "type": "motoko"
+    },
     "nns-cycles-minting": {
       "build": "",
       "candid": "candid/nns-cycles-minting.did",
