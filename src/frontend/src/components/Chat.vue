@@ -1,6 +1,7 @@
 <script setup>
-import { ChatBubbleOvalLeftEllipsisIcon, XMarkIcon } from "@heroicons/vue/24/solid"; // ✅ Heroicons
+import { ChatBubbleOvalLeftEllipsisIcon, FaceSmileIcon, XMarkIcon, PaperAirplaneIcon } from "@heroicons/vue/24/solid"; 
 import { ref, nextTick, onMounted, onUnmounted } from "vue";
+import EmojiPicker from './EmojiPicker.vue'
 
 const showChat = ref(false);
 const isHovering = ref(false);
@@ -158,6 +159,8 @@ onUnmounted(() => {
   document.removeEventListener("mousemove", resizeChat);
   document.removeEventListener("mouseup", stopResize);
 });
+
+const showEmojiPicker = ref(false)
 </script>
 
 <template>
@@ -200,37 +203,44 @@ onUnmounted(() => {
           </div>
         </div>
 
-
       </div>
       <!-- ✅ Input Area -->
-<div class="input-area">
-  <div class="input-wrapper">
-    <!-- Animated Icon -->
-    <div v-if="loading" class="dot-typing">
-      <div class="dot-flashing"></div>
-    </div>
-    <!-- Input Field -->
-    <input
-      v-model="prompt"
-      @keyup.enter="sendPrompt"
-      :placeholder="loading ? '' : 'Ask me anything...'"
-      :disabled="loading"
-      class="chat-input"
-    />
-    <!-- Thinking Text -->
-    <span v-if="loading" class="thinking-glow">Thinking...</span>
-
-  </div>
-  <button @click="sendPrompt" :disabled="loading">
-    Send
-  </button>
-</div>
-
+        <div class="input-area">
+        <div class="input-wrapper">
+            
+            <!-- Input Field -->
+            <input
+            v-model="prompt"
+            @keyup.enter="sendPrompt"
+            :placeholder="loading ? '' : 'Ask me anything...'"
+            :disabled="loading"
+            class="chat-input"
+            />
+            <!-- Thinking Indicator (Icon + Text) -->
+            <div v-if="loading" class="thinking-indicator">
+            <div class="dot-flashing"></div>
+            <span class="thinking-text">Thinking...</span>
+            </div>
+        </div>
+        <button class="emoji-button" @click="showEmojiPicker = !showEmojiPicker">
+        <FaceSmileIcon class="icon" />
+      </button>
+        <button class="send-icon" @click="sendPrompt" :disabled="loading">
+            <PaperAirplaneIcon class="icon" />
+        </button>
+        </div>
+        <EmojiPicker
+        v-if="showEmojiPicker"
+        :show="showEmojiPicker"
+        @select="(emoji) => { prompt += emoji; showEmojiPicker = false }"
+        @close="showEmojiPicker = false"
+        />
     </div>
   </transition>
 </template>
 
 <style scoped>
+/* ✅ Floating Chat Button */
 /* ✅ Floating Chat Button */
 .chat-toggle {
   position: fixed;
@@ -300,7 +310,7 @@ onUnmounted(() => {
   white-space: pre-wrap;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;  /* ✅ Prevents horizontal scrolling */
+  overflow-x: hidden; /* ✅ Prevents horizontal scrolling */
 }
 
 /* ✅ Chat Bubbles */
@@ -349,39 +359,54 @@ onUnmounted(() => {
 /* ✅ Input Area */
 .input-area {
   display: flex;
+  align-items: center;
   padding: 1rem;
   background: #1e1e1e38;
   border-top: 1px solid rgba(126, 126, 126, 0.1);
+  gap: 0.5rem; /* ✅ Adds spacing between input and button */
 }
 
-input {
-  flex: 1;
+/* ✅ Input Field */
+.chat-input {
+  flex: 1; /* ✅ Ensures input takes up remaining space */
   padding: 1rem;
   background: #1b1b1b;
   border: 1px solid #ffffff21;
   border-radius: 0.5rem;
   color: white;
+  transition: all 0.2s ease;
 }
 
-button {
-  margin-left: 0.5rem;
-  background: #3b82f6;
-  color: white;
+.chat-input:focus {
+  outline: none;
+  border-color: #00a2fff8;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+/* ✅ Send Icon Button */
+.send-icon {
+  background: none;
   border: none;
-  border-radius: 0.5rem;
   cursor: pointer;
-    width: 100%;
+  color: #85b6ff;
+  transition: all 0.2s ease;
+  width: 2.5rem;
+  flex-shrink: 0; /* ✅ Prevents button from shrinking */
+  margin-right: -.5rem;
 }
 
-button:hover {
-  background: #6f9cfd;
+.send-icon:hover {
+  color: #ffffff;
+  background: #ffffff21;
+  border-radius: 0.5rem;
 }
+
 /* ✅ Input Wrapper */
 .input-wrapper {
-  flex: 1;
-  position: relative;
+  flex: 1; /* ✅ Ensures input takes up remaining space */
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 /* ✅ Thinking Icon */
@@ -393,14 +418,23 @@ button:hover {
   justify-content: center;
 }
 
+/* ✅ Thinking Indicator (Icon + Text) */
+.thinking-indicator {
+  position: absolute;
+  left: 1rem; /* Adjust based on input padding */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Space between icon and text */
+  pointer-events: none; /* Ensure it doesn't interfere with input */
+}
 /* ✅ Dot Flashing Animation */
 .dot-flashing {
-  position: relative;
-  width: 8px; /* Adjust the size of the dots */
-  height: 8px; /* Adjust the size of the dots */
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background-color: #3b82f6;
-  color: #3b82f6;
   animation: dotFlashing 1s infinite linear alternate;
   animation-delay: 0.5s;
 }
@@ -411,32 +445,22 @@ button:hover {
   display: inline-block;
   position: absolute;
   top: 0;
-  width: 8px; /* Adjust the size of the dots */
-  height: 8px; /* Adjust the size of the dots */
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background-color: #3b82f6;
-  color: #3b82f6;
 }
 
 .dot-flashing::before {
-  left: -12px; /* Adjust spacing between dots */
+  left: -12px;
   animation: dotFlashing 1s infinite alternate;
   animation-delay: 0s;
 }
 
 .dot-flashing::after {
-  left: 12px; /* Adjust spacing between dots */
+  left: 12px;
   animation: dotFlashing 1s infinite alternate;
   animation-delay: 1s;
-}
-
-/* ✅ Thinking Text */
-.thinking-text {
-  position: absolute;
-  left: 2.5rem; /* Adjust based on icon size */
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem; /* Adjust the size of the text */
-  pointer-events: none; /* Ensure it doesn't interfere with input */
 }
 
 @keyframes dotFlashing {
@@ -449,10 +473,11 @@ button:hover {
   }
 }
 
-
-
-
-
+/* ✅ Thinking Text */
+.thinking-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
 
 /* ✅ Three-Dot Typing Animation */
 .dot-typing {
@@ -461,6 +486,7 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 1rem;
 }
 
 .dot-typing span {
@@ -481,13 +507,9 @@ button:hover {
   50% { opacity: 1; transform: scale(1.2); }
 }
 
-
-
-
 /* ✅ Glowing Text Effect */
 .thinking-glow {
   position: absolute;
-  left: 2rem;
   color: rgba(59, 130, 246, 0.8);
   font-weight: bold;
   text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
@@ -500,6 +522,49 @@ button:hover {
 }
 
 
+/* ✅ Scrollbar - Webkit (Chrome, Edge, Safari) */
+.messages::-webkit-scrollbar {
+  width: 1rem; /* Slim scrollbar */
+}
 
+.messages::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1); /* Subtle track */
+  border-radius: 24px;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.8); /* Blue thumb */
+  border-radius: 24px;
+  transition: background 0.3s ease;
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 1); /* Brighten on hover */
+}
+
+/* ✅ Scrollbar - Firefox */
+.messages {
+  scrollbar-width: 1rem;
+  scrollbar-color: rgba(59, 130, 246, 0.8) rgba(255, 255, 255, 0.1);
+}
+
+/* ✅ Fix: Make emoji button visible */
+.emoji-button {
+  background: none;
+  border: none;
+  color: #ffffff; /* ✅ Change color */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.emoji-button:hover {
+  color: #3b82f6;
+  transform: scale(1.1);
+}
+
+.emoji-button .icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
 
 </style>
