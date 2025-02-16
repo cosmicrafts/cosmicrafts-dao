@@ -1,336 +1,370 @@
-use candid::{CandidType, Deserialize, Principal};
-use ic_cdk::api::call::CallResult;
-use ic_cdk_macros::*;
-use serde::Serialize;
-use serde::de::DeserializeOwned;
-use std::collections::HashMap;
+use ic_cdk_timers::TimerId;
 use std::cell::RefCell;
+use std::time::Duration;
+use std::collections::HashMap;
+use serde::Serialize;
+use candid::{CandidType, Deserialize, Principal};
+use ic_cdk_macros::init;
+use std::collections::VecDeque;
 
-type EntityId = u64;
-type ComponentId = u64;
-thread_local! {
-    static STATE: RefCell<State> = RefCell::new(State::default());
+#[init]
+fn init() {
+    ic_cdk::println!("Init function executed.");
+    start_game_loop();
+    spawn_entity(EntityType::Ship);
 }
-
-#[derive(Clone, Debug, CandidType, Deserialize, Serialize)]
+// Simplified Entity and Component Types
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+struct GameFrame {
+    frame_number: u64,
+    timestamp: u64,          // Time in nanoseconds at the end of this frame
+    entities: Vec<Entity>,   // Snapshot of all entities
+}
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
 struct Position {
-    x: f32,
-    y: f32,
-    z: f32,
+    x: f64,
+    y: f64,
 }
-
-#[derive(Clone, Debug, CandidType, Deserialize, Serialize)]
-struct Velocity {
-    x: f32,
-    y: f32,
-    z: f32,
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+struct TargetPosition {
+    x: f64,
+    y: f64,
 }
-
-#[derive(Clone, Debug, CandidType, Deserialize, Serialize)]
-struct Spatial {
-    //...
-    x: f32,
-    y: f32,
-    z: f32,
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+struct Entity {
+    id: u64,
+    entity_type: EntityType,
+    position: Position,
+    target_position: Option<TargetPosition>, // Where the entity is moving towards
+    speed: f64, // Base speed of the entity
 }
-
-#[derive(Clone, Debug, CandidType, Deserialize, Serialize)]
-struct Health {
-    current: i32,
-    max: i32,
+#[derive(CandidType, Deserialize, Clone, Debug, PartialEq)]
+pub enum EntityType {
+    Planet,
+    Star,
+    Ship,
+    Mine,
+    Player,
 }
+// Constants
+const MAP_WIDTH: f64 = 1000.0;
+const MAP_HEIGHT: f64 = 1000.0;
+const DEFAULT_ENTITY_SPEED: f64 = 10.0;
+thread_local! {
+    static GAME_FRAMES: RefCell<VecDeque<GameFrame>> = RefCell::new(VecDeque::with_capacity(400));
+    static FRAME_NUMBER: RefCell<u64> = RefCell::new(0);
 
-const POSITION_ID: ComponentId = 1;
-const VELOCITY_ID: ComponentId = 2;
-const HEALTH_ID: ComponentId = 3;
-const SPATIAL_ID: ComponentId = 4;
 
-#[derive(Clone, Debug, CandidType, Deserialize, Serialize)]
-struct ComponentUpdate {
-    entity_id: EntityId,
-    component_id: ComponentId,
-    component_data: Vec<u8>,
-    timestamp: u64,
+    static ENTITIES: RefCell<HashMap<u64, Entity>> = RefCell::new(HashMap::new());
+    static ENTITY_COUNTER: RefCell<u64> = RefCell::new(0);
+    static TIMER_ID: RefCell<Option<TimerId>> = RefCell::new(None);
+
+    static PLAYERS: RefCell<HashMap<Principal, Player>> = RefCell::new(HashMap::new());
+    static MULTIPLIER_BY_PLAYER: RefCell<HashMap<Principal, f64>> = RefCell::new(HashMap::new());
+    static AVAILABLE_AVATARS: RefCell<HashMap<Principal, Vec<u32>>> = RefCell::new(HashMap::new());
+    static AVAILABLE_TITLES: RefCell<HashMap<Principal, Vec<u32>>> = RefCell::new(HashMap::new());
+
 }
-
-#[derive(Default)]
-struct ECS {
-    entities: HashMap<EntityId, Vec<Component>>,
-    next_entity_id: EntityId,
-    cached_components: HashMap<(EntityId, ComponentId), Vec<u8>>, // Cache: (Entity, Component) -> Data
-    pending_updates: Vec<ComponentUpdate>,
+fn next_entity_id() -> u64 {
+    ENTITY_COUNTER.with(|counter| {
+        let mut counter = counter.borrow_mut();
+        *counter += 1;
+        *counter
+    })
 }
-
-#[derive(Clone, Debug, CandidType, Deserialize, Serialize)]
-enum Component {
-    Position(Position),
-    Velocity(Velocity),
-    Health(Health),
-    Spatial(Spatial),
+fn generate_deterministic_position(entity_id: u64) -> Position {
+    let current_time = ic_cdk::api::time();
+    let x = (current_time as f64 * entity_id as f64) % MAP_WIDTH;
+    let y = (current_time as f64 / (entity_id as f64 + 1.0)) % MAP_HEIGHT;
+    Position { x, y }
 }
+#[ic_cdk::update]
+fn spawn_entity(entity_type: EntityType) -> u64 {
+    let entity_id = next_entity_id();
+    let position = generate_deterministic_position(entity_id);
 
-impl ECS {
-    fn new() -> Self {
-        ECS {
-            entities: HashMap::new(),
-            next_entity_id: 0,
-            cached_components: HashMap::new(),
-            pending_updates: Vec::new(),
+    let entity = Entity {
+        id: entity_id,
+        entity_type,
+        position,
+        target_position: None,
+        speed: DEFAULT_ENTITY_SPEED,
+    };
+
+    ENTITIES.with(|entities| {
+        entities.borrow_mut().insert(entity_id, entity);
+    });
+
+    entity_id
+}
+#[ic_cdk::update]
+fn spawn_multiple_entities(entity_type: EntityType, count: u64) -> Vec<u64> {
+    let mut entity_ids = Vec::new();
+
+    ENTITIES.with(|entities| {
+        let mut entities = entities.borrow_mut();
+        for _ in 0..count {
+            let entity_id = next_entity_id();
+            let position = generate_deterministic_position(entity_id);
+
+            let entity = Entity {
+                id: entity_id,
+                entity_type: entity_type.clone(),
+                position,
+                target_position: None,
+                speed: DEFAULT_ENTITY_SPEED,
+            };
+
+            entities.insert(entity_id, entity);
+            entity_ids.push(entity_id);
         }
+    });
+
+    entity_ids
+}
+#[ic_cdk::update]
+fn move_entity(entity_id: u64, target_x: f64, target_y: f64) -> Result<(), String> {
+    ENTITIES.with(|entities| {
+        let mut entities = entities.borrow_mut();
+        if let Some(entity) = entities.get_mut(&entity_id) {
+            entity.target_position = Some(TargetPosition {
+                x: target_x,
+                y: target_y,
+            });
+            Ok(())
+        } else {
+            Err("Entity not found".to_string())
+        }
+    })
+}
+
+fn update_world(dt: f64) {
+    ENTITIES.with(|entities| {
+        let mut entities = entities.borrow_mut();
+
+        // (1) update positions as you do now
+        let mut to_remove = Vec::new();
+        for (entity_id, entity) in entities.iter_mut() {
+            if let Some(target_pos) = &entity.target_position {
+                let dx = target_pos.x - entity.position.x;
+                let dy = target_pos.y - entity.position.y;
+                let distance = (dx*dx + dy*dy).sqrt();
+                if distance <= entity.speed * dt {
+                    entity.position.x = target_pos.x;
+                    entity.position.y = target_pos.y;
+                    to_remove.push(*entity_id);
+                } else {
+                    let move_x = dx / distance * entity.speed * dt;
+                    let move_y = dy / distance * entity.speed * dt;
+                    entity.position.x += move_x;
+                    entity.position.y += move_y;
+                    entity.position.x = entity.position.x.max(0.0).min(MAP_WIDTH);
+                    entity.position.y = entity.position.y.max(0.0).min(MAP_HEIGHT);
+                }
+            }
+        }
+        for entity_id in to_remove {
+            if let Some(entity) = entities.get_mut(&entity_id) {
+                entity.target_position = None;
+            }
+        }
+    });
+
+    // (2) increment FRAME_NUMBER
+    let current_frame = FRAME_NUMBER.with(|f| {
+        let mut frame = f.borrow_mut();
+        *frame += 1;
+        *frame
+    });
+
+    // (3) snapshot the entire entity list
+    let timestamp = ic_cdk::api::time();
+    let snapshot = ENTITIES.with(|entities| {
+        entities.borrow().values().cloned().collect::<Vec<Entity>>()
+    });
+
+    let game_frame = GameFrame {
+        frame_number: current_frame,
+        timestamp,
+        entities: snapshot,
+    };
+
+    // (4) store the frame
+    GAME_FRAMES.with(|frames| {
+        let mut frames = frames.borrow_mut();
+        frames.push_back(game_frame);
+
+        // if we exceed capacity, pop the oldest
+        if frames.len() > 200 {
+            frames.pop_front();
+        }
+    });
+}
+
+
+#[ic_cdk::update]
+fn start_game_loop() {
+    ic_cdk::println!("Game loop started.");
+    let timer_id = ic_cdk_timers::set_timer_interval(Duration::from_millis(100), || {
+        ic_cdk::spawn(async {
+           // ic_cdk::println!("Updating world...");
+            update_world(0.05);
+        });
+    });
+    TIMER_ID.with(|id| {
+        *id.borrow_mut() = Some(timer_id);
+    });
+}
+
+
+
+#[ic_cdk::query]
+fn export_entities() -> Vec<Entity> {
+    ENTITIES.with(|entities| entities.borrow().values().cloned().collect())
+}
+
+// Return all frames AFTER a given frame number (exclusive)
+#[ic_cdk::query]
+fn get_frames_since(frame_number: u64) -> Vec<GameFrame> {
+    GAME_FRAMES.with(|frames| {
+        frames
+            .borrow()
+            .iter()
+            .filter(|f| f.frame_number > frame_number)
+            .cloned()
+            .collect()
+    })
+}
+
+#[ic_cdk::query]
+fn get_latest_frame_number() -> u64 {
+    FRAME_NUMBER.with(|f| *f.borrow())
+}
+
+// User reg
+
+    // --- Player Management ---
+
+    #[ic_cdk::query]
+    fn get_player() -> Option<Player> {
+        let caller = ic_cdk::caller();
+        PLAYERS.with(|players| players.borrow().get(&caller).cloned())
     }
 
-    fn create_entity(&mut self) -> EntityId {
-        let id = self.next_entity_id;
-        self.next_entity_id += 1;
-        self.entities.insert(id, Vec::new());
-        id
-    }
+    #[ic_cdk::update]
+    async fn signup(
+        username: String,
+        avatar: u32,
+        referral_code: Option<String>,
+        language: String,
+    ) -> Result<(bool, Option<Player>, String), String> {
+        let caller = ic_cdk::caller();
 
-    fn add_component(&mut self, entity_id: EntityId, component: Component) {
-        let components = self.entities.get_mut(&entity_id).unwrap();
-        components.push(component.clone());
-        let component_id = match component {
-            Component::Position(_) => POSITION_ID,
-            Component::Velocity(_) => VELOCITY_ID,
-            Component::Health(_) => HEALTH_ID,
-            Component::Spatial(_) => SPATIAL_ID,
+        // Reject anonymous calls
+        if caller == Principal::anonymous() {
+            return Err("Anonymous users cannot register.".to_string());
+        }
+
+        // Check if the username is valid
+        if username.len() > 12 {
+            return Err("Username must be 12 characters or less".to_string());
+        }
+
+        // Check if the player is already registered
+        if PLAYERS.with(|players| players.borrow().contains_key(&caller)) {
+            let existing_player = PLAYERS.with(|players| players.borrow().get(&caller).cloned());
+            return Ok((false, existing_player, "User is already registered.".to_string()));
+        }
+
+        // Handle referral code scenarios
+        let final_code = match referral_code {
+            Some(code) => {
+                // Simulate referral code assignment logic
+                match assign_unassigned_referral_code(caller, code).await {
+                    ReferralCodeResult::Ok(assigned_code) => assigned_code,
+                    ReferralCodeResult::_Err(err_msg) => return Err(err_msg),
+                }
+            }
+            None => {
+                // Generate a new referral code
+                let (new_code, _) = assign_referral_code(caller, None).await;
+                new_code
+            }
         };
 
-        let encoded = candid::encode_one(&component).unwrap();
-        self.cached_components.insert((entity_id, component_id), encoded);
+
+        // Register the player
+        let new_player = Player {
+            id: caller,
+            username,
+            avatar: avatar as u64, // Ensure compatibility with u64 type in Player
+            title: "Starbound Initiate".to_string(),
+            description: "".to_string(),
+            registration_date: ic_cdk::api::time(),
+            level: 1,
+            elo: 1200.0,
+            language,
+            associated_entities: Vec::new(),    // Initialize with an empty list of associated entities
+        };
+
+        PLAYERS.with(|players| {
+            players.borrow_mut().insert(caller, new_player.clone());
+        });
+
+        // Initialize the player's multiplier
+        MULTIPLIER_BY_PLAYER.with(|multiplier| {
+            multiplier.borrow_mut().insert(caller, 1.0);
+        });
+
+        // Assign default avatars and titles
+        AVAILABLE_AVATARS.with(|avatars| {
+            avatars.borrow_mut().insert(caller, (1..=12).collect());
+        });
+
+        AVAILABLE_TITLES.with(|titles| {
+            titles.borrow_mut().insert(caller, vec![1]);
+        });
+
+        Ok((
+            true,
+            Some(new_player),
+            format!(
+                "User registered successfully with referral code {}",
+                final_code
+            ),
+        ))
     }
 
-    fn get_component<T: CandidType + Clone + DeserializeOwned>(
-        &self,
-        entity_id: EntityId,
-        component_id: ComponentId,
-    ) -> Option<T> {
-        let cache_key = (entity_id, component_id);
-    
-        self.cached_components
-            .get(&cache_key)
-            .cloned()
-            .and_then(|encoded| candid::decode_one(&encoded).ok()) // ✅ Fixes borrow issue
-    }
-    
-
-    fn queue_update(&mut self, update: &ComponentUpdate) {
-        self.pending_updates.push(update.clone());
+    // Mock functions for referral code handling
+    async fn assign_unassigned_referral_code(_player_id: Principal, code: String) -> ReferralCodeResult {
+        // Simulate referral code assignment logic
+        ReferralCodeResult::Ok(code)
     }
 
-    fn clear_pending_updates(&mut self) -> Vec<ComponentUpdate> {
-        std::mem::take(&mut self.pending_updates)
-    }
-}
-
-trait System {
-    fn update(&mut self, ecs: &mut ECS, dt: f64);
-}
-
-struct MovementSystem;
-
-impl System for MovementSystem {
-      fn update(&mut self, ecs: &mut ECS, dt: f64) {
-        let now = ic_cdk::api::time();
-
-        let mut entities_to_move: Vec<(EntityId, Position, Velocity)> = Vec::new();
-        for (entity_id, components) in &ecs.entities {
-            let mut position: Option<Position> = None;
-            let mut velocity: Option<Velocity> = None;
-            for component in components {
-                match component {
-                    Component::Position(p) => position = Some(p.clone()),
-                    Component::Velocity(v) => velocity = Some(v.clone()),
-                    _ => {}
-                }
-            }
-            if let (Some(p), Some(v)) = (position, velocity) {
-                entities_to_move.push((*entity_id, p, v));
-            }
-        }
-
-        for (entity_id, mut position, velocity) in entities_to_move {
-            position.x += velocity.x * (dt as f32);
-            position.y += velocity.y * (dt as f32);
-            position.z += velocity.z * (dt as f32);
-
-            if let Some(components) = ecs.entities.get_mut(&entity_id) {
-                for component in components {
-                    if let Component::Position(ref mut p) = component {
-                        *p = position.clone();
-                        break;
-                    }
-                }
-            }
-
-            let component_data = candid::encode_one(position).unwrap();
-            let update = ComponentUpdate {
-                entity_id,
-                component_id: POSITION_ID,
-                component_data: component_data.clone(), // Use component_data directly
-                timestamp: now,
-            };
-            ecs.queue_update(&update);
-            let cache_key = (entity_id, POSITION_ID);
-            ecs.cached_components.insert(cache_key, component_data); // Corrected line
-        }
-    }
-}
-
-
-struct State {
-    ecs: ECS,
-    motoko_canister_id: Principal,
-    movement_system: MovementSystem,
-}
-
-impl Default for State {
-    fn default() -> Self {
-        State {
-            ecs: ECS::new(),
-            motoko_canister_id: Principal::management_canister(), // Replace with actual ID in post_upgrade
-            movement_system: MovementSystem,
-        }
-    }
-}
-
-#[update]
-fn initialize_state(motoko_canister_id: Principal) {
-    STATE.with(|s| {
-        let mut state = s.borrow_mut();
-        state.motoko_canister_id = motoko_canister_id;
-    });
-}
-
-
-#[query]
-fn get_cached_component_position(entity_id: EntityId) -> Option<Position> {
-    STATE.with(|s| {
-        let state = s.borrow();
-        state.ecs.get_component::<Position>(entity_id, POSITION_ID)
-    })
-}
-
-#[update]
-async fn create_entity() -> EntityId {
-    STATE.with(|s| {
-        s.borrow_mut().ecs.create_entity()
-    })
-}
-
-#[update]
-async fn add_position_component(entity_id: EntityId, x: f32, y: f32, z: f32) {
-    STATE.with(|s| {
-        let mut state = s.borrow_mut();
-        let position = Position { x, y, z };
-        state.ecs.add_component(entity_id, Component::Position(position));
-    });
-}
-
-#[update]
-async fn add_velocity_component(entity_id: EntityId, x: f32, y: f32, z: f32) {
-    STATE.with(|s| {
-        let mut state = s.borrow_mut();
-        let velocity = Velocity { x, y, z };
-        state.ecs.add_component(entity_id, Component::Velocity(velocity));
-    });
-}
-
-#[update]
-async fn add_health_component(entity_id: EntityId, current: i32, max: i32) {
-    STATE.with(|s| {
-        let mut state = s.borrow_mut();
-        let health = Health { current, max };
-        state.ecs.add_component(entity_id, Component::Health(health));
-    });
-}
-
-#[update]
-async fn add_spatial_component(entity_id: EntityId, x: f32, y: f32, z: f32) {
-    STATE.with(|s| {
-        let mut state = s.borrow_mut();
-        let spatial = Spatial { x, y, z };
-        state.ecs.add_component(entity_id, Component::Spatial(spatial));
-    });
-}
-
-async fn send_updates_to_motoko(state: &mut State) -> Result<(), String> {
-    let updates = state.ecs.clear_pending_updates();
-    if updates.is_empty() {
-        return Ok(()); // Nothing to do.
+    async fn assign_referral_code(_player_id: Principal, _code: Option<String>) -> (String, bool) {
+        // Simulate referral code generation logic
+        ("generated_code".to_string(), true)
     }
 
-    for update in updates {
-        let args = candid::encode_one(update).unwrap();
-
-        let call_result: CallResult<()> =
-            ic_cdk::api::call::call(state.motoko_canister_id, "receive_update", (args,)).await;
-
-        call_result.map_err(|e| format!("Error calling Motoko: {:?}", e))?;
+    #[derive(CandidType, Serialize, Deserialize, Clone, Debug, PartialEq)]
+    struct Player {
+        id: Principal,
+        username: String,
+        avatar: u64,
+        title: String,
+        description: String,
+        registration_date: u64, 
+        level: u32,
+        elo: f64,
+        language: String,
+        associated_entities: Vec<Principal>, // IDs of associated entities (e.g., factions, colonies, fleets)
     }
-    Ok(())
-}
-
-#[update]
-async fn update(dt: f64) -> Result<(), String> {
-    STATE.with(|s| {
-        s.borrow_mut().movement_system.update(&mut s.borrow_mut().ecs, dt);
-    });
-
-    let updates = STATE.with(|s| {
-        s.borrow_mut().ecs.clear_pending_updates()
-    });
-
-    if !updates.is_empty() {
-        let motoko_canister_id = STATE.with(|s| s.borrow().motoko_canister_id);
-        for update in updates {
-            let args = candid::encode_one(update).unwrap();
-            let call_result: CallResult<()> =
-                ic_cdk::api::call::call(motoko_canister_id, "receive_update", (args,)).await;
-            call_result.map_err(|e| format!("Error calling Motoko: {:?}", e))?;
-        }
+    enum ReferralCodeResult {
+        Ok(String),
+        _Err(String),
     }
 
-    Ok(())
-}
 
-#[query]
-fn get_motoko_canister_id() -> Principal {
-    STATE.with(|s| s.borrow().motoko_canister_id)
-}
+    //... (Simplified spatial queries if needed)
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_create_entity() {
-        let mut ecs = ECS::new();
-        let entity_id = ecs.create_entity();
-        assert_eq!(entity_id, 0);
-        assert_eq!(ecs.create_entity(), 1);
-        assert_eq!(ecs.entities.len(), 2);
-    }
-
-    #[test]
-    fn test_add_component() {
-        let mut ecs = ECS::new();
-        let entity_id = ecs.create_entity();
-        let position = Position { x: 1.0, y: 2.0, z: 3.0 };
-        ecs.add_component(entity_id, Component::Position(position.clone()));
-
-        let components = ecs.get_components(entity_id).unwrap();
-        assert_eq!(components.len(), 1);
-        assert!(ecs.cached_components.contains_key(&(entity_id, POSITION_ID)));
-    }
-
-    #[test]
-    fn test_get_component() {
-        let mut ecs = ECS::new();
-        let entity_id = ecs.create_entity();
-        let position = Position { x: 1.0, y: 2.0, z: 3.0 };
-        ecs.add_component(entity_id, Component::Position(position.clone()));
-        let comp = ecs.get_component::<Position>(entity_id, POSITION_ID).unwrap();
-        assert_eq!(comp.x, position.x);
-    }
-}
+ic_cdk::export_candid!();

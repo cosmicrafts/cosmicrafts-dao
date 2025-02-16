@@ -16,6 +16,7 @@
     "src/frontend",
     "src/icp-minting"
   ],
-  "devDependencies": {
+  "dependencies": {
+    "@heroicons/vue": "^2.2.0"
   }
 }
