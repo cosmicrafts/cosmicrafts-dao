@@ -353,14 +353,14 @@ header {
 
 .dropdown-menu {
   position: absolute;
-  top: 100%;
   right: 0;
-  background-color: #1e2b38;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: .25rem;
+  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.658), rgba(23, 33, 43, 0.705));
+  border: 1px solid rgba(128, 128, 128, 0.116);
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-  padding: 0.5rem 0;
-  z-index: 10;
+  padding: 1rem 0;
+  z-index: 1000;
   min-width: 160px;
 }
 
@@ -371,10 +371,11 @@ header {
 }
 
 .dropdown-menu li {
+  font-weight: 700;
   padding: 0.5rem 1rem;
   color: #ffffff;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.1s ease;
 }
 
 .dropdown-menu li:hover {

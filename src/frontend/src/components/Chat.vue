@@ -29,7 +29,9 @@ const sendPrompt = async () => {
   if (!prompt.value.trim() || loading.value) return;
 
   const tempPrompt = prompt.value;
-  prompt.value = ""; // ✅ Clears input immediately
+  prompt.value = "";
+  chatInput.value.innerText = ""; // ✅ Clears the contenteditable input
+  adjustInputHeight(); // Reset height after sending
 
   messages.value.push({
     role: "user",
@@ -164,7 +166,34 @@ onUnmounted(() => {
   document.removeEventListener("mouseup", stopResize);
 });
 
-const showEmojiPicker = ref(false)
+const showEmojiPicker = ref(false);
+const chatInput = ref(null); // Reference for the input box
+
+// ✅ Auto-expand logic
+const updatePrompt = () => {
+  const input = chatInput.value;
+  prompt.value = input.innerText.trim(); // Update the real prompt variable
+  adjustInputHeight();
+};
+
+const adjustInputHeight = () => {
+  const input = chatInput.value;
+  input.style.height = "auto"; // Reset height before measuring
+  const maxHeight = 120; // Maximum height before scrolling
+  if (input.scrollHeight <= maxHeight) {
+    input.style.height = `${input.scrollHeight}px`;
+  } else {
+    input.style.height = `${maxHeight}px`;
+    input.style.overflowY = "auto"; // Enable scrolling
+  }
+};
+
+// ✅ Insert Emoji into Input
+const insertEmoji = (emoji) => {
+  chatInput.value.innerText += emoji;
+  updatePrompt();
+};
+
 </script>
 
 <template>
@@ -213,13 +242,17 @@ const showEmojiPicker = ref(false)
         <div class="input-wrapper">
             
             <!-- Input Field -->
-            <input
-            v-model="prompt"
-            @keyup.enter="sendPrompt"
-            :placeholder="loading ? '' : 'Ask me anything...'"
-            :disabled="loading"
-            class="chat-input"
-            />
+<!-- ✅ New Auto-Expanding Input -->
+<div
+  ref="chatInput"
+  class="chat-input"
+  contenteditable="true"
+  @input="updatePrompt"
+  @keydown.enter.prevent="sendPrompt"
+  role="textbox"
+></div>
+
+
             <!-- Thinking Indicator (Icon + Text) -->
             <div v-if="loading" class="thinking-indicator">
             <div class="dot-flashing"></div>
@@ -245,35 +278,37 @@ const showEmojiPicker = ref(false)
 
 <style scoped>
 /* ✅ Floating Chat Button */
-/* ✅ Floating Chat Button */
 .chat-toggle {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 56px;
-  height: 56px;
-  background: #ff0000;
-  color: white;
+  bottom: 1.5rem;
+  right: 1rem;
+  width: 2.5rem;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 64px rgb(0, 217, 255);
-  transition: all 0.25s ease-in-out;
+  background-color: rgba(30, 43, 56, 0.9);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: 
+    transform 0.3s ease-out, 
+    background-color 0.4s ease-out, /* ⏳ Slow fade-out */
+    box-shadow 0.6s ease-out; /* ⏳ Longer glow fade */
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
   z-index: 1000;
 }
 
 .hover-scale:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 195, 255, 0.862); /* Lighter blue background on hover */
+  box-shadow: 0 4px 16px rgba(0, 208, 255, 0.896);
 }
 
 /* ✅ Chat Window */
 .chat-window {
   position: fixed;
-  bottom: 8rem;
-  right: 2rem;
+  bottom: 6rem;
+  right: 1rem;
   width: 400px;
   max-width: 90vw;
   height: 60vh;
@@ -300,9 +335,15 @@ const showEmojiPicker = ref(false)
 }
 
 .close-icon {
-  width: 20px;
-  height: 20px;
+  margin-right: -.75rem;
+  width: 2rem;
+  height: 1.5rem;
   cursor: pointer;
+  
+}
+.close-icon:hover {
+  transform: scale(1.25);
+  color: #0099ff;
 }
 
 /* ✅ Chat Messages */
@@ -371,15 +412,22 @@ const showEmojiPicker = ref(false)
 }
 
 /* ✅ Input Field */
+/* ✅ Auto-Expanding Input */
 .chat-input {
-  flex: 1; /* ✅ Ensures input takes up remaining space */
-  padding: 1rem;
-  background: #1b1b1b;
-  border: 1px solid #ffffff21;
-  border-radius: 0.5rem;
+  flex: 1;
+  min-height: 40px;
+  max-height: 120px; /* Max height before scrolling */
+  padding: 0.75rem;
+  background: transparent;
   color: white;
-  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+  overflow-y: hidden;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  border-radius: 5px;
 }
+
 
 .chat-input:focus {
   outline: none;
@@ -387,23 +435,7 @@ const showEmojiPicker = ref(false)
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
 }
 
-/* ✅ Send Icon Button */
-.send-icon {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #85b6ff;
-  transition: all 0.2s ease;
-  width: 2.5rem;
-  flex-shrink: 0; /* ✅ Prevents button from shrinking */
-  margin-right: -.5rem;
-}
 
-.send-icon:hover {
-  color: #ffffff;
-  background: #ffffff21;
-  border-radius: 0.5rem;
-}
 
 /* ✅ Input Wrapper */
 .input-wrapper {
@@ -558,17 +590,52 @@ const showEmojiPicker = ref(false)
   border: none;
   color: #ffffff; /* ✅ Change color */
   cursor: pointer;
-  transition: all 0.2s ease;
+  border-radius: 4rem;
+  transition: all 0.1s ease;
+  padding: .25rem;
 }
 
 .emoji-button:hover {
   color: #3b82f6;
   transform: scale(1.1);
+  background: #ffffff21;
+  border-radius: 50%;
 }
 
 .emoji-button .icon {
   width: 1.5rem;
   height: 1.5rem;
+}
+
+/* ✅ Send Icon Button */
+.send-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  transition: all 0.1s ease;
+  width: 2rem;
+  margin-right: -.5rem;
+  padding: .25rem;
+}
+
+.send-icon:hover {
+  color: #3b82f6;
+  transform: scale(1.1);
+  background: #ffffff21;
+  border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+.chat-toggle{
+  bottom: 20%;
+}
+
+.chat-window {
+  position: fixed;
+  bottom: 25%;
+}
+
 }
 
 </style>

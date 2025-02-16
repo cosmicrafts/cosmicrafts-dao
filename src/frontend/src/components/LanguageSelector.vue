@@ -130,14 +130,15 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: repeat(2, 3fr);
   gap: 2rem;
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.98), rgba(23, 33, 43, 0.95));
+  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.658), rgba(23, 33, 43, 0.705));
   border: 1px solid #3a3a3a;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   list-style: none;
-  margin: 0;
-  padding: 1.5rem;
+  margin-top: .75rem;
+  padding: 1rem;
   border: 0.25px solid rgba(255, 255, 255, 0.086);
-  border-radius: 24px;
+  border-radius: 8px;
+  
 }
 
 /* Positioning for up-right */
@@ -164,8 +165,6 @@ onBeforeUnmount(() => {
   animation: fadeIn 0.25s ease forwards;
   animation-delay: calc(0.05s * var(--index)); /* Stagger each item */
 }
-
-
 
 @keyframes fadeIn {
   to {
