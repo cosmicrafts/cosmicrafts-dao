@@ -161,68 +161,74 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <!-- ✅ Floating Chat Button -->
-    <div
-      class="chat-toggle"
-      :class="{ 'hover-scale': isHovering, pulse: !showChat && !isAnimating }"
-      @mouseenter="isHovering = true"
-      @mouseleave="isHovering = false"
-      @click="toggleChat"
-    >
-      <transition name="rotate-icon">
-        <ChatBubbleOvalLeftEllipsisIcon v-if="!showChat" class="icon" />
-        <XMarkIcon v-else class="icon" />
-      </transition>
-    </div>
-  
-    <!-- ✅ Chat Window (Draggable & Resizable) -->
-    <transition name="slide-fade">
-      <div
-        v-if="showChat"
-        ref="chatWindow"
-        class="chat-window"
-        @mousedown.self="startDrag"
-        style="position: fixed; left: 50px; top: 100px"
-      >
-        <!-- ✅ Chat Header (Drag from here) -->
-        <div class="chat-header" @mousedown="startDrag">
-          <span>Cosmicrafts AI</span>
-          <XMarkIcon class="close-icon" @click="toggleChat" />
-        </div>
-  
-        <!-- ✅ Chat Messages -->
-        <div class="messages">
-          <div
-            v-for="(msg, index) in messages"
-            :key="index"
-            :class="['message', msg.role]"
-          >
-            <div class="bubble">
-              <span class="message-text">{{ msg.content }}</span>
-            </div>
+  <!-- ✅ Floating Chat Button -->
+  <div
+    class="chat-toggle"
+    :class="{ 'hover-scale': isHovering, pulse: !showChat && !isAnimating }"
+    @mouseenter="isHovering = true"
+    @mouseleave="isHovering = false"
+    @click="toggleChat"
+  >
+    <transition name="rotate-icon">
+      <ChatBubbleOvalLeftEllipsisIcon v-if="!showChat" class="icon" />
+      <XMarkIcon v-else class="icon" />
+    </transition>
+  </div>
+
+  <!-- ✅ Chat Window -->
+  <transition name="slide-fade">
+    <div v-if="showChat" class="chat-window">
+      <div class="chat-header">
+        <span>Cosmicrafts AI</span>
+        <XMarkIcon class="close-icon" @click="toggleChat" />
+      </div>
+
+      <div class="messages">
+        <div
+          v-for="(msg, index) in messages"
+          :key="index"
+          :class="['message', msg.role]"
+        >
+          <div class="bubble">
+            <span class="message-text">{{ msg.content }}</span>
           </div>
         </div>
-  
-        <!-- ✅ Input Area -->
-        <div class="input-area">
-          <input
-            v-model="prompt"
-            @keyup.enter="sendPrompt"
-            placeholder="Ask me anything..."
-            :disabled="loading"
-            class="chat-input"
-          />
-          <button @click="sendPrompt" :disabled="loading">
-            Send
-          </button>
-        </div>
-  
-        <!-- ✅ Resizer -->
-        <div class="resize-handle" @mousedown="startResize"></div>
-      </div>
-    </transition>
-  </template>
 
+        <div v-if="currentMessage" class="message assistant">
+          <div class="bubble">
+            <span class="message-text">{{ currentMessage }}</span>
+          </div>
+        </div>
+
+
+      </div>
+      <!-- ✅ Input Area -->
+<div class="input-area">
+  <div class="input-wrapper">
+    <!-- Animated Icon -->
+    <div v-if="loading" class="dot-typing">
+      <div class="dot-flashing"></div>
+    </div>
+    <!-- Input Field -->
+    <input
+      v-model="prompt"
+      @keyup.enter="sendPrompt"
+      :placeholder="loading ? '' : 'Ask me anything...'"
+      :disabled="loading"
+      class="chat-input"
+    />
+    <!-- Thinking Text -->
+    <span v-if="loading" class="thinking-glow">Thinking...</span>
+
+  </div>
+  <button @click="sendPrompt" :disabled="loading">
+    Send
+  </button>
+</div>
+
+    </div>
+  </transition>
+</template>
 
 <style scoped>
 /* ✅ Floating Chat Button */
@@ -249,7 +255,7 @@ onUnmounted(() => {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ Chat Window (Resizable & Draggable) */
+/* ✅ Chat Window */
 .chat-window {
   position: fixed;
   bottom: 8rem;
@@ -266,12 +272,9 @@ onUnmounted(() => {
   flex-direction: column;
   border-radius: 8px;
   border: 1px solid rgba(126, 126, 126, 0.1);
-  min-width: 300px;
-  min-height: 300px;
-  cursor: grab;
 }
 
-/* ✅ Chat Header (Drag Zone) */
+/* ✅ Chat Header */
 .chat-header {
   display: flex;
   justify-content: space-between;
@@ -280,28 +283,6 @@ onUnmounted(() => {
   font-weight: bold;
   background: linear-gradient(to bottom, rgba(30, 43, 56, 0.2), rgba(23, 33, 43, 0.4));
   border-bottom: 1px solid rgba(126, 126, 126, 0.1);
-  cursor: grab;
-  user-select: none;
-}
-
-.chat-header:active {
-  cursor: grabbing;
-}
-
-/* ✅ Resize Handle (Bottom Right Corner) */
-.resize-handle {
-  width: 16px;
-  height: 16px;
-  background: rgba(255, 255, 255, 0.2);
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  cursor: nwse-resize;
-  border-radius: 4px;
-}
-
-.resize-handle:hover {
-  background: rgba(255, 255, 255, 0.5);
 }
 
 .close-icon {
