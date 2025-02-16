@@ -2,6 +2,7 @@
 import { ChatBubbleOvalLeftEllipsisIcon, FaceSmileIcon, XMarkIcon, PaperAirplaneIcon } from "@heroicons/vue/24/solid"; 
 import { ref, nextTick, onMounted, onUnmounted } from "vue";
 import EmojiPicker from './EmojiPicker.vue'
+import { useAuthStore } from '../stores/auth';
 
 const showChat = ref(false);
 const isHovering = ref(false);
@@ -20,6 +21,8 @@ const startWidth = ref(0);
 const startHeight = ref(0);
 const offsetX = ref(0);
 const offsetY = ref(0);
+
+const authStore = useAuthStore();
 
 // ✅ Send Message to Backend
 const sendPrompt = async () => {
@@ -55,6 +58,7 @@ const sendPrompt = async () => {
 
       await nextTick();
       scrollToBottom();
+      focusInput();
     }
 
     messages.value.push({
@@ -72,7 +76,7 @@ const sendPrompt = async () => {
     loading.value = false;
     await nextTick();
     scrollToBottom();
-    focusInput(); // ✅ Refocus again after receiving response
+    focusInput();
   }
 };
 
