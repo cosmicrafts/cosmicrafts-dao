@@ -1,111 +1,230 @@
-<script setup>
-import { ChatBubbleOvalLeftEllipsisIcon, FaceSmileIcon, XMarkIcon, PaperAirplaneIcon } from "@heroicons/vue/24/solid"; 
-import { ref, nextTick, onMounted, onUnmounted } from "vue";
-import EmojiPicker from './EmojiPicker.vue'
+<script setup lang="ts">
+import { ChatBubbleOvalLeftEllipsisIcon, FaceSmileIcon, XMarkIcon, PaperAirplaneIcon } from "@heroicons/vue/24/solid";
+import { ref, nextTick, onMounted, onUnmounted, watch } from "vue";
+
+import EmojiPicker from './EmojiPicker.vue';
 import { useAuthStore } from '../stores/auth';
+import { useLanguageStore, languages } from '../stores/language';
 
-const showChat = ref(false);
-const isHovering = ref(false);
-const isAnimating = ref(false);
-const messages = ref([]);
-const prompt = ref("");
-const loading = ref(false);
-const currentMessage = ref("");
+// Reactive state
+const showChat = ref<boolean>(false);
+const isHovering = ref<boolean>(false);
+const isAnimating = ref<boolean>(false);
+const messages = ref<Array<{ role: string; content: string }>>([]);
+const prompt = ref<string>("");
+const loading = ref<boolean>(false);
+const currentMessage = ref<string>("");
 
-const chatWindow = ref(null);
-const isDragging = ref(false);
-const isResizing = ref(false);
-const startX = ref(0);
-const startY = ref(0);
-const startWidth = ref(0);
-const startHeight = ref(0);
-const offsetX = ref(0);
-const offsetY = ref(0);
+const chatWindow = ref<HTMLElement | null>(null);
+const isDragging = ref<boolean>(false);
+const isResizing = ref<boolean>(false);
+const startX = ref<number>(0);
+const startY = ref<number>(0);
+const startWidth = ref<number>(0);
+const startHeight = ref<number>(0);
+const offsetX = ref<number>(0);
+const offsetY = ref<number>(0);
 
 const authStore = useAuthStore();
+const languageStore = useLanguageStore();
+const MAX_HISTORY_TOKENS = 1000; // Adjust for performance
+const showEmojiPicker = ref<boolean>(false);
+const chatInput = ref<HTMLElement | null>(null); // Reference for the input box
+
+const injectMemory = async (userId: string, newMessage: string) => {
+  console.log(`Building structured memory for user: ${userId}`);
+
+  // ✅ User Profile (expanded)
+  const userProfile = {
+    username: authStore.player?.username || "guest",
+    language: languages.find(lang => lang.code === (authStore.player?.language || "en"))?.label || "English",
+    faction: authStore.player?.faction || "Unknown",
+    level: authStore.player?.level || 1,
+    experience: authStore.player?.experience || 0,
+    rank: authStore.player?.rank || "Unranked",
+    resources: authStore.player?.resources || {},
+    achievements: authStore.player?.achievements || [],
+    lastLogin: authStore.player?.lastLogin || "Unknown",
+  };
+
+  // ✅ Prune chat history before injecting it
+  pruneChatHistory(); 
+
+  // ✅ Retrieve the last 10 messages (for context)
+  const conversationHistory = messages.value.slice(-10); // Limit history
+  let historyLog = conversationHistory
+    .map((msg) => `[${new Date().toLocaleTimeString()}] ${msg.role.toUpperCase()}: ${msg.content}`)
+    .join("\n");
+
+  // ✅ Structured Prompt for Ollama
+  const finalPrompt = `
+[SYSTEM INSTRUCTIONS]
+This is a structured log of an AI chat assistant. 
+The user has a profile and a conversation history. 
+Use the timestamps to understand conversation flow.
+
+
+[USER PROFILE]
+- Username: ${userProfile.username}
+- Language: ${userProfile.language} **REPLY IN THIS LANGUAGE**
+- Faction: ${userProfile.faction}
+- Level: ${userProfile.level}
+- Experience: ${userProfile.experience}
+- Rank: ${userProfile.rank}
+- Resources: ${JSON.stringify(userProfile.resources)}
+- Achievements: ${userProfile.achievements.join(", ")}
+- Last Login: ${userProfile.lastLogin}
+
+
+[CONVERSATION HISTORY]
+${historyLog}
+
+[NEW USER INPUT]
+"${newMessage}"
+
+[RESPONSE]
+`;
+
+  // ✅ Log the full prompt sent to Ollama
+  console.log(`🔍 Final Prompt Sent to Ollama:\n${finalPrompt}`);
+
+  return finalPrompt;
+};
+
+const saveChatHistory = () => {
+  localStorage.setItem("chatHistory", JSON.stringify(messages.value));
+};
+
+const loadChatHistory = () => {
+  const storedChat = localStorage.getItem("chatHistory");
+  if (storedChat) {
+    messages.value = JSON.parse(storedChat);
+  }
+};
+
+// 🔥 Load history when component mounts
+onMounted(() => {
+  loadChatHistory();
+});
+
+// 🔥 Save history after every message
+watch(messages, () => {
+  saveChatHistory();
+});
+
+const pruneChatHistory = () => {
+  let totalTokens = 0;
+  let prunedMessages = [];
+
+  // ✅ Keep latest messages until reaching the max token limit
+  for (let i = messages.value.length - 1; i >= 0; i--) {
+    const msg = messages.value[i];
+    const msgTokens = msg.content.length / 4; // Approximate token count
+
+    if (totalTokens + msgTokens > MAX_HISTORY_TOKENS) break;
+
+    prunedMessages.unshift(msg);
+    totalTokens += msgTokens;
+  }
+
+  messages.value = prunedMessages;
+};
 
 // ✅ Send Message to Backend
-const sendPrompt = async () => {
+const sendPrompt = async (): Promise<void> => {
   if (!prompt.value.trim() || loading.value) return;
 
-  const tempPrompt = prompt.value;
-  prompt.value = "";
-  chatInput.value.innerText = ""; // ✅ Clears the contenteditable input
-  adjustInputHeight(); // Reset height after sending
-
-  messages.value.push({
-    role: "user",
-    content: tempPrompt,
-  });
+  const userMessage: string = prompt.value.trim();
+  messages.value.push({ role: "user", content: userMessage });
 
   await nextTick();
-  focusInput(); // ✅ Immediately refocus input
+  focusInput();
 
   try {
     loading.value = true;
     currentMessage.value = "";
 
-    const response = await fetch(
-      `http://localhost:8000/chat?prompt=${encodeURIComponent(tempPrompt)}`
-    );
+    // ✅ Fetch structured memory & inject it
+    const userId = authStore.player?.username || "guest";
+    const tempPrompt = await injectMemory(userId, userMessage);
 
-    const reader = response.body.getReader();
+    const response: Response = await fetch("http://127.0.0.1:11434/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "robotina",
+        prompt: tempPrompt,
+        stream: true,
+      }),
+    });
+
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error("Failed to read response stream");
+
     const decoder = new TextDecoder();
 
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
 
-      currentMessage.value += decoder.decode(value, { stream: true });
+      const chunk: string = decoder.decode(value, { stream: true }).trim();
+      const lines: string[] = chunk.split("\n");
+
+      for (const line of lines) {
+        if (!line) continue;
+
+        try {
+          const json = JSON.parse(line);
+          if (json.response) {
+            currentMessage.value += json.response;
+          }
+        } catch (err) {
+          console.error("JSON parse error:", err);
+        }
+      }
 
       await nextTick();
       scrollToBottom();
-      focusInput();
     }
 
     messages.value.push({
       role: "assistant",
       content: currentMessage.value,
     });
+
     currentMessage.value = "";
+
   } catch (error) {
     console.error("Chat error:", error);
-    messages.value.push({
-      role: "assistant",
-      content: "Error: Failed to get response",
-    });
+    messages.value.push({ role: "assistant", content: "Error: Failed to get response" });
   } finally {
     loading.value = false;
+    saveChatHistory(); // ✅ Save chat history
     await nextTick();
     scrollToBottom();
     focusInput();
   }
 };
 
-const focusInput = () => {
-  nextTick(() => {
-    document.querySelector(".chat-input")?.focus();
-  });
-};
-
-
 // ✅ Auto-scroll function
-const scrollToBottom = () => {
-  const chatMessages = document.querySelector(".messages");
+const scrollToBottom = (): void => {
+  const chatMessages: HTMLElement | null = document.querySelector(".messages");
   if (chatMessages) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 };
 
 // ✅ Toggle Chat with Animation
-const toggleChat = () => {
+const toggleChat = (): void => {
   isAnimating.value = true;
   showChat.value = !showChat.value;
   setTimeout(() => (isAnimating.value = false), 300);
 };
 
 // ✅ Make chat resizable from edges/corners
-const startResize = (event) => {
+const startResize = (event: MouseEvent): void => {
+  if (!chatWindow.value) return;
+
   isResizing.value = true;
   startX.value = event.clientX;
   startY.value = event.clientY;
@@ -116,24 +235,26 @@ const startResize = (event) => {
   document.addEventListener("mouseup", stopResize);
 };
 
-const resizeChat = (event) => {
-  if (!isResizing.value) return;
+const resizeChat = (event: MouseEvent): void => {
+  if (!isResizing.value || !chatWindow.value) return;
 
-  const newWidth = startWidth.value + (event.clientX - startX.value);
-  const newHeight = startHeight.value + (event.clientY - startY.value);
+  const newWidth: number = startWidth.value + (event.clientX - startX.value);
+  const newHeight: number = startHeight.value + (event.clientY - startY.value);
 
   chatWindow.value.style.width = `${Math.max(300, newWidth)}px`;
   chatWindow.value.style.height = `${Math.max(300, newHeight)}px`;
 };
 
-const stopResize = () => {
+const stopResize = (): void => {
   isResizing.value = false;
   document.removeEventListener("mousemove", resizeChat);
   document.removeEventListener("mouseup", stopResize);
 };
 
 // ✅ Make chat draggable
-const startDrag = (event) => {
+const startDrag = (event: MouseEvent): void => {
+  if (!chatWindow.value) return;
+
   isDragging.value = true;
   offsetX.value = event.clientX - chatWindow.value.getBoundingClientRect().left;
   offsetY.value = event.clientY - chatWindow.value.getBoundingClientRect().top;
@@ -142,17 +263,17 @@ const startDrag = (event) => {
   document.addEventListener("mouseup", stopDrag);
 };
 
-const dragChat = (event) => {
-  if (!isDragging.value) return;
+const dragChat = (event: MouseEvent): void => {
+  if (!isDragging.value || !chatWindow.value) return;
 
-  let x = event.clientX - offsetX.value;
-  let y = event.clientY - offsetY.value;
+  const x: number = event.clientX - offsetX.value;
+  const y: number = event.clientY - offsetY.value;
 
   chatWindow.value.style.left = `${x}px`;
   chatWindow.value.style.top = `${y}px`;
 };
 
-const stopDrag = () => {
+const stopDrag = (): void => {
   isDragging.value = false;
   document.removeEventListener("mousemove", dragChat);
   document.removeEventListener("mouseup", stopDrag);
@@ -166,20 +287,21 @@ onUnmounted(() => {
   document.removeEventListener("mouseup", stopResize);
 });
 
-const showEmojiPicker = ref(false);
-const chatInput = ref(null); // Reference for the input box
-
 // ✅ Auto-expand logic
-const updatePrompt = () => {
-  const input = chatInput.value;
+const updatePrompt = (): void => {
+  if (!chatInput.value) return;
+
+  const input: HTMLElement = chatInput.value;
   prompt.value = input.innerText.trim(); // Update the real prompt variable
   adjustInputHeight();
 };
 
-const adjustInputHeight = () => {
-  const input = chatInput.value;
+const adjustInputHeight = (): void => {
+  if (!chatInput.value) return;
+
+  const input: HTMLElement = chatInput.value;
   input.style.height = "auto"; // Reset height before measuring
-  const maxHeight = 120; // Maximum height before scrolling
+  const maxHeight: number = 120; // Maximum height before scrolling
   if (input.scrollHeight <= maxHeight) {
     input.style.height = `${input.scrollHeight}px`;
   } else {
@@ -189,11 +311,19 @@ const adjustInputHeight = () => {
 };
 
 // ✅ Insert Emoji into Input
-const insertEmoji = (emoji) => {
+const insertEmoji = (emoji: string): void => {
+  if (!chatInput.value) return;
+
   chatInput.value.innerText += emoji;
   updatePrompt();
 };
 
+// ✅ Focus Input
+const focusInput = (): void => {
+  nextTick(() => {
+    document.querySelector<HTMLElement>(".chat-input")?.focus();
+  });
+};
 </script>
 
 <template>
@@ -312,7 +442,7 @@ const insertEmoji = (emoji) => {
   width: 400px;
   max-width: 90vw;
   height: 60vh;
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.658), rgba(23, 33, 43, 0.705));
+  background: linear-gradient(to bottom, rgba(27, 56, 85, 0.858), rgba(17, 25, 32, 0.905));
   backdrop-filter: blur(8px);
   color: #f5f5f5;
   overflow: hidden;

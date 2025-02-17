@@ -1,8 +1,25 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
+export const languages = [
+  { code: 'en', label: 'English' },
+  { code: 'es', label: 'Español' },
+  { code: 'fr', label: 'Français' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'pt', label: 'Português' },
+  { code: 'ru', label: 'Русский' },
+  { code: 'ar', label: 'العربية' },
+  { code: 'tr', label: 'Türkçe' },
+  { code: 'vi', label: 'Tiếng Việt' },
+  { code: 'ko', label: '한국어' },
+  { code: 'ja', label: '日本語' },
+  { code: 'zh', label: '中文' },
+];
+
 export const useLanguageStore = defineStore('language', () => {
   const currentLanguage = ref('en'); // Default language
+
+
 
   const languageCountryMapping = {
     en: ['US', 'GB', 'AU', 'CA'],
@@ -19,11 +36,10 @@ export const useLanguageStore = defineStore('language', () => {
     tr: ['TR'],
   };
 
-  const API_URLS = [
-    'https://ipapi.co/json/',
-    'https://ipwhois.app/json/',
-    'https://geolocation-db.com/json/',
-  ];
+  function getLanguageLabel(code) {
+    const lang = languages.find(l => l.code === code);
+    return lang ? lang.label : 'English'; // Default to English if not found
+  }
 
   function mapLanguageByCountry(countryCode) {
     for (const [language, countries] of Object.entries(languageCountryMapping)) {
@@ -40,32 +56,22 @@ export const useLanguageStore = defineStore('language', () => {
   }
 
   async function detectLanguage() {
-    for (const url of API_URLS) {
+    for (const url of [
+      'https://ipapi.co/json/',
+      'https://ipwhois.app/json/',
+      'https://geolocation-db.com/json/',
+    ]) {
       try {
-       // console.log(`Trying to fetch language data from: ${url}`);
         const response = await fetch(url);
-
-        if (!response.ok) {
-          console.warn(`Response not ok from ${url}:`, response.statusText);
-          continue;
-        }
-
+        if (!response.ok) continue;
         const data = await response.json();
-       // console.log(`Localization ready from ${url}:`, data);
-
         const countryCode = data.country_code || data.countryCode || data.location?.country_code;
         const language = mapLanguageByCountry(countryCode);
-
-        if (language) {
-        //  console.log(`Language detected from ${url}: ${language}`);
-          return language;
-        }
+        if (language) return language;
       } catch (error) {
         console.warn(`Error fetching from ${url}:`, error.message);
       }
     }
-
-    console.warn('All geolocation API attempts failed. Falling back to browser language.');
     return detectBrowserLanguage() || 'en';
   }
 
@@ -86,8 +92,10 @@ export const useLanguageStore = defineStore('language', () => {
 
   return {
     currentLanguage,
+    languages,
     loadLanguage,
     setLanguage,
     detectLanguage,
+    getLanguageLabel,
   };
 });
