@@ -6,9 +6,20 @@
       "package": "backend",
       "type": "rust"
     },
-    "database": {
-      "main": "src/database/main.mo",
-      "type": "motoko"
+    "frontend": {
+      "dependencies": [
+        "backend"
+      ],
+      "headers": {
+        "**/*.br": {
+          "Content-Encoding": "br"
+        }
+      },
+      "source": [
+        "src/frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "frontend"
     },
     "nns-cycles-minting": {
       "build": "",
