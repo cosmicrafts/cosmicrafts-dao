@@ -58,38 +58,47 @@ const injectMemory = async (userId: string, newMessage: string) => {
 
   // ✅ Structured Prompt for Ollama
   const finalPrompt = `
-[SYSTEM INSTRUCTIONS]
-This is a structured log of an AI chat assistant. 
-The user has a profile and a conversation history. 
-Use the timestamps to understand conversation flow.
+  [SYSTEM INSTRUCTIONS]
+  Keep answers super short and concise.
+  Max 1 question related to your prompt.
+  If user is new welcome it first, then invite the user to sign in.
+  They can sign in in the top right button.
+  This is a structured log of an AI chat assistant. 
+  The user has a profile and a conversation history. 
+  Use the timestamps to understand conversation flow.
+  If user answers short or unintelligibly, follow up with an I feel you.
+  After [NEW USER INPUT] the user message is reveleaded.
+
+  **if they prompt you nonesense, try to understand**
+  **don't brush off user input, always address concerns**
+
+  [USER PROFILE]
+  - Username: ${userProfile.username}
+  - Language: ${userProfile.language} **REPLY IN THIS LANGUAGE**
+  - Faction: ${userProfile.faction}
+  - Level: ${userProfile.level}
+  - Experience: ${userProfile.experience}
+  - Rank: ${userProfile.rank}
+  - Resources: ${JSON.stringify(userProfile.resources)}
+  - Achievements: ${userProfile.achievements.join(", ")}
+  - Last Login: ${userProfile.lastLogin}
 
 
-[USER PROFILE]
-- Username: ${userProfile.username}
-- Language: ${userProfile.language} **REPLY IN THIS LANGUAGE**
-- Faction: ${userProfile.faction}
-- Level: ${userProfile.level}
-- Experience: ${userProfile.experience}
-- Rank: ${userProfile.rank}
-- Resources: ${JSON.stringify(userProfile.resources)}
-- Achievements: ${userProfile.achievements.join(", ")}
-- Last Login: ${userProfile.lastLogin}
+  [CONVERSATION HISTORY]
+  ${historyLog}
 
+  [NEW USER INPUT]
+  "${newMessage}"
 
-[CONVERSATION HISTORY]
-${historyLog}
-
-[NEW USER INPUT]
-"${newMessage}"
-
-[RESPONSE]
-`;
+  [RESPONSE]
+  `;
 
   // ✅ Log the full prompt sent to Ollama
   console.log(`🔍 Final Prompt Sent to Ollama:\n${finalPrompt}`);
 
   return finalPrompt;
 };
+
 
 const saveChatHistory = () => {
   localStorage.setItem("chatHistory", JSON.stringify(messages.value));

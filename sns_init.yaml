@@ -33,8 +33,11 @@ NnsProposal:
       **Distribution**
       * Total token supply -  1 Billion
       * Allocated to treasury -  65%
-      * Allocated to decentralization sale -  20%
-      * Allocated to developer neurons -  15%
+      * Allocated to decentralization sale -  10%
+      * Allocated to DFINITY - 8%
+      * Allocated to developer neurons -  5%
+      * Allocated to seed investors - 3%
+
       * The Ledger Transaction fee is 0.001 WELL
       
       **Decentralization SWAP**
@@ -44,7 +47,7 @@ NnsProposal:
       * Max to be raised -  100,000 ICP
 
       **Learn more**
-      * [Whitepaper](https://github.com/NovaICLabs/fomowell_sns/raw/refs/heads/main/FomoWell%20Whitepaper%20vison1.0.pdf)
+      * [Whitepaper](https://cosmicrafts.com/whitepaper)
       * [Github](https://github.com/cosmicrafts)
       * [Website](https://cosmicrafts.com/ )
 
@@ -85,14 +88,14 @@ Voting:
 Distribution:
     Neurons:
         - principal: p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
-          stake: 1_000 tokens
+          stake: 100_000_000 tokens
           memo: 0
           dissolve_delay: 2 years
           vesting_period: 4 years
     InitialBalances:
-        treasury: 2_000_000 tokens
-        swap: 500_000 tokens
-    total: 2_501_000 tokens
+        treasury: 800_000_000 tokens
+        swap: 100_000_000 tokens
+    total: 1_000_000_000 tokens
 
 Swap:
     minimum_participants: 1
@@ -106,4 +109,4 @@ Swap:
         events: 2
         interval: 1 month
     duration: 3 days
-    neurons_fund_participation: false
+    neurons_fund_participation: true
