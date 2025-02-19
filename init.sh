@@ -1,6 +1,45 @@
 #!/bin/bash
+#!/bin/bash
 
-set -e  # Exit immediately if a command fails
+# Check if `icp-transfer` is executable, if not, make it executable
+if [ ! -x ./bin/icp_transfer ]; then
+  chmod +x ./bin/icp_transfer
+fi
+
+# Check if the `nns` extension is installed, if not, install it
+if ! dfx extension list | grep -q 'nns'; then
+  dfx extension install nns
+fi
+
+# Check if the networks.json file exists, if not, create it
+DX_NET_JSON="${HOME}/.config/dfx/networks.json"
+if [ ! -f "$DX_NET_JSON" ]; then
+  mkdir -p "$(dirname "${DX_NET_JSON}")"
+  echo '{
+    "local": {
+      "bind": "0.0.0.0:8080",
+      "type": "ephemeral",
+      "replica": {
+        "subnet_type": "system",
+        "port": 8000
+      }
+    }
+  }' > "${DX_NET_JSON}"
+else
+  # If the file exists, back it up before making changes
+  cp "$DX_NET_JSON" "${DX_NET_JSON}.tmp" 2>/dev/null
+fi
+
+# Start DFX with --clean, then restore the original networks.json if it was backed up
+dfx start --clean --background --verbose
+if [ -f "${DX_NET_JSON}.tmp" ]; then
+  mv "${DX_NET_JSON}.tmp" "$DX_NET_JSON" 2>/dev/null
+fi
+
+# Exit immediately if a command fails
+set -e
+
+# Rest of the script remains unchanged... # Exit immediately if a command fails
 
 # Track progress
 STAKED=false
@@ -58,7 +97,7 @@ install_nns() {
 
   # ✅ Add back the ICP transfer call for default identity
   log "Sending 100,000 ICP to the default identity..."
-  ./bin/icp_transfer --to "$(dfx ledger account-id)" --amount 100000
+  bash ./bin/icp_transfer --to "$(dfx ledger account-id)" --amount 100000
 
   dfx deploy backend
 }
