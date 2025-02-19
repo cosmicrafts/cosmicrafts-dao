@@ -2,7 +2,7 @@
 ![Executive Summary](executivesummary.webp)
 ## Overview
 
-Cosmicrafts offers you a seat at the table of a Metaverse franchise built entirely on the [Internet Computer (ICP)](https://internetcomputer.org), we're introducing a new era of franchise ownership, stakeholder participation, and meaningful economic rewards. Backed by cutting-edge technology and over 8 years of development behind it, we’ve got a brand ready to grow, backed by a solid foundation and a system designed for action.
+Cosmicrafts offers you a seat at the table of a [Metaverse](https://en.wikipedia.org/wiki/Metaverse) franchise built entirely on the [Internet Computer (ICP)](https://internetcomputer.org), we're introducing a new era of franchise ownership, stakeholder participation, and meaningful economic rewards. Backed by cutting-edge technology and over 8 years of development behind it, we've got a brand ready to grow, backed by a solid foundation and a system designed for action.
 
 > This Executive Summary outlines the key components that make **Cosmicrafts DAO** a **one-of-a-kind** opportunity for stakeholders and investors.
 ---
@@ -12,33 +12,33 @@ Cosmicrafts offers you a seat at the table of a Metaverse franchise built entire
 The gaming industry is at a turning point, and the need for innovation has never been clearer:
 1. **Challenges in Traditional Gaming**:
    - **Crowded Market**: Dominated by [legacy franchises](https://a16zgames.substack.com/p/data-deep-dive-what-are-the-zoomers), it's [increasingly difficult](https://www.statista.com/statistics/552623/number-games-released-steam) for new projects to stand out.
-   - **Over-Monetization**: Has pushed players away, [frustrated](https://www.tekedia.com/web3-gaming-has-an-identity-problem/) by [Play-to-Earn](https://cointelegraph.com/news/play-to-earn-is-out-challenge-and-earn-is-the-next-major-trend-in-web3-gaming) and [Pay-to-win](https://techloved.com/mobile-games/) models and other [predatory practices](https://www.axios.com/2021/11/16/xbox-exploitive-nft-gaming-projects).
+   - **Over-Monetization**: Has pushed players away, [frustrated](https://www.tekedia.com/web3-gaming-has-an-identity-problem/) by [Play-to-Earn](https://en.wikipedia.org/wiki/Play-to-earn_game) and [Pay-to-win](https://en.wikipedia.org/wiki/Free-to-play#Pay-to-win) models and other [predatory practices](https://www.axios.com/2021/11/16/xbox-exploitive-nft-gaming-projects).
 2. **Web3 Gaming Failures**:
-   - **Misplaced Priorities**: Too many Web3 games focus on [speculative asset trading](https://cointelegraph.com/innovation-circle/embracing-the-shift-in-web3-gaming-from-play-to-earn-to-play-and-earn) instead gameplay.
+   - **Misplaced Priorities**: Too many [Web3](https://en.wikipedia.org/wiki/Web3) games focus on [speculative asset trading](https://cointelegraph.com/innovation-circle/embracing-the-shift-in-web3-gaming-from-play-to-earn-to-play-and-earn) instead gameplay.
    - **Low Quality**: Many projects [fail to deliver](https://nftplazas.com/web3-hype-and-quality/) the polish and depth expected by mainstream gamers.
    - **Community Skepticism**: Web3 is often seen as a [space for scams](https://techcrunch.com/2023/09/19/web3-gaming-investor-survey/) rather than meaningful innovation.
 
 
 ## The Solution
 
-Let’s keep it real—most projects claim to be “unique,” but we know execution is what matters. Here’s why Cosmicrafts delivers where others don’t:
+Let's keep it real—most projects claim to be "unique," but we know execution is what matters. Here's why Cosmicrafts delivers where others don't:
 
 1. **A Polished Product, Ready to Scale**
-   Most Web3 projects are either concepts or unfinished prototypes. Cosmicrafts isn’t. This is a live, polished game with fully developed mechanics, engaging gameplay, and years of iteration behind it. It’s about showing it to more players and scaling up. The groundwork is done, and now it’s about expansion.
+   Most Web3 projects are either concepts or unfinished prototypes. Cosmicrafts isn't. This is a live, polished game with fully developed mechanics, engaging gameplay, and years of iteration behind it. It's about showing it to more players and scaling up. The groundwork is done, and now it's about expansion.
 
 2. **No Blockchain Complexity**  
-   No need for wallets, pay for transactions or technical know-how to play. It’s Web3, but it feels just like Web2 for the user. Built on the Internet Computer, Cosmicrafts brings players the kind of polished games they’re used to—without the complexities of blockchain gaming.
+   No need for wallets, pay for transactions or technical know-how to play. It's Web3, but it feels just like Web2 for the user. Built on the Internet Computer, Cosmicrafts brings players the kind of polished games they're used to—without the complexities of blockchain gaming.
 
 3. **Evolving Assets That Mean Something**
-   In Cosmicrafts, assets like NFTs don’t stay static—they evolve. Smart contracts on the Internet Computer allow asset metadata to change without losing history. A spaceship you upgrade retains its record, its story, and its evolution. It’s a level of innovation unique to Cosmicrafts.
+   In Cosmicrafts, assets like [NFTs](https://en.wikipedia.org/wiki/Non-fungible_token) don't stay static—they evolve. [Smart contracts](https://en.wikipedia.org/wiki/Smart_contract) on the Internet Computer allow asset metadata to change without losing history. A spaceship you upgrade retains its record, its story, and its evolution. It's a level of innovation unique to Cosmicrafts.
 
-4. **DAO-Driven Growth for ICP**
-   The DAO is all about growth. You’re stepping into a role that directly shapes **how we grow this franchise**, from deciding how to reach new players to driving campaigns that make a real impact, the focus is on strategies that deliver results. And for ICP stakeholders, this is a unique way to show what the Internet Computer can achieve by putting its strengths front and center in a live project.
+4. **[DAO](https://en.wikipedia.org/wiki/Decentralized_autonomous_organization)-Driven Growth for ICP**
+   The DAO is all about growth. You're stepping into a role that directly shapes **how we grow this franchise**, from deciding how to reach new players to driving campaigns that make a real impact, the focus is on strategies that deliver results. And for ICP stakeholders, this is a unique way to show what the Internet Computer can achieve by putting its strengths front and center in a live project.
 
 5. **Real Utility, Backed by Strong Economics** 
-   The Spiral token connects gameplay with economic systems in ways familiar to players of traditional games. Microtransactions, upgrades, and in-game purchases feel natural and intuitive—just like they would in any top-tier game. The difference? It’s all tied to the ICP ecosystem where stakeholders benefit, creating an alignment of incentives that Web2 can’t offer.
+   The Spiral token connects gameplay with economic systems in ways familiar to players of traditional games. Microtransactions, upgrades, and in-game purchases feel natural and intuitive—just like they would in any top-tier game. The difference? It's all tied to the ICP ecosystem where stakeholders benefit, creating an alignment of incentives that Web2 can't offer.
 
-> This is your moment to be part of scaling something extraordinary. The DAO isn’t asking for help to finish the product—it’s inviting you to take a role in its success.
+> This is your moment to be part of scaling something extraordinary. The DAO isn't asking for help to finish the product—it's inviting you to take a role in its success.
 
 ---
 
@@ -48,7 +48,7 @@ Let’s keep it real—most projects claim to be “unique,” but we know execu
 Joining the Cosmicrafts DAO is about being the owner of brand, a franchise that's designed to expand, evolve, and reward those who help shape its future.  This is where your investment translates into real influence and tangible returns.
 
 1. **Building a Legacy Together**:
-  When you join the DAO, you’re becoming part of its foundation. Stakeholders hold a real piece of Cosmicrafts, designed to appreciate over time while offering tangible benefits along the way.
+  When you join the DAO, you're becoming part of its foundation. Stakeholders hold a real piece of Cosmicrafts, designed to appreciate over time while offering tangible benefits along the way.
    - **Real Ownership**: Stakeholders own a piece of the franchise, owning a luxury asset that not only appreciates in value but also pays dividends.
    - **Real Power**: Governance rights ensure stakeholders have a direct say in key decisions, such as hiring, firing, and treasury allocations.
 
@@ -59,8 +59,8 @@ Joining the Cosmicrafts DAO is about being the owner of brand, a franchise that'
 
 3. **Sustainable Tokenomics**:
 The Spiral token is the engine of this franchise. It's designed for utility, from in-game purchases to governance power. And with built-in deflationary mechanisms, we're focused on a sustainable economy and long-term value, not short-term gains.
-   - **Real Utility**: Use Spiral for purchases, upgrades, and governance decisions. It’s the backbone of the entire franchise.
-   - **Deflationary Mechanisms**: We don’t mint more tokens. Instead, transaction fees burn Spiral, reducing supply and increasing demand over time.
+   - **Real Utility**: Use Spiral for purchases, upgrades, and governance decisions. It's the backbone of the entire franchise.
+   - **Deflationary Mechanisms**: We don't mint more tokens. Instead, transaction fees burn Spiral, reducing supply and increasing demand over time.
 
 ---
 

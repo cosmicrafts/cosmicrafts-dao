@@ -88,13 +88,13 @@ Voting:
 Distribution:
     Neurons:
         - principal: p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
-          stake: 100_000_000 tokens
+          stake: 110_000_000 tokens
           memo: 0
           dissolve_delay: 2 years
           vesting_period: 4 years
     InitialBalances:
-        treasury: 800_000_000 tokens
-        swap: 100_000_000 tokens
+        treasury: 770_000_000 tokens
+        swap: 120_000_000 tokens
     total: 1_000_000_000 tokens
 
 Swap:

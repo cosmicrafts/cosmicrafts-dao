@@ -7,7 +7,7 @@ We’ve designed governance to put the community at the center, giving Stakehold
 ---
 ## DAO General Principles
 
-The Cosmicrafts DAO operates under a set of guiding principles designed to promote innovation, inclusivity, and long-term success. These principles ensure that all decisions and actions align with the DAO’s mission and the interests of its community.
+The Cosmicrafts DAO operates under a set of guiding principles designed to promote innovation, inclusivity, and long-term success. These principles ensure that all decisions and actions align with the DAO's mission and the interests of its community.
 
 #### **1. Community First**
 - The DAO exists to serve its community of players, creators, investors, and contributors. 
@@ -35,7 +35,7 @@ The Cosmicrafts DAO operates under a set of guiding principles designed to promo
 
 #### **7. Balanced Governance**
 - Governance decisions balance the need for efficiency with community involvement.  
-- The team and community share responsibility for the DAO’s success, with mechanisms to ensure fair participation and accountability.  
+- The team and community share responsibility for the DAO's success, with mechanisms to ensure fair participation and accountability.  
 
 #### **8. Ethical and Responsible Practices**
 - The DAO upholds ethical practices, including fair treatment of contributors, responsible allocation of resources, and respect for intellectual property.  
@@ -57,7 +57,7 @@ The Cosmicrafts DAO operates under a set of guiding principles designed to promo
 
 ## Initial Voting Power
 
-The **Cosmicrafts DAO** distributes its initial voting power across four key categories to create a balanced and democratic governance system. This structure ensures collaboration, checks, and balances while staying aligned with the project’s mission.
+The **Cosmicrafts DAO** distributes its initial voting power across four key categories to create a balanced and democratic governance system. This structure ensures collaboration, checks, and balances while staying aligned with the project's mission.
 
 ![Governance](votingpower.webp)
 
@@ -70,14 +70,14 @@ The **Cosmicrafts DAO** distributes its initial voting power across four key cat
 2. **Team (20.83%)**
    - Held by the Cosmicrafts Foundation, this allocation drives strategic decisions and safeguards the project's vision.  
    - Designed to protect long-term objectives, the team ensures decisions align with the roadmap and foundational principles.  
-   - Over time, the team’s voting power dissolves, shifting more influence to the community.  
+   - Over time, the team's voting power dissolves, shifting more influence to the community.  
 
 3. **Seed (20.83%)**
-   - Allocated to early backers and supporters who played a critical role in the project’s inception.  
-   - This ensures a voice for those who helped establish Cosmicrafts and aligns their long-term commitment with the DAO’s success.
+   - Allocated to early backers and supporters who played a critical role in the project's inception.  
+   - This ensures a voice for those who helped establish Cosmicrafts and aligns their long-term commitment with the DAO's success.
 
 4. **DFINITY (16.67%)**
-   - Recognizing DFINITY’s foundational role and ongoing guidance.  
+   - Recognizing DFINITY's foundational role and ongoing guidance.  
    - This allocation ensures Cosmicrafts aligns with the **Internet Computer ecosystem**, reflecting its core values and contributing to broader ecosystem growth.  
 
 
@@ -87,9 +87,9 @@ The voting power distribution is designed to encourage collaboration and prevent
 - **SNS Participants as the Decentralizing Force**:  
    With the largest share, the SNS Sale allocation ensures the DAO is decentralized, enabling community-driven governance.  
 - **Team and Seed as Stewards of Vision**:  
-   These allocations ensure that decisions remain aligned with the project’s mission and long-term strategy.  
+   These allocations ensure that decisions remain aligned with the project's mission and long-term strategy.  
 - **DFINITY as the Ecosystem Anchor**:  
-   DFINITY’s involvement acts as a stabilizing force, keeping Cosmicrafts aligned with the Internet Computer’s goals and principles. 
+   DFINITY's involvement acts as a stabilizing force, keeping Cosmicrafts aligned with the Internet Computer's goals and principles. 
 
 
 ---
@@ -116,7 +116,7 @@ The Cosmicrafts DAO leverages the Internet Computer's [SNS (Service Nervous Syst
 
 ### Proposal Submission
 
-Got an idea for a new feature, partnership, or treasury adjustment? Here’s how to turn your idea into action within the Cosmicrafts DAO.
+Got an idea for a new feature, partnership, or treasury adjustment? Here's how to turn your idea into action within the Cosmicrafts DAO.
 
 
 #### **1. Public Discussion**
@@ -125,7 +125,7 @@ We encourage stakeholders to start with a **public discussion** about their prop
 - For **critical decisions** that require immediate review, proposals can bypass this step but must clearly justify the urgency.  
 
 #### **2. Submitting Your Proposal**
-Once your idea has been validated through community discussion, it’s time to submit your proposal.  
+Once your idea has been validated through community discussion, it's time to submit your proposal.  
 - **Clear and Detailed Submission**:  
   Proposals must include:  
   - A clear and concise description.  
@@ -137,9 +137,9 @@ Once your idea has been validated through community discussion, it’s time to s
 #### **3. Community Voting**
 Once live, Spiral holders vote on your proposal.  
 - **Neuron Voting Power**:  
-  The weight of each vote is determined by the staked Spiral tokens in the voter’s neuron.  
+  The weight of each vote is determined by the staked Spiral tokens in the voter's neuron.  
 - **Engagement Incentives**:  
-  If your proposal passes, it’s automatically implemented by the SNS, and you may earn Spiral rewards as recognition for your contribution to the DAO.  
+  If your proposal passes, it's automatically implemented by the SNS, and you may earn Spiral rewards as recognition for your contribution to the DAO.  
 
 
 
@@ -148,11 +148,11 @@ Once live, Spiral holders vote on your proposal.
 The Cosmicrafts DAO treasury is the lifeblood of its operations, ensuring the sustainability and growth of the project. Effective treasury management is critical to balancing innovation, stability, and community engagement.
 
 ### Purpose of the Treasury
-The treasury exists to support the DAO’s objectives by funding initiatives, rewarding contributors, and ensuring long-term sustainability. It serves several key purposes:
+The treasury exists to support the DAO's objectives by funding initiatives, rewarding contributors, and ensuring long-term sustainability. It serves several key purposes:
 - **Development and Innovation**: Supporting product development, research, and technological advancements.  
-- **Marketing and Partnerships**: Funding campaigns, partnerships, and community-building efforts to expand Cosmicrafts’ reach.  
+- **Marketing and Partnerships**: Funding campaigns, partnerships, and community-building efforts to expand Cosmicrafts' reach.  
 - **Staking and Rewards**: Allocating Spiral rewards for active participants and incentivizing governance engagement.  
-- **Reserves for Market Stability**: Maintaining liquidity to stabilize the token’s market value during critical events.  
+- **Reserves for Market Stability**: Maintaining liquidity to stabilize the token's market value during critical events.  
 - **Operational Costs**: Covering legal, administrative, and other essential operational expenses.
 
 
@@ -165,7 +165,7 @@ The DAO governs the treasury to ensure transparency, inclusivity, and accountabi
   - The DAO reviews and votes on each proposal before implementation.
 
 - **Community Oversight**:  
-  Treasury activities are monitored by the community, ensuring decisions align with the DAO’s principles and goals. Regular updates and reports are shared with members to maintain transparency.  
+  Treasury activities are monitored by the community, ensuring decisions align with the DAO's principles and goals. Regular updates and reports are shared with members to maintain transparency.  
 
 - **Strategic Reserves**:  
   A portion of the treasury is reserved for unforeseen circumstances or high-impact opportunities. Access to these reserves requires supermajority approval by the DAO.
@@ -186,7 +186,7 @@ To ensure the long-term health of the treasury:
 - **Revenue Streams**:  
   The DAO continuously generates revenue through game transactions, NFTs, marketplace fees, and staking rewards.  
 - **Controlled Spending**:  
-  Expenditures are prioritized based on the potential return on investment and alignment with the DAO’s mission.  
+  Expenditures are prioritized based on the potential return on investment and alignment with the DAO's mission.  
 - **Periodic Audits**:  
   Regular audits are conducted to evaluate treasury performance, ensuring funds are utilized effectively and transparently.
 
@@ -212,7 +212,7 @@ The Cosmicrafts Foundation is an autonomous entity responsible for contributing 
   - Drive innovation, development, communication, and community engagement on behalf of the DAO.
 
 #### **DAO Oversight**
-The DAO retains oversight to ensure the foundation aligns with the community’s goals while preserving its autonomy.  
+The DAO retains oversight to ensure the foundation aligns with the community's goals while preserving its autonomy.  
 - **Opt-In/Out Membership**:
   The DAO can vote to add or remove members of the foundation based on performance or changing needs.  
 
@@ -223,11 +223,11 @@ The DAO retains oversight to ensure the foundation aligns with the community’s
 
 ### Team Voting Protocol for the DAO
 
-The Cosmicrafts Foundation team holds significant voting power in the DAO, but this power is designed to amplify the community’s voice, not override it. The protocol ensures that team votes are principled, timely, and aligned with the DAO’s long-term success.
+The Cosmicrafts Foundation team holds significant voting power in the DAO, but this power is designed to amplify the community's voice, not override it. The protocol ensures that team votes are principled, timely, and aligned with the DAO's long-term success.
 
 #### **1. Amplifying Community Consensus**
 - **Majority Support**:  
-  If the majority of the community supports a proposal **and** it aligns with the DAO’s General Principles, the team will cast their votes in favor of the proposal.  
+  If the majority of the community supports a proposal **and** it aligns with the DAO's General Principles, the team will cast their votes in favor of the proposal.  
   - This ensures the team acts as an amplifier of community consensus, respecting the collective decision-making process.
 
 #### **2. Timely Participation**
@@ -237,25 +237,25 @@ The Cosmicrafts Foundation team holds significant voting power in the DAO, but t
 
 #### **3. Principle-Based Opposition**
 - **Aligned with Core Principles**:  
-  If the team believes a proposal fundamentally contradicts the DAO’s principles, they reserve the right to vote against it.  
+  If the team believes a proposal fundamentally contradicts the DAO's principles, they reserve the right to vote against it.  
   - **Documentation**: Any NO vote by the team will be thoroughly documented, with a clear explanation made publicly available for review and discussion.  
   - **Engagement**: The team will encourage dialogue within the DAO community to ensure decisions are understood and collaboratively addressed.  
 
 #### **4. Roadmap Alignment**
 - **Unanimous Support for Roadmap Proposals**:  
-  Proposals that align with the DAO’s established Road Map will automatically receive full support from the team.  
+  Proposals that align with the DAO's established Road Map will automatically receive full support from the team.  
   - This reflects the commitment to the original vision and ensures the Road Map is executed effectively.  
 
 #### **5. Limits to Team Power**
 - **Safeguarding, Not Controlling**:  
-  The team’s voting power is substantial but exists to safeguard the DAO’s interests, not to dominate decision-making.  
-  - **Temporary Influence**: As 2% of the team’s tokens gradually dissolve over an 8-year period, their voting power will shift increasingly to community stakeholders.  
-  - **Community-Centric**: The team’s role is to act as stewards of the DAO, facilitating its growth while empowering the broader community to take ownership over time.  
+  The team's voting power is substantial but exists to safeguard the DAO's interests, not to dominate decision-making.  
+  - **Temporary Influence**: As 2% of the team's tokens gradually dissolve over an 8-year period, their voting power will shift increasingly to community stakeholders.  
+  - **Community-Centric**: The team's role is to act as stewards of the DAO, facilitating its growth while empowering the broader community to take ownership over time.  
 
 #### **6. Transparency and Accountability**
 - **Public Voting Records**:  
-  The team’s voting decisions will be documented and shared publicly to ensure transparency and foster trust.  
-- **Regular Updates**: The team will provide periodic updates on their voting rationale, aligning their actions with the DAO’s goals and values.  
+  The team's voting decisions will be documented and shared publicly to ensure transparency and foster trust.  
+- **Regular Updates**: The team will provide periodic updates on their voting rationale, aligning their actions with the DAO's goals and values.  
 
 > By setting clear boundaries and principles, this protocol guarantees that decisions are made transparently and in the best interest of Cosmicrafts and its stakeholders.
 
