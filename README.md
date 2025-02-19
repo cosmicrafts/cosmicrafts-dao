@@ -1,5 +1,20 @@
-# Architecture
+To run the project, you need to install the Internet Computer SDK.
 
+```bash
+curl -sL https://internetcomputer.org/install.sh | sh
+```
+
+
+Initialize the project.
+```bash
+git clone https://github.com/cosmicrafts/cosmicrafts-dao.git
+cd cosmicrafts-dao
+chmod +x init.sh
+./init.sh
+```
+
+
+# Architecture
 
 Cosmicrafts represents a paradigm shift in blockchain gaming with its architecture **built entirely on blockchain**, leveraging the [unparalleled capabilities](https://genfinity.io/2024/07/19/a-conversation-with-dfinitys-cto-jan-camenisch/) for [scalability](https://internetcomputer.org/capabilities/limitless-scaling), [cost-efficiency](https://www.reddit.com/r/devops/comments/1cwi1gn/when_did_the_cloud_become_so_stupid_expensive/), and [decentralized infrastructure](https://internetcomputer.org/how-it-works) of the **Internet Computer**. 
 

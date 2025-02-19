@@ -1,8 +1,8 @@
 {
   "canisters": {
     "backend": {
-      "build": "candid-extractor target/wasm32-unknown-unknown/release/backend.wasm > backend.did",
-      "candid": "backend.did",
+      "build": "candid-extractor target/wasm32-unknown-unknown/release/backend.wasm > candid/backend.did",
+      "candid": "candid/backend.did",
       "package": "backend",
       "type": "rust"
     },
@@ -20,6 +20,10 @@
       ],
       "type": "assets",
       "workspace": "frontend"
+    },
+    "roadmap": {
+      "type": "motoko",
+      "main": "src/backend/roadmap.mo"
     },
     "nns-cycles-minting": {
       "build": "",
