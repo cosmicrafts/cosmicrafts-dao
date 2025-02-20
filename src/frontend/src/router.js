@@ -8,7 +8,8 @@ import Games from './pages/Games.vue';
 import Login from './components/Login.vue';
 import Profile from './pages/Profile.vue';
 import Error from './pages/Error.vue';
-import Game from './pages/Game.vue'; 
+import Game from './pages/Game.vue';
+import Roadmap from './pages/Roadmap.vue';
 
 const routes = [
   { path: '/', component: Home, meta: { title: 'header.home' } },
@@ -39,6 +40,7 @@ const routes = [
     },
   },
   { path: '/error', component: Error, meta: { title: 'header.error' } },
+  { path: '/roadmap', component: Roadmap, meta: { title: 'header.roadmap' } },
 ];
 
 const router = createRouter({
