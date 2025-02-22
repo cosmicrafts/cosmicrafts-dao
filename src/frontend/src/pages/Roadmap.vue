@@ -1,65 +1,62 @@
 <template>
-  <div class="roadmap-page">
-    <h1>Roadmap</h1>
+  <div class="roadmap-page galactic">
+    <h1 class="title">Roadmap</h1>
 
-    <div v-for="(quarter, index) in quarters" :key="index" class="quarter">
-      <div class="quarter-header" @click="toggleQuarter(index)">
+    <div v-for="(quarter, qIndex) in quarters" :key="qIndex" class="quarter galactic-box">
+      <div class="quarter-header" @click="toggleQuarter(qIndex)" @touchstart="handleTouchStart(qIndex)">
         <h2>{{ quarter.period }}</h2>
-        <span class="icon">{{ quarter.open ? '-' : '+' }}</span>
+        <span class="icon" :class="{ rotated: quarter.open }">
+          {{ quarter.open ? '−' : '+' }}
+        </span>
       </div>
-
-      <div v-if="quarter.open" class="milestones">
-        <div v-for="milestone in quarter.milestones" :key="milestone.id" class="milestone">
-          <div class="milestone-header" @click="toggleMilestone(milestone)">
-            <h3>{{ milestone.title }}</h3>
-            <span class="icon">{{ milestone.open ? '-' : '+' }}</span>
-          </div>
-
-          <div v-if="milestone.open" class="tasks">
-            <ul>
-              <li v-for="task in milestone.tasks" :key="task.id">
-                <strong>{{ task.title }}</strong>: {{ task.description }} - <span class="status">{{ task.status }}</span>
-              </li>
-            </ul>
+      <transition name="galactic-slide">
+        <div v-if="quarter.open" class="milestones">
+          <div v-for="(milestone, mIndex) in quarter.milestones" :key="mIndex" class="milestone galactic-box">
+            <div class="milestone-header" @click="toggleMilestone(milestone)" @touchstart="handleTouchStart(milestone)">
+              <h3>{{ milestone.title }}</h3>
+              <span class="icon" :class="{ rotated: milestone.open }">
+                {{ milestone.open ? '−' : '+' }}
+              </span>
+            </div>
+            <transition name="galactic-fade">
+              <div v-if="milestone.open" class="tasks">
+                <ul>
+                  <li v-for="(task, tIndex) in milestone.tasks" :key="tIndex">
+                    <strong>{{ task.title }}</strong>: {{ task.description }} - 
+                    <span class="status">{{ task.status }}</span>
+                  </li>
+                </ul>
+              </div>
+            </transition>
           </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue';
-import { useCanisterStore } from '@/stores/canister';
+import roadmapData from '@/data/roadmap.json';
 
 export default {
-  name: 'Roadmap',
+  name: 'RoadmapGalactic',
   setup() {
     const quarters = ref([]);
 
-    const organizeByQuarter = (milestones) => {
-      const grouped = milestones.reduce((acc, milestone) => {
-        if (!acc[milestone.period]) acc[milestone.period] = [];
-        acc[milestone.period].push({ ...milestone, open: false });
-        return acc;
-      }, {});
-
-      return Object.keys(grouped).map((period) => ({
-        period,
-        milestones: grouped[period],
-        open: false,
-      }));
-    };
-
-    const fetchRoadmap = async () => {
-      try {
-        const canisterStore = useCanisterStore();
-        const roadmapCanister = await canisterStore.get('roadmap');
-        const fetchedMilestones = await roadmapCanister.getMilestones();
-        quarters.value = organizeByQuarter(fetchedMilestones);
-      } catch (error) {
-        console.error('Error fetching roadmap:', error);
-      }
+    const loadRoadmap = () => {
+      const data = Object.keys(roadmapData).map(key => {
+        const quarter = roadmapData[key];
+        return {
+          ...quarter,
+          open: false,
+          milestones: quarter.milestones.map(milestone => ({
+            ...milestone,
+            open: false
+          }))
+        };
+      });
+      quarters.value = data;
     };
 
     const toggleQuarter = (index) => {
@@ -70,92 +67,184 @@ export default {
       milestone.open = !milestone.open;
     };
 
-    onMounted(fetchRoadmap);
+    // Touch feedback for mobile
+    const handleTouchStart = (target) => {
+      if (target.open !== undefined) {
+        toggleMilestone(target);
+      } else {
+        toggleQuarter(target);
+      }
+    };
+
+    onMounted(() => {
+      loadRoadmap();
+    });
 
     return {
       quarters,
       toggleQuarter,
       toggleMilestone,
+      handleTouchStart
     };
-  },
+  }
 };
 </script>
 
 <style scoped>
-.roadmap-page {
-  color: var(--font-color);
-  background-color: var(--background-color);
+/* Galactic Theme with a pulsing starry background */
+.roadmap-page.galactic {
+  background: url('@/assets/webp/space.webp') repeat;
+  background-size: 1024px 1024px; /* Adjust tile size as needed */
   padding: 2rem;
-  line-height: 1.5;
-}
-
-h1 {
-  font-size: 2.5rem;
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #89c0ff;
-  text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
-}
-
-.quarter {
-  border: 1px solid #007bff;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  overflow: hidden;
-}
-
-.quarter-header {
-  background: linear-gradient(90deg, #08090c, #1d263c);
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
   color: #fff;
+  position: relative;
+  overflow: hidden;
+  animation: bgPulse 3s infinite alternate;
+}
+
+
+@keyframes bgPulse {
+  0% { filter: brightness(0.9); }
+  100% { filter: brightness(1.1); }
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .roadmap-page.galactic {
+    padding: 1rem;
+  }
+  .title {
+    font-size: 2.5rem;
+  }
+  .quarter-header, .milestone-header {
+    padding: 0.8rem;
+  }
+  .icon {
+    font-size: 1.5rem;
+  }
+}
+
+/* Animated star overlay */
+.roadmap-page.galactic::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  opacity: 0.15;
+  animation: drift 40s linear infinite;
+  z-index: 0;
+}
+@keyframes drift {
+  from { transform: translate(0, 0); }
+  to { transform: translate(1rem, 1rem); }
+}
+
+.title {
+  text-align: center;
+  font-size: 3.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+  text-shadow: 3px 3px 8px rgba(0,0,0,0.5);
+}
+
+/* Galactic boxes with blur and hover lift */
+.galactic-box {
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+  backdrop-filter: blur(6px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+.galactic-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+}
+
+/* Quarter header with subtle glow and hover effect */
+.quarter-header {
   padding: 1rem;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  transition: background 0.3s ease;
+}
+.quarter-header:hover {
+  background: rgba(255,255,255,0.1);
 }
 
-.milestones {
-  padding: 1rem;
-  background: #1d263c;
-}
-
-.milestone {
-  border: 1px solid #e0f7ff;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-}
-
+/* Milestone header with similar effects */
 .milestone-header {
   padding: 0.8rem;
-  background: #007bff;
-  color: #fff;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  transition: background 0.3s ease;
+}
+.milestone-header:hover {
+  background: rgba(255,255,255,0.1);
 }
 
+/* Icon rotation with a bounce effect */
+.icon {
+  font-size: 1.8rem;
+  transition: transform 0.3s ease;
+}
+.rotated {
+  transform: rotate(90deg);
+}
+
+/* Galactic slide transition for quarters/milestones */
+.galactic-slide-enter-active, .galactic-slide-leave-active {
+  transition: all 0.5s ease;
+}
+.galactic-slide-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.galactic-slide-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Galactic fade transition for tasks */
+.galactic-fade-enter-active, .galactic-fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+.galactic-fade-enter-from, .galactic-fade-leave-to {
+  opacity: 0;
+}
+
+/* Tasks list styling with hover */
 .tasks ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-
 .tasks li {
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid #e0f7ff;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  transition: background 0.3s ease;
+}
+.tasks li:hover {
+  background: rgba(255,255,255,0.1);
 }
 
-.tasks li:last-child {
-  border-bottom: none;
-}
-
+/* Status text style */
 .status {
-  color: #89c0ff;
-}
-
-.icon {
-  font-size: 1.5rem;
   font-weight: bold;
+  color: #ffea00;
 }
 </style>
