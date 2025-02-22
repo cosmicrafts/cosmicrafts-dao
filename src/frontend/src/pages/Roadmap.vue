@@ -96,91 +96,52 @@ export default {
   background: url('@/assets/webp/space.webp') repeat;
   background-size: 1024px 1024px; /* Adjust tile size as needed */
   padding: 2rem;
-  min-height: 100vh;
-  font-family: 'Roboto', sans-serif;
   color: #fff;
   position: relative;
   overflow: hidden;
-  animation: bgPulse 3s infinite alternate;
 }
 
-
-@keyframes bgPulse {
-  0% { filter: brightness(0.9); }
-  100% { filter: brightness(1.1); }
-}
-
-/* Responsive layout */
-@media (max-width: 768px) {
-  .roadmap-page.galactic {
-    padding: 1rem;
-  }
-  .title {
-    font-size: 2.5rem;
-  }
-  .quarter-header, .milestone-header {
-    padding: 0.8rem;
-  }
-  .icon {
-    font-size: 1.5rem;
-  }
-}
-
-/* Animated star overlay */
-.roadmap-page.galactic::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  opacity: 0.15;
-  animation: drift 40s linear infinite;
-  z-index: 0;
-}
-@keyframes drift {
-  from { transform: translate(0, 0); }
-  to { transform: translate(1rem, 1rem); }
-}
 
 .title {
   text-align: center;
-  font-size: 3.5rem;
-  margin-bottom: 2rem;
+  font-size: 2rem;
+  margin-top: 4rem;
   position: relative;
   z-index: 1;
   text-shadow: 3px 3px 8px rgba(0,0,0,0.5);
 }
 
-/* Galactic boxes with blur and hover lift */
 .galactic-box {
-  background: rgba(0, 0, 0, 0.5);
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-radius: 10px;
+  background: linear-gradient(to bottom, rgba(27, 56, 85, 0.858), rgba(17, 25, 32, 0.905));
+  border: 1px solid rgba(255, 255, 255, 0.068);
+  border-radius: 1rem;
   margin-bottom: 1.5rem;
   padding: 0.5rem;
   backdrop-filter: blur(6px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.6s ease, box-shadow 0.3s ease;
   position: relative;
   z-index: 1;
 }
 .galactic-box:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+  transform: translateY(-.25rem);
+  box-shadow: 0 16px 24px rgba(0, 0, 0, 0.5);
 }
 
 /* Quarter header with subtle glow and hover effect */
 .quarter-header {
-  padding: 1rem;
+  padding: 2rem;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,0.3);
   transition: background 0.3s ease;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: .5rem;
 }
 .quarter-header:hover {
   background: rgba(255,255,255,0.1);
+
 }
 
 /* Milestone header with similar effects */
@@ -190,11 +151,13 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   transition: background 0.3s ease;
+  border-radius: 1rem;
 }
 .milestone-header:hover {
   background: rgba(255,255,255,0.1);
+  
 }
 
 /* Icon rotation with a bounce effect */
@@ -235,7 +198,10 @@ export default {
 }
 .tasks li {
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.3);
+  border-radius: .5rem;
+  margin-top: .5rem;
+  margin-left: 12rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   transition: background 0.3s ease;
 }
 .tasks li:hover {
