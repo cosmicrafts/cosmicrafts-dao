@@ -56,10 +56,8 @@
   "myProfile": "Mi Perfil",
   "settings": "Configuración",
   "signout": "Cerrar sesión",
-  "profile": "Perfil"
-},
-    "error": {
-      "title": "Opsi!",
+  "profile": "Perfil",
+  "roadmap": "Recorrido",
       "description": "Esa página ya no existe",
       "homeButton": "⏪ Volver"
     },

@@ -19,6 +19,7 @@ const routes = [
   { path: '/games', component: Games, meta: { title: 'header.games' } },
   { path: '/login', component: Login, meta: { title: 'header.login' } },
   { path: '/game', component: Game, meta: { title: 'header.game' } },
+  { path: '/roadmap', component: Roadmap, meta: { title: 'header.roadmap' } },
   {
     path: '/:principal',
     component: Profile,
@@ -40,7 +41,6 @@ const routes = [
     },
   },
   { path: '/error', component: Error, meta: { title: 'header.error' } },
-  { path: '/roadmap', component: Roadmap, meta: { title: 'header.roadmap' } },
 ];
 
 const router = createRouter({

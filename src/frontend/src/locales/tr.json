@@ -56,7 +56,8 @@
   "myProfile": "Profilim",
   "settings": "Ayarlar",
   "signout": "Çıkış Yap",
-  "profile": "Profil"
+  "profile": "Profil",
+  "roadmap": "Yol Haritası"
 },
 "error": {
       "title": "Vay canına!",
@@ -69,7 +70,7 @@
         "title": "Başlangıç burada. Alpha yayında, hadi katıl!",
         "ctaButtons": [
           { "text": "Hemen Oyna!" },
-          { "text": "Epic Games Wishlist’ine Ekle" }
+          { "text": "Epic Games Wishlist'ine Ekle" }
         ]
       },
       {
@@ -80,7 +81,7 @@
         ]
       },
       {
-        "title": "Blockchain’de RTS. Yıldızlararası Drift, Galaktik Kaos",
+        "title": "Blockchain'de RTS. Yıldızlararası Drift, Galaktik Kaos",
         "ctaButtons": [
           { "text": "Hemen İndir!" },
           { "text": "Daha Fazla Bilgi!" }
@@ -98,7 +99,7 @@
   "cta": "Cosmicrafts Adventures'ı Deneyin",
   "lore": {
     "title": "Cosmicrafts Hikayesi",
-    "description": "Cosmicrafts’ın derin hikayesine bizimle dal – kahramanlar, epik savaşlar ve keşfedilmeyi bekleyen gizemlerle dolu!"
+    "description": "Cosmicrafts'ın derin hikayesine bizimle dal – kahramanlar, epik savaşlar ve keşfedilmeyi bekleyen gizemlerle dolu!"
   },
   "games": {
     "title": "Oyunlarımız",
@@ -121,7 +122,7 @@
       },
       {
         "title": "Cosmicrafts Battleground",
-        "description": "Harekete geç ve Cosmicrafts Battleground’u hemen oyna!",
+        "description": "Harekete geç ve Cosmicrafts Battleground'u hemen oyna!",
         "buttonText": "Şimdi Oyna",
         "action": "battleground"
       },

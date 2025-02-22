@@ -56,7 +56,8 @@
   "myProfile": "Meu Perfil",
   "settings": "Configurações",
   "signout": "Sair",
-  "profile": "Perfil"
+  "profile": "Perfil",
+  "roadmap": "Roteiro"
 },
 "error": {
       "title": "Eita!",

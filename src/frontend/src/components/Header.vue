@@ -23,7 +23,7 @@
         <li><router-link to="/game" class="u-hover">{{ t('header.games') }}</router-link></li>
         <li><router-link to="/dao" class="u-hover">{{ t('header.dao') }}</router-link></li>
         <li><router-link to="/whitepaper" class="u-hover">{{ t('header.whitepaper') }}</router-link></li>
-        <li><router-link to="/dashboard" class="u-hover">{{ t('header.dashboard') }}</router-link></li>
+        <li><router-link to="/roadmap" class="u-hover">{{ t('header.roadmap') }}</router-link></li>
       </ul>
     </nav>
 

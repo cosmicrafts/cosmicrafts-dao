@@ -56,7 +56,8 @@
   "myProfile": "Mon Profil",
   "settings": "Paramètres",
   "signout": "Se déconnecter",
-  "profile": "Profil"
+  "profile": "Profil",
+  "roadmap": "Roadmap"
 },
 "error": {
       "title": "Oh là là!",

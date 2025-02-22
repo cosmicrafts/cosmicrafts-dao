@@ -76,7 +76,7 @@ const scrollToTop = () => {
           { label: 'header.games', path: '/game' },
           { label: 'header.dao', path: '/dao' },
           { label: 'header.whitepaper', path: '/whitepaper' },
-          { label: 'header.dashboard', path: '/dashboard' }
+          { label: 'header.roadmap', path: '/roadmap' }
         ]" :key="index">
           <router-link :to="item.path" :style="{ '--index': index }" @click="closeMenu">
             {{ t(item.label) }}

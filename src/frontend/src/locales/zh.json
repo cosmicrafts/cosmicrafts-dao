@@ -56,7 +56,8 @@
   "myProfile": "我的资料",
   "settings": "设置",
   "signout": "退出",
-  "profile": "个人资料"
+  "profile": "个人资料",
+  "roadmap": "路线图"
 },
 "error": {
       "title": "哇塞!",

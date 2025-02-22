@@ -56,7 +56,8 @@
   "myProfile": "Мой Профиль",
   "settings": "Настройки",
   "signout": "Выйти",
-  "profile": "Профиль"
+  "profile": "Профиль",
+  "roadmap": "Дорожная карта"
 },
 "error": {
       "title": "Опа!",

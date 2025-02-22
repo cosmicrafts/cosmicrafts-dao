@@ -56,7 +56,8 @@
   "myProfile": "내 프로필",
   "settings": "설정",
   "signout": "로그아웃",
-  "profile": "프로필"
+  "profile": "프로필",
+  "roadmap": "로드맵"
 },
 "error": {
       "title": "아이고!",

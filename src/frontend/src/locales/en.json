@@ -57,7 +57,8 @@
     "myProfile": "My Profile",
     "settings": "Settings",
     "signout": "Sign out",
-    "profile": "Profile"
+    "profile": "Profile",
+    "roadmap": "Roadmap"
   },
   "error": {
     "title": "Whoah!",
@@ -67,14 +68,14 @@
   "hero": {
     "slides": [
       {
-        "title": "It all starts here. Alpha’s live—get in now!",
+        "title": "It all starts here. Alpha's live—get in now!",
         "ctaButtons": [
           { "text": "Play Now!" },
           { "text": "Wishlist on Epic Games" }
         ]
       },
       {
-        "title": "The Party’s Here. Are You In or What?",
+        "title": "The Party's Here. Are You In or What?",
         "ctaButtons": [
           { "text": "Go to NNS" },
           { "text": "Read Whitepaper" }
@@ -141,7 +142,7 @@
       ]
   },
   "footer": {
-    "stayConnected": "Let’s Stay Connected",
+    "stayConnected": "Let's Stay Connected",
     "careers": "Careers",
     "about": "About",
     "support": "Need a Hand?",

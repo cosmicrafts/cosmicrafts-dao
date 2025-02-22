@@ -56,7 +56,8 @@
   "myProfile": "Mein Profil",
   "settings": "Einstellungen",
   "signout": "Abmelden",
-  "profile": "Profil"
+  "profile": "Profil",
+  "roadmap": "Roadmap"
 },
 "error": {
       "title": "Hoppla!",
