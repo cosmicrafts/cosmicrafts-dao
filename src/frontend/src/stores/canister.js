@@ -1,14 +1,15 @@
 import { defineStore } from 'pinia';
 import { HttpAgent } from '@dfinity/agent';
-import { createActor, canisterId as backendCanisterId } from '../../../declarations/backend';
+import { createActor as createActorBackend, canisterId as backendCanisterId } from '../../../declarations/backend';
+import { createActor as createActorRoadmap, canisterId as roadmapCanisterId } from '../../../declarations/roadmap';
 import useAuthStore from './auth.js';
 
 let canisters = {
   cosmicrafts: null,
+  roadmap: null,
 };
 let currentIdentity = null;
 let initializing = false;
-
 
 const MANUAL_ENV = 'local'; // 'ic' for IC, 'local' for local development
 const isLocal = MANUAL_ENV === 'local';
@@ -21,28 +22,20 @@ export const useCanisterStore = defineStore('canister', {
   state: () => ({
     canisterIds: {
       cosmicrafts: backendCanisterId,
+      roadmap: 'be2us-64aaa-aaaaa-qaabq-cai',
     },
   }),
 
   actions: {
-    async get(canisterName) {
+    async initializeAgents() {
       const authStore = useAuthStore();
       const identity = authStore.getIdentity();
 
-      // Check if the identity has changed
-      if (identity !== currentIdentity) {
-        console.log('Initializing actor...');
-        currentIdentity = identity; // Update the current identity
-        canisters[canisterName] = null; // Reset the actor for the canister
-        initializing = true; // Set initializing flag
-      }
+      if (identity !== currentIdentity || !canisters.cosmicrafts || !canisters.roadmap) {
+        console.log('Initializing HttpAgent...');
+        currentIdentity = identity; // Update identity
+        initializing = true;
 
-      if (!canisters[canisterName]) {
-        console.log(`Initializing HttpAgent for canister ${canisterName}`);
-        console.log(`Identity Principal: ${identity ? identity.getPrincipal().toText() : 'No Identity'}`);
-        console.log(`Agent Host: ${host}`);
-
-        // Always use the authenticated identity for the HttpAgent
         const agent = new HttpAgent({ identity, host });
 
         // Fetch root key for local development
@@ -51,9 +44,26 @@ export const useCanisterStore = defineStore('canister', {
           await agent.fetchRootKey();
         }
 
-        console.log(`Creating actor for canister: ${this.canisterIds[canisterName]}`);
-        canisters[canisterName] = createActor(this.canisterIds[canisterName], { agent });
-        initializing = false; // Reset initializing flag
+        // ✅ Log the canister IDs to ensure they are correct
+        console.log('Canister IDs:', this.canisterIds);
+
+        // ✅ Initialize all canisters and log their creation
+        console.log(`Creating actor for cosmicrafts with ID: ${this.canisterIds.cosmicrafts}`);
+        canisters.cosmicrafts = createActorBackend(this.canisterIds.cosmicrafts, { agent });
+        console.log(`Cosmicrafts actor created:`, canisters.cosmicrafts);
+
+        console.log(`Creating actor for roadmap with ID: ${this.canisterIds.roadmap}`);
+        canisters.roadmap = createActorRoadmap(this.canisterIds.roadmap, { agent });
+        console.log(`Roadmap actor created:`, canisters.roadmap);
+
+        initializing = false;
+      }
+    },
+
+    async get(canisterName) {
+      // Initialize if not already done
+      if (!canisters[canisterName]) {
+        await this.initializeAgents();
       }
 
       // Wait for initialization to complete
@@ -61,6 +71,7 @@ export const useCanisterStore = defineStore('canister', {
         await new Promise(resolve => setTimeout(resolve, 100));
       }
 
+      console.log(`Returning canister for: ${canisterName}`, canisters[canisterName]);
       return canisters[canisterName];
     },
   },

@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 
 # Check if `icp-transfer` is executable, if not, make it executable
 if [ ! -x ./bin/icp_transfer ]; then
@@ -97,7 +96,7 @@ install_nns() {
 
   # ✅ Add back the ICP transfer call for default identity
   log "Sending 100,000 ICP to the default identity..."
-  bash ./bin/icp_transfer --to "$(dfx ledger account-id)" --amount 100000
+  ./bin/icp_transfer --to "$(dfx ledger account-id)" --amount 100000
 
   dfx deploy backend
 }
@@ -170,32 +169,7 @@ submit_sns_proposal() {
 }
 
 participate_sns() {
-  log "🔄 Waiting for SNS Swap Canister ($SNS_SWAP_CANISTER_ID) to be ready..."
-  
-  # Maximum wait time: 5 minutes (300 seconds)
-  MAX_WAIT_TIME=300
-  WAIT_INTERVAL=10
-  ELAPSED_TIME=0
 
-  while true; do
-    RESPONSE=$(dfx canister call "$SNS_SWAP_CANISTER_ID" get_state "(record {})" 2>&1)
-    
-    # Check if response contains valid lifecycle (instead of being null)
-    if echo "$RESPONSE" | grep -q "lifecycle"; then
-      log "✅ SNS Swap Canister is ready!"
-      break
-    fi
-
-    # Timeout handling
-    if [ "$ELAPSED_TIME" -ge "$MAX_WAIT_TIME" ]; then
-      log "❌ ERROR: SNS Swap Canister is still not available after 5 minutes. Something might have gone wrong!"
-      exit 1
-    fi
-
-    log "⏳ Canister not ready yet... retrying in $WAIT_INTERVAL seconds."
-    sleep $WAIT_INTERVAL
-    ELAPSED_TIME=$((ELAPSED_TIME + WAIT_INTERVAL))
-  done
 
   log "🔄 Participating in SNS Sale..."
   SNS_SWAP_CANISTER_ID="b77ix-eeaaa-aaaaa-qaada-cai"
