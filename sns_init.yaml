@@ -32,10 +32,9 @@ NnsProposal:
       ## Token distribution
       **Distribution**
       * Total token supply -  1 Billion
-      * Allocated to treasury -  65%
-      * Allocated to decentralization sale -  10%
-      * Allocated to DFINITY - 8%
-      * Allocated to developer neurons -  5%
+      * Allocated to treasury -  77%
+      * Allocated to decentralization sale -  12%
+      * Allocated to developer neurons -  8%
       * Allocated to seed investors - 3%
 
       * The Ledger Transaction fee is 0.001 WELL
@@ -43,8 +42,8 @@ NnsProposal:
       **Decentralization SWAP**
       * Min participation - 1 ICP
       * Min participants -  100
-      * Min to be raised -  20,000 ICP
-      * Max to be raised -  100,000 ICP
+      * Min to be raised -  1 ICP
+      * Max to be raised -  1,000,000 ICP
 
       **Learn more**
       * [Whitepaper](https://cosmicrafts.com/whitepaper)
@@ -60,12 +59,12 @@ dapp_canisters:
 Token:
     name: Spiral
     symbol: SPIRAL
-    transaction_fee: 10_000 e8s
+    transaction_fee: 1_000_000 e8s
     logo: logo.png
 
 Proposals:
     rejection_fee: 1 token
-    initial_voting_period: 4 days
+    initial_voting_period: 7 days
     maximum_wait_for_quiet_deadline_extension: 1 day
 
 Neurons:
@@ -98,11 +97,11 @@ Distribution:
     total: 1_000_000_000 tokens
 
 Swap:
-    minimum_participants: 1
+    minimum_participants: 10
     minimum_direct_participation_icp: 1 tokens
     maximum_direct_participation_icp: 1_000_000 tokens
-    minimum_participant_icp: 10 tokens
-    maximum_participant_icp: 500_000 tokens
+    minimum_participant_icp: 1 tokens
+    maximum_participant_icp: 100_000 tokens
     restricted_countries:
         - AQ
     VestingSchedule:
