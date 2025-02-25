@@ -24,10 +24,10 @@ The gaming industry is at a turning point, and the need for innovation has never
 Let's keep it real—most projects claim to be "unique," but we know execution is what matters. Here's why Cosmicrafts delivers where others don't:
 
 1. **A Polished Product, Ready to Scale**
-   Most Web3 projects are either concepts or unfinished prototypes. Cosmicrafts isn't. This is a live, polished game with fully developed mechanics, engaging gameplay, and years of iteration behind it. It's about showing it to more players and scaling up. The groundwork is done, and now it's about expansion.
+   Most Web3 projects are either concepts or unfinished prototypes. Cosmicrafts isn't. This is a live, polished game with fully developed mechanics and years of iteration behind it. It's about showing it to more players and scaling up. The groundwork is done, and now it's about expansion.
 
 2. **No Blockchain Complexity**  
-   No need for wallets, pay for transactions or technical know-how to play. It's Web3, but it feels just like Web2 for the user. Built on the Internet Computer, Cosmicrafts brings players the kind of polished games they're used to—without the complexities of blockchain gaming.
+   No need for wallets, pay for transactions or technical know-how to play. It's Web3, but it feels just like Web2 for the user. Built on the Internet Computer, Cosmicrafts brings players the kind of games they're used to—without the complexities of blockchain gaming.
 
 3. **Evolving Assets That Mean Something**
    In Cosmicrafts, assets like [NFTs](https://en.wikipedia.org/wiki/Non-fungible_token) don't stay static—they evolve. [Smart contracts](https://en.wikipedia.org/wiki/Smart_contract) on the Internet Computer allow asset metadata to change without losing history. A spaceship you upgrade retains its record, its story, and its evolution. It's a level of innovation unique to Cosmicrafts.
@@ -55,21 +55,22 @@ Joining the Cosmicrafts DAO is about being the owner of brand, a franchise that'
 2. **Economic Rewards**:
   The success of Cosmicrafts directly generate significant returns for its stakeholders. The DAO treasury captures revenue from various streams, creating a system that rewards active participation and commitment.
    - **Revenue That Flows Back to You**: Microtransactions, NFT sales, Ad revenue and other income sources, flow back to the DAO treasury, which directly benefits stakeholders.
-   - **Staking Spiral for Passive Income**: Lock your Spiral tokens and earn interest along with dividends from the treasury, the more the franchise grows, the more you earn.
+   - **Staking Spiral for Passive Income**: Lock your Spiral tokens and earn interest along with dividends from the treasury, the more Cosmicrafts grows, the more Spiral you earn.
 
 3. **Sustainable Tokenomics**:
-The Spiral token is the engine of this franchise. It's designed for utility, from in-game purchases to governance power. And with built-in deflationary mechanisms, we're focused on a sustainable economy and long-term value, not short-term gains.
+The Spiral token is the engine of this franchise. It's designed for utility, from in-game purchases to governance power. And with built-in deflationary mechanisms, we're focused on a sustainable economy and long-term value.
    - **Real Utility**: Use Spiral for purchases, upgrades, and governance decisions. It's the backbone of the entire franchise.
-   - **Deflationary Mechanisms**: We don't mint more tokens. Instead, transaction fees burn Spiral, reducing supply and increasing demand over time.
+   - **Deflationary Mechanisms**: New Spiral tokens cannot be minted. Instead its burned through transaction fees, reducing the supply over time.
 
 ---
 
 ## The Path Forward
 
-Cosmicrafts is ready to grow, and this is your opportunity to be part of that expansion. The foundation is solid, the franchise is live, and the system is designed to deliver both value and results.
+Cosmicrafts is ready to grow, and this is the pefect opportunity to be part of this expansion. The foundation is solid, the franchise is ready, and the system is designed to deliver both value and results.
 
 
-**The following sections of this whitepaper** will give you the complete picture of Cosmicrafts – the technology, the gameplay, and the economic model that makes it all work. You'll get a detailed look at:
+**The following sections of this whitepaper** will give you the complete picture of Cosmicrafts – the technology, the gameplay, its economy and the governance model that makes it all work. 
+You'll get a detailed look at:
 
 *   **The Architecture:**  We'll break down how our games run entirely on the **Internet Computer**, what that means for performance, security, and why it matters for players and investors.
 

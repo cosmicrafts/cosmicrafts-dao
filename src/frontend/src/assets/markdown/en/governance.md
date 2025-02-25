@@ -11,7 +11,7 @@ The Cosmicrafts DAO operates under a set of guiding principles designed to promo
 
 #### **1. Community First**
 - The DAO exists to serve its community of players, creators, investors, and contributors. 
-- All decisions prioritize the collective benefit and long-term growth of the community over individual interests.  
+- All decisions prioritize the collective benefit and long-term growth of the community over individual interests.
 
 #### **2. Transparency and Accountability**
 - Every action taken by the DAO or its members is documented and accessible to the community.
@@ -261,36 +261,113 @@ The Cosmicrafts Foundation team holds significant voting power in the DAO, but t
 
 
 ---
-## Roadmap Guidelines
+## Attack Vectors and Mitigation
 
-These guidelines outline the framework for the Roadmap. They are based on five guiding principles: Validate First, Market Strategically, Iterate Based on Data, Stay Transparent, and Build Sustainably.
-
----
-
-### 1. Validate First: Progressive Decentralization
-
-Test all products, features, and infrastructure thoroughly before scaling. Start with small-scale, controlled testing led by a core team to prototype and iterate. Gradually open the process to broader community involvement for feedback, refinement, and governance decisions. 
-
-
-### 2. Market Strategically: Creating Momentum
-
-Pair every major release with targeted campaigns designed to maximize visibility and engagement. Highlight unique features like exclusive content or collectibles to generate excitement. Empower community members to propose and lead marketing efforts, with the DAO supporting impactful campaigns through treasury funds.
-
-
-### 3. Iterate Based on Data: Continuous Improvement
-
-Refine and improve initiatives based on measurable outcomes and community feedback. Use analytics to track key metrics such as usage, engagement, and token activity. Create structured feedback channels and encourage data-backed proposals for improvements through governance mechanisms.
-
-
-### 4. Stay Transparent: Accountability Through Visibility
-
-Provide open access to information and decisions to maintain trust and ensure accountability. Share regular updates on finances, governance, and project progress. Build tools like dashboards for the community to access real-time data, including treasury activity and governance metrics.
-
-
-### 5. Build Sustainably: Long-Term Planning
-
-Focus on scalability and resilience to support growth and development. Manage resources through diversification and forward planning. Establish clear structures for treasury management and decision-making, with mechanisms to adapt to economic changes or unforeseen challenges.
+This section will directly address potential governance attack vectors and the mitigation strategies used within the Cosmicrafts DAO to ensure fair, transparent, and secure decision-making.
 
 ---
 
-These guidelines are designed to provide Cosmicrafts DAO with a flexible framework for sustainable growth and innovation while staying aligned with its core principles.
+### 1. 51% Attack
+
+**Risk:**  
+A single entity (or a colluding group) accumulating more than 50% of voting power could exert full control over governance decisions, leading to malicious actions such as fund misallocations or rule changes that benefit a minority at the expense of the community.
+
+**Mitigation Strategies:**
+
+- **Diverse Initial Distribution:**  
+   The community retains the largest share, ensuring decentralization from the outset.  
+
+- **Maturity-Based Voting Power:**  
+  Power scales over time, reducing the ability of a single entity to rapidly accumulate disproportionate control. 
+
+- **Stake-Based Commitments:**  
+  Attacking the system becomes costly since neurons require time to dissolve, ensuring attackers cannot immediately cash out if they attempt governance abuse.  
+
+- **Emergency Governance Protocols:**  
+  If a governance takeover is detected, community-wide alerts will be issued, encouraging swift defensive voting.
+
+---
+
+### 2. Sybil Attack (Multiple Fake Neurons)
+
+**Risk:**  
+A single entity could create multiple neurons with small amounts of Spiral tokens to artificially inflate their voting power.
+
+**Mitigation Strategies:**
+
+- **Minimum Staking Requirements:**  
+  Neurons must stake a minimum of Spiral tokens to participate in governance, making large-scale Sybil attacks costly.  
+
+- **Neuron Age and Maturity Scaling:**  
+  Voting power scales with neuron maturity, not just the number of neurons, discouraging rapid accumulation of fake neurons.  
+  Low-maturity neurons have minimal influence, making Sybil attacks economically inefficient.  
+
+- **Delegated Voting & Community Influence:**  
+  Token holders can delegate votes to trusted representatives, ensuring governance is driven by informed participants rather than numerous fake accounts.  
+
+- **Pattern Analysis for Abnormal Voting Activity:**  
+  The DAO monitors on-chain governance data to detect unnatural voting patterns (e.g., thousands of low-value neurons voting identically).  
+  If an anomaly is detected, governance alerts will be raised to encourage defensive counter-votes.  
+
+---
+
+### 3. Bribery and Vote Buying
+
+**Risk:**  
+A malicious actor could bribe neuron holders to vote in their favor, potentially passing harmful proposals.
+
+**Mitigation Strategies:**
+
+- **Maturity-Based Rewards Structure:**  
+  Governance rewards are directly tied to long-term participation, making short-term bribery less attractive.  
+  Accepting bribes could mean forfeiting future rewards.  
+
+- **Public Voting Transparency:**  
+  All votes are recorded on-chain and fully transparent, allowing the community to detect suspicious voting behavior.  
+  Large shifts in votes before deadlines can trigger a voting freeze or an extended discussion period.  
+
+- **Delayed Voting Execution:**  
+  Even if a proposal passes due to bribed votes, a time delay is applied before execution.  
+  This allows defensive counter-voting or emergency governance actions if foul play is suspected.  
+
+- **Social Incentives Against Bribery:**  
+  Active community members build reputation-based influence, making it reputationally damaging for stakeholders to engage in vote-buying schemes.  
+
+- **Team Voting Protocol as a Safeguard:**  
+  The Cosmicrafts Team holds a controlled share of voting power (20.83%), which can act as a countermeasure if bribery-driven proposals are detected.  
+
+---
+
+### 4. Last-Minute Vote Swings
+
+**Risk:**  
+Large stakeholders might wait until the last minute before casting their votes, making it difficult for smaller participants to react.
+
+**Mitigation Strategies:**
+
+- **Early Voting Incentives:**  
+  Voting earlier in the process earns slightly higher rewards than last-minute voting, encouraging active participation throughout the proposal window.  
+
+- **Tiered Voting Phases:**  
+  Proposals may have multiple voting phases, preventing a single last-minute swing from deciding the outcome.  
+
+- **Team Voting Protocol for Stability:**  
+  The team votes earlier based on community sentiment, reducing the risk of last-minute manipulations.  
+  This ensures early transparency and provides smaller stakeholders with a strategic voting reference.  
+
+- **Extended Time Lock for Large Votes:**  
+  If a proposal suddenly shifts due to large last-minute votes, an automatic extension may be triggered, giving the community time to respond.  
+
+- **Cooldown Before Execution:**  
+  A grace period between vote closure and execution allows further review.  
+  If foul play is detected, the community can propose an emergency counteraction.  
+
+---
+
+###  Conclusion
+
+Governance security is a critical part of Cosmicrafts DAO, ensuring fair, transparent, and resilient decision-making. Through a combination of token-based safeguards, neuron mechanics, and strategic voting protocols, the DAO actively mitigates risks associated with 51% attacks, Sybil attacks, bribery, and last-minute vote swings.
+
+---
+
+> These guidelines are designed to provide Cosmicrafts DAO with a flexible framework for sustainable growth and innovation while staying aligned with its core principles.

@@ -36,8 +36,7 @@
       </div>
 
       <!-- Avatar and Dropdown Menu -->
-      <div v-if="authStore.player" class="avatar-container">
-        <img
+      <div v-if="authStore.player" class="avatar-container" ref="avatarContainerRef">  <img
           v-if="computedPlayerAvatar"
           :src="computedPlayerAvatar"
           :key="computedPlayerAvatar"
@@ -47,9 +46,7 @@
         />
         <span v-else class="player-placeholder" @click="toggleDropdown"></span>
 
-        <!-- Dropdown Menu -->
-        <div v-if="isDropdownVisible" class="dropdown-menu">
-          <ul>
+        <div v-if="isDropdownVisible" class="dropdown-menu" ref="dropdownMenuRef">  <ul>
             <li @click="goToProfile">{{ t('header.myProfile') }}</li>
             <li @click="goToSettings">{{ t('header.settings') }}</li>
             <li @click="logout">{{ t('header.signout') }}</li>
@@ -57,7 +54,6 @@
         </div>
       </div>
 
-      <!-- Show "Connect" Button When Not Authenticated -->
       <button v-else class="button outline" @click="handleLogin">
         {{ t('header.connect') }}
       </button>
@@ -68,12 +64,12 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import MobileMenu from '@/components/MobileMenu.vue';
-import LanguageSelector from '@/components/LanguageSelector.vue'; // Re-import the LanguageSelector
+import LanguageSelector from '@/components/LanguageSelector.vue'
 import { useModalStore } from '@/stores/modal';
 import Login from '@/components/Login.vue';
 import defaultLogo from '@/assets/icons/logo.svg';
@@ -90,6 +86,11 @@ const authStore = useAuthStore();
 const modalStore = useModalStore();
 const playerAvatar = ref(null); // Reactive avatar reference
 const isDropdownVisible = ref(false);
+
+// Refs for DOM elements - ADD THESE LINES
+const dropdownMenuRef = ref(null); // Ref for the dropdown menu itself
+const avatarContainerRef = ref(null); // Ref for the avatar container (the clickable area)
+
 
 // Computed property for reactive player avatar
 const computedPlayerAvatar = computed(() => playerAvatar.value);
@@ -125,7 +126,8 @@ const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
 
-const toggleDropdown = () => {
+const toggleDropdown = (event) => {
+  event.stopPropagation(); // Prevent click from immediately propagating to document
   isDropdownVisible.value = !isDropdownVisible.value;
 };
 
@@ -178,8 +180,29 @@ const additionalLogoMap = {
 const additionalLogoSrc = computed(() => {
   return additionalLogoMap[locale.value] || additionalLogoMap.default;
 });
-</script>
 
+// CLICK OUTSIDE LOGIC - ADD THIS ENTIRE BLOCK
+const handleClickOutside = (event) => {
+  if (isDropdownVisible.value) {
+    if (dropdownMenuRef.value && avatarContainerRef.value) { // Check if refs are defined
+      if (
+        !dropdownMenuRef.value.contains(event.target) && // Click is NOT inside the dropdown menu
+        !avatarContainerRef.value.contains(event.target) // AND click is NOT inside the avatar container
+      ) {
+        isDropdownVisible.value = false; // Close the dropdown
+      }
+    }
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
+</script>
 
 <style scoped>
 /* Basic Header Styling */
@@ -190,14 +213,14 @@ header {
   justify-content: space-between;
   padding: 0rem 1.75rem;
   border: 1px solid #ffffff12;
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.2), rgba(23, 33, 43, 0.4));
+  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.65), rgba(23, 33, 43, 0.72));
   position: fixed;
   z-index: 12;
   border-radius: 12px;
   margin: auto;
   margin-top: .7%;
-  left: 0.5rem;
-  right: 0.5rem;
+  left: 1.2rem;
+  right: 1.2rem;
   height: 4rem;
   backdrop-filter: blur(8px);
 }
@@ -292,6 +315,12 @@ header {
   transform: translateY(-50%);
 }
 
+
+.button.outline {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+}
 
 /* Burger Menu Styling */
 .burger {

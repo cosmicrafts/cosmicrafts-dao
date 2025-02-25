@@ -72,6 +72,8 @@ export const useAuthStore = defineStore('auth', {
       if (!validateMnemonic(seedPhrase)) {
         throw new Error('Invalid seed phrase.');
       }
+
+      console.log('Seed Phrase:', seedPhrase);
     
       // Derive keys and create identity
       const keyPair = deriveKeysFromSeedPhrase(seedPhrase);

@@ -2,24 +2,24 @@
 
 /* Import primary fonts and multilingual fallbacks */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;800;900&display=swap'); /* General fallback */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap'); /* Japanese */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap'); /* Korean */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap'); /* Simplified Chinese */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800;900&display=swap'); /* Traditional Chinese */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;700;800;900&display=swap'); /* Arabic */
-
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap'); /* Arabic */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap'); /* Cyrillic (Russian) */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap'); /* Korean */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap'); /* Japanese */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap'); /* Simplified Chinese */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap'); /* Traditional Chinese */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap'); /* Vietnamese */
 :root {
   /* Colors */
   --background-color: #23272e;
   --font-color: #ffffff;
   --accent-color: #00C0FC;
   --hover-accent-color: #00C0FC;
-  --font-family-default: 'Montserrat', 'Noto Sans', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans TC', 'Noto Sans Arabic', 'Arial', sans-serif;
+
 
   /* Typography */
-  font-family: 'Montserrat', 'Noto Sans', Helvetica, sans-serif;
+  font-family: 'Montserrat', 'Noto Sans Arabic', 'Roboto', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', 'Noto Sans TC', 'Be Vietnam Pro', 'Noto Sans', Helvetica, sans-serif;
   line-height: 1.5;
 
   /* Font Weights */
@@ -67,9 +67,8 @@ a:hover {
 
 /* Universal Button Styles */
 .button {
-  font-weight: 500;
+
   color: var(--button-font-color);
-  background-color: var(--button-bg);
   padding: var(--button-padding);
   border: none;
   border-radius: var(--button-border-radius);
@@ -141,9 +140,7 @@ a:hover {
 
 
 .markdown-content {
-  font-family: var(--font-family-default);
-  color: var(--font-color); /* Use your default text color */
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 /* Headings */
