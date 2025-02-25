@@ -56,6 +56,35 @@ export const useAuthStore = defineStore('auth', {
     seedPhrase: '',
   }),
   actions: {
+    // In auth.js, update getPlayerByPrincipal
+async getPlayerByPrincipal(principal) {
+  try {
+    const canister = useCanisterStore();
+    const cosmicrafts = await canister.get('cosmicrafts');
+    
+    if (!cosmicrafts) {
+      throw new Error('Canister not initialized');
+    }
+
+    // Ensure principal is properly converted to string representation
+    const principalString = principal.toString();
+    
+    // Use the correct method signature expected by the canister
+    const playerArr = await cosmicrafts.get_player(principalString);
+    
+    if (playerArr?.length > 0 && playerArr[0]) {
+      return JSON.parse(
+        JSON.stringify(playerArr[0], (key, value) =>
+          typeof value === 'bigint' ? value.toString() : value
+        )
+      );
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching player data:', error);
+    throw error;
+  }
+},
     getIdentity() {
       return identity;
     },
@@ -127,6 +156,14 @@ export const useAuthStore = defineStore('auth', {
         }
       } catch (error) {
         console.error('Error during login:', error);
+    
+        // Reset auth state on canister call failure
+        this.$reset();
+        identity = null;
+        this.authenticated = false;
+        this.registered = false;
+        localStorage.removeItem('authStore');
+    
         throw new Error('Login failed. Please try again.');
       }
     },

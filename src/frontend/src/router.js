@@ -1,5 +1,5 @@
-// File: src/router.js
 import { createRouter, createWebHistory } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 import Home from './pages/Home.vue';
 import DAO from './pages/DAO.vue';
 import Whitepaper from './pages/Whitepaper.vue';
@@ -20,32 +20,50 @@ const routes = [
   { path: '/login', component: Login, meta: { title: 'header.login' } },
   { path: '/game', component: Game, meta: { title: 'header.game' } },
   { path: '/roadmap', component: Roadmap, meta: { title: 'header.roadmap' } },
+  { 
+    path: '/profile',
+    component: Profile,
+    meta: { title: 'header.profile', requiresAuth: true }
+  },
   {
-    path: '/:principal',
+    path: '/player/:principal',
     component: Profile,
     meta: { title: 'header.playerProfile' },
     beforeEnter: async (to, from, next) => {
       const { principal } = to.params;
+      const authStore = useAuthStore();
+
+      // Add principal validation regex check
+      const principalRegex = /^[a-z0-9-]{27}$/;
+      if (!principalRegex.test(principal)) {
+        next('/error');
+        return;
+      }
+
       try {
-        const playerData = await getPlayer(principal); // Replace with your actual getPlayer function
+        const principalObj = Principal.fromText(principal);
+        const playerData = await authStore.getPlayerByPrincipal(principalObj);
+
         if (playerData) {
           to.meta.playerData = playerData;
           next();
         } else {
-          next('/error'); 
+          next('/error');
         }
       } catch (error) {
-        console.error(`Error fetching player data for principal ${principal}:`, error);
-        next('/error'); 
+        console.error(`Error fetching player data:`, error);
+        next('/error');
       }
-    },
+    }
   },
   { path: '/error', component: Error, meta: { title: 'header.error' } },
+  // Add catch-all route for undefined paths
+  { path: '/:pathMatch(.*)*', redirect: '/' }
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+    history: createWebHistory(),
+    routes,
 });
 
 export default router;
