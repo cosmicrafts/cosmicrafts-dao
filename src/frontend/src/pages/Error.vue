@@ -13,41 +13,42 @@
       @mousemove="handleHover"
       @mouseleave="resetWave"
       >
-      {{ t("error.title") }}
+      {{ t('error.title', 'Page Not Found') }}
       </h1>
       <p 
       class="error-description wave-effect"
       @mousemove="handleHover"
       @mouseleave="resetWave"
       >
-      {{ t("error.description") }}
+      {{ t('error.description', 'The page you are looking for does not exist.') }}
       </p>
 
       <!-- Home button -->
       <button @click="goHome" class="home-button">
-      {{ t("error.homeButton") }}
+      {{ t('error.homeButton', 'Return Home') }}
       </button>
       </div>
  </div>
 </template>
 
-<script>
+<script setup>
 import Starfield from "@/components/Starfield.vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from 'vue-router';
 
-export default {
-  name: "ErrorPage",
-  components: {
-    Starfield,
-  },
-setup() {
-      const { t } = useI18n();
-},
-  methods: {
-    goHome() {
-      this.$router.push("/");
-    },
-  },
+const router = useRouter();
+const { t } = useI18n();
+
+const handleHover = () => {
+  // Add hover effect implementation if needed
+};
+
+const resetWave = () => {
+  // Add reset wave implementation if needed
+};
+
+const goHome = () => {
+  router.push("/");
 };
 </script>
 

@@ -57,11 +57,13 @@
   "settings": "Configuración",
   "signout": "Cerrar sesión",
   "profile": "Perfil",
-  "roadmap": "Recorrido",
-      "description": "Esa página ya no existe",
-      "homeButton": "⏪ Volver"
-    },
-
+  "roadmap": "Recorrido"
+},
+  "error": {
+    "title": "¡Vaya!",
+    "description": "Esta página no existe, ¡todavía!",
+    "homeButton": "⏪ Volver al Inicio"
+  },
   "hero": {
     "slides": [
       {
