@@ -30,7 +30,7 @@ const { t } = useI18n();
     <!-- Horizontal Links & Branding -->
     <div class="footer-nav">
       <ul class="links">
-        <li><a href="#">{{ t('footer.careers') }}</a></li>
+        <li><router-link to="/careers">{{ t('footer.careers') }}</router-link></li>
         <li><a href="#">{{ t('footer.about') }}</a></li>
         <li><a href="#">{{ t('footer.support') }}</a></li>
         <li><a href="#">{{ t('footer.press') }}</a></li>

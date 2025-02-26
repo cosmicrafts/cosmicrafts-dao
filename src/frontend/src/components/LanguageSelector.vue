@@ -97,14 +97,15 @@ onBeforeUnmount(() => {
   gap: 0.65rem;
   cursor: pointer;
   padding: 0.5rem;
-  font-size: 1.65rem;
+  font-size: 1.25rem;
   transition: background-color 0.1s ease;
   font-weight: 600;
+  z-index: 10;
 }
 
 .lang-icon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .lang-label {
