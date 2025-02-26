@@ -1,11 +1,29 @@
 <template>
   <div class="player-profile">
-    <!-- Mobile Navigation (only visible on mobile) -->
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" v-if="isLoading">
+      <div class="loading-spinner"></div>
+      <p>Loading profile data...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" v-if="loadingError">
+      <p>{{ loadingError }}</p>
+      <button @click="retryLoading">Retry</button>
+    </div>
+
+    <!-- Mobile Navigation -->
     <div class="mobile-nav">
-      <div class="nav-item active">Profile</div>
-      <div class="nav-item">Stats</div>
-      <div class="nav-item">Collection</div>
-      <div class="nav-item">Social</div>
+      <div class="nav-item" 
+           v-for="tab in ['profile', 'stats', 'collection', 'social']" 
+           :key="tab"
+           :class="{ 'active': activeTab === tab }"
+           @click="activeTab = tab">
+        <span class="nav-icon">
+          {{ getTabIcon(tab) }}
+        </span>
+        <span class="nav-label">{{ tab }}</span>
+      </div>
     </div>
 
     <!-- Hero Section -->
@@ -20,6 +38,42 @@
         <div class="player-details">
           <h1 class="player-name">{{ player.username }}</h1>
           <p class="player-title">{{ player.title || 'Galactic Adventurer' }}</p>
+          <p class="player-description" v-if="!isEditingDescription">
+            {{ player.description || 'No description yet' }}
+            <button class="edit-description-btn" @click="startEditingDescription">
+              <span class="edit-icon">✏️</span>
+              Edit
+            </button>
+          </p>
+          <div class="description-form" v-else>
+            <textarea 
+              v-model="descriptionForm.description"
+              :disabled="descriptionForm.isSubmitting"
+              maxlength="500"
+              placeholder="Tell us about yourself..."
+            ></textarea>
+            <div class="char-count">{{ descriptionForm.description.length }}/500</div>
+            <div class="form-actions">
+              <button 
+                type="button" 
+                @click="isEditingDescription = false"
+                :disabled="descriptionForm.isSubmitting"
+              >
+                Cancel
+              </button>
+              <button 
+                type="submit" 
+                @click="saveDescription"
+                :disabled="descriptionForm.isSubmitting"
+                class="save-btn"
+              >
+                {{ descriptionForm.isSubmitting ? 'Saving...' : 'Save' }}
+              </button>
+            </div>
+            <div class="error-message" v-if="descriptionForm.error">
+              {{ descriptionForm.error }}
+            </div>
+          </div>
           <div class="player-meta">
             <div class="meta-item">
               <span class="meta-label">ELO</span>
@@ -35,6 +89,10 @@
             </div>
           </div>
         </div>
+        <button class="edit-profile-btn" @click="startEditingProfile" v-if="!isEditingProfile">
+          <span class="edit-icon">✏️</span>
+          Edit Profile
+        </button>
       </div>
     </div>
 
@@ -94,7 +152,7 @@
               </div>
               <div class="stat-body">
                 <span class="stat-value">{{ formatNumber(playerStats?.totalDamageDealt) }}</span>
-                <div class="stat-progress" :style="{ width: '75%' }"></div>
+                <div class="stat-progress" :style="{ width: calculateStatProgress('totalDamageDealt', maxStats.totalDamageDealt) + '%' }"></div>
               </div>
             </div>
             <div class="stat-tile">
@@ -104,7 +162,7 @@
               </div>
               <div class="stat-body">
                 <span class="stat-value">{{ formatNumber(playerStats?.totalDamageEvaded) }}</span>
-                <div class="stat-progress" :style="{ width: '60%' }"></div>
+                <div class="stat-progress" :style="{ width: calculateStatProgress('totalDamageEvaded', maxStats.totalDamageEvaded) + '%' }"></div>
               </div>
             </div>
             <div class="stat-tile">
@@ -114,7 +172,7 @@
               </div>
               <div class="stat-body">
                 <span class="stat-value">{{ formatNumber(playerStats?.energyGenerated) }}</span>
-                <div class="stat-progress" :style="{ width: '85%' }"></div>
+                <div class="stat-progress" :style="{ width: calculateStatProgress('energyGenerated', maxStats.energyGenerated) + '%' }"></div>
               </div>
             </div>
             <div class="stat-tile">
@@ -124,7 +182,7 @@
               </div>
               <div class="stat-body">
                 <span class="stat-value">{{ formatNumber(playerStats?.energyUsed) }}</span>
-                <div class="stat-progress" :style="{ width: '70%' }"></div>
+                <div class="stat-progress" :style="{ width: calculateStatProgress('energyUsed', maxStats.energyUsed) + '%' }"></div>
               </div>
             </div>
           </div>
@@ -137,7 +195,9 @@
             <div v-for="category in nftCategories" 
                  :key="category.type"
                  class="tab"
-                 :class="{ 'active': category.type === 'characters' }">
+                 :class="{ 'active': activeCollection === category.type }"
+                 @click="activeCollection = category.type">
+              <span class="tab-icon">{{ getCategoryIcon(category.type) }}</span>
               {{ category.title }}
             </div>
           </div>
@@ -162,7 +222,10 @@
         <section class="content-section achievements-section" v-if="achievements.length">
           <h2>Achievements</h2>
           <div class="achievements-grid">
-            <div class="achievement-card" v-for="achievement in achievements" :key="achievement.id">
+            <div class="achievement-card" 
+                 v-for="achievement in achievements" 
+                 :key="achievement.id"
+                 @click="openAchievementDetails(achievement)">
               <div class="achievement-icon" :class="{ 'completed': achievement.completed }">
                 <img :src="achievement.icon" :alt="achievement.name" />
               </div>
@@ -193,6 +256,61 @@
             </div>
           </div>
         </section>
+      </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div class="modal" v-if="isEditingProfile">
+      <div class="modal-content">
+        <h2>Edit Profile</h2>
+        <form @submit.prevent="saveProfile">
+          <div class="form-group">
+            <label>Username</label>
+            <input v-model="editForm.username" type="text" maxlength="20" />
+          </div>
+          <div class="form-group">
+            <label>Title</label>
+            <input v-model="editForm.title" type="text" maxlength="30" />
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea v-model="editForm.description" maxlength="200"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" @click="isEditingProfile = false">Cancel</button>
+            <button type="submit">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Achievement Details Modal -->
+    <div class="modal achievement-modal" v-if="showAchievementDetails">
+      <div class="modal-content">
+        <button class="close-button" @click="closeAchievementDetails">×</button>
+        <div class="achievement-details" v-if="selectedAchievement">
+          <div class="achievement-icon large" :class="{ 'completed': selectedAchievement.completed }">
+            <img :src="selectedAchievement.icon" :alt="selectedAchievement.name" />
+          </div>
+          <h2>{{ selectedAchievement.name }}</h2>
+          <p class="achievement-desc">{{ selectedAchievement.description }}</p>
+          <div class="achievement-progress">
+            <div class="progress-track">
+              <div class="progress-fill" :style="{ width: `${selectedAchievement.progress}%` }"></div>
+            </div>
+            <span class="progress-text">{{ selectedAchievement.progress }}%</span>
+          </div>
+          <div class="achievement-stats">
+            <div class="stat">
+              <span class="stat-label">Completed by</span>
+              <span class="stat-value">23%</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Points</span>
+              <span class="stat-value">100</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -238,6 +356,30 @@ const nftCategories = ref([
   { type: 'chests', title: 'Chests', items: [] }
 ]);
 const friends = ref([]);
+const activeTab = ref('profile');
+const activeCollection = ref('characters');
+const isLoading = ref(true);
+const loadingError = ref(null);
+const maxStats = ref({
+  totalDamageDealt: 1000000,
+  totalDamageEvaded: 500000,
+  energyGenerated: 100000,
+  energyUsed: 100000
+});
+const showAchievementDetails = ref(false);
+const selectedAchievement = ref(null);
+const isEditingProfile = ref(false);
+const editForm = ref({
+  username: '',
+  title: '',
+  description: ''
+});
+const isEditingDescription = ref(false);
+const descriptionForm = ref({
+  description: '',
+  isSubmitting: false,
+  error: null
+});
 
 // Use the player data from the auth store
 const player = computed(() => authStore.player || {});
@@ -261,10 +403,23 @@ const playerAvatar = computed(() => {
 // Fetch all player data on mount
 onMounted(async () => {
   try {
+    isLoading.value = true;
+    loadingError.value = null;
+
     // Fetch player stats
     await statsStore.fetchPlayerStats();
     playerStats.value = statsStore.playerStats;
     averageStats.value = statsStore.averageStats;
+
+    // Update max stats based on average stats
+    if (averageStats.value) {
+      maxStats.value = {
+        totalDamageDealt: averageStats.value.totalDamageDealt * 2,
+        totalDamageEvaded: averageStats.value.totalDamageEvaded * 2,
+        energyGenerated: averageStats.value.energyGenerated * 2,
+        energyUsed: averageStats.value.energyUsed * 2
+      };
+    }
 
     // Fetch achievements
     await achStore.fetchAchievements();
@@ -280,7 +435,6 @@ onMounted(async () => {
     const cosmicrafts = await canisterStore.get("cosmicrafts");
     if (cosmicrafts) {
       try {
-        // Get friends list without parameters - it should use the caller's context
         const friendsList = await cosmicrafts.getFriendsList();
         friends.value = await processFriendsList(friendsList);
       } catch (error) {
@@ -290,6 +444,9 @@ onMounted(async () => {
     }
   } catch (error) {
     console.error('Error fetching profile data:', error);
+    loadingError.value = error.message;
+  } finally {
+    isLoading.value = false;
   }
 });
 
@@ -303,6 +460,11 @@ const calculateEnergyEfficiency = computed(() => {
   if (!playerStats.value?.energyGenerated) return 0;
   return Math.round((playerStats.value.energyUsed / playerStats.value.energyGenerated) * 100);
 });
+
+const calculateStatProgress = (stat, maxValue) => {
+  if (!playerStats.value || !playerStats.value[stat]) return 0;
+  return Math.min(Math.round((playerStats.value[stat] / maxValue) * 100), 100);
+};
 
 // Helper functions
 const formatNumber = (num) => {
@@ -468,6 +630,105 @@ const processAchievements = (categories) => {
   }
   return achievements;
 };
+
+const getTabIcon = (tab) => {
+  const icons = {
+    profile: '👤',
+    stats: '📊',
+    collection: '🎮',
+    social: '👥'
+  };
+  return icons[tab] || '📋';
+};
+
+const getCategoryIcon = (type) => {
+  const icons = {
+    characters: '🦸',
+    units: '⚔️',
+    avatars: '🎭',
+    trophies: '🏆',
+    chests: '📦'
+  };
+  return icons[type] || '📦';
+};
+
+// Add these methods
+const openAchievementDetails = (achievement) => {
+  selectedAchievement.value = achievement;
+  showAchievementDetails.value = true;
+};
+
+const closeAchievementDetails = () => {
+  showAchievementDetails.value = false;
+  selectedAchievement.value = null;
+};
+
+const startEditingProfile = () => {
+  editForm.value = {
+    username: player.value.username || '',
+    title: player.value.title || '',
+    description: player.value.description || ''
+  };
+  isEditingProfile.value = true;
+};
+
+const saveProfile = async () => {
+  try {
+    // TODO: Implement profile update logic
+    isEditingProfile.value = false;
+  } catch (error) {
+    console.error('Error updating profile:', error);
+  }
+};
+
+const startEditingDescription = () => {
+  descriptionForm.value = {
+    description: player.value.description || '',
+    isSubmitting: false,
+    error: null
+  };
+  isEditingDescription.value = true;
+};
+
+const saveDescription = async () => {
+  console.log('Starting description update...', {
+    currentDescription: player.value.description,
+    newDescription: descriptionForm.value.description
+  });
+  
+  descriptionForm.value.isSubmitting = true;
+  descriptionForm.value.error = null;
+  
+  try {
+    const cosmicrafts = await canisterStore.get("cosmicrafts");
+    if (!cosmicrafts) {
+      throw new Error("Cosmicrafts canister not initialized");
+    }
+
+    console.log('Calling updateDescription with:', descriptionForm.value.description);
+    const [success, playerId, message] = await cosmicrafts.updateDescription(descriptionForm.value.description);
+    
+    console.log('Update description response:', { success, playerId, message });
+
+    if (success) {
+      // Update local state
+      if (player.value) {
+        player.value.description = descriptionForm.value.description;
+      }
+      isEditingDescription.value = false;
+      
+      // Show success notification (you'll need to implement this)
+      console.log('Description updated successfully');
+    } else {
+      throw new Error(message || 'Failed to update description');
+    }
+  } catch (error) {
+    console.error('Error updating description:', error);
+    descriptionForm.value.error = error.message || 'Failed to update description';
+  } finally {
+    descriptionForm.value.isSubmitting = false;
+  }
+};
 </script>
 
 <style scoped>
@@ -488,18 +749,58 @@ const processAchievements = (categories) => {
   background: rgba(15, 23, 41, 0.95);
   backdrop-filter: blur(10px);
   z-index: 100;
-  padding: 1rem;
+  padding: 0.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+}
+
+.mobile-nav.hidden {
+  transform: translateY(100%);
 }
 
 .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 0.5rem;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.7);
+  gap: 0.25rem;
+  transition: all 0.3s ease;
 }
 
-.nav-item.active {
-  color: #00d9ff;
+.nav-icon {
+  font-size: 1.5rem;
+}
+
+.nav-label {
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.tab:hover {
+  background: rgba(0, 217, 255, 0.1);
+}
+
+.tab.active {
+  background: linear-gradient(90deg, #00d9ff, #ff00c3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 217, 255, 0.2);
+}
+
+.tab-icon {
+  font-size: 1.2rem;
 }
 
 /* Hero Section */
@@ -567,6 +868,110 @@ const processAchievements = (categories) => {
   font-size: 1.2rem;
   color: rgba(255, 255, 255, 0.8);
   margin: 0.5rem 0 1.5rem;
+}
+
+.player-description {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 1rem 0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  position: relative;
+  padding-right: 40px;
+}
+
+.edit-description-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #00d9ff;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.edit-description-btn:hover {
+  background: rgba(0, 217, 255, 0.1);
+}
+
+.description-form {
+  margin: 1rem 0;
+  position: relative;
+}
+
+.description-form textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 1rem;
+  resize: vertical;
+  transition: all 0.3s ease;
+}
+
+.description-form textarea:focus {
+  outline: none;
+  border-color: #00d9ff;
+  box-shadow: 0 0 0 2px rgba(0, 217, 255, 0.2);
+}
+
+.description-form .char-count {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.description-form .form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.description-form .form-actions button {
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.description-form .form-actions button[type="button"] {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.description-form .form-actions .save-btn {
+  background: linear-gradient(90deg, #00d9ff, #ff00c3);
+  color: white;
+}
+
+.description-form .form-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.description-form .error-message {
+  margin-top: 1rem;
+  color: #ff4444;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  background: rgba(255, 68, 68, 0.1);
+  border-radius: 0.25rem;
+  text-align: center;
 }
 
 .player-meta {
@@ -722,10 +1127,34 @@ const processAchievements = (categories) => {
 }
 
 .stat-progress {
+  position: relative;
   height: 4px;
   background: linear-gradient(90deg, #00d9ff, #ff00c3);
   border-radius: 2px;
   margin-top: 0.5rem;
+  transition: width 1s ease-in-out;
+}
+
+.stat-progress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.1) 25%, 
+    rgba(255, 255, 255, 0.2) 50%, 
+    rgba(255, 255, 255, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
 }
 
 /* Collection Section */
@@ -763,7 +1192,8 @@ const processAchievements = (categories) => {
 }
 
 .nft-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 217, 255, 0.15);
 }
 
 .nft-image {
@@ -968,6 +1398,328 @@ const processAchievements = (categories) => {
   
   .content-section {
     padding: 1rem;
+  }
+}
+
+/* Add smooth transitions for all interactive elements */
+.content-section,
+.nft-card,
+.achievement-card,
+.friend-card,
+.stat-card {
+  transition: all 0.3s ease;
+}
+
+.content-section {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.5s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced hover effects */
+.nft-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 217, 255, 0.15);
+}
+
+.achievement-card:hover {
+  transform: translateX(5px);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.friend-card:hover {
+  transform: translateX(5px);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #00d9ff, #ff00c3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #ff00c3, #00d9ff);
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 41, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(0, 217, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #00d9ff;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error Message */
+.error-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 0, 0, 0.1);
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.error-message button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.error-message button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Profile Edit Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 41, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #00d9ff;
+  box-shadow: 0 0 0 2px rgba(0, 217, 255, 0.2);
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.form-actions button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.form-actions button[type="button"] {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.form-actions button[type="submit"] {
+  background: linear-gradient(90deg, #00d9ff, #ff00c3);
+  color: white;
+}
+
+.form-actions button:hover {
+  transform: translateY(-2px);
+}
+
+.edit-profile-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.edit-profile-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.edit-icon {
+  font-size: 1.2rem;
+}
+
+.achievement-modal .modal-content {
+  max-width: 600px;
+}
+
+.achievement-details {
+  text-align: center;
+}
+
+.achievement-icon.large {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 1.5rem;
+}
+
+.achievement-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00d9ff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 </style>
