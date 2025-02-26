@@ -1,167 +1,198 @@
 <template>
-  <div class="player-profile cosmic-background">
-    <!-- Top Section with Avatar and Basic Info -->
-    <div class="profile-header">
-      <div class="avatar-frame">
-        <img :src="playerAvatar" alt="Player Avatar" class="avatar" />
-        <div class="glow"></div>
-      </div>
+  <div class="player-profile">
+    <!-- Mobile Navigation (only visible on mobile) -->
+    <div class="mobile-nav">
+      <div class="nav-item active">Profile</div>
+      <div class="nav-item">Stats</div>
+      <div class="nav-item">Collection</div>
+      <div class="nav-item">Social</div>
+    </div>
 
-      <div class="player-info">
-        <h1 class="player-name">{{ player.username }}</h1>
-        <p class="player-title">{{ player.title || 'Galactic Adventurer' }}</p>
-        
-        <!-- Principal ID -->
-        <div class="principal-id" :title="getPrincipalString">
-          <span class="principal-label">Principal ID</span>
-          <div class="principal-container">
-            <span class="principal-value">{{ formatPrincipal(getPrincipalString) }}</span>
-            <button class="copy-button" @click="copyPrincipal" :class="{ 'copied': copySuccess }">
-              <span v-if="!copySuccess">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              </span>
-              <span v-else>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-              </span>
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <div class="avatar-container">
+          <div class="avatar-frame">
+            <img :src="playerAvatar" alt="Player Avatar" class="avatar" />
+            <div class="level-badge">{{ player.level }}</div>
+          </div>
+        </div>
+        <div class="player-details">
+          <h1 class="player-name">{{ player.username }}</h1>
+          <p class="player-title">{{ player.title || 'Galactic Adventurer' }}</p>
+          <div class="player-meta">
+            <div class="meta-item">
+              <span class="meta-label">ELO</span>
+              <span class="meta-value">{{ formatElo(player.elo) }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Win Rate</span>
+              <span class="meta-value">{{ calculateWinRate }}%</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Games</span>
+              <span class="meta-value">{{ playerStats?.gamesPlayed || 0 }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Left Sidebar (Desktop) -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>Player ID</h3>
+          <div class="principal-display" :title="getPrincipalString">
+            <span class="principal-text">{{ formatPrincipal(getPrincipalString) }}</span>
+            <button class="icon-button" @click="copyPrincipal" :class="{ 'success': copySuccess }">
+              <span v-if="!copySuccess">📋</span>
+              <span v-else>✓</span>
             </button>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Main Content Grid -->
-    <div class="profile-content">
-      <!-- Left Column: Stats -->
-      <div class="profile-section stats-section">
-        <h2>Player Statistics</h2>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <span class="stat-label">Level</span>
-            <span class="stat-value">{{ player.level }}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">ELO Rating</span>
-            <span class="stat-value">{{ formatElo(player.elo) }}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Games Played</span>
-            <span class="stat-value">{{ playerStats?.gamesPlayed || 0 }}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Win Rate</span>
-            <span class="stat-value">{{ calculateWinRate }}%</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Total XP</span>
-            <span class="stat-value">{{ formatNumber(playerStats?.totalXpEarned) }}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Member Since</span>
-            <span class="stat-value">{{ formatDate(player.registration_date) }}</span>
-          </div>
-        </div>
-
-        <!-- Combat Stats -->
-        <h3>Combat Statistics</h3>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <span class="stat-label">Total Kills</span>
-            <span class="stat-value">{{ formatNumber(playerStats?.totalKills) }}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Damage Dealt</span>
-            <span class="stat-value">{{ formatNumber(playerStats?.totalDamageDealt) }}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Critical Hits</span>
-            <span class="stat-value">{{ formatNumber(playerStats?.totalDamageCrit) }}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Damage Evaded</span>
-            <span class="stat-value">{{ formatNumber(playerStats?.totalDamageEvaded) }}</span>
-          </div>
-        </div>
-
-        <!-- Energy Stats -->
-        <h3>Energy Management</h3>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <span class="stat-label">Energy Generated</span>
-            <span class="stat-value">{{ formatNumber(playerStats?.energyGenerated) }}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Energy Used</span>
-            <span class="stat-value">{{ formatNumber(playerStats?.energyUsed) }}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Energy Efficiency</span>
-            <span class="stat-value">{{ calculateEnergyEfficiency }}%</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Column: NFTs, Achievements, Friends -->
-      <div class="profile-section collection-section">
-        <!-- NFT Collections -->
-        <div class="collection-grid">
-          <div class="collection-category" v-for="category in nftCategories" :key="category.type">
-            <h3>{{ category.title }}</h3>
-            <div class="nft-grid" v-if="category.items.length">
-              <div class="nft-item" v-for="nft in category.items" :key="nft.id">
-                <img :src="nft.image" :alt="nft.name" />
-                <span class="nft-name">{{ nft.name }}</span>
+        <div class="sidebar-section">
+          <h3>Quick Stats</h3>
+          <div class="quick-stats">
+            <div class="stat-card">
+              <div class="stat-icon">⚔️</div>
+              <div class="stat-info">
+                <span class="stat-value">{{ formatNumber(playerStats?.totalKills) }}</span>
+                <span class="stat-label">Total Kills</span>
               </div>
             </div>
-            <p v-else class="empty-collection">No {{ category.title.toLowerCase() }} collected yet</p>
+            <div class="stat-card">
+              <div class="stat-icon">⚡</div>
+              <div class="stat-info">
+                <span class="stat-value">{{ calculateEnergyEfficiency }}%</span>
+                <span class="stat-label">Energy Efficiency</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">🎯</div>
+              <div class="stat-info">
+                <span class="stat-value">{{ formatNumber(playerStats?.totalDamageCrit) }}</span>
+                <span class="stat-label">Critical Hits</span>
+              </div>
+            </div>
           </div>
         </div>
+      </aside>
 
-        <!-- Achievements -->
-        <div class="achievements-section" v-if="achievements.length">
-          <h3>Achievements</h3>
+      <!-- Main Content Area -->
+      <div class="content-area">
+        <!-- Stats Section -->
+        <section class="content-section stats-section">
+          <h2>Combat Statistics</h2>
+          <div class="stats-grid">
+            <div class="stat-tile">
+              <div class="stat-header">
+                <span class="stat-icon">⚔️</span>
+                <span class="stat-title">Damage Dealt</span>
+              </div>
+              <div class="stat-body">
+                <span class="stat-value">{{ formatNumber(playerStats?.totalDamageDealt) }}</span>
+                <div class="stat-progress" :style="{ width: '75%' }"></div>
+              </div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-header">
+                <span class="stat-icon">🛡️</span>
+                <span class="stat-title">Damage Evaded</span>
+              </div>
+              <div class="stat-body">
+                <span class="stat-value">{{ formatNumber(playerStats?.totalDamageEvaded) }}</span>
+                <div class="stat-progress" :style="{ width: '60%' }"></div>
+              </div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-header">
+                <span class="stat-icon">⚡</span>
+                <span class="stat-title">Energy Generated</span>
+              </div>
+              <div class="stat-body">
+                <span class="stat-value">{{ formatNumber(playerStats?.energyGenerated) }}</span>
+                <div class="stat-progress" :style="{ width: '85%' }"></div>
+              </div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-header">
+                <span class="stat-icon">🔋</span>
+                <span class="stat-title">Energy Used</span>
+              </div>
+              <div class="stat-body">
+                <span class="stat-value">{{ formatNumber(playerStats?.energyUsed) }}</span>
+                <div class="stat-progress" :style="{ width: '70%' }"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Collection Section -->
+        <section class="content-section collection-section">
+          <h2>NFT Collection</h2>
+          <div class="collection-tabs">
+            <div v-for="category in nftCategories" 
+                 :key="category.type"
+                 class="tab"
+                 :class="{ 'active': category.type === 'characters' }">
+              {{ category.title }}
+            </div>
+          </div>
+          <div class="collection-grid">
+            <div v-for="category in nftCategories" :key="category.type">
+              <div class="nft-grid" v-if="category.items.length">
+                <div class="nft-card" v-for="nft in category.items" :key="nft.id">
+                  <div class="nft-image">
+                    <img :src="nft.image" :alt="nft.name" />
+                  </div>
+                  <div class="nft-info">
+                    <span class="nft-name">{{ nft.name }}</span>
+                  </div>
+                </div>
+              </div>
+              <p v-else class="empty-message">No {{ category.title.toLowerCase() }} collected yet</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section class="content-section achievements-section" v-if="achievements.length">
+          <h2>Achievements</h2>
           <div class="achievements-grid">
-            <div class="achievement-item" v-for="achievement in achievements" :key="achievement.id">
+            <div class="achievement-card" v-for="achievement in achievements" :key="achievement.id">
               <div class="achievement-icon" :class="{ 'completed': achievement.completed }">
                 <img :src="achievement.icon" :alt="achievement.name" />
               </div>
-              <div class="achievement-info">
+              <div class="achievement-details">
                 <span class="achievement-name">{{ achievement.name }}</span>
+                <p class="achievement-desc">{{ achievement.description }}</p>
                 <div class="achievement-progress">
-                  <div class="progress-bar" :style="{ width: `${achievement.progress}%` }"></div>
+                  <div class="progress-track">
+                    <div class="progress-fill" :style="{ width: `${achievement.progress}%` }"></div>
+                  </div>
+                  <span class="progress-text">{{ achievement.progress }}%</span>
                 </div>
-                <span class="progress-text">{{ achievement.progress }}%</span>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        <!-- Friends List -->
-        <div class="friends-section" v-if="friends.length">
-          <h3>Friends</h3>
+        <!-- Friends Section -->
+        <section class="content-section friends-section" v-if="friends.length">
+          <h2>Friends</h2>
           <div class="friends-grid">
-            <div class="friend-item" v-for="friend in friends" :key="friend.id">
+            <div class="friend-card" v-for="friend in friends" :key="friend.id">
               <img :src="friend.avatar" :alt="friend.username" class="friend-avatar" />
-              <span class="friend-name">{{ friend.username }}</span>
-              <span class="friend-status" :class="friend.status">{{ friend.status }}</span>
+              <div class="friend-info">
+                <span class="friend-name">{{ friend.username }}</span>
+                <span class="friend-status" :class="friend.status">{{ friend.status }}</span>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Description Section -->
-    <div class="profile-section description-section">
-      <h3>About Me</h3>
-      <div class="player-description" v-if="player.description">
-        <p>{{ player.description }}</p>
-      </div>
-      <div class="player-description empty" v-else>
-        <p class="no-description">No description yet</p>
+        </section>
       </div>
     </div>
   </div>
@@ -440,295 +471,333 @@ const processAchievements = (categories) => {
 </script>
 
 <style scoped>
-/* Cosmic background 🌌 */
-.cosmic-background {
+/* Base Styles */
+.player-profile {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f1729 0%, #1a1f35 100%);
+  color: #ffffff;
+}
+
+/* Mobile Navigation */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(15, 23, 41, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-item {
+  padding: 0.5rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.nav-item.active {
+  color: #00d9ff;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
+              url('@/assets/hero-bg.jpg') center/cover;
+  padding: 4rem 2rem;
   position: relative;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
   overflow: hidden;
 }
 
-/* Glowing avatar frame 🖼️ */
-.avatar-frame {
+.hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.avatar-container {
   position: relative;
-  width: 8rem;
-  height: 8rem;
+}
+
+.avatar-frame {
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
+  border: 4px solid rgba(0, 217, 255, 0.5);
   overflow: hidden;
-  margin-bottom: 2rem;
+  position: relative;
 }
 
 .avatar {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 50%;
 }
 
-/* Player info 🚀 */
-.player-info {
-  text-align: center;
-  max-width: 600px;
-  padding: 2rem;
-  background: rgba(0, 0, 0, 0.5);
+.level-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(135deg, #00d9ff, #ff00c3);
+  color: white;
+  padding: 0.5rem 1rem;
   border-radius: 1rem;
-  backdrop-filter: blur(10px);
+  font-weight: bold;
+}
+
+.player-details {
+  flex: 1;
 }
 
 .player-name {
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 800;
-  margin-bottom: 0.5rem;
+  margin: 0;
   background: linear-gradient(45deg, #00d9ff, #ff00c3);
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .player-title {
   font-size: 1.2rem;
-  color: #00d9ff;
-  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0.5rem 0 1.5rem;
 }
 
-/* Player Stats */
-.player-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
+.player-meta {
+  display: flex;
+  gap: 2rem;
 }
 
-.stat-item {
+.meta-item {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.stat-label {
+.meta-label {
   font-size: 0.9rem;
-  color: #00d9ff;
-  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.stat-value {
-  font-size: 1.2rem;
+.meta-value {
+  font-size: 1.5rem;
   font-weight: bold;
-  color: white;
+  color: #00d9ff;
 }
 
-/* Principal ID styles */
-.principal-id {
+/* Main Content Layout */
+.main-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+}
+
+/* Sidebar */
+.sidebar {
   background: rgba(255, 255, 255, 0.05);
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  margin: 1rem 0;
-  transition: all 0.3s ease;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  height: fit-content;
 }
 
-.principal-container {
+.sidebar-section {
+  margin-bottom: 2rem;
+}
+
+.sidebar-section h3 {
+  color: #00d9ff;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.principal-display {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
-  margin-top: 0.5rem;
 }
 
-.principal-label {
-  font-size: 0.8rem;
-  color: #00d9ff;
-}
-
-.principal-value {
+.principal-text {
   font-family: 'Roboto Mono', monospace;
   font-size: 0.9rem;
-  color: white;
-  letter-spacing: 0.5px;
-  margin-right: auto;
 }
 
-.copy-button {
+.icon-button {
   background: transparent;
   border: none;
   color: #00d9ff;
   cursor: pointer;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0.5rem;
   border-radius: 0.25rem;
-  transition: all 0.2s ease;
-  margin-left: 1rem;
+  transition: all 0.2s;
 }
 
-.copy-button:hover {
+.icon-button:hover {
   background: rgba(0, 217, 255, 0.1);
 }
 
-.copy-button.copied {
+.icon-button.success {
   color: #00ff95;
 }
 
-/* Player Description */
-.player-description {
-  margin: 2rem 0;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
-  color: #e0e0e0;
-  line-height: 1.6;
-}
-
-.player-description h3 {
-  color: #00d9ff;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-}
-
-.player-description.empty {
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.no-description {
-  color: rgba(255, 255, 255, 0.3);
-  font-style: italic;
-  font-size: 0.9rem;
-}
-
-/* Associated Entities */
-.associated-entities {
-  margin-top: 2rem;
-}
-
-.associated-entities h3 {
-  color: #00d9ff;
-  margin-bottom: 1rem;
-}
-
-.entity-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: center;
-}
-
-.entity-tag {
-  background: rgba(0, 217, 255, 0.2);
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-  font-size: 0.9rem;
-  color: #00d9ff;
-  border: 1px solid rgba(0, 217, 255, 0.3);
-}
-
-/* Glow effect */
-.glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(0, 217, 255, 0.5),
-              0 0 40px rgba(255, 0, 195, 0.3);
-  pointer-events: none;
-}
-
-.profile-content {
+.quick-stats {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  width: 100%;
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  gap: 1rem;
 }
 
-.profile-section {
-  background: rgba(0, 0, 0, 0.5);
+.stat-card {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  font-size: 1.5rem;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Content Area */
+.content-area {
+  display: grid;
+  gap: 2rem;
+}
+
+.content-section {
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 1rem;
   padding: 2rem;
-  backdrop-filter: blur(10px);
 }
 
+.content-section h2 {
+  color: #00d9ff;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+/* Stats Grid */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
-  margin: 1rem 0;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
 }
 
-.collection-grid {
-  display: grid;
-  gap: 2rem;
+.stat-tile {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.stat-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.stat-title {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.stat-body {
+  position: relative;
+}
+
+.stat-progress {
+  height: 4px;
+  background: linear-gradient(90deg, #00d9ff, #ff00c3);
+  border-radius: 2px;
+  margin-top: 0.5rem;
+}
+
+/* Collection Section */
+.collection-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab.active {
+  background: linear-gradient(90deg, #00d9ff, #ff00c3);
 }
 
 .nft-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
 }
 
-.nft-item {
-  position: relative;
-  aspect-ratio: 1;
+.nft-card {
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 0.5rem;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.1);
   transition: transform 0.2s;
 }
 
-.nft-item:hover {
-  transform: scale(1.05);
+.nft-card:hover {
+  transform: translateY(-5px);
 }
 
-.nft-item img {
+.nft-image {
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.nft-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.nft-name {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0.5rem;
-  background: rgba(0, 0, 0, 0.7);
-  font-size: 0.8rem;
-  text-align: center;
+.nft-info {
+  padding: 1rem;
 }
 
+/* Achievements Section */
 .achievements-grid {
   display: grid;
   gap: 1rem;
-  margin-top: 1rem;
 }
 
-.achievement-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.achievement-card {
+  background: rgba(0, 0, 0, 0.2);
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
   border-radius: 0.5rem;
+  display: flex;
+  gap: 1rem;
 }
 
 .achievement-icon {
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
   display: flex;
@@ -740,90 +809,165 @@ const processAchievements = (categories) => {
   background: linear-gradient(45deg, #00d9ff, #ff00c3);
 }
 
-.achievement-info {
+.achievement-details {
   flex: 1;
 }
 
+.achievement-name {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.achievement-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1rem;
+}
+
 .achievement-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.progress-track {
+  flex: 1;
   height: 4px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
-  margin-top: 0.5rem;
 }
 
-.progress-bar {
+.progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #00d9ff, #ff00c3);
   border-radius: 2px;
-  transition: width 0.3s ease;
 }
 
+/* Friends Section */
 .friends-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
-  margin-top: 1rem;
 }
 
-.friend-item {
+.friend-card {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
 }
 
 .friend-avatar {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.friend-info {
+  flex: 1;
+}
+
+.friend-name {
+  display: block;
+  margin-bottom: 0.25rem;
 }
 
 .friend-status {
   font-size: 0.8rem;
   padding: 0.25rem 0.5rem;
   border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .friend-status.online {
   background: rgba(0, 255, 0, 0.2);
-  color: #00ff00;
+  color: #00ff95;
 }
 
 .friend-status.offline {
-  background: rgba(255, 255, 255, 0.1);
-  color: #888;
-}
-
-h2, h3 {
-  color: #00d9ff;
-  margin-bottom: 1rem;
-}
-
-.empty-collection {
   color: rgba(255, 255, 255, 0.5);
+}
+
+/* Empty States */
+.empty-message {
   text-align: center;
-  padding: 1rem;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
 }
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-  .profile-content {
+  .main-content {
     grid-template-columns: 1fr;
+  }
+  
+  .sidebar {
+    order: 2;
+  }
+  
+  .content-area {
+    order: 1;
   }
 }
 
 @media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .player-meta {
+    justify-content: center;
+  }
+  
+  .mobile-nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .main-content {
+    padding: 1rem;
+    padding-bottom: 5rem;
+  }
+  
   .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+  }
+  
+  .collection-tabs {
+    justify-content: start;
+  }
+  
+  .nft-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .friends-grid {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
+  .hero-section {
+    padding: 2rem 1rem;
+  }
+  
+  .player-name {
+    font-size: 2rem;
+  }
+  
+  .avatar-frame {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .content-section {
+    padding: 1rem;
   }
 }
 </style>
