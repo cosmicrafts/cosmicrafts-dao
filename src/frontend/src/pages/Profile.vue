@@ -40,12 +40,12 @@
           <p class="player-title">{{ player.title || 'Galactic Adventurer' }}</p>
           <p class="player-description" v-if="!isEditingDescription">
             {{ player.description || 'No description yet' }}
-            <button class="edit-description-btn" @click="startEditingDescription">
+            <button class="edit-description-btn" @click="startEditingDescription" v-if="showEditControls">
               <span class="edit-icon">✏️</span>
               Edit
             </button>
           </p>
-          <div class="description-form" v-else>
+          <div class="description-form" v-else-if="showEditControls">
             <textarea 
               v-model="descriptionForm.description"
               :disabled="descriptionForm.isSubmitting"
@@ -89,7 +89,7 @@
             </div>
           </div>
         </div>
-        <button class="edit-profile-btn" @click="startEditingProfile" v-if="!isEditingProfile">
+        <button class="edit-profile-btn" @click="startEditingProfile" v-if="showEditControls && !isEditingProfile">
           <span class="edit-icon">✏️</span>
           Edit Profile
         </button>
@@ -381,8 +381,19 @@ const descriptionForm = ref({
   error: null
 });
 
-// Use the player data from the auth store
-const player = computed(() => authStore.player || {});
+// Determine if we're viewing our own profile or another player's
+const isOwnProfile = computed(() => !route.params.identifier);
+
+// Use either the route's playerData (for other players) or authStore.player (for own profile)
+const player = computed(() => {
+  if (isOwnProfile.value) {
+    return authStore.player || {};
+  }
+  return route.meta.playerData || {};
+});
+
+// Show edit controls only for own profile
+const showEditControls = computed(() => isOwnProfile.value);
 
 // Array of all available avatars
 const avatarSrcArray = [
@@ -406,45 +417,95 @@ onMounted(async () => {
     isLoading.value = true;
     loadingError.value = null;
 
-    // Fetch player stats
-    await statsStore.fetchPlayerStats();
-    playerStats.value = statsStore.playerStats;
-    averageStats.value = statsStore.averageStats;
-
-    // Update max stats based on average stats
-    if (averageStats.value) {
-      maxStats.value = {
-        totalDamageDealt: averageStats.value.totalDamageDealt * 2,
-        totalDamageEvaded: averageStats.value.totalDamageEvaded * 2,
-        energyGenerated: averageStats.value.energyGenerated * 2,
-        energyUsed: averageStats.value.energyUsed * 2
-      };
+    const cosmicrafts = await canisterStore.get('cosmicrafts');
+    if (!cosmicrafts) {
+      throw new Error('Failed to initialize canister');
     }
 
-    // Fetch achievements
-    await achStore.fetchAchievements();
-    achievements.value = processAchievements(achStore.categories);
+    // Get the principal for the profile we're viewing
+    const targetPrincipal = isOwnProfile.value 
+      ? authStore.getIdentity().getPrincipal()
+      : Principal.fromText(player.value.id.toString());
 
-    // Fetch NFTs for each category
-    await Promise.all(nftCategories.value.map(async category => {
-      const nfts = await fetchNFTsByCategory(category.type);
-      category.items = processNFTs(nfts);
-    }));
+    // Fetch player stats and achievements
+    try {
+      const [stats, avgStats] = await Promise.all([
+        cosmicrafts.getPlayerStats(targetPrincipal),
+        cosmicrafts.getPlayerAverageStats(targetPrincipal)
+      ]);
+      
+      playerStats.value = stats;
+      averageStats.value = avgStats;
+    } catch (error) {
+      console.error('Error fetching player stats:', error);
+      loadingError.value = 'Error fetching player stats';
+    }
 
-    // Fetch friends list
-    const cosmicrafts = await canisterStore.get("cosmicrafts");
-    if (cosmicrafts) {
+    // Only fetch friends list for own profile
+    if (isOwnProfile.value) {
       try {
         const friendsList = await cosmicrafts.getFriendsList();
-        friends.value = await processFriendsList(friendsList);
+        console.log('Friends list received:', friendsList);
+        
+        if (friendsList && friendsList.length > 0 && friendsList[0].length > 0) {
+          // Fetch friend profiles in parallel
+          const friendProfiles = await Promise.allSettled(
+            friendsList[0].map(async (friendId) => {
+              try {
+                const profile = await cosmicrafts.getPlayer(friendId);
+                return profile && profile.length > 0 ? profile[0] : null;
+              } catch (error) {
+                console.error('Error fetching friend profile:', error);
+                return null;
+              }
+            })
+          );
+          
+          // Filter out failed requests and null profiles
+          friends.value = friendProfiles
+            .filter(result => result.status === 'fulfilled' && result.value)
+            .map(result => result.value);
+        } else {
+          console.log('No friends found in the list');
+          friends.value = [];
+        }
       } catch (error) {
         console.error('Error fetching friends list:', error);
         friends.value = [];
       }
     }
+
+    // Fetch achievements
+    try {
+      const userAchievements = await cosmicrafts.getUserAchievementsStructure(targetPrincipal);
+      achievements.value = userAchievements || [];
+    } catch (error) {
+      console.error('Error fetching achievements:', error);
+      achievements.value = [];
+    }
+
+    // Fetch NFTs
+    try {
+      const nfts = await cosmicrafts.getNFTs(targetPrincipal);
+      if (nfts) {
+        // Process NFTs into categories
+        nftCategories.value = nftCategories.value.map(category => ({
+          ...category,
+          items: nfts.filter(nft => nft.metadata.category === category.type)
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching NFTs:', error);
+      // Keep the categories structure but with empty items
+      nftCategories.value = nftCategories.value.map(category => ({
+        ...category,
+        items: []
+      }));
+    }
+
   } catch (error) {
-    console.error('Error fetching profile data:', error);
-    loadingError.value = error.message;
+    console.error('Error loading profile data:', error);
+    loadingError.value = 'Error loading profile data';
   } finally {
     isLoading.value = false;
   }
