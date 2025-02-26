@@ -44,7 +44,7 @@
   "games": "Jeux",
   "community": "Communauté",
   "contact": "Contact",
-  "support": "Besoin d'aide ?",
+  "support": "Support",
   "language": "Langue",
   "marketplace": "Marché",
   "spiral": "Spiral",
@@ -74,7 +74,7 @@
         ]
       },
       {
-        "title": "La fête commence ici ! T’es des nôtres ou pas ?",
+        "title": "La fête commence ici ! T'es des nôtres ou pas ?",
         "ctaButtons": [
           { "text": "Aller sur NNS" },
           { "text": "Lire le Whitepaper" }
@@ -144,7 +144,7 @@
     "stayConnected": "Restons Connectés",
     "careers": "Carrières",
     "about": "À propos",
-    "support": "Besoin d'un coup de main?",
+    "support": "Support",
     "press": "Presse",
     "creators": "Créateurs",
     "privacy": "Confidentialité",
@@ -154,7 +154,6 @@
     "cookieSettings": "Paramètres de Cookies",
     "language": "Langue",
     "trademarks": "Toutes les marques mentionnées ici sont la propriété de leurs propriétaires respectifs."
-
   },
   "darkRift": {
   "title": "La Faille Obscure",

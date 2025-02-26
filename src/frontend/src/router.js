@@ -11,6 +11,7 @@ import Error from './pages/Error.vue';
 import Game from './pages/Game.vue';
 import Roadmap from './pages/Roadmap.vue';
 import Careers from './pages/Careers.vue';
+import Privacy from './pages/Privacy.vue';
 
 const routes = [
   { path: '/', component: Home, meta: { title: 'header.home' } },
@@ -65,7 +66,8 @@ const routes = [
     path: '/about',
     component: () => import('@/pages/About.vue'),
     meta: { title: 'header.about' }
-  }
+  },
+  { path: '/privacy', component: Privacy, meta: { title: 'footer.privacy' } },
 ];
 
 const router = createRouter({

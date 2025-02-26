@@ -44,7 +44,7 @@
   "games": "الألعاب",
   "community": "المجتمع",
   "contact": "تواصل معنا",
-  "support": "هل تحتاج مساعدة؟",
+  "support": "الدعم",
   "language": "اللغة",
   "marketplace": "السوق",
   "spiral": "الحلزون",
@@ -144,7 +144,7 @@
     "stayConnected": "خلينا متواصلين",
     "careers": "الوظائف",
     "about": "معلومات عنا",
-    "support": "تحتاج مساعدة؟",
+    "support": "الدعم",
     "press": "الإعلام",
     "creators": "المبدعون",
     "privacy": "الخصوصية",
@@ -154,7 +154,6 @@
     "cookieSettings": "إعدادات الكوكيز",
     "language": "اللغة",
     "trademarks": "جميع العلامات التجارية المذكورة هنا هي ملك لأصحابها."
-
   },
   "darkRift": {
   "title": "الصدع المظلم",

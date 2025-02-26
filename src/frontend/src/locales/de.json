@@ -44,7 +44,7 @@
   "games": "Spiele",
   "community": "Gemeinschaft",
   "contact": "Kontakt",
-  "support": "Brauchen Sie Hilfe?",
+  "support": "Support",
   "language": "Sprache",
   "marketplace": "Marktplatz",
   "spiral": "Spiral",
@@ -144,7 +144,7 @@
     "stayConnected": "Lass uns in Verbindung bleiben",
     "careers": "Karriere",
     "about": "Über uns",
-    "support": "Braucht's Hilfe?",
+    "support": "Support",
     "press": "Presse",
     "creators": "Ersteller",
     "privacy": "Datenschutz",
@@ -154,7 +154,6 @@
     "cookieSettings": "Cookie-Einstellungen",
     "language": "Sprache",
     "trademarks": "Alle hier genannten Marken sind Eigentum ihrer jeweiligen Besitzer."
-
   },
   "darkRift": {
   "title": "Die Dunkle Kluft",
@@ -213,5 +212,4 @@
       "debuggingTheMultiverse": "Multiversum wird debuggt"
     }
   }
-
 }
