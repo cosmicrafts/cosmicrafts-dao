@@ -33,8 +33,6 @@ const { t } = useI18n();
         <li><router-link to="/careers">{{ t('footer.careers') }}</router-link></li>
         <li><router-link to="/about">{{ t('footer.about') }}</router-link></li>
         <li><a href="#">{{ t('footer.support') }}</a></li>
-        <li><a href="#">{{ t('footer.press') }}</a></li>
-        <li><a href="#">{{ t('footer.creators') }}</a></li>
       </ul>
 
       <!-- Logo and Trademark -->
@@ -48,8 +46,6 @@ const { t } = useI18n();
         <li><router-link to="/privacy">{{ t('footer.privacy') }}</router-link></li>
         <li><a href="#">{{ t('footer.legal') }}</a></li>
         <li><a href="#">{{ t('footer.terms') }}</a></li>
-        <li><a href="#">{{ t('footer.cookiePolicy') }}</a></li>
-        <li><a href="#">{{ t('footer.cookieSettings') }}</a></li>
       </ul>
     </div>
   </footer>
@@ -69,7 +65,7 @@ footer {
 
 .social-section h3 {
   margin-bottom: 0.5rem;
-  font-size: 1.2rem;
+  font-size: 1.5rem;  
 }
 
 .social-links {
@@ -116,7 +112,7 @@ footer {
 .legal-links a {
   color: #00a6ff;
   text-decoration: none;
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: 500;
 }
 
@@ -137,11 +133,19 @@ footer {
 }
 
 .branding p {
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   color: #9c9c9c;
 }
 
 .branding br {
   color: #fff5f5;
+}
+@media (max-width: 768px) {
+  .links a,
+.legal-links a {
+  font-size: .85rem;
+}
+
+
 }
 </style>
