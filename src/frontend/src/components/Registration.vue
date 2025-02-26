@@ -168,22 +168,24 @@
 
           console.log("Signup response:", response);
 
-          // Handle the variant response
-          if (response.Ok) {
-            // Success case
-            const [ok, maybePlayer, msg] = response.Ok;
-            console.log('Registration successful:', maybePlayer);
-            registerResult.value = t('register.successMessage', {
-              username: maybePlayer[0]?.username || t('register.newPlayer'),
-            });
-            await authStore.isPlayerRegistered();
-            modalStore.closeModal();
-            router.push('/');
-          } else if (response.Err) {
-            // Error case
-            const errorMessage = response.Err;
-            console.log('Registration failed:', errorMessage);
-            registerResult.value = errorMessage || t('register.failureMessage');
+          // Handle the new response format
+          if (Array.isArray(response) && response.length === 3) {
+            const [success, playerData, message] = response;
+
+            if (success) {
+              // Success case
+              console.log('Registration successful:', playerData);
+              registerResult.value = t('register.successMessage', {
+                username: playerData[0]?.username || t('register.newPlayer'),
+              });
+              await authStore.isPlayerRegistered();
+              modalStore.closeModal();
+              router.push('/');
+            } else {
+              // Error case (if success is false)
+              console.log('Registration failed:', message);
+              registerResult.value = message || t('register.failureMessage');
+            }
           } else {
             // Unexpected response format
             console.error("Unexpected response format:", response);

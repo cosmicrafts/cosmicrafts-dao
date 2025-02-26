@@ -16,27 +16,25 @@ export const useStatisticsStore = defineStore('statistics', {
       const cosmicrafts = await canister.get("cosmicrafts");
 
       const authStore = useAuthStore();
-      const principalIdString = await authStore.getPrincipalId();
+      const identity = authStore.getIdentity();
       if (!cosmicrafts) {
         throw new Error("cosmicrafts service is not initialized");
       }
-      if (!principalIdString) {
-        throw new Error("Principal ID is not set");
+      if (!identity) {
+        throw new Error("Identity is not set");
       }
 
-      const principalId = Principal.fromText(principalIdString);
+      const principal = identity.getPrincipal();
 
       try {
-        console.log('Fetching player stats for principal ID:', principalId.toText());
-        const [playerStats, averageStats, myAverageStats, myStats] = await Promise.all([
-          cosmicrafts.getPlayerStats(principalId),
-          cosmicrafts.getPlayerAverageStats(principalId),
+        console.log('Fetching player stats for principal:', principal.toText());
+        const [playerStats, averageStats] = await Promise.all([
+          cosmicrafts.getPlayerStats(principal),
+          cosmicrafts.getPlayerAverageStats(principal)
         ]);
 
         this.playerStats = playerStats;
         this.averageStats = averageStats;
-        this.myAverageStats = myAverageStats;
-        this.myStats = myStats;
       } catch (error) {
         console.error('Failed to fetch player stats:', error);
         throw error;

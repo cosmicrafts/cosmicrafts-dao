@@ -70,7 +70,7 @@ async getPlayerByPrincipal(principal) {
     const principalString = principal.toString();
     
     // Use the correct method signature expected by the canister
-    const playerArr = await cosmicrafts.get_player(principalString);
+    const playerArr = await cosmicrafts.getPlayer(principalString);
     
     if (playerArr?.length > 0 && playerArr[0]) {
       return JSON.parse(
@@ -124,7 +124,7 @@ async getPlayerByPrincipal(principal) {
           throw new Error('Could not connect to the server.');
         }
     
-        const playerArr = await cosmicrafts.get_player();
+        const playerArr = await cosmicrafts.getPlayer();
         console.log('getPlayer() response:', playerArr);
     
         if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0]) {
@@ -199,7 +199,7 @@ async getPlayerByPrincipal(principal) {
         const cosmicrafts = await canisterStore.get('cosmicrafts');
     
         // Check if the identity is already registered
-        const playerArr = await cosmicrafts.get_player();
+        const playerArr = await cosmicrafts.getPlayer();
         if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0] !== null) {
           throw new Error('User is already registered.');
         }
@@ -250,7 +250,7 @@ async getPlayerByPrincipal(principal) {
           return false;
         }
 
-        const playerArr = await cosmicrafts.get_player();
+        const playerArr = await cosmicrafts.getPlayer();
         console.log('getPlayer() response:', playerArr);
 
         if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0]) {

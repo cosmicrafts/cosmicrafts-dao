@@ -5,26 +5,25 @@ import { useCanisterStore } from './canister.js';
 
 export const useACHStore = defineStore('ach', {
   state: () => ({
-    categories : {},
-    lines : {},
-    individual :{},
-    fetched : false,
-    loading : true,
+    categories: [],
+    fetched: false,
+    loading: true,
   }),
   actions: {
     async fetchAchievements() {
       const canister = useCanisterStore();
       const cosmicrafts = await canister.get("cosmicrafts");
       try {     
-        const [categories, lines, individual] = await cosmicrafts.getAchievementsView()
+        const categories = await cosmicrafts.getAchievements();
         this.categories = categories;
-        this.lines = lines;
-        this.individual = individual;
+        this.fetched = true;
+        this.loading = false;
       } catch (error) {
-        console.error('Failed to fetch player stats:', error);
+        console.error('Failed to fetch achievements:', error);
+        this.loading = false;
         throw error;
       }
-      return [this.categories, this.lines, this.individual];
+      return this.categories;
     }
   }
 });

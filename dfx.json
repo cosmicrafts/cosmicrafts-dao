@@ -1,34 +1,24 @@
 {
   "canisters": {
     "backend": {
-      "build": "candid-extractor target/wasm32-unknown-unknown/release/backend.wasm > candid/backend.did",
-      "candid": "candid/backend.did",
-      "package": "backend",
-      "type": "rust"
+      "main": "src/backend/main.mo",
+      "type": "motoko"
     },
     "frontend": {
       "dependencies": [
         "backend"
       ],
-      "headers": {
-        "**/*.br": {
-          "Content-Encoding": "br"
-        }
-      },
       "source": [
         "src/frontend/dist"
       ],
       "type": "assets",
       "workspace": "frontend"
-    },
-    "roadmap": {
-      "type": "motoko",
-      "main": "src/backend/roadmap.mo"
     }
   },
   "defaults": {
     "build": {
-      "args": ""
+      "args": "",
+      "packtool": "mops sources"
     }
   },
   "output_env_file": ".env",

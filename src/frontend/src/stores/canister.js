@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { HttpAgent } from '@dfinity/agent';
 import { createActor as createActorBackend, canisterId as backendCanisterId } from '../../../declarations/backend';
-import { createActor as createActorRoadmap, canisterId as roadmapCanisterId } from '../../../declarations/roadmap';
+import { createActor as createActorRoadmap, canisterId as roadmapCanisterId } from '../../../declarations/backend';
 import useAuthStore from './auth.js';
 
 let canisters = {
