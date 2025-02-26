@@ -8,6 +8,9 @@
             <p class="lead-text">
               🚀 Ready to launch your career into the stratosphere? We're seeking stellar talent to help shape the future of space gaming!
             </p>
+
+            <CareersPositions />
+
             <div class="cta-card">
               <p class="instruction-text">
                 If you believe you can contribute to Cosmicrafts in a professional capacity,<br>
@@ -20,9 +23,6 @@
               >
                 ✨ Beam to Careers ✨
               </a>
-              <div class="email-display">
-                careers@cosmicrafts.com
-              </div>
             </div>
             <p class="subtext">
               We're excited to review applications for all positions - from game developers to<br>
@@ -34,18 +34,24 @@
     </section>
   </template>
   
-  <script>
-  export default {
-    name: 'CareersPage'
+<script>
+import CareersPositions from '@/components/CareersPositions.vue';
+
+export default {
+  name: 'CareersPage',
+  components: {
+    CareersPositions
+  },
+  mounted() {
+    window.scrollTo(0, 0);
   }
-  </script>
+}
+</script>
   
   <style scoped>
   .careers-section {
     width: 100%;
     min-height: 100vh;
-    background: linear-gradient(45deg, #0a0e27, #1a1f4b);
-    color: white;
     overflow: hidden;
     position: relative;
   }
@@ -62,11 +68,11 @@
     text-align: center;
     font-size: 3.5rem;
     margin-bottom: 2rem;
-    background: linear-gradient(90deg, #00e1ff, #ff00ff);
+    background: linear-gradient(90deg, #00e1ff, #ff01d5);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: title-glow 2s ease-in-out infinite alternate;
+    animation: title-glow .5s ease-in-out infinite alternate;
   }
   
   .content-box {
@@ -115,18 +121,9 @@
   
   .email-button:hover {
     transform: translateY(-2px);
+    background: linear-gradient(45deg, #8427ff, #ff36d0);
+
     box-shadow: 0 10px 20px rgba(255, 0, 195, 0.3);
-  }
-  
-  .email-display {
-    font-family: monospace;
-    font-size: 1.2rem;
-    color: #00e1ff;
-    margin: 1.5rem 0;
-    padding: 1rem;
-    background: rgba(0, 225, 255, 0.1);
-    border-radius: 5px;
-    display: inline-block;
   }
   
   .subtext {
@@ -139,11 +136,11 @@
   /* Animations */
   @keyframes title-glow {
     from {
-      text-shadow: 0 0 10px rgba(0, 225, 255, 0.5);
+      text-shadow: 0 0 5px rgba(0, 225, 255, 0.451);
+      
     }
     to {
-      text-shadow: 0 0 20px rgba(255, 0, 195, 0.5),
-        0 0 30px rgba(255, 0, 195, 0.3);
+      text-shadow: 0 0 5px rgba(255, 0, 195, 0.291)
     }
   }
   
@@ -189,8 +186,5 @@
       font-size: 1rem;
     }
   
-    .email-display {
-      font-size: 1rem;
-    }
   }
   </style>

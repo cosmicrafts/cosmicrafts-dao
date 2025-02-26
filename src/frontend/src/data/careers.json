@@ -1,0 +1,96 @@
+{
+    "Community Manager": {
+      "title": "Community Manager",
+      "location": "Remote",
+      "type": "Full-time",
+      "description": "We are seeking a passionate and experienced Community Manager to join our team and help grow and nurture the Cosmicrafts community. You will be the bridge between our players and the development team, ensuring our community feels heard, engaged, and excited about our space gaming universe.",
+      "sections": [
+        {
+          "title": "Key Responsibilities",
+          "items": [
+            "Develop and execute community engagement strategies across Discord, Reddit, and social media platforms.",
+            "Moderate community platforms to ensure a positive and inclusive environment.",
+            "Organize and host virtual events, competitions, and community play sessions.",
+            "Gather and relay player feedback to the development team to influence game improvements.",
+            "Create and publish regular community updates, announcements, and newsletters.",
+            "Collaborate with the marketing team to align community initiatives with broader campaigns."
+          ]
+        },
+        {
+          "title": "Requirements",
+          "items": [
+            "2+ years of experience in community management or a related role.",
+            "Excellent written and verbal communication skills.",
+            "Deep understanding of gaming communities and player dynamics.",
+            "Familiarity with space strategy games and blockchain gaming ecosystems.",
+            "Ability to work across multiple time zones to engage a global audience.",
+            "Strong organizational skills and ability to manage multiple projects simultaneously."
+          ]
+        },
+        {
+          "title": "Preferred Qualifications",
+          "items": [
+            "Experience with blockchain-based communities and Web3 gaming.",
+            "Content creation skills, including graphic design or video editing.",
+            "Multilingual capabilities to engage with a diverse player base.",
+            "Experience with community management tools like Discord bots, moderation tools, and analytics platforms.",
+            "A passion for space exploration and strategy games."
+          ]
+        },
+        {
+          "title": "Technical Skills",
+          "items": [
+            "Platforms: Discord, Reddit, Twitter/X, YouTube, Twitch.",
+            "Tools: Google Workspace, Notion, Trello, or similar project management tools.",
+            "Analytics: Community engagement metrics and reporting tools.",
+            "Content Creation: Basic graphic design (Canva, Photoshop) or video editing (Premiere Pro, DaVinci Resolve)."
+          ]
+        }
+      ]
+    },
+    "Community Ambassador": {
+      "title": "Community Ambassador",
+      "location": "Remote",
+      "type": "Part-time",
+      "description": "We are looking for enthusiastic and dedicated Community Ambassadors to represent Cosmicrafts in local and regional gaming communities. As an Ambassador, you will be the face of Cosmicrafts, promoting our game, organizing events, and building relationships with players and influencers.",
+      "sections": [
+        {
+          "title": "Key Responsibilities",
+          "items": [
+            "Promote Cosmicrafts in your regional gaming community through events, social media, and local networks.",
+            "Create localized content (e.g., guides, videos, or streams) to engage players in your region.",
+            "Identify and collaborate with local influencers and content creators.",
+            "Host community play sessions and tournaments to foster engagement.",
+            "Report on community sentiment and provide feedback to the Cosmicrafts team."
+          ]
+        },
+        {
+          "title": "Requirements",
+          "items": [
+            "Active member of a gaming community with a strong network of connections.",
+            "Excellent communication and interpersonal skills.",
+            "Passion for space strategy games and blockchain gaming.",
+            "Ability to work independently and manage your own schedule.",
+            "Access to basic streaming or content creation tools (e.g., microphone, camera)."
+          ]
+        },
+        {
+          "title": "Preferred Qualifications",
+          "items": [
+            "Experience in content creation (streaming, video editing, or graphic design).",
+            "Familiarity with blockchain gaming and Web3 ecosystems.",
+            "Multilingual capabilities to engage with diverse audiences.",
+            "Experience organizing gaming events or tournaments."
+          ]
+        },
+        {
+          "title": "Technical Skills",
+          "items": [
+            "Platforms: Discord, Twitch, YouTube, Twitter/X.",
+            "Tools: OBS Studio, Streamlabs, or similar streaming software.",
+            "Content Creation: Basic video editing or graphic design tools."
+          ]
+        }
+      ]
+    }
+  }
