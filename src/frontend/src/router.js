@@ -60,7 +60,12 @@ const routes = [
   },
   { path: '/error', component: Error, meta: { title: 'header.error' } },
   // Add catch-all route for undefined paths
-  { path: '/:pathMatch(.*)*', redirect: '/' }
+  { path: '/:pathMatch(.*)*', redirect: '/' },
+  {
+    path: '/about',
+    component: () => import('@/pages/About.vue'),
+    meta: { title: 'header.about' }
+  }
 ];
 
 const router = createRouter({
