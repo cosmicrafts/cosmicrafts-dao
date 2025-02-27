@@ -1,11 +1,5 @@
 <template>
   <div class="player-profile">
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" v-if="isLoading">
-      <div class="loading-spinner"></div>
-      <p>Loading profile data...</p>
-    </div>
-
     <!-- Error Message -->
     <div class="error-message" v-if="loadingError">
       <h3>Profile Error</h3>
@@ -160,46 +154,60 @@
         <section class="content-section stats-section">
           <h2>Combat Statistics</h2>
           <div class="stats-grid">
-            <div class="stat-tile">
-              <div class="stat-header">
-                <span class="stat-icon">⚔️</span>
-                <span class="stat-title">Damage Dealt</span>
+            <template v-if="!playerStats">
+              <div class="stat-tile skeleton" v-for="i in 4" :key="i">
+                <div class="stat-header">
+                  <span class="stat-icon skeleton-icon"></span>
+                  <span class="stat-title skeleton-text"></span>
+                </div>
+                <div class="stat-body">
+                  <span class="stat-value skeleton-text"></span>
+                  <div class="stat-progress skeleton-progress"></div>
+                </div>
               </div>
-              <div class="stat-body">
-                <span class="stat-value">{{ formatNumber(playerStats?.totalDamageDealt) }}</span>
-                <div class="stat-progress" :style="{ width: calculateStatProgress('totalDamageDealt', maxStats.totalDamageDealt) + '%' }"></div>
+            </template>
+            <template v-else>
+              <div class="stat-tile">
+                <div class="stat-header">
+                  <span class="stat-icon">⚔️</span>
+                  <span class="stat-title">Damage Dealt</span>
+                </div>
+                <div class="stat-body">
+                  <span class="stat-value">{{ formatNumber(playerStats?.totalDamageDealt) }}</span>
+                  <div class="stat-progress" :style="{ width: calculateStatProgress('totalDamageDealt', maxStats.totalDamageDealt) + '%' }"></div>
+                </div>
               </div>
-            </div>
-            <div class="stat-tile">
-              <div class="stat-header">
-                <span class="stat-icon">🛡️</span>
-                <span class="stat-title">Damage Evaded</span>
+              <div class="stat-tile">
+                <div class="stat-header">
+                  <span class="stat-icon">🛡️</span>
+                  <span class="stat-title">Damage Evaded</span>
+                </div>
+                <div class="stat-body">
+                  <span class="stat-value">{{ formatNumber(playerStats?.totalDamageEvaded) }}</span>
+                  <div class="stat-progress" :style="{ width: calculateStatProgress('totalDamageEvaded', maxStats.totalDamageEvaded) + '%' }"></div>
+                </div>
               </div>
-              <div class="stat-body">
-                <span class="stat-value">{{ formatNumber(playerStats?.totalDamageEvaded) }}</span>
-                <div class="stat-progress" :style="{ width: calculateStatProgress('totalDamageEvaded', maxStats.totalDamageEvaded) + '%' }"></div>
+              <div class="stat-tile">
+                <div class="stat-header">
+                  <span class="stat-icon">⚡</span>
+                  <span class="stat-title">Energy Generated</span>
+                </div>
+                <div class="stat-body">
+                  <span class="stat-value">{{ formatNumber(playerStats?.energyGenerated) }}</span>
+                  <div class="stat-progress" :style="{ width: calculateStatProgress('energyGenerated', maxStats.energyGenerated) + '%' }"></div>
+                </div>
               </div>
-            </div>
-            <div class="stat-tile">
-              <div class="stat-header">
-                <span class="stat-icon">⚡</span>
-                <span class="stat-title">Energy Generated</span>
+              <div class="stat-tile">
+                <div class="stat-header">
+                  <span class="stat-icon">🔋</span>
+                  <span class="stat-title">Energy Used</span>
+                </div>
+                <div class="stat-body">
+                  <span class="stat-value">{{ formatNumber(playerStats?.energyUsed) }}</span>
+                  <div class="stat-progress" :style="{ width: calculateStatProgress('energyUsed', maxStats.energyUsed) + '%' }"></div>
+                </div>
               </div>
-              <div class="stat-body">
-                <span class="stat-value">{{ formatNumber(playerStats?.energyGenerated) }}</span>
-                <div class="stat-progress" :style="{ width: calculateStatProgress('energyGenerated', maxStats.energyGenerated) + '%' }"></div>
-              </div>
-            </div>
-            <div class="stat-tile">
-              <div class="stat-header">
-                <span class="stat-icon">🔋</span>
-                <span class="stat-title">Energy Used</span>
-              </div>
-              <div class="stat-body">
-                <span class="stat-value">{{ formatNumber(playerStats?.energyUsed) }}</span>
-                <div class="stat-progress" :style="{ width: calculateStatProgress('energyUsed', maxStats.energyUsed) + '%' }"></div>
-              </div>
-            </div>
+            </template>
           </div>
         </section>
 
@@ -214,24 +222,36 @@
                  @click="activeCollection = category.type">
               <span class="tab-icon">{{ getCategoryIcon(category.type) }}</span>
               {{ category.title }}
+              <span v-if="category.isLoading" class="loading-indicator">⟳</span>
             </div>
           </div>
           <div class="collection-grid">
             <div v-for="category in nftCategories" :key="category.type">
               <div class="nft-grid" v-if="activeCollection === category.type">
-                <div class="nft-card" v-for="nft in category.items" :key="nft.id">
-                  <div class="nft-image">
-                    <img 
-                      :src="nft.image"
-                      :alt="nft.name"
-                      class="nft-image"
-                    />
+                <template v-if="category.isLoading">
+                  <div class="nft-card skeleton" v-for="i in 6" :key="i">
+                    <div class="nft-image skeleton-image"></div>
+                    <div class="nft-info">
+                      <span class="nft-name skeleton-text"></span>
+                    </div>
                   </div>
-                  <div class="nft-info">
-                    <span class="nft-name">{{ nft.name }}</span>
+                </template>
+                <template v-else>
+                  <div class="nft-card" v-for="nft in category.items" :key="nft.id">
+                    <div class="nft-image">
+                      <img 
+                        :src="nft.image"
+                        :alt="nft.name"
+                        class="nft-image"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div class="nft-info">
+                      <span class="nft-name">{{ nft.name }}</span>
+                    </div>
                   </div>
-                </div>
-                <p v-if="category.items.length === 0" class="empty-message">No {{ category.title.toLowerCase() }} collected yet</p>
+                  <p v-if="category.items.length === 0" class="empty-message">No {{ category.title.toLowerCase() }} collected yet</p>
+                </template>
               </div>
             </div>
           </div>
@@ -378,16 +398,15 @@ const averageStats = ref(null);
 const achievements = ref([]);
 const playerAchievements = ref([]);
 const nftCategories = ref([
-  { type: 'characters', title: 'Characters', items: [] },
-  { type: 'units', title: 'Units', items: [] },
-  { type: 'avatars', title: 'Avatars', items: [] },
-  { type: 'trophies', title: 'Trophies', items: [] },
-  { type: 'chests', title: 'Chests', items: [] }
+  { type: 'characters', title: 'Characters', items: [], isLoading: false },
+  { type: 'units', title: 'Units', items: [], isLoading: false },
+  { type: 'avatars', title: 'Avatars', items: [], isLoading: false },
+  { type: 'trophies', title: 'Trophies', items: [], isLoading: false },
+  { type: 'chests', title: 'Chests', items: [], isLoading: false }
 ]);
 const friends = ref([]);
 const activeTab = ref('profile');
 const activeCollection = ref('characters');
-const isLoading = ref(true);
 const loadingError = ref(null);
 const maxStats = ref({
   totalDamageDealt: 1000000,
@@ -534,7 +553,6 @@ const playerAvatar = computed(() => {
 
 // Fetch all player data on mount
 onMounted(async () => {
-  isLoading.value = true;
   loadingError.value = '';
   
   try {
@@ -547,7 +565,6 @@ onMounted(async () => {
     let targetPrincipal;
     
     if (isOwnProfile.value) {
-      // For own profile, get the identity's principal safely
       const identity = authStore.getIdentity();
       if (!identity) {
         throw new Error('Authentication required to view your profile');
@@ -555,169 +572,95 @@ onMounted(async () => {
       targetPrincipal = identity.getPrincipal();
       console.log('Using own principal for profile:', targetPrincipal.toString());
     } else {
-      // For other profiles, get the principal from the player data
       if (player.value.id instanceof Principal) {
         targetPrincipal = player.value.id;
-        console.log('Using Principal object from player data:', targetPrincipal.toString());
-      } else if (route.meta.playerData && route.meta.playerData.id instanceof Principal) {
-        // If the player.value.id is not a Principal but route.meta.playerData.id is, use that
+      } else if (route.meta.playerData?.id instanceof Principal) {
         targetPrincipal = route.meta.playerData.id;
-        console.log('Using Principal from route meta playerData:', targetPrincipal.toString());
+      } else if (route.meta.profileLookupMethod === 'principal') {
+        targetPrincipal = Principal.fromText(route.params.identifier);
       } else {
-        // If we don't have a Principal in the player data, try to create one from the identifier
+        throw new Error(`Cannot create Principal from username: ${route.params.identifier}`);
+      }
+    }
+
+    // Fetch data in parallel
+    const fetchTasks = [
+      // Fetch player stats
+      (async () => {
         try {
-          // Only try to create a Principal if the lookup method was 'principal'
-          // For username lookups, this would fail
-          if (route.meta.profileLookupMethod === 'principal') {
-            targetPrincipal = Principal.fromText(route.params.identifier);
-            console.log('Created Principal from route identifier:', targetPrincipal.toString());
-          } else {
-            throw new Error(`Cannot create Principal from username: ${route.params.identifier}`);
+          const stats = await cosmicrafts.getPlayerStats(targetPrincipal);
+          playerStats.value = stats;
+          
+          const avgStats = await cosmicrafts.getPlayerAverageStats(targetPrincipal);
+          averageStats.value = avgStats;
+        } catch (error) {
+          console.error('Error fetching player stats:', error);
+          playerStats.value = {
+            gamesPlayed: 0,
+            gamesWon: 0,
+            energyGenerated: 0,
+            energyUsed: 0,
+            resourcesCollected: 0,
+            unitsBuilt: 0
+          };
+        }
+      })(),
+      
+      // Fetch achievements
+      (async () => {
+        try {
+          if (!achStore.fetched) {
+            await achStore.fetchAchievements();
+          }
+          const userAchievements = await cosmicrafts.getUserAchievementsStructure(targetPrincipal);
+          playerAchievements.value = userAchievements || [];
+          if (playerAchievements.value?.length > 0) {
+            achievements.value = processAchievements(playerAchievements.value);
           }
         } catch (error) {
-          console.error('Error creating Principal from identifier:', error);
-          throw new Error(`Invalid Principal ID: ${error.message}`);
+          console.error('Error fetching achievements:', error);
         }
-      }
-    }
-
-    // Ensure we have a valid Principal before proceeding
-    if (!targetPrincipal) {
-      // Instead of throwing an error, set a user-friendly error message
-      // and try to display what profile data we have
-      console.error('Could not determine a valid Principal ID for this profile');
-      loadingError.value = 'Could not fetch complete profile data. Some features may be limited.';
+      })(),
       
-      // Set minimal player stats
-      playerStats.value = {
-        gamesPlayed: 0,
-        gamesWon: 0,
-        energyGenerated: 0,
-        energyUsed: 0,
-        resourcesCollected: 0,
-        unitsBuilt: 0
-      };
-      
-      // Skip the rest of the data fetching that requires a Principal
-      isLoading.value = false;
-      return;
-    }
-
-    // Fetch player stats
-    console.log('Fetching player stats for principal:', targetPrincipal.toString());
-    try {
-      const stats = await cosmicrafts.getPlayerStats(targetPrincipal);
-      playerStats.value = stats;
-      console.log('Player stats:', stats);
-      
-      // Also fetch average stats if available
-      try {
-        const avgStats = await cosmicrafts.getPlayerAverageStats(targetPrincipal);
-        averageStats.value = avgStats;
-        console.log('Player average stats:', avgStats);
-      } catch (avgStatsError) {
-        console.warn('Average stats not available:', avgStatsError);
-      }
-    } catch (statsError) {
-      console.error('Error fetching player stats:', statsError);
-      playerStats.value = {
-        gamesPlayed: 0,
-        gamesWon: 0,
-        energyGenerated: 0,
-        energyUsed: 0,
-        resourcesCollected: 0,
-        unitsBuilt: 0
-      };
-    }
-
-    // Fetch player achievements
-    console.log('Fetching player achievements for principal:', targetPrincipal.toString());
-    try {
-      // First check if we need to fetch the achievement categories
-      if (!achStore.fetched) {
-        await achStore.fetchAchievements();
-      }
-      
-      // Then fetch the user's achievements
-      const userAchievements = await cosmicrafts.getUserAchievementsStructure(targetPrincipal);
-      playerAchievements.value = userAchievements || [];
-      console.log('Player achievements:', playerAchievements.value);
-      
-      // Process the achievements data to populate the achievements array
-      if (playerAchievements.value && playerAchievements.value.length > 0) {
-        achievements.value = processAchievements(playerAchievements.value);
-        console.log('Processed achievements:', achievements.value);
-      }
-    } catch (achError) {
-      console.error('Error fetching player achievements:', achError);
-      playerAchievements.value = [];
-      achievements.value = [];
-    }
-
-    // Initialize playerNFTs as an empty array
-    playerNFTs.value = [];
-    
-    // Fetch player NFTs if enabled
-    if (fetchNFTs.value) {
-      try {
-        console.log('Fetching player NFTs for principal:', targetPrincipal.toString());
-        const nfts = await cosmicrafts.getNFTs(targetPrincipal);
-        
-        // Convert BigInt values to strings before storing
-        const processedNfts = JSON.parse(
-          JSON.stringify(nfts || [], (key, value) => 
-            typeof value === 'bigint' ? value.toString() : value
-          )
-        );
-        
-        playerNFTs.value = processedNfts;
-        
-        // Log detailed NFT structure for debugging
-        if (playerNFTs.value && playerNFTs.value.length > 0) {
-          console.log('First NFT structure:', playerNFTs.value[0]);
-        } else {
-          console.log('No NFTs found for player');
-        }
-        
-        console.log('Player NFTs count:', playerNFTs.value?.length || 0);
-        
-        // Process NFTs and populate categories
-        if (playerNFTs.value && playerNFTs.value.length > 0) {
-          // Clear existing items in categories
-          nftCategories.value.forEach(category => {
-            category.items = [];
-          });
-          
-          const processedNFTs = processNFTs(playerNFTs.value);
-          console.log('Processed NFTs:', processedNFTs);
-          
-          // Categorize NFTs
-          processedNFTs.forEach(nft => {
-            const category = nft.metadata.category?.toLowerCase() || 'characters';
-            const categoryObj = nftCategories.value.find(c => c.type === category);
-            if (categoryObj) {
-              categoryObj.items.push(nft);
-            } else {
-              // Default to characters if category not found
-              nftCategories.value.find(c => c.type === 'characters')?.items.push(nft);
+      // Fetch NFTs for active category
+      (async () => {
+        if (fetchNFTs.value) {
+          const category = nftCategories.value.find(c => c.type === activeCollection.value);
+          if (category) {
+            category.isLoading = true;
+            try {
+              const nfts = await cosmicrafts.getNFTs(targetPrincipal);
+              const processedNfts = JSON.parse(
+                JSON.stringify(nfts || [], (key, value) => 
+                  typeof value === 'bigint' ? value.toString() : value
+                )
+              );
+              
+              if (processedNfts?.length > 0) {
+                const categorizedNfts = processNFTs(processedNfts);
+                categorizedNfts.forEach(nft => {
+                  const nftCategory = nft.metadata.category?.toLowerCase() || 'characters';
+                  const categoryObj = nftCategories.value.find(c => c.type === nftCategory);
+                  if (categoryObj) {
+                    categoryObj.items.push(nft);
+                  }
+                });
+              }
+            } catch (error) {
+              console.error('Error fetching NFTs:', error);
+            } finally {
+              category.isLoading = false;
             }
-          });
-          
-          console.log('NFT categories after processing:', nftCategories.value);
+          }
         }
-      } catch (nftError) {
-        console.error('Error fetching NFTs:', nftError);
-        loadingError.value = `Error loading NFTs: ${nftError.message}`;
-      }
-    } else {
-      console.log('NFT fetching is disabled');
-    }
+      })()
+    ];
 
-    isLoading.value = false;
+    // Execute all fetch tasks in parallel
+    await Promise.allSettled(fetchTasks);
+
   } catch (error) {
     console.error('Error loading profile data:', error);
-    
-    // Provide a more user-friendly error message based on the error type
     if (error.message.includes('Invalid Principal ID') || 
         error.message.includes('Cannot create Principal')) {
       loadingError.value = 'Could not load profile data. This may be because the username does not exist or the Principal ID is invalid.';
@@ -728,8 +671,6 @@ onMounted(async () => {
     } else {
       loadingError.value = `Error loading profile data: ${error.message}`;
     }
-    
-    isLoading.value = false;
   }
 });
 
@@ -1133,14 +1074,12 @@ const saveDescription = async () => {
 
 // Function to retry loading profile data
 const retryLoading = () => {
-  isLoading.value = true;
   loadingError.value = null;
   
   // Call the onMounted function again
   onMounted().catch(error => {
     console.error('Error retrying profile load:', error);
     loadingError.value = `Failed to reload profile: ${error.message}`;
-    isLoading.value = false;
   });
 };
 
@@ -1884,37 +1823,6 @@ const formattedRegistrationDate = computed(() => {
   background: linear-gradient(45deg, #ff00c3, #00d9ff);
 }
 
-/* Loading Overlay */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(15, 23, 41, 0.9);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid rgba(0, 217, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #00d9ff;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* Error Message */
 .error-message {
   background: rgba(255, 0, 0, 0.05);
@@ -2176,5 +2084,76 @@ const formattedRegistrationDate = computed(() => {
   margin-top: 5px;
   margin-bottom: 10px;
   font-style: italic;
+}
+
+/* Add skeleton loading styles */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.05) 20%,
+    rgba(255, 255, 255, 0.1) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.skeleton-text {
+  height: 1em;
+  width: 80%;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 0.5em 0;
+  border-radius: 4px;
+}
+
+.skeleton-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.skeleton-progress {
+  height: 4px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  margin-top: 0.5rem;
+}
+
+.loading-indicator {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  margin-left: 0.5rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 </style>
