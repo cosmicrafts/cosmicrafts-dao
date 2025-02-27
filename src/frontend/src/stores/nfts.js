@@ -123,19 +123,76 @@ export const useNftsStore = defineStore('nfts', {
     processNFTs(nfts) {
       return (nfts || []).map(nft => {
         try {
-          const [id, metadata] = Array.isArray(nft) ? nft : [nft.tokenId, nft.metadata];
-          const generalMetadata = metadata?.general || {};
-          const basicMetadata = metadata?.basic || {};
+          // Extract id and metadata from array format [tokenId, metadata]
+          const [id, rawMetadata] = Array.isArray(nft) ? nft : [nft.tokenId, nft.metadata];
           
+          // Extract the general metadata and category
+          const generalMetadata = rawMetadata?.metadata?.general || {};
+          const categoryData = rawMetadata?.metadata?.category || {};
+          
+          // Determine category from the category object
+          let category = 'unknown';
+          if (categoryData) {
+            if ('Avatar' in categoryData) category = 'avatars';
+            else if ('Trophy' in categoryData) category = 'trophies';
+            else if ('Chest' in categoryData) category = 'chests';
+            else if ('Unit' in categoryData) category = 'units';
+          }
+
+          // Extract basic metadata
+          const basicMetadata = rawMetadata?.metadata?.basic || {};
+          
+          // Process faction (it's now an array in general metadata)
+          let faction = null;
+          if (generalMetadata.faction && Array.isArray(generalMetadata.faction) && generalMetadata.faction.length > 0) {
+            const factionValue = generalMetadata.faction[0];
+            if ('Cosmicon' in factionValue) faction = 'cosmicon';
+            else if ('Spade' in factionValue) faction = 'spade';
+            else if ('Arch' in factionValue) faction = 'arch';
+            else if ('Celestial' in factionValue) faction = 'celestial';
+            else if ('Webe' in factionValue) faction = 'webe';
+            else if ('Neutral' in factionValue) faction = 'neutral';
+            else if ('Spirat' in factionValue) faction = 'spirat';
+          }
+
+          // Process rarity (it's now an array in general metadata)
+          const rarity = generalMetadata.rarity && Array.isArray(generalMetadata.rarity) 
+            ? generalMetadata.rarity[0] 
+            : 1;
+
+          // Process skills
+          const skills = rawMetadata?.metadata?.skills || [];
+          const processedSkills = skills.map(skill => {
+            if ('CriticalStrike' in skill) return 'critical-strike';
+            if ('Shield' in skill) return 'shield';
+            if ('Evasion' in skill) return 'evasion';
+            return null;
+          }).filter(Boolean);
+
+          // Process soul data
+          const soulData = rawMetadata?.metadata?.soul || [];
+          const soul = soulData.length > 0 ? {
+            gamesPlayed: soulData[0]?.gamesPlayed || 0,
+            totalDamageDealt: soulData[0]?.totalDamageDealt || 0,
+            birth: soulData[0]?.birth || Date.now(),
+            totalKills: soulData[0]?.totalKills || 0,
+            combatExperience: soulData[0]?.combatExperience || 0
+          } : null;
+
           return {
             id: id?.toString() || 'unknown',
             name: generalMetadata.name || 'Unknown NFT',
+            description: generalMetadata.description || '',
             image: generalMetadata.image || '/assets/webp/chest.webp',
             metadata: {
-              ...metadata,
-              category: metadata?.category || 'characters',
-              level: basicMetadata?.level || 1,
-              rarity: generalMetadata?.rarity || 1
+              category,
+              faction,
+              rarity,
+              level: basicMetadata.level || 1,
+              damage: basicMetadata.damage || 0,
+              health: basicMetadata.health || 0,
+              skills: processedSkills,
+              soul
             }
           };
         } catch (error) {
@@ -143,11 +200,12 @@ export const useNftsStore = defineStore('nfts', {
           return {
             id: 'error',
             name: 'Error Loading NFT',
+            description: 'Failed to load NFT data',
             image: '/assets/webp/chest.webp',
             metadata: {
-              category: 'characters',
-              level: 1,
-              rarity: 1
+              category: 'unknown',
+              rarity: 1,
+              level: 1
             }
           };
         }

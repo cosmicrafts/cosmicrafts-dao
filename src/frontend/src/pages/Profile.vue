@@ -237,20 +237,14 @@
                   </div>
                 </template>
                 <template v-else>
-                  <div class="nft-card" v-for="nft in category.items" :key="nft.id">
-                    <div class="nft-image">
-                      <img 
-                        :src="nft.image"
-                        :alt="nft.name"
-                        class="nft-image"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div class="nft-info">
-                      <span class="nft-name">{{ nft.name }}</span>
-                    </div>
-                  </div>
-                  <p v-if="category.items.length === 0" class="empty-message">No {{ category.title.toLowerCase() }} collected yet</p>
+                  <NFTCard 
+                    v-for="nft in category.items" 
+                    :key="nft.id"
+                    :nft="nft"
+                  />
+                  <p v-if="category.items.length === 0" class="empty-message">
+                    No {{ category.title.toLowerCase() }} collected yet
+                  </p>
                 </template>
               </div>
             </div>
@@ -382,6 +376,7 @@ import avatar12 from '@/assets/avatars/Avatar_12.webp';
 import { Principal } from '@dfinity/principal';
 import { useProfileStore } from '../stores/profile';
 import { useNftsStore } from '../stores/nfts';
+import NFTCard from '@/components/NFTCard.vue';
 
 const authStore = useAuthStore();
 const statsStore = useStatisticsStore();
@@ -826,43 +821,105 @@ const processNFTs = (nfts) => {
       // Log the raw NFT data for debugging
       console.log('Processing individual NFT:', nft);
       
-      // Handle different possible NFT data structures
-      const [id, metadata] = Array.isArray(nft) ? nft : [nft.tokenId, nft.metadata];
-      console.log('Extracted id and metadata:', { id, metadata });
+      // Extract id and metadata from the array format
+      const [id, rawMetadata] = nft;
+      console.log('Raw metadata:', rawMetadata);
       
-      // Extract metadata fields
-      const generalMetadata = metadata?.general || {};
-      const basicMetadata = metadata?.basic || {};
-      console.log('Extracted metadata fields:', { generalMetadata, basicMetadata });
+      // The metadata structure is: metadata.metadata.general
+      const metadata = rawMetadata.metadata || {};
+      const general = metadata.general || {};
+      const basic = metadata.basic || [];
+      const category = metadata.category || {};
       
-      // Handle image path
-      let imageUrl = generalMetadata.image;
-      if (!imageUrl || !imageUrl.startsWith('http')) {
-        imageUrl = '/assets/webp/chest.webp';
+      console.log('Processed metadata:', {
+        general,
+        basic,
+        category
+      });
+
+      // Determine category
+      let categoryType = 'unknown';
+      if (category) {
+        if ('Avatar' in category) categoryType = 'avatars';
+        else if ('Trophy' in category) categoryType = 'trophies';
+        else if ('Chest' in category) categoryType = 'chests';
+        else if ('Unit' in category) categoryType = 'units';
       }
-      console.log('Resolved image URL:', imageUrl);
-      
-      return {
+
+      // Process faction if it exists (it's an array with a single object)
+      let faction = null;
+      if (general.faction && Array.isArray(general.faction) && general.faction.length > 0) {
+        const factionObj = general.faction[0];
+        if ('Cosmicon' in factionObj) faction = 'cosmicon';
+        else if ('Spade' in factionObj) faction = 'spade';
+        else if ('Arch' in factionObj) faction = 'arch';
+        else if ('Celestial' in factionObj) faction = 'celestial';
+        else if ('Webe' in factionObj) faction = 'webe';
+        else if ('Neutral' in factionObj) faction = 'neutral';
+        else if ('Spirat' in factionObj) faction = 'spirat';
+      }
+
+      // Process rarity (it's an array with a single value)
+      const rarity = general.rarity && Array.isArray(general.rarity) 
+        ? general.rarity[0] 
+        : 1;
+
+      // Get basic stats
+      const level = basic.length > 0 ? basic[0].level || 1 : 1;
+      const damage = basic.length > 0 ? basic[0].damage || 0 : 0;
+      const health = basic.length > 0 ? basic[0].health || 0 : 0;
+
+      // Process skills
+      const skills = metadata.skills || [];
+      const processedSkills = skills.map(skill => {
+        if ('CriticalStrike' in skill) return 'critical-strike';
+        if ('Shield' in skill) return 'shield';
+        if ('Evasion' in skill) return 'evasion';
+        return null;
+      }).filter(Boolean);
+
+      // Process soul data if it exists
+      const soulData = metadata.soul || [];
+      const soul = soulData.length > 0 ? {
+        gamesPlayed: soulData[0].gamesPlayed || 0,
+        totalDamageDealt: soulData[0].totalDamageDealt || 0,
+        birth: soulData[0].birth || Date.now(),
+        totalKills: soulData[0].totalKills || 0,
+        combatExperience: soulData[0].combatExperience || 0
+      } : null;
+
+      // Construct the final NFT object
+      const processedNFT = {
         id: id?.toString() || 'unknown',
-        name: generalMetadata.name || 'Unknown NFT',
-        image: imageUrl,
+        name: general.name || 'Unknown NFT',
+        description: general.description || '',
+        image: general.image || '/assets/webp/chest.webp',
         metadata: {
-          ...metadata,
-          category: metadata?.category || 'characters',
-          level: basicMetadata?.level || 1,
-          rarity: generalMetadata?.rarity || 1
+          category: categoryType,
+          faction,
+          rarity,
+          level,
+          damage,
+          health,
+          skills: processedSkills,
+          soul
         }
       };
+
+      console.log('Processed NFT:', processedNFT);
+      return processedNFT;
+
     } catch (error) {
       console.error('Error processing NFT:', error, 'NFT data:', nft);
       return {
         id: 'error',
-        name: 'Error NFT',
+        name: 'Error Loading NFT',
+        description: 'Failed to load NFT data',
         image: '/assets/webp/chest.webp',
         metadata: {
-          category: 'error',
-          level: 1,
-          rarity: 1
+          category: 'unknown',
+          rarity: 1,
+          level: 1
         }
       };
     }
@@ -1094,7 +1151,7 @@ const formattedRegistrationDate = computed(() => {
 /* Base Styles */
 .player-profile {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f1729 0%, #1a1f35 100%);
+  background: linear-gradient(135deg, #464646 0%, #181818 100%);
   color: #ffffff;
 }
 
@@ -1166,7 +1223,7 @@ const formattedRegistrationDate = computed(() => {
 .hero-section {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
               url('@/assets/hero-bg.jpg') center/cover;
-  padding: 4rem 2rem;
+  padding: 6rem 2rem;
   position: relative;
   overflow: hidden;
 }
@@ -1988,7 +2045,7 @@ const formattedRegistrationDate = computed(() => {
 
 .edit-profile-btn {
   position: absolute;
-  top: 1rem;
+  top: 8rem;
   right: 1rem;
   background: rgba(255, 255, 255, 0.1);
   border: none;
