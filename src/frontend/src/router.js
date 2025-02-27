@@ -53,48 +53,118 @@ const routes = [
       }
 
       try {
-        let playerData;
-        console.log('🔍 Attempting to fetch profile for identifier:', identifier);
-
-        // Updated regex pattern for Principal IDs
-        const principalRegex = /^[a-z0-9-]{5,63}$/;
+        // More specific Principal ID regex pattern
+        // Principal IDs are typically 5-63 characters with specific format
+        const principalRegex = /^[a-z0-9]{1,5}(-[a-z0-9]{1,5}){2,}$/;
+        const isPrincipalFormat = principalRegex.test(identifier);
+        
         console.log('🔍 Testing identifier format:', {
-          isPrincipalFormat: principalRegex.test(identifier),
+          isPrincipalFormat,
           length: identifier.length
         });
 
-        // First try to treat it as a Principal ID
-        if (principalRegex.test(identifier)) {
-          console.log('🔑 Identifier matches Principal format, creating Principal object...');
+        let playerData = null;
+        let usedMethod = '';
+
+        // Try to fetch the profile based on the identifier format
+        if (isPrincipalFormat) {
+          console.log('🔑 Identifier appears to be a Principal ID, attempting to create Principal object...');
           try {
             const principalObj = Principal.fromText(identifier);
+            
+            // Skip the default anonymous principal
+            if (principalObj.toString() === '2vxsx-fae') {
+              console.warn('⚠️ Default anonymous Principal (2vxsx-fae) detected, which should not be used');
+              throw new Error('Default anonymous Principal should not be used');
+            }
+            
             console.log('✅ Principal object created:', principalObj.toString());
             console.log('📡 Fetching profile by Principal...');
             playerData = await profileStore.getProfileByPrincipal(principalObj);
+            usedMethod = 'principal';
           } catch (principalError) {
             console.error('❌ Error creating Principal object:', {
               error: principalError.message,
               identifier
             });
-            next('/error');
-            return;
+            // Fall back to trying username if Principal creation failed
+            console.log('🔄 Falling back to username search...');
           }
-        } else {
-          console.log('👤 Identifier appears to be username, fetching by username...');
-          playerData = await profileStore.getProfileByUsername(identifier);
+        }
+        
+        // If we don't have player data yet, try by username
+        if (!playerData) {
+          console.log('👤 Trying to fetch profile by username:', identifier);
+          try {
+            playerData = await profileStore.getProfileByUsername(identifier);
+            usedMethod = 'username';
+            
+            // Log detailed information about the player data
+            if (playerData) {
+              console.log('🔍 Player data from username search:', {
+                username: playerData.username,
+                id: playerData.id ? (typeof playerData.id === 'object' ? 'Principal Object' : playerData.id) : 'No ID',
+                idType: playerData.id ? typeof playerData.id : 'undefined',
+                hasToText: playerData.id && typeof playerData.id === 'object' ? typeof playerData.id.toText === 'function' : false,
+                isPrincipal: playerData.id instanceof Principal,
+                properties: playerData.id && typeof playerData.id === 'object' ? Object.getOwnPropertyNames(playerData.id) : []
+              });
+            }
+          } catch (usernameError) {
+            console.error('❌ Error fetching by username:', {
+              error: usernameError.message,
+              identifier
+            });
+          }
         }
 
         if (playerData) {
-          console.log('✨ Profile found:', {
-            username: playerData.username,
-            id: playerData.id,
-            level: playerData.level
+          console.log(`✨ Profile found via ${usedMethod}:`, {
+            username: playerData.username || 'Unknown',
+            id: playerData.id ? (typeof playerData.id === 'object' ? 'Principal Object' : playerData.id) : 'No ID',
+            level: playerData.level || '?'
           });
-          to.meta.playerData = playerData;
+          
+          // IMPORTANT: Preserve the Principal object in playerData
+          // Do NOT stringify and parse the playerData as it will lose the Principal object
+          to.meta.playerData = {
+            ...playerData,
+            username: playerData.username || `User ${identifier.substring(0, 5)}...`,
+            level: playerData.level || '?',
+            title: playerData.title || 'Galactic Adventurer',
+            description: playerData.description || 'No description available.',
+            elo: playerData.elo || 1200
+          };
+          
+          // Log the Principal object in the route metadata
+          console.log('Route meta playerData Principal check:', {
+            hasId: !!to.meta.playerData.id,
+            idType: to.meta.playerData.id ? typeof to.meta.playerData.id : 'undefined',
+            isPrincipal: to.meta.playerData.id instanceof Principal,
+            hasToText: to.meta.playerData.id && typeof to.meta.playerData.id === 'object' ? 
+                      typeof to.meta.playerData.id.toText === 'function' : false
+          });
+          
+          // Store original identifier and method used to find profile
+          to.meta.principalId = identifier;
+          to.meta.profileLookupMethod = usedMethod;
           next();
         } else {
           console.log('❌ No profile found for identifier:', identifier);
-          next('/error');
+          // If no profile was found, but it looked like a valid Principal ID format,
+          // still allow viewing with minimal data
+          if (isPrincipalFormat) {
+            console.log('🔑 Valid Principal format, allowing profile view with minimal data');
+            to.meta.principalId = identifier;
+            to.meta.playerData = {
+              username: `User ${identifier.substring(0, 5)}...`,
+              id: identifier,
+              level: '?'
+            };
+            next();
+          } else {
+            next('/error');
+          }
         }
       } catch (error) {
         console.error('🚨 Error in route navigation:', {

@@ -417,11 +417,19 @@ async getPlayerByPrincipal(principal) {
       }
     },
     async logout() {
-      this.$reset();
+      // First, clear localStorage (this is a fast operation)
+      localStorage.removeItem('authStore');
+      
+      // Then reset authentication state (these are in-memory operations)
       identity = null;
       this.authenticated = false;
       this.registered = false;
-      localStorage.removeItem('authStore');
+      
+      // Finally reset the store
+      this.$reset();
+      
+      // Immediately refresh the page - no need for setTimeout
+      window.location.href = '/';
     },
     saveStateToLocalStorage() {
       const replacer = (key, value) => {

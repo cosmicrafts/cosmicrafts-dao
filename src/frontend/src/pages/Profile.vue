@@ -8,8 +8,22 @@
 
     <!-- Error Message -->
     <div class="error-message" v-if="loadingError">
+      <h3>Profile Error</h3>
       <p>{{ loadingError }}</p>
-      <button @click="retryLoading">Retry</button>
+      <div class="error-actions">
+        <button @click="retryLoading" class="retry-btn">
+          <span class="retry-icon">🔄</span>
+          Retry
+        </button>
+        <router-link to="/" class="home-btn">
+          <span class="home-icon">🏠</span>
+          Go Home
+        </router-link>
+      </div>
+      <p class="error-help">
+        This profile might not exist or might be temporarily unavailable. 
+        If you entered a username, try accessing by Principal ID instead, or vice versa.
+      </p>
     </div>
 
     <!-- Mobile Navigation -->
@@ -30,14 +44,14 @@
     <div class="hero-section">
       <div class="hero-content">
         <div class="avatar-container">
-          <div class="avatar-frame">
-            <img :src="playerAvatar" alt="Player Avatar" class="avatar" />
-            <div class="level-badge">{{ player.level }}</div>
-          </div>
+    <div class="avatar-frame">
+      <img :src="playerAvatar" alt="Player Avatar" class="avatar" />
+            <div class="level-badge">{{ player.level || '?' }}</div>
+    </div>
         </div>
         <div class="player-details">
-          <h1 class="player-name">{{ player.username }}</h1>
-          <p class="player-title">{{ player.title || 'Galactic Adventurer' }}</p>
+          <h1 class="player-name">{{ player.username || 'Unknown Player' }}</h1>
+      <p class="player-title">{{ player.title || 'Galactic Adventurer' }}</p>
           <p class="player-description" v-if="!isEditingDescription">
             {{ player.description || 'No description yet' }}
             <button class="edit-description-btn" @click="startEditingDescription" v-if="showEditControls">
@@ -108,7 +122,7 @@
               <span v-if="!copySuccess">📋</span>
               <span v-else>✓</span>
             </button>
-          </div>
+      </div>
         </div>
 
         <div class="sidebar-section">
@@ -301,15 +315,15 @@
             <span class="progress-text">{{ selectedAchievement.progress }}%</span>
           </div>
           <div class="achievement-stats">
-            <div class="stat">
+      <div class="stat">
               <span class="stat-label">Completed by</span>
               <span class="stat-value">23%</span>
-            </div>
-            <div class="stat">
+      </div>
+      <div class="stat">
               <span class="stat-label">Points</span>
               <span class="stat-value">100</span>
-            </div>
-          </div>
+      </div>
+    </div>
         </div>
       </div>
     </div>
@@ -380,16 +394,84 @@ const descriptionForm = ref({
   isSubmitting: false,
   error: null
 });
+const playerNFTs = ref([]);
 
-// Determine if we're viewing our own profile or another player's
-const isOwnProfile = computed(() => !route.params.identifier);
+// Check if this is the current user's own profile
+const isOwnProfile = computed(() => {
+  // Check if we're on the /profile route
+  if (route.path === '/profile') {
+    return true;
+  }
+  
+  // Check if the user is authenticated
+  const identity = authStore.getIdentity();
+  if (!identity) {
+    return false; // Not authenticated, so can't be own profile
+  }
+  
+  // Compare route identifier with user's principal
+  try {
+    const identifierFromRoute = route.params.identifier;
+    const userPrincipal = identity.getPrincipal().toText();
+    return identifierFromRoute === userPrincipal;
+  } catch (error) {
+    console.error('Error determining if profile is own:', error);
+    return false;
+  }
+});
 
 // Use either the route's playerData (for other players) or authStore.player (for own profile)
 const player = computed(() => {
   if (isOwnProfile.value) {
+    console.log('Using authStore.player for own profile:', authStore.player);
     return authStore.player || {};
   }
-  return route.meta.playerData || {};
+  
+  // For other players, use the playerData from the route meta
+  const playerData = route.meta.playerData;
+  const lookupMethod = route.meta.profileLookupMethod;
+  console.log(`Route meta playerData (via ${lookupMethod}):`, playerData);
+  
+  // If playerData is missing or incomplete, create a placeholder with the identifier
+  if (!playerData || !playerData.username) {
+    const identifier = route.params.identifier;
+    console.log('Creating placeholder profile for identifier:', identifier);
+    return {
+      username: `User ${identifier.substring(0, 5)}...`,
+      id: identifier,
+      level: '?',
+      title: 'Unknown Player',
+      description: 'Profile data is unavailable.',
+      elo: 1200 // Default ELO
+    };
+  }
+  
+  // Format the player ID appropriately based on how we found the profile
+  let formattedId;
+  if (lookupMethod === 'username' && typeof playerData.id === 'object') {
+    // For username lookups with object IDs, try to get the principal string
+    try {
+      formattedId = playerData.id.toText ? playerData.id.toText() : route.params.identifier;
+    } catch (error) {
+      console.error('Error formatting player ID from object:', error);
+      formattedId = route.params.identifier;
+    }
+  } else if (lookupMethod === 'principal') {
+    // For principal lookups, use the original principal ID
+    formattedId = route.params.identifier;
+  } else {
+    // Default fallback
+    formattedId = typeof playerData.id === 'string' ? playerData.id : route.params.identifier;
+  }
+  
+  // Ensure all expected properties exist on the player object
+  return {
+    ...playerData,
+    id: formattedId,
+    title: playerData.title || 'Galactic Adventurer',
+    description: playerData.description || 'No description available.',
+    elo: playerData.elo || 1200
+  };
 });
 
 // Show edit controls only for own profile
@@ -423,9 +505,134 @@ onMounted(async () => {
     }
 
     // Get the principal for the profile we're viewing
-    const targetPrincipal = isOwnProfile.value 
-      ? authStore.getIdentity().getPrincipal()
-      : Principal.fromText(player.value.id.toString());
+    let targetPrincipal;
+    const lookupMethod = route.meta.profileLookupMethod;
+    
+    console.log('Profile lookup method:', lookupMethod);
+    
+    if (isOwnProfile.value) {
+      // For own profile, get the identity's principal safely
+      const identity = authStore.getIdentity();
+      if (!identity) {
+        console.error('No identity available for own profile');
+        loadingError.value = 'Authentication required to view your profile';
+        isLoading.value = false;
+        return;
+      }
+      targetPrincipal = identity.getPrincipal();
+      console.log('Using own principal for profile:', targetPrincipal.toString());
+    } else {
+      // Check if we already have a Principal ID from the route meta
+      const profileData = route.meta.playerData;
+      
+      if (lookupMethod === 'principal' || !lookupMethod) {
+        // For profiles accessed by Principal ID
+        try {
+          targetPrincipal = Principal.fromText(route.params.identifier);
+          console.log('Created Principal from route identifier:', targetPrincipal.toString());
+        } catch (error) {
+          console.error('Error creating Principal from route identifier:', error);
+          loadingError.value = `Invalid Principal ID: ${error.message}`;
+          isLoading.value = false;
+          return;
+        }
+      } else if (lookupMethod === 'username' && profileData?.id) {
+        // For profiles accessed by username, we need to query the canister directly
+        try {
+          console.log('Username lookup detected, querying canister directly for:', route.params.identifier);
+          
+          // Query the canister directly using the username
+          const username = route.params.identifier;
+          const userResults = await cosmicrafts.searchUserByUsername(username);
+          
+          if (!userResults || !Array.isArray(userResults) || userResults.length === 0 || !userResults[0]) {
+            throw new Error(`No user found with username: ${username}`);
+          }
+          
+          const user = userResults[0];
+          console.log('Found user from direct username query:', user);
+          
+          // Log detailed information about the user
+          console.log('User details from direct username query:', {
+            username: user.username,
+            id: user.id ? (typeof user.id === 'object' ? 'Principal Object' : user.id) : 'No ID',
+            idType: user.id ? typeof user.id : 'undefined',
+            hasToText: user.id && typeof user.id === 'object' ? typeof user.id.toText === 'function' : false,
+            isPrincipal: user.id instanceof Principal
+          });
+          
+          // Handle the Principal directly from the query result
+          if (!user.id) {
+            throw new Error('User found but ID is missing');
+          }
+          
+          // Use the Principal directly from the query result
+          if (user.id instanceof Principal) {
+            targetPrincipal = user.id;
+            console.log('Using Principal instance from direct username query:', targetPrincipal.toString());
+          } else if (typeof user.id === 'object' && typeof user.id.toText === 'function') {
+            targetPrincipal = user.id;
+            console.log('Using Principal-like object from direct username query:', targetPrincipal.toText());
+          } else {
+            // If we can't use the Principal directly, throw an error
+            throw new Error('User found but ID is not a valid Principal object');
+          }
+          
+          // Update the route meta with the correct Principal
+          if (targetPrincipal) {
+            console.log('Successfully obtained Principal from username query:', targetPrincipal.toString());
+          }
+        } catch (error) {
+          console.error('Error querying user by username:', error);
+          loadingError.value = `Unable to find user: ${error.message}`;
+          isLoading.value = false;
+          return;
+        }
+      } else {
+        // Fallback if we can't determine a Principal
+        console.error('Unable to determine Principal for profile');
+        loadingError.value = 'Unable to determine profile identity';
+        isLoading.value = false;
+        return;
+      }
+    }
+
+    // Fetch the player profile data if we're viewing another player's profile
+    if (!isOwnProfile.value) {
+      try {
+        console.log('Fetching profile data for Principal:', targetPrincipal.toString());
+        const profileData = await cosmicrafts.getProfile(targetPrincipal);
+        
+        if (profileData) {
+          console.log('Profile data received:', profileData);
+           
+          // Handle array format - getProfile returns an array with the profile object inside
+          let processedProfile;
+          if (Array.isArray(profileData) && profileData.length > 0) {
+            processedProfile = profileData[0];
+            console.log('Processed profile data:', processedProfile);
+          } else {
+            processedProfile = profileData;
+          }
+           
+          // Convert BigInt values to strings
+          const safeProfile = JSON.parse(
+            JSON.stringify(processedProfile, (key, value) =>
+              typeof value === 'bigint' ? value.toString() : value
+            )
+          );
+           
+          // Update the route meta with the fetched profile data
+          route.meta.playerData = safeProfile;
+          console.log('Updated route meta with profile data:', safeProfile);
+        } else {
+          console.log('No profile data found for Principal:', targetPrincipal.toString());
+        }
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+        // Continue with stats and achievements even if profile fetch fails
+      }
+    }
 
     // Fetch player stats and achievements
     try {
@@ -443,35 +650,59 @@ onMounted(async () => {
 
     // Only fetch friends list for own profile
     if (isOwnProfile.value) {
-      try {
-        const friendsList = await cosmicrafts.getFriendsList();
-        console.log('Friends list received:', friendsList);
-        
-        if (friendsList && friendsList.length > 0 && friendsList[0].length > 0) {
-          // Fetch friend profiles in parallel
-          const friendProfiles = await Promise.allSettled(
-            friendsList[0].map(async (friendId) => {
-              try {
-                const profile = await cosmicrafts.getPlayer(friendId);
-                return profile && profile.length > 0 ? profile[0] : null;
-              } catch (error) {
-                console.error('Error fetching friend profile:', error);
-                return null;
-              }
-            })
-          );
+      // Check if the identity is available before fetching friends list
+      const identity = authStore.getIdentity();
+      if (!identity) {
+        console.error('No identity available to fetch friends list');
+      } else {
+        try {
+          const friendsList = await cosmicrafts.getFriendsList();
+          console.log('Friends list received:', friendsList);
           
-          // Filter out failed requests and null profiles
-          friends.value = friendProfiles
-            .filter(result => result.status === 'fulfilled' && result.value)
-            .map(result => result.value);
-        } else {
-          console.log('No friends found in the list');
+          if (friendsList && friendsList.length > 0 && friendsList[0].length > 0) {
+            // Fetch friend profiles in parallel
+            const friendProfiles = await Promise.allSettled(
+              friendsList[0].map(async (friendId) => {
+                try {
+                  // Use getProfile instead of getPlayer
+                  const profile = await cosmicrafts.getProfile(friendId);
+                  return profile || null;
+                } catch (error) {
+                  console.error('Error fetching friend profile:', error);
+                  return null;
+                }
+              })
+            );
+            
+            // Filter out failed requests and null profiles
+            friends.value = friendProfiles
+              .filter(result => result.status === 'fulfilled' && result.value)
+              .map(result => result.value);
+          } else {
+            console.log('No friends found in the list');
+            friends.value = [];
+          }
+        } catch (error) {
+          console.error('Error fetching friends list:', error);
           friends.value = [];
         }
-      } catch (error) {
-        console.error('Error fetching friends list:', error);
-        friends.value = [];
+      }
+    }
+
+    // Only fetch NFTs for own profile
+    if (isOwnProfile.value) {
+      // Check if the identity is available before fetching NFTs
+      const identity = authStore.getIdentity();
+      if (!identity) {
+        console.error('No identity available to fetch NFTs');
+      } else {
+        try {
+          // Fetch NFTs for own profile
+          const nfts = await fetchNFTsByCategory('characters');
+          playerNFTs.value = processNFTs(nfts);
+        } catch (error) {
+          console.error('Error fetching NFTs:', error);
+        }
       }
     }
 
@@ -484,29 +715,10 @@ onMounted(async () => {
       achievements.value = [];
     }
 
-    // Fetch NFTs
-    try {
-      const nfts = await cosmicrafts.getNFTs(targetPrincipal);
-      if (nfts) {
-        // Process NFTs into categories
-        nftCategories.value = nftCategories.value.map(category => ({
-          ...category,
-          items: nfts.filter(nft => nft.metadata.category === category.type)
-        }));
-      }
-    } catch (error) {
-      console.error('Error fetching NFTs:', error);
-      // Keep the categories structure but with empty items
-      nftCategories.value = nftCategories.value.map(category => ({
-        ...category,
-        items: []
-      }));
-    }
-
+    isLoading.value = false;
   } catch (error) {
     console.error('Error loading profile data:', error);
-    loadingError.value = 'Error loading profile data';
-  } finally {
+    loadingError.value = `Error loading profile data: ${error.message}`;
     isLoading.value = false;
   }
 });
@@ -556,6 +768,12 @@ const formatDate = (timestamp) => {
 
 const getPrincipalString = computed(() => {
   try {
+    // If viewing another player's profile, use the principal from the route
+    if (!isOwnProfile.value) {
+      return route.params.identifier;
+    }
+    
+    // Otherwise use the identity's principal
     const identity = authStore.getIdentity();
     if (!identity) return '';
     return identity.getPrincipal().toText();
@@ -578,12 +796,15 @@ const copyPrincipal = async () => {
     try {
       await navigator.clipboard.writeText(principalText);
       copySuccess.value = true;
+      console.log('Copied principal to clipboard:', principalText);
       setTimeout(() => {
         copySuccess.value = false;
       }, 2000);
     } catch (err) {
       console.error('Failed to copy principal:', err);
     }
+  } else {
+    console.error('No principal available to copy');
   }
 };
 
@@ -593,17 +814,31 @@ const fetchNFTsByCategory = async (category) => {
   if (!cosmicrafts) {
     throw new Error("Cosmicrafts canister not initialized");
   }
-  const principal = authStore.getIdentity()?.getPrincipal();
-  if (!principal) {
-    throw new Error("No principal available");
+  
+  const identity = authStore.getIdentity();
+  if (!identity) {
+    console.error("No identity available for fetching NFTs");
+    return [];
   }
-  switch (category) {
-    case 'characters': return cosmicrafts.getCharacters(principal);
-    case 'units': return cosmicrafts.getUnits(principal);
-    case 'avatars': return cosmicrafts.getAvatars(principal);
-    case 'trophies': return cosmicrafts.getTrophies(principal);
-    case 'chests': return cosmicrafts.getChests(principal);
-    default: return [];
+  
+  const principal = identity.getPrincipal();
+  if (!principal) {
+    console.error("No principal available");
+    return [];
+  }
+  
+  try {
+    switch (category) {
+      case 'characters': return await cosmicrafts.getCharacters(principal);
+      case 'units': return await cosmicrafts.getUnits(principal);
+      case 'avatars': return await cosmicrafts.getAvatars(principal);
+      case 'trophies': return await cosmicrafts.getTrophies(principal);
+      case 'chests': return await cosmicrafts.getChests(principal);
+      default: return [];
+    }
+  } catch (error) {
+    console.error(`Error fetching ${category} NFTs:`, error);
+    return [];
   }
 };
 
@@ -617,9 +852,16 @@ const processNFTs = (nfts) => {
 };
 
 const processFriendsList = async (friendsList) => {
-  if (!friendsList || !Array.isArray(friendsList)) return [];
+  if (!friendsList || !Array.isArray(friendsList)) {
+    console.log('No friends list or invalid format');
+    return [];
+  }
+  
   const cosmicrafts = await canisterStore.get("cosmicrafts");
-  if (!cosmicrafts) return [];
+  if (!cosmicrafts) {
+    console.error('Cosmicrafts canister not initialized');
+    return [];
+  }
   
   console.log('Friends list received:', friendsList);
   
@@ -636,7 +878,12 @@ const processFriendsList = async (friendsList) => {
       // Handle different possible formats of friendId
       let principal;
       if (typeof friendId === 'string') {
-        principal = Principal.fromText(friendId);
+        try {
+          principal = Principal.fromText(friendId);
+        } catch (error) {
+          console.error('Error creating Principal from string:', error);
+          return null;
+        }
       } else if (friendId instanceof Principal) {
         principal = friendId;
       } else if (typeof friendId === 'object' && friendId.toText) {
@@ -646,9 +893,25 @@ const processFriendsList = async (friendsList) => {
         return null;
       }
 
-      const profile = await cosmicrafts.getPlayer(principal);
-      if (!profile || profile.length === 0) return null;
-      const playerData = profile[0];
+      // Use getProfile instead of getPlayer for consistency
+      const profile = await cosmicrafts.getProfile(principal);
+      if (!profile) {
+        console.log('No profile found for friend:', principal.toString());
+        return null;
+      }
+      
+      // Handle array format if needed
+      let playerData;
+      if (Array.isArray(profile) && profile.length > 0) {
+        playerData = profile[0];
+      } else {
+        playerData = profile;
+      }
+      
+      if (!playerData) {
+        console.log('No player data found for friend');
+        return null;
+      }
       
       // Use a try-catch specifically for the ID conversion
       let idString;
@@ -789,6 +1052,19 @@ const saveDescription = async () => {
   } finally {
     descriptionForm.value.isSubmitting = false;
   }
+};
+
+// Function to retry loading profile data
+const retryLoading = () => {
+  isLoading.value = true;
+  loadingError.value = null;
+  
+  // Call the onMounted function again
+  onMounted().catch(error => {
+    console.error('Error retrying profile load:', error);
+    loadingError.value = `Failed to reload profile: ${error.message}`;
+    isLoading.value = false;
+  });
 };
 </script>
 
@@ -1015,7 +1291,7 @@ const saveDescription = async () => {
   color: white;
 }
 
-.description-form .form-actions .save-btn {
+.description-form .form-actions button[type="submit"] {
   background: linear-gradient(90deg, #00d9ff, #ff00c3);
   color: white;
 }
@@ -1446,9 +1722,9 @@ const saveDescription = async () => {
 @media (max-width: 480px) {
   .hero-section {
     padding: 2rem 1rem;
-  }
-  
-  .player-name {
+}
+
+.player-name {
     font-size: 2rem;
   }
   
@@ -1558,31 +1834,51 @@ const saveDescription = async () => {
 
 /* Error Message */
 .error-message {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255, 0, 0, 0.1);
-  padding: 2rem;
-  border-radius: 1rem;
-  text-align: center;
-  backdrop-filter: blur(10px);
+  background: rgba(255, 0, 0, 0.05);
   border: 1px solid rgba(255, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 600px;
+  text-align: center;
+  color: #fff;
 }
 
-.error-message button {
-  margin-top: 1rem;
-  padding: 0.5rem 1.5rem;
+.error-message h3 {
+  color: #ff5555;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.error-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.retry-btn, .home-btn {
   background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 0.5rem;
-  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
 
-.error-message button:hover {
+.retry-btn:hover, .home-btn:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.error-help {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 10px;
 }
 
 /* Profile Edit Modal */
