@@ -2,6 +2,65 @@ import { defineStore } from 'pinia';
 import { useCanisterStore } from './canister';
 import { Principal } from '@dfinity/principal';
 
+// Helper function to standardize profile data format
+function standardizeProfileData(profileData) {
+  if (!profileData) return null;
+  
+  // Create a copy to avoid modifying the original
+  const standardProfile = { ...profileData };
+  
+  // Handle Principal ID consistently
+  if (standardProfile.id) {
+    // If id is already a Principal instance, keep it
+    if (standardProfile.id instanceof Principal) {
+      console.log('Profile has Principal object, preserving it');
+    } 
+    // If id is a serialized Principal object
+    else if (typeof standardProfile.id === 'object' && standardProfile.id.__principal__) {
+      try {
+        standardProfile.id = Principal.fromText(standardProfile.id.__principal__);
+        console.log('Converted serialized Principal to Principal object');
+      } catch (error) {
+        console.error('Failed to convert serialized Principal:', error);
+      }
+    }
+    // If id is a string, convert to Principal
+    else if (typeof standardProfile.id === 'string') {
+      try {
+        standardProfile.id = Principal.fromText(standardProfile.id);
+        console.log('Converted string ID to Principal object');
+      } catch (error) {
+        console.error('Failed to convert string ID to Principal:', error);
+      }
+    }
+  }
+  
+  // Convert BigInt values to strings
+  for (const key in standardProfile) {
+    if (typeof standardProfile[key] === 'bigint') {
+      standardProfile[key] = standardProfile[key].toString();
+    }
+  }
+  
+  // Ensure all expected fields exist
+  const expectedFields = ['username', 'id', 'level', 'title', 'description', 'elo', 'avatar', 'registrationDate', 'language', 'friends'];
+  expectedFields.forEach(field => {
+    if (standardProfile[field] === undefined) {
+      if (field === 'friends') {
+        standardProfile[field] = [];
+      } else if (field === 'level' || field === 'elo' || field === 'avatar') {
+        standardProfile[field] = '0';
+      } else if (field === 'registrationDate') {
+        standardProfile[field] = Date.now().toString();
+      } else {
+        standardProfile[field] = '';
+      }
+    }
+  });
+  
+  return standardProfile;
+}
+
 export const useProfileStore = defineStore('profile', {
   state: () => ({
     cachedProfiles: new Map(),
@@ -12,6 +71,14 @@ export const useProfileStore = defineStore('profile', {
     async getProfileByPrincipal(principal) {
       try {
         console.log('Fetching profile for principal:', principal.toString());
+        
+        // Check cache first
+        const cachedProfile = this.cachedProfiles.get(principal.toString());
+        if (cachedProfile) {
+          console.log('Returning cached profile for principal:', principal.toString());
+          return cachedProfile;
+        }
+        
         const canister = useCanisterStore();
         const cosmicrafts = await canister.get('cosmicrafts');
         
@@ -19,7 +86,7 @@ export const useProfileStore = defineStore('profile', {
           throw new Error('Canister not initialized');
         }
 
-        // Use getProfile instead of getPlayer
+        // Use getProfile method
         const profile = await cosmicrafts.getProfile(principal);
         
         if (profile) {
@@ -28,19 +95,20 @@ export const useProfileStore = defineStore('profile', {
           if (Array.isArray(profile) && profile.length > 0) {
             processedProfile = profile[0];
             console.log('Processed profile data:', processedProfile);
-          } else {
+          } else if (profile.hasOwnProperty('id')) {
             processedProfile = profile;
+          } else {
+            processedProfile = null;
           }
           
-          const safeProfile = JSON.parse(
-            JSON.stringify(processedProfile, (key, value) =>
-              typeof value === 'bigint' ? value.toString() : value
-            )
-          );
-          
-          // Cache the profile
-          this.cachedProfiles.set(principal.toString(), safeProfile);
-          return safeProfile;
+          if (processedProfile) {
+            // Standardize the profile data
+            const standardProfile = standardizeProfileData(processedProfile);
+            
+            // Cache the profile
+            this.cachedProfiles.set(principal.toString(), standardProfile);
+            return standardProfile;
+          }
         }
         return null;
       } catch (error) {
@@ -52,6 +120,7 @@ export const useProfileStore = defineStore('profile', {
     async getProfileByUsername(username) {
       try {
         console.log('Fetching profile for username:', username);
+        
         const canister = useCanisterStore();
         const cosmicrafts = await canister.get('cosmicrafts');
         
@@ -59,7 +128,7 @@ export const useProfileStore = defineStore('profile', {
           throw new Error('Canister not initialized');
         }
 
-        // Try searchUserByUsername first
+        // Try searchUserByUsername
         let playerData = null;
         try {
           const playerArr = await cosmicrafts.searchUserByUsername(username);
@@ -72,63 +141,47 @@ export const useProfileStore = defineStore('profile', {
               username: playerData.username,
               id: playerData.id ? (typeof playerData.id === 'object' ? 'Principal Object' : playerData.id) : 'No ID',
               idType: playerData.id ? typeof playerData.id : 'undefined',
-              hasToText: playerData.id && typeof playerData.id === 'object' ? typeof playerData.id.toText === 'function' : false,
               isPrincipal: playerData.id instanceof Principal
             });
             
-            // Ensure the ID is properly handled
-            if (playerData.id) {
-              // If ID is a Principal object, keep it as is
-              if (playerData.id instanceof Principal || 
-                  (typeof playerData.id === 'object' && typeof playerData.id.toText === 'function')) {
-                // Keep the Principal object intact
-                console.log('Preserving Principal object in player data');
-              } 
-              // If ID is a serialized Principal, try to parse it
-              else if (typeof playerData.id === 'object' && playerData.id.__principal__) {
-                console.log('Found serialized Principal in player data:', playerData.id.__principal__);
-                // Keep the serialized format for now, will be handled in Profile.vue
-              }
-              // If ID is a string, ensure it's not the default anonymous Principal
-              else if (typeof playerData.id === 'string' && playerData.id === '2vxsx-fae') {
-                console.warn('Found default anonymous Principal in player data, which should not be used');
-                // Don't modify it here, let Profile.vue handle the error
-              }
+            // Standardize the profile data
+            const standardProfile = standardizeProfileData(playerData);
+            
+            // Cache the profile using the Principal as key if available
+            if (standardProfile.id instanceof Principal) {
+              this.cachedProfiles.set(standardProfile.id.toString(), standardProfile);
             }
+            
+            return standardProfile;
           }
         } catch (searchError) {
           console.error('Error in searchUserByUsername:', searchError);
-          // If searchUserByUsername fails, we'll continue to other methods
         }
 
-        // If no result from search, handle the case
-        if (!playerData) {
-          console.log('No profile found directly for username:', username);
-          return null;
-        }
-
-        // IMPORTANT: Do NOT stringify the player data as it will lose the Principal object
-        // Instead, create a safe copy that preserves the Principal object
-        const safeProfile = { ...playerData };
-        
-        // Convert any BigInt values to strings, but preserve the Principal object
-        for (const key in safeProfile) {
-          if (typeof safeProfile[key] === 'bigint') {
-            safeProfile[key] = safeProfile[key].toString();
-          }
-        }
-        
-        console.log('Returning profile with preserved Principal:', {
-          username: safeProfile.username,
-          hasId: !!safeProfile.id,
-          idType: safeProfile.id ? typeof safeProfile.id : 'undefined',
-          isPrincipal: safeProfile.id instanceof Principal
-        });
-        
-        return safeProfile;
+        return null;
       } catch (error) {
         console.error('Error fetching profile by username:', error);
         throw error;
+      }
+    },
+    
+    // Format registration date to "Since Month Year"
+    formatRegistrationDate(registrationDate) {
+      if (!registrationDate) return 'Unknown';
+      
+      try {
+        // Convert nanoseconds to milliseconds (divide by 1,000,000)
+        const dateInMs = Number(registrationDate) / 1_000_000;
+        const date = new Date(dateInMs);
+        
+        // Format as "Since Month Year"
+        const month = date.toLocaleString('default', { month: 'long' });
+        const year = date.getFullYear();
+        
+        return `Since ${month} ${year}`;
+      } catch (error) {
+        console.error('Error formatting registration date:', error);
+        return 'Unknown';
       }
     }
   }

@@ -447,39 +447,81 @@ async getPlayerByPrincipal(principal) {
     async loadStateFromLocalStorage() {
       const stored = localStorage.getItem('authStore');
       if (stored) {
-        const parsed = JSON.parse(stored, (key, value) => {
-          // Convert strings matching BigInt pattern back to BigInt
-          if (typeof value === 'string' && /^\d+$/.test(value)) {
+        try {
+          const parsed = JSON.parse(stored, (key, value) => {
+            // Convert strings matching BigInt pattern back to BigInt
+            if (typeof value === 'string' && /^\d+$/.test(value)) {
+              try {
+                return BigInt(value); // Convert back to BigInt
+              } catch {
+                return value; // Fallback if conversion fails
+              }
+            }
+            return value;
+          });
+    
+          // Apply parsed state to the store
+          this.$patch(parsed);
+    
+          // Reinitialize identity if a seedPhrase exists
+          if (parsed.seedPhrase) {
             try {
-              return BigInt(value); // Convert back to BigInt
-            } catch {
-              return value; // Fallback if conversion fails
+              const keyPair = deriveKeysFromSeedPhrase(parsed.seedPhrase);
+              identity = createIdentityFromKeyPair(keyPair);
+              console.log('Identity reinitialized from seed phrase:', identity.getPrincipal().toText());
+              
+              // Set authenticated state immediately
+              this.authenticated = true;
+              
+              // Try to fetch fresh player data, but don't fail if it doesn't work
+              try {
+                const canister = useCanisterStore();
+                const cosmicrafts = await canister.get('cosmicrafts');
+                
+                if (cosmicrafts) {
+                  const playerArr = await cosmicrafts.getPlayer();
+                  if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0]) {
+                    const safePlayer = JSON.parse(
+                      JSON.stringify(playerArr[0], (key, value) =>
+                        typeof value === 'bigint' ? value.toString() : value
+                      )
+                    );
+                    this.$patch((state) => {
+                      state.player = safePlayer;
+                    });
+                    this.registered = true;
+                  }
+                }
+              } catch (playerError) {
+                console.warn('Could not fetch fresh player data, using cached data:', playerError);
+                // Keep using the cached player data from localStorage
+              }
+            } catch (identityError) {
+              console.error('Failed to reinitialize identity:', identityError);
+              // Clear invalid state
+              this.$reset();
+              identity = null;
+              localStorage.removeItem('authStore');
+              return false;
             }
           }
-          return value;
-        });
     
-        // Apply parsed state to the store
-        this.$patch(parsed);
+          // Log the username if player data exists
+          if (parsed.player && parsed.player.username) {
+            console.log(`Loading account: ${parsed.player.username}`);
+          } else {
+            console.log('No username found in the stored player data.');
+          }
     
-        // Reinitialize identity if a seedPhrase exists
-        if (parsed.seedPhrase) {
-          const keyPair = deriveKeysFromSeedPhrase(parsed.seedPhrase);
-          identity = createIdentityFromKeyPair(keyPair);
-          console.log('Identity reinitialized from seed phrase:', identity.getPrincipal().toText());
-    
-          // Call handleLoginFlow to fetch player data and restore session
-          await this.handleLoginFlow(parsed.seedPhrase);
+          return true; // Indicate that user data was found
+        } catch (error) {
+          console.error('Error parsing stored auth data:', error);
+          // Clear invalid state
+          this.$reset();
+          identity = null;
+          localStorage.removeItem('authStore');
+          return false;
         }
-    
-        // Log the username if player data exists
-        if (parsed.player && parsed.player.username) {
-          console.log(`Loading account: ${parsed.player.username}`);
-        } else {
-          console.log('No username found in the stored player data.');
-        }
-    
-        return true; // Indicate that user data was found
       } else {
         console.log('No user data stored found.');
         return false; // Indicate that no user data was found

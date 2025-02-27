@@ -52,6 +52,7 @@
         <div class="player-details">
           <h1 class="player-name">{{ player.username || 'Unknown Player' }}</h1>
       <p class="player-title">{{ player.title || 'Galactic Adventurer' }}</p>
+      <p class="registration-date">{{ formattedRegistrationDate }}</p>
           <p class="player-description" v-if="!isEditingDescription">
             {{ player.description || 'No description yet' }}
             <button class="edit-description-btn" @click="startEditingDescription" v-if="showEditControls">
@@ -217,17 +218,21 @@
           </div>
           <div class="collection-grid">
             <div v-for="category in nftCategories" :key="category.type">
-              <div class="nft-grid" v-if="category.items.length">
+              <div class="nft-grid" v-if="activeCollection === category.type">
                 <div class="nft-card" v-for="nft in category.items" :key="nft.id">
                   <div class="nft-image">
-                    <img :src="nft.image" :alt="nft.name" />
+                    <img 
+                      :src="nft.image"
+                      :alt="nft.name"
+                      class="nft-image"
+                    />
                   </div>
                   <div class="nft-info">
                     <span class="nft-name">{{ nft.name }}</span>
                   </div>
                 </div>
+                <p v-if="category.items.length === 0" class="empty-message">No {{ category.title.toLowerCase() }} collected yet</p>
               </div>
-              <p v-else class="empty-message">No {{ category.title.toLowerCase() }} collected yet</p>
             </div>
           </div>
         </section>
@@ -327,15 +332,20 @@
         </div>
       </div>
     </div>
+
+    <!-- Add registration date display somewhere in your template -->
+    <div class="registration-info">
+      <span class="registration-date">{{ formattedRegistrationDate }}</span>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import { useStatisticsStore } from '@/stores/stats';
-import { useACHStore } from '@/stores/ach';
+import { useStatisticsStore } from '../stores/stats';
+import { useACHStore } from '../stores/ach';
 import { useCanisterStore } from '@/stores/canister';
 import avatar1 from '@/assets/avatars/Avatar_01.webp';
 import avatar2 from '@/assets/avatars/Avatar_02.webp';
@@ -350,6 +360,8 @@ import avatar10 from '@/assets/avatars/Avatar_10.webp';
 import avatar11 from '@/assets/avatars/Avatar_11.webp';
 import avatar12 from '@/assets/avatars/Avatar_12.webp';
 import { Principal } from '@dfinity/principal';
+import { useProfileStore } from '../stores/profile';
+import { useNftsStore } from '../stores/nfts';
 
 const authStore = useAuthStore();
 const statsStore = useStatisticsStore();
@@ -357,11 +369,14 @@ const achStore = useACHStore();
 const canisterStore = useCanisterStore();
 const route = useRoute();
 const copySuccess = ref(false);
+const profileStore = useProfileStore();
+const nftsStore = useNftsStore();
 
 // State
 const playerStats = ref(null);
 const averageStats = ref(null);
 const achievements = ref([]);
+const playerAchievements = ref([]);
 const nftCategories = ref([
   { type: 'characters', title: 'Characters', items: [] },
   { type: 'units', title: 'Units', items: [] },
@@ -395,6 +410,7 @@ const descriptionForm = ref({
   error: null
 });
 const playerNFTs = ref([]);
+const fetchNFTs = ref(true);
 
 // Check if this is the current user's own profile
 const isOwnProfile = computed(() => {
@@ -442,7 +458,26 @@ const player = computed(() => {
       level: '?',
       title: 'Unknown Player',
       description: 'Profile data is unavailable.',
-      elo: 1200 // Default ELO
+      elo: 1200, // Default ELO
+      avatar: '0',
+      registrationDate: '',
+      language: '',
+      friends: []
+    };
+  }
+  
+  // For username lookups, preserve the Principal object
+  if (lookupMethod === 'username' && playerData.id instanceof Principal) {
+    console.log('Preserving Principal object from username lookup');
+    return {
+      ...playerData,
+      title: playerData.title || 'Galactic Adventurer',
+      description: playerData.description || 'No description available.',
+      elo: playerData.elo || 1200,
+      avatar: playerData.avatar || '0',
+      registrationDate: playerData.registrationDate || '',
+      language: playerData.language || '',
+      friends: playerData.friends || []
     };
   }
   
@@ -470,7 +505,11 @@ const player = computed(() => {
     id: formattedId,
     title: playerData.title || 'Galactic Adventurer',
     description: playerData.description || 'No description available.',
-    elo: playerData.elo || 1200
+    elo: playerData.elo || 1200,
+    avatar: playerData.avatar || '0',
+    registrationDate: playerData.registrationDate || '',
+    language: playerData.language || '',
+    friends: playerData.friends || []
   };
 });
 
@@ -495,10 +534,10 @@ const playerAvatar = computed(() => {
 
 // Fetch all player data on mount
 onMounted(async () => {
+  isLoading.value = true;
+  loadingError.value = '';
+  
   try {
-    isLoading.value = true;
-    loadingError.value = null;
-
     const cosmicrafts = await canisterStore.get('cosmicrafts');
     if (!cosmicrafts) {
       throw new Error('Failed to initialize canister');
@@ -506,220 +545,202 @@ onMounted(async () => {
 
     // Get the principal for the profile we're viewing
     let targetPrincipal;
-    const lookupMethod = route.meta.profileLookupMethod;
-    
-    console.log('Profile lookup method:', lookupMethod);
     
     if (isOwnProfile.value) {
       // For own profile, get the identity's principal safely
       const identity = authStore.getIdentity();
       if (!identity) {
-        console.error('No identity available for own profile');
-        loadingError.value = 'Authentication required to view your profile';
-        isLoading.value = false;
-        return;
+        throw new Error('Authentication required to view your profile');
       }
       targetPrincipal = identity.getPrincipal();
       console.log('Using own principal for profile:', targetPrincipal.toString());
     } else {
-      // Check if we already have a Principal ID from the route meta
-      const profileData = route.meta.playerData;
-      
-      if (lookupMethod === 'principal' || !lookupMethod) {
-        // For profiles accessed by Principal ID
+      // For other profiles, get the principal from the player data
+      if (player.value.id instanceof Principal) {
+        targetPrincipal = player.value.id;
+        console.log('Using Principal object from player data:', targetPrincipal.toString());
+      } else if (route.meta.playerData && route.meta.playerData.id instanceof Principal) {
+        // If the player.value.id is not a Principal but route.meta.playerData.id is, use that
+        targetPrincipal = route.meta.playerData.id;
+        console.log('Using Principal from route meta playerData:', targetPrincipal.toString());
+      } else {
+        // If we don't have a Principal in the player data, try to create one from the identifier
         try {
-          targetPrincipal = Principal.fromText(route.params.identifier);
-          console.log('Created Principal from route identifier:', targetPrincipal.toString());
-        } catch (error) {
-          console.error('Error creating Principal from route identifier:', error);
-          loadingError.value = `Invalid Principal ID: ${error.message}`;
-          isLoading.value = false;
-          return;
-        }
-      } else if (lookupMethod === 'username' && profileData?.id) {
-        // For profiles accessed by username, we need to query the canister directly
-        try {
-          console.log('Username lookup detected, querying canister directly for:', route.params.identifier);
-          
-          // Query the canister directly using the username
-          const username = route.params.identifier;
-          const userResults = await cosmicrafts.searchUserByUsername(username);
-          
-          if (!userResults || !Array.isArray(userResults) || userResults.length === 0 || !userResults[0]) {
-            throw new Error(`No user found with username: ${username}`);
+          // Only try to create a Principal if the lookup method was 'principal'
+          // For username lookups, this would fail
+          if (route.meta.profileLookupMethod === 'principal') {
+            targetPrincipal = Principal.fromText(route.params.identifier);
+            console.log('Created Principal from route identifier:', targetPrincipal.toString());
+          } else {
+            throw new Error(`Cannot create Principal from username: ${route.params.identifier}`);
           }
-          
-          const user = userResults[0];
-          console.log('Found user from direct username query:', user);
-          
-          // Log detailed information about the user
-          console.log('User details from direct username query:', {
-            username: user.username,
-            id: user.id ? (typeof user.id === 'object' ? 'Principal Object' : user.id) : 'No ID',
-            idType: user.id ? typeof user.id : 'undefined',
-            hasToText: user.id && typeof user.id === 'object' ? typeof user.id.toText === 'function' : false,
-            isPrincipal: user.id instanceof Principal
+        } catch (error) {
+          console.error('Error creating Principal from identifier:', error);
+          throw new Error(`Invalid Principal ID: ${error.message}`);
+        }
+      }
+    }
+
+    // Ensure we have a valid Principal before proceeding
+    if (!targetPrincipal) {
+      // Instead of throwing an error, set a user-friendly error message
+      // and try to display what profile data we have
+      console.error('Could not determine a valid Principal ID for this profile');
+      loadingError.value = 'Could not fetch complete profile data. Some features may be limited.';
+      
+      // Set minimal player stats
+      playerStats.value = {
+        gamesPlayed: 0,
+        gamesWon: 0,
+        energyGenerated: 0,
+        energyUsed: 0,
+        resourcesCollected: 0,
+        unitsBuilt: 0
+      };
+      
+      // Skip the rest of the data fetching that requires a Principal
+      isLoading.value = false;
+      return;
+    }
+
+    // Fetch player stats
+    console.log('Fetching player stats for principal:', targetPrincipal.toString());
+    try {
+      const stats = await cosmicrafts.getPlayerStats(targetPrincipal);
+      playerStats.value = stats;
+      console.log('Player stats:', stats);
+      
+      // Also fetch average stats if available
+      try {
+        const avgStats = await cosmicrafts.getPlayerAverageStats(targetPrincipal);
+        averageStats.value = avgStats;
+        console.log('Player average stats:', avgStats);
+      } catch (avgStatsError) {
+        console.warn('Average stats not available:', avgStatsError);
+      }
+    } catch (statsError) {
+      console.error('Error fetching player stats:', statsError);
+      playerStats.value = {
+        gamesPlayed: 0,
+        gamesWon: 0,
+        energyGenerated: 0,
+        energyUsed: 0,
+        resourcesCollected: 0,
+        unitsBuilt: 0
+      };
+    }
+
+    // Fetch player achievements
+    console.log('Fetching player achievements for principal:', targetPrincipal.toString());
+    try {
+      // First check if we need to fetch the achievement categories
+      if (!achStore.fetched) {
+        await achStore.fetchAchievements();
+      }
+      
+      // Then fetch the user's achievements
+      const userAchievements = await cosmicrafts.getUserAchievementsStructure(targetPrincipal);
+      playerAchievements.value = userAchievements || [];
+      console.log('Player achievements:', playerAchievements.value);
+      
+      // Process the achievements data to populate the achievements array
+      if (playerAchievements.value && playerAchievements.value.length > 0) {
+        achievements.value = processAchievements(playerAchievements.value);
+        console.log('Processed achievements:', achievements.value);
+      }
+    } catch (achError) {
+      console.error('Error fetching player achievements:', achError);
+      playerAchievements.value = [];
+      achievements.value = [];
+    }
+
+    // Initialize playerNFTs as an empty array
+    playerNFTs.value = [];
+    
+    // Fetch player NFTs if enabled
+    if (fetchNFTs.value) {
+      try {
+        console.log('Fetching player NFTs for principal:', targetPrincipal.toString());
+        const nfts = await cosmicrafts.getNFTs(targetPrincipal);
+        
+        // Convert BigInt values to strings before storing
+        const processedNfts = JSON.parse(
+          JSON.stringify(nfts || [], (key, value) => 
+            typeof value === 'bigint' ? value.toString() : value
+          )
+        );
+        
+        playerNFTs.value = processedNfts;
+        
+        // Log detailed NFT structure for debugging
+        if (playerNFTs.value && playerNFTs.value.length > 0) {
+          console.log('First NFT structure:', playerNFTs.value[0]);
+        } else {
+          console.log('No NFTs found for player');
+        }
+        
+        console.log('Player NFTs count:', playerNFTs.value?.length || 0);
+        
+        // Process NFTs and populate categories
+        if (playerNFTs.value && playerNFTs.value.length > 0) {
+          // Clear existing items in categories
+          nftCategories.value.forEach(category => {
+            category.items = [];
           });
           
-          // Handle the Principal directly from the query result
-          if (!user.id) {
-            throw new Error('User found but ID is missing');
-          }
+          const processedNFTs = processNFTs(playerNFTs.value);
+          console.log('Processed NFTs:', processedNFTs);
           
-          // Use the Principal directly from the query result
-          if (user.id instanceof Principal) {
-            targetPrincipal = user.id;
-            console.log('Using Principal instance from direct username query:', targetPrincipal.toString());
-          } else if (typeof user.id === 'object' && typeof user.id.toText === 'function') {
-            targetPrincipal = user.id;
-            console.log('Using Principal-like object from direct username query:', targetPrincipal.toText());
-          } else {
-            // If we can't use the Principal directly, throw an error
-            throw new Error('User found but ID is not a valid Principal object');
-          }
+          // Categorize NFTs
+          processedNFTs.forEach(nft => {
+            const category = nft.metadata.category?.toLowerCase() || 'characters';
+            const categoryObj = nftCategories.value.find(c => c.type === category);
+            if (categoryObj) {
+              categoryObj.items.push(nft);
+            } else {
+              // Default to characters if category not found
+              nftCategories.value.find(c => c.type === 'characters')?.items.push(nft);
+            }
+          });
           
-          // Update the route meta with the correct Principal
-          if (targetPrincipal) {
-            console.log('Successfully obtained Principal from username query:', targetPrincipal.toString());
-          }
-        } catch (error) {
-          console.error('Error querying user by username:', error);
-          loadingError.value = `Unable to find user: ${error.message}`;
-          isLoading.value = false;
-          return;
+          console.log('NFT categories after processing:', nftCategories.value);
         }
-      } else {
-        // Fallback if we can't determine a Principal
-        console.error('Unable to determine Principal for profile');
-        loadingError.value = 'Unable to determine profile identity';
-        isLoading.value = false;
-        return;
+      } catch (nftError) {
+        console.error('Error fetching NFTs:', nftError);
+        loadingError.value = `Error loading NFTs: ${nftError.message}`;
       }
-    }
-
-    // Fetch the player profile data if we're viewing another player's profile
-    if (!isOwnProfile.value) {
-      try {
-        console.log('Fetching profile data for Principal:', targetPrincipal.toString());
-        const profileData = await cosmicrafts.getProfile(targetPrincipal);
-        
-        if (profileData) {
-          console.log('Profile data received:', profileData);
-           
-          // Handle array format - getProfile returns an array with the profile object inside
-          let processedProfile;
-          if (Array.isArray(profileData) && profileData.length > 0) {
-            processedProfile = profileData[0];
-            console.log('Processed profile data:', processedProfile);
-          } else {
-            processedProfile = profileData;
-          }
-           
-          // Convert BigInt values to strings
-          const safeProfile = JSON.parse(
-            JSON.stringify(processedProfile, (key, value) =>
-              typeof value === 'bigint' ? value.toString() : value
-            )
-          );
-           
-          // Update the route meta with the fetched profile data
-          route.meta.playerData = safeProfile;
-          console.log('Updated route meta with profile data:', safeProfile);
-        } else {
-          console.log('No profile data found for Principal:', targetPrincipal.toString());
-        }
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-        // Continue with stats and achievements even if profile fetch fails
-      }
-    }
-
-    // Fetch player stats and achievements
-    try {
-      const [stats, avgStats] = await Promise.all([
-        cosmicrafts.getPlayerStats(targetPrincipal),
-        cosmicrafts.getPlayerAverageStats(targetPrincipal)
-      ]);
-      
-      playerStats.value = stats;
-      averageStats.value = avgStats;
-    } catch (error) {
-      console.error('Error fetching player stats:', error);
-      loadingError.value = 'Error fetching player stats';
-    }
-
-    // Only fetch friends list for own profile
-    if (isOwnProfile.value) {
-      // Check if the identity is available before fetching friends list
-      const identity = authStore.getIdentity();
-      if (!identity) {
-        console.error('No identity available to fetch friends list');
-      } else {
-        try {
-          const friendsList = await cosmicrafts.getFriendsList();
-          console.log('Friends list received:', friendsList);
-          
-          if (friendsList && friendsList.length > 0 && friendsList[0].length > 0) {
-            // Fetch friend profiles in parallel
-            const friendProfiles = await Promise.allSettled(
-              friendsList[0].map(async (friendId) => {
-                try {
-                  // Use getProfile instead of getPlayer
-                  const profile = await cosmicrafts.getProfile(friendId);
-                  return profile || null;
-                } catch (error) {
-                  console.error('Error fetching friend profile:', error);
-                  return null;
-                }
-              })
-            );
-            
-            // Filter out failed requests and null profiles
-            friends.value = friendProfiles
-              .filter(result => result.status === 'fulfilled' && result.value)
-              .map(result => result.value);
-          } else {
-            console.log('No friends found in the list');
-            friends.value = [];
-          }
-        } catch (error) {
-          console.error('Error fetching friends list:', error);
-          friends.value = [];
-        }
-      }
-    }
-
-    // Only fetch NFTs for own profile
-    if (isOwnProfile.value) {
-      // Check if the identity is available before fetching NFTs
-      const identity = authStore.getIdentity();
-      if (!identity) {
-        console.error('No identity available to fetch NFTs');
-      } else {
-        try {
-          // Fetch NFTs for own profile
-          const nfts = await fetchNFTsByCategory('characters');
-          playerNFTs.value = processNFTs(nfts);
-        } catch (error) {
-          console.error('Error fetching NFTs:', error);
-        }
-      }
-    }
-
-    // Fetch achievements
-    try {
-      const userAchievements = await cosmicrafts.getUserAchievementsStructure(targetPrincipal);
-      achievements.value = userAchievements || [];
-    } catch (error) {
-      console.error('Error fetching achievements:', error);
-      achievements.value = [];
+    } else {
+      console.log('NFT fetching is disabled');
     }
 
     isLoading.value = false;
   } catch (error) {
     console.error('Error loading profile data:', error);
-    loadingError.value = `Error loading profile data: ${error.message}`;
+    
+    // Provide a more user-friendly error message based on the error type
+    if (error.message.includes('Invalid Principal ID') || 
+        error.message.includes('Cannot create Principal')) {
+      loadingError.value = 'Could not load profile data. This may be because the username does not exist or the Principal ID is invalid.';
+    } else if (error.message.includes('Authentication required')) {
+      loadingError.value = 'You need to be logged in to view your profile.';
+    } else if (error.message.includes('Failed to initialize canister')) {
+      loadingError.value = 'Could not connect to the server. Please try again later.';
+    } else {
+      loadingError.value = `Error loading profile data: ${error.message}`;
+    }
+    
     isLoading.value = false;
+  }
+});
+
+// Initialize achievements store
+onBeforeMount(async () => {
+  if (!achStore.fetched && !achStore.loading) {
+    try {
+      await achStore.fetchAchievements();
+    } catch (error) {
+      console.error('Failed to pre-fetch achievements:', error);
+    }
   }
 });
 
@@ -768,15 +789,29 @@ const formatDate = (timestamp) => {
 
 const getPrincipalString = computed(() => {
   try {
-    // If viewing another player's profile, use the principal from the route
-    if (!isOwnProfile.value) {
+    // If viewing own profile, use identity's principal
+    if (isOwnProfile.value) {
+      const identity = authStore.getIdentity();
+      return identity ? identity.getPrincipal().toText() : '';
+    }
+    
+    // For other profiles, check if we have a Principal object
+    if (player.value?.id instanceof Principal) {
+      return player.value.id.toText();
+    }
+    
+    // If player data has a Principal in route meta
+    if (route.meta.playerData?.id instanceof Principal) {
+      return route.meta.playerData.id.toText();
+    }
+    
+    // If we have a principal ID string in the route params
+    if (route.meta.profileLookupMethod === 'principal') {
       return route.params.identifier;
     }
     
-    // Otherwise use the identity's principal
-    const identity = authStore.getIdentity();
-    if (!identity) return '';
-    return identity.getPrincipal().toText();
+    // If we can't get a principal, return empty string
+    return '';
   } catch (error) {
     console.error('Error getting principal string:', error);
     return '';
@@ -843,12 +878,54 @@ const fetchNFTsByCategory = async (category) => {
 };
 
 const processNFTs = (nfts) => {
-  return nfts.map(nft => ({
-    id: nft[0],
-    name: nft[1].name || 'Unknown',
-    image: nft[1].thumbnail || '',
-    metadata: nft[1]
-  }));
+  console.log('Processing NFTs:', nfts);
+  
+  return nfts.map(nft => {
+    try {
+      // Log the raw NFT data for debugging
+      console.log('Processing individual NFT:', nft);
+      
+      // Handle different possible NFT data structures
+      const [id, metadata] = Array.isArray(nft) ? nft : [nft.tokenId, nft.metadata];
+      console.log('Extracted id and metadata:', { id, metadata });
+      
+      // Extract metadata fields
+      const generalMetadata = metadata?.general || {};
+      const basicMetadata = metadata?.basic || {};
+      console.log('Extracted metadata fields:', { generalMetadata, basicMetadata });
+      
+      // Handle image path
+      let imageUrl = generalMetadata.image;
+      if (!imageUrl || !imageUrl.startsWith('http')) {
+        imageUrl = '/assets/webp/chest.webp';
+      }
+      console.log('Resolved image URL:', imageUrl);
+      
+      return {
+        id: id?.toString() || 'unknown',
+        name: generalMetadata.name || 'Unknown NFT',
+        image: imageUrl,
+        metadata: {
+          ...metadata,
+          category: metadata?.category || 'characters',
+          level: basicMetadata?.level || 1,
+          rarity: generalMetadata?.rarity || 1
+        }
+      };
+    } catch (error) {
+      console.error('Error processing NFT:', error, 'NFT data:', nft);
+      return {
+        id: 'error',
+        name: 'Error NFT',
+        image: '/assets/webp/chest.webp',
+        metadata: {
+          category: 'error',
+          level: 1,
+          rarity: 1
+        }
+      };
+    }
+  });
 };
 
 const processFriendsList = async (friendsList) => {
@@ -1066,6 +1143,12 @@ const retryLoading = () => {
     isLoading.value = false;
   });
 };
+
+// Format registration date
+const formattedRegistrationDate = computed(() => {
+  if (!player.value || !player.value.registrationDate) return 'Unknown';
+  return profileStore.formatRegistrationDate(player.value.registrationDate);
+});
 </script>
 
 <style scoped>
@@ -2078,5 +2161,20 @@ const retryLoading = () => {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+.registration-info {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #888;
+  text-align: center;
+}
+
+.registration-date {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-style: italic;
 }
 </style>

@@ -103,11 +103,9 @@ const routes = [
             if (playerData) {
               console.log('🔍 Player data from username search:', {
                 username: playerData.username,
-                id: playerData.id ? (typeof playerData.id === 'object' ? 'Principal Object' : playerData.id) : 'No ID',
+                id: playerData.id instanceof Principal ? 'Principal Object' : 'Not Principal',
                 idType: playerData.id ? typeof playerData.id : 'undefined',
-                hasToText: playerData.id && typeof playerData.id === 'object' ? typeof playerData.id.toText === 'function' : false,
-                isPrincipal: playerData.id instanceof Principal,
-                properties: playerData.id && typeof playerData.id === 'object' ? Object.getOwnPropertyNames(playerData.id) : []
+                isPrincipal: playerData.id instanceof Principal
               });
             }
           } catch (usernameError) {
@@ -121,33 +119,22 @@ const routes = [
         if (playerData) {
           console.log(`✨ Profile found via ${usedMethod}:`, {
             username: playerData.username || 'Unknown',
-            id: playerData.id ? (typeof playerData.id === 'object' ? 'Principal Object' : playerData.id) : 'No ID',
+            id: playerData.id instanceof Principal ? 'Principal Object' : 'Not Principal',
             level: playerData.level || '?'
           });
           
-          // IMPORTANT: Preserve the Principal object in playerData
-          // Do NOT stringify and parse the playerData as it will lose the Principal object
-          to.meta.playerData = {
-            ...playerData,
-            username: playerData.username || `User ${identifier.substring(0, 5)}...`,
-            level: playerData.level || '?',
-            title: playerData.title || 'Galactic Adventurer',
-            description: playerData.description || 'No description available.',
-            elo: playerData.elo || 1200
-          };
-          
-          // Log the Principal object in the route metadata
-          console.log('Route meta playerData Principal check:', {
-            hasId: !!to.meta.playerData.id,
-            idType: to.meta.playerData.id ? typeof to.meta.playerData.id : 'undefined',
-            isPrincipal: to.meta.playerData.id instanceof Principal,
-            hasToText: to.meta.playerData.id && typeof to.meta.playerData.id === 'object' ? 
-                      typeof to.meta.playerData.id.toText === 'function' : false
-          });
+          // Store the standardized player data in route meta
+          to.meta.playerData = playerData;
           
           // Store original identifier and method used to find profile
-          to.meta.principalId = identifier;
+          to.meta.principalId = playerData.id instanceof Principal ? playerData.id.toString() : identifier;
           to.meta.profileLookupMethod = usedMethod;
+          
+          // Log the registration date
+          if (playerData.registrationDate) {
+            console.log('📅 Registration date:', profileStore.formatRegistrationDate(playerData.registrationDate));
+          }
+          
           next();
         } else {
           console.log('❌ No profile found for identifier:', identifier);
@@ -156,10 +143,18 @@ const routes = [
           if (isPrincipalFormat) {
             console.log('🔑 Valid Principal format, allowing profile view with minimal data');
             to.meta.principalId = identifier;
+            to.meta.profileLookupMethod = 'principal';
             to.meta.playerData = {
               username: `User ${identifier.substring(0, 5)}...`,
-              id: identifier,
-              level: '?'
+              id: Principal.fromText(identifier),
+              level: '?',
+              title: 'Galactic Adventurer',
+              description: 'No description available.',
+              elo: '1200',
+              avatar: '0',
+              registrationDate: Date.now().toString(),
+              language: '',
+              friends: []
             };
             next();
           } else {

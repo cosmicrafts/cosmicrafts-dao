@@ -12,20 +12,31 @@ export const useNftsStore = defineStore('nfts', {
   actions: {
     async fetchNFTs() {
       try {
-        console.log("fetchNFTs");
+        console.log("Fetching NFTs...");
         const authStore = useAuthStore();
         const canister = useCanisterStore();       
         const cosmicrafts = await canister.get("cosmicrafts");
         const id = await authStore.getIdentity().getPrincipal().toText();
-        /**
-        public type TokenId = Nat;       
-        public type TokenMetadata = {
-          tokenId : TokenId;
-          owner : Account;
-          metadata : Metadata;
-        };
-         */
-        this.nfts = await cosmicrafts.getNFTs(Principal.toString()) || [];
+        console.log("Fetching NFTs for principal:", id);
+        
+        const nftsResult = await cosmicrafts.getNFTs(Principal.fromText(id));
+        console.log("Raw NFTs result:", nftsResult);
+        
+        // Convert BigInt values to strings
+        this.nfts = JSON.parse(
+          JSON.stringify(nftsResult || [], (key, value) => {
+            if (typeof value === 'bigint') {
+              return value.toString();
+            }
+            // Handle special cases for image URLs
+            if (key === 'image' && !value) {
+              return '/assets/webp/chest.webp';
+            }
+            return value;
+          })
+        );
+        
+        console.log("Processed NFTs:", this.nfts);
       } catch (error) {
         console.error('Error fetching NFTs:', error);
         this.nfts = []; // Ensure nfts is an empty array on error
