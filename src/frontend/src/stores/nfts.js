@@ -183,7 +183,7 @@ export const useNftsStore = defineStore('nfts', {
             id: id?.toString() || 'unknown',
             name: generalMetadata.name || 'Unknown NFT',
             description: generalMetadata.description || '',
-            image: generalMetadata.image || '/assets/webp/chest.webp',
+            image: generalMetadata.image || '/assets/webp/nft.webp',
             metadata: {
               category,
               faction,
@@ -201,7 +201,7 @@ export const useNftsStore = defineStore('nfts', {
             id: 'error',
             name: 'Error Loading NFT',
             description: 'Failed to load NFT data',
-            image: '/assets/webp/chest.webp',
+            image: '/assets/webp/nft.webp',
             metadata: {
               category: 'unknown',
               rarity: 1,

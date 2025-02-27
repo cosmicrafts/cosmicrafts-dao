@@ -893,7 +893,7 @@ const processNFTs = (nfts) => {
         id: id?.toString() || 'unknown',
         name: general.name || 'Unknown NFT',
         description: general.description || '',
-        image: general.image || '/assets/webp/chest.webp',
+        image: general.image || '/assets/webp/nft.webp',
         metadata: {
           category: categoryType,
           faction,
@@ -915,7 +915,7 @@ const processNFTs = (nfts) => {
         id: 'error',
         name: 'Error Loading NFT',
         description: 'Failed to load NFT data',
-        image: '/assets/webp/chest.webp',
+        image: '/assets/webp/nft.webp',
         metadata: {
           category: 'unknown',
           rarity: 1,
