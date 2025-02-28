@@ -4,6 +4,8 @@
 
 **Cosmicrafts DAO** represents the State-of-the-art of Web3 gaming with a groundbreaking shift in governance, empowering stakeholders to take an active role in shaping the future of a **Web3 gaming franchise**. Built entirely on the [Internet Computer](https://internetcomputer.org), the DAO is designed to leverage ICP's unmatched speed, scalability, security, and innovation of blockchain technology.
 
+
+
 ## Why DAO?
 
 A great product deserves its moment to shine. **Cosmicrafts** is that product – with years of development complete, a fully-built, game franchise – and the **Cosmicrafts DAO** is now turning its focus to the most exciting phase: reaching its audience. The games are live, the infrastructure is solid, and the framework is in place.

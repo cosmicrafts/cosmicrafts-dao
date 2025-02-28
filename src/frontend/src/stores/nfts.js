@@ -126,6 +126,13 @@ export const useNftsStore = defineStore('nfts', {
           // Extract id and metadata from array format [tokenId, metadata]
           const [id, rawMetadata] = Array.isArray(nft) ? nft : [nft.tokenId, nft.metadata];
           
+          console.log('Processing NFT raw metadata:', {
+            id,
+            rawMetadata,
+            generalMetadata: rawMetadata?.metadata?.general,
+            category: rawMetadata?.metadata?.category
+          });
+          
           // Extract the general metadata and category
           const generalMetadata = rawMetadata?.metadata?.general || {};
           const categoryData = rawMetadata?.metadata?.category || {};
@@ -138,6 +145,35 @@ export const useNftsStore = defineStore('nfts', {
             else if ('Chest' in categoryData) category = 'chests';
             else if ('Unit' in categoryData) category = 'units';
           }
+
+          // Get the image path based on the NFT name for chests
+          const getImagePath = (name, category) => {
+            if (category === 'chests') {
+              const nameToPath = {
+                'Cosmic Cache': '/assets/webp/cosmic-cache.webp',
+                'Stellar Box': '/assets/webp/stellar-box.webp',
+                'Nebula Cube': '/assets/webp/nebula-cube.webp',
+                'Galactic Crate': '/assets/webp/galactic-crate.webp',
+                'Astral Vault': '/assets/webp/astral-vault.webp',
+                'Celestial Locker': '/assets/webp/celestial-locker.webp',
+                'Quantum Chest': '/assets/webp/quantum-chest.webp',
+                'Ethereal Metacube': '/assets/webp/ethereal-metacube.webp'
+              };
+              return nameToPath[name] || '/assets/webp/cosmic-cache.webp';
+            }
+            
+            // Fallback to category-based images
+            switch(category) {
+              case 'avatars':
+                return '/assets/webp/avatar.webp';
+              case 'units':
+                return '/assets/webp/unit.webp';
+              case 'trophies':
+                return '/assets/webp/trophy.webp';
+              default:
+                return '/assets/webp/nft.webp';
+            }
+          };
 
           // Extract basic metadata
           const basicMetadata = rawMetadata?.metadata?.basic || {};
@@ -179,11 +215,20 @@ export const useNftsStore = defineStore('nfts', {
             combatExperience: soulData[0]?.combatExperience || 0
           } : null;
 
+          const name = generalMetadata.name || 'Unknown NFT';
+          const imagePath = getImagePath(name, category);
+          
+          console.log('NFT Image Resolution:', {
+            name,
+            category,
+            resolvedPath: imagePath
+          });
+
           return {
             id: id?.toString() || 'unknown',
-            name: generalMetadata.name || 'Unknown NFT',
+            name,
             description: generalMetadata.description || '',
-            image: generalMetadata.image || '/assets/webp/nft.webp',
+            image: imagePath,
             metadata: {
               category,
               faction,

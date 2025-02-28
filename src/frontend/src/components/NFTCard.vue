@@ -1,8 +1,19 @@
 <template>
   <div class="nft-card" :class="[cardCategory, { 'has-soul': hasSoul }]">
     <div class="nft-image-container">
-      <img 
-        :src="nft.image" 
+      <!-- Show skeleton loader while loading -->
+      <div v-if="imageLoading" class="skeleton-loader" />
+      
+      <!-- Show error state -->
+      <div v-else-if="imageError" class="error-state">
+        <i class="fas fa-exclamation-circle" />
+        <span>Failed to load image</span>
+      </div>
+      
+      <!-- Show image when loaded -->
+      <img
+        v-else
+        :src="imageSrc"
         :alt="nft.name"
         class="nft-image"
         loading="lazy"
@@ -76,7 +87,8 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { assetManager } from '@/services/AssetManager';
 
 const props = defineProps({
   nft: {
@@ -97,6 +109,26 @@ const props = defineProps({
         soul: null
       }
     })
+  }
+});
+
+const imageLoading = ref(true);
+const imageError = ref(false);
+const imageSrc = ref('');
+
+// Load the image using the asset manager
+onMounted(async () => {
+  try {
+    imageLoading.value = true;
+    imageSrc.value = await assetManager.getAsset(
+      props.nft.metadata.category,
+      props.nft.name
+    );
+  } catch (error) {
+    console.error('Failed to load NFT image:', error);
+    imageError.value = true;
+  } finally {
+    imageLoading.value = false;
   }
 });
 
@@ -298,5 +330,38 @@ function handleImageError(event) {
   0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2); }
   50% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
   100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+/* Add these new styles */
+.skeleton-loader {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 25%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 0.5rem;
+}
+
+.error-state {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4444;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 </style> 

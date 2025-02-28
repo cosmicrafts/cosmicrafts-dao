@@ -818,10 +818,9 @@ const processNFTs = (nfts) => {
   
   return nfts.map(nft => {
     try {
-      // Log the raw NFT data for debugging
       console.log('Processing individual NFT:', nft);
       
-      // Extract id and metadata from the array format
+      // Extract id and metadata from array format
       const [id, rawMetadata] = nft;
       console.log('Raw metadata:', rawMetadata);
       
@@ -845,6 +844,45 @@ const processNFTs = (nfts) => {
         else if ('Chest' in category) categoryType = 'chests';
         else if ('Unit' in category) categoryType = 'units';
       }
+
+      // Get the image path based on the NFT name for chests
+      const getImagePath = (name, category) => {
+        console.log('Getting image path for:', { name, category });
+        
+        if (category === 'chests') {
+          const nameToPath = {
+            'Cosmic Cache': '/assets/webp/cosmic-cache.webp',
+            'Stellar Box': '/assets/webp/stellar-box.webp',
+            'Nebula Cube': '/assets/webp/nebula-cube.webp',
+            'Galactic Crate': '/assets/webp/galactic-crate.webp',
+            'Astral Vault': '/assets/webp/astral-vault.webp',
+            'Celestial Locker': '/assets/webp/celestial-locker.webp',
+            'Quantum Chest': '/assets/webp/quantum-chest.webp',
+            'Ethereal Metacube': '/assets/webp/ethereal-metacube.webp'
+          };
+          const resolvedPath = nameToPath[name] || '/assets/webp/cosmic-cache.webp';
+          console.log('Resolved chest image path:', resolvedPath);
+          return resolvedPath;
+        }
+        
+        // Fallback to category-based images
+        let fallbackPath;
+        switch(category) {
+          case 'avatars':
+            fallbackPath = '/assets/webp/avatar.webp';
+            break;
+          case 'units':
+            fallbackPath = '/assets/webp/unit.webp';
+            break;
+          case 'trophies':
+            fallbackPath = '/assets/webp/trophy.webp';
+            break;
+          default:
+            fallbackPath = '/assets/webp/nft.webp';
+        }
+        console.log('Using fallback image path:', fallbackPath);
+        return fallbackPath;
+      };
 
       // Process faction if it exists (it's an array with a single object)
       let faction = null;
@@ -888,12 +926,21 @@ const processNFTs = (nfts) => {
         combatExperience: soulData[0].combatExperience || 0
       } : null;
 
+      const name = general.name || 'Unknown NFT';
+      const imagePath = getImagePath(name, categoryType);
+      
+      console.log('NFT Image Resolution:', {
+        name,
+        category: categoryType,
+        resolvedPath: imagePath
+      });
+
       // Construct the final NFT object
       const processedNFT = {
         id: id?.toString() || 'unknown',
-        name: general.name || 'Unknown NFT',
+        name,
         description: general.description || '',
-        image: general.image || '/assets/webp/nft.webp',
+        image: imagePath,
         metadata: {
           category: categoryType,
           faction,
@@ -1221,8 +1268,7 @@ const formattedRegistrationDate = computed(() => {
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
-              url('@/assets/hero-bg.jpg') center/cover;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
   padding: 6rem 2rem;
   position: relative;
   overflow: hidden;
