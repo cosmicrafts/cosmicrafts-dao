@@ -393,6 +393,7 @@ const averageStats = ref(null);
 const achievements = ref([]);
 const playerAchievements = ref([]);
 const nftCategories = ref([
+  { type: 'all', title: 'All NFTs', items: [], isLoading: false },
   { type: 'characters', title: 'Characters', items: [], isLoading: false },
   { type: 'units', title: 'Units', items: [], isLoading: false },
   { type: 'avatars', title: 'Avatars', items: [], isLoading: false },
@@ -633,11 +634,26 @@ onMounted(async () => {
               
               if (processedNfts?.length > 0) {
                 const categorizedNfts = processNFTs(processedNfts);
+                
+                // Clear existing items for all categories
+                nftCategories.value.forEach(cat => {
+                  cat.items = [];
+                });
+                
+                // Distribute NFTs to their respective categories
                 categorizedNfts.forEach(nft => {
                   const nftCategory = nft.metadata.category?.toLowerCase() || 'characters';
+                  
+                  // Add to specific category
                   const categoryObj = nftCategories.value.find(c => c.type === nftCategory);
                   if (categoryObj) {
                     categoryObj.items.push(nft);
+                  }
+                  
+                  // Add to "all" category
+                  const allCategory = nftCategories.value.find(c => c.type === 'all');
+                  if (allCategory) {
+                    allCategory.items.push(nft);
                   }
                 });
               }
@@ -1089,6 +1105,7 @@ const getTabIcon = (tab) => {
 
 const getCategoryIcon = (type) => {
   const icons = {
+    all: '🎯',
     characters: '🦸',
     units: '⚔️',
     avatars: '🎭',
