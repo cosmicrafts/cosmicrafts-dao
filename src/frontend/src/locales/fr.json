@@ -211,6 +211,29 @@
     "encryptingReality": "Chiffrement de la réalité",
     "debuggingTheMultiverse": "Débogage du multivers"
   }
+},
+"notifications": {
+  "title": "Notifications",
+  "noNotifications": "Pas de notifications",
+  "viewAll": "Voir tout",
+  "friendRequests": "Demandes d'amitié",
+  "noFriendRequests": "Pas de demandes d'amitié",
+  "accept": "Accepter",
+  "decline": "Refuser",
+  "accepted": "Accepté",
+  "declined": "Refusé",
+  "sentYouFriendRequest": "vous a envoyé une demande d'amitié",
+  "acceptedYourFriendRequest": "a accepté votre demande d'amitié",
+  "tabs": {
+    "all": "Tout",
+    "friendRequests": "Demandes d'amitié",
+    "notifications": "Notifications"
+  },
+  "timeAgo": {
+    "justNow": "à l'instant",
+    "minutesAgo": "il y a {minutes} minutes",
+    "hoursAgo": "il y a {hours} heures",
+    "daysAgo": "il y a {days} jours"
+  }
 }
-
 }

@@ -2942,6 +2942,16 @@ shared actor class Cosmicrafts() = Self {
                         mutualFriendships.put((playerId, fromId), friendship);
                         mutualFriendships.put((fromId, playerId), friendship);
 
+                        // Send notification to the request sender that their request was accepted
+                        switch (players.get(fromId)) {
+                            case (null) {
+                                // Do nothing if the sender doesn't exist (unlikely)
+                            };
+                            case (?fromPlayer) {
+                                sendNotification(fromId, _player.username # " accepted your friend request");
+                            };
+                        };
+
                         // Update achievement progress for both players
                         let updateResult1 = await updateAddFriendAchievement(playerId);
                         let updateResult2 = await updateAddFriendAchievement(fromId);
@@ -3911,7 +3921,7 @@ shared actor class Cosmicrafts() = Self {
                       }
                   };
               }
-          }
+          };
       };
       return Buffer.toArray(buffer);
   };
@@ -4590,7 +4600,7 @@ shared actor class Cosmicrafts() = Self {
     private let icrc7_InitArgs: TypesICRC7.CollectionInitArgs = {
         name = "Cosmicrafts NFTs";
         symbol = "Cosmicrafts";
-        royalties = null; 
+        royalties = null; // No royalties
         royaltyRecipient = null;
         description = ?"Trade, upgrade, and share with friends to unleash mayhem in the metaverse! Collect powerful spaceships, unlock legendary loot in mysterious metacubes, and craft your own style with unique avatars and rare items. Forge your cosmic empire and become a legend among the stars.";
         image = null;

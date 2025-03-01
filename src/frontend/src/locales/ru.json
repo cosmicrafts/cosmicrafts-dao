@@ -211,6 +211,29 @@
       "encryptingReality": "Шифруем реальность",
       "debuggingTheMultiverse": "Отладка мультивселенной"
     }
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "noNotifications": "Нет уведомлений",
+    "viewAll": "Посмотреть все",
+    "friendRequests": "Запросы в друзья",
+    "noFriendRequests": "Нет запросов в друзья",
+    "accept": "Принять",
+    "decline": "Отклонить",
+    "accepted": "Принято",
+    "declined": "Отклонено",
+    "sentYouFriendRequest": "отправил(а) вам запрос в друзья",
+    "acceptedYourFriendRequest": "принял(а) ваш запрос в друзья",
+    "tabs": {
+      "all": "Все",
+      "friendRequests": "Запросы в друзья",
+      "notifications": "Уведомления"
+    },
+    "timeAgo": {
+      "justNow": "только что",
+      "minutesAgo": "{minutes} минут назад",
+      "hoursAgo": "{hours} часов назад",
+      "daysAgo": "{days} дней назад"
+    }
   }
-
 }

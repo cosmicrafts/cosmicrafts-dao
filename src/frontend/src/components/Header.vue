@@ -35,6 +35,9 @@
         <LanguageSelector direction="down-left" />
       </div>
 
+      <!-- Notifications Icon (Only show when logged in) -->
+      <NotificationIcon v-if="authStore.player" />
+
       <!-- Avatar and Dropdown Menu -->
       <div v-if="authStore.player" class="avatar-container" ref="avatarContainerRef">  <img
           v-if="computedPlayerAvatar"
@@ -48,6 +51,7 @@
 
         <div v-if="isDropdownVisible" class="dropdown-menu" ref="dropdownMenuRef">  <ul>
             <li @click="goToProfile">{{ t('header.myProfile') }}</li>
+            <li @click="goToNotifications">{{ t('header.notifications') }}</li>
             <li @click="goToSettings">{{ t('header.settings') }}</li>
             <li @click="logout">{{ t('header.signout') }}</li>
           </ul>
@@ -72,6 +76,7 @@ import MobileMenu from '@/components/MobileMenu.vue';
 import LanguageSelector from '@/components/LanguageSelector.vue'
 import { useModalStore } from '@/stores/modal';
 import Login from '@/components/Login.vue';
+import NotificationIcon from '@/components/NotificationIcon.vue';
 import defaultLogo from '@/assets/icons/logo.svg';
 import logoCN from '@/assets/icons/logo-cn.svg';
 import logoKR from '@/assets/icons/logo-kr.svg';
@@ -140,6 +145,10 @@ const logout = async () => {
 // Navigation handlers
 const goToProfile = () => {
   router.push('/profile'); // Adjust route as needed
+};
+
+const goToNotifications = () => {
+  router.push('/notifications'); // Navigate to notifications page
 };
 
 const goToSettings = () => {

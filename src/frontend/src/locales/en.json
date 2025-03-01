@@ -58,7 +58,8 @@
     "settings": "Settings",
     "signout": "Sign out",
     "profile": "Profile",
-    "roadmap": "Roadmap"
+    "roadmap": "Roadmap",
+    "notifications": "Notifications"
   },
   "error": {
     "title": "Whoah!",
@@ -186,6 +187,30 @@
   },
   "whitepaper": {
     "title": "Cosmicrafts Whitepaper"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "noNotifications": "No notifications yet",
+    "viewAll": "View All",
+    "friendRequests": "Friend Requests",
+    "noFriendRequests": "No friend requests",
+    "accept": "Accept",
+    "decline": "Decline",
+    "accepted": "Accepted",
+    "declined": "Declined",
+    "sentYouFriendRequest": "sent you a friend request",
+    "acceptedYourFriendRequest": "accepted your friend request",
+    "tabs": {
+      "all": "All",
+      "friendRequests": "Friend Requests",
+      "notifications": "Notifications"
+    },
+    "timeAgo": {
+      "justNow": "just now",
+      "minutesAgo": "{minutes} minutes ago",
+      "hoursAgo": "{hours} hours ago",
+      "daysAgo": "{days} days ago"
+    }
   },
   "loadingScreen": {
       "messages": {

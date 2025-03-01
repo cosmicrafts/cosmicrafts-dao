@@ -211,5 +211,29 @@
       "encryptingReality": "تشفير الواقع",
       "debuggingTheMultiverse": "تصحيح الأكوان المتعددة"
     }
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "noNotifications": "لا توجد إشعارات",
+    "viewAll": "عرض الكل",
+    "friendRequests": "طلبات الصداقة",
+    "noFriendRequests": "لا توجد طلبات صداقة",
+    "accept": "قبول",
+    "decline": "رفض",
+    "accepted": "تم القبول",
+    "declined": "تم الرفض",
+    "sentYouFriendRequest": "أرسل لك طلب صداقة",
+    "acceptedYourFriendRequest": "قبل طلب صداقتك",
+    "tabs": {
+      "all": "الكل",
+      "friendRequests": "طلبات الصداقة",
+      "notifications": "الإشعارات"
+    },
+    "timeAgo": {
+      "justNow": "الآن",
+      "minutesAgo": "منذ {minutes} دقائق",
+      "hoursAgo": "منذ {hours} ساعات",
+      "daysAgo": "منذ {days} أيام"
+    }
   }
 }

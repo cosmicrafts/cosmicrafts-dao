@@ -211,5 +211,29 @@
       "encryptingReality": "현실 암호화 중",
       "debuggingTheMultiverse": "다중우주 디버깅 중"
     }
+  },
+  "notifications": {
+    "title": "알림",
+    "noNotifications": "알림이 없습니다",
+    "viewAll": "모두 보기",
+    "friendRequests": "친구 요청",
+    "noFriendRequests": "친구 요청이 없습니다",
+    "accept": "수락",
+    "decline": "거절",
+    "accepted": "수락됨",
+    "declined": "거절됨",
+    "sentYouFriendRequest": "님이 친구 요청을 보냈습니다",
+    "acceptedYourFriendRequest": "님이 친구 요청을 수락했습니다",
+    "tabs": {
+      "all": "전체",
+      "friendRequests": "친구 요청",
+      "notifications": "알림"
+    },
+    "timeAgo": {
+      "justNow": "방금",
+      "minutesAgo": "{minutes}분 전",
+      "hoursAgo": "{hours}시간 전",
+      "daysAgo": "{days}일 전"
+    }
   }
 }

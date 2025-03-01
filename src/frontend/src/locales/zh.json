@@ -212,6 +212,29 @@
       "encryptingReality": "加密现实",
       "debuggingTheMultiverse": "调试多元宇宙"
     }
+  },
+  "notifications": {
+    "title": "通知",
+    "noNotifications": "暂无通知",
+    "viewAll": "查看全部",
+    "friendRequests": "好友请求",
+    "noFriendRequests": "暂无好友请求",
+    "accept": "接受",
+    "decline": "拒绝",
+    "accepted": "已接受",
+    "declined": "已拒绝",
+    "sentYouFriendRequest": "向您发送了好友请求",
+    "acceptedYourFriendRequest": "接受了您的好友请求",
+    "tabs": {
+      "all": "全部",
+      "friendRequests": "好友请求",
+      "notifications": "通知"
+    },
+    "timeAgo": {
+      "justNow": "刚刚",
+      "minutesAgo": "{minutes}分钟前",
+      "hoursAgo": "{hours}小时前",
+      "daysAgo": "{days}天前"
+    }
   }
-
 }

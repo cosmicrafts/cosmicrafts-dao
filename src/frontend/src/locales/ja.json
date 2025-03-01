@@ -211,6 +211,29 @@
       "encryptingReality": "現実を暗号化中",
       "debuggingTheMultiverse": "マルチバースをデバッグ中"
     }
+  },
+  "notifications": {
+    "title": "通知",
+    "noNotifications": "通知はありません",
+    "viewAll": "すべて表示",
+    "friendRequests": "友達リクエスト",
+    "noFriendRequests": "友達リクエストはありません",
+    "accept": "承認",
+    "decline": "拒否",
+    "accepted": "承認済み",
+    "declined": "拒否済み",
+    "sentYouFriendRequest": "があなたに友達リクエストを送信しました",
+    "acceptedYourFriendRequest": "があなたの友達リクエストを承認しました",
+    "tabs": {
+      "all": "すべて",
+      "friendRequests": "友達リクエスト",
+      "notifications": "通知"
+    },
+    "timeAgo": {
+      "justNow": "たった今",
+      "minutesAgo": "{minutes}分前",
+      "hoursAgo": "{hours}時間前",
+      "daysAgo": "{days}日前"
+    }
   }
-
 }

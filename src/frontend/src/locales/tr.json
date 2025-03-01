@@ -211,6 +211,29 @@
       "encryptingReality": "Gerçeklik şifreleniyor",
       "debuggingTheMultiverse": "Çoklu evren temizleniyor"
     }
+  },
+  "notifications": {
+    "title": "Bildirimler",
+    "noNotifications": "Bildirim yok",
+    "viewAll": "Tümünü Gör",
+    "friendRequests": "Arkadaşlık İstekleri",
+    "noFriendRequests": "Arkadaşlık isteği yok",
+    "accept": "Kabul Et",
+    "decline": "Reddet",
+    "accepted": "Kabul Edildi",
+    "declined": "Reddedildi",
+    "sentYouFriendRequest": "size arkadaşlık isteği gönderdi",
+    "acceptedYourFriendRequest": "arkadaşlık isteğinizi kabul etti",
+    "tabs": {
+      "all": "Tümü",
+      "friendRequests": "Arkadaşlık İstekleri",
+      "notifications": "Bildirimler"
+    },
+    "timeAgo": {
+      "justNow": "şimdi",
+      "minutesAgo": "{minutes} dakika önce",
+      "hoursAgo": "{hours} saat önce",
+      "daysAgo": "{days} gün önce"
+    }
   }
-
 }

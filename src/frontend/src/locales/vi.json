@@ -212,6 +212,29 @@
       "encryptingReality": "Mã hóa thực tại",
       "debuggingTheMultiverse": "Gỡ lỗi đa vũ trụ"
     }
+  },
+  "notifications": {
+    "title": "Thông báo",
+    "noNotifications": "Không có thông báo",
+    "viewAll": "Xem tất cả",
+    "friendRequests": "Lời mời kết bạn",
+    "noFriendRequests": "Không có lời mời kết bạn",
+    "accept": "Chấp nhận",
+    "decline": "Từ chối",
+    "accepted": "Đã chấp nhận",
+    "declined": "Đã từ chối",
+    "sentYouFriendRequest": "đã gửi cho bạn lời mời kết bạn",
+    "acceptedYourFriendRequest": "đã chấp nhận lời mời kết bạn của bạn",
+    "tabs": {
+      "all": "Tất cả",
+      "friendRequests": "Lời mời kết bạn",
+      "notifications": "Thông báo"
+    },
+    "timeAgo": {
+      "justNow": "vừa xong",
+      "minutesAgo": "{minutes} phút trước",
+      "hoursAgo": "{hours} giờ trước",
+      "daysAgo": "{days} ngày trước"
+    }
   }
-
 }

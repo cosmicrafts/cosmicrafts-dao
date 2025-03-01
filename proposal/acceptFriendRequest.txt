@@ -1,0 +1,64 @@
+// This is a code snippet showing the proposed changes to the acceptFriendRequest function
+// Note: This is not a complete Motoko file, just a demonstration of the changes needed
+
+/*
+public shared ({ caller: PlayerId }) func acceptFriendRequest(fromId: PlayerId) : async (Bool, Text) {
+    let playerId = caller;
+    switch (players.get(playerId)) {
+        case (null) {
+            return (false, "User record does not exist");
+        };
+        case (?_player) {
+            var requests = Utils.nullishCoalescing<[FriendRequest]>(friendRequests.get(playerId), []);
+            let requestIndex = findFriendRequestIndex(requests, fromId);
+            switch (requestIndex) {
+                case (null) {
+                    return (false, "Friend request not found");
+                };
+                case (?_index) {
+                    // Remove the request from the list
+                    requests := Array.filter<FriendRequest>(requests, func(req: FriendRequest) : Bool { req.from != fromId });
+                    friendRequests.put(playerId, requests);
+
+                    // Add friend to both users' friends list
+                    addFriendToUser(playerId, fromId);
+                    addFriendToUser(fromId, playerId);
+
+                    // Record the mutual friendship with timestamp
+                    let friendship: MutualFriendship = {
+                        friend1 = playerId;
+                        friend2 = fromId;
+                        friendsSince = Time.now();
+                    };
+                    mutualFriendships.put((playerId, fromId), friendship);
+                    mutualFriendships.put((fromId, playerId), friendship);
+
+                    // NEW CODE: Send notification to the request sender that their request was accepted
+                    switch (players.get(fromId)) {
+                        case (null) {
+                            // Do nothing if the sender doesn't exist (unlikely)
+                        };
+                        case (?fromPlayer) {
+                            sendNotification(fromId, _player.username # " accepted your friend request");
+                        };
+                    };
+                    // END NEW CODE
+
+                    // Update achievement progress for both players
+                    let updateResult1 = await updateAddFriendAchievement(playerId);
+                    let updateResult2 = await updateAddFriendAchievement(fromId);
+
+                    if (updateResult1.0 and updateResult2.0) {
+                        return (true, "Friend request accepted and achievements updated");
+                    } else {
+                        return (true, "Friend request accepted but achievements update failed");
+                    };
+                };
+            };
+        };
+    };
+};
+*/
+
+// The key change is using _player.username instead of player.username:
+// sendNotification(fromId, _player.username # " accepted your friend request"); 
