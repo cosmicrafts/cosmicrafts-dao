@@ -91,7 +91,7 @@
                   <img :src="getDefaultAvatar()" alt="User Avatar" class="avatar" />
                 </div>
                 <div class="notification-details">
-                  <span class="notification-message">{{ notification.message }}</span>
+                  <span class="notification-message">{{ translateMessage(notification.message) }}</span>
                   <span class="notification-time">{{ formatTime(notification.timestamp) }}</span>
                 </div>
               </div>
@@ -110,6 +110,7 @@ import { useCanisterStore } from '@/stores/canister';
 import { useAuthStore } from '@/stores/auth';
 import { useI18n } from 'vue-i18n';
 import defaultAvatar from '@/assets/avatars/Avatar_01.webp';
+import { translateNotification } from '@/utils/notificationTranslator';
 
 const route = useRoute();
 const router = useRouter();
@@ -296,6 +297,11 @@ const formatTime = (timestamp) => {
 
 const getDefaultAvatar = () => {
   return defaultAvatar;
+};
+
+// Add this method to translate notification messages
+const translateMessage = (message) => {
+  return translateNotification(message, t);
 };
 </script>
 

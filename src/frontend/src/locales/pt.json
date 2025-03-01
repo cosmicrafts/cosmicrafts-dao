@@ -224,6 +224,8 @@
   "declined": "Recusado",
   "sentYouFriendRequest": "enviou-lhe um pedido de amizade",
   "acceptedYourFriendRequest": "aceitou seu pedido de amizade",
+  "newFriendRequest": "Você tem um novo pedido de amizade de",
+  "privacySettingsUpdated": "Suas configurações de privacidade foram atualizadas.",
   "tabs": {
     "all": "Todas",
     "friendRequests": "Pedidos de amizade",

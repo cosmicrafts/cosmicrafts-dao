@@ -224,6 +224,8 @@
     "declined": "Abgelehnt",
     "sentYouFriendRequest": "hat dir eine Freundschaftsanfrage gesendet",
     "acceptedYourFriendRequest": "hat deine Freundschaftsanfrage akzeptiert",
+    "newFriendRequest": "Du hast eine neue Freundschaftsanfrage von",
+    "privacySettingsUpdated": "Deine Datenschutzeinstellungen wurden aktualisiert.",
     "tabs": {
       "all": "Alle",
       "friendRequests": "Freundschaftsanfragen",

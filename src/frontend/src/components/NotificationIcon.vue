@@ -73,7 +73,7 @@
             <h4 class="section-title">Recent</h4>
             <div v-for="(notification, index) in displayedNotifications" :key="'notif-' + index" class="notification-item">
               <div class="notification-content">
-                <span class="notification-message">{{ notification.message }}</span>
+                <span class="notification-message">{{ translateMessage(notification.message) }}</span>
                 <span class="notification-time">{{ formatTime(notification.timestamp) }}</span>
               </div>
             </div>
@@ -96,6 +96,7 @@ import { useCanisterStore } from '@/stores/canister';
 import { useAuthStore } from '@/stores/auth';
 import { useI18n } from 'vue-i18n';
 import defaultAvatar from '@/assets/avatars/Avatar_01.webp';
+import { translateNotification } from '@/utils/notificationTranslator';
 
 const router = useRouter();
 const canisterStore = useCanisterStore();
@@ -317,6 +318,11 @@ watch(() => authStore.isAuthenticated, (isAuthenticated) => {
     friendRequests.value = [];
   }
 });
+
+// Add this method to translate notification messages
+const translateMessage = (message) => {
+  return translateNotification(message, t);
+};
 </script>
 
 <style scoped>

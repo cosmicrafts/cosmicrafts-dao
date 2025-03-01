@@ -200,6 +200,8 @@
     "declined": "Declined",
     "sentYouFriendRequest": "sent you a friend request",
     "acceptedYourFriendRequest": "accepted your friend request",
+    "newFriendRequest": "You have a new friend request from",
+    "privacySettingsUpdated": "Your privacy settings have been updated.",
     "tabs": {
       "all": "All",
       "friendRequests": "Friend Requests",

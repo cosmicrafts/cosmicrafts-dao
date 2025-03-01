@@ -224,6 +224,8 @@
     "declined": "拒否済み",
     "sentYouFriendRequest": "があなたに友達リクエストを送信しました",
     "acceptedYourFriendRequest": "があなたの友達リクエストを承認しました",
+    "newFriendRequest": "新しい友達リクエストがあります：",
+    "privacySettingsUpdated": "プライバシー設定が更新されました。",
     "tabs": {
       "all": "すべて",
       "friendRequests": "友達リクエスト",

@@ -224,6 +224,8 @@
     "declined": "거절됨",
     "sentYouFriendRequest": "님이 친구 요청을 보냈습니다",
     "acceptedYourFriendRequest": "님이 친구 요청을 수락했습니다",
+    "newFriendRequest": "새로운 친구 요청이 있습니다:",
+    "privacySettingsUpdated": "개인정보 설정이 업데이트되었습니다.",
     "tabs": {
       "all": "전체",
       "friendRequests": "친구 요청",

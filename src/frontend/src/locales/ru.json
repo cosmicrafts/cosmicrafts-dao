@@ -224,6 +224,8 @@
     "declined": "Отклонено",
     "sentYouFriendRequest": "отправил(а) вам запрос в друзья",
     "acceptedYourFriendRequest": "принял(а) ваш запрос в друзья",
+    "newFriendRequest": "У вас новый запрос в друзья от",
+    "privacySettingsUpdated": "Ваши настройки конфиденциальности были обновлены.",
     "tabs": {
       "all": "Все",
       "friendRequests": "Запросы в друзья",

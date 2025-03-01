@@ -224,6 +224,8 @@
     "declined": "Reddedildi",
     "sentYouFriendRequest": "size arkadaşlık isteği gönderdi",
     "acceptedYourFriendRequest": "arkadaşlık isteğinizi kabul etti",
+    "newFriendRequest": "Yeni bir arkadaşlık isteğiniz var:",
+    "privacySettingsUpdated": "Gizlilik ayarlarınız güncellendi.",
     "tabs": {
       "all": "Tümü",
       "friendRequests": "Arkadaşlık İstekleri",

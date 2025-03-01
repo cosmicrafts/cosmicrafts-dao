@@ -224,6 +224,8 @@
     "declined": "تم الرفض",
     "sentYouFriendRequest": "أرسل لك طلب صداقة",
     "acceptedYourFriendRequest": "قبل طلب صداقتك",
+    "newFriendRequest": "لديك طلب صداقة جديد من",
+    "privacySettingsUpdated": "تم تحديث إعدادات الخصوصية الخاصة بك.",
     "tabs": {
       "all": "الكل",
       "friendRequests": "طلبات الصداقة",

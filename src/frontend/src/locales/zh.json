@@ -225,6 +225,8 @@
     "declined": "已拒绝",
     "sentYouFriendRequest": "向您发送了好友请求",
     "acceptedYourFriendRequest": "接受了您的好友请求",
+    "newFriendRequest": "您收到了来自以下用户的好友请求：",
+    "privacySettingsUpdated": "您的隐私设置已更新。",
     "tabs": {
       "all": "全部",
       "friendRequests": "好友请求",

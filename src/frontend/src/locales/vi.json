@@ -225,6 +225,8 @@
     "declined": "Đã từ chối",
     "sentYouFriendRequest": "đã gửi cho bạn lời mời kết bạn",
     "acceptedYourFriendRequest": "đã chấp nhận lời mời kết bạn của bạn",
+    "newFriendRequest": "Bạn có lời mời kết bạn mới từ",
+    "privacySettingsUpdated": "Cài đặt quyền riêng tư của bạn đã được cập nhật.",
     "tabs": {
       "all": "Tất cả",
       "friendRequests": "Lời mời kết bạn",
