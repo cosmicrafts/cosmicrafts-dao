@@ -47,42 +47,48 @@
           <h1 class="player-name">{{ player.username || 'Unknown Player' }}</h1>
       <p class="player-title">{{ player.title || 'Galactic Adventurer' }}</p>
       <p class="registration-date">{{ formattedRegistrationDate }}</p>
-          <p class="player-description" v-if="!isEditingDescription">
-            {{ player.description || 'No description yet' }}
-            <button class="edit-description-btn" @click="startEditingDescription" v-if="showEditControls">
-              <span class="edit-icon">✏️</span>
-              Edit
-            </button>
-          </p>
-          <div class="description-form" v-else-if="showEditControls">
-            <textarea 
-              v-model="descriptionForm.description"
-              :disabled="descriptionForm.isSubmitting"
-              maxlength="500"
-              placeholder="Tell us about yourself..."
-            ></textarea>
-            <div class="char-count">{{ descriptionForm.description.length }}/500</div>
-            <div class="form-actions">
-              <button 
-                type="button" 
-                @click="isEditingDescription = false"
-                :disabled="descriptionForm.isSubmitting"
-              >
-                Cancel
-              </button>
-              <button 
-                type="submit" 
-                @click="saveDescription"
-                :disabled="descriptionForm.isSubmitting"
-                class="save-btn"
-              >
-                {{ descriptionForm.isSubmitting ? 'Saving...' : 'Save' }}
-              </button>
-            </div>
-            <div class="error-message" v-if="descriptionForm.error">
-              {{ descriptionForm.error }}
-            </div>
-          </div>
+      
+      <!-- Add Friend Button - Only show if not own profile -->
+      <div class="friend-actions" v-if="!isOwnProfile && !loadingError">
+        <button 
+          v-if="!isFriend && !friendRequestSent" 
+          @click="sendFriendRequest" 
+          class="friend-btn add-friend"
+          :disabled="isProcessingFriendAction"
+        >
+          <span class="btn-icon">👥</span>
+          Add Friend
+          <span v-if="isProcessingFriendAction" class="loading-indicator">⟳</span>
+        </button>
+        <button 
+          v-else-if="friendRequestSent" 
+          @click="cancelFriendRequest" 
+          class="friend-btn request-sent"
+          :disabled="isProcessingFriendAction"
+        >
+          <span class="btn-icon">⏱️</span>
+          Request Sent
+          <span v-if="isProcessingFriendAction" class="loading-indicator">⟳</span>
+        </button>
+        <button 
+          v-else 
+          @click="removeFriend" 
+          class="friend-btn remove-friend"
+          :disabled="isProcessingFriendAction"
+        >
+          <span class="btn-icon">✖️</span>
+          Remove Friend
+          <span v-if="isProcessingFriendAction" class="loading-indicator">⟳</span>
+        </button>
+      </div>
+      
+      <p class="player-description" v-if="!isEditingDescription">
+        {{ player.description || 'No description yet' }}
+        <button class="edit-description-btn" @click="startEditingDescription" v-if="showEditControls">
+          <span class="edit-icon">✏️</span>
+          Edit
+        </button>
+      </p>
           <div class="player-meta">
             <div class="meta-item">
               <span class="meta-label">ELO</span>
@@ -426,6 +432,10 @@ const descriptionForm = ref({
 });
 const playerNFTs = ref([]);
 const fetchNFTs = ref(true);
+const isFriend = ref(false);
+const friendRequestSent = ref(false);
+const isProcessingFriendAction = ref(false);
+const friendActionError = ref(null);
 
 // Check if this is the current user's own profile
 const isOwnProfile = computed(() => {
@@ -669,6 +679,9 @@ onMounted(async () => {
 
     // Execute all fetch tasks in parallel
     await Promise.allSettled(fetchTasks);
+
+    // Check friendship status
+    await checkFriendshipStatus();
 
   } catch (error) {
     console.error('Error loading profile data:', error);
@@ -1209,14 +1222,179 @@ const formattedRegistrationDate = computed(() => {
   if (!player.value || !player.value.registrationDate) return 'Unknown';
   return profileStore.formatRegistrationDate(player.value.registrationDate);
 });
+
+// Function to check if the current user and profile user are friends
+const checkFriendshipStatus = async () => {
+  if (isOwnProfile.value) {
+    return; // No need to check friendship status for own profile
+  }
+  
+  try {
+    const cosmicrafts = await canisterStore.get("cosmicrafts");
+    if (!cosmicrafts) {
+      console.error('Cosmicrafts canister not initialized');
+      return;
+    }
+    
+    // Get the current user's friends list
+    const friendsList = await cosmicrafts.getFriendsList();
+    if (!friendsList) {
+      console.log('No friends list available');
+      return;
+    }
+    
+    // Get the profile user's principal
+    let profilePrincipal;
+    if (typeof player.value.id === 'string') {
+      try {
+        profilePrincipal = Principal.fromText(player.value.id);
+      } catch (error) {
+        console.error('Error creating Principal from string:', error);
+        return;
+      }
+    } else if (player.value.id instanceof Principal) {
+      profilePrincipal = player.value.id;
+    } else {
+      console.error('Unexpected player ID format:', player.value.id);
+      return;
+    }
+    
+    // Check if the profile user is in the current user's friends list
+    const actualFriendsList = Array.isArray(friendsList[0]) ? friendsList[0] : friendsList;
+    isFriend.value = actualFriendsList.some(friendId => {
+      if (friendId instanceof Principal) {
+        return friendId.toText() === profilePrincipal.toText();
+      } else if (typeof friendId === 'string') {
+        return friendId === profilePrincipal.toText();
+      }
+      return false;
+    });
+    
+    // If not friends, check if a friend request has been sent
+    if (!isFriend.value) {
+      // This would require a backend function to check pending friend requests
+      // For now, we'll just set it to false
+      friendRequestSent.value = false;
+    }
+    
+    console.log('Friendship status:', { isFriend: isFriend.value, friendRequestSent: friendRequestSent.value });
+  } catch (error) {
+    console.error('Error checking friendship status:', error);
+  }
+};
+
+// Function to send a friend request
+const sendFriendRequest = async () => {
+  if (isProcessingFriendAction.value) return;
+  
+  isProcessingFriendAction.value = true;
+  friendActionError.value = null;
+  
+  try {
+    const cosmicrafts = await canisterStore.get("cosmicrafts");
+    if (!cosmicrafts) {
+      throw new Error("Cosmicrafts canister not initialized");
+    }
+    
+    // Get the profile user's principal
+    let profilePrincipal;
+    if (typeof player.value.id === 'string') {
+      profilePrincipal = Principal.fromText(player.value.id);
+    } else if (player.value.id instanceof Principal) {
+      profilePrincipal = player.value.id;
+    } else {
+      throw new Error('Invalid player ID format');
+    }
+    
+    // Send the friend request
+    const [success, message] = await cosmicrafts.sendFriendRequest(profilePrincipal);
+    
+    console.log('Send friend request response:', { success, message });
+    
+    if (success) {
+      friendRequestSent.value = true;
+      // Show success notification
+      console.log('Friend request sent successfully');
+    } else {
+      throw new Error(message || 'Failed to send friend request');
+    }
+  } catch (error) {
+    console.error('Error sending friend request:', error);
+    friendActionError.value = error.message || 'Failed to send friend request';
+  } finally {
+    isProcessingFriendAction.value = false;
+  }
+};
+
+// Function to cancel a friend request (this would require a backend function)
+const cancelFriendRequest = async () => {
+  // This would require a backend function to cancel a friend request
+  // For now, we'll just show an alert
+  alert('This functionality is not yet implemented');
+};
+
+// Function to remove a friend
+const removeFriend = async () => {
+  if (isProcessingFriendAction.value) return;
+  
+  // Confirm before removing friend
+  if (!confirm(`Are you sure you want to remove ${player.value.username} from your friends list?`)) {
+    return;
+  }
+  
+  isProcessingFriendAction.value = true;
+  friendActionError.value = null;
+  
+  try {
+    // This would require a backend function to remove a friend
+    // For now, we'll just show an alert
+    alert('This functionality is not yet implemented');
+    
+    // If the backend had a removeFriend function, it would look like this:
+    /*
+    const cosmicrafts = await canisterStore.get("cosmicrafts");
+    if (!cosmicrafts) {
+      throw new Error("Cosmicrafts canister not initialized");
+    }
+    
+    // Get the profile user's principal
+    let profilePrincipal;
+    if (typeof player.value.id === 'string') {
+      profilePrincipal = Principal.fromText(player.value.id);
+    } else if (player.value.id instanceof Principal) {
+      profilePrincipal = player.value.id;
+    } else {
+      throw new Error('Invalid player ID format');
+    }
+    
+    // Remove the friend
+    const [success, message] = await cosmicrafts.removeFriend(profilePrincipal);
+    
+    if (success) {
+      isFriend.value = false;
+      // Show success notification
+      console.log('Friend removed successfully');
+    } else {
+      throw new Error(message || 'Failed to remove friend');
+    }
+    */
+  } catch (error) {
+    console.error('Error removing friend:', error);
+    friendActionError.value = error.message || 'Failed to remove friend';
+  } finally {
+    isProcessingFriendAction.value = false;
+  }
+};
 </script>
 
 <style scoped>
 /* Base Styles */
 .player-profile {
   min-height: 100vh;
-  background: linear-gradient(135deg, #464646 0%, #181818 100%);
+  background: radial-gradient(circle at center, #0a0e1a, #000000);
   color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  padding: 2rem;
 }
 
 /* Mobile Navigation */
@@ -1257,38 +1435,16 @@ const formattedRegistrationDate = computed(() => {
   text-transform: capitalize;
 }
 
-.tab {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 0.5rem;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.3s ease;
-}
-
-.tab:hover {
-  background: rgba(0, 217, 255, 0.1);
-}
-
-.tab.active {
-  background: linear-gradient(90deg, #00d9ff, #ff00c3);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 217, 255, 0.2);
-}
-
-.tab-icon {
-  font-size: 1.2rem;
-}
-
 /* Hero Section */
 .hero-section {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
   padding: 6rem 2rem;
   position: relative;
   overflow: hidden;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  background: radial-gradient(circle at top left, rgba(0, 217, 255, 0.1), rgba(255, 0, 195, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .hero-content {
@@ -1310,6 +1466,7 @@ const formattedRegistrationDate = computed(() => {
   border: 4px solid rgba(0, 217, 255, 0.5);
   overflow: hidden;
   position: relative;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
 }
 
 .avatar {
@@ -1327,6 +1484,7 @@ const formattedRegistrationDate = computed(() => {
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   font-weight: bold;
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
 }
 
 .player-details {
@@ -1341,6 +1499,7 @@ const formattedRegistrationDate = computed(() => {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
 }
 
 .player-title {
@@ -1380,101 +1539,6 @@ const formattedRegistrationDate = computed(() => {
   background: rgba(0, 217, 255, 0.1);
 }
 
-.description-form {
-  margin: 1rem 0;
-  position: relative;
-}
-
-.description-form textarea {
-  width: 100%;
-  min-height: 100px;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
-  color: white;
-  font-size: 1rem;
-  resize: vertical;
-  transition: all 0.3s ease;
-}
-
-.description-form textarea:focus {
-  outline: none;
-  border-color: #00d9ff;
-  box-shadow: 0 0 0 2px rgba(0, 217, 255, 0.2);
-}
-
-.description-form .char-count {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.description-form .form-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 1rem;
-}
-
-.description-form .form-actions button {
-  padding: 0.5rem 1.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.description-form .form-actions button[type="button"] {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-.description-form .form-actions button[type="submit"] {
-  background: linear-gradient(90deg, #00d9ff, #ff00c3);
-  color: white;
-}
-
-.description-form .form-actions button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.description-form .error-message {
-  margin-top: 1rem;
-  color: #ff4444;
-  font-size: 0.9rem;
-  padding: 0.5rem;
-  background: rgba(255, 68, 68, 0.1);
-  border-radius: 0.25rem;
-  text-align: center;
-}
-
-.player-meta {
-  display: flex;
-  gap: 2rem;
-}
-
-.meta-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.meta-label {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.meta-value {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #00d9ff;
-}
-
 /* Main Content Layout */
 .main-content {
   max-width: 1400px;
@@ -1491,6 +1555,8 @@ const formattedRegistrationDate = computed(() => {
   border-radius: 1rem;
   padding: 1.5rem;
   height: fit-content;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-section {
@@ -1547,6 +1613,8 @@ const formattedRegistrationDate = computed(() => {
   display: flex;
   align-items: center;
   gap: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .stat-icon {
@@ -1568,12 +1636,15 @@ const formattedRegistrationDate = computed(() => {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 1rem;
   padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .content-section h2 {
   color: #00d9ff;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
+  text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
 }
 
 /* Stats Grid */
@@ -1587,6 +1658,8 @@ const formattedRegistrationDate = computed(() => {
   background: rgba(0, 0, 0, 0.2);
   padding: 1.5rem;
   border-radius: 0.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .stat-header {
@@ -1651,10 +1724,21 @@ const formattedRegistrationDate = computed(() => {
   border-radius: 0.5rem;
   cursor: pointer;
   white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.tab:hover {
+  background: rgba(0, 217, 255, 0.1);
 }
 
 .tab.active {
   background: linear-gradient(90deg, #00d9ff, #ff00c3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 217, 255, 0.2);
+}
+
+.tab-icon {
+  font-size: 1.2rem;
 }
 
 .nft-grid {
@@ -1668,6 +1752,8 @@ const formattedRegistrationDate = computed(() => {
   border-radius: 0.5rem;
   overflow: hidden;
   transition: transform 0.2s;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .nft-card:hover {
@@ -1702,6 +1788,8 @@ const formattedRegistrationDate = computed(() => {
   border-radius: 0.5rem;
   display: flex;
   gap: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .achievement-icon {
@@ -1767,6 +1855,8 @@ const formattedRegistrationDate = computed(() => {
   display: flex;
   align-items: center;
   gap: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .friend-avatar {
@@ -2275,5 +2365,62 @@ const formattedRegistrationDate = computed(() => {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* Friend Button Styles */
+.friend-actions {
+  margin: 1rem 0;
+}
+
+.friend-btn {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  color: white;
+  gap: 0.5rem;
+}
+
+.friend-btn .btn-icon {
+  font-size: 1.2rem;
+}
+
+.friend-btn.add-friend {
+  background-color: #4a6cff;
+}
+
+.friend-btn.add-friend:hover {
+  background-color: #3a5cef;
+}
+
+.friend-btn.request-sent {
+  background-color: #f59e0b;
+}
+
+.friend-btn.request-sent:hover {
+  background-color: #d97706;
+}
+
+.friend-btn.remove-friend {
+  background-color: #ef4444;
+}
+
+.friend-btn.remove-friend:hover {
+  background-color: #dc2626;
+}
+
+.friend-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.friend-btn .loading-indicator {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  margin-left: 0.5rem;
 }
 </style>

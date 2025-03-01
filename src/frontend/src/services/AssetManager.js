@@ -131,4 +131,4 @@ class AssetManager {
 }
 
 // Export a singleton instance
-export const assetManager = new AssetManager(); 
+export const assetManager = new AssetManager();
