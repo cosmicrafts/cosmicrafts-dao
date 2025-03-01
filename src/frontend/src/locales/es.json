@@ -306,7 +306,6 @@
   "editProfileModal": {
     "title": "Editar Perfil",
     "username": "Nombre de Usuario",
-    "title": "Título",
     "description": "Descripción",
     "cancel": "Cancelar",
     "saveChanges": "Guardar Cambios"

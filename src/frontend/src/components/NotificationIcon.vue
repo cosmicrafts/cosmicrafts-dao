@@ -5,7 +5,7 @@
       @click="toggleNotifications"
       :class="{ 'has-notifications': notificationCount > 0 }"
     >
-      <span class="icon">🔔</span>
+      <img :src="notificationIcon" alt="Notifications" class="icon" />
       <span v-if="notificationCount > 0" class="notification-badge">
         {{ notificationCount > 9 ? '9+' : notificationCount }}
       </span>
@@ -90,6 +90,8 @@
 </template>
 
 <script setup>
+import notificationIcon from '@/assets/icons/notifications.svg';
+
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCanisterStore } from '@/stores/canister';
@@ -329,19 +331,19 @@ const translateMessage = (message) => {
 .notification-icon-container {
   position: relative;
   display: inline-block;
-  margin-right: 1rem;
+
 }
 
 .notification-icon {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 3rem;
+  height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  border-radius: var(--radius-medium);
+  transition: all var(--transition-fast);
 }
 
 .notification-icon:hover {
@@ -353,23 +355,30 @@ const translateMessage = (message) => {
 }
 
 .icon {
-  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s ease;
+}
+
+.notification-icon:hover .icon {
+  transform: scale(1.1);
 }
 
 .notification-badge {
   position: absolute;
-  top: 0;
-  right: 0;
-  background-color: #ff3e3e;
+  top: 0.25rem;
+  right: 0.25rem;
+  background-color: var(--color-error);
   color: white;
-  border-radius: 50%;
+  border-radius: var(--radius-circle);
   width: 18px;
   height: 18px;
-  font-size: 0.7rem;
+  font-size: var(--text-xs);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-weight: var(--weight-bold);
 }
 
 .notification-dropdown {
@@ -377,14 +386,14 @@ const translateMessage = (message) => {
   top: 100%;
   right: 0;
   width: 320px;
-  max-height: 400px;
+  max-height: 420px;
   overflow-y: auto;
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.95), rgba(23, 33, 43, 0.95));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  margin-top: 0.5rem;
+  background: var(--gradient-primary);
+  border: var(--border-thin);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-medium);
+  z-index: var(--z-dropdown);
+  margin-top: var(--space-sm);
   backdrop-filter: blur(4px);
 }
 
@@ -392,21 +401,21 @@ const translateMessage = (message) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: var(--border-thin);
 }
 
 .notification-header h3 {
   margin: 0;
-  font-size: 1rem;
-  color: #ffffff;
+  font-size: var(--text-md);
+  color: var(--color-text-primary);
 }
 
 .view-all-btn {
   background: none;
   border: none;
-  color: #4a6cff;
-  font-size: 0.8rem;
+  color: var(--color-info);
+  font-size: var(--text-xs);
   cursor: pointer;
   padding: 0;
 }
@@ -415,55 +424,55 @@ const translateMessage = (message) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
-  color: #8a8a8a;
+  padding: var(--space-lg);
+  color: var(--color-text-tertiary);
 }
 
 .loading-indicator {
   display: inline-block;
   animation: spin 1s linear infinite;
-  margin-right: 0.5rem;
-  font-size: 1.2rem;
+  margin-right: var(--space-sm);
+  font-size: var(--text-lg);
 }
 
 .no-notifications {
-  padding: 2rem 1rem;
+  padding: var(--space-xl) var(--space-md);
   text-align: center;
-  color: #8a8a8a;
+  color: var(--color-text-tertiary);
 }
 
 .notification-section {
-  padding: 0.5rem 0;
+  padding: var(--space-sm) 0;
 }
 
 .section-title {
   margin: 0;
-  padding: 0.5rem 1rem;
-  font-size: 0.8rem;
-  color: #8a8a8a;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
   text-transform: uppercase;
 }
 
 .friend-request {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: var(--border-thin);
 }
 
 .request-info {
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-sm);
 }
 
 .request-avatar {
-  margin-right: 0.75rem;
+  margin-right: var(--space-sm);
 }
 
 .request-avatar .avatar {
   width: 40px;
   height: 40px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-medium);
+  border: var(--border-thin);
 }
 
 .request-details {
@@ -472,39 +481,39 @@ const translateMessage = (message) => {
 }
 
 .request-username {
-  font-weight: 500;
-  color: #ffffff;
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
 }
 
 .request-message {
-  font-size: 0.75rem;
-  color: #8a8a8a;
-  margin-top: 0.25rem;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-xs);
 }
 
 .request-time {
-  font-size: 0.75rem;
-  color: #8a8a8a;
-  margin-top: 0.25rem;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-xs);
 }
 
 .request-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-sm);
 }
 
 .accept-btn, .decline-btn {
-  padding: 0.4rem 0.75rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 500;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-small);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
   cursor: pointer;
   border: none;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .accept-btn {
-  background-color: #4a6cff;
+  background-color: var(--color-info);
   color: white;
 }
 
@@ -514,8 +523,8 @@ const translateMessage = (message) => {
 
 .decline-btn {
   background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  border: var(--border-thin);
+  color: var(--color-text-primary);
 }
 
 .decline-btn:hover {
@@ -528,8 +537,8 @@ const translateMessage = (message) => {
 }
 
 .notification-item {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: var(--border-thin);
 }
 
 .notification-content {
@@ -538,26 +547,26 @@ const translateMessage = (message) => {
 }
 
 .notification-message {
-  color: #ffffff;
-  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
 }
 
 .notification-time {
-  font-size: 0.75rem;
-  color: #8a8a8a;
-  margin-top: 0.25rem;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-xs);
 }
 
 .view-more {
-  padding: 0.5rem 1rem;
+  padding: var(--space-sm) var(--space-md);
   text-align: center;
 }
 
 .view-more-btn {
   background: none;
   border: none;
-  color: #4a6cff;
-  font-size: 0.8rem;
+  color: var(--color-info);
+  font-size: var(--text-xs);
   cursor: pointer;
   padding: 0;
 }
@@ -581,7 +590,7 @@ const translateMessage = (message) => {
 }
 
 .dropdown-enter-active, .dropdown-leave-active {
-  transition: opacity 0.3s, transform 0.3s;
+  transition: opacity var(--transition-slow), transform var(--transition-slow);
 }
 
 .dropdown-enter-from, .dropdown-leave-to {

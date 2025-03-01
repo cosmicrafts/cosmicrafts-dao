@@ -303,7 +303,6 @@
     "editProfileModal": {
       "title": "Profil bearbeiten",
       "username": "Benutzername",
-      "title": "Titel",
       "description": "Beschreibung",
       "cancel": "Abbrechen",
       "saveChanges": "Änderungen speichern"

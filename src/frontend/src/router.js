@@ -15,6 +15,7 @@ import Roadmap from './pages/Roadmap.vue';
 import Careers from './pages/Careers.vue';
 import Privacy from './pages/Privacy.vue';
 import Notifications from './pages/Notifications.vue';
+import StyleGuide from './pages/StyleGuide.vue';
 
 const routes = [
   { path: '/', component: Home, meta: { title: 'header.home' } },
@@ -30,6 +31,7 @@ const routes = [
   { path: '/privacy', component: Privacy, meta: { title: 'footer.privacy' } },
   { path: '/notifications', component: Notifications, meta: { title: 'header.notifications', requiresAuth: true } },
   { path: '/about', component: () => import('@/pages/About.vue'), meta: { title: 'header.about' } },
+  { path: '/style-guide', component: StyleGuide, meta: { title: 'Style Guide' } },
   // New catch-all route for usernames/principals
   {
     path: '/:identifier',
@@ -47,7 +49,7 @@ const routes = [
       const profileStore = useProfileStore();
 
       // Skip routing for known static routes
-      const staticRoutes = ['dao', 'whitepaper', 'dashboard', 'games', 'login', 'game', 'roadmap', 'careers', 'profile', 'privacy', 'about', 'notifications'];
+      const staticRoutes = ['dao', 'whitepaper', 'dashboard', 'games', 'login', 'game', 'roadmap', 'careers', 'profile', 'privacy', 'about', 'notifications', 'style-guide'];
       if (staticRoutes.includes(identifier)) {
         console.log('📍 Static route detected:', identifier);
         next();

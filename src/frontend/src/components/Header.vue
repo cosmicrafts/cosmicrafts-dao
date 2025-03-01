@@ -227,10 +227,10 @@ header {
   z-index: 12;
   border-radius: 12px;
   margin: auto;
-  margin-top: .7%;
-  left: 1.2rem;
-  right: 1.2rem;
-  height: 4rem;
+  margin-top: 1rem;
+  left: 2rem;
+  right: 2rem;
+  height: 3.75rem;
   backdrop-filter: blur(8px);
 }
 
@@ -303,7 +303,7 @@ header {
 .nav-links ul {
   position: absolute;
   left: 8rem;
-  top: 5%;
+  top: 0;
   display: flex;
   gap: 2rem;
   list-style: none;

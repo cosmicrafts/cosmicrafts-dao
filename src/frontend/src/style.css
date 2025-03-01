@@ -1,5 +1,8 @@
 /* Global Styles */
 
+/* Import universal styles */
+@import './assets/css/universal.css';
+
 /* Import primary fonts and multilingual fallbacks */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap');
@@ -317,49 +320,116 @@ a:hover {
   position: relative;
   display: inline-block;
   text-decoration: none;
-  font-weight: 600;
-  color: var(--font-color);
-  transition: color 0.15s ease-in-out, text-shadow 0.25s ease-in-out, border 0.25s ease-in-out;
-  padding: 0.2rem 0.5rem; /* Adjusted for border space */
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  /* Add initial transparent borders to prevent layout shift */
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  /* Use box-sizing to maintain size */
+  box-sizing: border-box;
+  /* Fixed padding that won't change */
+  padding: 0.2rem 0.5rem;
+  /* Only transition the visual properties */
+  transition: color 0.15s ease-in-out, text-shadow 0.25s ease-in-out;
 }
 
-/* Blue Hover Effect (Like Header Nav) */
 .u-hover:hover {
-  color: #00c3ff;
-  border-bottom: 1px solid #00c3ff;
-  border-top: 1px solid #00c3ff;
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--color-primary);
+  border-top: 1px solid var(--color-primary);
   text-shadow: 0px 0px 2px rgba(0, 191, 255, 0.686);
 }
 
-/* Orange Line Animation (Like Header Nav) */
 .u-hover::before,
 .u-hover::after {
   content: '';
   position: absolute;
   height: .15rem;
   width: 50%;
-  background-color: #ffa200;
+  background-color: var(--color-accent);
   transition: transform 0.45s ease, box-shadow 0.65s ease;
   box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.948);
   transform: scaleX(0);
+  /* Add z-index to ensure lines appear above/below without affecting layout */
+  z-index: 1;
+  pointer-events: none; /* Prevent the lines from interfering with hover */
 }
 
-/* Orange Line - Top & Bottom */
 .u-hover::before {
-  top: -.1rem; /* Orange line above text */
+  top: -.1rem;
   left: -4%;
   transform-origin: left;
 }
 
 .u-hover::after {
+  bottom: -1px;
+  right: -4%;
+  transform-origin: right;
+}
+
+.u-hover:hover::before,
+.u-hover:hover::after {
+  transform: scaleX(1.25);
+  box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.936);
+}
+
+/* 
+ * Hover Effect Utility
+ * This can be applied to any element that needs the cosmic hover effect
+ */
+.cosmic-hover {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .75);
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  /* Add transparent borders initially to prevent layout shift */
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  /* Use box-sizing to prevent size changes */
+  box-sizing: border-box;
+  padding: 0.2rem 0.5rem;
+  /* Transition only color and text-shadow, not position properties */
+  transition: color 0.15s ease-in-out, text-shadow 0.25s ease-in-out;
+}
+
+.cosmic-hover:hover {
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--color-primary);
+  border-top: 1px solid var(--color-primary);
+  text-shadow: 0px 0px 2px rgba(0, 191, 255, 0.686);
+  /* No padding changes on hover */
+}
+
+.cosmic-hover::before,
+.cosmic-hover::after {
+  content: '';
+  position: absolute;
+  height: .15rem;
+  width: 50%;
+  background-color: var(--color-accent);
+  transition: transform 0.45s ease, box-shadow 0.65s ease;
+  box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.948);
+  transform: scaleX(0);
+  /* Use z-index to ensure the lines appear above/below without affecting layout */
+  z-index: 1;
+}
+
+.cosmic-hover::before {
+  top: -.1rem; /* Orange line above text */
+  left: -4%;
+  transform-origin: left;
+}
+
+.cosmic-hover::after {
   bottom: -1px; /* Orange line below text */
   right: -4%;
   transform-origin: right;
 }
 
-/* Expand Orange Lines on Hover */
-.u-hover:hover::before,
-.u-hover:hover::after {
+.cosmic-hover:hover::before,
+.cosmic-hover:hover::after {
   transform: scaleX(1.25);
   box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.936);
 }

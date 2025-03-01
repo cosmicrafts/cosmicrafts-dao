@@ -305,8 +305,7 @@ export default {
   overflow: hidden;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(90deg, #08090cda, rgba(29, 37, 55, 0.85), #08090cd8),
-    url('@/assets/webp/daomission.webp') no-repeat center center;
+  background: linear-gradient(90deg, #08090cda, #161922da, #08090cd8);
   background-size: cover;
   background-attachment: fixed;
   background-blend-mode: normal;
@@ -317,7 +316,7 @@ export default {
   flex: 1;
   margin-left: 15%;
   margin-right: 12%;
-  padding: 4.5rem 6rem 6rem;
+  padding: 5rem 8rem 8rem;
 }
 
 .sidebar {
@@ -423,7 +422,7 @@ export default {
   right: 0;
   width: 12%;
   height: 100vh;
-  padding: 0.4rem 0.8rem;
+  padding: 1rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: right;
@@ -433,7 +432,7 @@ export default {
 .right-sidebar ul {
   font-size: 0.8rem;
   font-weight: bold;
-  margin-top: 4.5rem;
+  margin-top: 5rem;
   list-style: none;
   padding: 0.4rem 0.4rem;
 }
@@ -741,13 +740,13 @@ export default {
   .content {
     margin-left: 15%;
     margin-right: 15%;
-    padding: 4.5rem 5rem 5rem;
+    padding: 5rem 5rem 5rem;
   }
 
   .content {
     margin-right: 1rem;
     margin-left: 12rem;
-    padding: 4.5rem 2rem 1rem;
+    padding: 5rem 2rem 1rem;
     width: 100%;
   }
 
@@ -773,7 +772,7 @@ export default {
 
   .content {
     margin: 0;
-    padding: 4.5rem 2rem 2rem;
+    padding: 5rem 2rem 2rem;
     width: 100%;
   }
 

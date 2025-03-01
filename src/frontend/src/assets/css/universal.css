@@ -1,0 +1,423 @@
+/* Universal Style System for Cosmicrafts
+   This file contains reusable variables, mixins, and utility classes
+   for consistent styling across the application */
+
+:root {
+  /* Color System */
+  --color-background: #0a0e1a;
+  --color-background-darker: #000000;
+  --color-surface-primary: rgba(30, 43, 56, 0.5);
+  --color-surface-secondary: rgba(23, 33, 43, 0.7);
+  --color-surface-tertiary: rgba(0, 0, 0, 0.2);
+  
+  /* Text Colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.8);
+  --color-text-tertiary: rgba(255, 255, 255, 0.6);
+  --color-text-disabled: rgba(255, 255, 255, 0.4);
+  
+  /* Brand Colors */
+  --color-primary: #00c3ff;
+  --color-primary-hover: #33cfff;
+  --color-secondary: #ff00c3;
+  --color-accent: #ffa200;
+  
+  /* Status Colors */
+  --color-success: #00ff95;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #4a6cff;
+  
+  /* Border */
+  --border-thin: 1px solid rgba(255, 255, 255, 0.1);
+  --border-medium: 2px solid rgba(255, 255, 255, 0.15);
+  --border-highlight: 1px solid var(--color-primary);
+  
+  /* Border Radius */
+  --radius-small: 4px;
+  --radius-medium: 8px;
+  --radius-large: 12px;
+  --radius-xl: 16px;
+  --radius-circle: 50%;
+  
+  /* Shadows */
+  --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-large: 0 8px 16px rgba(0, 0, 0, 0.3);
+  --shadow-glow-primary: 0 0 10px rgba(0, 195, 255, 0.5);
+  --shadow-glow-secondary: 0 0 10px rgba(255, 0, 195, 0.5);
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-xxl: 3rem;
+  
+  /* Font Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 3rem;
+  
+  /* Font Weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+  --weight-extra-bold: 800;
+  
+  /* Z-index layers */
+  --z-background: -1;
+  --z-default: 1;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-fixed: 30;
+  --z-modal: 40;
+  --z-tooltip: 50;
+  
+  /* Transitions */
+  --transition-fast: 0.1s ease;
+  --transition-medium: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(to bottom, rgba(30, 43, 56, 0.9), rgba(23, 33, 43, .95));
+  --gradient-hero: radial-gradient(circle at center, #0a0e1a, #000000);
+  --gradient-accent: linear-gradient(90deg, #00d9ff, #ff00c3);
+  --gradient-button: linear-gradient(to bottom, #3886de, #246ed6);
+  --gradient-button-hover: linear-gradient(to bottom, #3d92f3, #287aed);
+}
+
+/* ======== UTILITY CLASSES ======== */
+
+/* Backgrounds */
+.bg-surface {
+  background: var(--color-surface-primary);
+  backdrop-filter: blur(8px);
+  border: var(--border-thin);
+  border-radius: var(--radius-medium);
+}
+
+.bg-surface-secondary {
+  background: var(--color-surface-secondary);
+  backdrop-filter: blur(8px);
+  border: var(--border-thin);
+  border-radius: var(--radius-medium);
+}
+
+.bg-panel {
+  background: var(--color-surface-tertiary);
+  border: var(--border-thin);
+  border-radius: var(--radius-medium);
+}
+
+.bg-gradient {
+  background: var(--gradient-primary);
+}
+
+.bg-hero {
+  background: var(--gradient-hero);
+}
+
+/* Universal Page Background */
+.cosmic-page-bg {
+  min-height: 100vh;
+  background: linear-gradient(135deg, 
+    var(--color-background) 0%,
+    var(--color-background-darker) 100%
+  );
+  position: relative;
+  z-index: 0;
+}
+
+/* Background Variations */
+.cosmic-page-bg-simple {
+  min-height: 100vh;
+  background: var(--color-background);
+  position: relative;
+  z-index: 0;
+}
+
+.cosmic-page-bg-gradient {
+  min-height: 100vh;
+  background: linear-gradient(to bottom,
+    var(--color-background) 0%,
+    var(--color-background-darker) 100%
+  );
+  position: relative;
+  z-index: 0;
+}
+
+.cosmic-page-bg-accent {
+  min-height: 100vh;
+  background: linear-gradient(45deg,
+    var(--color-background) 0%,
+    rgba(0, 195, 255, 0.1) 100%
+  );
+  position: relative;
+  z-index: 0;
+}
+
+/* Optional Overlay Effects - Add these classes alongside cosmic-page-bg */
+.with-subtle-grid {
+  position: relative;
+}
+
+.with-subtle-grid::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: -1;
+}
+
+.with-glow {
+  position: relative;
+}
+
+.with-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 0%, 
+    rgba(0, 195, 255, 0.15) 0%, 
+    transparent 50%
+  );
+  z-index: -1;
+}
+
+/* Content Container for Pages */
+.cosmic-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-md);
+  position: relative;
+  z-index: 1;
+}
+
+/* Cards */
+.cosmic-card {
+  background: var(--color-surface-primary);
+  backdrop-filter: blur(8px);
+  border: var(--border-thin);
+  border-radius: var(--radius-medium);
+  padding: var(--space-md);
+  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+}
+
+.cosmic-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Text Styles */
+.text-primary {
+  color: var(--color-text-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-tertiary {
+  color: var(--color-text-tertiary);
+}
+
+.text-accent {
+  color: var(--color-primary);
+}
+
+.text-gradient {
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Typography */
+.title-large {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.title-medium {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.title-small {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  color: var(--color-primary);
+  margin-bottom: var(--space-sm);
+}
+
+/* Buttons */
+.cosmic-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-medium);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-medium);
+  border: none;
+  color: var(--color-text-primary);
+}
+
+.cosmic-button-primary {
+  background: var(--gradient-button);
+  box-shadow: var(--shadow-small);
+}
+
+.cosmic-button-primary:hover {
+  background: var(--gradient-button-hover);
+  box-shadow: var(--shadow-glow-primary);
+}
+
+.cosmic-button-secondary {
+  background: transparent;
+  border: var(--border-thin);
+}
+
+.cosmic-button-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border: var(--border-highlight);
+}
+
+.cosmic-button-danger {
+  background-color: var(--color-error);
+}
+
+.cosmic-button-danger:hover {
+  background-color: #dc2626;
+}
+
+/* Badges */
+.cosmic-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-error);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+}
+
+/* Animation Utilities */
+.glow-effect {
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px rgba(0, 195, 255, 0.3);
+  }
+  to {
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.6);
+  }
+}
+
+.hover-scale {
+  transition: transform var(--transition-medium);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Loader */
+.cosmic-loading {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Transition Effects */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--transition-medium);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Basic Layout Classes */
+.cosmic-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.cosmic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--space-md);
+}
+
+.cosmic-flex {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.cosmic-flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cosmic-section {
+  margin-bottom: var(--space-xl);
+}
+
+/* Empty States */
+.cosmic-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--color-text-tertiary);
+}
+
+.cosmic-empty-icon {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-md);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .cosmic-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .cosmic-hidden-mobile {
+    display: none;
+  }
+} 

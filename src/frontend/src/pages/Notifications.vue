@@ -1,6 +1,6 @@
 <template>
-  <div class="notifications-page">
-    <div class="container">
+  <div class="notifications-page cosmic-page-bg-gradient with-glow">
+    <div class="cosmic-page-container">
       <div class="page-header">
         <h1>{{ $t('notifications.title') }}</h1>
         <div class="tabs">
@@ -308,49 +308,57 @@ const translateMessage = (message) => {
 <style scoped>
 .notifications-page {
   min-height: 100vh;
-  background: radial-gradient(circle at center, #0a0e1a, #000000);
-  color: #ffffff;
-  padding: 2rem 0;
+  background: var(--gradient-hero);
+  color: var(--color-text-primary);
+  padding: var(--space-xl) 0;
 }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 1rem;
+.cosmic-page-container {
+  margin-left: 1rem;
+  max-width: 100%;
+
+  padding: 0 var(--space-md);
 }
 
 .page-header {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-xl);
+  background: var(--color-surface-primary);
+  padding: var(--space-lg);
+  border-radius: var(--radius-large);
+  border: var(--border-thin);
+  backdrop-filter: blur(8px);
+  margin-top: 4rem;
 }
 
 .page-header h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #ffffff;
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
+  font-weight: var(--weight-bold);
 }
 
 .tabs {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 0.5rem;
+  gap: var(--space-md);
+  margin-bottom: 0;
+  border-bottom: var(--border-thin);
+  padding-bottom: var(--space-sm);
 }
 
 .tab-button {
   background: none;
   border: none;
-  color: #8a8a8a;
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  padding: var(--space-sm) var(--space-md);
   cursor: pointer;
   position: relative;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .tab-button.active {
-  color: #ffffff;
+  color: var(--color-text-primary);
 }
 
 .tab-button.active::after {
@@ -360,35 +368,35 @@ const translateMessage = (message) => {
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: #4a6cff;
+  background-color: var(--color-info);
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #ff3e3e;
+  background-color: var(--color-error);
   color: white;
-  border-radius: 50%;
+  border-radius: var(--radius-circle);
   width: 18px;
   height: 18px;
-  font-size: 0.7rem;
-  margin-left: 0.5rem;
+  font-size: var(--text-xs);
+  margin-left: var(--space-sm);
 }
 
 .loading-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
-  color: #8a8a8a;
+  padding: var(--space-xxl);
+  color: var(--color-text-tertiary);
 }
 
 .loading-indicator {
   display: inline-block;
   animation: spin 1s linear infinite;
-  margin-right: 0.5rem;
-  font-size: 1.2rem;
+  margin-right: var(--space-sm);
+  font-size: var(--text-lg);
 }
 
 .empty-state {
@@ -396,68 +404,76 @@ const translateMessage = (message) => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 2rem;
+  padding: var(--space-xxl) var(--space-xl);
   text-align: center;
 }
 
 .empty-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-md);
   opacity: 0.5;
 }
 
 .empty-state h3 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: #ffffff;
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-primary);
 }
 
 .empty-state p {
-  color: #8a8a8a;
+  color: var(--color-text-tertiary);
 }
 
 .section {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-xl);
 }
 
 .section-title {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  color: #ffffff;
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
 }
 
 .friend-requests-list, .notifications-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-md);
 }
 
 .friend-request-card, .notification-card {
-  background: rgba(30, 43, 56, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  background: var(--color-surface-primary);
+  border: var(--border-thin);
+  border-radius: var(--radius-medium);
   overflow: hidden;
+  transition: all var(--transition-medium);
+  backdrop-filter: blur(8px);
+}
+
+.friend-request-card:hover, .notification-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+  border-color: var(--color-border-hover);
 }
 
 .friend-request-card {
-  padding: 1rem;
+  padding: var(--space-md);
 }
 
 .request-info {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-md);
 }
 
 .request-avatar {
-  margin-right: 1rem;
+  margin-right: var(--space-md);
 }
 
 .request-avatar .avatar {
   width: 50px;
   height: 50px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-medium);
+  border: var(--border-thin);
 }
 
 .request-details {
@@ -466,43 +482,43 @@ const translateMessage = (message) => {
 }
 
 .request-username {
-  font-weight: 500;
-  color: #ffffff;
-  font-size: 1.1rem;
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+  font-size: var(--text-md);
 }
 
 .request-message {
-  font-size: 0.8rem;
-  color: #8a8a8a;
-  margin-top: 0.25rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-xs);
 }
 
 .request-time {
-  font-size: 0.8rem;
-  color: #8a8a8a;
-  margin-top: 0.25rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-xs);
 }
 
 .request-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--space-sm);
 }
 
 .accept-btn, .decline-btn {
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-small);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
   cursor: pointer;
   border: none;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .accept-btn {
-  background-color: #4a6cff;
+  background-color: var(--color-info);
   color: white;
   flex: 1;
 }
@@ -513,8 +529,8 @@ const translateMessage = (message) => {
 
 .decline-btn {
   background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  border: var(--border-thin);
+  color: var(--color-text-primary);
   flex: 1;
 }
 
@@ -528,7 +544,7 @@ const translateMessage = (message) => {
 }
 
 .notification-card {
-  padding: 1rem;
+  padding: var(--space-md);
 }
 
 .notification-content {
@@ -538,14 +554,14 @@ const translateMessage = (message) => {
 }
 
 .notification-avatar {
-  margin-right: 1rem;
+  margin-right: var(--space-md);
 }
 
 .notification-avatar .avatar {
   width: 50px;
   height: 50px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-medium);
+  border: var(--border-thin);
 }
 
 .notification-details {
@@ -555,15 +571,15 @@ const translateMessage = (message) => {
 }
 
 .notification-message {
-  color: #ffffff;
-  font-size: 1rem;
+  color: var(--color-text-primary);
+  font-size: var(--text-md);
   line-height: 1.5;
 }
 
 .notification-time {
-  font-size: 0.8rem;
-  color: #8a8a8a;
-  margin-top: 0.5rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-sm);
 }
 
 /* Animations */
@@ -574,13 +590,13 @@ const translateMessage = (message) => {
 
 /* Responsive styles */
 @media (max-width: 768px) {
-  .container {
-    padding: 0 1rem;
+  .cosmic-page-container {
+    padding: 0 var(--space-md);
   }
   
   .tabs {
     overflow-x: auto;
-    padding-bottom: 1rem;
+    padding-bottom: var(--space-md);
   }
   
   .tab-button {
@@ -588,7 +604,7 @@ const translateMessage = (message) => {
   }
   
   .friend-request-card {
-    padding: 0.75rem;
+    padding: var(--space-sm);
   }
   
   .request-avatar .avatar {
@@ -597,12 +613,12 @@ const translateMessage = (message) => {
   }
   
   .request-username {
-    font-size: 1rem;
+    font-size: var(--text-md);
   }
   
   .accept-btn, .decline-btn {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.8rem;
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-sm);
   }
 }
 </style> 
