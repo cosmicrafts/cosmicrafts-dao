@@ -160,7 +160,7 @@
     "discover": "Descubre"
   },
   "whitepaper": {
-    "title": "Libro Blanco"
+    "title": "Libro Blanco de Cosmicrafts"
   },
   "loadingScreen": {
   "messages": {
@@ -240,6 +240,92 @@
     "hoursAgo": "hace {hours} horas",
     "daysAgo": "hace {days} días"
   }
+},
+"profilePage": {
+  "profileError": "Error de Perfil",
+  "retry": "Reintentar",
+  "goHome": "Ir a Inicio",
+  "errorHelp": "Este perfil podría no existir o estar temporalmente no disponible. Si ingresaste un nombre de usuario, intenta acceder por ID Principal o viceversa.",
+  "tabs": {
+    "profile": "Perfil",
+    "stats": "Estadísticas",
+    "collection": "Colección",
+    "social": "Social"
+  },
+  "unknownPlayer": "Jugador Desconocido",
+  "defaultTitle": "Aventurero Galáctico",
+  "registrationDate": "Miembro desde {date}",
+  "unknownRegistrationDate": "Fecha de registro desconocida",
+  "friendActions": {
+    "addFriend": "Agregar Amigo",
+    "requestSent": "Solicitud Enviada",
+    "removeFriend": "Eliminar Amigo"
+  },
+  "noDescription": "Sin descripción aún",
+  "edit": "Editar",
+  "playerStats": {
+    "elo": "ELO",
+    "winRate": "Tasa de Victorias",
+    "games": "Partidas"
+  },
+  "editProfile": "Editar Perfil",
+  "playerId": "ID de Jugador",
+  "quickStats": "Estadísticas Rápidas",
+  "statsCards": {
+    "totalKills": "Eliminaciones Totales",
+    "energyEfficiency": "Eficiencia Energética",
+    "criticalHits": "Golpes Críticos"
+  },
+  "combatStatistics": "Estadísticas de Combate",
+  "statsDetails": {
+    "damageDealt": "Daño Causado",
+    "damageEvaded": "Daño Evadido",
+    "energyGenerated": "Energía Generada",
+    "energyUsed": "Energía Utilizada"
+  },
+  "nftCollection": "Colección NFT",
+  "nftCategories": {
+    "all": "Todos los NFTs",
+    "characters": "Personajes",
+    "units": "Unidades",
+    "avatars": "Avatares",
+    "trophies": "Trofeos",
+    "chests": "Cofres"
+  },
+  "noNfts": "No hay {category} coleccionados aún",
+  "achievements": "Logros",
+  "achievementStats": {
+    "completedBy": "Completado por",
+    "points": "Puntos"
+  },
+  "friends": "Amigos",
+  "friendStatus": {
+    "online": "En línea",
+    "offline": "Desconectado"
+  },
+  "editProfileModal": {
+    "title": "Editar Perfil",
+    "username": "Nombre de Usuario",
+    "title": "Título",
+    "description": "Descripción",
+    "cancel": "Cancelar",
+    "saveChanges": "Guardar Cambios"
+  },
+  "confirmRemoveFriend": "¿Estás seguro de que quieres eliminar a {username} de tu lista de amigos?"
+},
+"months": {
+  "0": "enero",
+  "1": "febrero",
+  "2": "marzo",
+  "3": "abril",
+  "4": "mayo",
+  "5": "junio",
+  "6": "julio",
+  "7": "agosto",
+  "8": "septiembre",
+  "9": "octubre",
+  "10": "noviembre",
+  "11": "diciembre"
 }
 }
 

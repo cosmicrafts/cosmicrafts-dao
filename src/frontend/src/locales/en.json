@@ -188,6 +188,78 @@
   "whitepaper": {
     "title": "Cosmicrafts Whitepaper"
   },
+  "profilePage": {
+    "profileError": "Profile Error",
+    "retry": "Retry",
+    "goHome": "Go Home",
+    "errorHelp": "This profile might not exist or might be temporarily unavailable. If you entered a username, try accessing by Principal ID instead, or vice versa.",
+    "tabs": {
+      "profile": "Profile",
+      "stats": "Stats",
+      "collection": "Collection",
+      "social": "Social"
+    },
+    "unknownPlayer": "Unknown Player",
+    "defaultTitle": "Galactic Adventurer",
+    "registrationDate": "Member since {date}",
+    "unknownRegistrationDate": "Registration date unknown",
+    "friendActions": {
+      "addFriend": "Add Friend",
+      "requestSent": "Request Sent",
+      "removeFriend": "Remove Friend"
+    },
+    "noDescription": "No description yet",
+    "edit": "Edit",
+    "playerStats": {
+      "elo": "ELO",
+      "winRate": "Win Rate",
+      "games": "Games"
+    },
+    "editProfile": "Edit Profile",
+    "playerId": "Player ID",
+    "quickStats": "Quick Stats",
+    "statsCards": {
+      "totalKills": "Total Kills",
+      "energyEfficiency": "Energy Efficiency",
+      "criticalHits": "Critical Hits"
+    },
+    "combatStatistics": "Combat Statistics",
+    "statsDetails": {
+      "damageDealt": "Damage Dealt",
+      "damageEvaded": "Damage Evaded",
+      "energyGenerated": "Energy Generated",
+      "energyUsed": "Energy Used"
+    },
+    "nftCollection": "NFT Collection",
+    "nftCategories": {
+      "all": "All NFTs",
+      "characters": "Characters",
+      "units": "Units",
+      "avatars": "Avatars",
+      "trophies": "Trophies",
+      "chests": "Chests"
+    },
+    "noNfts": "No {category} collected yet",
+    "achievements": "Achievements",
+    "achievementStats": {
+      "completedBy": "Completed by",
+      "points": "Points"
+    },
+    "friends": "Friends",
+    "friendStatus": {
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "editProfileModal": {
+      "title": "Edit Profile",
+      "username": "Username",
+      "title": "Title",
+      "description": "Description",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes"
+    },
+    "confirmRemoveFriend": "Are you sure you want to remove {username} from your friends list?"
+  },
   "notifications": {
     "title": "Notifications",
     "noNotifications": "No notifications yet",
@@ -266,5 +338,19 @@
         "encryptingReality": "Encrypting reality",
         "debuggingTheMultiverse": "Debugging the multiverse"
       }
+  },
+  "months": {
+    "0": "January",
+    "1": "February",
+    "2": "March",
+    "3": "April",
+    "4": "May",
+    "5": "June",
+    "6": "July",
+    "7": "August",
+    "8": "September",
+    "9": "October",
+    "10": "November",
+    "11": "December"
   }
 }

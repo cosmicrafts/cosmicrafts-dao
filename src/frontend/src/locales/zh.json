@@ -225,7 +225,7 @@
     "declined": "已拒绝",
     "sentYouFriendRequest": "向您发送了好友请求",
     "acceptedYourFriendRequest": "接受了您的好友请求",
-    "newFriendRequest": "您收到了来自以下用户的好友请求：",
+    "newFriendRequest": "您有一个来自以下用户的新好友请求",
     "privacySettingsUpdated": "您的隐私设置已更新。",
     "tabs": {
       "all": "全部",
@@ -238,5 +238,91 @@
       "hoursAgo": "{hours}小时前",
       "daysAgo": "{days}天前"
     }
+  },
+  "profilePage": {
+    "profileError": "个人资料错误",
+    "retry": "重试",
+    "goHome": "返回首页",
+    "errorHelp": "此个人资料可能不存在或暂时不可用。如果您输入了用户名，请尝试使用Principal ID访问，反之亦然。",
+    "tabs": {
+      "profile": "个人资料",
+      "stats": "统计数据",
+      "collection": "收藏品",
+      "social": "社交"
+    },
+    "unknownPlayer": "未知玩家",
+    "defaultTitle": "银河冒险家",
+    "registrationDate": "注册时间：{date}",
+    "unknownRegistrationDate": "注册日期未知",
+    "friendActions": {
+      "addFriend": "添加好友",
+      "requestSent": "请求已发送",
+      "removeFriend": "删除好友"
+    },
+    "noDescription": "暂无描述",
+    "edit": "编辑",
+    "playerStats": {
+      "elo": "ELO积分",
+      "winRate": "胜率",
+      "games": "游戏场次"
+    },
+    "editProfile": "编辑个人资料",
+    "playerId": "玩家ID",
+    "quickStats": "快速统计",
+    "statsCards": {
+      "totalKills": "总击杀数",
+      "energyEfficiency": "能量效率",
+      "criticalHits": "暴击次数"
+    },
+    "combatStatistics": "战斗统计",
+    "statsDetails": {
+      "damageDealt": "造成伤害",
+      "damageEvaded": "闪避伤害",
+      "energyGenerated": "产生能量",
+      "energyUsed": "使用能量"
+    },
+    "nftCollection": "NFT收藏",
+    "nftCategories": {
+      "all": "所有NFT",
+      "characters": "角色",
+      "units": "单位",
+      "avatars": "头像",
+      "trophies": "奖杯",
+      "chests": "宝箱"
+    },
+    "noNfts": "尚未收集{category}",
+    "achievements": "成就",
+    "achievementStats": {
+      "completedBy": "完成率",
+      "points": "点数"
+    },
+    "friends": "好友",
+    "friendStatus": {
+      "online": "在线",
+      "offline": "离线"
+    },
+    "editProfileModal": {
+      "title": "编辑个人资料",
+      "username": "用户名",
+      "title": "头衔",
+      "description": "描述",
+      "cancel": "取消",
+      "saveChanges": "保存更改"
+    },
+    "confirmRemoveFriend": "您确定要将 {username} 从您的好友列表中删除吗？"
+  },
+  "months": {
+    "0": "一月",
+    "1": "二月",
+    "2": "三月",
+    "3": "四月",
+    "4": "五月",
+    "5": "六月",
+    "6": "七月",
+    "7": "八月",
+    "8": "九月",
+    "9": "十月",
+    "10": "十一月",
+    "11": "十二月"
   }
 }

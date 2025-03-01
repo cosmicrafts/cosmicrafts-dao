@@ -237,5 +237,91 @@
       "hoursAgo": "vor {hours} Stunden",
       "daysAgo": "vor {days} Tagen"
     }
+  },
+  "profilePage": {
+    "profileError": "Profilfehler",
+    "retry": "Wiederholen",
+    "goHome": "Zur Startseite",
+    "errorHelp": "Dieses Profil existiert möglicherweise nicht oder ist vorübergehend nicht verfügbar. Wenn du einen Benutzernamen eingegeben hast, versuche es mit der Principal-ID oder umgekehrt.",
+    "tabs": {
+      "profile": "Profil",
+      "stats": "Statistiken",
+      "collection": "Sammlung",
+      "social": "Sozial"
+    },
+    "unknownPlayer": "Unbekannter Spieler",
+    "defaultTitle": "Galaktischer Abenteurer",
+    "registrationDate": "Mitglied seit {date}",
+    "unknownRegistrationDate": "Registrierungsdatum unbekannt",
+    "friendActions": {
+      "addFriend": "Freund hinzufügen",
+      "requestSent": "Anfrage gesendet",
+      "removeFriend": "Freund entfernen"
+    },
+    "noDescription": "Noch keine Beschreibung",
+    "edit": "Bearbeiten",
+    "playerStats": {
+      "elo": "ELO",
+      "winRate": "Siegesrate",
+      "games": "Spiele"
+    },
+    "editProfile": "Profil bearbeiten",
+    "playerId": "Spieler-ID",
+    "quickStats": "Schnellstatistiken",
+    "statsCards": {
+      "totalKills": "Gesamte Kills",
+      "energyEfficiency": "Energieeffizienz",
+      "criticalHits": "Kritische Treffer"
+    },
+    "combatStatistics": "Kampfstatistiken",
+    "statsDetails": {
+      "damageDealt": "Verursachter Schaden",
+      "damageEvaded": "Ausgewichener Schaden",
+      "energyGenerated": "Erzeugte Energie",
+      "energyUsed": "Verbrauchte Energie"
+    },
+    "nftCollection": "NFT-Sammlung",
+    "nftCategories": {
+      "all": "Alle NFTs",
+      "characters": "Charaktere",
+      "units": "Einheiten",
+      "avatars": "Avatare",
+      "trophies": "Trophäen",
+      "chests": "Truhen"
+    },
+    "noNfts": "Noch keine {category} gesammelt",
+    "achievements": "Erfolge",
+    "achievementStats": {
+      "completedBy": "Abgeschlossen von",
+      "points": "Punkte"
+    },
+    "friends": "Freunde",
+    "friendStatus": {
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "editProfileModal": {
+      "title": "Profil bearbeiten",
+      "username": "Benutzername",
+      "title": "Titel",
+      "description": "Beschreibung",
+      "cancel": "Abbrechen",
+      "saveChanges": "Änderungen speichern"
+    },
+    "confirmRemoveFriend": "Bist du sicher, dass du {username} aus deiner Freundesliste entfernen möchtest?"
+  },
+  "months": {
+    "0": "Januar",
+    "1": "Februar",
+    "2": "März",
+    "3": "April",
+    "4": "Mai",
+    "5": "Juni",
+    "6": "Juli",
+    "7": "August",
+    "8": "September",
+    "9": "Oktober",
+    "10": "November",
+    "11": "Dezember"
   }
 }

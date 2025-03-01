@@ -238,5 +238,90 @@
       "hoursAgo": "{hours} giờ trước",
       "daysAgo": "{days} ngày trước"
     }
+  },
+  "profilePage": {
+    "profileError": "Lỗi Hồ sơ",
+    "retry": "Thử lại",
+    "goHome": "Về Trang chủ",
+    "errorHelp": "Hồ sơ này có thể không tồn tại hoặc tạm thời không khả dụng. Nếu bạn đã nhập tên người dùng, hãy thử truy cập bằng ID Principal hoặc ngược lại.",
+    "tabs": {
+      "profile": "Hồ sơ",
+      "stats": "Thống kê",
+      "collection": "Bộ sưu tập",
+      "social": "Xã hội"
+    },
+    "unknownPlayer": "Người chơi không xác định",
+    "defaultTitle": "Nhà thám hiểm Thiên hà",
+    "registrationDate": "Thành viên từ {date}",
+    "friendActions": {
+      "addFriend": "Thêm bạn",
+      "requestSent": "Đã gửi lời mời",
+      "removeFriend": "Xóa bạn"
+    },
+    "noDescription": "Chưa có mô tả",
+    "edit": "Chỉnh sửa",
+    "playerStats": {
+      "elo": "ELO",
+      "winRate": "Tỷ lệ thắng",
+      "games": "Trận đấu"
+    },
+    "editProfile": "Chỉnh sửa Hồ sơ",
+    "playerId": "ID Người chơi",
+    "quickStats": "Thống kê nhanh",
+    "statsCards": {
+      "totalKills": "Tổng số tiêu diệt",
+      "energyEfficiency": "Hiệu suất năng lượng",
+      "criticalHits": "Đòn chí mạng"
+    },
+    "combatStatistics": "Thống kê chiến đấu",
+    "statsDetails": {
+      "damageDealt": "Sát thương gây ra",
+      "damageEvaded": "Sát thương tránh được",
+      "energyGenerated": "Năng lượng tạo ra",
+      "energyUsed": "Năng lượng sử dụng"
+    },
+    "nftCollection": "Bộ sưu tập NFT",
+    "nftCategories": {
+      "all": "Tất cả NFT",
+      "characters": "Nhân vật",
+      "units": "Đơn vị",
+      "avatars": "Hình đại diện",
+      "trophies": "Cúp",
+      "chests": "Rương"
+    },
+    "noNfts": "Chưa có {category} nào được sưu tập",
+    "achievements": "Thành tựu",
+    "achievementStats": {
+      "completedBy": "Hoàn thành bởi",
+      "points": "Điểm"
+    },
+    "friends": "Bạn bè",
+    "friendStatus": {
+      "online": "Trực tuyến",
+      "offline": "Ngoại tuyến"
+    },
+    "editProfileModal": {
+      "title": "Chỉnh sửa Hồ sơ",
+      "username": "Tên người dùng",
+      "title": "Tiêu đề",
+      "description": "Mô tả",
+      "cancel": "Hủy",
+      "saveChanges": "Lưu thay đổi"
+    },
+    "confirmRemoveFriend": "Bạn có chắc chắn muốn xóa {username} khỏi danh sách bạn bè của mình không?"
+  },
+  "months": {
+    "0": "tháng 1",
+    "1": "tháng 2",
+    "2": "tháng 3",
+    "3": "tháng 4",
+    "4": "tháng 5",
+    "5": "tháng 6",
+    "6": "tháng 7",
+    "7": "tháng 8",
+    "8": "tháng 9",
+    "9": "tháng 10",
+    "10": "tháng 11",
+    "11": "tháng 12"
   }
 }

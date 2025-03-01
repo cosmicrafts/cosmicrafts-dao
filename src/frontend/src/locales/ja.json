@@ -237,5 +237,91 @@
       "hoursAgo": "{hours}時間前",
       "daysAgo": "{days}日前"
     }
+  },
+  "profilePage": {
+    "profileError": "プロフィールエラー",
+    "retry": "再試行",
+    "goHome": "ホームに戻る",
+    "errorHelp": "このプロフィールは存在しないか、一時的に利用できない可能性があります。ユーザー名を入力した場合は、Principal IDでアクセスしてみてください。またはその逆も試してください。",
+    "tabs": {
+      "profile": "プロフィール",
+      "stats": "統計",
+      "collection": "コレクション",
+      "social": "ソーシャル"
+    },
+    "unknownPlayer": "不明なプレイヤー",
+    "defaultTitle": "銀河の冒険者",
+    "registrationDate": "{date}からのメンバー",
+    "unknownRegistrationDate": "登録日不明",
+    "friendActions": {
+      "addFriend": "友達に追加",
+      "requestSent": "リクエスト送信済み",
+      "removeFriend": "友達を削除"
+    },
+    "noDescription": "説明はまだありません",
+    "edit": "編集",
+    "playerStats": {
+      "elo": "ELO",
+      "winRate": "勝率",
+      "games": "ゲーム数"
+    },
+    "editProfile": "プロフィールを編集",
+    "playerId": "プレイヤーID",
+    "quickStats": "クイック統計",
+    "statsCards": {
+      "totalKills": "総キル数",
+      "energyEfficiency": "エネルギー効率",
+      "criticalHits": "クリティカルヒット"
+    },
+    "combatStatistics": "戦闘統計",
+    "statsDetails": {
+      "damageDealt": "与えたダメージ",
+      "damageEvaded": "回避したダメージ",
+      "energyGenerated": "生成したエネルギー",
+      "energyUsed": "使用したエネルギー"
+    },
+    "nftCollection": "NFTコレクション",
+    "nftCategories": {
+      "all": "すべてのNFT",
+      "characters": "キャラクター",
+      "units": "ユニット",
+      "avatars": "アバター",
+      "trophies": "トロフィー",
+      "chests": "チェスト"
+    },
+    "noNfts": "まだ{category}を収集していません",
+    "achievements": "実績",
+    "achievementStats": {
+      "completedBy": "達成率",
+      "points": "ポイント"
+    },
+    "friends": "友達",
+    "friendStatus": {
+      "online": "オンライン",
+      "offline": "オフライン"
+    },
+    "editProfileModal": {
+      "title": "プロフィールを編集",
+      "username": "ユーザー名",
+      "title": "タイトル",
+      "description": "説明",
+      "cancel": "キャンセル",
+      "saveChanges": "変更を保存"
+    },
+    "confirmRemoveFriend": "{username}をフレンドリストから削除してもよろしいですか？"
+  },
+  "months": {
+    "0": "1月",
+    "1": "2月",
+    "2": "3月",
+    "3": "4月",
+    "4": "5月",
+    "5": "6月",
+    "6": "7月",
+    "7": "8月",
+    "8": "9月",
+    "9": "10月",
+    "10": "11月",
+    "11": "12月"
   }
 }

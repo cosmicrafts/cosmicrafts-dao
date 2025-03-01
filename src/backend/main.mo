@@ -2947,7 +2947,7 @@ shared actor class Cosmicrafts() = Self {
                             case (null) {
                                 // Do nothing if the sender doesn't exist (unlikely)
                             };
-                            case (?fromPlayer) {
+                            case (?_fromPlayer) {
                                 sendNotification(fromId, _player.username # " accepted your friend request");
                             };
                         };

@@ -216,19 +216,19 @@
   "title": "Notifications",
   "noNotifications": "Pas de notifications",
   "viewAll": "Voir tout",
-  "friendRequests": "Demandes d'amitié",
-  "noFriendRequests": "Pas de demandes d'amitié",
+  "friendRequests": "Demandes d'amis",
+  "noFriendRequests": "Pas de demandes d'amis",
   "accept": "Accepter",
   "decline": "Refuser",
   "accepted": "Accepté",
   "declined": "Refusé",
-  "sentYouFriendRequest": "vous a envoyé une demande d'amitié",
-  "acceptedYourFriendRequest": "a accepté votre demande d'amitié",
-  "newFriendRequest": "Vous avez une nouvelle demande d'amitié de",
+  "sentYouFriendRequest": "vous a envoyé une demande d'ami",
+  "acceptedYourFriendRequest": "a accepté votre demande d'ami",
+  "newFriendRequest": "Vous avez une nouvelle demande d'ami de",
   "privacySettingsUpdated": "Vos paramètres de confidentialité ont été mis à jour.",
   "tabs": {
     "all": "Tout",
-    "friendRequests": "Demandes d'amitié",
+    "friendRequests": "Demandes d'amis",
     "notifications": "Notifications"
   },
   "timeAgo": {
@@ -236,6 +236,92 @@
     "minutesAgo": "il y a {minutes} minutes",
     "hoursAgo": "il y a {hours} heures",
     "daysAgo": "il y a {days} jours"
+  }
+},
+"profilePage": {
+  "profileError": "Erreur de Profil",
+  "retry": "Réessayer",
+  "goHome": "Accueil",
+  "errorHelp": "Ce profil pourrait ne pas exister ou être temporairement indisponible. Si vous avez entré un nom d'utilisateur, essayez d'accéder par ID Principal ou vice versa.",
+  "tabs": {
+    "profile": "Profil",
+    "stats": "Statistiques",
+    "collection": "Collection",
+    "social": "Social"
+  },
+  "unknownPlayer": "Joueur Inconnu",
+  "defaultTitle": "Aventurier Galactique",
+  "registrationDate": "Membre depuis {date}",
+  "unknownRegistrationDate": "Date d'inscription inconnue",
+  "friendActions": {
+    "addFriend": "Ajouter un Ami",
+    "requestSent": "Demande Envoyée",
+    "removeFriend": "Supprimer l'Ami"
+  },
+  "noDescription": "Pas encore de description",
+  "edit": "Modifier",
+  "playerStats": {
+    "elo": "ELO",
+    "winRate": "Taux de Victoire",
+    "games": "Parties"
+  },
+  "editProfile": "Modifier le Profil",
+  "playerId": "ID du Joueur",
+  "quickStats": "Statistiques Rapides",
+  "statsCards": {
+    "totalKills": "Éliminations Totales",
+    "energyEfficiency": "Efficacité Énergétique",
+    "criticalHits": "Coups Critiques"
+  },
+  "combatStatistics": "Statistiques de Combat",
+  "statsDetails": {
+    "damageDealt": "Dégâts Infligés",
+    "damageEvaded": "Dégâts Évités",
+    "energyGenerated": "Énergie Générée",
+    "energyUsed": "Énergie Utilisée"
+  },
+  "nftCollection": "Collection NFT",
+  "nftCategories": {
+    "all": "Tous les NFTs",
+    "characters": "Personnages",
+    "units": "Unités",
+    "avatars": "Avatars",
+    "trophies": "Trophées",
+    "chests": "Coffres"
+  },
+  "noNfts": "Pas encore de {category} collectés",
+  "achievements": "Succès",
+  "achievementStats": {
+    "completedBy": "Complété par",
+    "points": "Points"
+  },
+  "friends": "Amis",
+  "friendStatus": {
+    "online": "En ligne",
+    "offline": "Hors ligne"
+  },
+  "editProfileModal": {
+    "title": "Modifier le Profil",
+    "username": "Nom d'utilisateur",
+    "title": "Titre",
+    "description": "Description",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les Modifications"
+  },
+  "confirmRemoveFriend": "Êtes-vous sûr de vouloir supprimer {username} de votre liste d'amis ?",
+  "months": {
+    "0": "janvier",
+    "1": "février",
+    "2": "mars",
+    "3": "avril",
+    "4": "mai",
+    "5": "juin",
+    "6": "juillet",
+    "7": "août",
+    "8": "septembre",
+    "9": "octobre",
+    "10": "novembre",
+    "11": "décembre"
   }
 }
 }

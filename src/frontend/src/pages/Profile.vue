@@ -2,21 +2,20 @@
   <div class="player-profile">
     <!-- Error Message -->
     <div class="error-message" v-if="loadingError">
-      <h3>Profile Error</h3>
+      <h3>{{ $t('profilePage.profileError') }}</h3>
       <p>{{ loadingError }}</p>
       <div class="error-actions">
         <button @click="retryLoading" class="retry-btn">
           <span class="retry-icon">🔄</span>
-          Retry
+          {{ $t('profilePage.retry') }}
         </button>
         <router-link to="/" class="home-btn">
           <span class="home-icon">🏠</span>
-          Go Home
+          {{ $t('profilePage.goHome') }}
         </router-link>
       </div>
       <p class="error-help">
-        This profile might not exist or might be temporarily unavailable. 
-        If you entered a username, try accessing by Principal ID instead, or vice versa.
+        {{ $t('profilePage.errorHelp') }}
       </p>
     </div>
 
@@ -30,84 +29,95 @@
         <span class="nav-icon">
           {{ getTabIcon(tab) }}
         </span>
-        <span class="nav-label">{{ tab }}</span>
+        <span class="nav-label">{{ $t(`profilePage.tabs.${tab}`) }}</span>
       </div>
     </div>
 
     <!-- Hero Section -->
     <div class="hero-section">
+      <div class="hero-background"></div>
       <div class="hero-content">
         <div class="avatar-container">
-    <div class="avatar-frame">
-      <img :src="playerAvatar" alt="Player Avatar" class="avatar" />
+          <div class="avatar-frame">
+            <div class="avatar-glow"></div>
+            <img :src="playerAvatar" alt="Player Avatar" class="avatar" />
             <div class="level-badge">{{ player.level || '?' }}</div>
-    </div>
+          </div>
+          <div class="online-status" v-if="player.isOnline">
+            <span class="status-dot"></span>
+            {{ $t('profilePage.friendStatus.online') }}
+          </div>
         </div>
         <div class="player-details">
-          <h1 class="player-name">{{ player.username || 'Unknown Player' }}</h1>
-      <p class="player-title">{{ player.title || 'Galactic Adventurer' }}</p>
-      <p class="registration-date">{{ formattedRegistrationDate }}</p>
-      
-      <!-- Add Friend Button - Only show if not own profile -->
-      <div class="friend-actions" v-if="!isOwnProfile && !loadingError">
-        <button 
-          v-if="!isFriend && !friendRequestSent" 
-          @click="sendFriendRequest" 
-          class="friend-btn add-friend"
-          :disabled="isProcessingFriendAction"
-        >
-          <span class="btn-icon">👥</span>
-          Add Friend
-          <span v-if="isProcessingFriendAction" class="loading-indicator">⟳</span>
-        </button>
-        <button 
-          v-else-if="friendRequestSent" 
-          @click="cancelFriendRequest" 
-          class="friend-btn request-sent"
-          :disabled="isProcessingFriendAction"
-        >
-          <span class="btn-icon">⏱️</span>
-          Request Sent
-          <span v-if="isProcessingFriendAction" class="loading-indicator">⟳</span>
-        </button>
-        <button 
-          v-else 
-          @click="removeFriend" 
-          class="friend-btn remove-friend"
-          :disabled="isProcessingFriendAction"
-        >
-          <span class="btn-icon">✖️</span>
-          Remove Friend
-          <span v-if="isProcessingFriendAction" class="loading-indicator">⟳</span>
-        </button>
-      </div>
-      
-      <p class="player-description" v-if="!isEditingDescription">
-        {{ player.description || 'No description yet' }}
-        <button class="edit-description-btn" @click="startEditingDescription" v-if="showEditControls">
-          <span class="edit-icon">✏️</span>
-          Edit
-        </button>
-      </p>
+          <div class="player-header">
+            <h1 class="player-name">{{ player.username || $t('profilePage.unknownPlayer') }}</h1>
+            <button class="edit-profile-btn" @click="startEditingProfile" v-if="showEditControls && !isEditingProfile">
+              <span class="edit-icon">✏️</span>
+              {{ $t('profilePage.editProfile') }}
+            </button>
+          </div>
+          <p class="player-title">{{ translateMessage(player.title || 'Galactic Adventurer') }}</p>
+          <p class="registration-date">{{ formattedRegistrationDate }}</p>
+          
+          <!-- Add Friend Button - Only show if not own profile -->
+          <div class="friend-actions" v-if="!isOwnProfile && !loadingError">
+            <button 
+              v-if="!isFriend && !friendRequestSent" 
+              @click="sendFriendRequest" 
+              class="friend-btn add-friend"
+              :disabled="isProcessingFriendAction"
+            >
+              <span class="btn-icon">👥</span>
+              {{ $t('profilePage.friendActions.addFriend') }}
+              <span v-if="isProcessingFriendAction" class="loading-indicator">⟳</span>
+            </button>
+            <button 
+              v-else-if="friendRequestSent" 
+              @click="cancelFriendRequest" 
+              class="friend-btn request-sent"
+              :disabled="isProcessingFriendAction"
+            >
+              <span class="btn-icon">⏱️</span>
+              {{ $t('profilePage.friendActions.requestSent') }}
+              <span v-if="isProcessingFriendAction" class="loading-indicator">⟳</span>
+            </button>
+            <button 
+              v-else 
+              @click="removeFriend" 
+              class="friend-btn remove-friend"
+              :disabled="isProcessingFriendAction"
+            >
+              <span class="btn-icon">✖️</span>
+              {{ $t('profilePage.friendActions.removeFriend') }}
+              <span v-if="isProcessingFriendAction" class="loading-indicator">⟳</span>
+            </button>
+          </div>
+          
+          <div class="player-description-container">
+            <p class="player-description" v-if="!isEditingDescription">
+              {{ translateMessage(player.description || 'No description yet') }}
+              <button class="edit-description-btn" @click="startEditingDescription" v-if="showEditControls">
+                <span class="edit-icon">✏️</span>
+                {{ $t('profilePage.edit') }}
+              </button>
+            </p>
+          </div>
+          
           <div class="player-meta">
             <div class="meta-item">
-              <span class="meta-label">ELO</span>
+              <span class="meta-label">{{ $t('profilePage.playerStats.elo') }}</span>
               <span class="meta-value">{{ formatElo(player.elo) }}</span>
             </div>
             <div class="meta-item">
-              <span class="meta-label">Win Rate</span>
+              <span class="meta-label">{{ $t('profilePage.playerStats.winRate') }}</span>
               <span class="meta-value">{{ calculateWinRate }}%</span>
             </div>
             <div class="meta-item">
-              <span class="meta-label">Games</span>
+              <span class="meta-label">{{ $t('profilePage.playerStats.games') }}</span>
               <span class="meta-value">{{ playerStats?.gamesPlayed || 0 }}</span>
             </div>
           </div>
         </div>
-        <button class="edit-profile-btn" @click="startEditingProfile" v-if="showEditControls && !isEditingProfile">
-          <span class="edit-icon">✏️</span>
-          Edit Profile
-        </button>
       </div>
     </div>
 
@@ -116,38 +126,38 @@
       <!-- Left Sidebar (Desktop) -->
       <aside class="sidebar">
         <div class="sidebar-section">
-          <h3>Player ID</h3>
+          <h3>{{ $t('profilePage.playerId') }}</h3>
           <div class="principal-display" :title="getPrincipalString">
             <span class="principal-text">{{ formatPrincipal(getPrincipalString) }}</span>
             <button class="icon-button" @click="copyPrincipal" :class="{ 'success': copySuccess }">
               <span v-if="!copySuccess">📋</span>
               <span v-else>✓</span>
             </button>
-      </div>
+          </div>
         </div>
 
         <div class="sidebar-section">
-          <h3>Quick Stats</h3>
+          <h3>{{ $t('profilePage.quickStats') }}</h3>
           <div class="quick-stats">
             <div class="stat-card">
               <div class="stat-icon">⚔️</div>
               <div class="stat-info">
                 <span class="stat-value">{{ formatNumber(playerStats?.totalKills) }}</span>
-                <span class="stat-label">Total Kills</span>
+                <span class="stat-label">{{ $t('profilePage.statsCards.totalKills') }}</span>
               </div>
             </div>
             <div class="stat-card">
               <div class="stat-icon">⚡</div>
               <div class="stat-info">
                 <span class="stat-value">{{ calculateEnergyEfficiency }}%</span>
-                <span class="stat-label">Energy Efficiency</span>
+                <span class="stat-label">{{ $t('profilePage.statsCards.energyEfficiency') }}</span>
               </div>
             </div>
             <div class="stat-card">
               <div class="stat-icon">🎯</div>
               <div class="stat-info">
                 <span class="stat-value">{{ formatNumber(playerStats?.totalDamageCrit) }}</span>
-                <span class="stat-label">Critical Hits</span>
+                <span class="stat-label">{{ $t('profilePage.statsCards.criticalHits') }}</span>
               </div>
             </div>
           </div>
@@ -158,7 +168,7 @@
       <div class="content-area">
         <!-- Stats Section -->
         <section class="content-section stats-section">
-          <h2>Combat Statistics</h2>
+          <h2>{{ $t('profilePage.combatStatistics') }}</h2>
           <div class="stats-grid">
             <template v-if="!playerStats">
               <div class="stat-tile skeleton" v-for="i in 4" :key="i">
@@ -176,7 +186,7 @@
               <div class="stat-tile">
                 <div class="stat-header">
                   <span class="stat-icon">⚔️</span>
-                  <span class="stat-title">Damage Dealt</span>
+                  <span class="stat-title">{{ $t('profilePage.statsDetails.damageDealt') }}</span>
                 </div>
                 <div class="stat-body">
                   <span class="stat-value">{{ formatNumber(playerStats?.totalDamageDealt) }}</span>
@@ -186,7 +196,7 @@
               <div class="stat-tile">
                 <div class="stat-header">
                   <span class="stat-icon">🛡️</span>
-                  <span class="stat-title">Damage Evaded</span>
+                  <span class="stat-title">{{ $t('profilePage.statsDetails.damageEvaded') }}</span>
                 </div>
                 <div class="stat-body">
                   <span class="stat-value">{{ formatNumber(playerStats?.totalDamageEvaded) }}</span>
@@ -196,7 +206,7 @@
               <div class="stat-tile">
                 <div class="stat-header">
                   <span class="stat-icon">⚡</span>
-                  <span class="stat-title">Energy Generated</span>
+                  <span class="stat-title">{{ $t('profilePage.statsDetails.energyGenerated') }}</span>
                 </div>
                 <div class="stat-body">
                   <span class="stat-value">{{ formatNumber(playerStats?.energyGenerated) }}</span>
@@ -206,7 +216,7 @@
               <div class="stat-tile">
                 <div class="stat-header">
                   <span class="stat-icon">🔋</span>
-                  <span class="stat-title">Energy Used</span>
+                  <span class="stat-title">{{ $t('profilePage.statsDetails.energyUsed') }}</span>
                 </div>
                 <div class="stat-body">
                   <span class="stat-value">{{ formatNumber(playerStats?.energyUsed) }}</span>
@@ -219,7 +229,7 @@
 
         <!-- Collection Section -->
         <section class="content-section collection-section">
-          <h2>NFT Collection</h2>
+          <h2>{{ $t('profilePage.nftCollection') }}</h2>
           <div class="collection-tabs">
             <div v-for="category in nftCategories" 
                  :key="category.type"
@@ -227,7 +237,7 @@
                  :class="{ 'active': activeCollection === category.type }"
                  @click="activeCollection = category.type">
               <span class="tab-icon">{{ getCategoryIcon(category.type) }}</span>
-              {{ category.title }}
+              {{ $t(`profilePage.nftCategories.${category.type}`) }}
               <span v-if="category.isLoading" class="loading-indicator">⟳</span>
             </div>
           </div>
@@ -249,7 +259,7 @@
                     :nft="nft"
                   />
                   <p v-if="category.items.length === 0" class="empty-message">
-                    No {{ category.title.toLowerCase() }} collected yet
+                    {{ $t('profilePage.noNfts', { category: $t(`profilePage.nftCategories.${category.type}`).toLowerCase() }) }}
                   </p>
                 </template>
               </div>
@@ -259,7 +269,7 @@
 
         <!-- Achievements Section -->
         <section class="content-section achievements-section" v-if="achievements.length">
-          <h2>Achievements</h2>
+          <h2>{{ $t('profilePage.achievements') }}</h2>
           <div class="achievements-grid">
             <div class="achievement-card" 
                  v-for="achievement in achievements" 
@@ -284,13 +294,13 @@
 
         <!-- Friends Section -->
         <section class="content-section friends-section" v-if="friends.length">
-          <h2>Friends</h2>
+          <h2>{{ $t('profilePage.friends') }}</h2>
           <div class="friends-grid">
             <div class="friend-card" v-for="friend in friends" :key="friend.id">
               <img :src="friend.avatar" :alt="friend.username" class="friend-avatar" />
               <div class="friend-info">
                 <span class="friend-name">{{ friend.username }}</span>
-                <span class="friend-status" :class="friend.status">{{ friend.status }}</span>
+                <span class="friend-status" :class="friend.status">{{ $t(`profilePage.friendStatus.${friend.status}`) }}</span>
               </div>
             </div>
           </div>
@@ -301,23 +311,23 @@
     <!-- Profile Edit Modal -->
     <div class="modal" v-if="isEditingProfile">
       <div class="modal-content">
-        <h2>Edit Profile</h2>
+        <h2>{{ $t('profilePage.editProfileModal.title') }}</h2>
         <form @submit.prevent="saveProfile">
           <div class="form-group">
-            <label>Username</label>
+            <label>{{ $t('profilePage.editProfileModal.username') }}</label>
             <input v-model="editForm.username" type="text" maxlength="20" />
           </div>
           <div class="form-group">
-            <label>Title</label>
+            <label>{{ $t('profilePage.editProfileModal.title') }}</label>
             <input v-model="editForm.title" type="text" maxlength="30" />
           </div>
           <div class="form-group">
-            <label>Description</label>
+            <label>{{ $t('profilePage.editProfileModal.description') }}</label>
             <textarea v-model="editForm.description" maxlength="200"></textarea>
           </div>
           <div class="form-actions">
-            <button type="button" @click="isEditingProfile = false">Cancel</button>
-            <button type="submit">Save Changes</button>
+            <button type="button" @click="isEditingProfile = false">{{ $t('profilePage.editProfileModal.cancel') }}</button>
+            <button type="submit">{{ $t('profilePage.editProfileModal.saveChanges') }}</button>
           </div>
         </form>
       </div>
@@ -340,15 +350,15 @@
             <span class="progress-text">{{ selectedAchievement.progress }}%</span>
           </div>
           <div class="achievement-stats">
-      <div class="stat">
-              <span class="stat-label">Completed by</span>
+            <div class="stat">
+              <span class="stat-label">{{ $t('profilePage.achievementStats.completedBy') }}</span>
               <span class="stat-value">23%</span>
-      </div>
-      <div class="stat">
-              <span class="stat-label">Points</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">{{ $t('profilePage.achievementStats.points') }}</span>
               <span class="stat-value">100</span>
-      </div>
-    </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -367,6 +377,8 @@ import { useAuthStore } from '@/stores/auth';
 import { useStatisticsStore } from '../stores/stats';
 import { useACHStore } from '../stores/ach';
 import { useCanisterStore } from '@/stores/canister';
+import { useI18n } from 'vue-i18n';
+import { translateProfileMessage, formatRegistrationDate as formatRegDate } from '@/utils/profileTranslator';
 import avatar1 from '@/assets/avatars/Avatar_01.webp';
 import avatar2 from '@/assets/avatars/Avatar_02.webp';
 import avatar3 from '@/assets/avatars/Avatar_03.webp';
@@ -392,6 +404,7 @@ const route = useRoute();
 const copySuccess = ref(false);
 const profileStore = useProfileStore();
 const nftsStore = useNftsStore();
+const { t, locale } = useI18n();
 
 // State
 const playerStats = ref(null);
@@ -734,22 +747,6 @@ const formatNumber = (num) => {
 // Helper functions for formatting
 const formatElo = (elo) => {
   return elo ? Math.round(Number(elo)).toLocaleString() : '1000';
-};
-
-const formatDate = (timestamp) => {
-  if (!timestamp) return 'Unknown';
-
-  // Convert nat64 (nanoseconds) to milliseconds by dividing by 1_000_000
-  const milliseconds = Number(timestamp) / 1_000_000;
-
-  // Create a Date object from the milliseconds
-  const date = new Date(milliseconds);
-
-  // Format the date as "Month, Year"
-  return date.toLocaleDateString('en-US', {
-    month: 'long',
-    year: 'numeric',
-  });
 };
 
 const getPrincipalString = computed(() => {
@@ -1219,8 +1216,8 @@ const retryLoading = () => {
 
 // Format registration date
 const formattedRegistrationDate = computed(() => {
-  if (!player.value || !player.value.registrationDate) return 'Unknown';
-  return profileStore.formatRegistrationDate(player.value.registrationDate);
+  if (!player.value || !player.value.registrationDate) return '';
+  return formatRegDate(player.value.registrationDate, t, locale);
 });
 
 // Function to check if the current user and profile user are friends
@@ -1338,7 +1335,7 @@ const removeFriend = async () => {
   if (isProcessingFriendAction.value) return;
   
   // Confirm before removing friend
-  if (!confirm(`Are you sure you want to remove ${player.value.username} from your friends list?`)) {
+  if (!confirm(t('profilePage.confirmRemoveFriend', { username: player.value.username }))) {
     return;
   }
   
@@ -1384,6 +1381,11 @@ const removeFriend = async () => {
   } finally {
     isProcessingFriendAction.value = false;
   }
+};
+
+// Add a method to translate messages
+const translateMessage = (message) => {
+  return translateProfileMessage(message, t);
 };
 </script>
 
@@ -1447,6 +1449,18 @@ const removeFriend = async () => {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(0, 217, 255, 0.1), rgba(255, 0, 195, 0.05));
+  border-radius: 1rem;
+  overflow: hidden;
+  z-index: -1;
+}
+
 .hero-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -1467,6 +1481,19 @@ const removeFriend = async () => {
   overflow: hidden;
   position: relative;
   box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+}
+
+.avatar-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, rgba(255, 0, 195, 0.05) 100%);
+  z-index: -1;
+  opacity: 0.5;
+  animation: glow 2s infinite alternate;
 }
 
 .avatar {
@@ -1491,6 +1518,13 @@ const removeFriend = async () => {
   flex: 1;
 }
 
+.player-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 .player-name {
   font-size: 3rem;
   font-weight: 800;
@@ -1506,6 +1540,10 @@ const removeFriend = async () => {
   font-size: 1.2rem;
   color: rgba(255, 255, 255, 0.8);
   margin: 0.5rem 0 1.5rem;
+}
+
+.player-description-container {
+  margin-bottom: 1rem;
 }
 
 .player-description {
@@ -1537,6 +1575,69 @@ const removeFriend = async () => {
 
 .edit-description-btn:hover {
   background: rgba(0, 217, 255, 0.1);
+}
+
+.player-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.meta-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.25rem;
+}
+
+.meta-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00d9ff;
+}
+
+.online-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #00ff95;
+}
+
+.edit-profile-btn {
+  position: absolute;
+  top: 8rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.edit-profile-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.edit-icon {
+  font-size: 1.2rem;
 }
 
 /* Main Content Layout */
@@ -2194,30 +2295,6 @@ const removeFriend = async () => {
 
 .form-actions button:hover {
   transform: translateY(-2px);
-}
-
-.edit-profile-btn {
-  position: absolute;
-  top: 8rem;
-  right: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
-}
-
-.edit-profile-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.edit-icon {
-  font-size: 1.2rem;
 }
 
 .achievement-modal .modal-content {

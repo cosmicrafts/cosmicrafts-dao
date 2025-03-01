@@ -216,19 +216,19 @@
   "title": "Notificações",
   "noNotifications": "Sem notificações",
   "viewAll": "Ver todas",
-  "friendRequests": "Pedidos de amizade",
-  "noFriendRequests": "Sem pedidos de amizade",
+  "friendRequests": "Solicitações de amizade",
+  "noFriendRequests": "Sem solicitações de amizade",
   "accept": "Aceitar",
   "decline": "Recusar",
   "accepted": "Aceito",
   "declined": "Recusado",
-  "sentYouFriendRequest": "enviou-lhe um pedido de amizade",
-  "acceptedYourFriendRequest": "aceitou seu pedido de amizade",
-  "newFriendRequest": "Você tem um novo pedido de amizade de",
+  "sentYouFriendRequest": "enviou uma solicitação de amizade",
+  "acceptedYourFriendRequest": "aceitou sua solicitação de amizade",
+  "newFriendRequest": "Você tem uma nova solicitação de amizade de",
   "privacySettingsUpdated": "Suas configurações de privacidade foram atualizadas.",
   "tabs": {
     "all": "Todas",
-    "friendRequests": "Pedidos de amizade",
+    "friendRequests": "Solicitações de amizade",
     "notifications": "Notificações"
   },
   "timeAgo": {
@@ -237,5 +237,90 @@
     "hoursAgo": "há {hours} horas",
     "daysAgo": "há {days} dias"
   }
+},
+"profilePage": {
+  "profileError": "Erro no Perfil",
+  "retry": "Tentar novamente",
+  "goHome": "Ir para Início",
+  "errorHelp": "Este perfil pode não existir ou estar temporariamente indisponível. Se você inseriu um nome de usuário, tente acessar pelo ID Principal ou vice-versa.",
+  "tabs": {
+    "profile": "Perfil",
+    "stats": "Estatísticas",
+    "collection": "Coleção",
+    "social": "Social"
+  },
+  "unknownPlayer": "Jogador Desconhecido",
+  "defaultTitle": "Aventureiro Galáctico",
+  "registrationDate": "Membro desde {date}",
+  "friendActions": {
+    "addFriend": "Adicionar Amigo",
+    "requestSent": "Solicitação Enviada",
+    "removeFriend": "Remover Amigo"
+  },
+  "noDescription": "Sem descrição ainda",
+  "edit": "Editar",
+  "playerStats": {
+    "elo": "ELO",
+    "winRate": "Taxa de Vitórias",
+    "games": "Jogos"
+  },
+  "editProfile": "Editar Perfil",
+  "playerId": "ID do Jogador",
+  "quickStats": "Estatísticas Rápidas",
+  "statsCards": {
+    "totalKills": "Total de Abates",
+    "energyEfficiency": "Eficiência Energética",
+    "criticalHits": "Golpes Críticos"
+  },
+  "combatStatistics": "Estatísticas de Combate",
+  "statsDetails": {
+    "damageDealt": "Dano Causado",
+    "damageEvaded": "Dano Evitado",
+    "energyGenerated": "Energia Gerada",
+    "energyUsed": "Energia Utilizada"
+  },
+  "nftCollection": "Coleção de NFTs",
+  "nftCategories": {
+    "all": "Todos os NFTs",
+    "characters": "Personagens",
+    "units": "Unidades",
+    "avatars": "Avatares",
+    "trophies": "Troféus",
+    "chests": "Baús"
+  },
+  "noNfts": "Nenhum {category} coletado ainda",
+  "achievements": "Conquistas",
+  "achievementStats": {
+    "completedBy": "Completado por",
+    "points": "Pontos"
+  },
+  "friends": "Amigos",
+  "friendStatus": {
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "editProfileModal": {
+    "title": "Editar Perfil",
+    "username": "Nome de Usuário",
+    "title": "Título",
+    "description": "Descrição",
+    "cancel": "Cancelar",
+    "saveChanges": "Salvar Alterações"
+  },
+  "confirmRemoveFriend": "Tem certeza que deseja remover {username} da sua lista de amigos?"
+},
+"months": {
+  "0": "janeiro",
+  "1": "fevereiro",
+  "2": "março",
+  "3": "abril",
+  "4": "maio",
+  "5": "junho",
+  "6": "julho",
+  "7": "agosto",
+  "8": "setembro",
+  "9": "outubro",
+  "10": "novembro",
+  "11": "dezembro"
 }
 }

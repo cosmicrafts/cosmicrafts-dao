@@ -215,7 +215,7 @@
   "notifications": {
     "title": "Bildirimler",
     "noNotifications": "Bildirim yok",
-    "viewAll": "Tümünü Gör",
+    "viewAll": "Tümünü Görüntüle",
     "friendRequests": "Arkadaşlık İstekleri",
     "noFriendRequests": "Arkadaşlık isteği yok",
     "accept": "Kabul Et",
@@ -237,5 +237,90 @@
       "hoursAgo": "{hours} saat önce",
       "daysAgo": "{days} gün önce"
     }
+  },
+  "profilePage": {
+    "profileError": "Profil Hatası",
+    "retry": "Tekrar Dene",
+    "goHome": "Ana Sayfaya Git",
+    "errorHelp": "Bu profil mevcut olmayabilir veya geçici olarak kullanılamıyor olabilir. Bir kullanıcı adı girdiyseniz, Principal ID ile erişmeyi deneyin veya tam tersini yapın.",
+    "tabs": {
+      "profile": "Profil",
+      "stats": "İstatistikler",
+      "collection": "Koleksiyon",
+      "social": "Sosyal"
+    },
+    "unknownPlayer": "Bilinmeyen Oyuncu",
+    "defaultTitle": "Galaktik Maceracı",
+    "registrationDate": "{date} tarihinden beri üye",
+    "friendActions": {
+      "addFriend": "Arkadaş Ekle",
+      "requestSent": "İstek Gönderildi",
+      "removeFriend": "Arkadaşı Kaldır"
+    },
+    "noDescription": "Henüz açıklama yok",
+    "edit": "Düzenle",
+    "playerStats": {
+      "elo": "ELO",
+      "winRate": "Kazanma Oranı",
+      "games": "Oyunlar"
+    },
+    "editProfile": "Profili Düzenle",
+    "playerId": "Oyuncu ID",
+    "quickStats": "Hızlı İstatistikler",
+    "statsCards": {
+      "totalKills": "Toplam Öldürme",
+      "energyEfficiency": "Enerji Verimliliği",
+      "criticalHits": "Kritik Vuruşlar"
+    },
+    "combatStatistics": "Savaş İstatistikleri",
+    "statsDetails": {
+      "damageDealt": "Verilen Hasar",
+      "damageEvaded": "Kaçınılan Hasar",
+      "energyGenerated": "Üretilen Enerji",
+      "energyUsed": "Kullanılan Enerji"
+    },
+    "nftCollection": "NFT Koleksiyonu",
+    "nftCategories": {
+      "all": "Tüm NFT'ler",
+      "characters": "Karakterler",
+      "units": "Birimler",
+      "avatars": "Avatarlar",
+      "trophies": "Kupalar",
+      "chests": "Sandıklar"
+    },
+    "noNfts": "Henüz toplanmış {category} yok",
+    "achievements": "Başarılar",
+    "achievementStats": {
+      "completedBy": "Tamamlayan",
+      "points": "Puanlar"
+    },
+    "friends": "Arkadaşlar",
+    "friendStatus": {
+      "online": "Çevrimiçi",
+      "offline": "Çevrimdışı"
+    },
+    "editProfileModal": {
+      "title": "Profili Düzenle",
+      "username": "Kullanıcı Adı",
+      "title": "Başlık",
+      "description": "Açıklama",
+      "cancel": "İptal",
+      "saveChanges": "Değişiklikleri Kaydet"
+    },
+    "confirmRemoveFriend": "{username} adlı kullanıcıyı arkadaş listenizden çıkarmak istediğinizden emin misiniz?"
+  },
+  "months": {
+    "0": "Ocak",
+    "1": "Şubat",
+    "2": "Mart",
+    "3": "Nisan",
+    "4": "Mayıs",
+    "5": "Haziran",
+    "6": "Temmuz",
+    "7": "Ağustos",
+    "8": "Eylül",
+    "9": "Ekim",
+    "10": "Kasım",
+    "11": "Aralık"
   }
 }

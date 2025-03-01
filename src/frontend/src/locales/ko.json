@@ -237,5 +237,91 @@
       "hoursAgo": "{hours}시간 전",
       "daysAgo": "{days}일 전"
     }
+  },
+  "profilePage": {
+    "profileError": "프로필 오류",
+    "retry": "다시 시도",
+    "goHome": "홈으로 이동",
+    "errorHelp": "이 프로필이 존재하지 않거나 일시적으로 사용할 수 없습니다. 사용자 이름을 입력한 경우 Principal ID로 접근해 보거나 그 반대로 시도해 보세요.",
+    "tabs": {
+      "profile": "프로필",
+      "stats": "통계",
+      "collection": "컬렉션",
+      "social": "소셜"
+    },
+    "unknownPlayer": "알 수 없는 플레이어",
+    "defaultTitle": "은하계 모험가",
+    "registrationDate": "{date}부터 회원",
+    "unknownRegistrationDate": "등록 날짜 알 수 없음",
+    "friendActions": {
+      "addFriend": "친구 추가",
+      "requestSent": "요청 전송됨",
+      "removeFriend": "친구 삭제"
+    },
+    "noDescription": "아직 설명이 없습니다",
+    "edit": "편집",
+    "playerStats": {
+      "elo": "ELO",
+      "winRate": "승률",
+      "games": "게임 수"
+    },
+    "editProfile": "프로필 편집",
+    "playerId": "플레이어 ID",
+    "quickStats": "빠른 통계",
+    "statsCards": {
+      "totalKills": "총 처치 수",
+      "energyEfficiency": "에너지 효율",
+      "criticalHits": "치명타"
+    },
+    "combatStatistics": "전투 통계",
+    "statsDetails": {
+      "damageDealt": "가한 데미지",
+      "damageEvaded": "회피한 데미지",
+      "energyGenerated": "생성된 에너지",
+      "energyUsed": "사용된 에너지"
+    },
+    "nftCollection": "NFT 컬렉션",
+    "nftCategories": {
+      "all": "모든 NFT",
+      "characters": "캐릭터",
+      "units": "유닛",
+      "avatars": "아바타",
+      "trophies": "트로피",
+      "chests": "상자"
+    },
+    "noNfts": "아직 수집된 {category}이(가) 없습니다",
+    "achievements": "업적",
+    "achievementStats": {
+      "completedBy": "달성률",
+      "points": "포인트"
+    },
+    "friends": "친구",
+    "friendStatus": {
+      "online": "온라인",
+      "offline": "오프라인"
+    },
+    "editProfileModal": {
+      "title": "프로필 편집",
+      "username": "사용자 이름",
+      "title": "타이틀",
+      "description": "설명",
+      "cancel": "취소",
+      "saveChanges": "변경사항 저장"
+    },
+    "confirmRemoveFriend": "{username}님을 친구 목록에서 삭제하시겠습니까?"
+  },
+  "months": {
+    "0": "1월",
+    "1": "2월",
+    "2": "3월",
+    "3": "4월",
+    "4": "5월",
+    "5": "6월",
+    "6": "7월",
+    "7": "8월",
+    "8": "9월",
+    "9": "10월",
+    "10": "11월",
+    "11": "12월"
   }
 }

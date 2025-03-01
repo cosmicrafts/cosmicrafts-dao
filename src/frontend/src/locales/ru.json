@@ -222,8 +222,8 @@
     "decline": "Отклонить",
     "accepted": "Принято",
     "declined": "Отклонено",
-    "sentYouFriendRequest": "отправил(а) вам запрос в друзья",
-    "acceptedYourFriendRequest": "принял(а) ваш запрос в друзья",
+    "sentYouFriendRequest": "отправил вам запрос в друзья",
+    "acceptedYourFriendRequest": "принял ваш запрос в друзья",
     "newFriendRequest": "У вас новый запрос в друзья от",
     "privacySettingsUpdated": "Ваши настройки конфиденциальности были обновлены.",
     "tabs": {
@@ -237,5 +237,91 @@
       "hoursAgo": "{hours} часов назад",
       "daysAgo": "{days} дней назад"
     }
+  },
+  "profilePage": {
+    "profileError": "Ошибка профиля",
+    "retry": "Повторить",
+    "goHome": "На главную",
+    "errorHelp": "Этот профиль может не существовать или временно недоступен. Если вы ввели имя пользователя, попробуйте получить доступ по ID Principal или наоборот.",
+    "tabs": {
+      "profile": "Профиль",
+      "stats": "Статистика",
+      "collection": "Коллекция",
+      "social": "Социальное"
+    },
+    "unknownPlayer": "Неизвестный игрок",
+    "defaultTitle": "Галактический искатель приключений",
+    "registrationDate": "Участник с {date}",
+    "unknownRegistrationDate": "Дата регистрации неизвестна",
+    "friendActions": {
+      "addFriend": "Добавить в друзья",
+      "requestSent": "Запрос отправлен",
+      "removeFriend": "Удалить из друзей"
+    },
+    "noDescription": "Пока нет описания",
+    "edit": "Редактировать",
+    "playerStats": {
+      "elo": "ELO",
+      "winRate": "Процент побед",
+      "games": "Игры"
+    },
+    "editProfile": "Редактировать профиль",
+    "playerId": "ID игрока",
+    "quickStats": "Быстрая статистика",
+    "statsCards": {
+      "totalKills": "Всего убийств",
+      "energyEfficiency": "Энергоэффективность",
+      "criticalHits": "Критические удары"
+    },
+    "combatStatistics": "Боевая статистика",
+    "statsDetails": {
+      "damageDealt": "Нанесенный урон",
+      "damageEvaded": "Избежанный урон",
+      "energyGenerated": "Сгенерированная энергия",
+      "energyUsed": "Использованная энергия"
+    },
+    "nftCollection": "Коллекция NFT",
+    "nftCategories": {
+      "all": "Все NFT",
+      "characters": "Персонажи",
+      "units": "Юниты",
+      "avatars": "Аватары",
+      "trophies": "Трофеи",
+      "chests": "Сундуки"
+    },
+    "noNfts": "Пока нет собранных {category}",
+    "achievements": "Достижения",
+    "achievementStats": {
+      "completedBy": "Выполнено",
+      "points": "Очки"
+    },
+    "friends": "Друзья",
+    "friendStatus": {
+      "online": "В сети",
+      "offline": "Не в сети"
+    },
+    "editProfileModal": {
+      "title": "Редактировать профиль",
+      "username": "Имя пользователя",
+      "title": "Титул",
+      "description": "Описание",
+      "cancel": "Отмена",
+      "saveChanges": "Сохранить изменения"
+    },
+    "confirmRemoveFriend": "Вы уверены, что хотите удалить {username} из списка друзей?"
+  },
+  "months": {
+    "0": "январь",
+    "1": "февраль",
+    "2": "март",
+    "3": "апрель",
+    "4": "май",
+    "5": "июнь",
+    "6": "июль",
+    "7": "август",
+    "8": "сентябрь",
+    "9": "октябрь",
+    "10": "ноябрь",
+    "11": "декабрь"
   }
 }

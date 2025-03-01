@@ -233,9 +233,94 @@
     },
     "timeAgo": {
       "justNow": "الآن",
-      "minutesAgo": "منذ {minutes} دقائق",
-      "hoursAgo": "منذ {hours} ساعات",
-      "daysAgo": "منذ {days} أيام"
+      "minutesAgo": "منذ {minutes} دقيقة",
+      "hoursAgo": "منذ {hours} ساعة",
+      "daysAgo": "منذ {days} يوم"
     }
+  },
+  "profilePage": {
+    "profileError": "خطأ في الملف الشخصي",
+    "retry": "إعادة المحاولة",
+    "goHome": "العودة للرئيسية",
+    "errorHelp": "قد لا يكون هذا الملف الشخصي موجودًا أو غير متاح مؤقتًا. إذا أدخلت اسم مستخدم، حاول الوصول باستخدام معرف Principal أو العكس.",
+    "tabs": {
+      "profile": "الملف الشخصي",
+      "stats": "الإحصائيات",
+      "collection": "المجموعة",
+      "social": "الاجتماعي"
+    },
+    "unknownPlayer": "لاعب غير معروف",
+    "defaultTitle": "مغامر المجرة",
+    "registrationDate": "عضو منذ {date}",
+    "friendActions": {
+      "addFriend": "إضافة صديق",
+      "requestSent": "تم إرسال الطلب",
+      "removeFriend": "إزالة الصديق"
+    },
+    "noDescription": "لا يوجد وصف بعد",
+    "edit": "تعديل",
+    "playerStats": {
+      "elo": "تصنيف ELO",
+      "winRate": "معدل الفوز",
+      "games": "المباريات"
+    },
+    "editProfile": "تعديل الملف الشخصي",
+    "playerId": "معرف اللاعب",
+    "quickStats": "إحصائيات سريعة",
+    "statsCards": {
+      "totalKills": "إجمالي القتل",
+      "energyEfficiency": "كفاءة الطاقة",
+      "criticalHits": "الضربات الحاسمة"
+    },
+    "combatStatistics": "إحصائيات القتال",
+    "statsDetails": {
+      "damageDealt": "الضرر المسبب",
+      "damageEvaded": "الضرر المتجنب",
+      "energyGenerated": "الطاقة المولدة",
+      "energyUsed": "الطاقة المستخدمة"
+    },
+    "nftCollection": "مجموعة NFT",
+    "nftCategories": {
+      "all": "جميع NFTs",
+      "characters": "الشخصيات",
+      "units": "الوحدات",
+      "avatars": "الصور الرمزية",
+      "trophies": "الكؤوس",
+      "chests": "الصناديق"
+    },
+    "noNfts": "لم يتم جمع {category} بعد",
+    "achievements": "الإنجازات",
+    "achievementStats": {
+      "completedBy": "أكمله",
+      "points": "النقاط"
+    },
+    "friends": "الأصدقاء",
+    "friendStatus": {
+      "online": "متصل",
+      "offline": "غير متصل"
+    },
+    "editProfileModal": {
+      "title": "تعديل الملف الشخصي",
+      "username": "اسم المستخدم",
+      "title": "اللقب",
+      "description": "الوصف",
+      "cancel": "إلغاء",
+      "saveChanges": "حفظ التغييرات"
+    },
+    "confirmRemoveFriend": "هل أنت متأكد أنك تريد إزالة {username} من قائمة أصدقائك؟"
+  },
+  "months": {
+    "0": "يناير",
+    "1": "فبراير",
+    "2": "مارس",
+    "3": "أبريل",
+    "4": "مايو",
+    "5": "يونيو",
+    "6": "يوليو",
+    "7": "أغسطس",
+    "8": "سبتمبر",
+    "9": "أكتوبر",
+    "10": "نوفمبر",
+    "11": "ديسمبر"
   }
 }
