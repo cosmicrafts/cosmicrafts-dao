@@ -410,7 +410,7 @@ export default {
 .content-wrapper {
   max-width: 100%;
   margin: 2rem auto;
-  padding: 2rem 16rem;
+  padding: 2rem 12rem;
   position: relative;
 }
 
@@ -677,6 +677,20 @@ export default {
   opacity: 0;
   animation: fade-in 1s ease forwards 0.4s;
 }
+
+@media (max-width: 1600px) {
+  .content-wrapper {
+    padding: 2rem 4rem;
+  }
+}
+
+
+@media (max-width: 1440px) {
+  .content-wrapper {
+    padding: 2rem 2rem;
+  }
+}
+
 
 /* Responsive styles */
 @media (max-width: 1280px) {
