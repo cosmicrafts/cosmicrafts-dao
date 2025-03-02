@@ -108,12 +108,13 @@ export default {
         { id: "stakingrewards", title: "Staking Rewards" },
         { id: "sustainability", title: "Sustainability" },
         { id: "community", title: "Community" },
+        { id: "markdown-features", title: "Markdown Guide" },
       ],
       toc: [],
       activeHeading: null,
       showPreviousButton: false,
       showNextButton: false,
-      observer: null,
+      sectionObserver: null,
     };
   },
   computed: {
@@ -140,8 +141,8 @@ export default {
   methods: {
     // Handles the dynamic parallax effect
     applyDynamicParallaxEffect() {
-      const contentElement = this.$el.querySelector(".content");
-      const mdContent = contentElement.querySelectorAll(".markdown-content > *");
+      const mdContent = document.querySelectorAll('.content .markdown-content > *');
+      if (!mdContent.length) return;
 
       const observer = new IntersectionObserver(
         (entries) => {
@@ -156,7 +157,7 @@ export default {
             const scaleFactor =
               1 + Math.max(0, 1 - distanceFromMidpoint / (viewportHeight * 0.75)) * 0.05;
 
-            if (boundingClientRect.top < viewportHeight && boundingClientRect.bottom > 0) {
+            if (entry.isIntersecting) {
               entry.target.style.transform = `scale(${scaleFactor})`;
               entry.target.style.opacity = `${
                 0.75 + Math.min(1, 1 - distanceFromMidpoint / viewportHeight)
@@ -167,7 +168,7 @@ export default {
             }
           });
         },
-        { root: contentElement, threshold: 0 }
+        { root: null, threshold: 0 } // Use the viewport as the root
       );
 
       mdContent.forEach((el) => observer.observe(el));
@@ -175,9 +176,12 @@ export default {
 
     // Observes rendered content for changes
     observeRenderedContent() {
-      const contentElement = this.$el.querySelector(".content");
+      const contentElement = document.querySelector(".content");
+      if (!contentElement) return;
+      
       const observer = new MutationObserver(() => {
-        this.applyDynamicParallaxEffect();
+        // Only apply parallax effect if it doesn't interfere with scrolling
+        setTimeout(() => this.applyDynamicParallaxEffect(), 100);
       });
 
       observer.observe(contentElement, { childList: true, subtree: true });
@@ -191,16 +195,11 @@ export default {
       this.$nextTick(() => {
         this.generateTOC();
         
-        setTimeout(() => {
-          const target = document.querySelector(".content");
-          if (target) {
-            const headerOffset = 80; // Adjust for fixed headers
-            const targetPosition =
-              target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
-              
-            window.scrollTo({ top: targetPosition, behavior: "smooth" });
-          }
-        }, 100);
+        // Scroll to the top of the page
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
       });
     },
 
@@ -229,15 +228,27 @@ export default {
     // Generates the table of contents
     generateTOC() {
       this.toc = [];
-      const contentElement = this.$el.querySelector(".content");
+      const contentElement = document.querySelector(".content");
+      if (!contentElement) return;
+      
       const headings = contentElement.querySelectorAll("h2");
+      if (!headings.length) return;
 
       this.toc = Array.from(headings).map((heading, index) => {
-        if (!heading.id) heading.id = `heading-${index}`;
-        return { id: heading.id, text: heading.textContent };
+        // Create a simple ID based on index to avoid any issues
+        const headingId = `heading-${index}`;
+        heading.id = headingId;
+        
+        return { 
+          id: headingId, 
+          text: heading.textContent.trim() 
+        };
       });
 
-      if (this.toc.length > 0) this.activeHeading = this.toc[0].id;
+      if (this.toc.length > 0) {
+        this.activeHeading = this.toc[0].id;
+      }
+      
       this.$nextTick(() => this.observeSections());
     },
 
@@ -245,37 +256,52 @@ export default {
     scrollToHeading(id) {
       const target = document.getElementById(id);
       if (target) {
-        const headerOffset = 80;
-        const targetPosition =
-          target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+        // Calculate position accounting for fixed header
+        const headerOffset = 100;
+        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
 
-        window.scrollTo({ top: targetPosition, behavior: "smooth" });
+        // Scroll the window to the target
+        window.scrollTo({ 
+          top: targetPosition, 
+          behavior: "smooth" 
+        });
+        
         this.activeHeading = id;
       }
     },
 
-    // Observes sections for active heading
+    // Observes which section is currently in view
     observeSections() {
-      if (this.observer) this.observer.disconnect();
-
-      const options = {
-        root: null,
-        rootMargin: "0px",
-        threshold: [0.4],
-      };
-
-      this.observer = new IntersectionObserver((entries) => {
-        const visibleEntries = entries.filter((entry) => entry.isIntersecting);
-        if (visibleEntries.length > 0) {
-          visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-          this.activeHeading = visibleEntries[0].target.id;
+      if (!this.toc.length) return;
+      
+      // Clear any existing observer
+      if (this.sectionObserver) {
+        this.sectionObserver.disconnect();
+      }
+      
+      // Create a new IntersectionObserver
+      this.sectionObserver = new IntersectionObserver(
+        (entries) => {
+          // Find the first visible heading
+          const visibleHeading = entries.find(entry => entry.isIntersecting);
+          if (visibleHeading) {
+            this.activeHeading = visibleHeading.target.id;
+          }
+        },
+        {
+          root: null, // Use the viewport
+          rootMargin: "-100px 0px -70% 0px", // Adjust margins to determine when a section is "active"
+          threshold: 0
         }
-      }, options);
-
-      const headings = document.querySelectorAll(".content h2");
-      headings.forEach((heading) => this.observer.observe(heading));
-
-      if (headings.length > 0) this.activeHeading = headings[0].id;
+      );
+      
+      // Observe all headings
+      this.toc.forEach(heading => {
+        const element = document.getElementById(heading.id);
+        if (element) {
+          this.sectionObserver.observe(element);
+        }
+      });
     },
   },
 
@@ -290,38 +316,37 @@ export default {
 </script>
 
 <style scoped>
-.whitepaper-layout {
+.whitepaper-container {
   display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-  height: auto;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
 
 .main-content {
-  display: flex;
   flex: 1;
-  color: white;
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(90deg, #08090cda, #161922da, #08090cd8);
-  background-size: cover;
-  background-attachment: fixed;
-  background-blend-mode: normal;
-  opacity: 0.8;
+  width: 100%;
+  height: auto;
+  padding: 0 20px;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 1;
 }
 
 .content {
-  flex: 1;
-  margin-left: 15%;
-  margin-right: 12%;
-  padding: 5rem 8rem 8rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 0;
+  position: relative;
+  z-index: 1;
 }
 
 .sidebar {
   position: fixed;
   left: 0;
+  top: 0;
   width: 15%;
   height: 100vh;
   padding: 1rem;
@@ -329,6 +354,8 @@ export default {
   flex-direction: column;
   align-items: center;
   border-right: 1px solid #3a3a3a3d;
+  overflow-y: auto;
+
 }
 
 .sidebar ul {
@@ -420,6 +447,7 @@ export default {
 .right-sidebar {
   position: fixed;
   right: 0;
+  top: 0;
   width: 12%;
   height: 100vh;
   padding: 1rem 1rem;
@@ -427,6 +455,9 @@ export default {
   flex-direction: column;
   align-items: right;
   border-left: 1px solid #3a3a3a58;
+  overflow-y: auto;
+  pointer-events: auto;
+  z-index: 5;
 }
 
 .right-sidebar ul {
@@ -680,9 +711,15 @@ export default {
   }
 }
 
-.animated .whitepaper-layout {
-  opacity: 0;
-  animation: fade-in 1.2s ease forwards;
+.animated .whitepaper-layout,
+.animated .sidebar,
+.animated .right-sidebar,
+.animated .content,
+.animated .sidebar ul li,
+.animated .right-sidebar ul li {
+  animation: none;
+  opacity: 1;
+  transform: none;
 }
 
 .animated .sidebar {
@@ -711,20 +748,9 @@ export default {
   animation-delay: calc(0.2s + var(--index) * 0.1s);
 }
 
-@keyframes starWarsScroll {
-  0% {
-    transform: perspective(800px) rotateX(25deg) translateY(100%);
-    opacity: 1;
-  }
-  100% {
-    transform: perspective(800px) rotateX(25deg) translateY(-200%);
-    opacity: 0;
-  }
-}
 
 .content .scrolling-text {
-  position: absolute;
-  width: 100%;
+
   top: 0;
   left: 0;
   font-size: 1rem;
@@ -732,20 +758,14 @@ export default {
   color: #ffffff;
   text-align: center;
   line-height: 1.5;
-  animation: starWarsScroll 15s linear infinite;
-  transform-origin: 50% 100%;
 }
 
-@media (max-width: 1024px) {
-  .content {
-    margin-left: 15%;
-    margin-right: 15%;
-    padding: 5rem 5rem 5rem;
-  }
+@media (max-width: 1280px) {
 
   .content {
     margin-right: 1rem;
-    margin-left: 12rem;
+    margin-left: 14rem;
+    max-width: 900px;
     padding: 5rem 2rem 1rem;
     width: 100%;
   }
@@ -762,6 +782,12 @@ export default {
 .markdown-content > * {
   transform-origin: bottom top;
   transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+@media (max-width: 1024px) {
+  .content {
+    max-width: 600px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -787,5 +813,3 @@ export default {
   }
 }
 </style>
-
-    
