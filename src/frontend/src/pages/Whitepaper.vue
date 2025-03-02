@@ -409,8 +409,8 @@ export default {
 
 .content-wrapper {
   max-width: 100%;
-  margin: 3rem auto;
-  padding: 2rem 2rem;
+  margin: 2rem auto;
+  padding: 2rem 16rem;
   position: relative;
 }
 
@@ -680,6 +680,13 @@ export default {
 
 /* Responsive styles */
 @media (max-width: 1280px) {
+
+  .content-wrapper {
+  max-width: 100%;
+  margin: 2rem auto;
+  padding: 2rem 2rem;
+  position: relative;
+}
   .whitepaper-container {
     grid-template-columns: 200px 1fr;
     grid-template-areas: "left-sidebar main-content";
