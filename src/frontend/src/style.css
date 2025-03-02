@@ -144,6 +144,8 @@ a:hover {
 
 .markdown-content {
   line-height: 1.5;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  max-width: 100%;
 }
 
 /* Headings */
@@ -291,13 +293,18 @@ a:hover {
   font-size: 0.9rem;
   background: #1d2537b3;
   color: white;
+  table-layout: fixed; /* Fixed layout ensures columns don't expand based on content */
+  max-width: 100%; /* Ensure table doesn't exceed container width */
 }
 
 .markdown-content th,
 .markdown-content td {
   border: 1px solid #3a3a3a;
   padding: .5rem .5rem;
-  text-align: center;
+  text-align: left;
+  word-wrap: break-word; /* Allow words to break and wrap */
+  overflow-wrap: break-word;
+  white-space: normal; /* Prevent nowrap behavior */
 }
 
 .markdown-content th {
@@ -308,8 +315,16 @@ a:hover {
 @media (max-width: 768px) {
   .markdown-content table {
     display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+    overflow-x: visible; /* Change from auto to visible to prevent horizontal scrolling */
+    white-space: normal; /* Change from nowrap to normal to allow text wrapping */
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .markdown-content td, 
+  .markdown-content th {
+    max-width: 100%;
+    word-break: break-word;
   }
 }
 

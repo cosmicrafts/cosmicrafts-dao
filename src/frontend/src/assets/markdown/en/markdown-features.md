@@ -4,8 +4,6 @@ This guide demonstrates all the enhanced Markdown features available in the Cosm
 
 ## Table of Contents
 
-[[toc]]
-
 ## Basic Markdown
 
 ### Text Formatting

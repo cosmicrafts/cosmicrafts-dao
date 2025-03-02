@@ -34,7 +34,7 @@ The gaming industry is at a turning point, and the need for innovation has never
 ## The Solution
 
 ::: warning Reality Check
-Let's keep it real—most projects claim to be "unique," but we know execution is what matters. Here's why Cosmicrafts delivers where others don't:
+Let's keep it real—most projects claim to be "unique," but we know execution is what matters. Here's why Cosmicrafts delivers:
 :::
 
 ### 1. A Polished Product, Ready to Scale
