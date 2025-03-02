@@ -5,7 +5,6 @@
 <script>
 import MarkdownIt from "markdown-it";
 import markdownItAnchor from "markdown-it-anchor";
-// Import only the plugins that are working correctly
 import markdownItContainer from "markdown-it-container";
 import markdownItHighlightjs from "markdown-it-highlightjs";
 
@@ -23,6 +22,46 @@ export default {
   },
   mounted() {
     this.loadMarkdown(this.$i18n.locale);
+
+    // Load Mermaid from CDN
+    const mermaidScript = document.createElement('script');
+    mermaidScript.src = 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js';
+    mermaidScript.onload = () => {
+      // Initialize Mermaid with custom theme
+      window.mermaid.initialize({ 
+        startOnLoad: false, // Important: set to false for manual initialization
+        theme: 'dark',
+        themeVariables: {
+          primaryColor: '#00c3ff',
+          primaryTextColor: '#ffffff',
+          primaryBorderColor: '#00c3ff',
+          lineColor: '#00c3ff',
+          secondaryColor: '#ffa200',
+          tertiaryColor: '#121725',
+          background: '#1d2537',
+          mainBkg: '#1d2537',
+          secondaryBorderColor: '#ffa200',
+          textColor: '#ffffff',
+          nodeBorder: '#00c3ff',
+          clusterBkg: '#121725',
+          titleColor: '#00c3ff',
+          edgeLabelBackground: '#121725',
+          nodeTextColor: '#ffffff'
+        },
+        securityLevel: 'loose', // Allow rendering of all diagram types
+        flowchart: {
+          htmlLabels: true,
+          curve: 'basis'
+        },
+        sequence: {
+          diagramMarginX: 50,
+          diagramMarginY: 10,
+          actorMargin: 50
+        }
+      });
+      this.renderMermaidDiagrams(); // Ensure `this` refers to the Vue instance
+    };
+    document.head.appendChild(mermaidScript);
 
     // Add click listener for internal links
     this.$el.addEventListener("click", (event) => {
@@ -68,6 +107,14 @@ export default {
       }
     },
     renderMarkdown(content) {
+      // Replace Mermaid code blocks with a placeholder
+      const mermaidRegex = /```mermaid([\s\S]*?)```/g;
+      let processedContent = content.replace(mermaidRegex, (match, diagram) => {
+        // Trim whitespace and ensure the diagram has proper syntax
+        const trimmedDiagram = diagram.trim();
+        return `<pre class="mermaid">${trimmedDiagram}</pre>`;
+      });
+
       // Add basic emoji support manually
       const emojiMap = {
         ':rocket:': '🚀',
@@ -98,7 +145,6 @@ export default {
       };
       
       // Replace emoji shortcodes in the content
-      let processedContent = content;
       Object.keys(emojiMap).forEach(shortcode => {
         const regex = new RegExp(shortcode, 'g');
         processedContent = processedContent.replace(regex, emojiMap[shortcode]);
@@ -234,6 +280,28 @@ export default {
             tocPlaceholder.appendChild(toc);
           }
         }
+        
+        // Render Mermaid diagrams after content is fully loaded
+        this.renderMermaidDiagrams();
+      });
+    },
+    renderMermaidDiagrams() {
+      this.$nextTick(() => {
+        // Clear any existing diagrams first
+        const mermaidDivs = document.querySelectorAll('.mermaid');
+        if (mermaidDivs.length > 0 && window.mermaid) {
+          try {
+            // For Mermaid 11.4.1, we need to use run() instead of init()
+            window.mermaid.run({
+              querySelector: '.mermaid',
+              nodes: Array.from(mermaidDivs)
+            }).catch(error => {
+              console.error('Error rendering mermaid diagrams:', error);
+            });
+          } catch (error) {
+            console.error('Error initializing mermaid diagrams:', error);
+          }
+        }
       });
     },
   },
@@ -319,5 +387,60 @@ h3 .header-anchor:hover {
 
 .task-list-item-checkbox {
   margin-right: 0.5rem;
+}
+
+/* Mermaid diagram styles */
+.mermaid {
+  background-color: rgba(29, 37, 55, 0.7);
+  border-radius: var(--radius-medium);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-left: 3px solid var(--color-primary);
+  overflow: auto;
+  text-align: center;
+}
+
+/* Remove pre default styling */
+pre.mermaid {
+  white-space: pre-wrap;
+  font-family: inherit;
+}
+
+/* Enhance mermaid diagram text */
+.mermaid text {
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: 500 !important;
+}
+
+/* Style for pie charts */
+.mermaid .pieCircle {
+  stroke: #121725 !important;
+  stroke-width: 2px !important;
+}
+
+/* Style for flowcharts */
+.mermaid .node rect, 
+.mermaid .node circle, 
+.mermaid .node ellipse, 
+.mermaid .node polygon, 
+.mermaid .node path {
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.5)) !important;
+}
+
+/* Style for sequence diagrams */
+.mermaid .actor {
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.5)) !important;
+}
+
+/* Style for gantt charts */
+.mermaid .section {
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.5)) !important;
+}
+
+/* Style for mermaid SVG */
+.mermaid svg {
+  max-width: 100%;
+  height: auto !important;
 }
 </style>
