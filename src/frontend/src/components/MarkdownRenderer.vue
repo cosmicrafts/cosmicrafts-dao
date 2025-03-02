@@ -74,6 +74,24 @@ export default {
           this.$emit("navigateToSection", sectionId); // Emit event for parent to handle
         }
       }
+      
+      // Handle TOC toggle
+      if (target.classList.contains('toc-toggle') || target.parentElement.classList.contains('toc-toggle')) {
+        const tocElement = target.closest('.toc-container').querySelector('.toc-content');
+        if (tocElement) {
+          tocElement.classList.toggle('toc-expanded');
+          
+          // Update the toggle icon
+          const toggleIcon = target.closest('.toc-container').querySelector('.toc-toggle-icon');
+          if (toggleIcon) {
+            if (tocElement.classList.contains('toc-expanded')) {
+              toggleIcon.textContent = '▼';
+            } else {
+              toggleIcon.textContent = '▶';
+            }
+          }
+        }
+      }
     });
   },
   watch: {
@@ -237,7 +255,15 @@ export default {
       // Only replace TOC placeholder if it exists in the content
       const tocRegex = /\[\[toc\]\]/gi;
       if (tocRegex.test(processedContent)) {
-        processedContent = processedContent.replace(tocRegex, `<div class="toc-container"><h3>Table of Contents</h3><div id="toc-placeholder-${this.fileName}"></div></div>`);
+        processedContent = processedContent.replace(tocRegex, `<div class="toc-container">
+          <div class="toc-header">
+            <h3 class="toc-title">Table of Contents</h3>
+            <button class="toc-toggle" aria-label="Toggle Table of Contents">
+              <span class="toc-toggle-icon">▶</span>
+            </button>
+          </div>
+          <div class="toc-content" id="toc-placeholder-${this.fileName}"></div>
+        </div>`);
       }
       
       // Simple task list replacement
@@ -321,9 +347,59 @@ export default {
   border-left: 3px solid var(--color-primary);
 }
 
+.toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toc-title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--color-primary);
+}
+
+.toc-toggle {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background-color: rgba(0, 195, 255, 0.1);
+  border-radius: var(--radius-small);
+}
+
+.toc-toggle:hover {
+  background-color: rgba(0, 195, 255, 0.2);
+}
+
+.toc-toggle-icon {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.toc-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.toc-content.toc-expanded {
+  max-height: 500px; /* Adjust based on your needs */
+  overflow-y: auto;
+  margin-top: 1rem;
+}
+
 .toc-container ul {
   list-style-type: none;
   padding-left: 1rem;
+  margin: 0;
 }
 
 .toc-container li {

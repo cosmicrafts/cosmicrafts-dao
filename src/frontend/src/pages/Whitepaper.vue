@@ -295,7 +295,6 @@ export default {
 /* Left sidebar styles */
 .left-sidebar {
   grid-area: left-sidebar;
-  background-color: var(--color-background-secondary, #121725);
   border-right: 1px solid rgba(58, 58, 58, 0.24);
   height: 100%;
   overflow: hidden;
@@ -409,16 +408,15 @@ export default {
 }
 
 .content-wrapper {
-  max-width: 800px;
+  max-width: 100%;
   margin: 3rem auto;
-  padding: 40px 20px;
+  padding: 2rem 2rem;
   position: relative;
 }
 
 /* Right sidebar styles */
 .right-sidebar {
   grid-area: right-sidebar;
-  background-color: var(--color-background-secondary, #121725);
   border-left: 1px solid rgba(58, 58, 58, 0.24);
   height: 100%;
   overflow: hidden;
@@ -700,10 +698,6 @@ export default {
   
   .left-sidebar {
     display: none;
-  }
-  
-  .content-wrapper {
-    padding: 20px;
   }
   
   .navigation-buttons {
