@@ -32,4 +32,8 @@ Here’s what the DAO brings to the table:
 7. [Community](#community)
 8. [Sustainability](#sustainability)
 
+
+or
+
+[[toc]]
 ---

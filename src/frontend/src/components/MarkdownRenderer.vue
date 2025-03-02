@@ -234,8 +234,11 @@ export default {
         return defaultLinkRender(tokens, idx, options, env, self);
       };
 
-      // Simple TOC replacement - use a unique ID based on the filename
-      processedContent = processedContent.replace(/\[\[toc\]\]/gi, `<div class="toc-container"><h3>Table of Contents</h3><div id="toc-placeholder-${this.fileName}"></div></div>`);
+      // Only replace TOC placeholder if it exists in the content
+      const tocRegex = /\[\[toc\]\]/gi;
+      if (tocRegex.test(processedContent)) {
+        processedContent = processedContent.replace(tocRegex, `<div class="toc-container"><h3>Table of Contents</h3><div id="toc-placeholder-${this.fileName}"></div></div>`);
+      }
       
       // Simple task list replacement
       processedContent = processedContent.replace(/- \[ \]/g, '- <input type="checkbox" disabled class="task-list-item-checkbox"> ');

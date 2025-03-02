@@ -1,7 +1,5 @@
 # Governance
 
-[[toc]]
-
 ## Introduction
 
 ::: info Decentralized Governance

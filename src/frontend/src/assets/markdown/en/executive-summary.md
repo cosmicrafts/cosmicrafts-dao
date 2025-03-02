@@ -1,6 +1,5 @@
 # Executive Summary
 ![Executive Summary](executivesummary.webp)
-
 [[toc]]
 
 ## Overview
@@ -115,3 +114,4 @@ The following sections will give you the complete picture of Cosmicrafts – the
 :::
 
 ---
+

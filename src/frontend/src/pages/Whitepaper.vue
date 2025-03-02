@@ -1,10 +1,8 @@
 <template>
-  <div class="whitepaper-layout animated">
-    <!-- Main Layout -->
-    <div class="main-content">
-
-      <!-- Sidebar (Left) -->
-      <aside class="sidebar">
+  <div class="whitepaper-container">
+    <!-- Left Sidebar (Navigation) -->
+    <aside class="left-sidebar">
+      <div class="sidebar-content">
         <ul>
           <li
             v-for="section in sections"
@@ -15,11 +13,12 @@
             {{ section.title }}
           </li>
         </ul>
-      </aside>
+      </div>
+    </aside>
 
-      <!-- Main Content -->
-      <div class="content">
-
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="content-wrapper">
         <!-- Content Transition and Markdown Rendering -->
         <transition
           name="fade-slide"
@@ -63,11 +62,12 @@
             </button>
           </transition>
         </div>
-
       </div>
+    </main>
 
-      <!-- Right Sidebar (Table of Contents) -->
-      <aside class="right-sidebar">
+    <!-- Right Sidebar (Table of Contents) -->
+    <aside class="right-sidebar">
+      <div class="sidebar-content">
         <transition name="fade-slide-toc">
           <ul v-if="toc.length > 0">
             <li
@@ -80,9 +80,8 @@
             </li>
           </ul>
         </transition>
-      </aside>
-
-    </div>
+      </div>
+    </aside>
   </div>
 </template>
 
@@ -139,54 +138,6 @@ export default {
     },
   },
   methods: {
-    // Handles the dynamic parallax effect
-    applyDynamicParallaxEffect() {
-      const mdContent = document.querySelectorAll('.content .markdown-content > *');
-      if (!mdContent.length) return;
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            const boundingClientRect = entry.target.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-
-            const midpoint = viewportHeight * 0.5;
-            const distanceFromMidpoint = Math.abs(
-              boundingClientRect.top - midpoint
-            );
-            const scaleFactor =
-              1 + Math.max(0, 1 - distanceFromMidpoint / (viewportHeight * 0.75)) * 0.05;
-
-            if (entry.isIntersecting) {
-              entry.target.style.transform = `scale(${scaleFactor})`;
-              entry.target.style.opacity = `${
-                0.75 + Math.min(1, 1 - distanceFromMidpoint / viewportHeight)
-              }`;
-            } else {
-              entry.target.style.transform = `scale(1)`;
-              entry.target.style.opacity = `1`;
-            }
-          });
-        },
-        { root: null, threshold: 0 } // Use the viewport as the root
-      );
-
-      mdContent.forEach((el) => observer.observe(el));
-    },
-
-    // Observes rendered content for changes
-    observeRenderedContent() {
-      const contentElement = document.querySelector(".content");
-      if (!contentElement) return;
-      
-      const observer = new MutationObserver(() => {
-        // Only apply parallax effect if it doesn't interfere with scrolling
-        setTimeout(() => this.applyDynamicParallaxEffect(), 100);
-      });
-
-      observer.observe(contentElement, { childList: true, subtree: true });
-    },
-
     // Changes the active section
     changeSection(sectionId) {
       this.activeSection = sectionId;
@@ -195,11 +146,11 @@ export default {
       this.$nextTick(() => {
         this.generateTOC();
         
-        // Scroll to the top of the page
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        });
+        // Scroll to the top of the main content
+        const mainContent = document.querySelector(".main-content");
+        if (mainContent) {
+          mainContent.scrollTop = 0;
+        }
       });
     },
 
@@ -228,7 +179,7 @@ export default {
     // Generates the table of contents
     generateTOC() {
       this.toc = [];
-      const contentElement = document.querySelector(".content");
+      const contentElement = document.querySelector(".main-content");
       if (!contentElement) return;
       
       const headings = contentElement.querySelectorAll("h2");
@@ -256,16 +207,23 @@ export default {
     scrollToHeading(id) {
       const target = document.getElementById(id);
       if (target) {
-        // Calculate position accounting for fixed header
+        // Calculate the header offset (adjust this value if you have a fixed header)
         const headerOffset = 100;
-        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
 
-        // Scroll the window to the target
-        window.scrollTo({ 
-          top: targetPosition, 
-          behavior: "smooth" 
+        // Get the main content element for scrolling
+        const mainContent = document.querySelector(".main-content");
+        if (!mainContent) return;
+
+        // Calculate the target position relative to the main content
+        const targetPosition = target.offsetTop - headerOffset;
+
+        // Scroll the main content to the target
+        mainContent.scrollTo({
+          top: targetPosition,
+          behavior: "smooth"
         });
-        
+
+        // Update the active heading
         this.activeHeading = id;
       }
     },
@@ -289,7 +247,7 @@ export default {
           }
         },
         {
-          root: null, // Use the viewport
+          root: document.querySelector('.main-content'), // Use main-content as the viewport
           rootMargin: "-100px 0px -70% 0px", // Adjust margins to determine when a section is "active"
           threshold: 0
         }
@@ -310,65 +268,54 @@ export default {
     this.updateButtonVisibility();
     this.generateTOC();
     this.$nextTick(() => this.observeSections());
-    this.observeRenderedContent();
+    
+    // Apply animation classes after component is mounted
+    setTimeout(() => {
+      const container = document.querySelector('.whitepaper-container');
+      if (container) {
+        container.classList.add('animated');
+      }
+    }, 100);
   },
 };
 </script>
 
-<style scoped>
+<style>
+/* Main container layout */
 .whitepaper-container {
-  display: flex;
-  width: 100%;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-}
-
-.main-content {
-  flex: 1;
-  width: 100%;
-  height: auto;
-  padding: 0 20px;
-  position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
-  z-index: 1;
-}
-
-.content {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px 0;
-  position: relative;
-  z-index: 1;
-}
-
-.sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 15%;
+  display: grid;
+  grid-template-columns: 250px 1fr 250px;
+  grid-template-areas: "left-sidebar main-content right-sidebar";
   height: 100vh;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-right: 1px solid #3a3a3a3d;
-  overflow-y: auto;
-
+  width: 100%;
+  overflow: hidden;
+  position: relative;
 }
 
-.sidebar ul {
+/* Left sidebar styles */
+.left-sidebar {
+  grid-area: left-sidebar;
+  background-color: var(--color-background-secondary, #121725);
+  border-right: 1px solid rgba(58, 58, 58, 0.24);
+  height: 100%;
+  overflow: hidden;
+}
+
+.left-sidebar .sidebar-content {
+  height: 100%;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.left-sidebar ul {
   font-size: 0.9rem;
   font-weight: bold;
-  justify-content: center;
-  align-items: center;
   margin-top: 5rem;
   list-style: none;
   padding: 0;
 }
 
-.sidebar li {
+.left-sidebar li {
   position: relative;
   cursor: pointer;
   margin-bottom: 1rem;
@@ -380,7 +327,7 @@ export default {
   text-align: left;
 }
 
-.sidebar li:hover {
+.left-sidebar li:hover {
   color: #00c3ff;
   border-bottom: 1px solid #00c3ff;
   border-top: 1px solid #00c3ff;
@@ -390,8 +337,8 @@ export default {
   margin-left: 0.25rem;
 }
 
-.sidebar li::before,
-.sidebar li::after {
+.left-sidebar li::before,
+.left-sidebar li::after {
   content: '';
   position: absolute;
   height: 1.5px;
@@ -402,25 +349,25 @@ export default {
   transform: scaleX(0);
 }
 
-.sidebar li::before {
+.left-sidebar li::before {
   top: -1px;
   left: -0.25rem;
   transform-origin: left;
 }
 
-.sidebar li::after {
+.left-sidebar li::after {
   bottom: -1px;
   right: -0.25rem;
   transform-origin: right;
 }
 
-.sidebar li:hover::before,
-.sidebar li:hover::after {
+.left-sidebar li:hover::before,
+.left-sidebar li:hover::after {
   transform: scaleX(1.5);
   box-shadow: 0px 0px 8px rgb(255, 162, 0);
 }
 
-.sidebar li.active {
+.left-sidebar li.active {
   color: #00c3ff;
   font-weight: bold;
   font-size: 1rem;
@@ -433,31 +380,54 @@ export default {
   margin-left: -0.5rem;
 }
 
-.sidebar li.active::before,
-.sidebar li.active::after {
+.left-sidebar li.active::before,
+.left-sidebar li.active::after {
   display: none;
 }
 
-.sidebar li,
-.sidebar li:hover,
-.sidebar li.active {
-  transition: all 0.3s ease-in-out;
+/* Main content styles */
+.main-content {
+  grid-area: main-content;
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
 
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.content-wrapper {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 40px 20px;
+  position: relative;
+}
+
+/* Right sidebar styles */
 .right-sidebar {
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 12%;
-  height: 100vh;
-  padding: 1rem 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: right;
-  border-left: 1px solid #3a3a3a58;
+  grid-area: right-sidebar;
+  background-color: var(--color-background-secondary, #121725);
+  border-left: 1px solid rgba(58, 58, 58, 0.24);
+  height: 100%;
+  overflow: hidden;
+}
+
+.right-sidebar .sidebar-content {
+  height: 100%;
   overflow-y: auto;
-  pointer-events: auto;
-  z-index: 5;
+  padding: 1rem;
 }
 
 .right-sidebar ul {
@@ -549,51 +519,13 @@ export default {
   display: none;
 }
 
-.right-sidebar li,
-.right-sidebar li:hover,
-.right-sidebar li.active {
-  transition: all 0.3s ease-in-out;
-}
-
-.fade-slide-toc-enter-active {
-  top: 0;
-  left: 0;
-  width: 100%;
-  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.fade-slide-toc-leave-active {
-  top: 0;
-  left: 0;
-  width: 100%;
-  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.fade-slide-toc-enter-from {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.fade-slide-toc-enter-to {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.fade-slide-toc-leave-from {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.fade-slide-toc-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
+/* Navigation buttons */
 .navigation-buttons {
   display: flex;
   justify-content: center;
   gap: 2rem;
   margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .navigation-buttons .button {
@@ -644,18 +576,13 @@ export default {
   right: 1rem;
 }
 
-.fade-slide-leave-active {
-  top: 0;
-  left: 0;
-  width: 100%;
-  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+/* Transitions */
+.fade-slide-enter-active {
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.fade-slide-enter-active {
-  top: 0;
-  left: 0;
-  width: 100%;
-  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+.fade-slide-leave-active {
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fade-slide-enter-from {
@@ -678,6 +605,35 @@ export default {
   transform: translateY(-20px);
 }
 
+.fade-slide-toc-enter-active {
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-slide-toc-leave-active {
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-slide-toc-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.fade-slide-toc-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-slide-toc-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-slide-toc-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Animations */
 @keyframes slide-in-left {
   from {
     transform: translateX(-100%);
@@ -711,105 +667,51 @@ export default {
   }
 }
 
-.animated .whitepaper-layout,
-.animated .sidebar,
-.animated .right-sidebar,
-.animated .content,
-.animated .sidebar ul li,
-.animated .right-sidebar ul li {
-  animation: none;
-  opacity: 1;
-  transform: none;
-}
-
-.animated .sidebar {
-  transform: translateX(-100%);
-  opacity: 0;
+.whitepaper-container.animated .left-sidebar {
   animation: slide-in-left 0.8s ease forwards;
 }
 
-.animated .right-sidebar {
-  transform: translateX(100%);
-  opacity: 0;
+.whitepaper-container.animated .right-sidebar {
   animation: slide-in-right 0.8s ease forwards 0.2s;
 }
 
-.animated .content {
+.whitepaper-container.animated .main-content {
   opacity: 0;
-  transform: translateY(20px);
   animation: fade-in 1s ease forwards 0.4s;
 }
 
-.animated .sidebar ul li,
-.animated .right-sidebar ul li {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fade-in 0.6s ease forwards;
-  animation-delay: calc(0.2s + var(--index) * 0.1s);
-}
-
-
-.content .scrolling-text {
-
-  top: 0;
-  left: 0;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #ffffff;
-  text-align: center;
-  line-height: 1.5;
-}
-
+/* Responsive styles */
 @media (max-width: 1280px) {
-
-  .content {
-    margin-right: 1rem;
-    margin-left: 14rem;
-    max-width: 900px;
-    padding: 5rem 2rem 1rem;
-    width: 100%;
+  .whitepaper-container {
+    grid-template-columns: 200px 1fr;
+    grid-template-areas: "left-sidebar main-content";
   }
-
+  
   .right-sidebar {
     display: none;
-  }
-
-  .sidebar {
-    padding: 1.5rem;
-  }
-}
-
-.markdown-content > * {
-  transform-origin: bottom top;
-  transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-}
-
-@media (max-width: 1024px) {
-  .content {
-    max-width: 600px;
   }
 }
 
 @media (max-width: 768px) {
-  .sidebar,
-  .right-sidebar {
+  .whitepaper-container {
+    grid-template-columns: 1fr;
+    grid-template-areas: "main-content";
+  }
+  
+  .left-sidebar {
     display: none;
   }
-
-  .content {
-    margin: 0;
-    padding: 5rem 2rem 2rem;
-    width: 100%;
+  
+  .content-wrapper {
+    padding: 20px;
   }
-
-  .navigation-buttons .button {
-    padding: 1rem 1rem;
-    position: relative;
-  }
-
+  
   .navigation-buttons {
-    display: flex;
     gap: 1rem;
+  }
+  
+  .navigation-buttons .button {
+    padding: 0.8rem;
   }
 }
 </style>

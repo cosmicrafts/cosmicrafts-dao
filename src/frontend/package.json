@@ -39,6 +39,7 @@
     "brotli-wasm": "^3.0.1",
     "buffer": "^6.0.3",
     "highlight.js": "^11.9.0",
+    "lodash-es": "^4.17.21",
     "lottie-web": "^5.12.2",
     "markdown-it": "^14.1.0",
     "markdown-it-anchor": "^9.2.0",
