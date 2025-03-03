@@ -16,6 +16,7 @@ const loading = ref<boolean>(false);
 const currentMessage = ref<string>("");
 
 const chatWindow = ref<HTMLElement | null>(null);
+const chatToggle = ref<HTMLElement | null>(null); // Reference to the chat toggle button
 const isDragging = ref<boolean>(false);
 const isResizing = ref<boolean>(false);
 const startX = ref<number>(0);
@@ -24,6 +25,41 @@ const startWidth = ref<number>(0);
 const startHeight = ref<number>(0);
 const offsetX = ref<number>(0);
 const offsetY = ref<number>(0);
+const isIconDragging = ref<boolean>(false); // Track if the chat icon is being dragged
+const iconStartX = ref<number>(0);
+const iconStartY = ref<number>(0);
+const iconOffsetX = ref<number>(0);
+const iconOffsetY = ref<number>(0);
+const lastTapTime = ref<number>(0); // For detecting double taps on mobile
+const isMaximized = ref<boolean>(false); // Track if the chat window is maximized
+const previousWindowState = ref<{
+  width: string;
+  height: string;
+  left: string;
+  top: string;
+  right: string;
+  bottom: string;
+}>({
+  width: '400px',
+  height: '60vh',
+  left: 'auto',
+  top: 'auto',
+  right: '1rem',
+  bottom: '6rem'
+});
+const iconPosition = ref<{ left: string; bottom: string | null; right: string | null; top: string | null }>({
+  left: 'auto',
+  bottom: '1.5rem',
+  right: '1rem',
+  top: null
+});
+// Chat window position
+const windowPosition = ref<{ left: string; bottom: string | null; right: string | null; top: string | null }>({
+  left: 'auto',
+  bottom: '6rem',
+  right: '1rem',
+  top: null
+});
 
 const authStore = useAuthStore();
 const languageStore = useLanguageStore();
@@ -31,20 +67,68 @@ const MAX_HISTORY_TOKENS = 1000; // Adjust for performance
 const showEmojiPicker = ref<boolean>(false);
 const chatInput = ref<HTMLElement | null>(null); // Reference for the input box
 
+// Load saved position from localStorage
+const loadIconPosition = (): void => {
+  const savedPosition = localStorage.getItem('chatIconPosition');
+  if (savedPosition) {
+    try {
+      iconPosition.value = JSON.parse(savedPosition);
+    } catch (e) {
+      console.error('Error parsing saved icon position:', e);
+      // Reset to default position if parsing fails
+      iconPosition.value = {
+        left: 'auto',
+        bottom: '1.5rem',
+        right: '1rem',
+        top: null
+      };
+    }
+  }
+};
+
+// Save position to localStorage
+const saveIconPosition = (): void => {
+  // Ensure we're not saving null or undefined values
+  if (iconPosition.value) {
+    // Make sure we have at least one valid position property
+    const hasValidPosition = 
+      (iconPosition.value.left && iconPosition.value.left !== 'auto') || 
+      (iconPosition.value.top && iconPosition.value.top !== null);
+    
+    if (hasValidPosition) {
+      localStorage.setItem('chatIconPosition', JSON.stringify(iconPosition.value));
+      console.log('Saved icon position:', iconPosition.value);
+    }
+  }
+};
+
+// Load saved window position from localStorage
+const loadWindowPosition = (): void => {
+  const savedPosition = localStorage.getItem('chatWindowPosition');
+  if (savedPosition) {
+    windowPosition.value = JSON.parse(savedPosition);
+  }
+};
+
+// Save window position to localStorage
+const saveWindowPosition = (): void => {
+  localStorage.setItem('chatWindowPosition', JSON.stringify(windowPosition.value));
+};
+
 const injectMemory = async (userId: string, newMessage: string) => {
   console.log(`Building structured memory for user: ${userId}`);
 
   // ✅ User Profile (expanded)
   const userProfile = {
-    username: authStore.player?.username || "guest",
-    language: languages.find(lang => lang.code === (authStore.player?.language || "en"))?.label || "English",
-    faction: authStore.player?.faction || "Unknown",
-    level: authStore.player?.level || 1,
-    experience: authStore.player?.experience || 0,
-    rank: authStore.player?.rank || "Unranked",
-    resources: authStore.player?.resources || {},
-    achievements: authStore.player?.achievements || [],
-    lastLogin: authStore.player?.lastLogin || "Unknown",
+    username: (authStore.player as any)?.username || "guest",
+    language: languages.find(lang => lang.code === ((authStore.player as any)?.language || "en"))?.label || "English",
+    faction: (authStore.player as any)?.faction || "Unknown",
+    level: (authStore.player as any)?.level || 1,
+    experience: (authStore.player as any)?.experience || 0,
+    rank: (authStore.player as any)?.rank || "Unranked",
+    resources: (authStore.player as any)?.resources || {},
+    achievements: (authStore.player as any)?.achievements || [],
+    lastLogin: (authStore.player as any)?.lastLogin || "Unknown",
   };
 
   // ✅ Prune chat history before injecting it
@@ -111,14 +195,99 @@ const loadChatHistory = () => {
   }
 };
 
-// 🔥 Load history when component mounts
+// Load saved position on component mount
 onMounted(() => {
   loadChatHistory();
+  loadIconPosition();
+  loadWindowPosition();
+  
+  // Apply saved position to the chat toggle
+  nextTick(() => {
+    if (chatToggle.value) {
+      // Reset transform to ensure proper positioning
+      chatToggle.value.style.transform = 'none';
+      
+      // Clear all position properties first to avoid conflicts
+      chatToggle.value.style.left = 'auto';
+      chatToggle.value.style.top = 'auto';
+      chatToggle.value.style.right = 'auto';
+      chatToggle.value.style.bottom = 'auto';
+      
+      // Only apply saved position if we have valid values
+      const hasValidPosition = iconPosition.value && 
+                              ((iconPosition.value.left && iconPosition.value.left !== 'auto') || 
+                               (iconPosition.value.top && iconPosition.value.top !== null));
+      
+      if (hasValidPosition) {
+        // Apply saved position
+        Object.entries(iconPosition.value).forEach(([key, value]) => {
+          if (value !== null && chatToggle.value) {
+            (chatToggle.value.style as any)[key] = value;
+          }
+        });
+      } else {
+        // Use default position if no valid saved position
+        chatToggle.value.style.right = '1rem';
+        chatToggle.value.style.bottom = '1.5rem';
+        chatToggle.value.style.left = 'auto';
+        chatToggle.value.style.top = 'auto';
+      }
+    }
+    
+    // Apply saved position to the chat window
+    if (chatWindow.value) {
+      // Reset transform to ensure proper positioning
+      chatWindow.value.style.transform = 'none';
+      
+      // Only apply saved position if we have valid values
+      if (windowPosition.value) {
+        Object.entries(windowPosition.value).forEach(([key, value]) => {
+          if (value !== null && chatWindow.value) {
+            (chatWindow.value.style as any)[key] = value;
+          }
+        });
+      }
+    }
+  });
+  
+  // Add global keyboard event listeners
+  document.addEventListener('keydown', handleKeyDown);
 });
+
+// Handle keyboard shortcuts
+const handleKeyDown = (event: KeyboardEvent): void => {
+  // Check if the active element is an input or textarea to avoid interfering with typing
+  const activeElement = document.activeElement;
+  const isInputActive = activeElement instanceof HTMLInputElement || 
+                        activeElement instanceof HTMLTextAreaElement ||
+                        activeElement?.getAttribute('contenteditable') === 'true';
+  
+  // 'C' key to open chat (only when not already open and not typing in an input)
+  if (event.key.toLowerCase() === 'c' && !showChat.value && !isInputActive) {
+    toggleChat();
+    event.preventDefault();
+  }
+  
+  // 'ESC' key to close chat (only when open)
+  if (event.key === 'Escape' && showChat.value) {
+    toggleChat();
+    event.preventDefault();
+  }
+};
 
 // 🔥 Save history after every message
 watch(messages, () => {
   saveChatHistory();
+});
+
+// Focus input whenever chat is opened
+watch(showChat, (newValue) => {
+  if (newValue) {
+    // Chat was opened, focus the input
+    nextTick(() => {
+      focusInput();
+    });
+  }
 });
 
 const pruneChatHistory = () => {
@@ -154,7 +323,7 @@ const sendPrompt = async (): Promise<void> => {
     currentMessage.value = "";
 
     // ✅ Fetch structured memory & inject it
-    const userId = authStore.player?.username || "guest";
+    const userId = (authStore.player as any)?.username || "guest";
     const tempPrompt = await injectMemory(userId, userMessage);
 
     const response: Response = await fetch("http://127.0.0.1:11434/api/generate", {
@@ -228,12 +397,83 @@ const toggleChat = (): void => {
   isAnimating.value = true;
   showChat.value = !showChat.value;
   setTimeout(() => (isAnimating.value = false), 300);
+  
+  // Focus the input when opening chat
+  if (showChat.value) {
+    nextTick(() => {
+      // Ensure the chat window is properly positioned
+      if (chatWindow.value) {
+        // Only reset transform if it's not already set to none
+        if (chatWindow.value.style.transform && chatWindow.value.style.transform !== 'none') {
+          chatWindow.value.style.transform = 'none';
+        }
+        
+        // Apply saved position only if we have valid saved positions
+        if (windowPosition.value) {
+          Object.entries(windowPosition.value).forEach(([key, value]) => {
+            if (value !== null && chatWindow.value) {
+              (chatWindow.value.style as any)[key] = value;
+            }
+          });
+        }
+      }
+      
+      focusInput();
+    });
+  }
+};
+
+// ✅ Toggle maximize/restore chat window
+const toggleMaximize = (): void => {
+  if (!chatWindow.value) return;
+  
+  if (!isMaximized.value) {
+    // Save current state before maximizing
+    previousWindowState.value = {
+      width: chatWindow.value.style.width || '400px',
+      height: chatWindow.value.style.height || '60vh',
+      left: chatWindow.value.style.left || 'auto',
+      top: chatWindow.value.style.top || 'auto',
+      right: chatWindow.value.style.right || '1rem',
+      bottom: chatWindow.value.style.bottom || '6rem'
+    };
+    
+    // Maximize window
+    chatWindow.value.style.width = '100vw';
+    chatWindow.value.style.height = '100vh';
+    chatWindow.value.style.left = '0';
+    chatWindow.value.style.top = '0';
+    chatWindow.value.style.right = 'auto';
+    chatWindow.value.style.bottom = 'auto';
+    chatWindow.value.style.maxWidth = '100vw';
+    chatWindow.value.style.borderRadius = '0';
+    
+    isMaximized.value = true;
+  } else {
+    // Restore to previous state
+    chatWindow.value.style.width = previousWindowState.value.width;
+    chatWindow.value.style.height = previousWindowState.value.height;
+    chatWindow.value.style.left = previousWindowState.value.left;
+    chatWindow.value.style.top = previousWindowState.value.top;
+    chatWindow.value.style.right = previousWindowState.value.right;
+    chatWindow.value.style.bottom = previousWindowState.value.bottom;
+    chatWindow.value.style.maxWidth = '90vw';
+    chatWindow.value.style.borderRadius = '8px';
+    
+    isMaximized.value = false;
+  }
+  
+  // Scroll to bottom after resize
+  nextTick(() => {
+    scrollToBottom();
+  });
 };
 
 // ✅ Make chat resizable from edges/corners
 const startResize = (event: MouseEvent): void => {
-  if (!chatWindow.value) return;
-
+  if (!chatWindow.value || isMaximized.value) return; // Don't allow resize when maximized
+  
+  event.preventDefault();
   isResizing.value = true;
   startX.value = event.clientX;
   startY.value = event.clientY;
@@ -247,11 +487,21 @@ const startResize = (event: MouseEvent): void => {
 const resizeChat = (event: MouseEvent): void => {
   if (!isResizing.value || !chatWindow.value) return;
 
-  const newWidth: number = startWidth.value + (event.clientX - startX.value);
-  const newHeight: number = startHeight.value + (event.clientY - startY.value);
-
-  chatWindow.value.style.width = `${Math.max(300, newWidth)}px`;
-  chatWindow.value.style.height = `${Math.max(300, newHeight)}px`;
+  // Calculate width and height changes
+  const deltaX: number = event.clientX - startX.value;
+  const deltaY: number = event.clientY - startY.value;
+  
+  // Calculate new dimensions
+  const newWidth: number = Math.max(300, startWidth.value + deltaX);
+  const newHeight: number = Math.max(300, startHeight.value + deltaY);
+  
+  // Apply new dimensions directly for immediate response
+  chatWindow.value.style.width = `${newWidth}px`;
+  chatWindow.value.style.height = `${newHeight}px`;
+  
+  // Update the previous window state with new dimensions
+  previousWindowState.value.width = chatWindow.value.style.width;
+  previousWindowState.value.height = chatWindow.value.style.height;
 };
 
 const stopResize = (): void => {
@@ -262,9 +512,14 @@ const stopResize = (): void => {
 
 // ✅ Make chat draggable
 const startDrag = (event: MouseEvent): void => {
-  if (!chatWindow.value) return;
+  if (!chatWindow.value || isMaximized.value) return; // Don't allow drag when maximized
+  
+  // Prevent default to avoid text selection during drag
+  event.preventDefault();
 
   isDragging.value = true;
+  startX.value = event.clientX;
+  startY.value = event.clientY;
   offsetX.value = event.clientX - chatWindow.value.getBoundingClientRect().left;
   offsetY.value = event.clientY - chatWindow.value.getBoundingClientRect().top;
 
@@ -272,29 +527,326 @@ const startDrag = (event: MouseEvent): void => {
   document.addEventListener("mouseup", stopDrag);
 };
 
-const dragChat = (event: MouseEvent): void => {
+const dragChat = (event: MouseEvent | TouchEvent): void => {
   if (!isDragging.value || !chatWindow.value) return;
+  
+  event.preventDefault();
+  
+  let clientX: number;
+  let clientY: number;
+  
+  if ('touches' in event) {
+    // Touch event
+    clientX = event.touches[0].clientX;
+    clientY = event.touches[0].clientY;
+  } else {
+    // Mouse event
+    clientX = event.clientX;
+    clientY = event.clientY;
+  }
 
-  const x: number = event.clientX - offsetX.value;
-  const y: number = event.clientY - offsetY.value;
+  // Calculate new position
+  const x: number = clientX - offsetX.value;
+  const y: number = clientY - offsetY.value;
+  
+  // Get viewport dimensions
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  
+  // Get window dimensions
+  const windowWidth = chatWindow.value.offsetWidth;
+  const windowHeight = chatWindow.value.offsetHeight;
+  
+  // Ensure the window stays within viewport bounds
+  const boundedX = Math.max(0, Math.min(x, viewportWidth - windowWidth));
+  const boundedY = Math.max(0, Math.min(y, viewportHeight - windowHeight));
 
-  chatWindow.value.style.left = `${x}px`;
-  chatWindow.value.style.top = `${y}px`;
+  // Apply transform directly for immediate response
+  chatWindow.value.style.transform = `translate3d(${boundedX}px, ${boundedY}px, 0)`;
+  chatWindow.value.style.left = '0';
+  chatWindow.value.style.top = '0';
+  chatWindow.value.style.right = 'auto';
+  chatWindow.value.style.bottom = 'auto';
+  
+  // Update position ref for saving (we'll convert transform to actual position on stopDrag)
+  windowPosition.value = {
+    left: `${boundedX}px`,
+    top: `${boundedY}px`,
+    right: null as unknown as string,
+    bottom: null as unknown as string
+  };
 };
 
 const stopDrag = (): void => {
-  isDragging.value = false;
-  document.removeEventListener("mousemove", dragChat);
-  document.removeEventListener("mouseup", stopDrag);
+  if (isDragging.value && chatWindow.value) {
+    isDragging.value = false;
+    
+    // Convert transform to actual position
+    const transform = chatWindow.value.style.transform;
+    const matches = transform.match(/translate3d\(([^,]+),\s*([^,]+),\s*[^)]+\)/);
+    
+    if (matches && matches.length >= 3) {
+      const x = matches[1];
+      const y = matches[2];
+      
+      // Apply the final position
+      chatWindow.value.style.transform = 'none';
+      chatWindow.value.style.left = x;
+      chatWindow.value.style.top = y;
+      chatWindow.value.style.right = 'auto';
+      chatWindow.value.style.bottom = 'auto';
+      
+      // Update position ref
+      windowPosition.value = {
+        left: x,
+        top: y,
+        right: null as unknown as string,
+        bottom: null as unknown as string
+      };
+      
+      // Save the new position
+      saveWindowPosition();
+    }
+    
+    // Remove event listeners
+    document.removeEventListener("mousemove", dragChat);
+    document.removeEventListener("mouseup", stopDrag);
+    document.removeEventListener("touchmove", dragChat);
+    document.removeEventListener("touchend", stopDrag);
+  }
 };
 
-// ✅ Cleanup event listeners on unmount
-onUnmounted(() => {
-  document.removeEventListener("mousemove", dragChat);
-  document.removeEventListener("mouseup", stopDrag);
-  document.removeEventListener("mousemove", resizeChat);
-  document.removeEventListener("mouseup", stopResize);
-});
+// ✅ Touch event handlers for chat window
+const handleWindowTouchStart = (event: TouchEvent): void => {
+  if (!chatWindow.value || event.touches.length !== 1 || isMaximized.value) return;
+  
+  // Don't start drag if we're touching inside the input area
+  if ((event.target as HTMLElement).closest('.input-area') || 
+      (event.target as HTMLElement).closest('.chat-input')) {
+    return;
+  }
+  
+  isDragging.value = true;
+  const touch = event.touches[0];
+  startX.value = touch.clientX;
+  startY.value = touch.clientY;
+  offsetX.value = touch.clientX - chatWindow.value.getBoundingClientRect().left;
+  offsetY.value = touch.clientY - chatWindow.value.getBoundingClientRect().top;
+  
+  document.addEventListener("touchmove", dragChat, { passive: false });
+  document.addEventListener("touchend", stopDrag);
+};
+
+// ✅ Touch support for resize handle
+const handleResizeTouchStart = (event: TouchEvent): void => {
+  if (!chatWindow.value || event.touches.length !== 1 || isMaximized.value) return;
+  
+  event.preventDefault();
+  isResizing.value = true;
+  const touch = event.touches[0];
+  startX.value = touch.clientX;
+  startY.value = touch.clientY;
+  startWidth.value = chatWindow.value.offsetWidth;
+  startHeight.value = chatWindow.value.offsetHeight;
+  
+  document.addEventListener("touchmove", resizeTouchMove, { passive: false });
+  document.addEventListener("touchend", stopResize);
+};
+
+const resizeTouchMove = (event: TouchEvent): void => {
+  if (!isResizing.value || !chatWindow.value) return;
+  
+  event.preventDefault();
+  const touch = event.touches[0];
+  
+  // Calculate width and height changes
+  const deltaX: number = touch.clientX - startX.value;
+  const deltaY: number = touch.clientY - startY.value;
+  
+  // Calculate new dimensions
+  const newWidth: number = Math.max(300, startWidth.value + deltaX);
+  const newHeight: number = Math.max(300, startHeight.value + deltaY);
+  
+  // Apply new dimensions directly for immediate response
+  chatWindow.value.style.width = `${newWidth}px`;
+  chatWindow.value.style.height = `${newHeight}px`;
+  
+  // Update the previous window state with new dimensions
+  previousWindowState.value.width = chatWindow.value.style.width;
+  previousWindowState.value.height = chatWindow.value.style.height;
+};
+
+// ✅ Make chat icon draggable (Mouse events)
+const startIconDrag = (event: MouseEvent): void => {
+  // Prevent default to avoid text selection during drag
+  event.preventDefault();
+  
+  if (!chatToggle.value) return;
+  
+  // Only start dragging if it's a mousedown event (not a click)
+  if (event.type === 'mousedown') {
+    isIconDragging.value = true;
+    iconStartX.value = event.clientX;
+    iconStartY.value = event.clientY;
+    iconOffsetX.value = event.clientX - chatToggle.value.getBoundingClientRect().left;
+    iconOffsetY.value = event.clientY - chatToggle.value.getBoundingClientRect().top;
+    
+    // Remove any existing click handler
+    document.removeEventListener("click", handleIconClick);
+    
+    // Add a one-time click handler to detect if this was a click
+    document.addEventListener("click", handleIconClick, { once: true });
+    
+    document.addEventListener("mousemove", dragIcon);
+    document.addEventListener("mouseup", stopIconDrag);
+  }
+};
+
+// Handle icon click (separate from drag)
+const handleIconClick = (event: MouseEvent): void => {
+  // If we haven't moved much, this is a click
+  const moveThreshold = 5; // pixels
+  const deltaX = Math.abs(event.clientX - iconStartX.value);
+  const deltaY = Math.abs(event.clientY - iconStartY.value);
+  
+  if (deltaX < moveThreshold && deltaY < moveThreshold) {
+    toggleChat();
+  }
+  
+  // Clean up the click handler
+  document.removeEventListener("click", handleIconClick);
+};
+
+const dragIcon = (event: MouseEvent | TouchEvent): void => {
+  if (!isIconDragging.value || !chatToggle.value) return;
+  
+  event.preventDefault();
+  
+  let clientX: number;
+  let clientY: number;
+  
+  if ('touches' in event) {
+    // Touch event
+    clientX = event.touches[0].clientX;
+    clientY = event.touches[0].clientY;
+  } else {
+    // Mouse event
+    clientX = event.clientX;
+    clientY = event.clientY;
+  }
+  
+  // Calculate new position
+  const x: number = clientX - iconOffsetX.value;
+  const y: number = clientY - iconOffsetY.value;
+  
+  // Get viewport dimensions
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  
+  // Get icon dimensions
+  const iconWidth = chatToggle.value.offsetWidth;
+  const iconHeight = chatToggle.value.offsetHeight;
+  
+  // Ensure the icon stays within viewport bounds
+  const boundedX = Math.max(0, Math.min(x, viewportWidth - iconWidth));
+  const boundedY = Math.max(0, Math.min(y, viewportHeight - iconHeight));
+  
+  // Apply transform directly for immediate response
+  chatToggle.value.style.transform = `translate3d(${boundedX}px, ${boundedY}px, 0)`;
+}
+
+const stopIconDrag = (): void => {
+  if (isIconDragging.value && chatToggle.value) {
+    isIconDragging.value = false;
+    
+    // Convert transform to actual position
+    const transform = chatToggle.value.style.transform;
+    const matches = transform.match(/translate3d\(([^,]+),\s*([^,]+),\s*[^)]+\)/);
+    
+    if (matches && matches.length >= 3) {
+      const x = matches[1];
+      const y = matches[2];
+      
+      // Apply the final position
+      chatToggle.value.style.transform = 'none';
+      chatToggle.value.style.left = x;
+      chatToggle.value.style.top = y;
+      chatToggle.value.style.right = 'auto';
+      chatToggle.value.style.bottom = 'auto';
+      
+      // Update position ref
+      iconPosition.value = {
+        left: x,
+        top: y,
+        right: null,
+        bottom: null
+      };
+      
+      // Save the new position
+      saveIconPosition();
+    }
+    
+    // Remove event listeners
+    document.removeEventListener("mousemove", dragIcon);
+    document.removeEventListener("mouseup", stopIconDrag);
+    document.removeEventListener("touchmove", dragIcon);
+    document.removeEventListener("touchend", stopIconDrag);
+  }
+};
+
+// ✅ Touch event handlers for mobile
+const handleTouchStart = (event: TouchEvent): void => {
+  if (!chatToggle.value || event.touches.length !== 1) return;
+  
+  const now = new Date().getTime();
+  const timeSinceLastTap = now - lastTapTime.value;
+  
+  // Detect double tap (300ms threshold)
+  if (timeSinceLastTap < 300) {
+    // Double tap detected, toggle chat
+    toggleChat();
+    event.preventDefault();
+    return;
+  }
+  
+  lastTapTime.value = now;
+  
+  // If chat is already open, close it on tap
+  if (showChat.value) {
+    // Add a small delay to differentiate between tap and drag
+    const tapTimer = setTimeout(() => {
+      // Only toggle if we haven't started dragging
+      if (!isIconDragging.value) {
+        toggleChat();
+      }
+    }, 100);
+    
+    // Clear the timer if we start dragging
+    const clearTapTimer = () => {
+      clearTimeout(tapTimer);
+      document.removeEventListener('touchmove', clearTapTimer);
+    };
+    
+    document.addEventListener('touchmove', clearTapTimer);
+    
+    // Also remove the listener after a short delay
+    setTimeout(() => {
+      document.removeEventListener('touchmove', clearTapTimer);
+    }, 300);
+    
+    return;
+  }
+  
+  isIconDragging.value = true;
+  const touch = event.touches[0];
+  iconStartX.value = touch.clientX;
+  iconStartY.value = touch.clientY;
+  iconOffsetX.value = touch.clientX - chatToggle.value.getBoundingClientRect().left;
+  iconOffsetY.value = touch.clientY - chatToggle.value.getBoundingClientRect().top;
+  
+  document.addEventListener("touchmove", dragIcon, { passive: false });
+  document.addEventListener("touchend", stopIconDrag);
+};
 
 // ✅ Auto-expand logic
 const updatePrompt = (): void => {
@@ -330,32 +882,116 @@ const insertEmoji = (emoji: string): void => {
 // ✅ Focus Input
 const focusInput = (): void => {
   nextTick(() => {
-    document.querySelector<HTMLElement>(".chat-input")?.focus();
+    if (chatInput.value) {
+      chatInput.value.focus();
+      
+      // Place cursor at the end of any existing text
+      if (chatInput.value.innerText.length > 0) {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        
+        range.selectNodeContents(chatInput.value);
+        range.collapse(false); // Collapse to end
+        
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+      }
+    } else {
+      // Fallback if ref isn't available yet
+      setTimeout(() => {
+        const inputElement = document.querySelector<HTMLElement>(".chat-input");
+        if (inputElement) {
+          inputElement.focus();
+        }
+      }, 100);
+    }
   });
 };
+
+// ✅ Cleanup event listeners on unmount
+onUnmounted(() => {
+  document.removeEventListener("mousemove", dragChat);
+  document.removeEventListener("mouseup", stopDrag);
+  document.removeEventListener("mousemove", resizeChat);
+  document.removeEventListener("mouseup", stopResize);
+  document.removeEventListener("mousemove", dragIcon);
+  document.removeEventListener("mouseup", stopIconDrag);
+  document.removeEventListener("touchmove", dragIcon);
+  document.removeEventListener("touchend", stopIconDrag);
+  document.removeEventListener("touchmove", dragChat);
+  document.removeEventListener("touchend", stopDrag);
+  document.removeEventListener("touchmove", resizeTouchMove);
+  document.removeEventListener("touchend", stopResize);
+  document.removeEventListener("keydown", handleKeyDown);
+});
 </script>
 
 <template>
-  <!-- ✅ Floating Chat Button -->
+  <!-- ✅ Floating Chat Button (hidden when chat is maximized) -->
   <div
+    v-if="!isMaximized || !showChat"
+    ref="chatToggle"
     class="chat-toggle"
     :class="{ 'hover-scale': isHovering, pulse: !showChat && !isAnimating }"
     @mouseenter="isHovering = true"
     @mouseleave="isHovering = false"
-    @click="toggleChat"
+    @mousedown="startIconDrag"
+    @touchstart="handleTouchStart"
+    @click.stop="toggleChat"
   >
     <transition name="rotate-icon">
       <ChatBubbleOvalLeftEllipsisIcon v-if="!showChat" class="icon" />
       <XMarkIcon v-else class="icon" />
     </transition>
+    
+    <!-- Tooltip -->
+    <div class="tooltip" :class="{ 'visible': isHovering }">
+      <span class="tooltip-text">{{ showChat ? 'Close' : 'Open your AI Assistant' }}</span>
+      <span class="tooltip-hotkey">Hotkey: <span class="key">{{ showChat ? 'ESC' : 'C' }}</span></span>
+    </div>
   </div>
 
   <!-- ✅ Chat Window -->
-  <transition name="slide-fade">
-    <div v-if="showChat" class="chat-window">
-      <div class="chat-header">
+  <transition name="fade-scale">
+    <div 
+      v-if="showChat" 
+      ref="chatWindow" 
+      class="chat-window" 
+      :class="{ 'maximized': isMaximized }"
+      @mousedown.self="startDrag"
+      @touchstart.self="handleWindowTouchStart"
+    >
+      <div 
+        class="chat-header" 
+        @mousedown="startDrag"
+        @touchstart="handleWindowTouchStart"
+      >
         <span>Cosmicrafts AI</span>
-        <XMarkIcon class="close-icon" @click="toggleChat" />
+        <div class="header-controls">
+          <!-- Maximize/Restore Button -->
+          <button class="control-button maximize-button" @click.stop="toggleMaximize">
+            <svg v-if="!isMaximized" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <polyline points="9 21 3 21 3 15"></polyline>
+              <line x1="21" y1="3" x2="14" y2="10"></line>
+              <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 14 10 14 10 20"></polyline>
+              <polyline points="20 10 14 10 14 4"></polyline>
+              <line x1="14" y1="10" x2="21" y2="3"></line>
+              <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+          </button>
+          <!-- Close Button -->
+          <div class="close-button-wrapper">
+            <XMarkIcon class="close-icon" @click="toggleChat" />
+            <div class="tooltip close-tooltip">
+              <span class="tooltip-text">Close</span>
+              <span class="tooltip-hotkey">Hotkey: <span class="key">ESC</span></span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="messages">
@@ -377,40 +1013,46 @@ const focusInput = (): void => {
 
       </div>
       <!-- ✅ Input Area -->
-        <div class="input-area">
+      <div class="input-area">
         <div class="input-wrapper">
             
-            <!-- Input Field -->
-<!-- ✅ New Auto-Expanding Input -->
-<div
-  ref="chatInput"
-  class="chat-input"
-  contenteditable="true"
-  @input="updatePrompt"
-  @keydown.enter.prevent="sendPrompt"
-  role="textbox"
-></div>
+          <!-- Input Field -->
+          <div
+            ref="chatInput"
+            class="chat-input"
+            contenteditable="true"
+            @input="updatePrompt"
+            @keydown.enter.prevent="sendPrompt"
+            role="textbox"
+          ></div>
 
-
-            <!-- Thinking Indicator (Icon + Text) -->
-            <div v-if="loading" class="thinking-indicator">
+          <!-- Thinking Indicator (Icon + Text) -->
+          <div v-if="loading" class="thinking-indicator">
             <div class="dot-flashing"></div>
             <span class="thinking-text">Thinking...</span>
-            </div>
+          </div>
         </div>
         <button class="emoji-button" @click="showEmojiPicker = !showEmojiPicker">
-        <FaceSmileIcon class="icon" />
-      </button>
-        <button class="send-icon" @click="sendPrompt" :disabled="loading">
-            <PaperAirplaneIcon class="icon" />
+          <FaceSmileIcon class="icon" />
         </button>
-        </div>
-        <EmojiPicker
+        <button class="send-icon" @click="sendPrompt" :disabled="loading">
+          <PaperAirplaneIcon class="icon" />
+        </button>
+      </div>
+      <EmojiPicker
         v-if="showEmojiPicker"
         :show="showEmojiPicker"
-        @select="(emoji) => { prompt += emoji; showEmojiPicker = false }"
+        @select="(emoji) => { insertEmoji(emoji); showEmojiPicker = false }"
         @close="showEmojiPicker = false"
-        />
+      />
+      
+      <!-- Resize Handle (only visible when not maximized) -->
+      <div 
+        v-if="!isMaximized" 
+        class="resize-handle" 
+        @mousedown.stop="startResize"
+        @touchstart.stop="handleResizeTouchStart"
+      ></div>
     </div>
   </transition>
 </template>
@@ -422,6 +1064,7 @@ const focusInput = (): void => {
   bottom: 1.5rem;
   right: 1rem;
   width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -436,6 +1079,14 @@ const focusInput = (): void => {
     box-shadow 0.6s ease-out; /* ⏳ Longer glow fade */
   box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
   z-index: 1000;
+  touch-action: none; /* Prevents default touch actions */
+  user-select: none; /* Prevents text selection during drag */
+}
+
+.chat-toggle .icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: white;
 }
 
 .hover-scale:hover {
@@ -460,6 +1111,24 @@ const focusInput = (): void => {
   flex-direction: column;
   border-radius: 8px;
   border: 1px solid rgba(126, 126, 126, 0.1);
+  touch-action: none; /* Prevents default touch actions */
+  user-select: none; /* Prevents text selection during drag */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-out;
+  will-change: transform; /* Optimize for animations */
+}
+
+/* Maximized state */
+.chat-window.maximized {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
+  border-radius: 0 !important;
+  border: none;
 }
 
 /* ✅ Chat Header */
@@ -471,6 +1140,38 @@ const focusInput = (): void => {
   font-weight: bold;
   background: linear-gradient(to bottom, rgba(30, 43, 56, 0.2), rgba(23, 33, 43, 0.4));
   border-bottom: 1px solid rgba(126, 126, 126, 0.1);
+  cursor: move; /* Indicates draggable area */
+}
+
+/* Header Controls Container */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Control Buttons (Maximize/Restore) */
+.control-button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.control-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.maximize-button {
+  width: 2rem;
+  height: 1.5rem;
 }
 
 .close-icon {
@@ -478,11 +1179,70 @@ const focusInput = (): void => {
   width: 2rem;
   height: 1.5rem;
   cursor: pointer;
-  
 }
+
 .close-icon:hover {
   transform: scale(1.25);
   color: #0099ff;
+}
+
+/* ✅ Resize Handle */
+.resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  cursor: nwse-resize;
+  background: transparent;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.resize-handle::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  margin: 0 2px 2px 0;
+  background-image: 
+    linear-gradient(to bottom right,
+      transparent 0%,
+      transparent 40%,
+      rgba(59, 130, 246, 0.6) 40%,
+      rgba(59, 130, 246, 0.6) 50%,
+      transparent 50%,
+      transparent 65%,
+      rgba(59, 130, 246, 0.6) 65%,
+      rgba(59, 130, 246, 0.6) 75%,
+      transparent 75%,
+      transparent 90%,
+      rgba(59, 130, 246, 0.6) 90%,
+      rgba(59, 130, 246, 0.6) 100%
+    );
+  border-radius: 0 0 4px 0;
+  transition: opacity 0.2s ease;
+}
+
+.resize-handle:hover::before {
+  opacity: 1;
+  background-image: 
+    linear-gradient(to bottom right,
+      transparent 0%,
+      transparent 40%,
+      rgba(59, 130, 246, 0.9) 40%,
+      rgba(59, 130, 246, 0.9) 50%,
+      transparent 50%,
+      transparent 65%,
+      rgba(59, 130, 246, 0.9) 65%,
+      rgba(59, 130, 246, 0.9) 75%,
+      transparent 75%,
+      transparent 90%,
+      rgba(59, 130, 246, 0.9) 90%,
+      rgba(59, 130, 246, 0.9) 100%
+    );
 }
 
 /* ✅ Chat Messages */
@@ -495,6 +1255,8 @@ const focusInput = (): void => {
   display: flex;
   flex-direction: column;
   overflow-x: hidden; /* ✅ Prevents horizontal scrolling */
+  touch-action: auto; /* Allow normal touch behavior in messages */
+  user-select: text; /* Allow text selection in messages */
 }
 
 /* ✅ Chat Bubbles */
@@ -548,6 +1310,8 @@ const focusInput = (): void => {
   background: #1e1e1e38;
   border-top: 1px solid rgba(126, 126, 126, 0.1);
   gap: 0.5rem; /* ✅ Adds spacing between input and button */
+  touch-action: auto; /* Allow normal touch behavior in input area */
+  user-select: text; /* Allow text selection in input area */
 }
 
 /* ✅ Input Field */
@@ -559,14 +1323,16 @@ const focusInput = (): void => {
   padding: 0.75rem;
   background: transparent;
   color: white;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle outline when not focused */
   outline: none;
   overflow-y: hidden;
   word-wrap: break-word;
   white-space: pre-wrap;
   border-radius: 5px;
+  touch-action: auto; /* Allow normal touch behavior */
+  user-select: text; /* Allow text selection */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-
 
 .chat-input:focus {
   outline: none;
@@ -777,4 +1543,114 @@ const focusInput = (): void => {
 
 }
 
+/* ✅ Tooltip */
+.tooltip {
+  position: absolute;
+  top: -70px;
+  right: 0;
+  background: rgba(30, 43, 56, 0.95);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1001;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
+  background: rgba(30, 43, 56, 0.95);
+  transform: rotate(45deg);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s; /* Show after 0.5s hover */
+}
+
+.tooltip-text {
+  margin-bottom: 4px;
+  color: white;
+}
+
+.tooltip-hotkey {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+}
+
+.tooltip-hotkey .key {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-left: 2px;
+  color: white;
+  font-weight: bold;
+}
+
+/* ✅ Close Button Tooltip */
+.close-tooltip {
+  top: 40px;
+  right: 0;
+}
+
+.close-tooltip::after {
+  top: -5px;
+  bottom: auto;
+  border-top: none;
+  border-left: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.close-button-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.close-button-wrapper:hover .close-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s;
+}
+
+/* ✅ New animations for chat window */
+.fade-scale-enter-active,
+.fade-scale-leave-active {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: bottom right;
+  backface-visibility: hidden; /* Prevent flickering */
+  perspective: 1000px; /* 3D effect */
+  will-change: transform, opacity, filter; /* Optimize animation performance */
+}
+
+.fade-scale-enter-from,
+.fade-scale-leave-to {
+  opacity: 0;
+  transform: scale(0.85) translateY(10px);
+  filter: blur(4px);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+/* Add a subtle shadow animation */
+.chat-window {
+  transition: box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
 </style>

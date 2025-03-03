@@ -61,16 +61,17 @@ import { ref, onMounted, onUnmounted } from 'vue'
   .emoji-picker {
     position: absolute;
     bottom: 4.5rem;
-    left: 0; /* Ensure it's positioned correctly */
+    left: 1rem; /* Adjust position */
     background: rgba(30, 43, 56, 0.95);
     backdrop-filter: blur(8px);
     border-radius: 12px;
     padding: 1rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+    z-index: 1001; /* Higher z-index to ensure visibility */
     max-height: 300px;
     overflow-y: auto;
-    display: flex; /* ✅ Ensure it's visible */
+    width: 300px; /* Fixed width */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Add border */
   }
   
   .emoji-grid {
