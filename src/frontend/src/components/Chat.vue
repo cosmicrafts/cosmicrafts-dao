@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ChatBubbleOvalLeftEllipsisIcon, FaceSmileIcon, XMarkIcon, PaperAirplaneIcon } from "@heroicons/vue/24/solid";
-import { ref, nextTick, onMounted, onUnmounted, watch } from "vue";
+import { ref, nextTick, onMounted, onUnmounted, watch, computed } from "vue";
 
 import EmojiPicker from './EmojiPicker.vue';
 import { useAuthStore } from '../stores/auth';
@@ -71,6 +71,9 @@ const chatInput = ref<HTMLElement | null>(null); // Reference for the input box
 const hasMoved = ref<boolean>(false);
 
 const lastHeaderTapTime = ref<number>(0); // For detecting double taps on header
+
+// Expose the chat's visibility state to parent components
+const isOpen = computed(() => showChat.value);
 
 // Load saved position from localStorage
 const loadIconPosition = (): void => {
@@ -347,6 +350,9 @@ const toggleChat = (): void => {
 const toggleMaximize = (): void => {
   if (!chatWindow.value) return;
   
+  // Add transition class for smooth animation
+  chatWindow.value.classList.add('size-transition');
+  
   if (!isMaximized.value) {
     // Save current state before maximizing
     previousWindowState.value = {
@@ -382,6 +388,13 @@ const toggleMaximize = (): void => {
     
     isMaximized.value = false;
   }
+  
+  // Remove transition class after animation completes
+  setTimeout(() => {
+    if (chatWindow.value) {
+      chatWindow.value.classList.remove('size-transition');
+    }
+  }, 300);
   
   // Scroll to bottom after resize
   nextTick(() => {
@@ -834,6 +847,11 @@ const handleTouchEnd = (event: TouchEvent): void => {
   document.removeEventListener("touchmove", dragIcon);
   document.removeEventListener("touchend", handleTouchEnd);
 };
+
+// Make isOpen available to parent components through the template ref
+defineExpose({
+  isOpen
+});
 </script>
 
 <template>
@@ -857,6 +875,7 @@ const handleTouchEnd = (event: TouchEvent): void => {
     <div class="tooltip" :class="{ 'visible': isHovering }">
       <span class="tooltip-text">{{ showChat ? 'Close' : 'Open your AI Assistant' }}</span>
       <span class="tooltip-hotkey">Hotkey: <span class="key">{{ showChat ? 'ESC' : 'C' }}</span></span>
+      <span class="tooltip-hint">Drag to reposition</span>
     </div>
   </div>
 
@@ -928,12 +947,11 @@ const handleTouchEnd = (event: TouchEvent): void => {
             <span class="message-text">{{ currentMessage }}</span>
           </div>
         </div>
-
       </div>
+      
       <!-- ✅ Input Area -->
       <div class="input-area">
         <div class="input-wrapper">
-            
           <!-- Input Field -->
           <div
             ref="chatInput"
@@ -950,19 +968,21 @@ const handleTouchEnd = (event: TouchEvent): void => {
             <span class="thinking-text">Thinking...</span>
           </div>
         </div>
-        <button class="emoji-button" @click="showEmojiPicker = !showEmojiPicker">
-          <FaceSmileIcon class="icon" />
-        </button>
+        <div class="emoji-button-wrapper">
+          <button class="emoji-button" @click.stop="showEmojiPicker = !showEmojiPicker">
+            <FaceSmileIcon class="icon" />
+          </button>
+          <EmojiPicker
+            v-if="showEmojiPicker"
+            :show="showEmojiPicker"
+            @select="(emoji) => { insertEmoji(emoji); showEmojiPicker = false }"
+            @close="showEmojiPicker = false"
+          />
+        </div>
         <button class="send-icon" @click="sendPrompt" :disabled="loading">
           <PaperAirplaneIcon class="icon" />
         </button>
       </div>
-      <EmojiPicker
-        v-if="showEmojiPicker"
-        :show="showEmojiPicker"
-        @select="(emoji) => { insertEmoji(emoji); showEmojiPicker = false }"
-        @close="showEmojiPicker = false"
-      />
       
       <!-- Resize Handle (only visible when not maximized) -->
       <div 
@@ -1421,6 +1441,27 @@ const handleTouchEnd = (event: TouchEvent): void => {
   height: 1.5rem;
 }
 
+/* Emoji button wrapper for positioning the picker */
+.emoji-button-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Override emoji picker position to appear above the button */
+:deep(.emoji-picker) {
+  position: absolute !important;
+  bottom: 3.5rem !important;
+  right: 0 !important;
+  left: auto !important;
+  z-index: 1010 !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  max-height: 350px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  width: 320px !important;
+}
+
 /* ✅ Send Icon Button */
 .send-icon {
   background: none;
@@ -1609,5 +1650,11 @@ const handleTouchEnd = (event: TouchEvent): void => {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.8rem;
   margin-top: 4px;
+}
+
+/* Size transition for maximize/restore */
+.size-transition {
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.0) !important;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.3);
 }
 </style>
