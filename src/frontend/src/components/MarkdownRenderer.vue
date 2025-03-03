@@ -557,4 +557,35 @@ pre.mermaid {
   max-width: 100%;
   height: auto !important;
 }
+
+/* Mobile navigation styles */
+.mobile-nav {
+  display: none;
+}
+
+.mobile-nav h2 {
+  display: none;
+}
+
+.mobile-nav ul {
+  display: none;
+}
+
+.mobile-nav li {
+  display: none;
+}
+
+.mobile-nav a {
+  display: none;
+}
+
+.mobile-nav a:hover {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-nav {
+    display: none;
+  }
+}
 </style>

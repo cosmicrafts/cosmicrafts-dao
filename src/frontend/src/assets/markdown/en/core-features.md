@@ -1,5 +1,8 @@
 # Core Features
 ![Core Features](corebanner.webp)
+
+[[toc]]
+
 ## Overview
 
 At its core, **Cosmicrafts DAO** revolves around building a franchise that integrates **fun-first gameplay**, **functional NFTs**, **deflationary tokenomics**, and a an **interconnected backend** where players' profiles, progress, and assets carry over across all games in the franchise.
@@ -127,7 +130,7 @@ Cosmicrafts NFTs are the cornerstone of the franchise, designed to provide **mul
 
 ### Metadata and NFT Evolution
 
-Metadata is the backbone of Cosmicrafts NFTs, defining their attributes and enabling dynamic updates. Each NFT’s metadata includes:
+Metadata is the backbone of Cosmicrafts NFTs, defining their attributes and enabling dynamic updates. Each NFT's metadata includes:
 
 - **Category**: Defines the NFT type (e.g., Unit, Chest, Avatar).
 - **General Metadata**:
@@ -414,4 +417,6 @@ The **Core Features** of Cosmicrafts showcase a unified, interconnected gaming e
     - Dynamic, evolving NFTs that reflect player progress and achievements.
     - Titles and avatars allow for personalized expression across all games.
 
-> Cosmicrafts delivers a franchise experience that’s both immersive for players and profitable for stakeholders.
+> Cosmicrafts delivers a franchise experience that's both immersive for players and profitable for stakeholders.
+
+---

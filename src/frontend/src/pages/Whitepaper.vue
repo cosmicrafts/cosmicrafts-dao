@@ -82,6 +82,29 @@
         </transition>
       </div>
     </aside>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-navigation-container">
+      <!-- Mobile Navigation Button (Always Visible) -->
+      <button class="mobile-nav-button" @click="toggleMobileNav">
+        <span>Whitepaper Sections</span>
+        <span class="mobile-nav-icon" :class="{ 'open': showMobileNav }">▼</span>
+      </button>
+      
+      <!-- Mobile Navigation Menu -->
+      <div class="mobile-nav-menu" :class="{ 'expanded': showMobileNav }">
+        <ul>
+          <li 
+            v-for="section in sections" 
+            :key="section.id"
+            :class="{ active: activeSection === section.id }"
+            @click="changeSectionAndCloseNav(section.id)"
+          >
+            {{ section.title }}
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -97,7 +120,6 @@ export default {
       activeSection: "introduction",
       sections: [
         { id: "introduction", title: "Introduction" },
-        { id: "executive-summary", title: "Executive Summary" },
         { id: "architecture", title: "Architecture" },
         { id: "core-features", title: "Core Features" },       
         { id: "governance", title: "Governance" },
@@ -110,6 +132,7 @@ export default {
       showPreviousButton: false,
       showNextButton: false,
       sectionObserver: null,
+      showMobileNav: false,
     };
   },
   computed: {
@@ -372,6 +395,17 @@ export default {
           this.sectionObserver.observe(element);
         }
       });
+    },
+
+    // Toggles the mobile TOC expansion
+    toggleMobileNav() {
+      this.showMobileNav = !this.showMobileNav;
+    },
+    
+    // Changes the section and closes the mobile navigation
+    changeSectionAndCloseNav(sectionId) {
+      this.changeSection(sectionId);
+      this.showMobileNav = false;
     },
   },
 
@@ -839,6 +873,123 @@ export default {
   
   .navigation-buttons .button {
     padding: 0.8rem;
+  }
+  
+  .mobile-navigation-container {
+    display: block;
+  }
+  
+  .content-wrapper {
+    padding-bottom: 4rem; /* Add space for the mobile navigation button */
+  }
+}
+
+/* Mobile Navigation Container */
+.mobile-navigation-container {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+/* Mobile Navigation Button */
+.mobile-nav-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1.25rem 2rem;
+  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.6), rgba(23, 33, 43, .9));
+  backdrop-filter: blur(8px);
+  border: none;
+  border-top: 1px solid var(--color-primary, #00c3ff3a);
+  color: #04d5ff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 -4px 15px rgba(0, 195, 255, 0.099);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 -4px 15px rgba(0, 195, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 -4px 20px rgba(0, 195, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0 -4px 15px rgba(0, 195, 255, 0.3);
+  }
+}
+
+.mobile-nav-icon {
+  transition: transform var(--transition-medium, 1.6s ease);
+  font-size: 1rem;
+}
+
+.mobile-nav-icon.open {
+  transform: rotate(180deg);
+}
+
+/* Mobile Navigation Menu */
+.mobile-nav-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-slow, 0.3s ease);
+  background-color: var(--color-surface-primary, rgba(30, 43, 56, 0.9));
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-nav-menu.expanded {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.mobile-nav-menu ul {
+  list-style-type: none;
+  padding: 0.75rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-nav-menu li {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-small, 4px);
+  background-color: var(--color-surface-tertiary, rgba(0, 0, 0, 0.2));
+  cursor: pointer;
+  transition: all var(--transition-medium, 0.2s ease);
+  font-weight: var(--weight-medium, 500);
+  border-left: 2px solid transparent;
+  color: var(--color-text-primary, #ffffff);
+}
+
+.mobile-nav-menu li:hover {
+  background-color: rgba(0, 195, 255, 0.1);
+  border-left: 2px solid var(--color-primary, #00c3ff);
+  transform: translateX(2px);
+}
+
+.mobile-nav-menu li.active {
+  background-color: rgba(0, 195, 255, 0.15);
+  border-left: 3px solid var(--color-primary, #00c3ff);
+  color: var(--color-primary, #00c3ff);
+  font-weight: var(--weight-bold, 700);
+  text-shadow: var(--shadow-glow-primary, 0 0 10px rgba(0, 195, 255, 0.5));
+}
+
+@media (max-width: 768px) {
+  .mobile-navigation-container {
+    display: block;
+  }
+  
+  .content-wrapper {
+    padding-bottom: 4rem; /* Add space for the mobile navigation button */
   }
 }
 </style>

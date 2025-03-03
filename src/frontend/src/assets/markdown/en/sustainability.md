@@ -1,4 +1,10 @@
-# Risk Management and Sustainability: Securing the Future of Cosmicrafts
+# Sustainability
+
+![Sustainability](sustainabilitybanner.webp)
+
+[[toc]]
+
+## Risk Management: Securing the Future of Cosmicrafts
 
 Every great journey comes with risks. For the Cosmicrafts DAO, proactively managing those risks is key to ensuring the community's trust and long-term success. By identifying potential challenges early and implementing safeguards, we can build a resilient ecosystem that grows stronger over time.
 
@@ -18,16 +24,16 @@ Here are the key risks the DAO faces, categorized for clarity, with examples spe
 
 - **Token Volatility**: Fluctuations in Spiral's value could affect the stability of the ecosystem.
 - **Unsustainable Rewards**: Overly generous rewards might deplete the treasury too quickly.
-- **Insufficient Treasury Growth**: If the treasury doesn’t grow sufficiently, we might not have the resources to fund all the exciting projects we want to pursue.
+- **Insufficient Treasury Growth**: If the treasury doesn't grow sufficiently, we might not have the resources to fund all the exciting projects we want to pursue.
 
 ### 3. **Security Risks**
 
-- **Smart Contract Vulnerabilities**: Exploitable bugs in governance or staking mechanisms could undermine the DAO’s stability.
+- **Smart Contract Vulnerabilities**: Exploitable bugs in governance or staking mechanisms could undermine the DAO's stability.
 - **Fraudulent Proposals**: Bad actors might exploit the governance process to push harmful agendas.
 
 ### 4. **Ecosystem Risks**
 
-- **Inadequate Community Engagement**: Declining participation in governance or staking could weaken the DAO’s effectiveness.
+- **Inadequate Community Engagement**: Declining participation in governance or staking could weaken the DAO's effectiveness.
 - **Competition**: Other projects competing for attention and users in the Web3 gaming space.
 
 ---
@@ -64,7 +70,7 @@ Here are the key risks the DAO faces, categorized for clarity, with examples spe
 Our commitment to long-term sustainability is at the heart of everything we do. By focusing on these key pillars, we can ensure Cosmicrafts thrives for years to come:
 
 1. **Healthy Treasury**: Sustainable spending ensures the DAO can continue funding new games, partnerships, and community initiatives.
-2. **Incentivized Long-Term Staking**: Staking mechanics reward commitment, stabilizing Spiral’s value and encouraging active participation.
+2. **Incentivized Long-Term Staking**: Staking mechanics reward commitment, stabilizing Spiral's value and encouraging active participation.
 3. **Strategic Adaptability**: The DAO can pivot based on market conditions and community needs, ensuring relevance in a rapidly changing ecosystem.
 
 ---
@@ -106,7 +112,7 @@ This adaptive approach ensures that the DAO remains aligned with its goals while
 
 ## Why This Matters
 
-By tackling risks head-on and planning for the future, the Cosmicrafts DAO ensures that the ecosystem stays strong, secure, and ready to grow. Proactive risk management isn’t just about avoiding problems—it’s about building a foundation for long-term success and trust.
+By tackling risks head-on and planning for the future, the Cosmicrafts DAO ensures that the ecosystem stays strong, secure, and ready to grow. Proactive risk management isn't just about avoiding problems—it's about building a foundation for long-term success and trust.
 
 ---
 
@@ -114,5 +120,5 @@ By tackling risks head-on and planning for the future, the Cosmicrafts DAO ensur
 
 1. Are the types of risks outlined comprehensive, or are there additional risks we should address?
 2. Do the proposed safeguards feel adequate for addressing these risks? Are there areas where we need stronger measures?
-3. Are there specific visuals or metrics you’d like to see in this section to enhance understanding?
+3. Are there specific visuals or metrics you'd like to see in this section to enhance understanding?
 4. Is the balance between technical details and accessibility appropriate for this audience?
