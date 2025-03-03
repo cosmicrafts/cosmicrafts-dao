@@ -70,6 +70,8 @@ const chatInput = ref<HTMLElement | null>(null); // Reference for the input box
 // Track if we've moved during touch
 const hasMoved = ref<boolean>(false);
 
+const lastHeaderTapTime = ref<number>(0); // For detecting double taps on header
+
 // Load saved position from localStorage
 const loadIconPosition = (): void => {
   const savedPosition = localStorage.getItem('chatIconPosition');
@@ -536,7 +538,23 @@ const stopDrag = (): void => {
 
 // ✅ Touch event handlers for chat window
 const handleWindowTouchStart = (event: TouchEvent): void => {
-  if (!chatWindow.value || event.touches.length !== 1 || isMaximized.value) return;
+  if (!chatWindow.value || event.touches.length !== 1 || isMaximized.value && (event.target as HTMLElement).closest('.resize-handle')) return;
+  
+  // Check for double tap on header
+  if ((event.target as HTMLElement).closest('.chat-header')) {
+    const now = new Date().getTime();
+    const timeSinceLastTap = now - lastHeaderTapTime.value;
+    
+    // Detect double tap (300ms threshold)
+    if (timeSinceLastTap < 300) {
+      // Double tap detected, toggle maximize
+      toggleMaximize();
+      event.preventDefault();
+      return;
+    }
+    
+    lastHeaderTapTime.value = now;
+  }
   
   // Don't start drag if we're touching inside the input area
   if ((event.target as HTMLElement).closest('.input-area') || 
@@ -856,28 +874,37 @@ const handleTouchEnd = (event: TouchEvent): void => {
         class="chat-header" 
         @mousedown="startDrag"
         @touchstart="handleWindowTouchStart"
+        @dblclick="toggleMaximize"
       >
         <span>Cosmicrafts AI</span>
         <div class="header-controls">
           <!-- Maximize/Restore Button -->
-          <button class="control-button maximize-button" @click.stop="toggleMaximize">
-            <svg v-if="!isMaximized" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <polyline points="9 21 3 21 3 15"></polyline>
-              <line x1="21" y1="3" x2="14" y2="10"></line>
-              <line x1="3" y1="21" x2="10" y2="14"></line>
-            </svg>
-            <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="4 14 10 14 10 20"></polyline>
-              <polyline points="20 10 14 10 14 4"></polyline>
-              <line x1="14" y1="10" x2="21" y2="3"></line>
-              <line x1="3" y1="21" x2="10" y2="14"></line>
-            </svg>
-          </button>
+          <div class="control-wrapper">
+            <button class="control-button" @click.stop="toggleMaximize">
+              <svg v-if="!isMaximized" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <polyline points="9 21 3 21 3 15"></polyline>
+                <line x1="21" y1="3" x2="14" y2="10"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+              </svg>
+              <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="4 14 10 14 10 20"></polyline>
+                <polyline points="20 10 14 10 14 4"></polyline>
+                <line x1="14" y1="10" x2="21" y2="3"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+              </svg>
+            </button>
+            <div class="tooltip control-tooltip">
+              <span class="tooltip-text">{{ isMaximized ? 'Restore' : 'Maximize' }}</span>
+              <span class="tooltip-hint">Double-click header to {{ isMaximized ? 'restore' : 'maximize' }}</span>
+            </div>
+          </div>
           <!-- Close Button -->
-          <div class="close-button-wrapper">
-            <XMarkIcon class="close-icon" @click="toggleChat" />
-            <div class="tooltip close-tooltip">
+          <div class="control-wrapper">
+            <button class="control-button" @click.stop="toggleChat">
+              <XMarkIcon class="control-icon" />
+            </button>
+            <div class="tooltip control-tooltip">
               <span class="tooltip-text">Close</span>
               <span class="tooltip-hotkey">Hotkey: <span class="key">ESC</span></span>
             </div>
@@ -1041,40 +1068,31 @@ const handleTouchEnd = (event: TouchEvent): void => {
   gap: 0.5rem;
 }
 
-/* Control Buttons (Maximize/Restore) */
+/* Control Buttons */
 .control-button {
   background: none;
   border: none;
   color: #ffffff;
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
   transition: all 0.2s ease;
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
 .control-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
   transform: scale(1.1);
-}
-
-.maximize-button {
-  width: 2rem;
-  height: 1.5rem;
-}
-
-.close-icon {
-  margin-right: -.75rem;
-  width: 2rem;
-  height: 1.5rem;
-  cursor: pointer;
-}
-
-.close-icon:hover {
-  transform: scale(1.25);
   color: #0099ff;
+}
+
+.control-icon {
+  width: 20px;
+  height: 20px;
 }
 
 /* ✅ Resize Handle */
@@ -1537,5 +1555,59 @@ const handleTouchEnd = (event: TouchEvent): void => {
 /* Add a subtle shadow animation */
 .chat-window {
   transition: box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Control wrapper for tooltips */
+.control-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.control-wrapper:hover .control-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s;
+}
+
+/* Control tooltip */
+.control-tooltip {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: rgba(30, 43, 56, 0.95);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1001;
+}
+
+.control-tooltip::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
+  background: rgba(30, 43, 56, 0.95);
+  transform: rotate(45deg);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltip-hint {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  margin-top: 4px;
 }
 </style>
