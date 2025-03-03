@@ -67,39 +67,20 @@ const MAX_HISTORY_TOKENS = 1000; // Adjust for performance
 const showEmojiPicker = ref<boolean>(false);
 const chatInput = ref<HTMLElement | null>(null); // Reference for the input box
 
+// Track if we've moved during touch
+const hasMoved = ref<boolean>(false);
+
 // Load saved position from localStorage
 const loadIconPosition = (): void => {
   const savedPosition = localStorage.getItem('chatIconPosition');
   if (savedPosition) {
-    try {
-      iconPosition.value = JSON.parse(savedPosition);
-    } catch (e) {
-      console.error('Error parsing saved icon position:', e);
-      // Reset to default position if parsing fails
-      iconPosition.value = {
-        left: 'auto',
-        bottom: '1.5rem',
-        right: '1rem',
-        top: null
-      };
-    }
+    iconPosition.value = JSON.parse(savedPosition);
   }
 };
 
 // Save position to localStorage
 const saveIconPosition = (): void => {
-  // Ensure we're not saving null or undefined values
-  if (iconPosition.value) {
-    // Make sure we have at least one valid position property
-    const hasValidPosition = 
-      (iconPosition.value.left && iconPosition.value.left !== 'auto') || 
-      (iconPosition.value.top && iconPosition.value.top !== null);
-    
-    if (hasValidPosition) {
-      localStorage.setItem('chatIconPosition', JSON.stringify(iconPosition.value));
-      console.log('Saved icon position:', iconPosition.value);
-    }
-  }
+  localStorage.setItem('chatIconPosition', JSON.stringify(iconPosition.value));
 };
 
 // Load saved window position from localStorage
@@ -199,54 +180,15 @@ const loadChatHistory = () => {
 onMounted(() => {
   loadChatHistory();
   loadIconPosition();
-  loadWindowPosition();
   
   // Apply saved position to the chat toggle
   nextTick(() => {
     if (chatToggle.value) {
-      // Reset transform to ensure proper positioning
-      chatToggle.value.style.transform = 'none';
-      
-      // Clear all position properties first to avoid conflicts
-      chatToggle.value.style.left = 'auto';
-      chatToggle.value.style.top = 'auto';
-      chatToggle.value.style.right = 'auto';
-      chatToggle.value.style.bottom = 'auto';
-      
-      // Only apply saved position if we have valid values
-      const hasValidPosition = iconPosition.value && 
-                              ((iconPosition.value.left && iconPosition.value.left !== 'auto') || 
-                               (iconPosition.value.top && iconPosition.value.top !== null));
-      
-      if (hasValidPosition) {
-        // Apply saved position
-        Object.entries(iconPosition.value).forEach(([key, value]) => {
-          if (value !== null && chatToggle.value) {
-            (chatToggle.value.style as any)[key] = value;
-          }
-        });
-      } else {
-        // Use default position if no valid saved position
-        chatToggle.value.style.right = '1rem';
-        chatToggle.value.style.bottom = '1.5rem';
-        chatToggle.value.style.left = 'auto';
-        chatToggle.value.style.top = 'auto';
-      }
-    }
-    
-    // Apply saved position to the chat window
-    if (chatWindow.value) {
-      // Reset transform to ensure proper positioning
-      chatWindow.value.style.transform = 'none';
-      
-      // Only apply saved position if we have valid values
-      if (windowPosition.value) {
-        Object.entries(windowPosition.value).forEach(([key, value]) => {
-          if (value !== null && chatWindow.value) {
-            (chatWindow.value.style as any)[key] = value;
-          }
-        });
-      }
+      Object.entries(iconPosition.value).forEach(([key, value]) => {
+        if (value !== null && chatToggle.value) {
+          (chatToggle.value.style as any)[key] = value;
+        }
+      });
     }
   });
   
@@ -397,30 +339,6 @@ const toggleChat = (): void => {
   isAnimating.value = true;
   showChat.value = !showChat.value;
   setTimeout(() => (isAnimating.value = false), 300);
-  
-  // Focus the input when opening chat
-  if (showChat.value) {
-    nextTick(() => {
-      // Ensure the chat window is properly positioned
-      if (chatWindow.value) {
-        // Only reset transform if it's not already set to none
-        if (chatWindow.value.style.transform && chatWindow.value.style.transform !== 'none') {
-          chatWindow.value.style.transform = 'none';
-        }
-        
-        // Apply saved position only if we have valid saved positions
-        if (windowPosition.value) {
-          Object.entries(windowPosition.value).forEach(([key, value]) => {
-            if (value !== null && chatWindow.value) {
-              (chatWindow.value.style as any)[key] = value;
-            }
-          });
-        }
-      }
-      
-      focusInput();
-    });
-  }
 };
 
 // ✅ Toggle maximize/restore chat window
@@ -683,44 +601,26 @@ const startIconDrag = (event: MouseEvent): void => {
   
   if (!chatToggle.value) return;
   
-  // Only start dragging if it's a mousedown event (not a click)
-  if (event.type === 'mousedown') {
-    isIconDragging.value = true;
-    iconStartX.value = event.clientX;
-    iconStartY.value = event.clientY;
-    iconOffsetX.value = event.clientX - chatToggle.value.getBoundingClientRect().left;
-    iconOffsetY.value = event.clientY - chatToggle.value.getBoundingClientRect().top;
-    
-    // Remove any existing click handler
-    document.removeEventListener("click", handleIconClick);
-    
-    // Add a one-time click handler to detect if this was a click
-    document.addEventListener("click", handleIconClick, { once: true });
-    
-    document.addEventListener("mousemove", dragIcon);
-    document.addEventListener("mouseup", stopIconDrag);
-  }
-};
-
-// Handle icon click (separate from drag)
-const handleIconClick = (event: MouseEvent): void => {
-  // If we haven't moved much, this is a click
-  const moveThreshold = 5; // pixels
-  const deltaX = Math.abs(event.clientX - iconStartX.value);
-  const deltaY = Math.abs(event.clientY - iconStartY.value);
+  // Reset the moved flag
+  hasMoved.value = false;
   
-  if (deltaX < moveThreshold && deltaY < moveThreshold) {
-    toggleChat();
-  }
+  isIconDragging.value = true;
+  iconStartX.value = event.clientX;
+  iconStartY.value = event.clientY;
+  iconOffsetX.value = event.clientX - chatToggle.value.getBoundingClientRect().left;
+  iconOffsetY.value = event.clientY - chatToggle.value.getBoundingClientRect().top;
   
-  // Clean up the click handler
-  document.removeEventListener("click", handleIconClick);
+  document.addEventListener("mousemove", dragIcon);
+  document.addEventListener("mouseup", stopIconDrag);
 };
 
 const dragIcon = (event: MouseEvent | TouchEvent): void => {
   if (!isIconDragging.value || !chatToggle.value) return;
   
   event.preventDefault();
+  
+  // Mark that we've moved
+  hasMoved.value = true;
   
   let clientX: number;
   let clientY: number;
@@ -751,40 +651,32 @@ const dragIcon = (event: MouseEvent | TouchEvent): void => {
   const boundedX = Math.max(0, Math.min(x, viewportWidth - iconWidth));
   const boundedY = Math.max(0, Math.min(y, viewportHeight - iconHeight));
   
-  // Apply transform directly for immediate response
-  chatToggle.value.style.transform = `translate3d(${boundedX}px, ${boundedY}px, 0)`;
-}
+  // Update position directly
+  chatToggle.value.style.left = `${boundedX}px`;
+  chatToggle.value.style.top = `${boundedY}px`;
+  chatToggle.value.style.right = 'auto';
+  chatToggle.value.style.bottom = 'auto';
+  
+  // Update position ref for saving
+  iconPosition.value = {
+    left: `${boundedX}px`,
+    top: `${boundedY}px`,
+    right: null,
+    bottom: null
+  };
+};
 
-const stopIconDrag = (): void => {
-  if (isIconDragging.value && chatToggle.value) {
+const stopIconDrag = (event: MouseEvent | TouchEvent): void => {
+  if (isIconDragging.value) {
     isIconDragging.value = false;
     
-    // Convert transform to actual position
-    const transform = chatToggle.value.style.transform;
-    const matches = transform.match(/translate3d\(([^,]+),\s*([^,]+),\s*[^)]+\)/);
-    
-    if (matches && matches.length >= 3) {
-      const x = matches[1];
-      const y = matches[2];
-      
-      // Apply the final position
-      chatToggle.value.style.transform = 'none';
-      chatToggle.value.style.left = x;
-      chatToggle.value.style.top = y;
-      chatToggle.value.style.right = 'auto';
-      chatToggle.value.style.bottom = 'auto';
-      
-      // Update position ref
-      iconPosition.value = {
-        left: x,
-        top: y,
-        right: null,
-        bottom: null
-      };
-      
-      // Save the new position
-      saveIconPosition();
+    // If we haven't moved, treat it as a click
+    if (!hasMoved.value) {
+      toggleChat();
     }
+    
+    // Save the new position
+    saveIconPosition();
     
     // Remove event listeners
     document.removeEventListener("mousemove", dragIcon);
@@ -811,32 +703,10 @@ const handleTouchStart = (event: TouchEvent): void => {
   
   lastTapTime.value = now;
   
-  // If chat is already open, close it on tap
-  if (showChat.value) {
-    // Add a small delay to differentiate between tap and drag
-    const tapTimer = setTimeout(() => {
-      // Only toggle if we haven't started dragging
-      if (!isIconDragging.value) {
-        toggleChat();
-      }
-    }, 100);
-    
-    // Clear the timer if we start dragging
-    const clearTapTimer = () => {
-      clearTimeout(tapTimer);
-      document.removeEventListener('touchmove', clearTapTimer);
-    };
-    
-    document.addEventListener('touchmove', clearTapTimer);
-    
-    // Also remove the listener after a short delay
-    setTimeout(() => {
-      document.removeEventListener('touchmove', clearTapTimer);
-    }, 300);
-    
-    return;
-  }
+  // Reset the moved flag
+  hasMoved.value = false;
   
+  // Start tracking for potential drag
   isIconDragging.value = true;
   const touch = event.touches[0];
   iconStartX.value = touch.clientX;
@@ -845,7 +715,7 @@ const handleTouchStart = (event: TouchEvent): void => {
   iconOffsetY.value = touch.clientY - chatToggle.value.getBoundingClientRect().top;
   
   document.addEventListener("touchmove", dragIcon, { passive: false });
-  document.addEventListener("touchend", stopIconDrag);
+  document.addEventListener("touchend", handleTouchEnd);
 };
 
 // ✅ Auto-expand logic
@@ -924,6 +794,28 @@ onUnmounted(() => {
   document.removeEventListener("touchend", stopResize);
   document.removeEventListener("keydown", handleKeyDown);
 });
+
+// Handle touch end for the chat icon
+const handleTouchEnd = (event: TouchEvent): void => {
+  if (!isIconDragging.value) return;
+  
+  isIconDragging.value = false;
+  
+  // If we haven't moved much, treat it as a tap
+  if (!hasMoved.value) {
+    toggleChat();
+  }
+  
+  // Reset the moved flag
+  hasMoved.value = false;
+  
+  // Save the new position
+  saveIconPosition();
+  
+  // Remove event listeners
+  document.removeEventListener("touchmove", dragIcon);
+  document.removeEventListener("touchend", handleTouchEnd);
+};
 </script>
 
 <template>
@@ -935,9 +827,8 @@ onUnmounted(() => {
     :class="{ 'hover-scale': isHovering, pulse: !showChat && !isAnimating }"
     @mouseenter="isHovering = true"
     @mouseleave="isHovering = false"
-    @mousedown="startIconDrag"
+    @mousedown.stop="startIconDrag"
     @touchstart="handleTouchStart"
-    @click.stop="toggleChat"
   >
     <transition name="rotate-icon">
       <ChatBubbleOvalLeftEllipsisIcon v-if="!showChat" class="icon" />
@@ -952,7 +843,7 @@ onUnmounted(() => {
   </div>
 
   <!-- ✅ Chat Window -->
-  <transition name="fade-scale">
+  <transition name="slide-fade">
     <div 
       v-if="showChat" 
       ref="chatWindow" 
@@ -1632,21 +1523,15 @@ onUnmounted(() => {
 }
 
 /* ✅ New animations for chat window */
-.fade-scale-enter-active,
-.fade-scale-leave-active {
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-origin: bottom right;
-  backface-visibility: hidden; /* Prevent flickering */
-  perspective: 1000px; /* 3D effect */
-  will-change: transform, opacity, filter; /* Optimize animation performance */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
 }
 
-.fade-scale-enter-from,
-.fade-scale-leave-to {
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
   opacity: 0;
-  transform: scale(0.85) translateY(10px);
-  filter: blur(4px);
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
 }
 
 /* Add a subtle shadow animation */
