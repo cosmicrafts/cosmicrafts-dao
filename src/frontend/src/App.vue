@@ -29,27 +29,33 @@ const areOtherWindowsOpen = () => {
   return false;
 };
 
-// Handle keyboard events for the Escape menu
+// Dedicated handler for ESC key at the template level
+const handleEscKey = (event) => {
+  // Check if we're typing in an input field
+  const activeElement = document.activeElement;
+  const isInputActive = activeElement instanceof HTMLInputElement || 
+                        activeElement instanceof HTMLTextAreaElement ||
+                        activeElement?.getAttribute('contenteditable') === 'true';
+  
+  if (isInputActive) {
+    return; // Don't interfere with input fields
+  }
+  
+  // If other windows are open, let them handle the ESC key
+  if (areOtherWindowsOpen()) {
+    return;
+  }
+  
+  // Toggle the menu if no other windows are open
+  isEscMenuOpen.value = !isEscMenuOpen.value;
+  event.stopPropagation();
+  event.preventDefault();
+};
+
+// The existing handleKeyDown function - only use for initialization 
 const handleKeyDown = (event) => {
   if (event.key === 'Escape') {
-    // Check if we're typing in an input field
-    const activeElement = document.activeElement;
-    const isInputActive = activeElement instanceof HTMLInputElement || 
-                          activeElement instanceof HTMLTextAreaElement ||
-                          activeElement?.getAttribute('contenteditable') === 'true';
-    
-    if (isInputActive) {
-      return; // Don't interfere with input fields
-    }
-    
-    // If other windows are open, let them handle the ESC key
-    if (areOtherWindowsOpen()) {
-      return;
-    }
-    
-    // Toggle the menu if no other windows are open
-    isEscMenuOpen.value = !isEscMenuOpen.value;
-    event.preventDefault();
+    handleEscKey(event);
   }
 };
 
@@ -68,7 +74,7 @@ const closeEscMenu = () => {
 </script>
 
 <template>
-  <main id="app">
+  <main id="app" @keydown.esc="handleEscKey">
     <Header />
     <Chat ref="chatRef" />
     <Modal />

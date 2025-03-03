@@ -1099,17 +1099,17 @@ defineExpose({
       ></div>
     </div>
   </transition>
-  
-  <!-- Teleport EmojiPicker to body -->
-  <Teleport to="body">
-    <EmojiPicker 
-      v-if="showEmojiPicker"
-      :show="showEmojiPicker"
-      @select="(emoji) => { insertEmoji(emoji); showEmojiPicker = false }"
-      @close="showEmojiPicker = false"
-    />
-  </Teleport>
 </template>
+
+<!-- Add Teleported EmojiPicker outside the template -->
+<Teleport to="body">
+  <EmojiPicker 
+    v-if="showEmojiPicker"
+    :show="showEmojiPicker"
+    @select="(emoji) => { insertEmoji(emoji); showEmojiPicker = false }"
+    @close="showEmojiPicker = false"
+  />
+</Teleport>
 
 <style scoped>
 /* ✅ Floating Chat Button */

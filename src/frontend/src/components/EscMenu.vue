@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-if="isOpen" class="esc-menu-overlay" @click="closeOnClickOutside">
+    <div v-if="isOpen" class="esc-menu-overlay" @click="closeOnClickOutside" @keydown.esc.stop="close">
       <div class="esc-menu" @click.stop>
         <div class="esc-menu-header">
           <h2>Menu</h2>
@@ -170,18 +170,17 @@ const toggleSound = () => {
   // Implement actual sound toggling logic here
 };
 
-// Handle keyboard events
+// Handle keyboard events specifically for the keyboard shortcuts modal
 const handleKeyDown = (event) => {
-  if (event.key === 'Escape') {
-    if (showKeyboardShortcuts.value) {
-      showKeyboardShortcuts.value = false;
-      return;
-    }
-    close();
+  if (event.key === 'Escape' && showKeyboardShortcuts.value) {
+    event.stopPropagation();
+    event.preventDefault();
+    showKeyboardShortcuts.value = false;
   }
 };
 
 onMounted(() => {
+  // Only add keyboard handler for the shortcuts modal
   document.addEventListener('keydown', handleKeyDown);
 });
 
@@ -202,7 +201,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 200000;
   animation: fadeIn 0.3s ease;
 }
 
