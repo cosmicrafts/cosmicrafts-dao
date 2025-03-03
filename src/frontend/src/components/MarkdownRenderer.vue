@@ -71,7 +71,24 @@ export default {
         const href = target.getAttribute("href");
         if (href.startsWith("#")) {
           const sectionId = href.slice(1); // Remove the # symbol
-          this.$emit("navigateToSection", sectionId); // Emit event for parent to handle
+          
+          // Check if this is a cross-section reference (like /tokenomics#section)
+          if (sectionId.includes('/')) {
+            const [targetSection, targetHeading] = sectionId.split('#');
+            // Remove the leading slash if present
+            const cleanSection = targetSection.startsWith('/') ? targetSection.substring(1) : targetSection;
+            
+            if (targetHeading) {
+              // Both section and heading specified
+              this.$emit("navigateToSection", `${cleanSection}#${targetHeading}`);
+            } else {
+              // Only section specified
+              this.$emit("navigateToSection", cleanSection);
+            }
+          } else {
+            // Regular internal heading reference
+            this.$emit("navigateToSection", sectionId);
+          }
         }
       }
       
@@ -242,9 +259,27 @@ export default {
         const hrefIndex = token.attrIndex("href");
         if (hrefIndex >= 0) {
           const href = token.attrs[hrefIndex][1];
+          
+          // Handle internal links
           if (href.startsWith("#")) {
             token.attrPush(["class", "internal-link"]);
-          } else {
+          } 
+          // Handle cross-document links in whitepaper (like /tokenomics or /tokenomics#section)
+          else if (href.startsWith("/") && 
+                  ["introduction", "executive-summary", "architecture", "core-features",
+                   "governance", "tokenomics", "community", "sustainability"].some(section => 
+                   href.startsWith(`/${section}`))) {
+            
+            // Convert to proper nested hash format that our component can handle
+            const pathParts = href.substring(1).split("#");
+            const section = pathParts[0];
+            const heading = pathParts.length > 1 ? pathParts[1] : "";
+            
+            // Update the href attribute to use our nested hash format
+            token.attrs[hrefIndex][1] = heading ? `#${section}#${heading}` : `#${section}`;
+            token.attrPush(["class", "internal-link"]);
+          }
+          else {
             token.attrPush(["target", "_blank"]);
             token.attrPush(["rel", "noopener noreferrer"]);
           }

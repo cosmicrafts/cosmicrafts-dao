@@ -100,14 +100,10 @@ export default {
         { id: "executive-summary", title: "Executive Summary" },
         { id: "architecture", title: "Architecture" },
         { id: "core-features", title: "Core Features" },       
-        { id: "tokenomics", title: "Tokenomics" },
         { id: "governance", title: "Governance" },
-        { id: "treasurymanagement", title: "Treasury Management" },
-        { id: "proposalprocess", title: "Proposal Process" },
-        { id: "stakingrewards", title: "Staking Rewards" },
-        { id: "sustainability", title: "Sustainability" },
+        { id: "tokenomics", title: "Tokenomics" },
         { id: "community", title: "Community" },
-        { id: "markdown-features", title: "Markdown Guide" },
+        { id: "sustainability", title: "Sustainability" },
       ],
       toc: [],
       activeHeading: null,
@@ -135,11 +131,79 @@ export default {
   watch: {
     activeSection() {
       this.updateButtonVisibility();
+      // Update URL hash when section changes
+      this.updateUrlHash();
     },
+    activeHeading() {
+      // Update URL hash when active heading changes
+      this.updateUrlHash();
+    },
+    // Watch for hash changes in the URL
+    '$route.hash': {
+      immediate: true,
+      handler(hash) {
+        if (hash) {
+          this.handleUrlHash(hash);
+        }
+      }
+    }
   },
   methods: {
+    // Updates the URL hash with current section and heading
+    updateUrlHash() {
+      if (!this.activeSection) return;
+      
+      const hash = this.activeHeading 
+        ? `#${this.activeSection}#${this.activeHeading}` 
+        : `#${this.activeSection}`;
+      
+      // Update URL without triggering navigation
+      if (window.location.hash !== hash) {
+        history.replaceState(null, null, hash);
+      }
+    },
+    
+    // Handles URL hash changes
+    handleUrlHash(hash) {
+      if (!hash) return;
+      
+      // Remove the leading # character
+      const hashValue = hash.startsWith('#') ? hash.substring(1) : hash;
+      
+      // Check if it's a nested hash (#section#heading)
+      if (hashValue.includes('#')) {
+        const [sectionId, headingId] = hashValue.split('#');
+        
+        // First change to the correct section
+        if (sectionId && this.sections.some(s => s.id === sectionId)) {
+          // Only change section if it's different from the current one
+          if (this.activeSection !== sectionId) {
+            this.changeSection(sectionId, false);
+            
+            // After section is loaded, scroll to heading
+            this.$nextTick(() => {
+              setTimeout(() => {
+                if (headingId) {
+                  this.scrollToHeading(headingId, false);
+                }
+              }, 500); // Give time for content to render
+            });
+          } else if (headingId) {
+            // If already on the correct section, just scroll to heading
+            this.scrollToHeading(headingId, false);
+          }
+        }
+      } else if (this.sections.some(s => s.id === hashValue)) {
+        // It's just a section hash
+        this.changeSection(hashValue, false);
+      } else {
+        // It might be just a heading hash
+        this.scrollToHeading(hashValue, false);
+      }
+    },
+    
     // Changes the active section
-    changeSection(sectionId) {
+    changeSection(sectionId, updateUrl = true) {
       this.activeSection = sectionId;
       this.toc = [];
       
@@ -150,6 +214,11 @@ export default {
         const mainContent = document.querySelector(".main-content");
         if (mainContent) {
           mainContent.scrollTop = 0;
+        }
+        
+        // Update URL if needed
+        if (updateUrl) {
+          this.updateUrlHash();
         }
       });
     },
@@ -163,9 +232,41 @@ export default {
     },
 
     // Handles TOC navigation
-    handleNavigateToSection(sectionId) {
-      const section = this.sections.find((s) => s.id === sectionId);
-      section ? this.changeSection(sectionId) : this.scrollToHeading(sectionId);
+    handleNavigateToSection(sectionIdOrHeadingId) {
+      // Check if it contains both section and heading (section#heading format)
+      if (sectionIdOrHeadingId.includes('#')) {
+        const [sectionId, headingId] = sectionIdOrHeadingId.split('#');
+        
+        // Check if it's a valid section
+        if (this.sections.some(s => s.id === sectionId)) {
+          // Change to the section first
+          if (this.activeSection !== sectionId) {
+            this.changeSection(sectionId, false);
+            
+            // After section is loaded, scroll to heading
+            this.$nextTick(() => {
+              setTimeout(() => {
+                this.scrollToHeading(headingId);
+              }, 500); // Give time for content to render
+            });
+          } else {
+            // Already on the correct section, just scroll to heading
+            this.scrollToHeading(headingId);
+          }
+        }
+        return;
+      }
+      
+      // Check if it's a known section ID (normal case)
+      const section = this.sections.find((s) => s.id === sectionIdOrHeadingId);
+      
+      if (section) {
+        // It's a section, change to it
+        this.changeSection(sectionIdOrHeadingId);
+      } else {
+        // It's a heading, scroll to it
+        this.scrollToHeading(sectionIdOrHeadingId);
+      }
     },
 
     // Updates the visibility of navigation buttons
@@ -186,13 +287,14 @@ export default {
       if (!headings.length) return;
 
       this.toc = Array.from(headings).map((heading, index) => {
-        // Create a simple ID based on index to avoid any issues
-        const headingId = `heading-${index}`;
+        // Use the heading text for the ID to make it more readable in URLs
+        const headingText = heading.textContent.trim();
+        const headingId = this.slugify(headingText);
         heading.id = headingId;
         
         return { 
           id: headingId, 
-          text: heading.textContent.trim() 
+          text: headingText 
         };
       });
 
@@ -205,10 +307,10 @@ export default {
 
     // Scrolls to a specific heading
     scrollToHeading(id) {
-      const target = document.getElementById(id);
+    const target = document.getElementById(id);
       if (target) {
-        // Calculate the header offset (adjust this value if you have a fixed header)
-        const headerOffset = 100;
+        // Calculate the header offset (20% from the top)
+        const headerOffset = window.innerHeight * 0.2;
 
         // Get the main content element for scrolling
         const mainContent = document.querySelector(".main-content");
@@ -226,6 +328,16 @@ export default {
         // Update the active heading
         this.activeHeading = id;
       }
+    },
+    
+    // Creates a URL-friendly slug from text
+    slugify(text) {
+      return text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '') // Remove non-word characters
+        .replace(/\s+/g, '-')     // Replace spaces with hyphens
+        .replace(/--+/g, '-')     // Replace multiple hyphens with single hyphen
+        .trim();                  // Trim leading/trailing whitespace
     },
 
     // Observes which section is currently in view

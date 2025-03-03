@@ -1,10 +1,43 @@
 # Governance
 
+[[toc]]
+
+## Document Navigation Guide
+
+This document outlines the governance framework of the Cosmicrafts DAO, focusing on decision-making processes, proposal systems, and community participation. It complements the [Tokenomics](/tokenomics) document, which covers economic aspects.
+
+::: info Reading Guide
+- **Primary Focus**: Governance processes, voting, and community decision-making
+- **Companion Document**: [Tokenomics](/tokenomics) for token economics and utility
+- **Cross-References**: Look for tip boxes linking to relevant tokenomics sections
+:::
+
 ## Introduction
 
 ::: info Decentralized Governance
 We've designed governance to put the community at the center, giving Stakeholders a real say in how the franchise grows. Built using ICP's native [SNS (Service Nervous System)](https://internetcomputer.org/docs/current/developer-docs/daos/sns/overview), maintained by the [DFINITY Foundation](https://dfinity.org/), the DAO uses fairness, transparency, and community-driven decision-making to ensure Cosmicrafts stays true to its vision.
 :::
+
+---
+
+## Relationship Between Governance & Tokenomics
+
+The Governance and Tokenomics systems of Cosmicrafts DAO are deeply interconnected but serve distinct purposes. Understanding their relationship helps navigate both documents more effectively.
+
+::: tip Document Navigation
+This document focuses on **governance processes** - how decisions are made, who can participate, and what safeguards ensure fair representation. For details on **economic mechanics** including token utility, staking rewards, and treasury economics, see the [Tokenomics](/tokenomics) document.
+:::
+
+### Key Interactions
+
+| Governance Aspect | Tokenomics Aspect | Relationship |
+|-------------------|-------------------|--------------|
+| **Voting Power** | **Token Staking** | Governance power derives from staked tokens; longer commitments increase influence |
+| **Treasury Management** | **Economic Sustainability** | Governance processes decide treasury allocations that drive economic outcomes |
+| **Proposal System** | **Token Utility** | The ability to create proposals is a core utility of the Spiral token |
+| **DAO Evolution** | **Economic Projections** | Governance maturity develops alongside economic growth metrics |
+
+Throughout this document, you'll find standardized cross-references (like the box above) that direct you to relevant sections in the Tokenomics document for economic details.
 
 ---
 ## DAO General Principles
@@ -89,61 +122,111 @@ The DAO empowers stakeholders by granting them voting rights to shape the projec
 
 - Voting is conducted through the [NNS (Network Nervous System)](https://internetcomputer.org/docs/current/developer-docs/daos/nns/overview), an intuitive interface, making governance accessible to all token holders.
 
-### Maturity-Based Staking
+### Neuron-Based Voting Power
 
 ```mermaid
 graph TD
     A[Stake Tokens in Neurons] --> B[Increase Maturity Over Time]
     B --> C[Greater Voting Power]
-    B --> D[Higher Staking Rewards]
     C --> E[More Influence in DAO]
-    D --> F[Compounding Returns]
     A --> G[Set Dissolve Delay]
-    G --> H[Balance Liquidity vs Governance]
+    G --> H[Longer Delay = More Voting Weight]
 ```
 
-- **Neuron Staking**: Stakeholders lock tokens in [neurons](https://internetcomputer.org/docs/current/developer-docs/daos/nns/concepts/neurons/neuron-overview) to participate in governance and earn rewards.
-  - The longer tokens are staked, the greater the maturity of the neuron, directly impacting:
-    - **Voting Power**: Higher maturity grants greater influence in governance decisions.
-    - **Rewards**: Maturity-based staking provides [compounding returns](https://internetcomputer.org/docs/current/developer-docs/daos/nns/concepts/neurons/staking-voting-rewards), incentivizing long-term commitment.
-  - Neuron holders can [dissolve neurons to unlock tokens](https://internetcomputer.org/docs/current/developer-docs/daos/nns/concepts/neurons/neuron-management), with dissolving durations adjustable to balance liquidity and governance participation.
+- **Neuron Creation**: To participate in governance, stakeholders must lock Spiral tokens in [neurons](https://internetcomputer.org/docs/current/developer-docs/daos/nns/concepts/neurons/neuron-overview).
+- **Voting Power Factors**: The influence of your votes is determined by:
+  - **Stake Size**: The more tokens staked, the greater your voting weight
+  - **Dissolve Delay**: Committing to longer lockup periods increases your influence
+  - **Neuron Age**: Longer-standing neurons accumulate more voting power over time
+  
+::: tip See Also: Staking Mechanics
+For complete details on the staking mechanics, rewards structure, and dissolve options, see the [Staking & Rewards System](/tokenomics#staking-rewards-system) section in the Tokenomics document.
+:::
+
 - **Governance Participation Rewards**: Active participation in proposals and voting enhances individual rewards, promoting engagement within the community.
+
+---
+
+## Proposal Lifecycle & Community Involvement
+
+The Cosmicrafts DAO thrives on its community. Whether it's a bold idea for a new game mode, a partnership with another project, or a fresh way to grow the ecosystem, you can bring those ideas to life by submitting a proposal to the DAO. Here's how the process works:
+
+### Proposal Creation: Turning Ideas into Action
+
+Every great proposal starts with a conversation. Before formally submitting your idea, we encourage you to share it with the community in dedicated discussion channels. This early feedback helps refine your proposal, address potential concerns, and increase its chances of success.
+
+#### Who can propose?
+Any Spiral token holder with a staked neuron can submit a proposal.
+
+#### What should your proposal include?
+
+A strong proposal should clearly outline:
+
+- **The Problem**: What issue or opportunity are you addressing? (Clearly define the challenge or potential benefit.)
+- **Your Solution**: What's your idea to solve the problem or capitalize on the opportunity? (Describe your proposed solution in detail.)
+- **The Plan**: What steps are needed to make it happen? (Outline the key steps and milestones for implementation.)
+- **Required Resources**: What resources are needed? (Specify budget requirements, human resources, or other support needed.)
+- **Expected Impact**: What benefits will this bring to Cosmicrafts? (Explain the projected outcomes and their value to the ecosystem.)
+- **Success Metrics**: How will we know if it's successful? (Define measurable success criteria and evaluation methods.)
+
+::: info
+Using the proposal format above will help the community quickly understand your idea and increase its chances of approval. Clear, well-structured proposals tend to receive more serious consideration from the community.
+:::
 
 ### Proposal Submission
 
-Got an idea for a new feature, partnership, or treasury adjustment? Here's how to turn your idea into action within the Cosmicrafts DAO.
+Once you've refined your idea based on community feedback, you can formally submit it to the DAO. While proposal submission is designed to be inclusive, certain measures ensure the process remains meaningful:
 
-#### 1. Public Discussion
+- **Minimum Staking Requirement**: To prevent spam proposals, you'll need to have a minimum amount of Spiral staked in a neuron.
+- **Proposal Deposit**: A small deposit is required when submitting a proposal. This deposit is returned if the proposal is processed to completion (whether approved or rejected), but may be forfeited if the proposal is deemed malicious or disruptive.
 
-::: info Community Feedback
-We encourage stakeholders to start with a **public discussion** about their proposal. This step helps refine ideas, gather community feedback, and increase the chances of success.
+### Types of Proposals
+
+The DAO recognizes different proposal types, each with its own voting requirements and implementation process:
+
+| Proposal Type | Description | Approval Threshold | Processing Time |
+|---------------|-------------|-------------------|-----------------|
+| **Motion** | A formal statement, declaration, or position of the DAO without direct action | Simple Majority (>50%) | 3 Days |
+| **Minor Allocation** | Requests for funding below a defined threshold | Simple Majority (>50%) | 5 Days |
+| **Major Allocation** | Requests for significant funding above the threshold | Super Majority (>66%) | 7 Days |
+| **Parameter Change** | Changes to DAO parameters, voting requirements, etc. | Super Majority (>66%) | 7 Days |
+| **Network Upgrade** | Updates to the core platform or infrastructure | Super Majority (>66%) | 10 Days |
+
+### Review and Voting Process
+
+After submission, proposals go through a structured review and voting process:
+
+1. **Initial Review** (1-2 days): The proposal is visible to the community for initial feedback and discussion. This period allows for clarification questions and minor adjustments.
+
+2. **Formal Voting** (3-10 days, depending on proposal type): Eligible neuron holders cast their votes on the proposal. Voting power depends on the number of tokens staked and the staking duration.
+
+3. **Implementation** (If approved): The proposal moves to implementation, with regular updates provided to the community on progress.
+
+### Implementation and Accountability
+
+For approved proposals, especially those involving fund allocation or significant changes:
+
+- **Implementation Team**: Either the proposer or an assigned team is responsible for implementation.
+- **Milestone Reporting**: Regular updates are provided to the community, especially for proposals with longer implementation timeframes.
+- **Funds Release**: For funded proposals, funds may be released in stages based on milestone achievement.
+- **Final Report**: Once implemented, a final report summarizes the outcomes, lessons learned, and impact.
+
+::: warning
+Proposal submitters are accountable to the DAO for the execution of their proposals. Failure to deliver on approved proposals may affect future proposals from the same individual or team.
 :::
 
-- Use our dedicated **forum** to present your concept, share details, and receive constructive input from the community.  
-- For **critical decisions** that require immediate review, proposals can bypass this step but must clearly justify the urgency.  
+### Community Debate: Collaborative Refinement
 
-#### 2. Submitting Your Proposal
+Through dedicated channels on our Discord server, threads on the official Cosmicrafts forum, and regular AMAs, everyone can review, ask questions, and offer suggestions for improvement. 
 
-Once your idea has been validated through community discussion, it's time to submit your proposal.
+Here's how the community collaborates to refine each proposal:
+- **Feedback**: Stakeholders provide constructive feedback to improve the proposal.
+- **Debate**: Discussions address potential challenges and highlight opportunities.
+- **Iteration**: Proposal creators can refine their ideas based on community input.
 
-| Requirement | Details |
-|-------------|---------|
-| **Clear Description** | Concise explanation of what you're proposing |
-| **Rationale** | Why this proposal benefits Cosmicrafts |
-| **Expected Outcomes** | Specific benefits to the DAO and community |
-| **Implementation Plan** | How and when the proposal will be executed |
+This collaborative process ensures proposals are thoroughly reviewed and optimized before voting begins.
 
-- **Team Assistance**:  
-   If your proposal has been validated but you face challenges submitting it, the team can help elaborate and submit it on your behalf, covering the proposal fee.
-
-#### 3. Community Voting
-
-Once live, Spiral holders vote on your proposal.
-
-- **Neuron Voting Power**:  
-  The weight of each vote is determined by the staked Spiral tokens in the voter's neuron.
-- **Engagement Incentives**:  
-  If your proposal passes, it's automatically implemented by the SNS, and you may earn Spiral rewards as recognition for your contribution to the DAO.
+---
 
 ## Treasury Management
 
@@ -162,6 +245,10 @@ The treasury exists to support the DAO's objectives by funding initiatives, rewa
 | **Staking and Rewards** | Allocating Spiral rewards for active participants and incentivizing governance |
 | **Reserves for Market Stability** | Maintaining liquidity to stabilize the token's market value |
 | **Operational Costs** | Covering legal, administrative, and other essential expenses |
+
+::: tip See Also: Economic Details
+For comprehensive details on treasury economic allocations, revenue streams, and long-term sustainability measures, see the [Economic Sustainability](/tokenomics#economic-sustainability) section in the Tokenomics document.
+:::
 
 ### Governance Over Treasury Management
 
@@ -191,26 +278,60 @@ graph LR
 - A portion of the treasury is reserved for unforeseen circumstances or high-impact opportunities.
 - Access to these reserves requires supermajority approval by the DAO.
 
-### Voting and Decision-Making
+### Treasury Use Cases
 
-Treasury-related proposals follow a structured process to ensure fair decision-making:
+The Community Treasury funds the initiatives that will take Cosmicrafts to the next level. Each use case requires specific governance considerations:
 
-1. **Public Review**:  
-   The community discusses the proposal during a public review period to refine and assess its viability.   
-2. **Proposal Submission**:
-   Stakeholders submit a detailed proposal, including the requested amount, justification, and benefits to the DAO. 
-3. **Voting**:  
-   Spiral holders vote on the proposal. The weight of each vote is determined by the staked tokens in the neuron.  
-4. **Implementation**:  
-   Approved proposals are executed, with funds released from the treasury to the specified initiative.
+::: info Economic Impact
+For detailed analysis of the economic impact of treasury allocations, revenue flows, and value generation models, see the [Economic Sustainability](/tokenomics#economic-sustainability) and [Token Circulation Model](/tokenomics#token-circulation-model) sections in the Tokenomics document.
+:::
 
-### Sustainability Measures
+#### 1. Development Funding
+- **Governance Focus**: Proposals for development funding must include:
+  - Clear alignment with roadmap priorities
+  - Specific milestones and deliverables
+  - Impact measurement frameworks
+- **Decision Framework**: Development proposals are evaluated based on:
+  - Strategic value to the ecosystem
+  - Technical feasibility
+  - Community demand
 
-To ensure the long-term health of the treasury:
+#### 2. Ecosystem Growth
+- **Governance Approach**: Ecosystem growth initiatives require:
+  - Partnership agreement templates approved by the DAO
+  - Marketing campaign oversight committees
+  - Community-led review processes
+- **Measurement**: Regular reporting on:
+  - Return on investment metrics
+  - User acquisition and retention data
+  - Brand growth indicators
 
-- [x] **Revenue Streams**: The DAO continuously generates revenue through game transactions, NFTs, marketplace fees, and staking rewards.
-- [x] **Controlled Spending**: Expenditures are prioritized based on the potential return on investment and alignment with the DAO's mission.
-- [x] **Periodic Audits**: Regular audits are conducted to evaluate treasury performance, ensuring funds are utilized effectively and transparently.
+#### 3. Governance Incentives
+- **Structure**: Weighted rewards based on:
+  - Active participation rates
+  - Quality of contributions
+  - Longevity of commitment
+- **Adjustment Mechanism**: Quarterly reviews of incentive effectiveness conducted by:
+  - Participation analysis committee
+  - Treasury sustainability monitors
+  - Community feedback channels
+
+#### 4. Security & Infrastructure
+- **Priority Framework**: Security and infrastructure proposals receive priority processing when they:
+  - Address identified vulnerabilities
+  - Improve system resilience
+  - Enhance user experience for governance participants
+- **Proactive Planning**: Dedicated budget allocations for:
+  - Regular security audits
+  - System upgrades
+  - Emergency response capabilities
+
+### Safeguards for Treasury Protection
+
+- **Community-driven decisions**: All spending requires DAO approval through voting
+- **On-chain transparency**: All transactions are recorded on-chain with regular reporting
+- **Proposal deposit requirements**: Small deposits required to prevent spam proposals
+- **Emergency reserves**: Protected funds accessible only through expedited voting
 
 ### Emergency Protocols
 
@@ -220,7 +341,7 @@ In case of emergencies, such as market instability or urgent funding needs:
 - Emergency expenditures are strictly documented and reported to the community.
 :::
 
-> Treasury management ensures the DAO operates efficiently, transparently, and sustainably by empowering the community to oversee and govern the treasure.
+> Treasury management through effective governance ensures the DAO operates efficiently, transparently, and sustainably by empowering the community to oversee and direct resources.
 
 ---
 
@@ -418,90 +539,6 @@ Governance security is a critical part of Cosmicrafts DAO, ensuring fair, transp
 
 ---
 
-> These guidelines are designed to provide Cosmicrafts DAO with a flexible framework for sustainable growth and innovation while staying aligned with its core principles.
-
-## Proposal Lifecycle & Community Involvement
-
-The Cosmicrafts DAO thrives on its community. Whether it's a bold idea for a new game mode, a partnership with another project, or a fresh way to grow the ecosystem, you can bring those ideas to life by submitting a proposal to the DAO. Here's how the process works:
-
-### Proposal Creation: Turning Ideas into Action
-
-Every great proposal starts with a conversation. Before formally submitting your idea, we encourage you to share it with the community in dedicated discussion channels. This early feedback helps refine your proposal, address potential concerns, and increase its chances of success.
-
-#### Who can propose?
-Any Spiral token holder with a staked neuron can submit a proposal.
-
-#### What should your proposal include?
-
-A strong proposal should clearly outline:
-
-- **The Problem**: What issue or opportunity are you addressing? (Clearly define the challenge or potential benefit.)
-- **Your Solution**: What's your idea to solve the problem or capitalize on the opportunity? (Describe your proposed solution in detail.)
-- **The Plan**: What steps are needed to make it happen? (Outline the key steps and milestones for implementation.)
-- **Timeline**: How long will it take? (Provide a realistic timeframe for each stage of the project.)
-- **Budget (if applicable)**: How much funding is required, and how will it be used? (Provide a detailed breakdown of expenses.)
-- **Team (if applicable)**: Who will be responsible for carrying out the proposal? (List the individuals or teams involved and their roles.)
-
-> **Tip:** Present your information clearly and concisely to ensure the community can easily understand and evaluate your proposal.
-
-### Community Debate: Collaborative Refinement
-
-Once submitted, your proposal enters a community debate phase. During this time:
-
-- **Community members can ask questions, provide feedback, and suggest improvements.**
-- **You can refine your proposal based on community input.**
-- **The community can gauge support for the proposal before it goes to a formal vote.**
-
-This collaborative process ensures that proposals are thoroughly vetted and improved before they're put to a vote, increasing their chances of success and implementation.
-
-### Voting: Democratic Decision-Making
-
-After the debate phase, eligible proposals move to a formal vote. The voting process is designed to be fair, transparent, and accessible to all stakeholders:
-
-- **Voting Power**: Your voting power is determined by the amount of Spiral tokens you have staked in neurons and the dissolve delay you've chosen.
-- **Voting Period**: Most proposals have a standard voting period of 7 days, giving all stakeholders ample time to participate.
-- **Approval Threshold**: Different types of proposals require different approval thresholds, ranging from simple majority to supermajority, depending on their impact.
-
-### Implementation: Bringing Ideas to Life
-
-Approved proposals move to the implementation phase, where the real work begins:
-
-- **Execution Team**: The team responsible for implementing the proposal (as specified in the proposal itself) gets to work.
-- **Progress Updates**: Regular updates are provided to the community, ensuring transparency and accountability.
-- **Milestone Reviews**: For larger projects, milestone reviews may be conducted to ensure the project is on track and meeting its objectives.
-
----
-
-## Staking & Rewards: Building Value Together
-
-By staking your Spiral tokens, you become a vital part of the Cosmicrafts ecosystem, contributing to its long-term success and earning rewards along the way. Staking isn't just about rewards—it's about securing the DAO, driving its growth, and unlocking unique benefits for your commitment.
-
-### Why Stake Spiral Tokens?
-
-Staking Spiral tokens is your gateway to deeper involvement in the DAO and a way to earn meaningful rewards. Here's why staking matters:
-
-- **Earn Rewards**: Stake Spiral and earn rewards for your contribution to the DAO.
-- **Boost Voting Power**: Locking your Spiral in neurons boosts your voting power, giving you a bigger say in how the DAO is run.
-- **Support the Ecosystem**: Staking strengthens the treasury, stabilizes the Spiral token, and fuels the development of new projects.
-- **Unlock Exclusive Perks**: As a staker, you'll unlock perks like early access to new games and content, special NFT drops, and more.
-
-### Staking Your Spiral and Earning Rewards
-
-Staking your Spiral is simple and rewarding. Here's how it works:
-
-#### Staking Your Spiral
-
-Using the DAO's governance interface, you can lock your Spiral tokens into a neuron. You'll also choose a "dissolve delay"—the length of time you commit to locking your tokens. The longer the delay, the greater your rewards and voting power.
-
-#### How Your Neuron Grows
-
-Over time, your neuron accumulates voting power based on three key factors:
-- **Dissolve Delay**: The longer you commit to locking your tokens, the more voting power you receive.
-- **Age**: The longer your neuron has been staked, the more voting power it accumulates.
-- **Stake Size**: The more Spiral tokens you stake, the greater your voting power.
-
----
-
 ## Community Building & Ecosystem Growth
 
 The heart of Cosmicrafts is its **community**. Through engagement, events, and gamified rewards, we're creating interactive ways for you to **connect, collaborate, and thrive**.
@@ -543,9 +580,9 @@ Here are the key risks the DAO faces, categorized for clarity, with examples spe
 
 #### 2. **Economic Risks**
 
-- **Token Volatility**: Fluctuations in Spiral's value could affect the stability of the ecosystem.
-- **Unsustainable Rewards**: Overly generous rewards might deplete the treasury too quickly.
-- **Insufficient Treasury Growth**: If the treasury doesn't grow sufficiently, we might not have the resources to fund all the exciting projects we want to pursue.
+::: tip See Also: Economic Risk Analysis
+While economic risks impact governance operations, their detailed analysis and mitigation strategies are covered in the [Economic Risk Factors](/tokenomics#economic-risk-factors) section of the Tokenomics document. The governance system addresses these risks through the economic stability measures outlined below.
+:::
 
 #### 3. **Security Risks**
 
@@ -585,3 +622,105 @@ To address these risks, the DAO has implemented several key strategies:
 - **Regular Events**: Community events, AMAs, and town halls keep members engaged and informed.
 
 By proactively addressing these risks, the Cosmicrafts DAO ensures its long-term sustainability and success, creating a resilient ecosystem that can weather challenges and seize opportunities.
+
+---
+
+## Governance Evolution
+
+The Cosmicrafts DAO governance system is designed to evolve alongside the project's growth, with defined phases that enhance decentralization, efficiency, and community ownership over time.
+
+::: tip See Also: Economic Projections
+Governance evolution is closely tied to economic development. For detailed projections on staking rates, treasury growth, and key metrics across different timeframes, see the [Economic Projections](/tokenomics#economic-projections) section in the Tokenomics document.
+:::
+
+### Phase 1: Foundation (Year 1)
+
+During this initial phase, governance focuses on establishing core processes, encouraging participation, and educating the community:
+
+- **Guided Proposals**: The team provides templates and support for proposal creation
+- **Educational Focus**: Regular workshops and guides to help members understand governance
+- **Limited Scope**: Focus on well-defined, manageable decision areas
+- **Streamlined Process**: Simplified voting procedures to encourage participation
+
+### Phase 2: Expansion (Years 2-3)
+
+As the community matures, governance becomes more sophisticated and decentralized:
+
+- **Specialized Working Groups**: Formation of domain-specific groups focused on areas like development, marketing, or partnerships
+- **Enhanced Delegation**: More advanced delegation systems that allow for nuanced representation
+- **Process Refinement**: Optimized proposal flows based on learnings from Phase 1
+- **Increased Autonomy**: Greater community independence from core team guidance
+
+### Phase 3: Maturity (Years 4+)
+
+The final phase represents a fully decentralized, efficient governance system:
+
+- **Multi-Tiered Governance**: Different processes for different types of decisions
+- **Reputation Systems**: Advanced systems that recognize and reward valuable contributions
+- **Inter-DAO Collaboration**: Formal frameworks for working with other DAOs and projects
+- **Continuous Innovation**: Self-improving processes that adapt to emerging best practices
+
+The evolution of governance will be monitored using key metrics outlined in the Tokenomics document, with regular community reviews to ensure alignment with the project's values and goals.
+
+---
+
+## Visual Suggestions for Governance
+
+1. **Treasury Allocation Pie Chart**
+   - **Content**: A visual breakdown of how treasury funds are allocated across use cases.
+   - **Style**: Simple and clean, with percentages labeled.
+
+2. **Neuron Voting Weight Chart**
+   - **Content**: A graphic illustrating how staked Spiral, neuron age, and dissolve delay combine to determine voting power.
+   - **Style**: Use bars or scales with clear legends.
+
+3. **Transparency Dashboard Mockup**
+   - **Content**: A sample dashboard showing treasury activity, proposal statuses, and voting results.
+   - **Style**: Minimalist and intuitive design.
+
+4. **Proposal Lifecycle Flowchart**
+   - **Content**: A step-by-step diagram showing the process from submitting a proposal to voting and implementation.
+   - **Style**: Linear flowchart with clear labels and distinct colors for each stage.
+
+> These guidelines are designed to provide Cosmicrafts DAO with a flexible framework for sustainable growth and innovation while staying aligned with its core principles.
+
+## Governance and Staking
+
+The Cosmicrafts DAO uses a staking-based governance system where participation and influence are directly tied to your commitment to the ecosystem.
+
+::: tip See Also: Staking Mechanics
+By staking your Spiral tokens, you not only earn rewards but also gain voting power in the DAO. For complete details on staking mechanics, rewards, and advantages, see the [Staking & Rewards System](/tokenomics#staking-rewards-system) section in the Tokenomics document.
+:::
+
+### Governance Benefits of Staking
+
+Staking your Spiral tokens provides several governance-related benefits:
+
+1. **Voting Power**: Staked tokens grant you the ability to vote on proposals, with power weighted by stake size, duration, and age
+2. **Proposal Creation**: Stakers can submit proposals for consideration by the community
+3. **Governance Rewards**: Active participation in voting is incentivized with additional rewards
+
+### Impact on Decision-Making
+
+The staking-based governance model helps ensure that:
+- Long-term supporters have greater influence than short-term speculators
+- Those with the most at stake have proportional say in DAO decisions
+- Active participation is rewarded and encouraged
+
+For the technical details on how staking works, dissolve delays, and the full rewards structure, please refer to the Tokenomics document.
+
+---
+
+## Next Steps
+
+Now that you understand the governance framework of the Cosmicrafts DAO, here are recommended next steps:
+
+::: info Continue Reading
+- **[Tokenomics Document](/tokenomics)**: Learn about the economic model and token utility
+- **[Community](/community)**: Discover how to get involved with the Cosmicrafts community
+- **[Executive Summary](/executive-summary)**: Get a high-level overview of the entire project
+:::
+
+To participate in governance discussions or ask questions about the proposal process, join our [Discord community](https://discord.gg/cosmicrafts) and visit the #governance channel.
+
+---

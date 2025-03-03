@@ -3,6 +3,16 @@
 
 [[toc]]
 
+## Document Navigation Guide
+
+This document details the economic framework of the Cosmicrafts DAO, focusing on the Spiral token's allocation, utility, and mechanics. It complements the [Governance](/governance) document, which covers decision-making processes.
+
+::: info Reading Guide
+- **Primary Focus**: Token economics, distribution, and utility
+- **Companion Document**: [Governance](/governance) for decision-making processes
+- **Cross-References**: Look for tip boxes linking to relevant governance sections
+:::
+
 ## Introduction
 
 ::: info Spiral Token
@@ -10,6 +20,27 @@ The **Spiral Token (SPL)** is the foundation of Cosmicrafts, powering governance
 :::
 
 > This section details the token allocation, utility, and economic model that make Spiral a powerful asset.
+
+---
+
+## Relationship Between Tokenomics & Governance
+
+The Tokenomics and Governance systems of Cosmicrafts DAO work in concert to create a balanced, sustainable ecosystem. Understanding their relationship helps navigate both documents more effectively.
+
+::: tip Document Navigation
+This document focuses on **economic mechanics** - how the token functions, its utility, and distribution model. For details on **decision-making processes** including proposal creation, voting, and treasury management governance, see the [Governance](/governance) document.
+:::
+
+### Key Interactions
+
+| Tokenomics Aspect | Governance Aspect | Relationship |
+|-------------------|-------------------|--------------|
+| **Token Staking** | **Voting Power** | Staking tokens creates neurons that grant voting power in governance |
+| **Economic Sustainability** | **Treasury Management** | Economic mechanisms fund the treasury that governance processes manage |
+| **Token Utility** | **Proposal System** | Token utility includes governance rights managed by the proposal system |
+| **Economic Projections** | **DAO Evolution** | Economic growth metrics evolve alongside governance maturity |
+
+Throughout this document, you'll find standardized cross-references (like the box above) that direct you to relevant sections in the Governance document for decision-making details.
 
 ---
 
@@ -159,6 +190,14 @@ Spiral enables a decentralized governance model, granting stakeholders direct co
 | **Voting Power** | Weighted by the amount of Spiral staked, neuron age (how long it's been staked), and dissolve delay (commitment period) |
 | **Governance Rewards** | Active participation in voting earns Spiral rewards, incentivizing consistent engagement |
 
+::: tip See Also: Governance Process
+For complete details on the governance process, proposal types, voting procedures, and decision-making frameworks, see the [Governance](/governance) document.
+:::
+
+::: warning Security Considerations
+The token design includes built-in safeguards against governance attacks. For details on how the system addresses 51% attacks, Sybil attacks, and other attack vectors, see the [Attack Vectors and Mitigation](/governance#attack-vectors-and-mitigation) section in the Governance document.
+:::
+
 ### 2. Gaming Economy: Enhancing Player Experience
 
 ::: info In-Game Utility
@@ -233,6 +272,87 @@ Spiral operates as the backbone of Cosmicrafts' interconnected gaming ecosystem:
 
 ---
 
+## Staking & Rewards System
+
+By staking your Spiral tokens, you become a vital part of the Cosmicrafts ecosystem, contributing to its long-term success and earning rewards along the way. Staking isn't just about rewards—it's about securing the DAO, driving its growth, and unlocking unique benefits for your commitment.
+
+::: tip See Also: Governance Connection
+Staking is the foundation of the DAO's governance system. For complete details on how staked tokens influence governance, proposal creation rights, and decision-making processes, see the [Governance and Staking](/governance#governance-and-staking) section in the Governance document.
+:::
+
+### Why Stake Spiral Tokens?
+
+Staking Spiral tokens is your gateway to deeper involvement in the DAO and a way to earn meaningful rewards:
+
+- **Earn Rewards**: Stake Spiral and earn rewards for your contribution to the DAO.
+- **Boost Voting Power**: Locking your Spiral in neurons boosts your voting power, giving you a bigger say in how the DAO is run.
+- **Support the Ecosystem**: Staking strengthens the treasury, stabilizes the Spiral token, and fuels the development of new projects.
+- **Unlock Exclusive Perks**: As a staker, you'll unlock perks like early access to new games and content, special NFT drops, and more.
+
+### How Staking Works
+
+#### Staking Your Spiral
+
+Using the DAO's governance interface, you can lock your Spiral tokens into a neuron. You'll also choose a "dissolve delay"—the length of time you commit to locking your tokens. The longer the delay, the greater your rewards and voting power.
+
+#### How Your Neuron Grows
+
+Over time, your neuron accumulates voting power based on three key factors:
+
+1. **Staked Spiral**: The more Spiral you've locked up, the more weight your vote carries.
+2. **Neuron Age**: The longer you've been staking, the more voting power you gain.
+3. **Dissolve Delay**: Committing to a longer dissolve delay boosts your voting power even further.
+
+This accumulated voting power directly translates to higher governance rewards when you participate in DAO proposals.
+
+### Earning Rewards
+
+As a Spiral staker, you can earn rewards in several ways:
+
+1. **Governance Rewards**:  
+   Every time you vote on a proposal, you'll earn Spiral tokens. The more voting power your neuron has, the more you'll earn.
+
+2. **Maturity-Based Bonuses**:  
+   The longer you stake your Spiral, the bigger your bonus rewards become. For example:  
+   - **1 Year:** +5% bonus on top of your base rewards.  
+   - **2 Years:** +12% bonus on top of your base rewards.  
+   - **3+ Years:** Up to +20% bonus on top of your base rewards.  
+   These amounts are examples and are subject to DAO governance.
+
+3. **Exclusive Perks**:  
+   Staking unlocks exclusive perks like early access to new Cosmicrafts games and content, special NFT drops, and more.
+
+4. **Deflationary Benefits**:  
+   A portion of transaction fees from in-game purchases is distributed to active stakers, creating additional revenue streams.
+
+### Safeguards for Staking
+
+To protect stakers and ensure long-term sustainability, the DAO employs several safeguards:
+
+- **Anti-Whale Measures**:  
+  Limits on maximum voting power per neuron prevent centralization and ensure fair participation.
+
+- **Penalty for Early Dissolving**:  
+  Stakers who dissolve their neurons early lose a portion of accumulated rewards. This penalty discourages short-term speculation and incentivizes long-term commitment, which is crucial for the stability and growth of the DAO.
+
+- **Fair Distribution**:  
+  Rewards are funded from the Community Treasury, ensuring no new tokens are minted for staking payouts, maintaining the token's value.
+
+### Ecosystem Benefits of Staking
+
+Staking Spiral doesn't just benefit individual stakers—it drives the entire Cosmicrafts ecosystem forward:
+
+- **Treasury Growth**:  
+  When you stake Spiral, you help strengthen the treasury, giving the DAO more resources to fund exciting new projects.
+
+- **Token Stability**:  
+  Locking up Spiral helps stabilize the token's value and reduces market volatility.
+
+- **Community Engagement**:  
+  Staking encourages active participation in governance, ensuring a vibrant and committed community.
+
+---
+
 ## Advantages of Spiral Tokenomics
 
 ### For Stakeholders:
@@ -262,6 +382,10 @@ Spiral is designed with multiple utilities to create a robust, interconnected ec
 - **Voting Weight**: Voting power is determined by the amount of staked tokens and the chosen dissolve delay.
 - **Decision Making**: Spiral holders shape the future of Cosmicrafts through direct participation in governance.
 
+::: tip See Also: Governance Process
+The governance utility of Spiral tokens is fundamental to the DAO's operation. For comprehensive details on the governance process, proposal types, and decision frameworks, see the [Governance](/governance) document.
+:::
+
 ### 2. In-Game Currency
 - **Microtransactions**: Purchase in-game items, cosmetics, and upgrades.
 - **Battle Passes**: Access premium content and exclusive rewards.
@@ -279,44 +403,13 @@ Spiral is designed with multiple utilities to create a robust, interconnected ec
 
 ---
 
-## Staking Mechanics
-
-Staking is a core component of the Spiral token economy, providing benefits to both stakers and the ecosystem as a whole.
-
-### Staking Process
-
-1. **Neuron Creation**: Lock your Spiral tokens in a neuron through the governance interface.
-2. **Dissolve Delay**: Choose a dissolve delay (8 days to 8 years) - the longer the delay, the greater your rewards and voting power.
-3. **Voting Participation**: Participate in governance by voting on proposals to earn rewards.
-4. **Reward Distribution**: Receive staking rewards based on your stake size, dissolve delay, and voting participation.
-
-### Staking Benefits
-
-- **Governance Rewards**: Earn Spiral tokens for participating in governance.
-- **Treasury Dividends**: Receive a share of treasury distributions based on your stake.
-- **Voting Power**: Gain influence in the DAO proportional to your stake and commitment.
-- **Exclusive Access**: Unlock special perks, early access, and unique opportunities.
-
-### Reward Calculation
-
-Staking rewards are calculated based on several factors:
-
-1. **Base Reward Rate**: A foundational reward rate set by the DAO.
-2. **Dissolve Delay Multiplier**: Longer dissolve delays earn higher rewards.
-   - 8 days: 1x multiplier
-   - 6 months: 1.125x multiplier
-   - 1 year: 1.25x multiplier
-   - 2 years: 1.5x multiplier
-   - 4 years: 1.75x multiplier
-   - 8 years: 2x multiplier
-3. **Voting Participation Bonus**: Active voters receive additional rewards.
-4. **Age Bonus**: Neurons accumulate additional voting power over time.
-
----
-
 ## Economic Sustainability
 
 The Spiral token economy is designed for long-term sustainability through several key mechanisms:
+
+::: tip See Also: Treasury Management
+The economic sustainability of Spiral is deeply connected to effective treasury management. For details on how treasury decisions are made, oversight mechanisms, and emergency protocols, see the [Treasury Management](/governance#treasury-management) section in the Governance document.
+:::
 
 ### 1. Deflationary Mechanisms
 - **Transaction Fees**: A small percentage of each transaction is burned, reducing the total supply over time.
@@ -361,20 +454,108 @@ The Spiral token circulation model is designed to create a healthy, balanced eco
 
 Based on our economic model and projections, we anticipate the following outcomes:
 
+::: tip See Also: Governance Evolution
+Economic projections are closely tied to governance development. For detailed information on governance evolution, risk management strategies, and community building initiatives, see the relevant sections in the [Governance](/governance) document.
+:::
+
 ### 1. Short-Term (Year 1)
 - **Staking Rate**: 30-40% of circulating supply staked.
 - **Transaction Volume**: Moderate, primarily driven by early adopters.
 - **Treasury Growth**: Initial growth from token sales and early revenue.
+- **Governance Activity**: 
+  - Average proposal processing of 2-5 per month
+  - Core team providing significant guidance
+  - Foundation for community-led initiatives being established
 
 ### 2. Medium-Term (Years 2-3)
 - **Staking Rate**: 40-60% of circulating supply staked.
 - **Transaction Volume**: Significant increase as user base grows.
 - **Treasury Growth**: Accelerated growth from multiple revenue streams.
+- **Governance Evolution**:
+  - Increased proposal diversity and complexity
+  - Formation of specialized working groups
+  - Enhanced delegation and voting systems
+  - Progressive decentralization of decision-making
 
 ### 3. Long-Term (Years 4+)
 - **Staking Rate**: 60-70% of circulating supply staked.
 - **Transaction Volume**: High, driven by a mature ecosystem.
 - **Treasury Growth**: Substantial, supporting extensive development and community initiatives.
+- **Governance Maturity**:
+  - Fully decentralized decision-making
+  - Efficient proposal processing systems
+  - Multi-tiered governance for different decision types
+  - Robust reputation systems for governance participants
+  - Interoperability with other DAO governance systems
+
+### Metrics for Success
+
+The following metrics will be regularly tracked to evaluate the health of the token economy and governance system:
+
+| Timeframe | Token Economy Metrics | Governance Metrics |
+|-----------|----------------------|-------------------|
+| **Weekly** | - Trading volume<br>- Staking/unstaking rate<br>- Token velocity | - Voter participation<br>- Proposal submission rate<br>- Governance rewards distributed |
+| **Monthly** | - Treasury growth rate<br>- Token distribution<br>- Revenue from use cases | - Proposal approval ratio<br>- Working group activity<br>- Community sentiment analysis |
+| **Quarterly** | - Price stability<br>- Liquidity depth<br>- Token holder growth | - Successful implementation rate<br>- Governance process improvements<br>- Decision-making efficiency |
+
+---
+
+## Economic Risk Factors
+
+While the Spiral token economy is designed for sustainability, several economic risk factors require active management:
+
+::: tip See Also: Risk Management
+Economic risks are closely monitored by the DAO governance. For a complete overview of all risk categories and mitigation strategies, see the [Risk Management and Sustainability](/governance#risk-management-and-sustainability) section in the Governance document.
+:::
+
+### Token Volatility
+
+- **Risk**: Significant fluctuations in Spiral's value could affect ecosystem stability, user confidence, and treasury operations.
+- **Impact**: High volatility may discourage merchants from accepting Spiral, reduce staking commitment, or create unpredictable treasury valuations.
+- **Mitigation**: 
+  - Strategic liquidity provision from the treasury
+  - Gradual token release schedules
+  - Multiple utility drivers creating consistent demand
+
+### Reward Sustainability
+
+- **Risk**: Overly generous rewards could deplete the treasury too quickly if not balanced with sufficient inflows.
+- **Impact**: Unsustainable rewards may create short-term growth but lead to long-term economic instability.
+- **Mitigation**:
+  - Dynamic reward algorithms adjusting based on treasury health
+  - Multiple revenue streams feeding the treasury
+  - Regular economic parameter reviews by governance
+
+### Treasury Growth Challenges
+
+- **Risk**: Insufficient treasury growth could limit funding for development, marketing, and ecosystem expansion.
+- **Impact**: Reduced ability to fund new projects, respond to opportunities, or maintain competitive development.
+- **Mitigation**:
+  - Diverse revenue capture mechanisms
+  - Value-added partnerships generating treasury inflows
+  - Efficient capital allocation prioritizing ROI
+
+### Economic Attack Vectors
+
+- **Risk**: Economic attacks such as wash trading, price manipulation, or reward exploitation.
+- **Impact**: Could distort token value, drain treasury resources, or undermine economic incentives.
+- **Mitigation**:
+  - Advanced monitoring systems for unusual economic activities
+  - Tiered reward structures resistant to exploitation
+  - Circuit breakers for extreme market conditions
+
+### Token Security Risks
+
+- **Risk**: Smart contract vulnerabilities, protocol exploits, or integration weaknesses.
+- **Impact**: Could lead to token theft, unauthorized minting, or economic disruption.
+- **Mitigation**:
+  - Regular security audits by multiple independent firms
+  - Bug bounty programs incentivizing white-hat security research
+  - Progressive deployment with emergency pause functions
+  
+::: info Governance Attack Vectors
+For a complete analysis of governance-related attack vectors that could impact token security, including 51% attacks, Sybil attacks, and bribery, see the [Attack Vectors and Mitigation](/governance#attack-vectors-and-mitigation) section in the Governance document.
+:::
 
 ---
 
@@ -383,5 +564,19 @@ Based on our economic model and projections, we anticipate the following outcome
 The Spiral token economy is designed to create a virtuous cycle of value creation, capture, and distribution. By aligning the incentives of all stakeholders—players, developers, investors, and community members—we've created a sustainable economic model that rewards participation, encourages long-term commitment, and drives the growth of the Cosmicrafts franchise.
 
 Through careful design, balanced mechanisms, and community governance, the Spiral token will serve as the foundation for a thriving ecosystem that benefits all participants while ensuring the long-term success of Cosmicrafts.
+
+---
+
+## Next Steps
+
+Now that you understand the economic framework of the Spiral token, here are recommended next steps:
+
+::: info Continue Reading
+- **[Governance Document](/governance)**: Learn how decisions are made in the Cosmicrafts DAO
+- **[Core Features](/core-features)**: Explore the key features of the Cosmicrafts platform
+- **[Architecture](/architecture)**: Understand the technical foundation of the system
+:::
+
+For questions about tokenomics or to participate in discussions about economic proposals, join our [Discord community](https://discord.gg/cosmicrafts) and visit the #tokenomics channel.
 
 ---

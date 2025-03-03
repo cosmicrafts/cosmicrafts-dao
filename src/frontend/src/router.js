@@ -184,6 +184,11 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior(to, from) {
+    // For the whitepaper with nested hash navigation, let the component handle scrolling
+    if (to.path === '/whitepaper' && to.hash) {
+      return false; // Don't auto-scroll, let the component handle it
+    }
+    
     // Only reset scroll for new navigation paths
     if (to.path !== from.path) {
       return new Promise(resolve => {
