@@ -39,21 +39,52 @@
   /* Glow Effects */
   --glow-primary: 0 0 10px rgba(0, 195, 255, 0.5);
   --glow-secondary: 0 0 10px rgba(255, 162, 0, 0.5);
+  
+  /* Diagram Sizing */
+  --mermaid-text-size-small: 1.2rem;
+  --mermaid-text-size-medium: 1.4rem;
+  --mermaid-text-size-large: 1.6rem;
+  --mermaid-text-size-xlarge: 1.8rem;
+  
+  /* Diagram Scaling */
+  --mermaid-scale: 1;
+}
+
+/* Size variant classes */
+.mermaid-large {
+  --mermaid-scale: 1 !important;
+  --mermaid-text-size-small: 1.4rem !important;
+  --mermaid-text-size-medium: 1.6rem !important;
+  --mermaid-text-size-large: 1.8rem !important;
+  --mermaid-text-size-xlarge: 2rem !important;
+}
+
+.mermaid-small {
+  --mermaid-scale: 0.85 !important;
+  --mermaid-text-size-small: 1rem !important;
+  --mermaid-text-size-medium: 1.2rem !important;
+  --mermaid-text-size-large: 1.4rem !important;
+  --mermaid-text-size-xlarge: 1.6rem !important;
 }
 
 /* Global Mermaid Styling */
 .mermaid {
   background-color: transparent !important;
   padding: 3rem !important;
-  margin: 3rem 0 !important;
+  margin: 3rem auto !important;
   border-radius: 12px !important;
   background-image: radial-gradient(circle at center, #0a0e1ab3, #000000e6) !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 195, 255, 0.1) !important;
   border-left: 3px solid var(--mermaid-accent-primary) !important;
   position: relative !important;
-  overflow: visible !important; /* Changed from hidden to visible to prevent text cutoff */
+  overflow: visible !important;
   max-width: 100% !important;
-  width: auto !important; /* Allow diagram to expand as needed */
+  width: auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  transform: scale(var(--mermaid-scale)) !important; /* Apply scaling */
+  transform-origin: center center !important;
 }
 
 .mermaid::before {
@@ -75,16 +106,40 @@
   font-weight: 500 !important;
   fill: var(--mermaid-text-primary) !important;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
-  font-size: 1.4rem !important;
+  font-size: var(--mermaid-text-size-medium) !important;
   white-space: normal !important; /* Allow text to wrap */
   word-wrap: break-word !important; /* Break words if needed */
 }
 
-/* SVG container to ensure proper sizing */
+/* SVG container to ensure proper sizing and centering */
 .mermaid svg {
   max-width: 100% !important;
   height: auto !important;
   overflow: visible !important;
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+/* Center the graph within the SVG */
+.mermaid .mermaid-main {
+  transform: translateX(0) !important;
+}
+
+/* Ensure clusters (subgraphs) are centered */
+.mermaid .clusters {
+  transform: translateX(0) !important;
+}
+
+/* Center nodes within their containers */
+.mermaid .nodes {
+  transform: translateX(0) !important;
+}
+
+/* Ensure the entire graph is centered */
+.mermaid #graphDiv {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
 }
 
 /* Flowchart Styling */
@@ -93,12 +148,50 @@
   stroke-width: 2px !important;
   filter: drop-shadow(0 0 3px #00c3ff80) !important;
   transition: all 0.3s ease-in-out !important;
+  opacity: 0.8 !important; /* Slightly transparent by default */
 }
 
 .mermaid .flowchart-link:hover {
   stroke: var(--mermaid-accent-tertiary) !important;
   stroke-width: 3px !important;
   filter: drop-shadow(0 0 8px #ffa200b3) !important;
+  opacity: 1 !important; /* Fully opaque on hover */
+}
+
+/* Add styling for edge paths */
+.mermaid .path {
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+/* Add styling for arrowheads */
+.mermaid marker {
+  fill: var(--mermaid-arrow-color) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid marker:hover {
+  fill: var(--mermaid-accent-tertiary) !important;
+}
+
+/* Fix for edge label positioning */
+.mermaid .edgePaths {
+  pointer-events: stroke !important; /* Allow hover on paths */
+}
+
+.mermaid .edgeLabels {
+  pointer-events: all !important; /* Ensure labels are clickable */
+}
+
+/* Ensure edge labels are above paths */
+.mermaid .edgeLabels {
+  z-index: 10 !important;
+}
+
+/* Ensure edge paths don't interfere with labels */
+.mermaid .edgePath {
+  z-index: 1 !important;
 }
 
 /* Node Styling with enhanced visuals and hover effects */
@@ -154,7 +247,7 @@
 
 .mermaid .cluster .label {
   font-weight: 600 !important;
-  font-size: 1.8rem !important;
+  font-size: var(--mermaid-text-size-xlarge) !important;
   fill: var(--mermaid-accent-primary) !important;
   filter: drop-shadow(0 0 4px #00c3ff80) !important;
   transition: all 0.3s ease-in-out !important;
@@ -167,7 +260,7 @@
 
 /* Node labels with improved styling */
 .mermaid .label {
-  font-size: 1.4rem !important;
+  font-size: var(--mermaid-text-size-medium) !important;
   white-space: normal !important; /* Allow text to wrap */
   word-wrap: break-word !important; /* Break words if needed */
   max-width: none !important; /* Remove max-width constraints */
@@ -175,16 +268,41 @@
 
 /* Ensure edgeLabels don't get cut off */
 .mermaid .edgeLabel {
-  background-color: rgba(0, 0, 0, 0.6) !important;
-  border-radius: 4px !important;
-  padding: 4px 8px !important;
+  background-color: transparent !important;
+  border-radius: 0 !important; /* Remove border radius */
+  padding: 0 !important; /* Remove padding */
   white-space: normal !important;
   line-height: 1.4 !important;
   max-width: none !important;
+  filter: none !important; /* Remove filter from container */
+  transition: all 0.3s ease-in-out !important;
 }
 
 .mermaid .edgeLabel text {
-  font-size: 1.2rem !important;
+  font-size: var(--mermaid-text-size-small) !important;
+  fill: var(--mermaid-text-primary) !important;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.9) !important; /* Stronger text shadow for readability */
+  transition: all 0.3s ease-in-out !important;
+}
+
+/* Add hover effect for edge labels */
+.mermaid .edgeLabel:hover text {
+  fill: var(--mermaid-accent-primary) !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 8px rgba(0, 195, 255, 0.7) !important; /* Glow effect on hover */
+}
+
+/* Fix for edge label backgrounds */
+.mermaid .edgeLabel rect,
+.mermaid .edgeLabel foreignObject {
+  fill: transparent !important;
+  background-color: transparent !important;
+  opacity: 0 !important; /* Make any background elements invisible */
+}
+
+/* Fix for any potential background elements */
+.mermaid .edgeLabel * {
+  background-color: transparent !important;
 }
 
 /* Sequence Diagram Styling with enhanced visuals */
@@ -220,7 +338,7 @@
 
 .mermaid .messageText {
   fill: var(--mermaid-text-primary) !important;
-  font-size: 1.4rem !important;
+  font-size: var(--mermaid-text-size-medium) !important;
   font-weight: 500 !important;
   white-space: normal !important;
   word-wrap: break-word !important;
@@ -282,7 +400,7 @@
 /* State Diagram Styling */
 .mermaid .stateLabel text {
   fill: var(--mermaid-text-primary) !important;
-  font-size: 1.2rem !important;
+  font-size: var(--mermaid-text-size-small) !important;
   white-space: normal !important;
 }
 
@@ -350,7 +468,7 @@
 }
 
 .mermaid .pieTitleText {
-  font-size: 1.6rem !important;
+  font-size: var(--mermaid-text-size-large) !important;
   font-weight: 600 !important;
   fill: var(--mermaid-accent-primary) !important;
   filter: drop-shadow(0 0 4px rgba(0, 195, 255, 0.5)) !important;
@@ -425,10 +543,146 @@
   
   .mermaid text,
   .mermaid .label {
-    font-size: 1.2rem !important;
+    font-size: var(--mermaid-text-size-small) !important;
   }
   
   .mermaid .cluster .label {
-    font-size: 1.5rem !important;
+    font-size: var(--mermaid-text-size-large) !important;
   }
+}
+
+/* Additional centering for diagram elements */
+.mermaid g.root {
+  transform: translateX(0) !important;
+}
+
+/* Ensure the diagram container is centered */
+.markdown-content .mermaid {
+  text-align: center !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* Center the diagram within the SVG */
+.mermaid > svg {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  position: relative !important;
+}
+
+/* Ensure subgraphs are centered */
+.mermaid .subgraph {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Sequence Diagram Specific Enhancements */
+.mermaid .sequenceNumber {
+  font-size: var(--mermaid-text-size-small) !important;
+  fill: var(--mermaid-text-secondary) !important;
+}
+
+/* Ensure all diagram types have consistent text sizing */
+.mermaid .actor text,
+.mermaid .messageText,
+.mermaid .loopText,
+.mermaid .noteText,
+.mermaid .activation0,
+.mermaid .activation1,
+.mermaid .activation2 {
+  font-size: var(--mermaid-text-size-medium) !important;
+  font-weight: 500 !important;
+  fill: var(--mermaid-text-primary) !important;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Enhance sequence diagram actor boxes */
+.mermaid .actor {
+  fill: var(--mermaid-node-user) !important;
+  stroke: var(--mermaid-border-frontend) !important;
+  stroke-width: 2px !important;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.7)) !important;
+  rx: 8px !important;
+  ry: 8px !important;
+}
+
+/* Enhance sequence diagram lifelines */
+.mermaid .actor + line {
+  stroke: var(--mermaid-border-frontend) !important;
+  stroke-width: 1.5px !important;
+  stroke-dasharray: 5 !important;
+}
+
+/* Enhance activation boxes in sequence diagrams */
+.mermaid .activation0,
+.mermaid .activation1,
+.mermaid .activation2 {
+  fill: rgba(0, 195, 255, 0.2) !important;
+  stroke: var(--mermaid-border-frontend) !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Enhance note styling in sequence diagrams */
+.mermaid .note {
+  fill: rgba(255, 162, 0, 0.15) !important;
+  stroke: var(--mermaid-border-data) !important;
+  stroke-width: 1.5px !important;
+  rx: 8px !important;
+  ry: 8px !important;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.5)) !important;
+}
+
+.mermaid .noteText {
+  fill: var(--mermaid-text-primary) !important;
+  font-size: var(--mermaid-text-size-medium) !important;
+}
+
+/* Enhance sequence diagram message lines */
+.mermaid .messageLine0,
+.mermaid .messageLine1 {
+  stroke-width: 2px !important;
+  stroke: var(--mermaid-arrow-color) !important;
+  filter: drop-shadow(0 0 3px rgba(0, 195, 255, 0.3)) !important;
+}
+
+/* Enhance sequence diagram arrowheads */
+.mermaid .messageLine0 + marker path,
+.mermaid .messageLine1 + marker path {
+  fill: var(--mermaid-arrow-color) !important;
+  stroke: var(--mermaid-arrow-color) !important;
+}
+
+/* Add hover effects for sequence diagram elements */
+.mermaid .actor:hover {
+  fill: rgba(0, 195, 255, 0.3) !important;
+  stroke: var(--mermaid-accent-primary) !important;
+  filter: drop-shadow(0 0 12px rgba(0, 195, 255, 0.5)) !important;
+  transform: translateY(-2px) !important;
+}
+
+.mermaid .note:hover {
+  fill: rgba(255, 162, 0, 0.25) !important;
+  stroke: var(--mermaid-accent-tertiary) !important;
+  filter: drop-shadow(0 0 12px rgba(255, 162, 0, 0.5)) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Specific styling for sequence diagram labels */
+.mermaid .labelBox {
+  fill: var(--mermaid-node-user) !important;
+  stroke: var(--mermaid-border-user) !important;
+  stroke-width: 1.5px !important;
+  rx: 6px !important;
+  ry: 6px !important;
+}
+
+.mermaid .labelText {
+  font-size: var(--mermaid-text-size-medium) !important;
+  fill: var(--mermaid-text-primary) !important;
+}
+
+/* Ensure all text in sequence diagrams is properly sized */
+.mermaid .sequenceDiagram text {
+  font-size: var(--mermaid-text-size-medium) !important;
 } 

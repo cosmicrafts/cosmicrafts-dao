@@ -22,46 +22,64 @@ All critical operations are conducted entirely on-chain, ensuring transparency, 
 You can [view our public smart contracts on the Internet Computer dashboard](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai) along with our [open-source code](https://github.com/worldofunreal/cosmicrafts-motoko-backend) to explore how we achieve this level of trust and decentralization.
 :::
 
+<div class="mermaid-large">
+
 ```mermaid
 flowchart TD
+    %% Define diagram direction and layout
+    %% Use TD (top-down) for vertical flow
+    
     subgraph "User Layer"
+        direction TB
         User["👤 User/Player"]
         Browser["🌐 Web Browser"]
         Client["💻 Game Client"]
     end
     
     subgraph "Frontend Layer"
+        direction TB
         UI["🖥️ User Interface"]
         ClientLogic["⚙️ Client Logic"]
         APIcalls["🔌 API Calls"]
     end
     
     subgraph "Blockchain Layer"
-        DAO["🏛️ DAO Governance"]
+        direction TB
         GameLogic["🎮 Game Logic"]
         TokenSystem["💰 Token System"]
         NFTSystem["🏆 NFT System"]
+        DAO["🏛️ DAO Governance"]
     end
     
-    User --> Browser & Client
-    Browser & Client --> UI
+    %% Connections between nodes with clear vertical flow
+    User --> Browser
+    User --> Client
+    Browser --> UI
+    Client --> UI
     UI --> ClientLogic
     ClientLogic --> APIcalls
     
     APIcalls --> GameLogic
-    GameLogic --> |"Updates"| TokenSystem & NFTSystem
-    TokenSystem & NFTSystem --> |"Governance"| DAO
-    DAO --> |"Controls"| GameLogic & TokenSystem & NFTSystem
+    GameLogic --> TokenSystem
+    GameLogic --> NFTSystem
+    TokenSystem --> DAO
+    NFTSystem --> DAO
+    DAO -.->|"Controls"| GameLogic
+    DAO -.->|"Controls"| TokenSystem
+    DAO -.->|"Controls"| NFTSystem
     
-    %% Styling classes - simplified for better aesthetics
+    %% Styling classes for visual distinction
     classDef userLayer fill:#1e2b38,stroke:#ffffff4d,stroke-width:1.5px
     classDef frontendLayer fill:#00c3ff20,stroke:#00c3ff,stroke-width:1.5px
     classDef blockchainLayer fill:#00993320,stroke:#00ff95,stroke-width:1.5px
     
+    %% Apply styles to nodes
     class User,Browser,Client userLayer
     class UI,ClientLogic,APIcalls frontendLayer
     class DAO,GameLogic,TokenSystem,NFTSystem blockchainLayer
 ```
+
+</div>
 
 ![DAO On-chain Architecture](archfullyonchain.webp)
 
@@ -250,6 +268,8 @@ pub struct Metadata {
 
 The data flow within Cosmicrafts follows a carefully designed pattern to ensure efficiency and security:
 
+<div class="mermaid-small">
+
 ```mermaid
 sequenceDiagram
     participant User as 👤 User
@@ -280,11 +300,7 @@ sequenceDiagram
     Note over User,Other: All operations are recorded on-chain for transparency and auditability
 ```
 
-1. **User Interaction**: Player actions in the frontend trigger calls to the appropriate canister
-2. **Validation Layer**: All inputs are validated against security rules before processing
-3. **State Management**: Game state changes are processed atomically to prevent inconsistencies
-4. **Event Emission**: State changes trigger events that can be observed by other system components
-5. **Response Generation**: Results are returned to the frontend for immediate feedback
+</div>
 
 This architecture ensures:
 - **Data Consistency**: All game state remains consistent across the system
@@ -315,52 +331,87 @@ Several optimizations ensure the game remains responsive despite being fully on-
 
 Communication between canisters is handled through a well-defined API layer:
 
+<div class="mermaid-large">
+
 ```mermaid
-flowchart LR
-    subgraph "Game Canister"
-        GameLogic["🎮 Game Logic"]
-        PlayerData["👤 Player Data"]
-        Events["📢 Event System"]
-    end
+flowchart TD
+    %% Game Canister nodes
+    GameLogic["🎮 Game Logic"]
+    PlayerData["👤 Player Data"]
+    Events["📢 Event System"]
     
-    subgraph "Token Canister"
-        TokenLogic["💰 Token Logic"]
-        Balances["💵 Balances"]
-        Transfers["📊 Transfer History"]
-    end
+    %% Token Canister nodes
+    TokenLogic["💰 Token Logic"]
+    Balances["💵 Balances"]
+    Transfers["📊 Transfer History"]
     
-    subgraph "NFT Canister"
-        NFTLogic["🖼️ NFT Logic"]
-        Assets["🏆 Asset Metadata"]
-        Ownership["📜 Ownership Records"]
-    end
+    %% NFT Canister nodes
+    NFTLogic["🖼️ NFT Logic"]
+    Assets["🏆 Asset Metadata"]
+    Ownership["📜 Ownership Records"]
     
-    subgraph "DAO Canister"
-        Governance["🏛️ Governance"]
-        Proposals["📝 Proposals"]
-        Voting["🗳️ Voting System"]
-    end
+    %% DAO Canister nodes
+    Governance["🏛️ Governance"]
+    Proposals["📝 Proposals"]
+    Voting["🗳️ Voting System"]
     
+    %% Internal connections
+    GameLogic --> PlayerData
+    GameLogic --> Events
+    TokenLogic --> Balances
+    TokenLogic --> Transfers
+    NFTLogic --> Assets
+    NFTLogic --> Ownership
+    Governance --> Proposals
+    Governance --> Voting
+    
+    %% Cross-canister connections
     GameLogic -->|"reward_player()"| TokenLogic
     GameLogic -->|"mint_asset()"| NFTLogic
     GameLogic -->|"query_governance()"| Governance
-    
     TokenLogic -->|"notify_transfer()"| Events
     NFTLogic -->|"notify_mint()"| Events
-    
     Governance -->|"update_params()"| GameLogic
     
-    %% Styling classes - simplified for better aesthetics
+    %% Subgraph definitions
+    subgraph GameCanister["Game Canister"]
+        GameLogic
+        PlayerData
+        Events
+    end
+    
+    subgraph TokenCanister["Token Canister"]
+        TokenLogic
+        Balances
+        Transfers
+    end
+    
+    subgraph NFTCanister["NFT Canister"]
+        NFTLogic
+        Assets
+        Ownership
+    end
+    
+    subgraph DAOCanister["DAO Canister"]
+        Governance
+        Proposals
+        Voting
+    end
+    
+    %% Styling classes for visual distinction
     classDef gameCanister fill:#00c3ff20,stroke:#00c3ff,stroke-width:1.5px
     classDef tokenCanister fill:#ffa20020,stroke:#ffa200,stroke-width:1.5px
     classDef nftCanister fill:#00993320,stroke:#00ff95,stroke-width:1.5px
     classDef daoCanister fill:#cc000020,stroke:#ef4444,stroke-width:1.5px
     
+    %% Apply styles to nodes
     class GameLogic,PlayerData,Events gameCanister
     class TokenLogic,Balances,Transfers tokenCanister
     class NFTLogic,Assets,Ownership nftCanister
     class Governance,Proposals,Voting daoCanister
 ```
+
+</div>
 
 ```rust
 // Example of cross-canister call to the token canister
@@ -454,61 +505,80 @@ This technology stack eliminates many of the limitations found in other blockcha
 
 The **Internet Computer** introduces a new approach to smart contracts through its **canister architecture**. [Canisters](https://internetcomputer.org/docs/current/tutorials/developer-journey/level-0/intro-canisters) are the Internet Computer's version of smart contracts, designed to provide greater functionality and scalability than traditional blockchain contracts.
 
+<div class="mermaid-large">
+
 ```mermaid
 flowchart TD
-    %% Main Canister Structure
+    %% WebAssembly Module nodes
+    Code["💻 Code (Logic)"]
+    Memory["🧠 Memory (State)"]
+    API["🔌 API Interface"]
+    
+    %% Canister State nodes
+    Stable["💾 Stable Memory"]
+    Heap["📊 Heap Memory"]
+    Cycles["⚡ Cycles (Gas)"]
+    
+    %% Internet Computer Network nodes
+    Consensus["🔗 Consensus Layer"]
+    Execution["⚙️ Execution Environment"]
+    Networking["🌐 Networking Layer"]
+    
+    %% External Systems node
+    External["🌍 External Systems"]
+    
+    %% Internal Canister Connections
+    Code <--> Memory
+    API <--> Code
+    Memory <--> Stable
+    Memory <--> Heap
+    Cycles --> Code
+    
+    %% Network connections
+    Networking --> Consensus
+    Consensus --> Execution
+    
+    %% External connections
+    External <--> API
+    
+    %% Subgraph definitions
     subgraph CanisterStructure["Canister Architecture"]
-        direction TB
-        
         subgraph WasmModule["WebAssembly Module"]
-            Code["💻 Code (Logic)"]
-            Memory["🧠 Memory (State)"]
-            API["🔌 API Interface"]
+            Code
+            Memory
+            API
         end
         
         subgraph CanisterState["Canister State"]
-            Stable["💾 Stable Memory"]
-            Heap["📊 Heap Memory"]
-            Cycles["⚡ Cycles (Gas)"]
+            Stable
+            Heap
+            Cycles
         end
-        
-        %% Internal Canister Connections
-        Code <--> Memory
-        API <--> Code
-        Memory <--> Stable
-        Memory <--> Heap
-        Cycles --> Code
     end
     
-    %% Internet Computer Infrastructure
     subgraph IC["Internet Computer Network"]
-        Consensus["🔗 Consensus Layer"]
-        Execution["⚙️ Execution Environment"]
-        Networking["🌐 Networking Layer"]
+        Networking
+        Consensus
+        Execution
     end
     
-    %% External Systems
-    External["🌍 External Systems"]
-    
-    %% Connections between main components
+    %% Connect the major components
     Execution --> CanisterStructure
-    Consensus --> Execution
-    Networking --> Consensus
     
-    External <--> API
-    
-    %% Styling classes - simplified for better aesthetics
+    %% Styling classes for visual distinction
     classDef module fill:#00c3ff20,stroke:#00c3ff,stroke-width:1.5px
     classDef state fill:#ffa20020,stroke:#ffa200,stroke-width:1.5px
     classDef ic fill:#00993320,stroke:#00ff95,stroke-width:1.5px
     classDef external fill:#1e2b38,stroke:#ffffff4d,stroke-width:1.5px
     
-    %% Apply styles
-    class WasmModule,Code,Memory,API module
-    class CanisterState,Stable,Heap,Cycles state
-    class IC,Consensus,Execution,Networking ic
+    %% Apply styles to nodes
+    class Code,Memory,API module
+    class Stable,Heap,Cycles state
+    class Networking,Consensus,Execution ic
     class External external
 ```
+
+</div>
 
 ### What Are Canisters?
 
@@ -607,6 +677,8 @@ The Internet Computer makes it easy to access games across different platforms, 
 
 ![DAO Architecture Diagram](archdiagram.webp)
 
+<div class="mermaid-large">
+
 ```mermaid
 sequenceDiagram
     participant User as 👤 Player
@@ -654,6 +726,8 @@ sequenceDiagram
     Note over User,DAOCanister: All interactions are transparent and verifiable on-chain
 ```
 
+</div>
+
 ### Layers Explained
 
 #### 1. Frontend Layer
@@ -680,218 +754,92 @@ The **Backend Layer** is powered entirely by the **Internet Computer** and handl
 Security is a cornerstone of our architecture, designed to protect both player assets and the integrity of the gaming experience.
 :::
 
+<div class="mermaid-large">
+
 ```mermaid
-graph TD
-    subgraph "Security Layers"
-        direction TB
-        
-        L1["🔒 Network Layer Security"]
-        L2["🛡️ Canister Isolation"]
-        L3["🔐 Principal Authentication"]
-        L4["👮 Role-Based Access Control"]
-        L5["✅ Input Validation"]
-        L6["⚙️ Business Logic Verification"]
-        
-        L1 --> L2 --> L3 --> L4 --> L5 --> L6
+flowchart TD
+    %% Security Layer nodes
+    L1["🔒 Network Layer Security"]
+    L2["🛡️ Canister Isolation"]
+    L3["🔐 Principal Authentication"]
+    L4["👮 Role-Based Access Control"]
+    L5["✅ Input Validation"]
+    L6["⚙️ Business Logic Verification"]
+    
+    %% Threat Mitigation nodes
+    T1["🚫 DDoS Protection"]
+    T2["🔍 Anomaly Detection"]
+    T3["⏱️ Rate Limiting"]
+    T4["📝 Audit Logging"]
+    T5["🔄 Automatic Recovery"]
+    
+    %% Reliability Feature nodes
+    R1["🌐 Global Node Distribution"]
+    R2["⚖️ Load Balancing"]
+    R3["📈 Automatic Scaling"]
+    R4["🔄 Redundant Systems"]
+    R5["🔧 Self-Healing"]
+    
+    %% Security Layer connections
+    L1 --> L2
+    L2 --> L3
+    L3 --> L4
+    L4 --> L5
+    L5 --> L6
+    
+    %% Threat Mitigation connections
+    T1 --> T2
+    T2 --> T3
+    T3 --> T4
+    T4 --> T5
+    
+    %% Reliability Feature connections
+    R1 --> R2
+    R2 --> R3
+    R3 --> R4
+    R4 --> R5
+    
+    %% Cross-category connections
+    L6 --> T1
+    T5 --> R1
+    
+    %% Subgraph definitions
+    subgraph SecurityLayers["Security Layers"]
+        L1
+        L2
+        L3
+        L4
+        L5
+        L6
     end
     
-    subgraph "Threat Mitigation"
-        T1["🚫 DDoS Protection"]
-        T2["🔍 Anomaly Detection"]
-        T3["⏱️ Rate Limiting"]
-        T4["📝 Audit Logging"]
-        T5["🔄 Automatic Recovery"]
+    subgraph ThreatMitigation["Threat Mitigation"]
+        T1
+        T2
+        T3
+        T4
+        T5
     end
     
-    subgraph "Reliability Features"
-        R1["🌐 Global Node Distribution"]
-        R2["⚖️ Load Balancing"]
-        R3["📈 Automatic Scaling"]
-        R4["🔄 Redundant Systems"]
-        R5["🔧 Self-Healing"]
+    subgraph ReliabilityFeatures["Reliability Features"]
+        R1
+        R2
+        R3
+        R4
+        R5
     end
     
-    L6 --> T1 & T2 & T3 & T4 & T5
-    T5 --> R1 & R2 & R3 & R4 & R5
+    %% Connect the major sections vertically
+    SecurityLayers --> ThreatMitigation
+    ThreatMitigation --> ReliabilityFeatures
     
-    %% Styling classes - simplified for better aesthetics
+    %% Styling classes for visual distinction
     classDef securityLayer fill:#cc000020,stroke:#ef4444,stroke-width:1.5px
     classDef threatLayer fill:#ffa20020,stroke:#ffa200,stroke-width:1.5px
     classDef reliabilityLayer fill:#00993320,stroke:#00ff95,stroke-width:1.5px
     
+    %% Apply styles to nodes
     class L1,L2,L3,L4,L5,L6 securityLayer
     class T1,T2,T3,T4,T5 threatLayer
     class R1,R2,R3,R4,R5 reliabilityLayer
-```
-
-### Security Measures
-
-- **Smart Contract Audits**: Our codebase undergoes regular security audits by independent third parties
-- **Open Source Verification**: All code is open source, allowing community verification and transparency
-- **Formal Verification**: Critical components are formally verified to mathematically prove their correctness
-- **Decentralized Infrastructure**: The Internet Computer's distributed nature eliminates single points of failure
-
-### Reliability Features
-
-- **Global Node Distribution**: Game services run across a global network of nodes, ensuring uptime and performance
-- **Automatic Scaling**: Resources scale automatically with demand, preventing performance degradation
-- **Redundant Systems**: Critical systems have built-in redundancy to maintain service during updates or issues
-
----
-
-## Future Expansions
-
-The architecture is designed to evolve with ICP's latest integrations:
-
-```mermaid
-graph TD
-    subgraph "Core Platform" 
-        Cosmicrafts["🎮 Cosmicrafts Core"]
-        GameEngine["⚙️ Game Engine"]
-        TokenSystem["💰 Token Economy"]
-        NFTSystem["🏆 NFT System"]
-        DAOSystem["🏛️ DAO Governance"]
-    end
-    
-    subgraph "Future Integrations"
-        CrossChain["🔄 Cross-Chain Integration"]
-        AI["🧠 On-Chain AI"]
-        Analytics["📊 Advanced Analytics"]
-        Metaverse["🌐 Metaverse Expansion"]
-        Mobile["📱 Mobile Platform"]
-    end
-    
-    subgraph "Ecosystem Partners"
-        ORIGYN["💎 ORIGYN - RWA Protocol"]
-        BOOMDAO["🚀 BOOM DAO - Game Infrastructure"]
-        OpenChat["💬 OpenChat - Communication"]
-        Dmail["📧 Dmail - Messaging"]
-        Neutrinite["📈 Neutrinite - Data"]
-        Bitfinity["⛓️ Bitfinity - Layer 2"]
-        WaterNeuron["💧 WaterNeuron - Staking"]
-    end
-    
-    Cosmicrafts --> GameEngine & TokenSystem & NFTSystem & DAOSystem
-    
-    Cosmicrafts --> CrossChain
-    CrossChain --> Bitfinity
-    
-    Cosmicrafts --> AI
-    AI --> Analytics
-    
-    GameEngine --> Metaverse
-    GameEngine --> Mobile
-    
-    TokenSystem --> WaterNeuron
-    NFTSystem --> ORIGYN
-    GameEngine --> BOOMDAO
-    
-    DAOSystem --> OpenChat
-    DAOSystem --> Dmail
-    Analytics --> Neutrinite
-    
-    %% Styling classes - simplified for better aesthetics
-    classDef core fill:#00c3ff20,stroke:#00c3ff,stroke-width:1.5px
-    classDef future fill:#00993320,stroke:#00ff95,stroke-width:1.5px
-    classDef partner fill:#ffa20020,stroke:#ffa200,stroke-width:1.5px
-    
-    class Cosmicrafts,GameEngine,TokenSystem,NFTSystem,DAOSystem core
-    class CrossChain,AI,Analytics,Metaverse,Mobile future
-    class ORIGYN,BOOMDAO,OpenChat,Dmail,Neutrinite,Bitfinity,WaterNeuron partner
-```
-
-### Cross-Chain Interoperability
-
-::: info Multichain Future
-The **Internet Computer (ICP)** is leading the way in building a **multichain** future, where blockchains are no longer isolated but interconnected networks. While ICP serves as the foundation, its [Chain Fusion technology]((https://internetcomputer.org/chainfusion)) enables integration with other blockchains, unlocking new possibilities for developers and users.
-:::
-
-### On-Chain AI
-
-Additional features, such as advanced **AI-driven gameplay** along with advanced **data analytics**, will be supported by ICP's evolving capabilities, enabling smart contracts to directly run [AI models on-chain](https://internetcomputer.org/ai). This innovation unlocks a range of possibilities as ICP evolves, the potential for integrating AI into decentralized applications grows exponentially.
-
-### Developer Tools
-
-The roadmap includes plans to integrate [development kits](https://github.com/dfinity/awesome-internet-computer) from partners and third-party developers into Cosmicrafts. These tools aim to enhance the developer experience and expand the project's ecosystem.
-
-#### Key integrations include:
-
-| Partner | Contribution |
-|---------|--------------|
-| **[ORIGYN](https://www.origyn.com/)** | An **RWA blockchain protocol** providing advanced tools for tokenizing real-world and digital assets, ensuring transparency, fractional ownership, and secure asset certification through its fully on-chain platform |
-| **[BOOM DAO](https://docs.boomdao.xyz/)** | A collective dedicated to building foundational infrastructure for **fully on-chain games**. Developers can integrate the **World Protocol** as a "game server" using BOOM DAO's World canisters |
-| **[OpenChat](https://oc.app/home)** | Enabling **decentralized communication** tools like chat and voice chat that allow for real-time interactions, powered entirely by the Internet Computer |
-| **[Dmail](https://dmail.ai/)** | An AI-powered decentralized communication platform offering **encrypted emails**, cross-chain notifications, and NFT domain accounts. Dmail integrates secure messaging, asset interactions, and notifications |
-| **[Neutrinite](https://icpcoins.com)** | A DAO-controlled platform **sourcing data** from DEXes, DAOs, and DeFi applications, promoting transparency and innovation in the ecosystem |
-| **[Bitfinity](https://bitfinity.network/)** | A high-performance Bitcoin **Layer-2 platform** offering fast transactions, EVM compatibility, and tools like BitFusion SDK for seamless cross-chain development |
-| **[WaterNeuron](https://waterneuron.fi/)** | A **liquid staking protocol** for the Internet Computer that provides nICP tokens, allowing users to earn NNS rewards while maintaining liquidity for DeFi applications |
-
-::: info Ecosystem Growth
-These integrations empower developers to build, innovate, and expand the functionalities with a collaborative and thriving ecosystem.
-:::
-
-## Investment Potential
-
-::: info Why Cosmicrafts Architecture Matters to Investors
-The technical foundation of Cosmicrafts is designed not just for today's gaming market, but for the future of blockchain gaming. Here's why our architecture represents a strong investment opportunity:
-:::
-
-```mermaid
-graph TD
-    subgraph "Investment Value Proposition"
-        direction TB
-        
-        subgraph "Market Position"
-            FirstMover["🥇 First-Mover Advantage"]
-            MarketSize["📈 $200B+ Gaming Market"]
-            Audience["👥 Global Player Base"]
-        end
-        
-        subgraph "Technical Advantages"
-            Scalability["⚖️ Infinite Scalability"]
-            Performance["⚡ High Performance"]
-            Security["🔒 Enhanced Security"]
-            Interoperability["🔄 Cross-Chain Capability"]
-        end
-        
-        subgraph "Economic Benefits"
-            OpEx["📉 Lower Operational Costs"]
-            DevSpeed["🚀 Faster Development Cycle"]
-            Revenue["💰 Multiple Revenue Streams"]
-            Margins["📊 Higher Profit Margins"]
-        end
-        
-        subgraph "Long-Term Value"
-            Community["🤝 Community Ownership"]
-            Governance["🏛️ DAO-Driven Evolution"]
-            Adaptability["🔧 Future-Proof Design"]
-            Compliance["📜 Regulatory Readiness"]
-        end
-    end
-    
-    FirstMover --> Scalability & Performance
-    MarketSize --> Revenue
-    Audience --> Community
-    
-    Scalability --> OpEx
-    Performance --> DevSpeed
-    Security --> Compliance
-    Interoperability --> Revenue
-    
-    OpEx & DevSpeed --> Margins
-    Revenue --> Community
-    
-    Community --> Governance
-    Governance --> Adaptability
-    
-    %% Styling classes - simplified for better aesthetics
-    classDef market fill:#1e2b38,stroke:#ffffff4d,stroke-width:1.5px
-    classDef tech fill:#00c3ff20,stroke:#00c3ff,stroke-width:1.5px
-    classDef economic fill:#00993320,stroke:#00ff95,stroke-width:1.5px
-    classDef longterm fill:#ffa20020,stroke:#ffa200,stroke-width:1.5px
-    
-    class FirstMover,MarketSize,Audience market
-    class Scalability,Performance,Security,Interoperability tech
-    class OpEx,DevSpeed,Revenue,Margins economic
-    class Community,Governance,Adaptability,Compliance longterm
 ```
