@@ -2,7 +2,7 @@
 
 ![DAO Architecture](architecturebanner.webp)
 
-[[toc]]
+[[toc:2-2]]
 
 ::: info What Makes Cosmicrafts Different
 Cosmicrafts represents a paradigm shift in blockchain gaming with its architecture **built entirely on blockchain**, leveraging the [unparalleled capabilities](https://genfinity.io/2024/07/19/a-conversation-with-dfinitys-cto-jan-camenisch/) for [scalability](https://internetcomputer.org/capabilities/limitless-scaling), [cost-efficiency](https://www.reddit.com/r/devops/comments/1cwi1gn/when_did_the_cloud_become_so_stupid_expensive/), and [decentralized infrastructure](https://internetcomputer.org/how-it-works) of the **Internet Computer**. 
@@ -10,17 +10,58 @@ Cosmicrafts represents a paradigm shift in blockchain gaming with its architectu
 
 Unlike traditional games reliant on [centralized servers](https://www.geeksforgeeks.org/comparison-centralized-decentralized-and-distributed-systems/), Cosmicrafts' architecture resides on a [decentralized network of datacenters](https://internetcomputer.org/node-providers), positioned strategically around the globe, eliminating [single points of failure](https://en.wikipedia.org/wiki/Single_point_of_failure) through [cryptographic consensus](https://crypto.com/en/university/consensus-mechanisms-explained).
 
-> This section outlines the key [architectural components](https://en.wikipedia.org/wiki/Software_architecture) of Cosmicrafts, showcasing its technical superiority over traditional software architectures.
+> This section outlines the key architectural components of Cosmicrafts, showcasing its technical advantages and investment potential.
 
 ---
 
 ## Fully On-Chain
 
-All [critical operations](https://tokenminds.co/blog/web3-development/the-benfefits-of-on-chain-web) are conducted entirely on-chain, ensuring transparency, security, and scalability.
+All critical operations are conducted entirely on-chain, ensuring transparency, security, and scalability.
 
 ::: info Transparency
 You can [view our public smart contracts on the Internet Computer dashboard](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai) along with our [open-source code](https://github.com/worldofunreal/cosmicrafts-motoko-backend) to explore how we achieve this level of trust and decentralization.
 :::
+
+```mermaid
+flowchart TD
+    subgraph "User Layer"
+        User["👤 User/Player"]
+        Browser["🌐 Web Browser"]
+        Client["💻 Game Client"]
+    end
+    
+    subgraph "Frontend Layer"
+        UI["🖥️ User Interface"]
+        Assets["🖼️ Static Assets"]
+        ClientLogic["⚙️ Client Logic"]
+    end
+    
+    subgraph "Blockchain Layer"
+        DAO["🏛️ DAO Governance"]
+        GameLogic["🎮 Game Logic"]
+        TokenSystem["💰 Token System"]
+        NFTSystem["🏆 NFT System"]
+    end
+    
+    User --> Browser & Client
+    Browser & Client --> UI
+    UI --> ClientLogic
+    ClientLogic --> Assets
+    
+    ClientLogic --> |"API Calls"| GameLogic
+    GameLogic --> |"Updates"| TokenSystem & NFTSystem
+    TokenSystem & NFTSystem --> |"Governance"| DAO
+    DAO --> |"Controls"| GameLogic & TokenSystem & NFTSystem
+    
+    %% Styling classes - simplified for better aesthetics
+    classDef userLayer fill:#1e2b38,stroke:#ffffff4d,stroke-width:1.5px
+    classDef frontendLayer fill:#00c3ff20,stroke:#00c3ff,stroke-width:1.5px
+    classDef blockchainLayer fill:#00993320,stroke:#00ff95,stroke-width:1.5px
+    
+    class User,Browser,Client userLayer
+    class UI,Assets,ClientLogic frontendLayer
+    class DAO,GameLogic,TokenSystem,NFTSystem blockchainLayer
+```
 
 ![DAO On-chain Architecture](archfullyonchain.webp)
 
@@ -34,6 +75,347 @@ You can [view our public smart contracts on the Internet Computer dashboard](htt
 | **Economy Canisters ([ICRCs](https://github.com/dfinity/ICRC))** | Token and asset management | - **Tokens:** In-game transactions, DEX/CEX compatible<br>- **NFTs:** Dynamic metadata for upgrades and traits |
 
 > This architecture ensures trust, enhances transparency, and establishes a robust foundation for expanding the Cosmicrafts ecosystem.
+
+---
+
+## Current Dependencies and Future Integration
+
+While Cosmicrafts is designed to be fully on-chain, we currently rely on certain off-chain services to deliver the optimal gaming experience. We are committed to transitioning these dependencies to on-chain solutions as the technology becomes available.
+
+::: info Transparency About Dependencies
+In accordance with DFINITY's SNS preparation guidelines, we believe in full transparency about our current dependencies and our roadmap for complete decentralization.
+:::
+
+### Current Off-Chain Dependencies
+
+| Dependency | Current Implementation | Decentralization Plan |
+|------------|------------------------|------------------------|
+| **WebSocket Communication** | We use traditional WebSocket services for real-time multiplayer functionality | As Internet Computer develops native WebSocket capabilities, we will migrate to fully on-chain solutions |
+| **SSL Certification** | Standard SSL certificates for secure connections | We will adopt Internet Computer's native security protocols as they become available |
+| **Content Delivery** | Some static assets are delivered via traditional CDNs for optimal performance | Progressive migration to Internet Computer's asset canister storage as capabilities expand |
+
+### Decentralization Roadmap
+
+1. **Phase 1 (Current)**: Hybrid architecture with core game logic on-chain and supporting services off-chain
+2. **Phase 2 (2024-2025)**: Migration of communication protocols to Internet Computer's native solutions
+3. **Phase 3 (2025-2026)**: Complete transition to fully on-chain infrastructure as Internet Computer capabilities mature
+
+::: warning Investor Note
+While these dependencies exist, they do not compromise the security or integrity of the core game mechanics, token economy, or DAO governance. All critical operations remain fully on-chain and transparent.
+:::
+
+---
+
+## Technical Deep Dive
+
+This section provides a deeper look at Cosmicrafts' technical implementation, offering insights into how the system actually works under the hood. Understanding these details helps both developers and technically-inclined investors appreciate the robustness of our architecture.
+
+### Canister Structure
+
+Cosmicrafts employs a modular canister architecture that separates concerns while maintaining efficient communication between components:
+
+```
+Cosmicrafts Architecture
+├── Core Game Logic Canister
+│   ├── Player Management
+│   ├── Matchmaking System
+│   ├── Game State Management
+│   └── Achievement System
+├── Token Canister (ICRC-1)
+│   ├── Spiral Token Implementation
+│   ├── Transaction Processing
+│   └── Balance Management
+├── NFT Canister (ICRC-7)
+│   ├── Game Asset Management
+│   ├── Metadata Storage
+│   └── Transfer Logic
+└── DAO Governance Canisters (SNS)
+    ├── Proposal Management
+    ├── Voting Mechanisms
+    └── Treasury Management
+```
+
+### Core Game Logic Implementation
+
+The main game canister (`main.mo`) implements the core game mechanics using Motoko, the Internet Computer's native programming language. Here's how some key systems are implemented:
+
+#### Player Management System
+
+```rust
+// Player data structure
+pub struct Player {
+    id: PlayerId,
+    username: String,
+    avatar: AvatarID,
+    title: String,
+    description: String,
+    registration_date: u64,
+    level: u32,
+    elo: f64,
+    friends: Vec<FriendDetails>,
+    language: String,
+}
+```
+
+Our player management system stores all player data on-chain, including profiles, statistics, and social connections. This enables:
+
+- **Persistent Player Identity**: Player data remains consistent across all game modes and platforms
+- **Verifiable Achievements**: All player accomplishments are cryptographically verifiable
+- **Social Graph Management**: Friend relationships and social interactions are managed on-chain
+
+#### Matchmaking System
+
+The matchmaking system uses a sophisticated algorithm that considers multiple factors:
+
+```rust
+pub struct MMInfo {
+    player_id: PlayerId,
+    elo: f64,
+    preferred_factions: Vec<String>,
+    preferred_game_modes: Vec<String>,
+    search_start_time: u64,
+}
+```
+
+This system:
+- Pairs players based on skill level (ELO rating)
+- Considers player preferences for factions and game modes
+- Implements wait-time adjustments to ensure reasonable queue times
+- Stores all match history on-chain for transparency and analysis
+
+#### Achievement and Mission System
+
+Achievements and missions are fully implemented on-chain, with progress tracking and reward distribution handled automatically:
+
+```rust
+pub struct Mission {
+    id: String,
+    title: String,
+    description: String,
+    category: MissionCategory,
+    mission_type: MissionType,
+    requirement: u64,
+    reward: RewardType,
+    reward_amount: u64,
+}
+```
+
+This system:
+- Tracks player progress across multiple achievement categories
+- Automatically distributes rewards when conditions are met
+- Maintains a verifiable history of all player accomplishments
+
+### Token Implementation (ICRC-1)
+
+The Spiral token implements the ICRC-1 standard, ensuring compatibility with the broader Internet Computer ecosystem:
+
+```rust
+// ICRC-1 Transfer implementation
+pub struct TransferArgs {
+    from_subaccount: Option<Subaccount>,
+    to: Account,
+    amount: Tokens,
+    fee: Option<Tokens>,
+    memo: Option<Vec<u8>>,
+    created_at_time: Option<u64>,
+}
+```
+
+Key features include:
+- **Standard Compliance**: Full implementation of the ICRC-1 interface
+- **Efficient Transfers**: Optimized for low-latency, high-throughput transactions
+- **Metadata Support**: Rich token metadata for better integration with wallets and exchanges
+- **Fee Management**: Configurable transaction fees with treasury allocation
+
+### NFT Implementation (ICRC-7)
+
+Game assets are implemented as NFTs using the ICRC-7 standard, providing:
+
+```rust
+// NFT metadata structure
+pub struct Metadata {
+    name: String,
+    description: Option<String>,
+    image: Option<String>,
+    attributes: Vec<Attribute>,
+}
+```
+
+- **Dynamic Metadata**: NFT properties can evolve based on game events
+- **Composable Assets**: Game items can be combined or upgraded
+- **Verifiable Ownership**: Cryptographic proof of asset ownership
+- **Cross-Game Compatibility**: Assets can be used across different games in the ecosystem
+
+### Data Flow Architecture
+
+The data flow within Cosmicrafts follows a carefully designed pattern to ensure efficiency and security:
+
+```mermaid
+sequenceDiagram
+    participant User as 👤 User
+    participant Frontend as 🖥️ Frontend
+    participant API as 🔌 API Layer
+    participant Validation as ✅ Validation
+    participant GameState as 🎲 Game State
+    participant Events as 📢 Events
+    participant Other as 🔄 Other Systems
+    
+    User->>Frontend: Initiates Action
+    Frontend->>API: API Request
+    API->>Validation: Validate Input
+    
+    alt Invalid Input
+        Validation-->>API: Reject Request
+        API-->>Frontend: Error Response
+        Frontend-->>User: Display Error
+    else Valid Input
+        Validation->>GameState: Process State Change
+        GameState->>Events: Emit Events
+        Events->>Other: Notify Relevant Systems
+        GameState-->>API: Return Updated State
+        API-->>Frontend: Success Response
+        Frontend-->>User: Update UI
+    end
+    
+    Note over User,Other: All operations are recorded on-chain for transparency and auditability
+```
+
+1. **User Interaction**: Player actions in the frontend trigger calls to the appropriate canister
+2. **Validation Layer**: All inputs are validated against security rules before processing
+3. **State Management**: Game state changes are processed atomically to prevent inconsistencies
+4. **Event Emission**: State changes trigger events that can be observed by other system components
+5. **Response Generation**: Results are returned to the frontend for immediate feedback
+
+This architecture ensures:
+- **Data Consistency**: All game state remains consistent across the system
+- **Auditability**: Every action is recorded and can be verified
+- **Scalability**: The system can handle increasing load through efficient data management
+
+### Security Implementation
+
+Security is implemented at multiple levels:
+
+1. **Principal-Based Authentication**: All actions are authenticated using Internet Computer principals
+2. **Role-Based Access Control**: Different functions have different access requirements
+3. **Input Validation**: All user inputs are validated before processing
+4. **Rate Limiting**: Protection against spam and DoS attacks
+5. **Formal Verification**: Critical components are formally verified for correctness
+
+### Performance Optimizations
+
+Several optimizations ensure the game remains responsive despite being fully on-chain:
+
+1. **Efficient Data Structures**: Custom data structures minimize storage and processing costs
+2. **Batched Updates**: Related state changes are batched to reduce the number of transactions
+3. **Lazy Loading**: Data is loaded only when needed to minimize resource usage
+4. **Caching Strategies**: Frequently accessed data is cached for faster access
+5. **Asynchronous Processing**: Non-critical operations are processed asynchronously
+
+### Cross-Canister Communication
+
+Communication between canisters is handled through a well-defined API layer:
+
+```mermaid
+flowchart LR
+    subgraph "Game Canister"
+        GameLogic["🎮 Game Logic"]
+        PlayerData["👤 Player Data"]
+        Events["📢 Event System"]
+    end
+    
+    subgraph "Token Canister"
+        TokenLogic["💰 Token Logic"]
+        Balances["💵 Balances"]
+        Transfers["📊 Transfer History"]
+    end
+    
+    subgraph "NFT Canister"
+        NFTLogic["🖼️ NFT Logic"]
+        Assets["🏆 Asset Metadata"]
+        Ownership["📜 Ownership Records"]
+    end
+    
+    subgraph "DAO Canister"
+        Governance["🏛️ Governance"]
+        Proposals["📝 Proposals"]
+        Voting["🗳️ Voting System"]
+    end
+    
+    GameLogic -->|"reward_player()"| TokenLogic
+    GameLogic -->|"mint_asset()"| NFTLogic
+    GameLogic -->|"query_governance()"| Governance
+    
+    TokenLogic -->|"notify_transfer()"| Events
+    NFTLogic -->|"notify_mint()"| Events
+    
+    Governance -->|"update_params()"| GameLogic
+    
+    %% Styling classes - simplified for better aesthetics
+    classDef gameCanister fill:#00c3ff20,stroke:#00c3ff,stroke-width:1.5px
+    classDef tokenCanister fill:#ffa20020,stroke:#ffa200,stroke-width:1.5px
+    classDef nftCanister fill:#00993320,stroke:#00ff95,stroke-width:1.5px
+    classDef daoCanister fill:#cc000020,stroke:#ef4444,stroke-width:1.5px
+    
+    class GameLogic,PlayerData,Events gameCanister
+    class TokenLogic,Balances,Transfers tokenCanister
+    class NFTLogic,Assets,Ownership nftCanister
+    class Governance,Proposals,Voting daoCanister
+```
+
+```rust
+// Example of cross-canister call to the token canister
+pub async fn reward_player(player_id: Principal, amount: u64) -> Result<(), String> {
+    let token_canister = ic_cdk::api::call::call_with_payment(
+        TOKEN_CANISTER_ID,
+        "transfer",
+        (TransferArgs {
+            from_subaccount: None,
+            to: Account { owner: player_id, subaccount: None },
+            amount: amount,
+            fee: None,
+            memo: Some("Game Reward".as_bytes().to_vec()),
+            created_at_time: Some(ic_cdk::api::time()),
+        },),
+        0,
+    ).await;
+    
+    match token_canister {
+        Ok(block_index) => Ok(()),
+        Err(transfer_error) => Err(format!("Transfer failed: {:?}", transfer_error)),
+    }
+}
+```
+
+This approach:
+- Maintains clear separation of concerns between different system components
+- Enables modular upgrades without disrupting the entire system
+- Provides clear error handling and recovery mechanisms
+
+### DAO Governance Integration
+
+The SNS governance system is tightly integrated with the game mechanics:
+
+```yaml
+# SNS Configuration Excerpt
+Token:
+    name: Spiral
+    symbol: SPIRAL
+    transaction_fee: 1_000_000 e8s
+    logo: logo.png
+
+Proposals:
+    rejection_fee: 1000 tokens
+    initial_voting_period: 7 days
+    maximum_wait_for_quiet_deadline_extension: 1 day
+
+Neurons:
+    minimum_creation_stake: 1000 tokens
+```
+
+This integration enables:
+- **Community-Driven Development**: Game features can be proposed and voted on by token holders
+- **Transparent Treasury Management**: All financial decisions are made through DAO governance
+- **Decentralized Upgrades**: Game updates are controlled by the community, not a central authority
 
 ---
 
@@ -62,8 +444,8 @@ The **Internet Computer** stands apart from other [blockchains](https://chainspe
 - [x] **Community and Grants**: Supported by DFINITY's [funding](https://dfinity.org/grants) and a thriving [developer network](https://forum.dfinity.org/)
 - [x] **Expert R&D**: Backed by one of the most [innovative teams](https://dfinity.org/#team) in the tech industry
 
-::: info Competitive Advantage
-This eliminates many of the limitations found in other blockchains and cloud services, creating a foundation for faster, more efficient, and more secure applications.
+::: info Investment Advantage
+This technology stack eliminates many of the limitations found in other blockchains and cloud services, creating a foundation for faster, more efficient, and more secure applications—translating to better user experiences and stronger market positioning.
 :::
 
 ![DAO Architecture2](archimg2.webp)
@@ -71,6 +453,62 @@ This eliminates many of the limitations found in other blockchains and cloud ser
 ## Canister Architecture
 
 The **Internet Computer** introduces a new approach to smart contracts through its **canister architecture**. [Canisters](https://internetcomputer.org/docs/current/tutorials/developer-journey/level-0/intro-canisters) are the Internet Computer's version of smart contracts, designed to provide greater functionality and scalability than traditional blockchain contracts.
+
+```mermaid
+flowchart TD
+    %% Main Canister Structure
+    subgraph CanisterStructure["Canister Architecture"]
+        direction TB
+        
+        subgraph WasmModule["WebAssembly Module"]
+            Code["💻 Code (Logic)"]
+            Memory["🧠 Memory (State)"]
+            API["🔌 API Interface"]
+        end
+        
+        subgraph CanisterState["Canister State"]
+            Stable["💾 Stable Memory"]
+            Heap["📊 Heap Memory"]
+            Cycles["⚡ Cycles (Gas)"]
+        end
+        
+        %% Internal Canister Connections
+        Code <--> Memory
+        API <--> Code
+        Memory <--> Stable
+        Memory <--> Heap
+        Cycles --> Code
+    end
+    
+    %% Internet Computer Infrastructure
+    subgraph IC["Internet Computer Network"]
+        Consensus["🔗 Consensus Layer"]
+        Execution["⚙️ Execution Environment"]
+        Networking["🌐 Networking Layer"]
+    end
+    
+    %% External Systems
+    External["🌍 External Systems"]
+    
+    %% Connections between main components
+    Execution --> CanisterStructure
+    Consensus --> Execution
+    Networking --> Consensus
+    
+    External <--> API
+    
+    %% Styling classes - simplified for better aesthetics
+    classDef module fill:#00c3ff20,stroke:#00c3ff,stroke-width:1.5px
+    classDef state fill:#ffa20020,stroke:#ffa200,stroke-width:1.5px
+    classDef ic fill:#00993320,stroke:#00ff95,stroke-width:1.5px
+    classDef external fill:#1e2b38,stroke:#ffffff4d,stroke-width:1.5px
+    
+    %% Apply styles
+    class WasmModule,Code,Memory,API module
+    class CanisterState,Stable,Heap,Cycles state
+    class IC,Consensus,Execution,Networking ic
+    class External external
+```
 
 ### What Are Canisters?
 
@@ -107,15 +545,13 @@ With canisters at its core, the Internet Computer redefines what smart contracts
 
 Cosmicrafts backend is coded in the Internet Computer's native programming language, [Motoko](https://github.com/dfinity/motoko), it powers advanced smart contracts with the following features:
 
-```javascript
-// Example Motoko code for NFT ownership verification
-public func verifyOwnership(tokenId : TokenId, owner : Principal) : async Bool {
-  switch (tokens.get(tokenId)) {
-    case null { return false };
-    case (?token) {
-      return token.owner == owner;
-    };
-  };
+```rust
+// Example code for NFT ownership verification
+pub async fn verify_ownership(token_id: TokenId, owner: Principal) -> bool {
+    match tokens.get(&token_id) {
+        None => false,
+        Some(token) => token.owner == owner
+    }
 }
 ```
 
@@ -171,6 +607,53 @@ The Internet Computer makes it easy to access games across different platforms, 
 
 ![DAO Architecture Diagram](archdiagram.webp)
 
+```mermaid
+sequenceDiagram
+    participant User as 👤 Player
+    participant Frontend as 🖥️ Frontend
+    participant GameCanister as 🎮 Game Canister
+    participant TokenCanister as 💰 Token Canister
+    participant NFTCanister as 🏆 NFT Canister
+    participant DAOCanister as 🏛️ DAO Canister
+    
+    User->>Frontend: Start Game Session
+    Frontend->>GameCanister: Initialize Game
+    GameCanister-->>Frontend: Session Created
+    
+    User->>Frontend: Perform Game Action
+    Frontend->>GameCanister: Submit Action
+    GameCanister->>GameCanister: Process Game Logic
+    
+    alt Action Earns Reward
+        GameCanister->>TokenCanister: Mint Tokens
+        TokenCanister-->>GameCanister: Tokens Minted
+        GameCanister->>NFTCanister: Mint Game Asset
+        NFTCanister-->>GameCanister: NFT Minted
+    end
+    
+    GameCanister-->>Frontend: Updated Game State
+    Frontend-->>User: Display Results
+    
+    User->>Frontend: Submit Governance Proposal
+    Frontend->>DAOCanister: Create Proposal
+    DAOCanister-->>Frontend: Proposal Created
+    Frontend-->>User: Proposal ID
+    
+    User->>Frontend: Vote on Proposal
+    Frontend->>DAOCanister: Cast Vote
+    DAOCanister->>DAOCanister: Process Vote
+    
+    alt Proposal Passes
+        DAOCanister->>GameCanister: Update Game Parameters
+        GameCanister-->>DAOCanister: Parameters Updated
+    end
+    
+    DAOCanister-->>Frontend: Vote Recorded
+    Frontend-->>User: Vote Confirmation
+    
+    Note over User,DAOCanister: All interactions are transparent and verifiable on-chain
+```
+
 ### Layers Explained
 
 #### 1. Frontend Layer
@@ -191,9 +674,131 @@ The **Backend Layer** is powered entirely by the **Internet Computer** and handl
 
 ---
 
+## Security and Reliability
+
+::: info Investor Confidence
+Security is a cornerstone of our architecture, designed to protect both player assets and the integrity of the gaming experience.
+:::
+
+```mermaid
+graph TD
+    subgraph "Security Layers"
+        direction TB
+        
+        L1["🔒 Network Layer Security"]
+        L2["🛡️ Canister Isolation"]
+        L3["🔐 Principal Authentication"]
+        L4["👮 Role-Based Access Control"]
+        L5["✅ Input Validation"]
+        L6["⚙️ Business Logic Verification"]
+        
+        L1 --> L2 --> L3 --> L4 --> L5 --> L6
+    end
+    
+    subgraph "Threat Mitigation"
+        T1["🚫 DDoS Protection"]
+        T2["🔍 Anomaly Detection"]
+        T3["⏱️ Rate Limiting"]
+        T4["📝 Audit Logging"]
+        T5["🔄 Automatic Recovery"]
+    end
+    
+    subgraph "Reliability Features"
+        R1["🌐 Global Node Distribution"]
+        R2["⚖️ Load Balancing"]
+        R3["📈 Automatic Scaling"]
+        R4["🔄 Redundant Systems"]
+        R5["🔧 Self-Healing"]
+    end
+    
+    L6 --> T1 & T2 & T3 & T4 & T5
+    T5 --> R1 & R2 & R3 & R4 & R5
+    
+    %% Styling classes - simplified for better aesthetics
+    classDef securityLayer fill:#cc000020,stroke:#ef4444,stroke-width:1.5px
+    classDef threatLayer fill:#ffa20020,stroke:#ffa200,stroke-width:1.5px
+    classDef reliabilityLayer fill:#00993320,stroke:#00ff95,stroke-width:1.5px
+    
+    class L1,L2,L3,L4,L5,L6 securityLayer
+    class T1,T2,T3,T4,T5 threatLayer
+    class R1,R2,R3,R4,R5 reliabilityLayer
+```
+
+### Security Measures
+
+- **Smart Contract Audits**: Our codebase undergoes regular security audits by independent third parties
+- **Open Source Verification**: All code is open source, allowing community verification and transparency
+- **Formal Verification**: Critical components are formally verified to mathematically prove their correctness
+- **Decentralized Infrastructure**: The Internet Computer's distributed nature eliminates single points of failure
+
+### Reliability Features
+
+- **Global Node Distribution**: Game services run across a global network of nodes, ensuring uptime and performance
+- **Automatic Scaling**: Resources scale automatically with demand, preventing performance degradation
+- **Redundant Systems**: Critical systems have built-in redundancy to maintain service during updates or issues
+
+---
+
 ## Future Expansions
 
 The architecture is designed to evolve with ICP's latest integrations:
+
+```mermaid
+graph TD
+    subgraph "Core Platform" 
+        Cosmicrafts["🎮 Cosmicrafts Core"]
+        GameEngine["⚙️ Game Engine"]
+        TokenSystem["💰 Token Economy"]
+        NFTSystem["🏆 NFT System"]
+        DAOSystem["🏛️ DAO Governance"]
+    end
+    
+    subgraph "Future Integrations"
+        CrossChain["🔄 Cross-Chain Integration"]
+        AI["🧠 On-Chain AI"]
+        Analytics["📊 Advanced Analytics"]
+        Metaverse["🌐 Metaverse Expansion"]
+        Mobile["📱 Mobile Platform"]
+    end
+    
+    subgraph "Ecosystem Partners"
+        ORIGYN["💎 ORIGYN - RWA Protocol"]
+        BOOMDAO["🚀 BOOM DAO - Game Infrastructure"]
+        OpenChat["💬 OpenChat - Communication"]
+        Dmail["📧 Dmail - Messaging"]
+        Neutrinite["📈 Neutrinite - Data"]
+        Bitfinity["⛓️ Bitfinity - Layer 2"]
+        WaterNeuron["💧 WaterNeuron - Staking"]
+    end
+    
+    Cosmicrafts --> GameEngine & TokenSystem & NFTSystem & DAOSystem
+    
+    Cosmicrafts --> CrossChain
+    CrossChain --> Bitfinity
+    
+    Cosmicrafts --> AI
+    AI --> Analytics
+    
+    GameEngine --> Metaverse
+    GameEngine --> Mobile
+    
+    TokenSystem --> WaterNeuron
+    NFTSystem --> ORIGYN
+    GameEngine --> BOOMDAO
+    
+    DAOSystem --> OpenChat
+    DAOSystem --> Dmail
+    Analytics --> Neutrinite
+    
+    %% Styling classes - simplified for better aesthetics
+    classDef core fill:#00c3ff20,stroke:#00c3ff,stroke-width:1.5px
+    classDef future fill:#00993320,stroke:#00ff95,stroke-width:1.5px
+    classDef partner fill:#ffa20020,stroke:#ffa200,stroke-width:1.5px
+    
+    class Cosmicrafts,GameEngine,TokenSystem,NFTSystem,DAOSystem core
+    class CrossChain,AI,Analytics,Metaverse,Mobile future
+    class ORIGYN,BOOMDAO,OpenChat,Dmail,Neutrinite,Bitfinity,WaterNeuron partner
+```
 
 ### Cross-Chain Interoperability
 
@@ -225,4 +830,68 @@ The roadmap includes plans to integrate [development kits](https://github.com/df
 These integrations empower developers to build, innovate, and expand the functionalities with a collaborative and thriving ecosystem.
 :::
 
----
+## Investment Potential
+
+::: info Why Cosmicrafts Architecture Matters to Investors
+The technical foundation of Cosmicrafts is designed not just for today's gaming market, but for the future of blockchain gaming. Here's why our architecture represents a strong investment opportunity:
+:::
+
+```mermaid
+graph TD
+    subgraph "Investment Value Proposition"
+        direction TB
+        
+        subgraph "Market Position"
+            FirstMover["🥇 First-Mover Advantage"]
+            MarketSize["📈 $200B+ Gaming Market"]
+            Audience["👥 Global Player Base"]
+        end
+        
+        subgraph "Technical Advantages"
+            Scalability["⚖️ Infinite Scalability"]
+            Performance["⚡ High Performance"]
+            Security["🔒 Enhanced Security"]
+            Interoperability["🔄 Cross-Chain Capability"]
+        end
+        
+        subgraph "Economic Benefits"
+            OpEx["📉 Lower Operational Costs"]
+            DevSpeed["🚀 Faster Development Cycle"]
+            Revenue["💰 Multiple Revenue Streams"]
+            Margins["📊 Higher Profit Margins"]
+        end
+        
+        subgraph "Long-Term Value"
+            Community["🤝 Community Ownership"]
+            Governance["🏛️ DAO-Driven Evolution"]
+            Adaptability["🔧 Future-Proof Design"]
+            Compliance["📜 Regulatory Readiness"]
+        end
+    end
+    
+    FirstMover --> Scalability & Performance
+    MarketSize --> Revenue
+    Audience --> Community
+    
+    Scalability --> OpEx
+    Performance --> DevSpeed
+    Security --> Compliance
+    Interoperability --> Revenue
+    
+    OpEx & DevSpeed --> Margins
+    Revenue --> Community
+    
+    Community --> Governance
+    Governance --> Adaptability
+    
+    %% Styling classes - simplified for better aesthetics
+    classDef market fill:#1e2b38,stroke:#ffffff4d,stroke-width:1.5px
+    classDef tech fill:#00c3ff20,stroke:#00c3ff,stroke-width:1.5px
+    classDef economic fill:#00993320,stroke:#00ff95,stroke-width:1.5px
+    classDef longterm fill:#ffa20020,stroke:#ffa200,stroke-width:1.5px
+    
+    class FirstMover,MarketSize,Audience market
+    class Scalability,Performance,Security,Interoperability tech
+    class OpEx,DevSpeed,Revenue,Margins economic
+    class Community,Governance,Adaptability,Compliance longterm
+```

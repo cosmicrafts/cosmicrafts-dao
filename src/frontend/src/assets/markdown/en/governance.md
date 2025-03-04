@@ -1,6 +1,6 @@
 # Governance
 
-[[toc]]
+[[toc:2-2]]
 
 ## Document Navigation Guide
 

@@ -2,7 +2,7 @@
 
 ![Community](communitybanner.webp)
 
-[[toc]]
+[[toc:2-2]]
 
 ## **1. Introduction: A Thriving Universe, Built by You**
 

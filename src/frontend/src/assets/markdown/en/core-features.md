@@ -1,7 +1,7 @@
 # Core Features
 ![Core Features](corebanner.webp)
 
-[[toc]]
+[[toc:2-2]]
 
 ## Overview
 

@@ -880,7 +880,22 @@ export default {
   }
   
   .content-wrapper {
-    padding-bottom: 4rem; /* Add space for the mobile navigation button */
+    padding-bottom: 5rem; /* Add space for the mobile navigation button */
+    padding: 1rem 1rem 5rem 1rem; /* Reduced horizontal padding */
+    margin: 1rem auto; /* Reduced top/bottom margin */
+  }
+  
+  /* Optimize table display on mobile */
+  .markdown-content table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  /* Reduce image sizes on mobile */
+  .markdown-content img {
+    max-width: 100%;
+    height: auto;
   }
 }
 

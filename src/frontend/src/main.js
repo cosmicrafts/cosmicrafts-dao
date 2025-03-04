@@ -20,7 +20,6 @@ import zh from '@/locales/zh.json';
 import tr from '@/locales/tr.json';
 import { registerSW } from 'virtual:pwa-register';
 
-
 const i18n = createI18n({
   legacy: false,
   locale: 'en',
@@ -81,8 +80,6 @@ watch(
   },
   { immediate: true }
 );
-
-
 
 app.use(i18n);
 app.use(router);

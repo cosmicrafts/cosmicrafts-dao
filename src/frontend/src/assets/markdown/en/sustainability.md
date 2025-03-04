@@ -2,7 +2,7 @@
 
 ![Sustainability](sustainabilitybanner.webp)
 
-[[toc]]
+[[toc:2-2]]
 
 ## Risk Management: Securing the Future of Cosmicrafts
 

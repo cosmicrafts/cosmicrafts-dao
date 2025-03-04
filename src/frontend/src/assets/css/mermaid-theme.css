@@ -1,0 +1,250 @@
+/* Mermaid Theme for Cosmicrafts
+   This file contains custom styling for mermaid diagrams
+   to match the Cosmicrafts design system */
+
+/* Base theme variables - these match our universal.css */
+:root {
+  /* Diagram Background Colors */
+  --mermaid-bg-primary: #0a0e1acc;
+  --mermaid-bg-secondary: #17212be6;
+  --mermaid-bg-tertiary: #1e2b38b3;
+  
+  /* Node Colors */
+  --mermaid-node-user: #1e2b38;
+  --mermaid-node-frontend: #00c3ff20;
+  --mermaid-node-blockchain: #00993320;
+  --mermaid-node-data: #ffa20020;
+  --mermaid-node-security: #cc000020;
+  
+  /* Border Colors */
+  --mermaid-border-user: #ffffff4d;
+  --mermaid-border-frontend: #00c3ff;
+  --mermaid-border-blockchain: #00ff95;
+  --mermaid-border-data: #ffa200;
+  --mermaid-border-security: #ef4444;
+  
+  /* Text Colors */
+  --mermaid-text-primary: #ffffff;
+  --mermaid-text-secondary: #ffffffcc;
+  
+  /* Arrow Colors */
+  --mermaid-arrow-color: #00c3ff;
+  --mermaid-arrow-highlight: #ffa200;
+  
+  /* Accent Colors */
+  --mermaid-accent-primary: #00c3ff;
+  --mermaid-accent-secondary: #ff00c3;
+  --mermaid-accent-tertiary: #ffa200;
+}
+
+/* Global Mermaid Styling */
+.mermaid {
+  background-color: transparent !important;
+  padding: 2rem;
+  margin: 2.5rem 0;
+  border-radius: 8px;
+  background-image: radial-gradient(circle at center, #0a0e1ab3, #000000e6);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border-left: 3px solid var(--mermaid-accent-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.mermaid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #00c3ff0d, transparent 40%);
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+/* Enhance diagram text */
+.mermaid text {
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: 500 !important;
+  fill: var(--mermaid-text-primary) !important;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Flowchart Styling */
+.mermaid .flowchart-link {
+  stroke: var(--mermaid-arrow-color) !important;
+  stroke-width: 1.5px !important;
+  filter: drop-shadow(0 0 3px #00c3ff80) !important;
+}
+
+.mermaid .flowchart-link:hover {
+  stroke: var(--mermaid-accent-tertiary) !important;
+  stroke-width: 2px !important;
+  filter: drop-shadow(0 0 5px #ffa200b3) !important;
+}
+
+/* Node Styling */
+.mermaid .node rect, 
+.mermaid .node circle, 
+.mermaid .node ellipse, 
+.mermaid .node polygon, 
+.mermaid .node path {
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5)) !important;
+  stroke-width: 1.5px !important;
+  rx: 6px !important;
+  ry: 6px !important;
+}
+
+/* Subgraph Styling */
+.mermaid .cluster rect {
+  fill: var(--mermaid-bg-secondary) !important;
+  stroke: rgba(255, 255, 255, 0.15) !important;
+  stroke-width: 1px !important;
+  rx: 8px !important;
+  ry: 8px !important;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.5)) !important;
+}
+
+.mermaid .cluster .label {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  fill: var(--mermaid-accent-primary) !important;
+  filter: drop-shadow(0 0 2px #00c3ff80) !important;
+}
+
+/* Sequence Diagram Styling */
+.mermaid .actor {
+  fill: var(--mermaid-bg-tertiary) !important;
+  stroke: var(--mermaid-border-frontend) !important;
+  stroke-width: 1.5px !important;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5)) !important;
+}
+
+.mermaid .messageLine0, 
+.mermaid .messageLine1 {
+  stroke: var(--mermaid-arrow-color) !important;
+  stroke-width: 1.5px !important;
+  filter: drop-shadow(0 0 2px #00c3ff4d) !important;
+}
+
+.mermaid .messageText {
+  fill: var(--mermaid-text-primary) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+.mermaid .loopText, 
+.mermaid .loopLine {
+  fill: var(--mermaid-text-secondary) !important;
+  stroke: var(--mermaid-border-data) !important;
+}
+
+.mermaid .note {
+  fill: var(--mermaid-node-data) !important;
+  stroke: var(--mermaid-border-data) !important;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3)) !important;
+}
+
+/* Class Diagram Styling */
+.mermaid .classLabel .label {
+  fill: var(--mermaid-text-primary) !important;
+}
+
+.mermaid .relation {
+  stroke: var(--mermaid-arrow-color) !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Entity Relationship Diagram Styling */
+.mermaid .entityBox {
+  fill: var(--mermaid-bg-tertiary) !important;
+  stroke: var(--mermaid-border-blockchain) !important;
+}
+
+/* State Diagram Styling */
+.mermaid .stateLabel text {
+  fill: var(--mermaid-text-primary) !important;
+  font-size: 12px !important;
+}
+
+.mermaid .transition {
+  stroke: var(--mermaid-arrow-color) !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Gantt Chart Styling */
+.mermaid .section {
+  fill: var(--mermaid-node-blockchain) !important;
+}
+
+.mermaid .task {
+  fill: var(--mermaid-node-frontend) !important;
+  stroke: var(--mermaid-border-frontend) !important;
+}
+
+.mermaid .taskText {
+  fill: var(--mermaid-text-primary) !important;
+}
+
+.mermaid .grid .tick line {
+  stroke: rgba(255, 255, 255, 0.1) !important;
+}
+
+.mermaid .grid .tick text {
+  fill: var(--mermaid-text-secondary) !important;
+}
+
+/* Pie Chart Styling */
+.mermaid .pieCircle {
+  stroke: rgba(10, 14, 26, 0.5) !important;
+  stroke-width: 1px !important;
+}
+
+.mermaid .pieTitleText {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  fill: var(--color-primary) !important;
+  filter: drop-shadow(0 0 2px rgba(0, 195, 255, 0.5)) !important;
+}
+
+/* Custom styling for specific node classes */
+.mermaid .userLayer rect,
+.mermaid .market rect {
+  fill: var(--mermaid-node-user) !important;
+  stroke: var(--mermaid-border-user) !important;
+}
+
+.mermaid .frontendLayer rect,
+.mermaid .tech rect,
+.mermaid .module rect {
+  fill: var(--mermaid-node-frontend) !important;
+  stroke: var(--mermaid-border-frontend) !important;
+}
+
+.mermaid .blockchainLayer rect,
+.mermaid .economic rect,
+.mermaid .ic rect {
+  fill: var(--mermaid-node-blockchain) !important;
+  stroke: var(--mermaid-border-blockchain) !important;
+}
+
+.mermaid .tokenCanisters rect,
+.mermaid .longterm rect,
+.mermaid .state rect {
+  fill: var(--mermaid-node-data) !important;
+  stroke: var(--mermaid-border-data) !important;
+}
+
+.mermaid .daoCanisters rect,
+.mermaid .securityLayer rect {
+  fill: var(--mermaid-node-security) !important;
+  stroke: var(--mermaid-border-security) !important;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .mermaid {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+} 

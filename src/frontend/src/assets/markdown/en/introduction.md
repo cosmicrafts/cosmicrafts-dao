@@ -2,7 +2,7 @@
 
 ![DAO Mission](daobanner.webp)
 
-[[toc]]
+[[toc:2-2]]
 
 **Cosmicrafts DAO** is pioneering the $200B+ gaming industry revolution through Web3 technology, creating the first fully on-chain gaming franchise with real ownership economics. In development since 2016 and built entirely on the [Internet Computer](https://internetcomputer.org) since 2021, we've survived multiple market cycles while consistently advancing our vision of blockchain gaming without the limitations that have held back previous Web3 ventures.
 

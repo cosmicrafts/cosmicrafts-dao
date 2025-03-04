@@ -2,6 +2,8 @@
 
 /* Import universal styles */
 @import './assets/css/universal.css';
+/* Import mermaid theme */
+@import './assets/css/mermaid-theme.css';
 
 /* Import primary fonts and multilingual fallbacks */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap');
@@ -447,4 +449,77 @@ a:hover {
 .cosmic-hover:hover::after {
   transform: scaleX(1.25);
   box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.936);
+}
+
+/* Mobile-specific typography adjustments for whitepaper */
+@media (max-width: 768px) {
+  .markdown-content {
+    font-size: 0.9rem; /* Slightly smaller base font size on mobile */
+  }
+  
+  .markdown-content h1 {
+    font-size: 1.8rem; /* Reduced from 2rem */
+  }
+  
+  .markdown-content h2 {
+    font-size: 1.35rem; /* Reduced from 1.5rem */
+  }
+  
+  .markdown-content h3 {
+    font-size: 1.15rem; /* Reduced from 1.25rem */
+  }
+  
+  .markdown-content h4 {
+    font-size: 1rem; /* Reduced from 1.1rem */
+  }
+  
+  .markdown-content p {
+    font-size: 0.9rem; /* Reduced from 1rem */
+    line-height: 1.5; /* Slightly tighter line height */
+  }
+  
+  .markdown-content li {
+    font-size: 0.9rem; /* Reduced from 1rem */
+    margin-bottom: 0.8rem; /* Reduced from 1rem */
+  }
+  
+  .markdown-content table {
+    font-size: 0.85rem; /* Even smaller for tables to fit more content */
+  }
+  
+  .markdown-content blockquote {
+    padding: 0.4rem 0.8rem; /* Smaller padding */
+    margin: 0.8rem 0; /* Smaller margin */
+  }
+  
+  .markdown-content code {
+    font-size: 0.85rem; /* Smaller code font */
+    padding: 0.3rem 0.6rem; /* Smaller padding */
+  }
+  
+  /* Adjust info/warning containers for mobile */
+  .markdown-content .info-container,
+  .markdown-content .warning-container {
+    padding: 0.8rem; /* Reduced from 1rem */
+    margin: 0.8rem 0; /* Reduced from 1rem */
+  }
+}
+
+/* Extra small devices (phones, 375px and down) */
+@media (max-width: 375px) {
+  .markdown-content {
+    font-size: 0.85rem; /* Even smaller for very small screens */
+  }
+  
+  .markdown-content h1 {
+    font-size: 1.7rem;
+  }
+  
+  .markdown-content h2 {
+    font-size: 1.3rem;
+  }
+  
+  .markdown-content table {
+    font-size: 0.8rem; /* Further reduced for very small screens */
+  }
 }
