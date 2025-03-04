@@ -32,8 +32,8 @@ flowchart TD
     
     subgraph "Frontend Layer"
         UI["🖥️ User Interface"]
-        Assets["🖼️ Static Assets"]
         ClientLogic["⚙️ Client Logic"]
+        APIcalls["🔌 API Calls"]
     end
     
     subgraph "Blockchain Layer"
@@ -46,9 +46,9 @@ flowchart TD
     User --> Browser & Client
     Browser & Client --> UI
     UI --> ClientLogic
-    ClientLogic --> Assets
+    ClientLogic --> APIcalls
     
-    ClientLogic --> |"API Calls"| GameLogic
+    APIcalls --> GameLogic
     GameLogic --> |"Updates"| TokenSystem & NFTSystem
     TokenSystem & NFTSystem --> |"Governance"| DAO
     DAO --> |"Controls"| GameLogic & TokenSystem & NFTSystem
@@ -59,7 +59,7 @@ flowchart TD
     classDef blockchainLayer fill:#00993320,stroke:#00ff95,stroke-width:1.5px
     
     class User,Browser,Client userLayer
-    class UI,Assets,ClientLogic frontendLayer
+    class UI,ClientLogic,APIcalls frontendLayer
     class DAO,GameLogic,TokenSystem,NFTSystem blockchainLayer
 ```
 

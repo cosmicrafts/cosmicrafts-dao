@@ -68,6 +68,7 @@
   font-weight: 500 !important;
   fill: var(--mermaid-text-primary) !important;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+  font-size: 1.4rem !important;
 }
 
 /* Flowchart Styling */
@@ -107,9 +108,14 @@
 
 .mermaid .cluster .label {
   font-weight: 600 !important;
-  font-size: 14px !important;
+  font-size: 1.8rem !important;
   fill: var(--mermaid-accent-primary) !important;
   filter: drop-shadow(0 0 2px #00c3ff80) !important;
+}
+
+/* Node labels */
+.mermaid .label {
+  font-size: 1.4rem !important;
 }
 
 /* Sequence Diagram Styling */
@@ -129,7 +135,7 @@
 
 .mermaid .messageText {
   fill: var(--mermaid-text-primary) !important;
-  font-size: 12px !important;
+  font-size: 1.4rem !important;
   font-weight: 500 !important;
 }
 

@@ -79,7 +79,7 @@ export default {
       });
       
       // Render the markdown content
-      this.renderMarkdown();
+      this.renderMermaidDiagrams();
     };
     document.head.appendChild(mermaidScript);
 
