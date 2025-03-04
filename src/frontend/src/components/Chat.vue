@@ -464,7 +464,7 @@ const toggleMaximize = (): void => {
 // ✅ Make chat resizable from edges/corners
 const startResize = (event: MouseEvent): void => {
   if (!chatWindow.value || isMaximized.value) return; // Don't allow resize when maximized
-  
+
   event.preventDefault();
   isResizing.value = true;
   startX.value = event.clientX;
@@ -521,7 +521,7 @@ const startDrag = (event: MouseEvent): void => {
 
 const dragChat = (event: MouseEvent | TouchEvent): void => {
   if (!isDragging.value || !chatWindow.value) return;
-  
+
   event.preventDefault();
   
   let clientX: number;
@@ -571,7 +571,7 @@ const dragChat = (event: MouseEvent | TouchEvent): void => {
 
 const stopDrag = (): void => {
   if (isDragging.value && chatWindow.value) {
-    isDragging.value = false;
+  isDragging.value = false;
     
     // Convert transform to actual position
     const transform = chatWindow.value.style.transform;
@@ -601,8 +601,8 @@ const stopDrag = (): void => {
     }
     
     // Remove event listeners
-    document.removeEventListener("mousemove", dragChat);
-    document.removeEventListener("mouseup", stopDrag);
+  document.removeEventListener("mousemove", dragChat);
+  document.removeEventListener("mouseup", stopDrag);
     document.removeEventListener("touchmove", dragChat);
     document.removeEventListener("touchend", stopDrag);
   }
@@ -1062,33 +1062,33 @@ defineExpose({
       </div>
       
       <!-- ✅ Input Area -->
-      <div class="input-area">
+        <div class="input-area">
         <div class="input-wrapper">
-          <!-- Input Field -->
-          <div
-            ref="chatInput"
-            class="chat-input"
-            contenteditable="true"
-            @input="updatePrompt"
-            @keydown.enter.prevent="sendPrompt"
-            role="textbox"
-          ></div>
+            <!-- Input Field -->
+<div
+  ref="chatInput"
+  class="chat-input"
+  contenteditable="true"
+  @input="updatePrompt"
+  @keydown.enter.prevent="sendPrompt"
+  role="textbox"
+></div>
 
-          <!-- Thinking Indicator (Icon + Text) -->
-          <div v-if="loading" class="thinking-indicator">
+            <!-- Thinking Indicator (Icon + Text) -->
+            <div v-if="loading" class="thinking-indicator">
             <div class="dot-flashing"></div>
             <span class="thinking-text">Thinking...</span>
-          </div>
+            </div>
         </div>
         <div class="emoji-button-wrapper">
           <button class="emoji-button" @click.stop="showEmojiPicker = !showEmojiPicker">
-            <FaceSmileIcon class="icon" />
-          </button>
+        <FaceSmileIcon class="icon" />
+      </button>
         </div>
         <button class="send-icon" @click="sendPrompt" :disabled="loading">
-          <PaperAirplaneIcon class="icon" />
+            <PaperAirplaneIcon class="icon" />
         </button>
-      </div>
+        </div>
       
       <!-- Resize Handle (only visible when not maximized) -->
       <div 
@@ -1102,12 +1102,12 @@ defineExpose({
   
   <!-- Teleport EmojiPicker to body -->
   <Teleport to="body">
-    <EmojiPicker 
-      v-if="showEmojiPicker"
-      :show="showEmojiPicker"
+        <EmojiPicker
+        v-if="showEmojiPicker"
+        :show="showEmojiPicker"
       @select="(emoji) => { insertEmoji(emoji); showEmojiPicker = false }"
-      @close="showEmojiPicker = false"
-    />
+        @close="showEmojiPicker = false"
+        />
   </Teleport>
 </template>
 
