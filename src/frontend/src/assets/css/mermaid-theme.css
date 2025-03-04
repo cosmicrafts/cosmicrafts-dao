@@ -35,19 +35,25 @@
   --mermaid-accent-primary: #00c3ff;
   --mermaid-accent-secondary: #ff00c3;
   --mermaid-accent-tertiary: #ffa200;
+  
+  /* Glow Effects */
+  --glow-primary: 0 0 10px rgba(0, 195, 255, 0.5);
+  --glow-secondary: 0 0 10px rgba(255, 162, 0, 0.5);
 }
 
 /* Global Mermaid Styling */
 .mermaid {
   background-color: transparent !important;
-  padding: 2rem;
-  margin: 2.5rem 0;
-  border-radius: 8px;
-  background-image: radial-gradient(circle at center, #0a0e1ab3, #000000e6);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  border-left: 3px solid var(--mermaid-accent-primary);
-  position: relative;
-  overflow: hidden;
+  padding: 3rem !important;
+  margin: 3rem 0 !important;
+  border-radius: 12px !important;
+  background-image: radial-gradient(circle at center, #0a0e1ab3, #000000e6) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 195, 255, 0.1) !important;
+  border-left: 3px solid var(--mermaid-accent-primary) !important;
+  position: relative !important;
+  overflow: visible !important; /* Changed from hidden to visible to prevent text cutoff */
+  max-width: 100% !important;
+  width: auto !important; /* Allow diagram to expand as needed */
 }
 
 .mermaid::before {
@@ -59,7 +65,8 @@
   bottom: 0;
   background: linear-gradient(45deg, #00c3ff0d, transparent 40%);
   pointer-events: none;
-  border-radius: 8px;
+  border-radius: 12px;
+  z-index: 0;
 }
 
 /* Enhance diagram text */
@@ -69,127 +76,255 @@
   fill: var(--mermaid-text-primary) !important;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
   font-size: 1.4rem !important;
+  white-space: normal !important; /* Allow text to wrap */
+  word-wrap: break-word !important; /* Break words if needed */
+}
+
+/* SVG container to ensure proper sizing */
+.mermaid svg {
+  max-width: 100% !important;
+  height: auto !important;
+  overflow: visible !important;
 }
 
 /* Flowchart Styling */
 .mermaid .flowchart-link {
   stroke: var(--mermaid-arrow-color) !important;
-  stroke-width: 1.5px !important;
+  stroke-width: 2px !important;
   filter: drop-shadow(0 0 3px #00c3ff80) !important;
+  transition: all 0.3s ease-in-out !important;
 }
 
 .mermaid .flowchart-link:hover {
   stroke: var(--mermaid-accent-tertiary) !important;
-  stroke-width: 2px !important;
-  filter: drop-shadow(0 0 5px #ffa200b3) !important;
+  stroke-width: 3px !important;
+  filter: drop-shadow(0 0 8px #ffa200b3) !important;
 }
 
-/* Node Styling */
+/* Node Styling with enhanced visuals and hover effects */
 .mermaid .node rect, 
 .mermaid .node circle, 
 .mermaid .node ellipse, 
 .mermaid .node polygon, 
 .mermaid .node path {
-  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5)) !important;
-  stroke-width: 1.5px !important;
-  rx: 6px !important;
-  ry: 6px !important;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.7)) !important;
+  stroke-width: 2px !important;
+  rx: 10px !important;
+  ry: 10px !important;
+  transition: all 0.3s ease-in-out !important;
+  opacity: 0.95 !important;
 }
 
-/* Subgraph Styling */
+/* Node hover effects */
+.mermaid .node:hover rect, 
+.mermaid .node:hover circle, 
+.mermaid .node:hover ellipse, 
+.mermaid .node:hover polygon, 
+.mermaid .node:hover path {
+  filter: drop-shadow(0 0 12px rgba(0, 195, 255, 0.7)) !important;
+  transform: translateY(-2px) !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
+}
+
+/* Node text hover effect */
+.mermaid .node:hover text {
+  fill: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 8px rgba(0, 195, 255, 0.8) !important;
+}
+
+/* Subgraph Styling with enhanced visuals */
 .mermaid .cluster rect {
   fill: var(--mermaid-bg-secondary) !important;
-  stroke: rgba(255, 255, 255, 0.15) !important;
-  stroke-width: 1px !important;
-  rx: 8px !important;
-  ry: 8px !important;
-  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.5)) !important;
+  stroke: rgba(255, 255, 255, 0.2) !important;
+  stroke-width: 1.5px !important;
+  rx: 12px !important;
+  ry: 12px !important;
+  filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.7)) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+/* Subgraph hover effect */
+.mermaid .cluster:hover rect {
+  stroke: var(--mermaid-accent-primary) !important;
+  stroke-width: 2px !important;
+  filter: drop-shadow(0 0 15px rgba(0, 195, 255, 0.3)) !important;
 }
 
 .mermaid .cluster .label {
   font-weight: 600 !important;
   font-size: 1.8rem !important;
   fill: var(--mermaid-accent-primary) !important;
-  filter: drop-shadow(0 0 2px #00c3ff80) !important;
+  filter: drop-shadow(0 0 4px #00c3ff80) !important;
+  transition: all 0.3s ease-in-out !important;
 }
 
-/* Node labels */
+.mermaid .cluster:hover .label {
+  font-weight: 700 !important;
+  filter: drop-shadow(0 0 8px #00c3ffaa) !important;
+}
+
+/* Node labels with improved styling */
 .mermaid .label {
   font-size: 1.4rem !important;
+  white-space: normal !important; /* Allow text to wrap */
+  word-wrap: break-word !important; /* Break words if needed */
+  max-width: none !important; /* Remove max-width constraints */
 }
 
-/* Sequence Diagram Styling */
+/* Ensure edgeLabels don't get cut off */
+.mermaid .edgeLabel {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  white-space: normal !important;
+  line-height: 1.4 !important;
+  max-width: none !important;
+}
+
+.mermaid .edgeLabel text {
+  font-size: 1.2rem !important;
+}
+
+/* Sequence Diagram Styling with enhanced visuals */
 .mermaid .actor {
   fill: var(--mermaid-bg-tertiary) !important;
   stroke: var(--mermaid-border-frontend) !important;
-  stroke-width: 1.5px !important;
-  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5)) !important;
+  stroke-width: 2px !important;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.7)) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .actor:hover {
+  fill: rgba(0, 195, 255, 0.2) !important;
+  stroke: var(--mermaid-accent-primary) !important;
+  filter: drop-shadow(0 0 12px rgba(0, 195, 255, 0.5)) !important;
+  transform: translateY(-2px) !important;
 }
 
 .mermaid .messageLine0, 
 .mermaid .messageLine1 {
   stroke: var(--mermaid-arrow-color) !important;
-  stroke-width: 1.5px !important;
-  filter: drop-shadow(0 0 2px #00c3ff4d) !important;
+  stroke-width: 2px !important;
+  filter: drop-shadow(0 0 4px #00c3ff4d) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .messageLine0:hover, 
+.mermaid .messageLine1:hover {
+  stroke: var(--mermaid-accent-tertiary) !important;
+  stroke-width: 2.5px !important;
+  filter: drop-shadow(0 0 8px #ffa20080) !important;
 }
 
 .mermaid .messageText {
   fill: var(--mermaid-text-primary) !important;
   font-size: 1.4rem !important;
   font-weight: 500 !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
 }
 
 .mermaid .loopText, 
 .mermaid .loopLine {
   fill: var(--mermaid-text-secondary) !important;
   stroke: var(--mermaid-border-data) !important;
+  transition: all 0.3s ease-in-out !important;
 }
 
 .mermaid .note {
   fill: var(--mermaid-node-data) !important;
   stroke: var(--mermaid-border-data) !important;
-  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3)) !important;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.5)) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .note:hover {
+  fill: rgba(255, 162, 0, 0.2) !important;
+  stroke: var(--mermaid-accent-tertiary) !important;
+  filter: drop-shadow(0 0 12px rgba(255, 162, 0, 0.5)) !important;
+  transform: translateY(-2px) !important;
 }
 
 /* Class Diagram Styling */
 .mermaid .classLabel .label {
   fill: var(--mermaid-text-primary) !important;
+  white-space: normal !important;
 }
 
 .mermaid .relation {
   stroke: var(--mermaid-arrow-color) !important;
-  stroke-width: 1.5px !important;
+  stroke-width: 2px !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .relation:hover {
+  stroke: var(--mermaid-accent-tertiary) !important;
+  stroke-width: 2.5px !important;
+  filter: drop-shadow(0 0 8px rgba(255, 162, 0, 0.5)) !important;
 }
 
 /* Entity Relationship Diagram Styling */
 .mermaid .entityBox {
   fill: var(--mermaid-bg-tertiary) !important;
   stroke: var(--mermaid-border-blockchain) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .entityBox:hover {
+  fill: rgba(0, 255, 149, 0.2) !important;
+  stroke: var(--mermaid-border-blockchain) !important;
+  filter: drop-shadow(0 0 12px rgba(0, 255, 149, 0.5)) !important;
+  transform: translateY(-2px) !important;
 }
 
 /* State Diagram Styling */
 .mermaid .stateLabel text {
   fill: var(--mermaid-text-primary) !important;
-  font-size: 12px !important;
+  font-size: 1.2rem !important;
+  white-space: normal !important;
 }
 
 .mermaid .transition {
   stroke: var(--mermaid-arrow-color) !important;
-  stroke-width: 1.5px !important;
+  stroke-width: 2px !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .transition:hover {
+  stroke: var(--mermaid-accent-tertiary) !important;
+  stroke-width: 2.5px !important;
+  filter: drop-shadow(0 0 8px rgba(255, 162, 0, 0.5)) !important;
 }
 
 /* Gantt Chart Styling */
 .mermaid .section {
   fill: var(--mermaid-node-blockchain) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .section:hover {
+  fill: rgba(0, 255, 149, 0.3) !important;
+  filter: drop-shadow(0 0 8px rgba(0, 255, 149, 0.5)) !important;
 }
 
 .mermaid .task {
   fill: var(--mermaid-node-frontend) !important;
   stroke: var(--mermaid-border-frontend) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .task:hover {
+  fill: rgba(0, 195, 255, 0.3) !important;
+  stroke: var(--mermaid-accent-primary) !important;
+  filter: drop-shadow(0 0 8px rgba(0, 195, 255, 0.5)) !important;
+  transform: translateY(-1px) !important;
 }
 
 .mermaid .taskText {
   fill: var(--mermaid-text-primary) !important;
+  white-space: normal !important;
 }
 
 .mermaid .grid .tick line {
@@ -198,19 +333,27 @@
 
 .mermaid .grid .tick text {
   fill: var(--mermaid-text-secondary) !important;
+  font-size: 1.1rem !important;
 }
 
 /* Pie Chart Styling */
 .mermaid .pieCircle {
   stroke: rgba(10, 14, 26, 0.5) !important;
   stroke-width: 1px !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .pieCircle:hover {
+  stroke-width: 2px !important;
+  filter: drop-shadow(0 0 8px rgba(0, 195, 255, 0.5)) !important;
+  transform: scale(1.02) !important;
 }
 
 .mermaid .pieTitleText {
-  font-size: 16px !important;
+  font-size: 1.6rem !important;
   font-weight: 600 !important;
-  fill: var(--color-primary) !important;
-  filter: drop-shadow(0 0 2px rgba(0, 195, 255, 0.5)) !important;
+  fill: var(--mermaid-accent-primary) !important;
+  filter: drop-shadow(0 0 4px rgba(0, 195, 255, 0.5)) !important;
 }
 
 /* Custom styling for specific node classes */
@@ -218,6 +361,14 @@
 .mermaid .market rect {
   fill: var(--mermaid-node-user) !important;
   stroke: var(--mermaid-border-user) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .userLayer rect:hover,
+.mermaid .market rect:hover {
+  fill: rgba(30, 43, 56, 0.9) !important;
+  stroke: rgba(255, 255, 255, 0.8) !important;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.3)) !important;
 }
 
 .mermaid .frontendLayer rect,
@@ -225,6 +376,15 @@
 .mermaid .module rect {
   fill: var(--mermaid-node-frontend) !important;
   stroke: var(--mermaid-border-frontend) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .frontendLayer rect:hover,
+.mermaid .tech rect:hover,
+.mermaid .module rect:hover {
+  fill: rgba(0, 195, 255, 0.3) !important;
+  stroke: var(--mermaid-accent-primary) !important;
+  filter: drop-shadow(0 0 12px rgba(0, 195, 255, 0.5)) !important;
 }
 
 .mermaid .blockchainLayer rect,
@@ -232,6 +392,15 @@
 .mermaid .ic rect {
   fill: var(--mermaid-node-blockchain) !important;
   stroke: var(--mermaid-border-blockchain) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.mermaid .blockchainLayer rect:hover,
+.mermaid .economic rect:hover,
+.mermaid .ic rect:hover {
+  fill: rgba(0, 255, 149, 0.3) !important;
+  stroke: var(--mermaid-border-blockchain) !important;
+  filter: drop-shadow(0 0 12px rgba(0, 255, 149, 0.5)) !important;
 }
 
 .mermaid .tokenCanisters rect,
@@ -247,10 +416,19 @@
   stroke: var(--mermaid-border-security) !important;
 }
 
-/* Responsive adjustments for mobile */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .mermaid {
-    padding: 1.5rem;
-    margin: 1.5rem 0;
+    padding: 1.5rem !important;
+    margin: 1.5rem 0 !important;
+  }
+  
+  .mermaid text,
+  .mermaid .label {
+    font-size: 1.2rem !important;
+  }
+  
+  .mermaid .cluster .label {
+    font-size: 1.5rem !important;
   }
 } 
