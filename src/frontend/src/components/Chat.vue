@@ -75,6 +75,9 @@ const lastHeaderTapTime = ref<number>(0); // For detecting double taps on header
 // Expose the chat's visibility state to parent components
 const isOpen = computed(() => showChat.value);
 
+// Add a new ref for storing the input text
+const savedInputText = ref<string>("");
+
 // Load saved position from localStorage with validation
 const loadIconPosition = (): void => {
   const savedPosition = localStorage.getItem('chatIconPosition');
@@ -320,6 +323,13 @@ const sendPrompt = async (): Promise<void> => {
 
   const userMessage: string = prompt.value.trim();
   messages.value.push({ role: "user", content: userMessage });
+  
+  // Clear input field and saved text after sending
+  if (chatInput.value) {
+    chatInput.value.innerText = "";
+  }
+  prompt.value = "";
+  savedInputText.value = "";
 
   await nextTick();
   focusInput();
@@ -401,7 +411,24 @@ const scrollToBottom = (): void => {
 // ✅ Toggle Chat with Animation
 const toggleChat = (): void => {
   isAnimating.value = true;
+  
+  // Save input text when closing chat
+  if (showChat.value) {
+    savedInputText.value = prompt.value;
+  }
+  
   showChat.value = !showChat.value;
+  
+  // Restore input text when opening chat
+  if (showChat.value && savedInputText.value) {
+    nextTick(() => {
+      if (chatInput.value) {
+        chatInput.value.innerText = savedInputText.value;
+        prompt.value = savedInputText.value;
+      }
+    });
+  }
+  
   setTimeout(() => (isAnimating.value = false), 300);
 };
 
@@ -1538,18 +1565,22 @@ defineExpose({
 .emoji-button {
   background: none;
   border: none;
-  color: #ffffff; /* ✅ Change color */
+  color: #ffffff;
   cursor: pointer;
-  border-radius: 4rem;
-  transition: all 0.1s ease;
-  padding: .25rem;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
 .emoji-button:hover {
-  color: #3b82f6;
+  background-color: rgba(255, 255, 255, 0.1);
   transform: scale(1.1);
-  background: #ffffff21;
-  border-radius: 50%;
+  color: #0099ff;
 }
 
 .emoji-button .icon {
@@ -1567,19 +1598,27 @@ defineExpose({
 .send-icon {
   background: none;
   border: none;
-  cursor: pointer;
   color: #ffffff;
-  transition: all 0.1s ease;
-  width: 2rem;
-  margin-right: -.5rem;
-  padding: .25rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
 .send-icon:hover {
-  color: #3b82f6;
+  background-color: rgba(255, 255, 255, 0.1);
   transform: scale(1.1);
-  background: #ffffff21;
-  border-radius: 50%;
+  color: #0099ff;
+}
+
+.send-icon .icon {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 @media (max-width: 768px) {
