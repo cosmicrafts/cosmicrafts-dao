@@ -1,16 +1,38 @@
 <!-- File: App.vue -->
 <script setup>
-import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import Modal from '@/components/Modal.vue'; 
 import Chat from "@/components/Chat.vue";
 import EscMenu from "@/components/EscMenu.vue";
+import vScrollToTop from '@/directives/scrollToTop';
 
 const route = useRoute();
 const isWhitepaper = computed(() => route.path === '/whitepaper');
 const isGame = computed(() => route.path === '/game');
+
+// Add watcher for route changes to force scroll to top
+watch(
+  () => route.path,
+  (newPath, oldPath) => {
+    // Don't interfere with hash navigation within the whitepaper
+    if (newPath === '/whitepaper' && route.hash) {
+      return;
+    }
+    
+    // For all other route changes, force scroll to top
+    if (newPath !== oldPath) {
+      setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }, 100); // Small delay to ensure it happens after the view transition
+    }
+  }
+);
 
 // State for tracking if other windows are open
 const isEscMenuOpen = ref(false);
@@ -78,7 +100,7 @@ const closeEscMenu = () => {
     <Header />
     <Chat ref="chatRef" />
     <Modal />
-    <router-view />
+    <router-view v-scroll-to-top />
     <Footer v-if="!isWhitepaper && !isGame" />
     
     <!-- ESC Menu component -->

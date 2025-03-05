@@ -187,44 +187,28 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(to, from) {
-    // For the whitepaper with nested hash navigation, let the component handle scrolling
-    if (to.path === '/whitepaper' && to.hash) {
-      return false; // Don't auto-scroll, let the component handle it
-    }
-    
-    // Special handling for legal, privacy, and terms pages - always scroll to top
-    if (to.path === '/legal' || to.path === '/privacy' || to.path === '/terms') {
-      return {
-        top: 0,
-        behavior: 'smooth'
-      };
-    }
-    
-    // Only reset scroll for new navigation paths
-    if (to.path !== from.path) {
-      return new Promise(resolve => {
-        requestAnimationFrame(() => {
-          const mainContent = document.querySelector('#scroll-root') || window;
-          const target = mainContent.scrollTo ? mainContent : document.documentElement;
-          
-          target.scrollTo({ top: 0, behavior: 'smooth' });
-          resolve(false);
-        });
-      });
-    }
-    return false;
-  },
 });
 
-// Add global navigation guard to scroll to top after navigation
-router.afterEach(() => {
-    setTimeout(() => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    }, 100);
+// Force scroll to top on each navigation except for hash navigation
+router.afterEach((to, from) => {
+  // Don't interfere with hash navigation within the whitepaper
+  if (to.path === '/whitepaper' && to.hash) {
+    return;
+  }
+  
+  // Don't interfere with hash navigation on the same page
+  if (to.path === from.path && to.hash) {
+    return;
+  }
+  
+  // For all other navigations, force scroll to top with a delay
+  // to ensure it happens after view transition completes
+  setTimeout(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, 100); // Small delay to ensure it happens after the view transition
 });
 
 export default router;

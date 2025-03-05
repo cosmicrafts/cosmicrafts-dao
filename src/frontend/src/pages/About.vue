@@ -92,9 +92,11 @@
   
   <script setup>
   import { onMounted } from 'vue';
+  import { scrollToTop } from '@/utils/scroll';
   
+  // Force scroll to top on mount
   onMounted(() => {
-    window.scrollTo(0, 0);
+    scrollToTop();
   });
   </script>
   

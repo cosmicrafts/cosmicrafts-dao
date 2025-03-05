@@ -88,6 +88,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import careersData from '@/data/careers.json';
+import { scrollToTop } from '@/utils/scroll';
 
 export default {
   name: 'CareersPage',
@@ -124,7 +125,7 @@ export default {
 
     onMounted(() => {
       loadPositions();
-      window.scrollTo(0, 0);
+      scrollToTop();
     });
 
     return {
