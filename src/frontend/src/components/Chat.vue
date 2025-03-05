@@ -267,7 +267,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
                         activeElement?.getAttribute('contenteditable') === 'true';
   
   // 'C' key to open chat (only when not already open and not typing in an input)
-  if (event.key.toLowerCase() === 'c' && !showChat.value && !isInputActive) {
+  if (event.key.toLowerCase() === 'a' && !showChat.value && !isInputActive) {
     toggleChat();
     event.preventDefault();
   }
@@ -1013,7 +1013,7 @@ defineExpose({
     <!-- Tooltip -->
     <div class="tooltip" :class="{ 'visible': isHovering }">
       <span class="tooltip-text">{{ showChat ? 'Close' : 'Open your AI Assistant' }}</span>
-      <span class="tooltip-hotkey">Hotkey: <span class="key">{{ showChat ? 'ESC' : 'C' }}</span></span>
+      <span class="tooltip-hotkey">Hotkey: <span class="key">{{ showChat ? 'ESC' : 'A' }}</span></span>
       <span class="tooltip-hint">Drag to reposition</span>
     </div>
   </div>

@@ -44,8 +44,8 @@ const { t } = useI18n();
       <!-- Legal Links -->
       <ul class="legal-links">
         <li><router-link to="/privacy">{{ t('footer.privacy') }}</router-link></li>
-        <li><a href="#">{{ t('footer.legal') }}</a></li>
-        <li><a href="#">{{ t('footer.terms') }}</a></li>
+        <li><router-link to="/legal">{{ t('footer.legal') }}</router-link></li>
+        <li><router-link to="/terms">{{ t('footer.terms') }}</router-link></li>
       </ul>
     </div>
   </footer>

@@ -126,6 +126,7 @@ export default {
     },
     async loadMarkdown(lang) {
       try {
+        console.log(`Loading markdown: ${lang}/${this.fileName}`);
         const content = await import(`@/assets/markdown/${lang}/${this.fileName}.md?raw`);
         this.processMarkdown(content.default);
       } catch (error) {
@@ -134,13 +135,24 @@ export default {
         // Try to fall back to English if the current language file doesn't exist
         if (lang !== 'en') {
           try {
+            console.log(`Falling back to English for ${this.fileName}`);
             const fallbackContent = await import(`@/assets/markdown/en/${this.fileName}.md?raw`);
             this.processMarkdown(fallbackContent.default);
           } catch (fallbackError) {
-            this.htmlContent = "<p>Content not available in this language.</p>";
+            console.error(`Failed to load English fallback for ${this.fileName}`, fallbackError);
+            this.htmlContent = `<div class="error-container">
+              <h2>Content Not Available</h2>
+              <p>The requested content is not available in this language.</p>
+              <p>Requested file: ${this.fileName}.md</p>
+            </div>`;
           }
         } else {
-          this.htmlContent = "<p>Content not available.</p>";
+          console.error(`Content not available for ${this.fileName} in any language`);
+          this.htmlContent = `<div class="error-container">
+            <h2>Content Not Available</h2>
+            <p>The requested content could not be found.</p>
+            <p>Requested file: ${this.fileName}.md</p>
+          </div>`;
         }
       }
     },

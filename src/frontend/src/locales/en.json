@@ -157,6 +157,15 @@
     "language": "Language",
     "trademarks": "All trademarks referenced herein are the properties of their respective owners."
   },
+  "legal": {
+    "title": "Legal Notices"
+  },
+  "privacy": {
+    "title": "Privacy Policy"
+  },
+  "terms": {
+    "title": "Terms of Service"
+  },
   "dao": {
     "mission": {
       "title": "Decentralized governance, united vision.",

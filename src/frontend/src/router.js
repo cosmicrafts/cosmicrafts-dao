@@ -14,6 +14,8 @@ import Game from './pages/Game.vue';
 import Roadmap from './pages/Roadmap.vue';
 import Careers from './pages/Careers.vue';
 import Privacy from './pages/Privacy.vue';
+import Terms from './pages/Terms.vue';
+import Legal from './pages/Legal.vue';
 import Notifications from './pages/Notifications.vue';
 import StyleGuide from './pages/StyleGuide.vue';
 
@@ -29,6 +31,8 @@ const routes = [
   { path: '/careers', component: Careers, meta: { title: 'header.careers' } },
   { path: '/profile', component: Profile, meta: { title: 'header.profile', requiresAuth: true } },
   { path: '/privacy', component: Privacy, meta: { title: 'footer.privacy' } },
+  { path: '/terms', component: Terms, meta: { title: 'footer.terms' } },
+  { path: '/legal', component: Legal, meta: { title: 'footer.legal' } },
   { path: '/notifications', component: Notifications, meta: { title: 'header.notifications', requiresAuth: true } },
   { path: '/about', component: () => import('@/pages/About.vue'), meta: { title: 'header.about' } },
   { path: '/style-guide', component: StyleGuide, meta: { title: 'Style Guide' } },
@@ -49,7 +53,7 @@ const routes = [
       const profileStore = useProfileStore();
 
       // Skip routing for known static routes
-      const staticRoutes = ['dao', 'whitepaper', 'dashboard', 'games', 'login', 'game', 'roadmap', 'careers', 'profile', 'privacy', 'about', 'notifications', 'style-guide'];
+      const staticRoutes = ['dao', 'whitepaper', 'dashboard', 'games', 'login', 'game', 'roadmap', 'careers', 'profile', 'privacy', 'about', 'notifications', 'style-guide', 'terms', 'legal'];
       if (staticRoutes.includes(identifier)) {
         console.log('📍 Static route detected:', identifier);
         next();
@@ -189,6 +193,14 @@ const router = createRouter({
       return false; // Don't auto-scroll, let the component handle it
     }
     
+    // Special handling for legal, privacy, and terms pages - always scroll to top
+    if (to.path === '/legal' || to.path === '/privacy' || to.path === '/terms') {
+      return {
+        top: 0,
+        behavior: 'smooth'
+      };
+    }
+    
     // Only reset scroll for new navigation paths
     if (to.path !== from.path) {
       return new Promise(resolve => {
@@ -196,7 +208,7 @@ const router = createRouter({
           const mainContent = document.querySelector('#scroll-root') || window;
           const target = mainContent.scrollTo ? mainContent : document.documentElement;
           
-          target.scrollTo({ top: 0, behavior: 'auto' });
+          target.scrollTo({ top: 0, behavior: 'smooth' });
           resolve(false);
         });
       });

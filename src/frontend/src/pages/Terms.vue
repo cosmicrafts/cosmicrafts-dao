@@ -1,12 +1,12 @@
 <template>
   <section class="cosmic-page-bg with-subtle-grid">
-    <div class="cosmic-page-container privacy-container">
-      <h1 class="title-large text-gradient animated-title">{{ $t('privacy.title') }}</h1>
+    <div class="cosmic-page-container terms-container">
+      <h1 class="title-large text-gradient animated-title">{{ $t('terms.title') }}</h1>
       
-      <!-- Privacy Content -->
-      <div class="cosmic-card privacy-content">
+      <!-- Terms Content -->
+      <div class="cosmic-card terms-content">
         <MarkdownRenderer 
-          fileName="privacy" 
+          fileName="terms" 
           @rendered="onRendered"
           @navigateToSection="scrollToSection"
         />
@@ -72,7 +72,7 @@ const scrollToSection = (sectionId) => {
 </script>
 
 <style scoped>
-.privacy-container {
+.terms-container {
   padding-bottom: 4rem; /* Added padding to avoid footer overlap */
 }
 
@@ -82,7 +82,7 @@ const scrollToSection = (sectionId) => {
   animation: fadeInDown 1s ease-out;
 }
 
-.privacy-content {
+.terms-content {
   line-height: 1.8;
   padding: 2rem;
 }
@@ -100,7 +100,7 @@ const scrollToSection = (sectionId) => {
 }
 
 @media (max-width: 768px) {
-  .privacy-content {
+  .terms-content {
     padding: 1.5rem;
   }
 }

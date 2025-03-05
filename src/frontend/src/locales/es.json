@@ -141,9 +141,9 @@
     ]
   },
   "footer": {
-    "stayConnected": "Mantente Conectado",
+    "stayConnected": "Mantengámonos Conectados",
     "careers": "Carreras",
-    "about": "Sobre Nosotros",
+    "about": "Acerca de",
     "support": "Soporte",
     "press": "Prensa",
     "creators": "Creadores",
@@ -153,7 +153,7 @@
     "cookiePolicy": "Política de Cookies",
     "cookieSettings": "Configuración de Cookies",
     "language": "Idioma",
-    "trademarks": "Todas las marcas mencionadas aquí son propiedad de sus respectivos dueños."
+    "trademarks": "Todas las marcas comerciales mencionadas son propiedad de sus respectivos dueños"
   },
   "darkRift": {
     "title": "La Fisura Oscura",
@@ -325,6 +325,15 @@
   "9": "octubre",
   "10": "noviembre",
   "11": "diciembre"
+},
+"legal": {
+  "title": "Avisos Legales"
+},
+"privacy": {
+  "title": "Política de Privacidad"
+},
+"terms": {
+  "title": "Términos de Servicio"
 }
 }
 
