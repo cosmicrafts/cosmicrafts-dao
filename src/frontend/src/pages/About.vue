@@ -91,13 +91,7 @@
   </template>
   
   <script setup>
-  import { onMounted } from 'vue';
-  import { scrollToTop } from '@/utils/scroll';
-  
-  // Force scroll to top on mount
-  onMounted(() => {
-    scrollToTop();
-  });
+  // Remove scroll-related imports and hooks since router handles scrolling
   </script>
   
   <style scoped>

@@ -16,17 +16,11 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import MarkdownRenderer from '@/components/MarkdownRenderer.vue';
-import { scrollToTop } from '@/utils/scroll';
 
 // Track if markdown has been rendered
 const isRendered = ref(false);
-
-onMounted(() => {
-  // Force scroll to top with our utility
-  scrollToTop();
-});
 
 // Handle when markdown is rendered
 const onRendered = () => {
