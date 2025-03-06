@@ -1,264 +1,264 @@
-# Privacy Policy
+# プライバシーポリシー
 
 [[toc:2-3]]
 
-## Introduction
+## はじめに
 
-At Cosmicrafts, we are committed to protecting your privacy and providing a secure gaming experience. This Privacy Policy explains how we collect, use, store, and protect your personal information when you use our website, games, applications, and services (collectively referred to as "Services").
+Cosmicraftsでは、お客様のプライバシーを保護し、安全なゲーム体験を提供することに努めています。このプライバシーポリシーでは、当社のウェブサイト、ゲーム、アプリケーション、およびサービス（総称して「サービス」）をご利用いただく際に、お客様の個人情報をどのように収集、使用、保存、保護するかについて説明します。
 
-By accessing or using our Services, you agree to the collection and use of information in accordance with this Privacy Policy. If you do not agree with our policies and practices, please do not use our Services.
+当社のサービスにアクセスまたは利用することにより、お客様はこのプライバシーポリシーに従って情報の収集および使用に同意したことになります。当社のポリシーや実践にご同意いただけない場合は、当社のサービスをご利用にならないでください。
 
-## Effective Date
+## 発効日
 
-This Privacy Policy is effective as of April 15, 2025.
+このプライバシーポリシーは2025年3月4日から有効です。
 
-## Information We Collect
+## 収集する情報
 
-Cosmicrafts is committed to data minimization and user privacy. We collect only the minimal information necessary to provide our services:
+Cosmicraftsはデータの最小化とユーザープライバシーに取り組んでいます。当社はサービスを提供するために必要最小限の情報のみを収集しています：
 
-### Limited Information Collection
+### 限定的な情報収集
 
-- **Regional Preferences**: We may collect information about your language and region preferences to provide localized content. This information is optional and can be managed in your settings.
+- **地域の設定**: ローカライズされたコンテンツを提供するために、お客様の言語や地域の設定に関する情報を収集する場合があります。この情報はオプションであり、設定で管理できます。
 
-- **Anonymous Usage Data**: We may collect anonymous, aggregated usage statistics to help us improve our service. This data cannot be used to identify you personally.
+- **匿名の使用データ**: サービス改善のために匿名化された集計使用統計を収集する場合があります。このデータは個人を特定するために使用することはできません。
 
-- **Account Registration Information**: When you create an account, we collect:
-  - **Username**: Used to identify you in the platform (limited to 12 characters)
-  - **Avatar Selection**: Your chosen visual representation in the platform
-  - **Referral Code**: Optional information if you were referred by another user
-  - **Language Preference**: Your preferred language for the platform interface
+- **アカウント登録情報**: アカウントを作成する際、以下の情報を収集します：
+  - **ユーザー名**: プラットフォーム内でお客様を識別するために使用されます（12文字以内）
+  - **アバター選択**: プラットフォーム内でのお客様の視覚的表現
+  - **紹介コード**: 他のユーザーから紹介された場合のオプション情報
+  - **言語設定**: プラットフォームインターフェイスの希望言語
 
-No personal information such as names, addresses, or phone numbers are collected unless explicitly provided by you for specific purposes (such as 2FA).
+特定の目的（2FAなど）でお客様が明示的に提供しない限り、氏名、住所、電話番号などの個人情報は収集されません。
 
-### Web3 and On-Chain Data Storage
+### Web3およびオンチェーンデータストレージ
 
-As a Web3 platform, Cosmicrafts operates differently from traditional applications regarding data storage:
+Web3プラットフォームとして、Cosmicraftsは従来のアプリケーションとはデータストレージの扱いが異なります：
 
-- **Blockchain Databases**: All of our databases are stored on blockchain networks, which means information is typically public and transparent by design.
+- **ブロックチェーンデータベース**: 当社のすべてのデータベースはブロックチェーンネットワーク上に保存されており、情報は設計上、一般的に公開され透明性があります。
 
-- **Public By Default**: Any information you choose to share or store through our platform may be visible on public blockchains. We do not encrypt or hide this data by default.
+- **デフォルトで公開**: 当社のプラットフォームを通じて共有または保存することを選択した情報は、パブリックブロックチェーン上で閲覧可能になる場合があります。当社はデフォルトでこのデータを暗号化または隠蔽しません。
 
-- **User Responsibility**: You are responsible for any information you choose to share through our platform. Before sharing or storing information using our Services, you should carefully consider the public nature of blockchain technology.
+- **ユーザーの責任**: お客様は当社のプラットフォームを通じて共有することを選択した情報に対して責任を負います。当社のサービスを使用して情報を共有または保存する前に、ブロックチェーン技術の公開性質を慎重に検討する必要があります。
 
-- **No Private Storage**: Unlike traditional web applications, we generally do not maintain private, centralized databases for user information. Most data exists on decentralized networks outside our direct control.
+- **プライベートストレージなし**: 従来のウェブアプリケーションとは異なり、当社は一般的にユーザー情報のためのプライベートな中央集権的データベースを維持していません。ほとんどのデータは当社の直接的な管理外の分散型ネットワーク上に存在します。
 
-- **Limited Privacy Controls**: While we may offer some privacy settings, these have technical limitations based on blockchain technology. Information marked as "private" may still be visible to blockchain validators or through blockchain explorers.
+- **限定的なプライバシー管理**: 当社はいくつかのプライバシー設定を提供する場合がありますが、これらはブロックチェーン技術に基づく技術的な制限があります。「プライベート」としてマークされた情報でも、ブロックチェーンのバリデーターやブロックチェーンエクスプローラーを通じて閲覧可能な場合があります。
 
-### Blockchain Wallet Information
+### ブロックチェーンウォレット情報
 
-If you choose to connect a blockchain wallet to our platform:
+当社のプラットフォームにブロックチェーンウォレットを接続することを選択した場合：
 
-- **We never store your private keys or seed phrases on our servers**. Your keys are stored locally on your device.
-- **Keys are stored as JSON in your browser's local storage**. These keys can be technically encrypted and decrypted automatically, though we do not currently implement password-based encryption for this data.
-- **Your keys never leave your device**. When you connect wallets like MetaMask, Phantom, Plug, or Internet Identity, we only receive and process the public wallet address to display your on-chain assets.
-- **Authentication happens through signatures**. Rather than requesting your private keys, we ask your wallet to sign a unique message that proves your ownership without exposing sensitive information.
-- **All blockchain transactions are processed on-chain** and are not stored on our servers.
-- **Future plans for encryption**: We plan to add password-based encryption for locally stored wallet information in future updates, further enhancing security of your wallet data.
+- **当社はお客様の秘密鍵やシードフレーズを当社のサーバーに保存することはありません**。鍵はお客様のデバイス上にローカルに保存されます。
+- **鍵はブラウザのローカルストレージにJSONとして保存されます**。これらの鍵は技術的に自動的に暗号化および復号化できますが、現在この情報に対するパスワードベースの暗号化は実装していません。
+- **お客様の鍵がデバイスから出ることはありません**。MetaMask、Phantom、Plug、またはInternet Identityなどのウォレットを接続する場合、当社はオンチェーン資産を表示するために公開ウォレットアドレスのみを受信して処理します。
+- **認証は署名を通じて行われます**。秘密鍵を要求する代わりに、当社はお客様のウォレットに対して、機密情報を公開することなくお客様の所有権を証明する一意のメッセージに署名するよう依頼します。
+- **すべてのブロックチェーントランザクションはオンチェーンで処理され**、当社のサーバーには保存されません。
+- **暗号化の将来計画**: ウォレットデータのセキュリティをさらに強化するため、将来のアップデートでローカルに保存されたウォレット情報に対するパスワードベースの暗号化を追加する予定です。
 
-### Information Collected Automatically
+### 自動的に収集される情報
 
-We may collect very limited technical information through cookies and similar technologies:
-- Browser type and version (to ensure compatibility)
-- Approximate location based on IP address (for regional content delivery only)
-- Basic device information (to optimize display)
+当社はCookieや類似の技術を通じて非常に限定的な技術情報を収集する場合があります：
+- ブラウザの種類とバージョン（互換性を確保するため）
+- IPアドレスに基づく概略的な位置情報（地域コンテンツ配信のみを目的として）
+- 基本的なデバイス情報（表示を最適化するため）
 
-You can control or disable cookies through your browser settings. We do not use tracking cookies for advertising purposes.
+ブラウザの設定を通じてCookieを制御または無効化することができます。当社は広告目的の追跡Cookieを使用していません。
 
-## How We Use Your Information
+## お客様の情報の使用方法
 
-We use the limited information we collect solely for the following purposes:
+当社が収集する限定的な情報は、以下の目的にのみ使用されます：
 
-### Provide and Improve Services
-- Deliver and maintain our Services
-- Enable basic features such as language preferences
-- Improve user experience based on anonymous usage patterns
+### サービスの提供と改善
+- サービスの提供と維持
+- 言語設定などの基本機能の有効化
+- 匿名の使用パターンに基づくユーザー体験の向上
 
-### Security and Protection
-- Protect against unauthorized access to user accounts
-- Debug to identify and repair errors
+### セキュリティと保護
+- ユーザーアカウントへの不正アクセスからの保護
+- エラーを特定し修復するためのデバッグ
 
-### Contact Information
+### 連絡先情報
 
-If you have any questions about these Terms, please contact us at:
+これらの利用規約に関するご質問がある場合は、以下の連絡先までお問い合わせください：
 
-**Email**: contact@cosmicrafts.com  
+**メール**: contact@cosmicrafts.com  
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+規制遵守のために物理的な住所が必要な事項については、まずメールでお問い合わせください。
 
-## Data Sharing and Disclosure
+## データの共有と開示
 
-Given our minimal data collection practices, we have very limited data to share. However, in certain circumstances, we may share the limited information we have:
+当社の最小限のデータ収集慣行を考慮すると、共有するデータは非常に限られています。ただし、特定の状況では、当社が保有する限定的な情報を共有する場合があります：
 
-### Essential Service Providers
+### 不可欠なサービスプロバイダー
 
-We may share basic technical information with a few carefully selected service providers who help us with:
-- Website hosting and infrastructure
-- Analytics (in anonymized form)
-- Customer support systems
+以下を支援する厳選されたサービスプロバイダーと基本的な技術情報を共有する場合があります：
+- ウェブサイトのホスティングとインフラストラクチャ
+- 分析（匿名化された形式で）
+- カスタマーサポートシステム
 
-These providers access only the minimum information needed to perform their functions and are bound by confidentiality obligations.
+これらのプロバイダーは、その機能を実行するために必要な最小限の情報にのみアクセスし、機密保持義務に拘束されています。
 
-### Legal Requirements
+### 法的要件
 
-We may disclose information if required to do so by law or if we believe in good faith that such action is necessary to:
-- Comply with legal obligations
-- Protect and defend our rights or property
-- Prevent or investigate possible wrongdoing
-- Protect the personal safety of users or the public
+以下の場合、法律により要求された場合、または以下の行動が必要であると誠実に判断した場合、情報を開示することがあります：
+- 法的義務の遵守
+- 当社の権利または財産の保護と防衛
+- 可能性のある不正行為の防止または調査
+- ユーザーまたは公衆の人身安全の保護
 
-## Your Choices and Rights
+## お客様の選択と権利
 
-### Account Information
+### アカウント情報
 
-If you have created an account, you can review and update your account information by logging into your account settings.
+アカウントを作成した場合、アカウント設定にログインしてアカウント情報を確認および更新できます。
 
-### Account Deletion
+### アカウントの削除
 
-You can request to delete your account at any time:
-- Through the Web App settings
-- By sending an email to contact@cosmicrafts.com
+いつでもアカウントの削除をリクエストできます：
+- ウェブアプリの設定を通じて
+- contact@cosmicrafts.comにメールを送信することにより
 
-When you delete your account:
-- We will initiate a 30-day delay period in case you wish to recover your account
-- During this period, your account will be deactivated but not permanently deleted
-- If you change your mind, you can reactivate your account by logging in
-- After the 30-day period, we will permanently delete your account information from our systems
+アカウントを削除する場合：
+- アカウントの復元を希望する場合に備えて、30日間の遅延期間を設けます
+- この期間中、アカウントは非アクティブ化されますが完全に削除されません
+- 考えが変わった場合は、ログインしてアカウントを再アクティブ化できます
+- 30日間の経過後、当社のシステムからアカウント情報を完全に削除します
 
-**Important Note about On-Chain Data**: While we can delete information we control directly, data that has been recorded on public blockchains cannot be deleted or modified due to the immutable nature of blockchain technology. This includes transaction history, NFT ownership records, and any other data that has been committed to a blockchain.
+**オンチェーンデータに関する重要な注意**: 当社が直接管理する情報は削除できますが、パブリックブロックチェーンに記録されたデータは、ブロックチェーン技術の不変性により、削除または変更することはできません。これには、トランザクション履歴、NFT所有権記録、およびブロックチェーンにコミットされたその他のデータが含まれます。
 
-### Cookie Preferences
+### Cookieの設定
 
-Most web browsers allow you to control cookies through their settings. You may set your browser to refuse all or some cookies or to alert you when cookies are being sent.
+ほとんどのウェブブラウザでは、設定を通じてCookieを制御できます。すべてまたは一部のCookieを拒否するか、Cookieが送信されるときに警告するようにブラウザを設定することができます。
 
-### Communications
+### コミュニケーション
 
-You can opt out of receiving promotional communications from us by following the instructions in those communications.
+これらのコミュニケーションに記載されている指示に従って、プロモーションコミュニケーションの受信をオプトアウトすることができます。
 
-### Your Privacy Rights
+### プライバシー権
 
-Depending on your location, you may have certain rights regarding your personal information, such as:
-- The right to access information we have about you
-- The right to request deletion of your information
-- The right to object to the processing of your information
+お客様の所在地によっては、個人情報に関する特定の権利を持つ場合があります：
+- お客様に関する情報へのアクセス権
+- お客様の情報の削除をリクエストする権利
+- お客様の情報の処理に異議を唱える権利
 
-To exercise these rights, please contact us at contact@cosmicrafts.com.
+これらの権利を行使するには、contact@cosmicrafts.comまでお問い合わせください。
 
-## Data Security
+## データセキュリティ
 
-We implement appropriate technical and organizational measures to protect the limited information we collect. However, no method of transmission over the Internet or electronic storage is 100% secure, so we cannot guarantee absolute security.
+当社は、収集する限定的な情報を保護するために適切な技術的および組織的措置を実施しています。ただし、インターネット経由の送信または電子ストレージの方法は100％安全ではないため、絶対的なセキュリティを保証することはできません。
 
-## Children's Privacy
+## 子どものプライバシー
 
-Our Services are not directed to children under 13. We do not knowingly collect personal information from children under 13. If we become aware that a child under 13 has provided us with personal information, we will take steps to delete such information.
+当社のサービスは13歳未満の子どもを対象としていません。当社は13歳未満の子どもから意図的に個人情報を収集することはありません。13歳未満の子どもが当社に個人情報を提供したことを認識した場合、その情報を削除するための措置を講じます。
 
-### Minors and Cryptocurrency Usage
+### 未成年者と暗号通貨の使用
 
-While our games do not contain adult content such as nudity or graphic violence, and are generally suitable for users aged 13+, we strongly emphasize the following:
+当社のゲームには、ヌードやグラフィック暴力などの成人向けコンテンツは含まれておらず、一般的に13歳以上のユーザーに適していますが、以下の点を強く強調します：
 
-- **Parental Supervision Required**: If you are under 18 or the legal age of majority in your country, you should use our Services only with the involvement and supervision of a parent or guardian, particularly when engaging with cryptocurrency features.
+- **保護者の監督が必要**: 18歳未満または居住国の法定成年年齢未満の場合、特に暗号通貨機能を利用する際には、親または保護者の関与と監督のもとでのみ当社のサービスを使用すべきです。
 
-- **Irreversible Transactions**: Cryptocurrency transactions are almost always irreversible. Once completed, these transactions typically cannot be undone or refunded. This makes parental supervision particularly important.
+- **不可逆的なトランザクション**: 暗号通貨取引はほぼ常に不可逆的です。完了すると、これらの取引は一般的に元に戻すことやいかなる返金も不可能です。そのため、親の監督が特に重要です。
 
-- **Regulatory Variations**: Cryptocurrency regulations vary significantly between countries. What may be legal or allowed in one jurisdiction may be restricted or prohibited in another. Parents and guardians should familiarize themselves with local regulations before allowing minors to engage with cryptocurrency features.
+- **規制のばらつき**: 暗号通貨の規制は国によって大きく異なります。ある管轄区域で合法または許可されていることが、別の管轄区域では制限または禁止されている場合があります。親や保護者は、未成年者が暗号通貨機能を利用できるようにする前に、地域の規制に精通しておくべきです。
 
-- **Educational Approach**: We encourage parents to use our platform as an opportunity to educate minors about digital assets, blockchain technology, and responsible financial habits in a supervised environment.
+- **教育的アプローチ**: 監督された環境で、デジタル資産、ブロックチェーン技術、責任あるファイナンシャルハビットについて未成年者を教育する機会として当社のプラットフォームを利用することを親に奨励します。
 
-If you are a parent or guardian and discover that your child has created an account without your consent, please contact us immediately at contact@cosmicrafts.com.
+あなたが親または保護者で、お子様があなたの同意なくアカウントを作成したことを発見した場合は、すぐにcontact@cosmicrafts.comまでご連絡ください。
 
-## Changes to This Privacy Policy
+## プライバシーポリシーの変更
 
-We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
+当社は、このプライバシーポリシーを随時更新することがあります。更新されたバージョンは、更新された「発効日」によって示され、更新されたバージョンはアクセス可能になると同時に有効になります。当社がどのようにあなたの情報を保護しているかについて最新情報を得るために、このプライバシーポリシーを頻繁に確認することをお勧めします。
 
-## Contact Information
+## 連絡先情報
 
-If you have any questions about this Privacy Policy, please contact us at:
+このプライバシーポリシーに関するご質問がある場合は、以下の連絡先までお問い合わせください：
 
-**Email**: contact@cosmicrafts.com
+**メール**: contact@cosmicrafts.com
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+規制遵守のために物理的な住所が必要な事項については、まずメールでお問い合わせください。
 
-## International Data Transfers
+## 国際データ転送
 
-Given our minimal data collection practices, there is very limited data that might be transferred internationally. The anonymous usage statistics we collect may be processed on servers located outside your country of residence. By using our Services, you consent to this processing.
+当社の最小限のデータ収集慣行を考慮すると、国際的に転送される可能性のあるデータは非常に限られています。当社が収集する匿名の使用統計は、お客様の居住国外にあるサーバーで処理される場合があります。当社のサービスを利用することにより、お客様はこの処理に同意したことになります。
 
-## Retention of Information
+## 情報の保持
 
-We retain the limited information we collect only for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. Anonymous usage data may be retained indefinitely as it cannot be linked to individual users.
+当社は、法律により長期間の保持が必要または認められていない限り、このプライバシーポリシーに概説されている目的を達成するために必要な期間だけ収集した限定的な情報を保持します。匿名の使用データは、個々のユーザーにリンクできないため、無期限に保持される場合があります。
 
-## Legal Basis for Processing Personal Information (EEA and UK Users)
+## 個人情報処理の法的根拠（EEAおよび英国のユーザー）
 
-If you are located in the European Economic Area (EEA) or the United Kingdom, our legal basis for collecting and using your information depends on the specific information concerned and the context in which we collect it.
+欧州経済領域（EEA）または英国に所在する場合、当社がお客様の情報を収集および使用するための法的根拠は、対象となる特定の情報および当社がそれを収集する状況によって異なります。
 
-Generally, we collect minimal information based on the following legal grounds:
-- To perform our contract with you (e.g., to maintain your account if you choose to create one)
-- For our legitimate interests (e.g., to provide and improve our Services)
-- With your consent (e.g., for optional browser preferences)
-- To comply with legal obligations where applicable
+一般的に、当社は以下の法的根拠に基づいて最小限の情報を収集しています：
+- お客様との契約を履行するため（例：アカウントの作成を選択した場合のアカウント維持）
+- 当社の正当な利益のため（例：サービスの提供と改善）
+- お客様の同意を得て（例：オプションのブラウザ設定）
+- 該当する場合、法的義務を遵守するため
 
-## California Privacy Rights
+## カリフォルニア州のプライバシー権
 
-If you are a California resident, you may have certain rights under the California Consumer Privacy Act (CCPA) and other California privacy laws.
+カリフォルニア州居住者である場合、カリフォルニア州消費者プライバシー法（CCPA）およびその他のカリフォルニア州プライバシー法に基づく特定の権利を持つ場合があります。
 
-Given our minimal data collection practices, we typically do not "sell" or "share" personal information as those terms are defined under California law. We also do not use or disclose sensitive personal information for purposes that would require an opt-out right under California law.
+当社の最小限のデータ収集慣行を考えると、カリフォルニア州法で定義されているように、一般的に個人情報を「販売」または「共有」することはありません。また、カリフォルニア州法に基づくオプトアウト権が必要となる目的で機密個人情報を使用または開示することもありません。
 
-## Changes to This Privacy Policy
+## プライバシーポリシーの変更
 
-We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
+当社は、このプライバシーポリシーを随時更新することがあります。更新されたバージョンは、更新された「発効日」によって示され、更新されたバージョンはアクセス可能になると同時に有効になります。当社がどのようにあなたの情報を保護しているかについて最新情報を得るために、このプライバシーポリシーを頻繁に確認することをお勧めします。
 
-## Contact Information
+## 連絡先情報
 
-If you have any questions about this Privacy Policy, please contact us at:
+このプライバシーポリシーに関するご質問がある場合は、以下の連絡先までお問い合わせください：
 
-**Email**: contact@cosmicrafts.com
+**メール**: contact@cosmicrafts.com
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+規制遵守のために物理的な住所が必要な事項については、まずメールでお問い合わせください。
 
-## Third-Party Services
+## サードパーティサービス
 
-Our Services may contain links to third-party websites or services. We are not responsible for the privacy practices or content of these third-party sites. We encourage you to read the privacy policies of every website you visit.
+当社のサービスには、サードパーティのウェブサイトやサービスへのリンクが含まれる場合があります。当社はこれらのサードパーティサイトのプライバシー慣行やコンテンツについて責任を負いません。訪問するすべてのウェブサイトのプライバシーポリシーを読むことをお勧めします。
 
-## Platform-Specific Provisions
+## プラットフォーム固有の規定
 
 ### Apple App Store
 
-For users accessing our Services through Apple's App Store:
-- We only collect and use personal information as necessary to provide the requested features and functions of the app.
-- We do not use information obtained through the App Store for targeting users with advertising in other apps.
-- We comply with all applicable Apple guidelines regarding privacy and data handling.
+Apple App Storeを通じて当社のサービスにアクセスするユーザーの場合：
+- 当社は、アプリの要求された機能と機能を提供するために必要な個人情報のみを収集および使用します。
+- App Storeから取得した情報を他のアプリでユーザーに広告を表示する目的で使用することはありません。
+- プライバシーとデータ処理に関するすべての適用可能なAppleのガイドラインに準拠しています。
 
 ### Google Play Store
 
-For users accessing our Services through Google Play:
-- We adhere to Google Play's User Data Policy.
-- We provide notice and obtain consent for the collection of personal information as required by Google Play policies.
-- We maintain accurate and complete privacy disclosures in our store listing and within the app.
+Google Playを通じて当社のサービスにアクセスするユーザーの場合：
+- Google Playのユーザーデータポリシーに準拠しています。
+- Google Playポリシーで要求されているように、個人情報の収集に関する通知を提供し、同意を取得しています。
+- ストアリストとアプリ内で正確かつ完全なプライバシー開示を維持しています。
 
 ### Epic Games Store
 
-For users accessing our Services through Epic Games Store:
-- We comply with Epic's distribution agreement and privacy requirements.
-- We provide clear information about data collection practices in accordance with Epic's guidelines.
+Epic Games Storeを通じて当社のサービスにアクセスするユーザーの場合：
+- Epicの配布契約とプライバシー要件に準拠しています。
+- Epicのガイドラインに従ってデータ収集慣行に関する明確な情報を提供しています。
 
 ### Crazy Games
 
-For users accessing our Services through Crazy Games:
-- We adhere to Crazy Games' privacy requirements and publishing guidelines.
-- We ensure transparent communication regarding data collection and use.
+Crazy Gamesを通じて当社のサービスにアクセスするユーザーの場合：
+- Crazy Gamesのプライバシー要件と公開ガイドラインに準拠しています。
+- データ収集と使用に関する透明なコミュニケーションを確保しています。
 
-## Changes to This Privacy Policy
+## プライバシーポリシーの変更
 
-We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Effective Date" at the top.
+当社は、プライバシーポリシーを随時更新することがあります。変更があった場合は、このページに新しいプライバシーポリシーを掲載し、上部の「発効日」を更新することでお知らせします。
 
-We encourage you to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
+当社は、このプライバシーポリシーの変更を定期的に確認することをお勧めします。このページに掲載されると、プライバシーポリシーの変更は有効になります。
 
-## Contact Us
+## お問い合わせ
 
-If you have any questions about this Privacy Policy or our data practices, please contact us at:
+このプライバシーポリシーまたは当社のデータ慣行に関するご質問がある場合は、以下の連絡先までお問い合わせください：
 
-**Email**: contact@cosmicrafts.com  
+**メール**: contact@cosmicrafts.com  
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+規制遵守のために物理的な住所が必要な事項については、まずメールでお問い合わせください。
 
 ---
 
-*Last updated: April 15, 2025* 
+*最終更新日：2025年3月4日* 

@@ -10,7 +10,7 @@ En accédant ou en utilisant nos Services, vous acceptez la collecte et l'utilis
 
 ## Date d'Entrée en Vigueur
 
-Cette Politique de confidentialité entre en vigueur le 15 avril 2025.
+Cette Politique de confidentialité entre en vigueur le 4 mars 2025.
 
 ## Informations que Nous Collectons
 
@@ -263,4 +263,4 @@ Pour les questions nécessitant une adresse physique pour la conformité réglem
 
 ---
 
-*Dernière mise à jour : 15 avril 2025* 
+*Dernière mise à jour : 4 mars 2025* 

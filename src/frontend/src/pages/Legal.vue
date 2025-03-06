@@ -1,7 +1,7 @@
 <template>
   <section class="cosmic-page-bg with-subtle-grid">
     <div class="cosmic-page-container legal-container">
-      <h1 class="title-large text-gradient animated-title">{{ $t('legal.title') }}</h1>
+      <h1 class="title-large text-gradient animated-title">{{ $t('footer.legal') }}</h1>
       
       <!-- Legal Content -->
       <div class="cosmic-card legal-content">
@@ -65,7 +65,7 @@ const scrollToSection = (sectionId) => {
 
 <style scoped>
 .legal-container {
-  padding-bottom: 4rem; /* Added padding to avoid footer overlap */
+    padding-top: 4rem; /* Added padding to avoid footer overlap */
 }
 
 .animated-title {
@@ -75,8 +75,7 @@ const scrollToSection = (sectionId) => {
 }
 
 .legal-content {
-  line-height: 1.8;
-  padding: 2rem;
+  padding: 4rem;
 }
 
 /* Animation for headings when scrolled to */

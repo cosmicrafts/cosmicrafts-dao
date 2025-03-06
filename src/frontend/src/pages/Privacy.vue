@@ -1,7 +1,7 @@
 <template>
   <section class="cosmic-page-bg with-subtle-grid">
     <div class="cosmic-page-container privacy-container">
-      <h1 class="title-large text-gradient animated-title">{{ $t('privacy.title') }}</h1>
+      <h1 class="title-large text-gradient animated-title">{{ $t('footer.privacy') }}</h1>
       
       <!-- Privacy Content -->
       <div class="cosmic-card privacy-content">
@@ -65,7 +65,7 @@ const scrollToSection = (sectionId) => {
 
 <style scoped>
 .privacy-container {
-  padding-bottom: 4rem; /* Added padding to avoid footer overlap */
+  padding-top: 4rem;
 }
 
 .animated-title {
@@ -75,8 +75,7 @@ const scrollToSection = (sectionId) => {
 }
 
 .privacy-content {
-  line-height: 1.8;
-  padding: 2rem;
+  padding: 4rem;
 }
 
 /* Animation for headings when scrolled to */

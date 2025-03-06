@@ -4,7 +4,7 @@
 
 :root {
   /* Color System */
-  --color-background: #0a0e1a;
+  --color-background: #242731;
   --color-background-darker: #000000;
   --color-surface-primary: rgba(30, 43, 56, 0.5);
   --color-surface-secondary: rgba(23, 33, 43, 0.7);
@@ -174,10 +174,15 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 50px 50px;
+  background-image:
+    linear-gradient(30deg,      rgba(var(--color-primary-rgb), 0.15) 12.5%, transparent 12.5%, transparent 50%, rgba(var(--color-primary-rgb), 0.15) 50%, rgba(var(--color-primary-rgb), 0.15) 62.5%, transparent 62.5%, transparent),
+    linear-gradient(150deg,     rgba(var(--color-primary-rgb), 0.15) 12.5%, transparent 12.5%, transparent 50%, rgba(var(--color-primary-rgb), 0.15) 50%, rgba(var(--color-primary-rgb), 0.15) 62.5%, transparent 62.5%, transparent),
+    linear-gradient(0deg,       rgba(var(--color-primary-rgb), 0.15) 12.5%, transparent 12.5%, transparent 50%, rgba(var(--color-primary-rgb), 0.15) 50%, rgba(var(--color-primary-rgb), 0.15) 62.5%, transparent 62.5%, transparent),
+    linear-gradient(90deg,      rgba(var(--color-primary-rgb), 0.15) 12.5%, transparent 12.5%, transparent 50%, rgba(var(--color-primary-rgb), 0.15) 50%, rgba(var(--color-primary-rgb), 0.15) 62.5%, transparent 62.5%, transparent);
+  background-size: 50px 43.3px;
+  background-position: 0 0;
   z-index: -1;
+  opacity: 0.9; /* Slightly less subtle */
 }
 
 .with-glow {

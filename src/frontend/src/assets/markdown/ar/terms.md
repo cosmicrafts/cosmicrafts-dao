@@ -1,471 +1,717 @@
-# Terms of Service
+# شروط الخدمة
 
 [[toc:2-3]]
 
-## Introduction
-Welcome to Cosmicrafts. These Terms of Service ("Terms") govern your access to and use of Cosmicrafts' website, platform, applications, and any associated services (collectively, the "Services"). 
+## مقدمة
+مرحباً بكم في Cosmicrafts. تحكم شروط الخدمة هذه ("الشروط") وصولك إلى واستخدام موقع Cosmicrafts الإلكتروني ومنصته وتطبيقاته وأي خدمات مرتبطة (يشار إليها مجتمعة باسم "الخدمات").
 
-By accessing or using our Services, you agree to be bound by these Terms. If you disagree with any part of the Terms, you do not have permission to access the Services.
+من خلال الوصول إلى خدماتنا أو استخدامها، فإنك توافق على الالتزام بهذه الشروط. إذا كنت لا توافق على أي جزء من الشروط، فليس لديك إذن بالوصول إلى الخدمات.
 
-## Effective Date
-These Terms are effective as of April 15, 2025.
+## تاريخ السريان
+تسري هذه الشروط اعتباراً من 4 مارس 2025.
 
-## Definitions
-- **Platform**: Refers to the Cosmicrafts universe, including all websites, games, applications, and services provided by Cosmicrafts.
-- **User**, **You**, or **Your**: Refers to individuals who access or use the Platform.
-- **Content**: Refers to any information, text, graphics, photos, videos, or other materials uploaded, downloaded, or appearing on the Platform.
-- **NFT**: Non-Fungible Token, a unique digital identifier recorded on a blockchain that certifies ownership and authenticity of a specific digital asset.
-- **Cryptocurrency**: Digital or virtual currency that uses cryptography for security and operates independently of a central authority.
-- **Blockchain**: A distributed digital ledger that records transactions across many computers in a way that cannot be altered retroactively.
-- **On-Chain Data**: Information that is stored directly on a blockchain network, which is public, transparent, and immutable.
-- **App Store**: Refers to digital distribution platforms such as Google Play Store, Apple App Store, Epic Games Store, and Crazy Games where our applications may be available.
+## التعريفات
+- **المنصة**: تشير إلى عالم Cosmicrafts، بما في ذلك جميع المواقع الإلكترونية والألعاب والتطبيقات والخدمات التي يقدمها Cosmicrafts.
+- **المستخدم**، **أنت**، أو **الخاص بك**: يشير إلى الأفراد الذين يصلون إلى المنصة أو يستخدمونها.
+- **المحتوى**: يشير إلى أي معلومات أو نصوص أو رسومات أو صور أو مقاطع فيديو أو مواد أخرى يتم تحميلها أو تنزيلها أو تظهر على المنصة.
+- **NFT**: رمز غير قابل للاستبدال، وهو معرف رقمي فريد مسجل على سلسلة الكتل يثبت ملكية وأصالة أصل رقمي معين.
+- **العملة المشفرة**: عملة رقمية أو افتراضية تستخدم التشفير للأمان وتعمل بشكل مستقل عن سلطة مركزية.
+- **سلسلة الكتل**: سجل رقمي موزع يسجل المعاملات عبر العديد من أجهزة الكمبيوتر بطريقة لا يمكن تغييرها بأثر رجعي.
+- **البيانات على السلسلة**: المعلومات المخزنة مباشرة على شبكة سلسلة الكتل، والتي تكون عامة وشفافة بطبيعتها.
+- **متجر التطبيقات**: يشير إلى منصات التوزيع الرقمي مثل Google Play Store وApple App Store وEpic Games Store وCrazy Games حيث قد تتوفر تطبيقاتنا.
 
-## Web3 and On-Chain Data
+## Web3 والبيانات على السلسلة
 
-### Public Nature of Blockchain
-Cosmicrafts is built on Web3 technology, which means:
+### الطبيعة العامة لسلسلة الكتل
+تم بناء Cosmicrafts على تقنية Web3، مما يعني:
 
-1. **Public Transparency**: Most of our databases are stored on public blockchains, making information inherently public and transparent.
+1. **الشفافية العامة**: يتم تخزين معظم قواعد بياناتنا على سلاسل الكتل العامة، مما يجعل المعلومات عامة وشفافة بطبيعتها.
 
-2. **User Responsibility**: You are solely responsible for any information you choose to share through our platform. By using our Services, you explicitly acknowledge that information stored on blockchain networks is:
-   - Public by default
-   - Accessible to anyone with access to the blockchain
-   - Permanent and immutable (cannot be deleted or altered)
-   - Not encrypted or hidden by us unless explicitly stated
+2. **مسؤولية المستخدم**: أنت وحدك المسؤول عن أي معلومات تختار مشاركتها من خلال منصتنا. باستخدام خدماتنا، فإنك تقر صراحةً بأن المعلومات المخزنة على شبكات سلسلة الكتل هي:
+   - عامة بشكل افتراضي
+   - يمكن الوصول إليها من قبل أي شخص لديه وصول إلى سلسلة الكتل
+   - دائمة وغير قابلة للتغيير (لا يمكن حذفها أو تعديلها)
+   - غير مشفرة أو مخفية من قبلنا ما لم يُذكر خلاف ذلك صراحةً
 
-3. **Privacy Limitations**: Due to the nature of blockchain technology, privacy features have technical limitations. Even information marked as "private" may still be visible to blockchain validators or through blockchain explorers.
+3. **قيود الخصوصية**: نظراً لطبيعة تقنية سلسلة الكتل، فإن ميزات الخصوصية لها قيود تقنية. حتى المعلومات المميزة على أنها "خاصة" قد تظل مرئية لمصادقي سلسلة الكتل أو من خلال مستكشفات سلسلة الكتل.
 
-4. **No Expectation of Privacy**: You should have no expectation of privacy regarding any on-chain data. Before providing any information through our Services, you should carefully consider whether you are comfortable with that information being public and permanent.
+4. **لا توقع للخصوصية**: يجب ألا يكون لديك أي توقع للخصوصية فيما يتعلق بأي بيانات على السلسلة. قبل تقديم أي معلومات من خلال خدماتنا، يجب عليك التفكير بعناية فيما إذا كنت مرتاحاً لكون هذه المعلومات عامة ودائمة.
 
-5. **Data Sovereignty**: You retain ownership of your private keys and control of your digital assets, but public blockchain data cannot be deleted even if you discontinue using our Services.
+5. **سيادة البيانات**: تحتفظ بملكية مفاتيحك الخاصة والتحكم في أصولك الرقمية، ولكن لا يمكن حذف بيانات سلسلة الكتل العامة حتى إذا توقفت عن استخدام خدماتنا.
 
-## Web3 Safety and Privacy Guide
+## دليل السلامة والخصوصية في Web3
 
-### Important Safety Guidelines for New Users
-If you're new to Web3 platforms like Cosmicrafts, please review these critical safety guidelines:
+### إرشادات السلامة المهمة للمستخدمين الجدد
+إذا كنت جديداً على منصات Web3 مثل Cosmicrafts، يرجى مراجعة إرشادات السلامة المهمة هذه:
 
-1. **Protect Your Personal Information**:
-   - Never use your real full name, home address, or phone number on blockchain platforms
-   - Create pseudonymous usernames that cannot be connected to your real identity
-   - Avoid sharing personally identifiable information in public forums, chats, or profiles
-   - Be aware that anything you post on-chain could be permanently recorded
+1. **حماية معلوماتك الشخصية**:
+   - لا تستخدم أبداً اسمك الكامل الحقيقي أو عنوان منزلك أو رقم هاتفك على منصات سلسلة الكتل
+   - قم بإنشاء أسماء مستخدم مستعارة لا يمكن ربطها بهويتك الحقيقية
+   - تجنب مشاركة المعلومات التي تحدد هويتك الشخصية في المنتديات العامة أو الدردشات أو الملفات الشخصية
+   - كن على دراية بأن أي شيء تنشره على السلسلة قد يتم تسجيله بشكل دائم
 
-2. **Wallet and Key Security**:
-   - Your private keys and seed phrases are your sole access to your digital assets
-   - NEVER share your private keys, seed phrases, or wallet passwords with anyone, including Cosmicrafts staff
-   - NEVER enter your seed phrase or private keys on websites, even if they appear to be legitimate
-   - Store your seed phrase offline in a secure location (preferably multiple secure locations)
-   - Unlike traditional banking, there is NO central authority that can recover your account or assets if keys are lost or stolen
-   - Use hardware wallets for significant holdings whenever possible
+2. **أمان المحفظة والمفاتيح**:
+   - مفاتيحك الخاصة وعبارات البذور هي وسيلة وصولك الوحيدة إلى أصولك الرقمية
+   - لا تشارك أبداً مفاتيحك الخاصة أو عبارات البذور أو كلمات مرور محفظتك مع أي شخص، بما في ذلك موظفي Cosmicrafts
+   - لا تدخل أبداً عبارة البذور أو المفاتيح الخاصة بك على مواقع الويب، حتى لو بدت شرعية
+   - قم بتخزين عبارة البذور الخاصة بك دون اتصال في مكان آمن (يفضل في عدة أماكن آمنة)
+   - على عكس البنوك التقليدية، لا توجد سلطة مركزية يمكنها استعادة حسابك أو أصولك في حالة فقدان المفاتيح أو سرقتها
+   - استخدم محافظ الأجهزة للممتلكات المهمة كلما أمكن ذلك
 
-3. **Transaction Awareness**:
-   - ALL blockchain transactions are IRREVERSIBLE and CANNOT be refunded or reversed once confirmed
-   - Always double-check transaction details (recipient address, amount) before confirming
-   - Start with small test transactions when using new services or features
-   - Be wary of any transaction requests that create urgency or pressure you to act quickly
+3. **الوعي بالمعاملات**:
+   - جميع معاملات سلسلة الكتل غير قابلة للعكس ولا يمكن استرداد قيمتها أو عكسها بمجرد تأكيدها
+   - تحقق دائماً من تفاصيل المعاملة (عنوان المستلم، المبلغ) قبل التأكيد
+   - ابدأ بمعاملات اختبار صغيرة عند استخدام خدمات أو ميزات جديدة
+   - كن حذراً من أي طلبات معاملات تخلق إلحاحاً أو تضغط عليك للتصرف بسرعة
 
-4. **Scam Prevention**:
-   - Be extremely cautious of direct messages from strangers, especially those offering assistance, opportunities, or free assets
-   - Never click on unknown links sent via direct messages or from untrusted sources
-   - Always verify the source of communications - Cosmicrafts will ONLY contact you through official channels
-   - Be skeptical of "too good to be true" offers, giveaways, or investment opportunities
-   - Verify all contract addresses against official sources before interacting with them
-   - Check URLs carefully - scammers often use URLs that look similar to legitimate sites
+4. **منع الاحتيال**:
+   - كن شديد الحذر من الرسائل المباشرة من الغرباء، خاصة أولئك الذين يقدمون المساعدة أو الفرص أو الأصول المجانية
+   - لا تنقر أبداً على روابط غير معروفة مرسلة عبر رسائل مباشرة أو من مصادر غير موثوقة
+   - تحقق دائماً من مصدر الاتصالات - سيتصل Cosmicrafts بك فقط من خلال القنوات الرسمية
+   - كن متشككاً في العروض "الجيدة جداً لدرجة لا تصدق" أو الهدايا أو فرص الاستثمار
+   - تحقق من جميع عناوين العقود مقابل المصادر الرسمية قبل التفاعل معها
+   - تحقق من عناوين URL بعناية - غالباً ما يستخدم المحتالون عناوين URL تبدو مشابهة للمواقع الشرعية
 
-5. **Common Web3 Scams to Avoid**:
-   - Fake support staff offering to "help" with account issues
-   - Free NFT or token mints that request your seed phrase
-   - Urgent messages about account security requiring immediate action
-   - Impersonation of project founders, team members, or celebrities 
-   - Fraudulent airdrops requiring you to send cryptocurrency first
-   - Fake marketplace notifications about offers on your digital assets
+5. **عمليات احتيال Web3 الشائعة التي يجب تجنبها**:
+   - موظفو دعم مزيفون يقدمون "المساعدة" في مشاكل الحساب
+   - عمليات سك NFT أو رموز مجانية تطلب عبارة البذور الخاصة بك
+   - رسائل عاجلة حول أمان الحساب تتطلب إجراءً فورياً
+   - انتحال شخصية مؤسسي المشروع أو أعضاء الفريق أو المشاهير
+   - عمليات إسقاط جوي احتيالية تتطلب منك إرسال عملة مشفرة أولاً
+   - إشعارات سوق مزيفة حول عروض على أصولك الرقمية
 
-### Safety Tools and Resources
-Cosmicrafts provides several tools to help protect your experience:
+### أدوات وموارد السلامة
+يوفر Cosmicrafts العديد من الأدوات للمساعدة في حماية تجربتك:
 
-1. **Reporting System**: Use our reporting features to flag suspicious users, scam attempts, or harmful content. Look for the "Report" option in user profiles, messages, and content.
+1. **نظام الإبلاغ**: استخدم ميزات الإبلاغ لدينا للإبلاغ عن المستخدمين المشبوهين أو محاولات الاحتيال أو المحتوى الضار. ابحث عن خيار "الإبلاغ" في ملفات تعريف المستخدمين والرسائل والمحتوى.
 
-2. **Blocking Users**: You can block any user by accessing their profile and selecting the block option. Blocked users cannot contact you.
+2. **حظر المستخدمين**: يمكنك حظر أي مستخدم من خلال الوصول إلى ملفه الشخصي واختيار خيار الحظر. لا يمكن للمستخدمين المحظورين الاتصال بك.
 
-3. **Privacy Settings**: Configure your privacy settings in your account dashboard to control what information is visible to others and who can contact you.
+3. **إعدادات الخصوصية**: قم بتكوين إعدادات الخصوصية في لوحة تحكم حسابك للتحكم في المعلومات المرئية للآخرين ومن يمكنه الاتصال بك.
 
-4. **Authentication Options**: Enable two-factor authentication (2FA) for additional account security.
+4. **خيارات المصادقة**: قم بتمكين المصادقة الثنائية (2FA) لأمان إضافي للحساب.
 
-5. **Transaction Confirmation**: Our platform includes confirmation screens for all transactions with explicit warnings and details to prevent mistakes.
+5. **تأكيد المعاملة**: تتضمن منصتنا شاشات تأكيد لجميع المعاملات مع تحذيرات وتفاصيل واضحة لمنع الأخطاء.
 
-### Contacting Us Securely
-For any safety or security concerns, contact us ONLY through our official channels:
+### الاتصال بنا بشكل آمن
+لأي مخاوف تتعلق بالسلامة أو الأمان، اتصل بنا فقط من خلال قنواتنا الرسمية:
 
-- **Official Email**: contact@cosmicrafts.com
-- **In-Platform Support**: Via the help button in the account dashboard
-- **Official Social Media**: Only through accounts verified with blue checkmarks
+- **البريد الإلكتروني الرسمي**: contact@cosmicrafts.com
+- **الدعم داخل المنصة**: عبر زر المساعدة في لوحة تحكم الحساب
+- **وسائل التواصل الاجتماعي الرسمية**: فقط من خلال الحسابات المعتمدة بعلامات زرقاء
 
-We will NEVER ask for your seed phrase, private keys, or passwords. If anyone claiming to represent Cosmicrafts requests this information, it is a scam.
+لن نطلب أبداً عبارة البذور أو المفاتيح الخاصة أو كلمات المرور الخاصة بك. إذا طلب أي شخص يدعي تمثيل Cosmicrafts هذه المعلومات، فهو احتيال.
 
-## Account Registration and Eligibility
+## تسجيل الحساب والأهلية
 
-### Account Creation
-To access certain features of our Services, you must create an account. When registering, you agree to provide accurate, current, and complete information. You are responsible for safeguarding your account credentials and for all activities that occur under your account.
+### إنشاء الحساب
+للوصول إلى ميزات معينة من خدماتنا، يجب عليك إنشاء حساب. عند التسجيل، أنت توافق على تقديم معلومات دقيقة وحديثة وكاملة. أنت مسؤول عن حماية بيانات اعتماد حسابك وعن جميع الأنشطة التي تحدث تحت حسابك.
 
-### Age Requirements
-You must be at least 18 years old to create an account. If you are between 13 and 18 years old, you may only use our Services with the consent and supervision of a parent or legal guardian who agrees to be bound by these Terms.
+### متطلبات العمر
+يجب أن يكون عمرك 18 عاماً على الأقل لإنشاء حساب. إذا كان عمرك بين 13 و18 عاماً، يمكنك فقط استخدام خدماتنا بموافقة وإشراف أحد الوالدين أو الوصي القانوني الذي يوافق على الالتزام بهذه الشروط.
 
-### Account Security
-You are responsible for maintaining the confidentiality of your account information and password. You agree to notify us immediately of any unauthorized use of your account or any other breach of security.
+### أمن الحساب
+أنت مسؤول عن الحفاظ على سرية معلومات حسابك وكلمة المرور. أنت توافق على إخطارنا فوراً بأي استخدام غير مصرح به لحسابك أو أي خرق آخر للأمان.
 
-### Account Deletion
-You may request to delete your account at any time:
-- Through the Web App settings menu
-- By emailing contact@cosmicrafts.com
+### حذف الحساب
+يمكنك طلب حذف حسابك في أي وقت:
+- من خلال قائمة إعدادات تطبيق الويب
+- عن طريق إرسال بريد إلكتروني إلى contact@cosmicrafts.com
 
-When you request account deletion:
-- We will initiate a 30-day cooling-off period
-- During this period, your account will be deactivated but not permanently deleted
-- You can reactivate your account by simply logging in
-- After 30 days, we will permanently delete your account information from our systems
+عند طلب حذف الحساب:
+- سنبدأ فترة تهدئة مدتها 30 يوماً
+- خلال هذه الفترة، سيتم تعطيل حسابك ولكن لن يتم حذفه بشكل دائم
+- يمكنك إعادة تنشيط حسابك ببساطة عن طريق تسجيل الدخول
+- بعد 30 يوماً، سنقوم بحذف معلومات حسابك بشكل دائم من أنظمتنا
 
-**Note on Internet Computer Protocol (ICP) Deletion**: Cosmicrafts operates partly on the Internet Computer Protocol (ICP) blockchain, which enables the deletion of user profiles to comply with requirements from platforms such as Google Play and Apple App Store. When you request account deletion, we can remove your user profile and personal information from ICP-based services, in accordance with applicable privacy regulations.
+**ملاحظة حول بروتوكول إنترنت كمبيوتر (ICP)**: يعمل Cosmicrafts جزئياً على بلوكتشين بروتوكول إنترنت كمبيوتر (ICP)، مما يتيح حذف ملفات تعريف المستخدمين للامتثال لمتطلبات المنصات مثل Google Play وApple App Store. عندما تطلب حذف الحساب، يمكننا إزالة ملف تعريف المستخدم الخاص بك ومعلوماتك الشخصية من خدمات ICP، وفقاً للوائح الخصوصية المعمول بها.
 
-**Important Note on Blockchain Data**: While we can delete your account information from our centralized systems and your user profile from ICP, any transactions or data associated with your public key that has been recorded on public blockchains cannot be deleted or modified due to the immutable nature of blockchain technology. This includes transaction history, NFT ownership records, and any other data that has been committed to a blockchain.
+**ملاحظة مهمة حول بيانات البلوكتشين**: في حين يمكننا حذف معلومات حسابك من أنظمتنا المركزية وملف تعريف المستخدم الخاص بك من ICP، لا يمكن حذف أو تعديل أي معاملات أو بيانات مرتبطة بمفتاحك العام التي تم تسجيلها على سلاسل الكتل العامة بسبب الطبيعة غير القابلة للتغيير لتقنية البلوكتشين. يشمل ذلك سجل المعاملات وسجلات ملكية NFT وأي بيانات أخرى تم تسجيلها على البلوكتشين.
 
-## User Conduct
-When using our Services, you agree not to:
+## سلوك المستخدم
 
-- Violate any applicable laws or regulations
-- Infringe on the rights of others, including intellectual property rights
-- Harass, abuse, or harm another person
-- Impersonate any person or entity
-- Interfere with or disrupt the Services or servers
-- Create multiple accounts for disruptive or abusive purposes
-- Use our Services for any illegal or unauthorized purpose
-- Post spam or malicious content
-- Attempt to gain unauthorized access to any portion of the Platform
-- Use any automated means or interface not provided by us to access the Services
-- Store sensitive personal information on-chain that should reasonably remain private
+عند استخدام خدماتنا، أنت توافق على عدم:
 
-## Virtual Assets and Transactions
+- انتهاك أي قوانين أو لوائح معمول بها
+- التعدي على حقوق الآخرين، بما في ذلك حقوق الملكية الفكرية
+- مضايقة أو إساءة معاملة أو إيذاء شخص آخر
+- انتحال شخصية أي شخص أو كيان
+- التدخل في أو تعطيل الخدمات أو الخوادم
+- إنشاء حسابات متعددة لأغراض تخريبية أو مسيئة
+- استخدام خدماتنا لأي غرض غير قانوني أو غير مصرح به
+- نشر رسائل غير مرغوب فيها أو محتوى ضار
+- محاولة الوصول غير المصرح به إلى أي جزء من المنصة
+- استخدام أي وسائل آلية أو واجهة لم نوفرها للوصول إلى الخدمات
+- تخزين معلومات شخصية حساسة على السلسلة والتي يجب أن تظل خاصة بشكل معقول
 
-### Decentralization and User Responsibility
-All digital assets, including but not limited to cryptocurrency tokens, NFTs, and in-game items that exist on blockchain networks are decentralized by nature. You acknowledge and agree that:
+## الأصول الافتراضية والمعاملات
 
-1. **No Control**: World of Unreal, LLC do not control, maintain, or have custody of your digital assets that exist on blockchain networks.
+### اللامركزية ومسؤولية المستخدم
+جميع الأصول الرقمية، بما في ذلك على سبيل المثال لا الحصر رموز العملات المشفرة وNFTs والعناصر داخل اللعبة الموجودة على شبكات سلسلة الكتل هي لامركزية بطبيعتها. أنت تقر وتوافق على أن:
 
-2. **No Responsibility**: We bear no responsibility for any issues arising from blockchain transactions, including but not limited to lost private keys, phishing attacks, smart contract vulnerabilities, network failures, high gas fees, or regulatory changes.
+1. **لا تحكم**: شركة World of Unreal, LLC لا تتحكم في أو تحافظ على أو تحتفظ بأصولك الرقمية الموجودة على شبكات سلسلة الكتل.
 
-3. **No Recovery**: We cannot recover or restore lost digital assets, reverse transactions, or assist with forgotten passwords or private keys.
+2. **لا مسؤولية**: نحن لا نتحمل أي مسؤولية عن أي مشاكل تنشأ عن معاملات سلسلة الكتل، بما في ذلك على سبيل المثال لا الحصر المفاتيح الخاصة المفقودة، هجمات التصيد الاحتيالي، ثغرات العقود الذكية، أعطال الشبكة، رسوم الغاز المرتفعة، أو التغييرات التنظيمية.
 
-4. **Self-Custody**: You are solely responsible for securing your own wallet, private keys, seed phrases, and other credentials necessary to access your digital assets.
+3. **لا استعادة**: لا يمكننا استعادة أو استرجاع الأصول الرقمية المفقودة، أو عكس المعاملات، أو المساعدة في كلمات المرور أو المفاتيح الخاصة المنسية.
 
-### Platform Moderation and DAO Appeals
+4. **الحفظ الذاتي**: أنت وحدك المسؤول عن تأمين محفظتك الخاصة، والمفاتيح الخاصة، وعبارات البذور، وبيانات الاعتماد الأخرى اللازمة للوصول إلى أصولك الرقمية.
 
-While Cosmicrafts operates in a decentralized environment, we maintain certain limited administrative capabilities to protect users and the platform integrity:
+### إدارة المنصة واستئنافات DAO
 
-1. **NFT Confiscation/Burning**: In cases of clear policy violations, fraud, illegal content, or other significant infractions, Cosmicrafts administrators may exercise the right to confiscate (burn) NFTs. This is an emergency measure intended to protect our community and platform.
+في حين أن Cosmicrafts يعمل في بيئة لامركزية، نحتفظ ببعض القدرات الإدارية المحدودة لحماية المستخدمين وسلامة المنصة:
 
-2. **Limitations of Real-time Protection**: The decentralized nature of blockchain means damage can occur rapidly (e.g., stolen NFTs can be resold within seconds), often before moderation can intervene. We cannot guarantee protection against all forms of malicious activity.
+1. **مصادرة/حرق NFT**: في حالات انتهاك السياسة الواضحة، الاحتيال، المحتوى غير القانوني، أو المخالفات الكبيرة الأخرى، قد يمارس مديرو Cosmicrafts الحق في مصادرة (حرق) NFTs. هذا إجراء طارئ يهدف إلى حماية مجتمعنا ومنصتنا.
 
-3. **DAO Appeal Process**: Users who believe their NFTs were wrongfully confiscated may appeal to the Cosmicrafts DAO for review. The appeal process works as follows:
-   - Submit a formal appeal through the designated DAO governance portal
-   - Provide evidence supporting your case
-   - The DAO will review and vote on the appeal according to governance procedures
-   - If approved by the DAO, confiscated NFTs may be restored
+2. **قيود الحماية في الوقت الفعلي**: الطبيعة اللامركزية لسلسلة الكتل تعني أن الضرر يمكن أن يحدث بسرعة (على سبيل المثال، يمكن إعادة بيع NFTs المسروقة في غضون ثوانٍ)، غالباً قبل أن تتمكن الإدارة من التدخل. لا يمكننا ضمان الحماية من جميع أشكال النشاط الضار.
 
-4. **Final Authority**: The DAO's decision on appeals is considered final. Neither the Cosmicrafts Foundation nor World of Unreal, LLC can override DAO governance decisions because the smart contracts are under the DAO jurisdiction.
+3. **عملية استئناف DAO**: يمكن للمستخدمين الذين يعتقدون أن NFTs الخاصة بهم تمت مصادرتها بشكل خاطئ الاستئناف إلى Cosmicrafts DAO للمراجعة. تعمل عملية الاستئناف على النحو التالي:
+   - تقديم استئناف رسمي من خلال بوابة حوكمة DAO المخصصة
+   - تقديم أدلة تدعم قضيتك
+   - سيقوم DAO بمراجعة الاستئناف والتصويت عليه وفقاً لإجراءات الحوكمة
+   - إذا تمت الموافقة من قبل DAO، يمكن استعادة NFTs المصادرة
 
-5. **Dispute Resolution**: For disputes between users regarding digital assets (such as theft claims, fraudulent sales, etc.), the proper channel for resolution is through the DAO governance system, not through Cosmicrafts support. The DAO will judge such cases based on evidence and community standards.
+4. **السلطة النهائية**: يعتبر قرار DAO بشأن الاستئنافات نهائياً. لا يمكن لمؤسسة Cosmicrafts ولا World of Unreal, LLC تجاوز قرارات حوكمة DAO لأن العقود الذكية تخضع لولاية DAO.
 
-### Value and Exchange
-1. **Market Value**: Certain digital assets may have market value and may be tradable on decentralized exchanges (DEXes), centralized exchanges (CEXes), or other trading platforms. However, this value is highly volatile and speculative.
+5. **حل النزاعات**: بالنسبة للنزاعات بين المستخدمين بشأن الأصول الرقمية (مثل ادعاءات السرقة، المبيعات الاحتيالية، إلخ)، القناة المناسبة للحل هي من خلال نظام حوكمة DAO، وليس من خلال دعم Cosmicrafts. سيحكم DAO في مثل هذه الحالات بناءً على الأدلة ومعايير المجتمع.
 
-2. **Cross-Chain Assets**: Our platform may support cross-chain assets from various blockchains, including but not limited to Internet Computer Protocol (ICP), Bitcoin (including Runes and Ordinals), Solana, and Ethereum. Each blockchain has its own risks, technical limitations, and regulatory considerations.
+### القيمة والتبادل
+1. **قيمة السوق**: قد يكون لبعض الأصول الرقمية قيمة سوقية وقد تكون قابلة للتداول في البورصات اللامركزية (DEXes)، البورصات المركزية (CEXes)، أو منصات التداول الأخرى. ومع ذلك، هذه القيمة شديدة التقلب والمضاربة.
 
-3. **No Guarantees**: We make no guarantees regarding the value, tradability, or liquidity of any digital assets obtained through our platform. The value of these assets can change dramatically based on market conditions, regulatory actions, or technological developments.
+2. **الأصول عبر السلاسل**: قد تدعم منصتنا الأصول عبر السلاسل من سلاسل كتل مختلفة، بما في ذلك على سبيل المثال لا الحصر بروتوكول إنترنت كمبيوتر (ICP)، بيتكوين (بما في ذلك Runes وOrdinals)، سولانا، وإيثريوم. كل سلسلة كتل لديها مخاطرها وقيودها التقنية واعتباراتها التنظيمية الخاصة.
 
-4. **No Investment Advice**: Nothing in our platform or communications constitutes financial or investment advice. Any decisions you make regarding the purchase, sale, or holding of digital assets are made at your own risk.
+3. **لا ضمانات**: نحن لا نقدم أي ضمانات بشأن قيمة أو قابلية تداول أو سيولة أي أصول رقمية تم الحصول عليها من خلال منصتنا. يمكن أن تتغير قيمة هذه الأصول بشكل كبير بناءً على ظروف السوق أو الإجراءات التنظيمية أو التطورات التكنولوجية.
 
-### NFTs and Digital Collectibles
-NFTs and digital collectibles obtained through our platform are stored on blockchain networks. You acknowledge that:
+4. **لا نصائح استثمارية**: لا شيء في منصتنا أو اتصالاتنا يشكل نصيحة مالية أو استثمارية. أي قرارات تتخذها بشأن شراء أو بيع أو الاحتفاظ بالأصول الرقمية تتم على مسؤوليتك الخاصة.
 
-1. **Token Standard**: Our NFTs may use various token standards (e.g., ERC-721, ERC-1155, BEP-721, or equivalent standards on other blockchains). The specific rights conferred by an NFT are limited to those explicitly stated in our Terms or the applicable smart contract.
+## الملكية الفكرية
 
-2. **License Only**: Your purchase of an NFT grants you a license to the associated digital content, but not ownership of the underlying intellectual property rights, copyright, or trademark.
+### محتوانا
+جميع المحتويات الموجودة على المنصة، بما في ذلك على سبيل المثال لا الحصر النصوص والرسومات والشعارات والأيقونات والصور ومقاطع الصوت والتنزيلات الرقمية وتجميعات البيانات والبرامج، هي ملك لشركة World of Unreal, LLC (التي تعمل باسم "Cosmicrafts") أو موردي المحتوى التابعين لها وهي محمية بموجب قوانين حقوق النشر الدولية.
 
-3. **Permanent Transactions**: NFT transactions on blockchain networks are permanent and irreversible once confirmed. We cannot reverse, cancel, or refund any NFT transactions under any circumstances.
+### ملكية الملكية الفكرية وترخيص DAO
+تحتفظ World of Unreal, LLC بالملكية القانونية الكاملة لجميع حقوق النشر والعلامات التجارية وبراءات الاختراع وحقوق الملكية الفكرية الأخرى المرتبطة بـ Cosmicrafts. لتسهيل التطوير والحوكمة اللامركزية، منحت World of Unreal, LLC ترخيصاً تشغيلياً محدداً لـ Cosmicrafts DAO.
 
-   **Appeal Process for Special Cases**: While blockchain transactions are irreversible as a general rule, in exceptional circumstances, users may appeal to the Cosmicrafts DAO as a last resort for transaction disputes. To initiate this process:
-   - First post your case in the community forums for preliminary discussion
-   - You must have the minimum required amount of SPIRAL tokens staked to create a neuron and submit a formal proposal
-- Follow the governance proposal process as outlined in the [Whitepaper](/whitepaper)
-   - The DAO has final authority on all such appeals
-   - World of Unreal LLC has no responsibility or authority over these decisions
+يسمح هذا الترخيص لـ DAO باستخدام وتطوير وتوزيع علامة ومنصة Cosmicrafts وفقاً لقرارات الحوكمة، في حين تحتفظ World of Unreal, LLC بالملكية القانونية النهائية. يوفر هذا الهيكل حماية قانونية تقليدية للملكية الفكرية لـ Cosmicrafts مع تمكين العمليات اللامركزية.
 
-4. **Asset Persistence**: While we strive to maintain the infrastructure supporting our digital assets, we make no guarantees regarding the continued availability or functionality of metadata, artwork, or other content associated with NFTs if our services are discontinued.
+للحصول على تفاصيل كاملة عن هذا الترتيب للترخيص، يرجى الرجوع إلى وثيقة الإشعارات القانونية.
 
-### Transactions
-All purchases and transactions on our platform are final. We reserve the right to refuse any purchase or transaction at our discretion. For on-chain transactions:
+### الفن الرقمي المُنشأ بواسطة الذكاء الاصطناعي
 
-1. **Network Fees**: 
-   - On the Internet Computer Protocol (ICP), transactions are generally free for users, as the DAO pays for the computing power required to operate smart contracts.
-   - For transactions on other blockchains (e.g., Ethereum, Solana, Bitcoin), you are responsible for all network fees (gas fees) associated with those transactions.
-   - The cost of network fees varies depending on network congestion and complexity of the transaction.
+يستخدم Cosmicrafts أدوات وخدمات الذكاء الاصطناعي لإنشاء فن رقمي لمنصتنا:
 
-2. **Transaction Delays**: We are not responsible for any delays, failures, or errors in transaction processing that occur on blockchain networks.
+1. **التعبير الإبداعي**: الفن المُنشأ بواسطة الذكاء الاصطناعي لدينا مقصود به أن يكون تعبيراً إبداعياً أصلياً داخل عالمنا الفريد، وليس نسخاً من ملكيات فكرية أخرى. أي تشابه مع الأعمال الموجودة هو أمر عرضي أو يمثل تأثيرات فنية عامة.
 
-3. **Tax Implications**: You are solely responsible for determining and paying any applicable taxes related to your cryptocurrency transactions or NFT trading.
+2. **التراخيص والامتثال**: نستخدم أدوات الذكاء الاصطناعي بموجب اتفاقيات ترخيص تجارية مناسبة مع مزودي الخدمة. نحن نسعى جاهدين للامتثال لجميع القوانين واللوائح المعمول بها المتعلقة باستخدام تقنية الذكاء الاصطناعي.
 
-### Cryptocurrency
-We may accept cryptocurrency as payment for certain Services and offer cryptocurrency-based features. You acknowledge that:
+3. **حقوق الملكية**: تحتفظ World of Unreal, LLC بجميع حقوق الملكية الفكرية للمحتوى المُنشأ بواسطة الذكاء الاصطناعي المنتج لمنصتنا، مع مراعاة شروط الترخيص الممنوحة لـ DAO.
 
-1. **High Risk**: Cryptocurrency investments are highly speculative and volatile. You should never invest more than you can afford to lose.
-
-2. **Regulatory Uncertainty**: The regulatory landscape for cryptocurrencies and digital assets is uncertain and evolving. New regulations may impact the value, utility, or legality of digital assets at any time.
-
-3. **Technical Vulnerabilities**: Blockchain networks and smart contracts may contain bugs, vulnerabilities, or other technical issues that could result in the loss of your assets.
-
-4. **Market Risks**: Cryptocurrency markets may be subject to manipulation, extreme volatility, liquidity issues, and other market risks outside our control.
-
-### In-App Purchases
-For purchases made through mobile applications available on app stores such as Google Play Store, Apple App Store, Epic Games Store, or Crazy Games:
-
-1. All in-app purchases are subject to the terms of service and payment policies of the respective app store.
-2. For refunds related to in-app purchases, you must contact the respective app store through which the purchase was made.
-3. You acknowledge that once a purchase is made, it is considered complete and non-refundable except as may be permitted by the app store's refund policies or applicable law.
-4. Parents and guardians are responsible for monitoring and approving children's purchases.
-
-## Intellectual Property
-
-### Our Content
-All content on the Platform, including but not limited to text, graphics, logos, icons, images, audio clips, digital downloads, data compilations, and software, is the property of World of Unreal, LLC (doing business as "Cosmicrafts") or its content suppliers and is protected by international copyright laws. 
-
-### Intellectual Property Ownership and DAO License
-World of Unreal, LLC maintains full legal ownership of all copyrights, trademarks, patents, and other intellectual property rights associated with Cosmicrafts. To facilitate decentralized development and governance, World of Unreal, LLC has granted a specific operating license to the Cosmicrafts DAO.
-
-This license allows the DAO to use, develop, and distribute the Cosmicrafts brand and platform according to governance decisions, while World of Unreal, LLC retains ultimate legal ownership. This structure provides traditional legal protection for Cosmicrafts intellectual property while enabling decentralized operations.
-
-For full details of this licensing arrangement, please refer to the Legal Notices document.
-
-### AI-Generated Digital Art
-
-Cosmicrafts utilizes artificial intelligence tools and services to create digital art for our platform:
-
-1. **Creative Expression**: Our AI-generated art is intended as original creative expression within our unique universe, not as replications of other intellectual properties. Any similarities to existing works are coincidental or represent general artistic influences.
-
-2. **Artistic Inspiration**: Similar to how artists throughout history have drawn inspiration from other creators, our AI prompts may contain references to various universes, styles, characters, and themes. This is done not to infringe copyrights or copy intellectual property, but to create a rich blend of artistic expression that builds upon cultural traditions.
-
-3. **Third-Party IP Acknowledgment**: We acknowledge that AI models are trained on diverse datasets that may include copyrighted works. While we make good faith efforts to ensure our usage complies with applicable laws, the AI-generated content may inadvertently contain elements that resemble existing intellectual property.
-
-4. **Fair Use Belief**: We believe our use constitutes fair use and/or transformative use under applicable copyright laws. We utilize these AI services under commercial licensing terms that generally include indemnifications and legal protections.
-
-5. **IP Concerns Process**: If you believe that AI-generated content on our platform infringes your intellectual property rights, please contact us at contact@cosmicrafts.com before pursuing other legal remedies. We will promptly review your claim and, if appropriate, remove or modify the content in question.
-
-6. **Service Provider Responsibility**: In accordance with our agreements with AI services, primary legal responsibility for AI-generated content typically resides with the AI service provider as specified in their terms of service.
-
-For more detailed information about our AI art policies, please refer to the AI-Generated Digital Art section in our [Legal Notices](/legal).
-
-### Your Content
-By submitting content to our Platform, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, and display such content in any media.
-
-### Copyright Infringement
-If you believe that your work has been copied in a way that constitutes copyright infringement, please provide us with the following information:
-- A physical or electronic signature of the copyright owner
-- Identification of the copyrighted work claimed to have been infringed
-- Identification of the material that you claim is infringing
-- Information reasonably sufficient to permit us to contact you
-- A statement that you have a good faith belief that the disputed use is not authorized by the copyright owner
-- A statement, made under penalty of perjury, that the above information is accurate
-
-## Privacy
-Your privacy is important to us. Our **Privacy Policy** explains how we collect, use, and protect your personal information. By using our Services, you consent to the data practices described in our [Privacy Policy](/privacy).
-
-## Third-Party Services and App Stores
-
-### Platform-Specific Terms
-When accessing our Services through a third-party platform or app store (including but not limited to Google Play Store, Apple App Store, Epic Games Store, and Crazy Games), you are also subject to the terms, conditions, and policies of that platform.
-
-### App Store Compliance
-- **Google Play Store**: Our apps comply with Google Play Developer Distribution Agreement and Google Play Developer Program Policies.
-- **Apple App Store**: Our apps comply with Apple's App Store Review Guidelines and Developer Program License Agreement.
-- **Epic Games Store**: Our apps comply with Epic Games Store Distribution Agreement.
-- **Crazy Games**: Our apps comply with Crazy Games Publishing Agreement.
-
-### Third-Party Payment Processors
-Payments processed through app stores or third-party payment processors are subject to their respective terms of service. We are not responsible for the actions or policies of these third parties.
-
-## User Acknowledgment of Risks
-
-By using Cosmicrafts, you explicitly acknowledge and accept the following:
-
-1. **Blockchain Risks**: All blockchain networks involve inherent risks, including but not limited to smart contract vulnerabilities, consensus attacks, governance attacks, and other technological risks that could result in the loss of your digital assets.
-
-2. **Financial Risks**: Digital assets, cryptocurrencies, and NFTs are subject to extreme volatility, illiquidity, and potential loss of value, up to and including total loss. You should never commit funds you cannot afford to lose.
-
-3. **No Recourse**: In the event of loss of access to your wallet, theft of your digital assets, or other adverse events related to digital assets and blockchain activities, you have no recourse against Cosmicrafts or World of Unreal, LLC. We cannot and will not:
-   - Recover or restore lost assets
-   - Reverse, cancel, or modify blockchain transactions
-   - Compensate you for losses due to market volatility, scams, or security breaches
-   - Assist with password recovery for non-custodial wallets
-
-4. **Regulatory Uncertainty**: You understand that the laws, regulations, and tax treatments applicable to blockchain technologies, cryptocurrencies, and digital assets are uncertain, evolving, and may vary from jurisdiction to jurisdiction. These regulatory changes may adversely affect the value or utility of your digital assets or their legal status.
-
-5. **No Financial Advice**: Nothing in our platform, marketing materials, or communications constitutes financial, investment, legal, or tax advice. Any investment decisions you make are at your own risk and discretion.
-
-6. **Mandatory Risk Acceptance**: By using any of the decentralized or blockchain-based features of our platform, you are explicitly acknowledging and accepting all risks associated with blockchain technology and digital assets. If you do not agree with or accept these risks, you must not use the blockchain-related features of our platform.
-
-## Market Risk and Platform Liability
-
-### Service Provider Role
-Cosmicrafts operates solely as a technology service provider that offers a platform where users can interact with blockchain networks and engage in digital asset transactions. We explicitly clarify that:
-
-1. **Not a Financial Institution**: Cosmicrafts is not a bank, broker, dealer, investment advisor, financial institution, or cryptocurrency exchange. We do not provide financial, investment, legal, or tax advice.
-
-2. **Neutral Platform**: We provide neutral technological infrastructure only. We do not control, influence, or interfere with the markets, transactions, or values of any digital assets traded, minted, or otherwise exchanged through our platform.
-
-3. **No Custody**: We do not take custody of user funds or digital assets, nor do we have the ability to reverse transactions, recover lost assets, or modify blockchain data.
-
-4. **No Market Control**: We have no control over the value, tradability, or liquidity of any NFTs, tokens, or digital assets offered, created, sold, or purchased through our platform.
-
-### Market-Based Risks and Platform Non-Liability
-
-By using our platform, you explicitly acknowledge and agree that:
-
-1. **Price Volatility**: Digital asset markets are highly volatile, and the price of NFTs, tokens, and other digital assets can change dramatically in short periods of time, potentially resulting in partial or total loss of value.
-
-2. **No Liability for Market Events**: Cosmicrafts and World of Unreal, LLC shall not be liable, under any circumstances, for:
-   - Price fluctuations, market crashes, or loss of value in any digital assets
-   - "Rug pulls," abandoned projects, or developer team changes
-   - Changes in community interest or demand for specific NFTs or tokens
-   - Failures of third-party marketplaces, exchanges, or platforms
-   - Changes in artistic or collector sentiment toward specific digital assets
-   - Failed, delayed, or underperforming token launches or NFT mints
-   - Issues related to token economics or tokenomics design
-   - Changes in perceived value of digital collections or assets
-
-3. **Speculation at Your Own Risk**: All digital asset purchases, including NFTs and tokens, should be considered highly speculative. You should never spend money on digital assets that you cannot afford to lose entirely.
-
-4. **Secondary Markets**: We make no representations or warranties about the existence or availability of secondary markets for digital assets. The ability to resell or trade any digital asset is uncertain and depends on factors entirely outside our control.
-
-5. **No Guaranteed Returns**: We never guarantee profits, returns, or that any NFT or token will maintain or increase in value. Any statements regarding the potential value of digital assets should never be interpreted as a promise of financial returns.
-
-6. **No Representations About Artists or Projects**: While we may provide a platform for various artists, projects, or developers, we make no representations or warranties about their reliability, capability, or the likelihood of project success or completion.
-
-### User Assumption of Risk
-
-By using our platform:
-
-1. **Full Risk Assumption**: You acknowledge that you assume full responsibility and risk for all of your decisions to purchase, hold, trade, or sell digital assets.
-
-2. **Independent Evaluation**: You confirm that you have the knowledge, experience, and financial capability to make independent purchasing and trading decisions and to evaluate the risks involved.
-
-3. **No Reliance**: You have not relied on any representations made by Cosmicrafts regarding the future value, utility, or merchantability of any digital assets.
-
-4. **Platform Not Liable**: You agree that Cosmicrafts and World of Unreal, LLC shall not be liable for any market-based losses you may incur through your use of our Services or your participation in the digital asset marketplace.
-
-## Disclaimers
-
-### Service Availability
-We strive to keep our Services operational and secure; however, there may be occasions when our Services are interrupted. We do not guarantee that our Services will be available at all times.
-
-### 'As Is' and 'As Available'
-The Services are provided on an 'AS IS' and 'AS AVAILABLE' basis. Cosmicrafts disclaims all warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.
-
-## Limitation of Liability
-
-To the maximum extent permitted by law, Cosmicrafts and World of Unreal, LLC shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or goodwill, resulting from your access to or use of or inability to access or use the Services.
-
-### No Liability for Blockchain Activities
-Without limiting the generality of the foregoing, we specifically disclaim all liability for:
-
-1. **Digital Assets**: Any loss, theft, disappearance, destruction, or inability to access digital assets, cryptocurrency, or NFTs, whether due to security breaches, wallet compatibility issues, blockchain network failures, protocol updates, fork events, or any other reason.
-
-2. **Smart Contract Failures**: Any issues arising from bugs, errors, or security vulnerabilities in smart contracts used on our platform or third-party platforms that interact with our services.
-
-3. **Market Volatility**: Any financial losses due to the volatility, illiquidity, or market manipulation of cryptocurrencies, NFTs, or other digital assets.
-
-4. **Regulatory Actions**: Any changes in value, utility, or legality of digital assets due to regulatory actions, restrictions, or bans affecting blockchain technology, cryptocurrencies, or NFTs.
-
-5. **Cross-Chain Issues**: Any problems, errors, or losses resulting from cross-chain operations, bridge failures, or incompatibilities between different blockchain networks.
-
-6. **Third-Party Services**: Any losses or issues arising from the use of third-party wallets, exchanges, bridges, or other blockchain-related services used in conjunction with our platform.
-
-### Maximum Liability
-In any case, our maximum aggregate liability under these Terms shall not exceed the greater of: (a) the amount you paid to use our non-blockchain services during the six months prior to the event giving rise to the liability, or (b) $100 USD. The limitations of liability do not apply to liabilities that cannot be excluded or limited by applicable law.
-
-## Indemnification
-You agree to indemnify, defend, and hold harmless World of Unreal LLC, Cosmicrafts Foundation, its founder, officers, directors, employees, agents, and third parties, for any losses, costs, liabilities, and expenses relating to or arising out of your use of the Services, your violation of these Terms, or your violation of any rights of another.
-
-## Governing Law
-These Terms shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of law provisions.
-
-## Dispute Resolution
-
-### Informal Resolution
-If you have a dispute with us, please contact us first. We will attempt to resolve the dispute informally by contacting you via email.
-
-### Arbitration
-If we cannot resolve a dispute informally, any controversy or claim arising out of or relating to these Terms or the Services will be settled by binding arbitration in accordance with the commercial arbitration rules of the [American Arbitration Association](https://www.adr.org/).
-
-### Class Action Waiver
-You agree that any proceedings to resolve disputes will be conducted only on an individual basis and not in a class, consolidated, or representative action.
-
-## Amendments to Terms
-We may modify these Terms at any time. If we make changes, we will provide notice by posting the updated Terms on our Platform and updating the "Effective Date" at the top. Your continued use of our Services after the changes take effect constitutes your agreement to the revised Terms.
-
-## Termination
-We may terminate or suspend your account and access to our Services immediately, without prior notice or liability, for any reason, including if you breach these Terms.
-
-## Severability
-If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions will continue in full force and effect.
-
-## Entire Agreement
-These Terms constitute the entire agreement between you and Cosmicrafts regarding our Services and supersede any prior agreements.
-
-## Contact Information
-If you have any questions about these Terms, please contact us at:
-
-**Email**: contact@cosmicrafts.com  
-
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
-
-## DAO Governance and Token Rights
-
-### Governance Tokens and Utility Nature
-
-1. **Limited Utility Function**: Governance tokens are utility tokens that grant holders only two specific limited rights when staked:
-   - The right to vote on governance proposals
-   - The right to submit governance proposals (subject to minimum staking requirements)
-
-2. **Tokens Must Be Staked**: Governance rights are only available to users who have staked their tokens in the governance staking contract. Unstaked tokens provide no governance rights.
-
-3. **Utility Tokens Only**: Governance tokens are strictly utility tokens that facilitate platform governance. They:
-   - Do not represent any ownership, equity, shares, or securities in World of Unreal, LLC
-   - Do not confer any rights to dividends, profit-sharing, or financial returns
-   - Do not grant management control over World of Unreal, LLC or the Cosmicrafts Foundation
-   - Have no guaranteed market value or liquidity
-   - Are not presented or marketed as investments or speculative assets
-
-4. **No Commercial Rights**: Ownership of governance tokens does not grant any license, commercial rights, or intellectual property rights to Cosmicrafts assets, brand, or content.
-
-5. **Voting Limitations**: The scope of governance voting is limited to specific platform parameters defined in the governance documentation, and does not include:
-   - Business operations of World of Unreal, LLC
-   - Legal or regulatory compliance decisions
-   - Allocation of company revenues or profits
-   - Hiring, firing, or compensation of company personnel
-
-### Legal Relationship and Liability
-
-1. **Multi-Entity Structure**: The Cosmicrafts ecosystem operates through a multi-entity structure:
-   - **World of Unreal, LLC**: A Delaware limited liability company that serves as a legal entity interfacing with traditional systems for certain business operations.
-   - **Cosmicrafts Foundation**: A non-profit organization that serves as a major contributor to the development of the Cosmicrafts platform on behalf of the DAO.
-   - **Cosmicrafts DAO**: The decentralized autonomous organization that governs certain aspects of the platform through token-based voting.
-
-2. **Limited DAO Governance Scope**: The Cosmicrafts DAO's authority is limited to smart contracts and canister management with parameters as defined in the [governance documentation](/whitepaper#governance).
-
-3. **No Partnership or Joint Venture**: Participation in DAO governance does not create a partnership, joint venture, agency, or employment relationship between token holders and any of the legal entities involved in the Cosmicrafts ecosystem, or among token holders themselves.
-
-4. **Governance Documentation**: Your participation in DAO governance is also subject to any additional governance documentation, which may be updated from time to time through proper governance procedures.
-
-5. **No Fiduciary Relationship**: World of Unreal, LLC, the Cosmicrafts Foundation, and the DAO do not owe fiduciary duties to token holders. Token holders do not owe fiduciary duties to each other by virtue of holding governance tokens.
+4. **الإشعار بالانتهاك**: إذا كنت تعتقد أن المحتوى المُنشأ بواسطة الذكاء الاصطناعي على منصتنا ينتهك حقوقك، يرجى الاتصال بنا على contact@cosmicrafts.com مع تفاصيل المطالبة.
 
 ---
 
-*Last updated: April 15, 2025* 
+*آخر تحديث: 4 مارس 2025*
+
+### المحتوى الخاص بك
+من خلال تقديم محتوى إلى منصتنا، فإنك تمنحنا ترخيصاً عالمياً وغير حصري وخالياً من حقوق الملكية لاستخدام ونسخ وتعديل وتكييف ونشر وترجمة وإنشاء أعمال مشتقة من وتوزيع وعرض هذا المحتوى في أي وسيط.
+
+### انتهاك حقوق النشر
+إذا كنت تعتقد أن عملك قد تم نسخه بطريقة تشكل انتهاكاً لحقوق النشر، يرجى تزويدنا بالمعلومات التالية:
+- توقيع مادي أو إلكتروني لمالك حقوق النشر
+- تحديد العمل المحمي بحقوق النشر المدعى انتهاكه
+- تحديد المادة التي تدعي أنها مخالفة
+- معلومات كافية بشكل معقول للسماح لنا بالاتصال بك
+- بيان بأنك تعتقد بحسن نية أن الاستخدام المتنازع عليه غير مصرح به من قبل مالك حقوق النشر
+- بيان، تحت طائلة عقوبة الحنث باليمين، بأن المعلومات المذكورة أعلاه دقيقة
+
+## الخصوصية
+خصوصيتك مهمة بالنسبة لنا. توضح **سياسة الخصوصية** الخاصة بنا كيفية جمع واستخدام وحماية معلوماتك الشخصية. باستخدام خدماتنا، فإنك توافق على ممارسات البيانات الموضحة في [سياسة الخصوصية](/privacy) الخاصة بنا.
+
+## خدمات الطرف الثالث ومتاجر التطبيقات
+
+### شروط خاصة بالمنصات
+عند الوصول إلى خدماتنا من خلال منصة طرف ثالث أو متجر تطبيقات (بما في ذلك على سبيل المثال لا الحصر متجر Google Play وApple App Store وEpic Games Store وCrazy Games)، فإنك تخضع أيضاً لشروط وأحكام وسياسات تلك المنصة.
+
+### الامتثال لمتاجر التطبيقات
+- **متجر Google Play**: تتوافق تطبيقاتنا مع اتفاقية توزيع مطوري Google Play وسياسات برنامج مطوري Google Play.
+- **متجر Apple App Store**: تتوافق تطبيقاتنا مع إرشادات مراجعة App Store واتفاقية ترخيص برنامج مطوري Apple.
+- **متجر Epic Games**: تتوافق تطبيقاتنا مع اتفاقية توزيع متجر Epic Games.
+- **Crazy Games**: تتوافق تطبيقاتنا مع اتفاقية نشر Crazy Games.
+
+### معالجات الدفع من الطرف الثالث
+تخضع المدفوعات التي تتم معالجتها من خلال متاجر التطبيقات أو معالجات الدفع من الطرف الثالث لشروط الخدمة الخاصة بهم. نحن لسنا مسؤولين عن إجراءات أو سياسات هذه الأطراف الثالثة.
+
+## إقرار المستخدم بالمخاطر
+
+باستخدام Cosmicrafts، فإنك تقر صراحةً وتقبل ما يلي:
+
+1. **مخاطر سلسلة الكتل**: تنطوي جميع شبكات سلسلة الكتل على مخاطر متأصلة، بما في ذلك على سبيل المثال لا الحصر ثغرات العقود الذكية، هجمات الإجماع، هجمات الحوكمة، والمخاطر التكنولوجية الأخرى التي قد تؤدي إلى فقدان أصولك الرقمية.
+
+2. **المخاطر المالية**: تخضع الأصول الرقمية والعملات المشفرة وNFTs لتقلبات شديدة، وعدم السيولة، واحتمال فقدان القيمة، بما في ذلك الخسارة الكاملة. يجب ألا تستثمر أبداً أموالاً لا يمكنك تحمل خسارتها.
+
+3. **لا تعويض**: في حالة فقدان الوصول إلى محفظتك، سرقة أصولك الرقمية، أو أحداث سلبية أخرى تتعلق بالأصول الرقمية وأنشطة سلسلة الكتل، ليس لديك أي حق في الرجوع على Cosmicrafts أو World of Unreal, LLC. لا يمكننا ولن:
+   - استرداد أو استعادة الأصول المفقودة
+   - عكس أو إلغاء أو تعديل معاملات سلسلة الكتل
+   - تعويضك عن الخسائر بسبب تقلبات السوق أو عمليات الاحتيال أو خروقات الأمان
+   - المساعدة في استعادة كلمة المرور للمحافظ غير الوصائية
+
+4. **عدم اليقين التنظيمي**: أنت تفهم أن القوانين واللوائح والمعاملات الضريبية المطبقة على تقنيات سلسلة الكتل والعملات المشفرة والأصول الرقمية غير مؤكدة ومتطورة وقد تختلف من ولاية قضائية إلى أخرى. قد تؤثر هذه التغيرات التنظيمية سلباً على قيمة أو فائدة أصولك الرقمية أو وضعها القانوني.
+
+5. **لا نصائح مالية**: لا شيء في منصتنا أو مواد التسويق أو الاتصالات يشكل نصيحة مالية أو استثمارية أو قانونية أو ضريبية. أي قرارات استثمارية تتخذها تكون على مسؤوليتك وتقديرك الخاص.
+
+6. **قبول المخاطر إلزامي**: باستخدام أي من الميزات اللامركزية أو القائمة على سلسلة الكتل في منصتنا، فإنك تقر صراحةً وتقبل جميع المخاطر المرتبطة بتقنية سلسلة الكتل والأصول الرقمية. إذا كنت لا توافق على هذه المخاطر أو لا تقبلها، فيجب عليك عدم استخدام ميزات سلسلة الكتل في منصتنا.
+
+## مخاطر السوق ومسؤولية المنصة
+
+### دور مزود الخدمة
+تعمل Cosmicrafts فقط كمزود خدمة تقنية يقدم منصة حيث يمكن للمستخدمين التفاعل مع شبكات سلسلة الكتل والمشاركة في معاملات الأصول الرقمية. نحن نوضح صراحةً أن:
+
+1. **ليست مؤسسة مالية**: Cosmicrafts ليست بنكاً أو وسيطاً أو تاجراً أو مستشاراً استثمارياً أو مؤسسة مالية أو بورصة عملات مشفرة. نحن لا نقدم نصائح مالية أو استثمارية أو قانونية أو ضريبية.
+
+2. **منصة محايدة**: نحن نقدم فقط بنية تحتية تقنية محايدة. نحن لا نتحكم في أو نؤثر على أو نتدخل في الأسواق أو المعاملات أو قيم أي أصول رقمية يتم تداولها أو إنشاؤها أو تبادلها من خلال منصتنا.
+
+3. **لا حفظ**: نحن لا نحتفظ بأموال المستخدمين أو الأصول الرقمية، ولا نملك القدرة على عكس المعاملات أو استرداد الأصول المفقودة أو تعديل بيانات سلسلة الكتل.
+
+4. **لا تحكم في السوق**: ليس لدينا أي سيطرة على قيمة أو قابلية التداول أو سيولة أي NFTs أو رموز أو أصول رقمية يتم عرضها أو إنشاؤها أو بيعها أو شراؤها من خلال منصتنا.
+
+### مخاطر السوق وعدم مسؤولية المنصة
+
+باستخدام منصتنا، فإنك تقر صراحةً وتوافق على أن:
+
+1. **تقلب الأسعار**: أسواق الأصول الرقمية شديدة التقلب، ويمكن أن يتغير سعر NFTs والرموز والأصول الرقمية الأخرى بشكل كبير في فترات زمنية قصيرة، مما قد يؤدي إلى خسارة جزئية أو كلية للقيمة.
+
+2. **لا مسؤولية عن أحداث السوق**: لن تكون Cosmicrafts وWorld of Unreal, LLC مسؤولة، تحت أي ظرف من الظروف، عن:
+   - تقلبات الأسعار، انهيارات السوق، أو فقدان القيمة في أي أصول رقمية
+   - عمليات "السحب البساطي"، المشاريع المهجورة، أو تغييرات فريق المطورين
+   - التغيرات في اهتمام المجتمع أو الطلب على NFTs أو الرموز المحددة
+   - فشل الأسواق أو البورصات أو المنصات من الطرف الثالث
+   - التغيرات في المشاعر الفنية أو جامعي التحف تجاه أصول رقمية محددة
+   - إطلاق الرموز الفاشلة أو المتأخرة أو ذات الأداء الضعيف أو عمليات سك NFT
+   - القضايا المتعلقة بتصميم اقتصاديات الرموز
+   - التغيرات في القيمة المتصورة للمجموعات أو الأصول الرقمية
+
+3. **المضاربة على مسؤوليتك الخاصة**: يجب اعتبار جميع مشتريات الأصول الرقمية، بما في ذلك NFTs والرموز، مضاربة عالية المخاطر. يجب ألا تنفق أبداً أموالاً على الأصول الرقمية لا يمكنك تحمل خسارتها بالكامل.
+
+4. **الأسواق الثانوية**: نحن لا نقدم أي تعهدات أو ضمانات حول وجود أو توفر أسواق ثانوية للأصول الرقمية. القدرة على إعادة بيع أو تداول أي أصل رقمي غير مؤكدة وتعتمد على عوامل خارجة تماماً عن سيطرتنا.
+
+5. **لا عوائد مضمونة**: نحن لا نضمن أبداً الأرباح أو العوائد أو أن أي NFT أو رمز سيحافظ على قيمته أو يزيد فيها. يجب ألا يتم تفسير أي بيانات تتعلق بالقيمة المحتملة للأصول الرقمية على أنها وعد بعوائد مالية.
+
+6. **لا تعهدات حول الفنانين أو المشاريع**: في حين أننا قد نوفر منصة لمختلف الفنانين أو المشاريع أو المطورين، نحن لا نقدم أي تعهدات أو ضمانات حول موثوقيتهم أو قدرتهم أو احتمالية نجاح أو اكتمال المشروع.
+
+### تحمل المستخدم للمخاطر
+
+باستخدام منصتنا:
+
+1. **تحمل المخاطر الكامل**: أنت تقر بأنك تتحمل المسؤولية والمخاطر الكاملة عن جميع قراراتك لشراء أو الاحتفاظ أو تداول أو بيع الأصول الرقمية.
+
+2. **التقييم المستقل**: أنت تؤكد أن لديك المعرفة والخبرة والقدرة المالية لاتخاذ قرارات شراء وتداول مستقلة وتقييم المخاطر المتضمنة.
+
+3. **عدم الاعتماد**: أنت لم تعتمد على أي تعهدات قدمتها Cosmicrafts فيما يتعلق بالقيمة المستقبلية أو الفائدة أو قابلية التسويق لأي أصول رقمية.
+
+4. **المنصة غير مسؤولة**: أنت توافق على أن Cosmicrafts وWorld of Unreal, LLC لن تكونا مسؤولتين عن أي خسائر قائمة على السوق قد تتكبدها من خلال استخدامك لخدماتنا أو مشاركتك في سوق الأصول الرقمية.
+
+## الملكية الفكرية
+
+### محتوانا
+جميع المحتويات الموجودة على المنصة، بما في ذلك على سبيل المثال لا الحصر النصوص والرسومات والشعارات والأيقونات والصور ومقاطع الصوت والتنزيلات الرقمية وتجميعات البيانات والبرامج، هي ملك لشركة World of Unreal, LLC (التي تعمل باسم "Cosmicrafts") أو موردي المحتوى التابعين لها وهي محمية بموجب قوانين حقوق النشر الدولية.
+
+### ملكية الملكية الفكرية وترخيص DAO
+تحتفظ World of Unreal, LLC بالملكية القانونية الكاملة لجميع حقوق النشر والعلامات التجارية وبراءات الاختراع وحقوق الملكية الفكرية الأخرى المرتبطة بـ Cosmicrafts. لتسهيل التطوير والحوكمة اللامركزية، منحت World of Unreal, LLC ترخيصاً تشغيلياً محدداً لـ Cosmicrafts DAO.
+
+يسمح هذا الترخيص لـ DAO باستخدام وتطوير وتوزيع علامة ومنصة Cosmicrafts وفقاً لقرارات الحوكمة، في حين تحتفظ World of Unreal, LLC بالملكية القانونية النهائية. يوفر هذا الهيكل حماية قانونية تقليدية للملكية الفكرية لـ Cosmicrafts مع تمكين العمليات اللامركزية.
+
+للحصول على تفاصيل كاملة عن هذا الترتيب للترخيص، يرجى الرجوع إلى وثيقة الإشعارات القانونية.
+
+### الفن الرقمي المُنشأ بواسطة الذكاء الاصطناعي
+
+يستخدم Cosmicrafts أدوات وخدمات الذكاء الاصطناعي لإنشاء فن رقمي لمنصتنا:
+
+1. **التعبير الإبداعي**: الفن المُنشأ بواسطة الذكاء الاصطناعي لدينا مقصود به أن يكون تعبيراً إبداعياً أصلياً داخل عالمنا الفريد، وليس نسخاً من ملكيات فكرية أخرى. أي تشابه مع الأعمال الموجودة هو أمر عرضي أو يمثل تأثيرات فنية عامة.
+
+2. **التراخيص والامتثال**: نستخدم أدوات الذكاء الاصطناعي بموجب اتفاقيات ترخيص تجارية مناسبة مع مزودي الخدمة. نحن نسعى جاهدين للامتثال لجميع القوانين واللوائح المعمول بها المتعلقة باستخدام تقنية الذكاء الاصطناعي.
+
+3. **حقوق الملكية**: تحتفظ World of Unreal, LLC بجميع حقوق الملكية الفكرية للمحتوى المُنشأ بواسطة الذكاء الاصطناعي المنتج لمنصتنا، مع مراعاة شروط الترخيص الممنوحة لـ DAO.
+
+4. **الإشعار بالانتهاك**: إذا كنت تعتقد أن المحتوى المُنشأ بواسطة الذكاء الاصطناعي على منصتنا ينتهك حقوقك، يرجى الاتصال بنا على contact@cosmicrafts.com مع تفاصيل المطالبة.
+
+---
+
+*آخر تحديث: 4 مارس 2025*
+
+### المحتوى الخاص بك
+من خلال تقديم محتوى إلى منصتنا، فإنك تمنحنا ترخيصاً عالمياً وغير حصري وخالياً من حقوق الملكية لاستخدام ونسخ وتعديل وتكييف ونشر وترجمة وإنشاء أعمال مشتقة من وتوزيع وعرض هذا المحتوى في أي وسيط.
+
+### انتهاك حقوق النشر
+إذا كنت تعتقد أن عملك قد تم نسخه بطريقة تشكل انتهاكاً لحقوق النشر، يرجى تزويدنا بالمعلومات التالية:
+- توقيع مادي أو إلكتروني لمالك حقوق النشر
+- تحديد العمل المحمي بحقوق النشر المدعى انتهاكه
+- تحديد المادة التي تدعي أنها مخالفة
+- معلومات كافية بشكل معقول للسماح لنا بالاتصال بك
+- بيان بأنك تعتقد بحسن نية أن الاستخدام المتنازع عليه غير مصرح به من قبل مالك حقوق النشر
+- بيان، تحت طائلة عقوبة الحنث باليمين، بأن المعلومات المذكورة أعلاه دقيقة
+
+## الخصوصية
+خصوصيتك مهمة بالنسبة لنا. توضح **سياسة الخصوصية** الخاصة بنا كيفية جمع واستخدام وحماية معلوماتك الشخصية. باستخدام خدماتنا، فإنك توافق على ممارسات البيانات الموضحة في [سياسة الخصوصية](/privacy) الخاصة بنا.
+
+## خدمات الطرف الثالث ومتاجر التطبيقات
+
+### شروط خاصة بالمنصات
+عند الوصول إلى خدماتنا من خلال منصة طرف ثالث أو متجر تطبيقات (بما في ذلك على سبيل المثال لا الحصر متجر Google Play وApple App Store وEpic Games Store وCrazy Games)، فإنك تخضع أيضاً لشروط وأحكام وسياسات تلك المنصة.
+
+### الامتثال لمتاجر التطبيقات
+- **متجر Google Play**: تتوافق تطبيقاتنا مع اتفاقية توزيع مطوري Google Play وسياسات برنامج مطوري Google Play.
+- **متجر Apple App Store**: تتوافق تطبيقاتنا مع إرشادات مراجعة App Store واتفاقية ترخيص برنامج مطوري Apple.
+- **متجر Epic Games**: تتوافق تطبيقاتنا مع اتفاقية توزيع متجر Epic Games.
+- **Crazy Games**: تتوافق تطبيقاتنا مع اتفاقية نشر Crazy Games.
+
+### معالجات الدفع من الطرف الثالث
+تخضع المدفوعات التي تتم معالجتها من خلال متاجر التطبيقات أو معالجات الدفع من الطرف الثالث لشروط الخدمة الخاصة بهم. نحن لسنا مسؤولين عن إجراءات أو سياسات هذه الأطراف الثالثة.
+
+## إقرار المستخدم بالمخاطر
+
+باستخدام Cosmicrafts، فإنك تقر صراحةً وتقبل ما يلي:
+
+1. **مخاطر سلسلة الكتل**: تنطوي جميع شبكات سلسلة الكتل على مخاطر متأصلة، بما في ذلك على سبيل المثال لا الحصر ثغرات العقود الذكية، هجمات الإجماع، هجمات الحوكمة، والمخاطر التكنولوجية الأخرى التي قد تؤدي إلى فقدان أصولك الرقمية.
+
+2. **المخاطر المالية**: تخضع الأصول الرقمية والعملات المشفرة وNFTs لتقلبات شديدة، وعدم السيولة، واحتمال فقدان القيمة، بما في ذلك الخسارة الكاملة. يجب ألا تستثمر أبداً أموالاً لا يمكنك تحمل خسارتها.
+
+3. **لا تعويض**: في حالة فقدان الوصول إلى محفظتك، سرقة أصولك الرقمية، أو أحداث سلبية أخرى تتعلق بالأصول الرقمية وأنشطة سلسلة الكتل، ليس لديك أي حق في الرجوع على Cosmicrafts أو World of Unreal, LLC. لا يمكننا ولن:
+   - استرداد أو استعادة الأصول المفقودة
+   - عكس أو إلغاء أو تعديل معاملات سلسلة الكتل
+   - تعويضك عن الخسائر بسبب تقلبات السوق أو عمليات الاحتيال أو خروقات الأمان
+   - المساعدة في استعادة كلمة المرور للمحافظ غير الوصائية
+
+4. **عدم اليقين التنظيمي**: أنت تفهم أن القوانين واللوائح والمعاملات الضريبية المطبقة على تقنيات سلسلة الكتل والعملات المشفرة والأصول الرقمية غير مؤكدة ومتطورة وقد تختلف من ولاية قضائية إلى أخرى. قد تؤثر هذه التغيرات التنظيمية سلباً على قيمة أو فائدة أصولك الرقمية أو وضعها القانوني.
+
+5. **لا نصائح مالية**: لا شيء في منصتنا أو مواد التسويق أو الاتصالات يشكل نصيحة مالية أو استثمارية أو قانونية أو ضريبية. أي قرارات استثمارية تتخذها تكون على مسؤوليتك وتقديرك الخاص.
+
+6. **قبول المخاطر إلزامي**: باستخدام أي من الميزات اللامركزية أو القائمة على سلسلة الكتل في منصتنا، فإنك تقر صراحةً وتقبل جميع المخاطر المرتبطة بتقنية سلسلة الكتل والأصول الرقمية. إذا كنت لا توافق على هذه المخاطر أو لا تقبلها، فيجب عليك عدم استخدام ميزات سلسلة الكتل في منصتنا.
+
+## مخاطر السوق ومسؤولية المنصة
+
+### دور مزود الخدمة
+تعمل Cosmicrafts فقط كمزود خدمة تقنية يقدم منصة حيث يمكن للمستخدمين التفاعل مع شبكات سلسلة الكتل والمشاركة في معاملات الأصول الرقمية. نحن نوضح صراحةً أن:
+
+1. **ليست مؤسسة مالية**: Cosmicrafts ليست بنكاً أو وسيطاً أو تاجراً أو مستشاراً استثمارياً أو مؤسسة مالية أو بورصة عملات مشفرة. نحن لا نقدم نصائح مالية أو استثمارية أو قانونية أو ضريبية.
+
+2. **منصة محايدة**: نحن نقدم فقط بنية تحتية تقنية محايدة. نحن لا نتحكم في أو نؤثر على أو نتدخل في الأسواق أو المعاملات أو قيم أي أصول رقمية يتم تداولها أو إنشاؤها أو تبادلها من خلال منصتنا.
+
+3. **لا حفظ**: نحن لا نحتفظ بأموال المستخدمين أو الأصول الرقمية، ولا نملك القدرة على عكس المعاملات أو استرداد الأصول المفقودة أو تعديل بيانات سلسلة الكتل.
+
+4. **لا تحكم في السوق**: ليس لدينا أي سيطرة على قيمة أو قابلية التداول أو سيولة أي NFTs أو رموز أو أصول رقمية يتم عرضها أو إنشاؤها أو بيعها أو شراؤها من خلال منصتنا.
+
+### مخاطر السوق وعدم مسؤولية المنصة
+
+باستخدام منصتنا، فإنك تقر صراحةً وتوافق على أن:
+
+1. **تقلب الأسعار**: أسواق الأصول الرقمية شديدة التقلب، ويمكن أن يتغير سعر NFTs والرموز والأصول الرقمية الأخرى بشكل كبير في فترات زمنية قصيرة، مما قد يؤدي إلى خسارة جزئية أو كلية للقيمة.
+
+2. **لا مسؤولية عن أحداث السوق**: لن تكون Cosmicrafts وWorld of Unreal, LLC مسؤولة، تحت أي ظرف من الظروف، عن:
+   - تقلبات الأسعار، انهيارات السوق، أو فقدان القيمة في أي أصول رقمية
+   - عمليات "السحب البساطي"، المشاريع المهجورة، أو تغييرات فريق المطورين
+   - التغيرات في اهتمام المجتمع أو الطلب على NFTs أو الرموز المحددة
+   - فشل الأسواق أو البورصات أو المنصات من الطرف الثالث
+   - التغيرات في المشاعر الفنية أو جامعي التحف تجاه أصول رقمية محددة
+   - إطلاق الرموز الفاشلة أو المتأخرة أو ذات الأداء الضعيف أو عمليات سك NFT
+   - القضايا المتعلقة بتصميم اقتصاديات الرموز
+   - التغيرات في القيمة المتصورة للمجموعات أو الأصول الرقمية
+
+3. **المضاربة على مسؤوليتك الخاصة**: يجب اعتبار جميع مشتريات الأصول الرقمية، بما في ذلك NFTs والرموز، مضاربة عالية المخاطر. يجب ألا تنفق أبداً أموالاً على الأصول الرقمية لا يمكنك تحمل خسارتها بالكامل.
+
+4. **الأسواق الثانوية**: نحن لا نقدم أي تعهدات أو ضمانات حول وجود أو توفر أسواق ثانوية للأصول الرقمية. القدرة على إعادة بيع أو تداول أي أصل رقمي غير مؤكدة وتعتمد على عوامل خارجة تماماً عن سيطرتنا.
+
+5. **لا عوائد مضمونة**: نحن لا نضمن أبداً الأرباح أو العوائد أو أن أي NFT أو رمز سيحافظ على قيمته أو يزيد فيها. يجب ألا يتم تفسير أي بيانات تتعلق بالقيمة المحتملة للأصول الرقمية على أنها وعد بعوائد مالية.
+
+6. **لا تعهدات حول الفنانين أو المشاريع**: في حين أننا قد نوفر منصة لمختلف الفنانين أو المشاريع أو المطورين، نحن لا نقدم أي تعهدات أو ضمانات حول موثوقيتهم أو قدرتهم أو احتمالية نجاح أو اكتمال المشروع.
+
+### تحمل المستخدم للمخاطر
+
+باستخدام منصتنا:
+
+1. **تحمل المخاطر الكامل**: أنت تقر بأنك تتحمل المسؤولية والمخاطر الكاملة عن جميع قراراتك لشراء أو الاحتفاظ أو تداول أو بيع الأصول الرقمية.
+
+2. **التقييم المستقل**: أنت تؤكد أن لديك المعرفة والخبرة والقدرة المالية لاتخاذ قرارات شراء وتداول مستقلة وتقييم المخاطر المتضمنة.
+
+3. **عدم الاعتماد**: أنت لم تعتمد على أي تعهدات قدمتها Cosmicrafts فيما يتعلق بالقيمة المستقبلية أو الفائدة أو قابلية التسويق لأي أصول رقمية.
+
+4. **المنصة غير مسؤولة**: أنت توافق على أن Cosmicrafts وWorld of Unreal, LLC لن تكونا مسؤولتين عن أي خسائر قائمة على السوق قد تتكبدها من خلال استخدامك لخدماتنا أو مشاركتك في سوق الأصول الرقمية.
+
+## الملكية الفكرية
+
+### محتوانا
+جميع المحتويات الموجودة على المنصة، بما في ذلك على سبيل المثال لا الحصر النصوص والرسومات والشعارات والأيقونات والصور ومقاطع الصوت والتنزيلات الرقمية وتجميعات البيانات والبرامج، هي ملك لشركة World of Unreal, LLC (التي تعمل باسم "Cosmicrafts") أو موردي المحتوى التابعين لها وهي محمية بموجب قوانين حقوق النشر الدولية.
+
+### ملكية الملكية الفكرية وترخيص DAO
+تحتفظ World of Unreal, LLC بالملكية القانونية الكاملة لجميع حقوق النشر والعلامات التجارية وبراءات الاختراع وحقوق الملكية الفكرية الأخرى المرتبطة بـ Cosmicrafts. لتسهيل التطوير والحوكمة اللامركزية، منحت World of Unreal, LLC ترخيصاً تشغيلياً محدداً لـ Cosmicrafts DAO.
+
+يسمح هذا الترخيص لـ DAO باستخدام وتطوير وتوزيع علامة ومنصة Cosmicrafts وفقاً لقرارات الحوكمة، في حين تحتفظ World of Unreal, LLC بالملكية القانونية النهائية. يوفر هذا الهيكل حماية قانونية تقليدية للملكية الفكرية لـ Cosmicrafts مع تمكين العمليات اللامركزية.
+
+للحصول على تفاصيل كاملة عن هذا الترتيب للترخيص، يرجى الرجوع إلى وثيقة الإشعارات القانونية.
+
+### الفن الرقمي المُنشأ بواسطة الذكاء الاصطناعي
+
+يستخدم Cosmicrafts أدوات وخدمات الذكاء الاصطناعي لإنشاء فن رقمي لمنصتنا:
+
+1. **التعبير الإبداعي**: الفن المُنشأ بواسطة الذكاء الاصطناعي لدينا مقصود به أن يكون تعبيراً إبداعياً أصلياً داخل عالمنا الفريد، وليس نسخاً من ملكيات فكرية أخرى. أي تشابه مع الأعمال الموجودة هو أمر عرضي أو يمثل تأثيرات فنية عامة.
+
+2. **التراخيص والامتثال**: نستخدم أدوات الذكاء الاصطناعي بموجب اتفاقيات ترخيص تجارية مناسبة مع مزودي الخدمة. نحن نسعى جاهدين للامتثال لجميع القوانين واللوائح المعمول بها المتعلقة باستخدام تقنية الذكاء الاصطناعي.
+
+3. **حقوق الملكية**: تحتفظ World of Unreal, LLC بجميع حقوق الملكية الفكرية للمحتوى المُنشأ بواسطة الذكاء الاصطناعي المنتج لمنصتنا، مع مراعاة شروط الترخيص الممنوحة لـ DAO.
+
+4. **الإشعار بالانتهاك**: إذا كنت تعتقد أن المحتوى المُنشأ بواسطة الذكاء الاصطناعي على منصتنا ينتهك حقوقك، يرجى الاتصال بنا على contact@cosmicrafts.com مع تفاصيل المطالبة.
+
+---
+
+*آخر تحديث: 4 مارس 2025*
+
+### المحتوى الخاص بك
+من خلال تقديم محتوى إلى منصتنا، فإنك تمنحنا ترخيصاً عالمياً وغير حصري وخالياً من حقوق الملكية لاستخدام ونسخ وتعديل وتكييف ونشر وترجمة وإنشاء أعمال مشتقة من وتوزيع وعرض هذا المحتوى في أي وسيط.
+
+### انتهاك حقوق النشر
+إذا كنت تعتقد أن عملك قد تم نسخه بطريقة تشكل انتهاكاً لحقوق النشر، يرجى تزويدنا بالمعلومات التالية:
+- توقيع مادي أو إلكتروني لمالك حقوق النشر
+- تحديد العمل المحمي بحقوق النشر المدعى انتهاكه
+- تحديد المادة التي تدعي أنها مخالفة
+- معلومات كافية بشكل معقول للسماح لنا بالاتصال بك
+- بيان بأنك تعتقد بحسن نية أن الاستخدام المتنازع عليه غير مصرح به من قبل مالك حقوق النشر
+- بيان، تحت طائلة عقوبة الحنث باليمين، بأن المعلومات المذكورة أعلاه دقيقة
+
+## الخصوصية
+خصوصيتك مهمة بالنسبة لنا. توضح **سياسة الخصوصية** الخاصة بنا كيفية جمع واستخدام وحماية معلوماتك الشخصية. باستخدام خدماتنا، فإنك توافق على ممارسات البيانات الموضحة في [سياسة الخصوصية](/privacy) الخاصة بنا.
+
+## خدمات الطرف الثالث ومتاجر التطبيقات
+
+### شروط خاصة بالمنصات
+عند الوصول إلى خدماتنا من خلال منصة طرف ثالث أو متجر تطبيقات (بما في ذلك على سبيل المثال لا الحصر متجر Google Play وApple App Store وEpic Games Store وCrazy Games)، فإنك تخضع أيضاً لشروط وأحكام وسياسات تلك المنصة.
+
+### الامتثال لمتاجر التطبيقات
+- **متجر Google Play**: تتوافق تطبيقاتنا مع اتفاقية توزيع مطوري Google Play وسياسات برنامج مطوري Google Play.
+- **متجر Apple App Store**: تتوافق تطبيقاتنا مع إرشادات مراجعة App Store واتفاقية ترخيص برنامج مطوري Apple.
+- **متجر Epic Games**: تتوافق تطبيقاتنا مع اتفاقية توزيع متجر Epic Games.
+- **Crazy Games**: تتوافق تطبيقاتنا مع اتفاقية نشر Crazy Games.
+
+### معالجات الدفع من الطرف الثالث
+تخضع المدفوعات التي تتم معالجتها من خلال متاجر التطبيقات أو معالجات الدفع من الطرف الثالث لشروط الخدمة الخاصة بهم. نحن لسنا مسؤولين عن إجراءات أو سياسات هذه الأطراف الثالثة.
+
+## إقرار المستخدم بالمخاطر
+
+باستخدام Cosmicrafts، فإنك تقر صراحةً وتقبل ما يلي:
+
+1. **مخاطر سلسلة الكتل**: تنطوي جميع شبكات سلسلة الكتل على مخاطر متأصلة، بما في ذلك على سبيل المثال لا الحصر ثغرات العقود الذكية، هجمات الإجماع، هجمات الحوكمة، والمخاطر التكنولوجية الأخرى التي قد تؤدي إلى فقدان أصولك الرقمية.
+
+2. **المخاطر المالية**: تخضع الأصول الرقمية والعملات المشفرة وNFTs لتقلبات شديدة، وعدم السيولة، واحتمال فقدان القيمة، بما في ذلك الخسارة الكاملة. يجب ألا تستثمر أبداً أموالاً لا يمكنك تحمل خسارتها.
+
+3. **لا تعويض**: في حالة فقدان الوصول إلى محفظتك، سرقة أصولك الرقمية، أو أحداث سلبية أخرى تتعلق بالأصول الرقمية وأنشطة سلسلة الكتل، ليس لديك أي حق في الرجوع على Cosmicrafts أو World of Unreal, LLC. لا يمكننا ولن:
+   - استرداد أو استعادة الأصول المفقودة
+   - عكس أو إلغاء أو تعديل معاملات سلسلة الكتل
+   - تعويضك عن الخسائر بسبب تقلبات السوق أو عمليات الاحتيال أو خروقات الأمان
+   - المساعدة في استعادة كلمة المرور للمحافظ غير الوصائية
+
+4. **عدم اليقين التنظيمي**: أنت تفهم أن القوانين واللوائح والمعاملات الضريبية المطبقة على تقنيات سلسلة الكتل والعملات المشفرة والأصول الرقمية غير مؤكدة ومتطورة وقد تختلف من ولاية قضائية إلى أخرى. قد تؤثر هذه التغيرات التنظيمية سلباً على قيمة أو فائدة أصولك الرقمية أو وضعها القانوني.
+
+5. **لا نصائح مالية**: لا شيء في منصتنا أو مواد التسويق أو الاتصالات يشكل نصيحة مالية أو استثمارية أو قانونية أو ضريبية. أي قرارات استثمارية تتخذها تكون على مسؤوليتك وتقديرك الخاص.
+
+6. **قبول المخاطر إلزامي**: باستخدام أي من الميزات اللامركزية أو القائمة على سلسلة الكتل في منصتنا، فإنك تقر صراحةً وتقبل جميع المخاطر المرتبطة بتقنية سلسلة الكتل والأصول الرقمية. إذا كنت لا توافق على هذه المخاطر أو لا تقبلها، فيجب عليك عدم استخدام ميزات سلسلة الكتل في منصتنا.
+
+## مخاطر السوق ومسؤولية المنصة
+
+### دور مزود الخدمة
+تعمل Cosmicrafts فقط كمزود خدمة تقنية يقدم منصة حيث يمكن للمستخدمين التفاعل مع شبكات سلسلة الكتل والمشاركة في معاملات الأصول الرقمية. نحن نوضح صراحةً أن:
+
+1. **ليست مؤسسة مالية**: Cosmicrafts ليست بنكاً أو وسيطاً أو تاجراً أو مستشاراً استثمارياً أو مؤسسة مالية أو بورصة عملات مشفرة. نحن لا نقدم نصائح مالية أو استثمارية أو قانونية أو ضريبية.
+
+2. **منصة محايدة**: نحن نقدم فقط بنية تحتية تقنية محايدة. نحن لا نتحكم في أو نؤثر على أو نتدخل في الأسواق أو المعاملات أو قيم أي أصول رقمية يتم تداولها أو إنشاؤها أو تبادلها من خلال منصتنا.
+
+3. **لا حفظ**: نحن لا نحتفظ بأموال المستخدمين أو الأصول الرقمية، ولا نملك القدرة على عكس المعاملات أو استرداد الأصول المفقودة أو تعديل بيانات سلسلة الكتل.
+
+4. **لا تحكم في السوق**: ليس لدينا أي سيطرة على قيمة أو قابلية التداول أو سيولة أي NFTs أو رموز أو أصول رقمية يتم عرضها أو إنشاؤها أو بيعها أو شراؤها من خلال منصتنا.
+
+### مخاطر السوق وعدم مسؤولية المنصة
+
+باستخدام منصتنا، فإنك تقر صراحةً وتوافق على أن:
+
+1. **تقلب الأسعار**: أسواق الأصول الرقمية شديدة التقلب، ويمكن أن يتغير سعر NFTs والرموز والأصول الرقمية الأخرى بشكل كبير في فترات زمنية قصيرة، مما قد يؤدي إلى خسارة جزئية أو كلية للقيمة.
+
+2. **لا مسؤولية عن أحداث السوق**: لن تكون Cosmicrafts وWorld of Unreal, LLC مسؤولة، تحت أي ظرف من الظروف، عن:
+   - تقلبات الأسعار، انهيارات السوق، أو فقدان القيمة في أي أصول رقمية
+   - عمليات "السحب البساطي"، المشاريع المهجورة، أو تغييرات فريق المطورين
+   - التغيرات في اهتمام المجتمع أو الطلب على NFTs أو الرموز المحددة
+   - فشل الأسواق أو البورصات أو المنصات من الطرف الثالث
+   - التغيرات في المشاعر الفنية أو جامعي التحف تجاه أصول رقمية محددة
+   - إطلاق الرموز الفاشلة أو المتأخرة أو ذات الأداء الضعيف أو عمليات سك NFT
+   - القضايا المتعلقة بتصميم اقتصاديات الرموز
+   - التغيرات في القيمة المتصورة للمجموعات أو الأصول الرقمية
+
+3. **المضاربة على مسؤوليتك الخاصة**: يجب اعتبار جميع مشتريات الأصول الرقمية، بما في ذلك NFTs والرموز، مضاربة عالية المخاطر. يجب ألا تنفق أبداً أموالاً على الأصول الرقمية لا يمكنك تحمل خسارتها بالكامل.
+
+4. **الأسواق الثانوية**: نحن لا نقدم أي تعهدات أو ضمانات حول وجود أو توفر أسواق ثانوية للأصول الرقمية. القدرة على إعادة بيع أو تداول أي أصل رقمي غير مؤكدة وتعتمد على عوامل خارجة تماماً عن سيطرتنا.
+
+5. **لا عوائد مضمونة**: نحن لا نضمن أبداً الأرباح أو العوائد أو أن أي NFT أو رمز سيحافظ على قيمته أو يزيد فيها. يجب ألا يتم تفسير أي بيانات تتعلق بالقيمة المحتملة للأصول الرقمية على أنها وعد بعوائد مالية.
+
+6. **لا تعهدات حول الفنانين أو المشاريع**: في حين أننا قد نوفر منصة لمختلف الفنانين أو المشاريع أو المطورين، نحن لا نقدم أي تعهدات أو ضمانات حول موثوقيتهم أو قدرتهم أو احتمالية نجاح أو اكتمال المشروع.
+
+### تحمل المستخدم للمخاطر
+
+باستخدام منصتنا:
+
+1. **تحمل المخاطر الكامل**: أنت تقر بأنك تتحمل المسؤولية والمخاطر الكاملة عن جميع قراراتك لشراء أو الاحتفاظ أو تداول أو بيع الأصول الرقمية.
+
+2. **التقييم المستقل**: أنت تؤكد أن لديك المعرفة والخبرة والقدرة المالية لاتخاذ قرارات شراء وتداول مستقلة وتقييم المخاطر المتضمنة.
+
+3. **عدم الاعتماد**: أنت لم تعتمد على أي تعهدات قدمتها Cosmicrafts فيما يتعلق بالقيمة المستقبلية أو الفائدة أو قابلية التسويق لأي أصول رقمية.
+
+4. **المنصة غير مسؤولة**: أنت توافق على أن Cosmicrafts وWorld of Unreal, LLC لن تكونا مسؤولتين عن أي خسائر قائمة على السوق قد تتكبدها من خلال استخدامك لخدماتنا أو مشاركتك في سوق الأصول الرقمية.
+
+## الملكية الفكرية
+
+### محتوانا
+جميع المحتويات الموجودة على المنصة، بما في ذلك على سبيل المثال لا الحصر النصوص والرسومات والشعارات والأيقونات والصور ومقاطع الصوت والتنزيلات الرقمية وتجميعات البيانات والبرامج، هي ملك لشركة World of Unreal, LLC (التي تعمل باسم "Cosmicrafts") أو موردي المحتوى التابعين لها وهي محمية بموجب قوانين حقوق النشر الدولية.
+
+### ملكية الملكية الفكرية وترخيص DAO
+تحتفظ World of Unreal, LLC بالملكية القانونية الكاملة لجميع حقوق النشر والعلامات التجارية وبراءات الاختراع وحقوق الملكية الفكرية الأخرى المرتبطة بـ Cosmicrafts. لتسهيل التطوير والحوكمة اللامركزية، منحت World of Unreal, LLC ترخيصاً تشغيلياً محدداً لـ Cosmicrafts DAO.
+
+يسمح هذا الترخيص لـ DAO باستخدام وتطوير وتوزيع علامة ومنصة Cosmicrafts وفقاً لقرارات الحوكمة، في حين تحتفظ World of Unreal, LLC بالملكية القانونية النهائية. يوفر هذا الهيكل حماية قانونية تقليدية للملكية الفكرية لـ Cosmicrafts مع تمكين العمليات اللامركزية.
+
+للحصول على تفاصيل كاملة عن هذا الترتيب للترخيص، يرجى الرجوع إلى وثيقة الإشعارات القانونية.
+
+### الفن الرقمي المُنشأ بواسطة الذكاء الاصطناعي
+
+يستخدم Cosmicrafts أدوات وخدمات الذكاء الاصطناعي لإنشاء فن رقمي لمنصتنا:
+
+1. **التعبير الإبداعي**: الفن المُنشأ بواسطة الذكاء الاصطناعي لدينا مقصود به أن يكون تعبيراً إبداعياً أصلياً داخل عالمنا الفريد، وليس نسخاً من ملكيات فكرية أخرى. أي تشابه مع الأعمال الموجودة هو أمر عرضي أو يمثل تأثيرات فنية عامة.
+
+2. **التراخيص والامتثال**: نستخدم أدوات الذكاء الاصطناعي بموجب اتفاقيات ترخيص تجارية مناسبة مع مزودي الخدمة. نحن نسعى جاهدين للامتثال لجميع القوانين واللوائح المعمول بها المتعلقة باستخدام تقنية الذكاء الاصطناعي.
+
+3. **حقوق الملكية**: تحتفظ World of Unreal, LLC بجميع حقوق الملكية الفكرية للمحتوى المُنشأ بواسطة الذكاء الاصطناعي المنتج لمنصتنا، مع مراعاة شروط الترخيص الممنوحة لـ DAO.
+
+4. **الإشعار بالانتهاك**: إذا كنت تعتقد أن المحتوى المُنشأ بواسطة الذكاء الاصطناعي على منصتنا ينتهك حقوقك، يرجى الاتصال بنا على contact@cosmicrafts.com مع تفاصيل المطالبة.
+
+---
+
+*آخر تحديث: 4 مارس 2025*
+
+### المحتوى الخاص بك
+من خلال تقديم محتوى إلى منصتنا، فإنك تمنحنا ترخيصاً عالمياً وغير حصري وخالياً من حقوق الملكية لاستخدام ونسخ وتعديل وتكييف ونشر وترجمة وإنشاء أعمال مشتقة من وتوزيع وعرض هذا المحتوى في أي وسيط.
+
+### انتهاك حقوق النشر
+إذا كنت تعتقد أن عملك قد تم نسخه بطريقة تشكل انتهاكاً لحقوق النشر، يرجى تزويدنا بالمعلومات التالية:
+- توقيع مادي أو إلكتروني لمالك حقوق النشر
+- تحديد العمل المحمي بحقوق النشر المدعى انتهاكه
+- تحديد المادة التي تدعي أنها مخالفة
+- معلومات كافية بشكل معقول للسماح لنا بالاتصال بك
+- بيان بأنك تعتقد بحسن نية أن الاستخدام المتنازع عليه غير مصرح به من قبل مالك حقوق النشر
+- بيان، تحت طائلة عقوبة الحنث باليمين، بأن المعلومات المذكورة أعلاه دقيقة
+
+## الخصوصية
+خصوصيتك مهمة بالنسبة لنا. توضح **سياسة الخصوصية** الخاصة بنا كيفية جمع واستخدام وحماية معلوماتك الشخصية. باستخدام خدماتنا، فإنك توافق على ممارسات البيانات الموضحة في [سياسة الخصوصية](/privacy) الخاصة بنا.
+
+## خدمات الطرف الثالث ومتاجر التطبيقات
+
+### شروط خاصة بالمنصات
+عند الوصول إلى خدماتنا من خلال منصة طرف ثالث أو متجر تطبيقات (بما في ذلك على سبيل المثال لا الحصر متجر Google Play وApple App Store وEpic Games Store وCrazy Games)، فإنك تخضع أيضاً لشروط وأحكام وسياسات تلك المنصة.
+
+### الامتثال لمتاجر التطبيقات
+- **متجر Google Play**: تتوافق تطبيقاتنا مع اتفاقية توزيع مطوري Google Play وسياسات برنامج مطوري Google Play.
+- **متجر Apple App Store**: تتوافق تطبيقاتنا مع إرشادات مراجعة App Store واتفاقية ترخيص برنامج مطوري Apple.
+- **متجر Epic Games**: تتوافق تطبيقاتنا مع اتفاقية توزيع متجر Epic Games.
+- **Crazy Games**: تتوافق تطبيقاتنا مع اتفاقية نشر Crazy Games.
+
+### معالجات الدفع من الطرف الثالث
+تخضع المدفوعات التي تتم معالجتها من خلال متاجر التطبيقات أو معالجات الدفع من الطرف الثالث لشروط الخدمة الخاصة بهم. نحن لسنا مسؤولين عن إجراءات أو سياسات هذه الأطراف الثالثة.
+
+## إقرار المستخدم بالمخاطر
+
+باستخدام Cosmicrafts، فإنك تقر صراحةً وتقبل ما يلي:
+
+1. **مخاطر سلسلة الكتل**: تنطوي جميع شبكات سلسلة الكتل على مخاطر متأصلة، بما في ذلك على سبيل المثال لا الحصر ثغرات العقود الذكية، هجمات الإجماع، هجمات الحوكمة، والمخاطر التكنولوجية الأخرى التي قد تؤدي إلى فقدان أصولك الرقمية.
+
+2. **المخاطر المالية**: تخضع الأصول الرقمية والعملات المشفرة وNFTs لتقلبات شديدة، وعدم السيولة، واحتمال فقدان القيمة، بما في ذلك الخسارة الكاملة. يجب ألا تستثمر أبداً أموالاً لا يمكنك تحمل خسارتها.
+
+3. **لا تعويض**: في حالة فقدان الوصول إلى محفظتك، سرقة أصولك الرقمية، أو أحداث سلبية أخرى تتعلق بالأصول الرقمية وأنشطة سلسلة الكتل، ليس لديك أي حق في الرجوع على Cosmicrafts أو World of Unreal, LLC. لا يمكننا ولن:
+   - استرداد أو استعادة الأصول المفقودة
+   - عكس أو إلغاء أو تعديل معاملات سلسلة الكتل
+   - تعويضك عن الخسائر بسبب تقلبات السوق أو عمليات الاحتيال أو خروقات الأمان
+   - المساعدة في استعادة كلمة المرور للمحافظ غير الوصائية
+
+4. **عدم اليقين التنظيمي**: أنت تفهم أن القوانين واللوائح والمعاملات الضريبية المطبقة على تقنيات سلسلة الكتل والعملات المشفرة والأصول الرقمية غير مؤكدة ومتطورة وقد تختلف من ولاية قضائية إلى أخرى. قد تؤثر هذه التغيرات التنظيمية سلباً على قيمة أو فائدة أصولك الرقمية أو وضعها القانوني.
+
+5. **لا نصائح مالية**: لا شيء في منصتنا أو مواد التسويق أو الاتصالات يشكل نصيحة مالية أو استثمارية أو قانونية أو ضريبية. أي قرارات استثمارية تتخذها تكون على مسؤوليتك وتقديرك الخاص.
+
+6. **قبول المخاطر إلزامي**: باستخدام أي من الميزات اللامركزية أو القائمة على سلسلة الكتل في منصتنا، فإنك تقر صراحةً وتقبل جميع المخاطر المرتبطة بتقنية سلسلة الكتل والأصول الرقمية. إذا كنت لا توافق على هذه المخاطر أو لا تقبلها، فيجب عليك عدم استخدام ميزات سلسلة الكتل في منصتنا.
+
+## مخاطر السوق ومسؤولية المنصة
+
+### دور مزود الخدمة
+تعمل Cosmicrafts فقط كمزود خدمة تقنية يقدم منصة حيث يمكن للمستخدمين التفاعل مع شبكات سلسلة الكتل والمشاركة في معاملات الأصول الرقمية. نحن نوضح صراحةً أن:
+
+1. **ليست مؤسسة مالية**: Cosmicrafts ليست بنكاً أو وسيطاً أو تاجراً أو مستشاراً استثمارياً أو مؤسسة مالية أو بورصة عملات مشفرة. نحن لا نقدم نصائح مالية أو استثمارية أو قانونية أو ضريبية.
+
+2. **منصة محايدة**: نحن نقدم فقط بنية تحتية تقنية محايدة. نحن لا نتحكم في أو نؤثر على أو نتدخل في الأسواق أو المعاملات أو قيم أي أصول رقمية يتم تداولها أو إنشاؤها أو تبادلها من خلال منصتنا.
+
+3. **لا حفظ**: نحن لا نحتفظ بأموال المستخدمين أو الأصول الرقمية، ولا نملك القدرة على عكس المعاملات أو استرداد الأصول المفقودة أو تعديل بيانات سلسلة الكتل.
+
+4. **لا تحكم في السوق**: ليس لدينا أي سيطرة على قيمة أو قابلية التداول أو سيولة أي NFTs أو رموز أو أصول رقمية يتم عرضها أو إنشاؤها أو بيعها أو شراؤها من خلال منصتنا.
+
+### مخاطر السوق وعدم مسؤولية المنصة
+
+باستخدام منصتنا، فإنك تقر صراحةً وتوافق على أن:
+
+1. **تقلب الأسعار**: أسواق الأصول الرقمية شديدة التقلب، ويمكن أن يتغير سعر NFTs والرموز والأصول الرقمية الأخرى بشكل كبير في فترات زمنية قصيرة، مما قد يؤدي إلى خسارة جزئية أو كلية للقيمة.
+
+2. **لا مسؤولية عن أحداث السوق**: لن تكون Cosmicrafts وWorld of Unreal, LLC مسؤولة، تحت أي ظرف من الظروف، عن:
+   - تقلبات الأسعار، انهيارات السوق، أو فقدان القيمة في أي أصول رقمية
+   - عمليات "السحب البساطي"، المشاريع المهجورة، أو تغييرات فريق المطورين
+   - التغيرات في اهتمام المجتمع أو الطلب على NFTs أو الرموز المحددة
+   - فشل الأسواق أو البورصات أو المنصات من الطرف الثالث
+   - التغيرات في المشاعر الفنية أو جامعي التحف تجاه أصول رقمية محددة
+   - إطلاق الرموز الفاشلة أو المتأخرة أو ذات الأداء الضعيف أو عمليات سك NFT
+   - القضايا المتعلقة بتصميم اقتصاديات الرموز
+   - التغيرات في القيمة المتصورة للمجموعات أو الأصول الرقمية
+
+3. **المضاربة على مسؤوليتك الخاصة**: يجب اعتبار جميع مشتريات الأصول الرقمية، بما في ذلك NFTs والرموز، مضاربة عالية المخاطر. يجب ألا تنفق أبداً أموالاً على الأصول الرقمية لا يمكنك تحمل خسارتها بالكامل.
+
+4. **الأسواق الثانوية**: نحن لا نقدم أي تعهدات أو ضمانات حول وجود أو توفر أسواق ثانوية للأصول الرقمية. القدرة على إعادة بيع أو تداول أي أصل رقمي غير مؤكدة وتعتمد على عوامل خارجة تماماً عن سيطرتنا.
+
+5. **لا عوائد مضمونة**: نحن لا نضمن أبداً الأرباح أو العوائد أو أن أي NFT أو رمز سيحافظ على قيمته أو يزيد فيها. يجب ألا يتم تفسير أي بيانات تتعلق بالقيمة المحتملة للأصول الرقمية على أنها وعد بعوائد مالية.
+
+6. **لا تعهدات حول الفنانين أو المشاريع**: في حين أننا قد نوفر منصة لمختلف الفنانين أو المشاريع أو المطورين، نحن لا نقدم أي تعهدات أو ضمانات حول موثوقيتهم أو قدرتهم أو احتمالية نجاح أو اكتمال المشروع.
+
+### تحمل المستخدم للمخاطر
+
+باستخدام منصتنا:
+
+1. **تحمل المخاطر الكامل**: أنت تقر بأنك تتحمل المسؤولية والمخاطر الكاملة عن جميع قراراتك لشراء أو الاحتفاظ أو تداول أو بيع الأصول الرقمية.
+
+2. **التقييم المستقل**: أنت تؤكد أن لديك المعرفة والخبرة والقدرة المالية لاتخاذ قرارات شراء وتداول مستقلة وتقييم المخاطر المتضمنة.
+
+3. **عدم الاعتماد**: أنت لم تعتمد على أي تعهدات قدمتها Cosmicrafts فيما يتعلق بالقيمة المستقبلية أو الفائدة أو قابلية التسويق لأي أصول رقمية.
+
+4. **المنصة غير مسؤولة**: أنت توافق على أن Cosmicrafts وWorld of Unreal, LLC لن تكونا مسؤولتين عن أي خسائر قائمة على السوق قد تتكبدها من خلال استخدامك لخدماتنا أو مشاركتك في سوق الأصول الرقمية.
+
+## الملكية الفكرية
+
+### محتوانا
+جميع المحتويات الموجودة على المنصة، بما في ذلك على سبيل المثال لا الحصر النصوص والرسومات والشعارات والأيقونات والصور ومقاطع الصوت والتنزيلات الرقمية وتجميعات البيانات والبرامج، هي ملك لشركة World of Unreal, LLC (التي تعمل باسم "Cosmicrafts") أو موردي المحتوى التابعين لها وهي محمية بموجب قوانين حقوق النشر الدولية.
+
+### ملكية الملكية الفكرية وترخيص DAO
+تحتفظ World of Unreal, LLC بالملكية القانونية الكاملة لجميع حقوق النشر والعلامات التجارية وبراءات الاختراع وحقوق الملكية الفكرية الأخرى المرتبطة بـ Cosmicrafts. لتسهيل التطوير والحوكمة اللامركزية، منحت World of Unreal, LLC ترخيصاً تشغيلياً محدداً لـ Cosmicrafts DAO.
+
+يسمح هذا الترخيص لـ DAO باستخدام وتطوير وتوزيع علامة ومنصة Cosmicrafts وفقاً لقرارات الحوكمة، في حين تحتفظ World of Unreal, LLC بالملكية القانونية النهائية. يوفر هذا الهيكل حماية قانونية تقليدية للملكية الفكرية لـ Cosmicrafts مع تمكين العمليات اللامركزية.
+
+للحصول على تفاصيل كاملة عن هذا الترتيب للترخيص، يرجى الرجوع إلى وثيقة الإشعارات القانونية.
+
+### الفن الرقمي المُنشأ بواسطة الذكاء الاصطناعي
+
+يستخدم Cosmicrafts أدوات وخدمات الذكاء الاصطناعي لإنشاء فن رقمي لمنصتنا:
+
+1. **التعبير الإبداعي**: الفن المُنشأ بواسطة الذكاء الاصطناعي لدينا مقصود به أن يكون تعبيراً إبداعياً أصلياً داخل عالمنا الفريد، وليس نسخاً من ملكيات فكرية أخرى. أي تشابه مع الأعمال الموجودة هو أمر عرضي أو يمثل تأثيرات فنية عامة.
+
+2. **التراخيص والامتثال**: نستخدم أدوات الذكاء الاصطناعي بموجب اتفاقيات ترخيص تجارية مناسبة مع مزودي الخدمة. نحن نسعى جاهدين للامتثال لجميع القوانين واللوائح المعمول بها المتعلقة باستخدام تقنية الذكاء الاصطناعي.
+
+3. **حقوق الملكية**: تحتفظ World of Unreal, LLC بجميع حقوق الملكية الفكرية للمحتوى المُنشأ بواسطة الذكاء الاصطناعي المنتج لمنصتنا، مع مراعاة شروط الترخيص الممنوحة لـ DAO.
+
+4. **الإشعار بالانتهاك**: إذا كنت تعتقد أن المحتوى المُنشأ بواسطة الذكاء الاصطناعي على منصتنا ينتهك حقوقك، يرجى الاتصال بنا على contact@cosmicrafts.com مع تفاصيل المطالبة.
+
+---
+
+*آخر تحديث: 4 مارس 2025* 

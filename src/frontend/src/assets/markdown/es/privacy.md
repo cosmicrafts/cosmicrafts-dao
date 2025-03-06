@@ -10,7 +10,7 @@ Al acceder o utilizar nuestros Servicios, aceptas la recopilación y el uso de i
 
 ## Fecha de Vigencia
 
-Esta Política de Privacidad entra en vigor a partir del 15 de abril de 2025.
+Esta Política de Privacidad entra en vigor a partir del 4 de marzo de 2025.
 
 ## Información que Recopilamos
 
@@ -212,4 +212,4 @@ Si tienes alguna pregunta sobre esta Política de Privacidad, contáctanos en:
 
 Para asuntos que requieran una dirección física para cumplimiento regulatorio, por favor contáctanos primero por correo electrónico.
 
-*Última actualización: 15 de abril de 2025* 
+*Última actualización: 4 de marzo de 2025* 

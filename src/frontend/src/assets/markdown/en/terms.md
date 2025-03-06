@@ -8,7 +8,7 @@ Welcome to Cosmicrafts. These Terms of Service ("Terms") govern your access to a
 By accessing or using our Services, you agree to be bound by these Terms. If you disagree with any part of the Terms, you do not have permission to access the Services.
 
 ## Effective Date
-These Terms are effective as of April 15, 2025.
+These Terms are effective as of March 4, 2025.
 
 ## Definitions
 - **Platform**: Refers to the Cosmicrafts universe, including all websites, games, applications, and services provided by Cosmicrafts.
@@ -468,4 +468,4 @@ For matters requiring a physical address for regulatory compliance, please conta
 
 ---
 
-*Last updated: April 15, 2025* 
+*Last updated: March 4, 2025* 

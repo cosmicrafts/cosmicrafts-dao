@@ -189,7 +189,7 @@ Reconocemos que los modelos de IA están entrenados en diversos conjuntos de dat
 
 Si crees que el contenido generado por IA en nuestra plataforma infringe tus derechos de propiedad intelectual:
 
-1. **Contáctanos Primero**: Por favor, contáctanos en ip-concerns@cosmicrafts.com con detalles del contenido presuntamente infractor y tus derechos de propiedad intelectual.
+1. **Contáctanos Primero**: Por favor, contáctanos en contact@cosmicrafts.comcon detalles del contenido presuntamente infractor y tus derechos de propiedad intelectual.
 2. Revisaremos rápidamente tu reclamación y, si es apropiado, eliminaremos o modificaremos el contenido en cuestión.
 3. En la mayoría de los casos, intentaremos resolver las preocupaciones directamente, ya que respetamos los derechos de los propietarios de propiedad intelectual.
 
@@ -213,7 +213,7 @@ Para cualquier consulta legal sobre software de terceros, licencias u otros asun
 
 ## Última Actualización
 
-Este documento fue actualizado por última vez el 15 de abril de 2025.
+Este documento fue actualizado por última vez el 4 de marzo de 2025.
 
 ## Leyes de Control de Exportaciones
 

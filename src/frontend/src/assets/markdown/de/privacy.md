@@ -1,264 +1,252 @@
-# Privacy Policy
+# Datenschutzrichtlinie
 
 [[toc:2-3]]
 
-## Introduction
+## Einleitung
 
-At Cosmicrafts, we are committed to protecting your privacy and providing a secure gaming experience. This Privacy Policy explains how we collect, use, store, and protect your personal information when you use our website, games, applications, and services (collectively referred to as "Services").
+Bei Cosmicrafts setzen wir uns für den Schutz Ihrer Privatsphäre und die Bereitstellung einer sicheren Spielerfahrung ein. Diese Datenschutzrichtlinie erläutert, wie wir Ihre personenbezogenen Daten erheben, verwenden, speichern und schützen, wenn Sie unsere Website, Spiele, Anwendungen und Dienste (zusammenfassend als "Dienste" bezeichnet) nutzen.
 
-By accessing or using our Services, you agree to the collection and use of information in accordance with this Privacy Policy. If you do not agree with our policies and practices, please do not use our Services.
+Durch den Zugriff auf oder die Nutzung unserer Dienste stimmen Sie der Erhebung und Verwendung von Informationen gemäß dieser Datenschutzrichtlinie zu. Wenn Sie mit unseren Richtlinien und Praktiken nicht einverstanden sind, nutzen Sie bitte unsere Dienste nicht.
 
-## Effective Date
+## Datum des Inkrafttretens
 
-This Privacy Policy is effective as of April 15, 2025.
+Diese Datenschutzrichtlinie tritt am 4. Marz 2025 in Kraft.
 
-## Information We Collect
+## Informationen, die wir sammeln
 
-Cosmicrafts is committed to data minimization and user privacy. We collect only the minimal information necessary to provide our services:
+Cosmicrafts ist der Datenminimierung und dem Datenschutz der Nutzer verpflichtet. Wir erheben nur die minimal notwendigen Informationen, um unsere Dienste bereitzustellen:
 
-### Limited Information Collection
+### Begrenzte Informationssammlung
 
-- **Regional Preferences**: We may collect information about your language and region preferences to provide localized content. This information is optional and can be managed in your settings.
+- **Regionale Präferenzen**: Wir können Informationen über Ihre Sprach- und Regionspräferenzen sammeln, um lokalisierte Inhalte bereitzustellen. Diese Informationen sind optional und können in Ihren Einstellungen verwaltet werden.
 
-- **Anonymous Usage Data**: We may collect anonymous, aggregated usage statistics to help us improve our service. This data cannot be used to identify you personally.
+- **Anonyme Nutzungsdaten**: Wir können anonyme, aggregierte Nutzungsstatistiken sammeln, um unseren Dienst zu verbessern. Diese Daten können nicht zur persönlichen Identifizierung verwendet werden.
 
-- **Account Registration Information**: When you create an account, we collect:
-  - **Username**: Used to identify you in the platform (limited to 12 characters)
-  - **Avatar Selection**: Your chosen visual representation in the platform
-  - **Referral Code**: Optional information if you were referred by another user
-  - **Language Preference**: Your preferred language for the platform interface
+- **Kontoanmeldungsinformationen**: Wenn Sie ein Konto erstellen, sammeln wir:
+  - **Benutzername**: Wird verwendet, um Sie auf der Plattform zu identifizieren (auf 12 Zeichen begrenzt)
+  - **Avatar-Auswahl**: Ihre gewählte visuelle Darstellung auf der Plattform
+  - **Empfehlungscode**: Optionale Informationen, wenn Sie von einem anderen Benutzer empfohlen wurden
+  - **Sprachpräferenz**: Ihre bevorzugte Sprache für die Plattformoberfläche
 
-No personal information such as names, addresses, or phone numbers are collected unless explicitly provided by you for specific purposes (such as 2FA).
+Es werden keine persönlichen Informationen wie Namen, Adressen oder Telefonnummern gesammelt, es sei denn, diese werden von Ihnen ausdrücklich für bestimmte Zwecke (wie 2FA) angegeben.
 
-### Web3 and On-Chain Data Storage
+### Web3 und On-Chain-Datenspeicherung
 
-As a Web3 platform, Cosmicrafts operates differently from traditional applications regarding data storage:
+Als Web3-Plattform funktioniert Cosmicrafts in Bezug auf die Datenspeicherung anders als herkömmliche Anwendungen:
 
-- **Blockchain Databases**: All of our databases are stored on blockchain networks, which means information is typically public and transparent by design.
+- **Blockchain-Datenbanken**: Alle unsere Datenbanken werden auf Blockchain-Netzwerken gespeichert, was bedeutet, dass Informationen in der Regel standardmäßig öffentlich und transparent sind.
 
-- **Public By Default**: Any information you choose to share or store through our platform may be visible on public blockchains. We do not encrypt or hide this data by default.
+- **Standardmäßig öffentlich**: Alle Informationen, die Sie über unsere Plattform teilen oder speichern, können auf öffentlichen Blockchains sichtbar sein. Wir verschlüsseln oder verbergen diese Daten standardmäßig nicht.
 
-- **User Responsibility**: You are responsible for any information you choose to share through our platform. Before sharing or storing information using our Services, you should carefully consider the public nature of blockchain technology.
+- **Benutzerverantwortung**: Sie sind für alle Informationen verantwortlich, die Sie über unsere Plattform teilen. Bevor Sie Informationen über unsere Dienste teilen oder speichern, sollten Sie die öffentliche Natur der Blockchain-Technologie sorgfältig bedenken.
 
-- **No Private Storage**: Unlike traditional web applications, we generally do not maintain private, centralized databases for user information. Most data exists on decentralized networks outside our direct control.
+- **Keine private Speicherung**: Im Gegensatz zu herkömmlichen Webanwendungen unterhalten wir in der Regel keine privaten, zentralisierten Datenbanken für Benutzerinformationen. Die meisten Daten existieren in dezentralen Netzwerken außerhalb unserer direkten Kontrolle.
 
-- **Limited Privacy Controls**: While we may offer some privacy settings, these have technical limitations based on blockchain technology. Information marked as "private" may still be visible to blockchain validators or through blockchain explorers.
+- **Begrenzte Datenschutzkontrollen**: Obwohl wir einige Datenschutzeinstellungen anbieten können, haben diese aufgrund der Blockchain-Technologie technische Einschränkungen. Informationen, die als "privat" gekennzeichnet sind, können für Blockchain-Validatoren oder über Blockchain-Explorer dennoch sichtbar sein.
 
-### Blockchain Wallet Information
+### Blockchain-Wallet-Informationen
 
-If you choose to connect a blockchain wallet to our platform:
+Wenn Sie sich entscheiden, eine Blockchain-Wallet mit unserer Plattform zu verbinden:
 
-- **We never store your private keys or seed phrases on our servers**. Your keys are stored locally on your device.
-- **Keys are stored as JSON in your browser's local storage**. These keys can be technically encrypted and decrypted automatically, though we do not currently implement password-based encryption for this data.
-- **Your keys never leave your device**. When you connect wallets like MetaMask, Phantom, Plug, or Internet Identity, we only receive and process the public wallet address to display your on-chain assets.
-- **Authentication happens through signatures**. Rather than requesting your private keys, we ask your wallet to sign a unique message that proves your ownership without exposing sensitive information.
-- **All blockchain transactions are processed on-chain** and are not stored on our servers.
-- **Future plans for encryption**: We plan to add password-based encryption for locally stored wallet information in future updates, further enhancing security of your wallet data.
+- **Wir speichern niemals Ihre privaten Schlüssel oder Seed-Phrasen auf unseren Servern**. Ihre Schlüssel werden lokal auf Ihrem Gerät gespeichert.
+- **Schlüssel werden als JSON im lokalen Speicher Ihres Browsers gespeichert**. Diese Schlüssel können technisch verschlüsselt und automatisch entschlüsselt werden, obwohl wir derzeit keine passwortbasierte Verschlüsselung für diese Daten implementieren.
+- **Ihre Schlüssel verlassen niemals Ihr Gerät**. Wenn Sie Wallets wie MetaMask, Phantom, Plug oder Internet Identity verbinden, erhalten und verarbeiten wir nur die öffentliche Wallet-Adresse, um Ihre On-Chain-Assets anzuzeigen.
+- **Authentifizierung erfolgt durch Signaturen**. Anstatt Ihre privaten Schlüssel anzufordern, bitten wir Ihre Wallet, eine eindeutige Nachricht zu signieren, die Ihren Besitz beweist, ohne sensible Informationen preiszugeben.
+- **Alle Blockchain-Transaktionen werden on-chain verarbeitet** und nicht auf unseren Servern gespeichert.
+- **Zukünftige Pläne für Verschlüsselung**: Wir planen, in zukünftigen Updates eine passwortbasierte Verschlüsselung für lokal gespeicherte Wallet-Informationen hinzuzufügen, um die Sicherheit Ihrer Wallet-Daten weiter zu verbessern.
 
-### Information Collected Automatically
+### Automatisch gesammelte Informationen
 
-We may collect very limited technical information through cookies and similar technologies:
-- Browser type and version (to ensure compatibility)
-- Approximate location based on IP address (for regional content delivery only)
-- Basic device information (to optimize display)
+Wir können sehr begrenzte technische Informationen durch Cookies und ähnliche Technologien sammeln:
+- Browser-Typ und -Version (um Kompatibilität zu gewährleisten)
+- Ungefährer Standort basierend auf IP-Adresse (nur für regionale Inhaltsbereitstellung)
+- Grundlegende Geräteinformationen (zur Optimierung der Anzeige)
 
-You can control or disable cookies through your browser settings. We do not use tracking cookies for advertising purposes.
+Sie können Cookies über Ihre Browser-Einstellungen kontrollieren oder deaktivieren. Wir verwenden keine Tracking-Cookies für Werbezwecke.
 
-## How We Use Your Information
+## Wie wir Ihre Informationen verwenden
 
-We use the limited information we collect solely for the following purposes:
+Wir verwenden die begrenzten Informationen, die wir sammeln, ausschließlich für die folgenden Zwecke:
 
-### Provide and Improve Services
-- Deliver and maintain our Services
-- Enable basic features such as language preferences
-- Improve user experience based on anonymous usage patterns
+### Bereitstellung und Verbesserung der Dienste
+- Bereitstellung und Wartung unserer Dienste
+- Aktivierung grundlegender Funktionen wie Sprachpräferenzen
+- Verbesserung der Benutzererfahrung basierend auf anonymen Nutzungsmustern
 
-### Security and Protection
-- Protect against unauthorized access to user accounts
-- Debug to identify and repair errors
+### Sicherheit und Schutz
+- Schutz vor unbefugtem Zugriff auf Benutzerkonten
+- Fehlersuche zur Identifizierung und Behebung von Fehlern
 
-### Contact Information
+### Kontaktinformationen
 
-If you have any questions about these Terms, please contact us at:
+Wenn Sie Fragen zu diesen Nutzungsbedingungen haben, kontaktieren Sie uns bitte unter:
 
-**Email**: contact@cosmicrafts.com  
+**E-Mail**: contact@cosmicrafts.com  
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+Für Angelegenheiten, die aus regulatorischen Gründen eine physische Adresse erfordern, kontaktieren Sie uns bitte zuerst per E-Mail.
 
-## Data Sharing and Disclosure
+## Datenweitergabe und Offenlegung
 
-Given our minimal data collection practices, we have very limited data to share. However, in certain circumstances, we may share the limited information we have:
+Angesichts unserer minimalen Datenerhebungspraktiken haben wir sehr begrenzte Daten zu teilen. In bestimmten Fällen können wir jedoch die begrenzten Informationen, die wir haben, teilen:
 
-### Essential Service Providers
+### Wesentliche Dienstanbieter
 
-We may share basic technical information with a few carefully selected service providers who help us with:
-- Website hosting and infrastructure
-- Analytics (in anonymized form)
-- Customer support systems
+Wir können grundlegende technische Informationen mit einigen sorgfältig ausgewählten Dienstanbietern teilen, die uns bei Folgendem helfen:
+- Website-Hosting und Infrastruktur
+- Analytik (in anonymisierter Form)
+- Kundensupport-Systeme
 
-These providers access only the minimum information needed to perform their functions and are bound by confidentiality obligations.
+Diese Anbieter greifen nur auf die Mindestinformationen zu, die zur Erfüllung ihrer Funktionen erforderlich sind, und sind an Vertraulichkeitsverpflichtungen gebunden.
 
-### Legal Requirements
+### Gesetzliche Anforderungen
 
-We may disclose information if required to do so by law or if we believe in good faith that such action is necessary to:
-- Comply with legal obligations
-- Protect and defend our rights or property
-- Prevent or investigate possible wrongdoing
-- Protect the personal safety of users or the public
+Wir können Informationen offenlegen, wenn dies gesetzlich vorgeschrieben ist oder wenn wir in gutem Glauben der Ansicht sind, dass eine solche Maßnahme notwendig ist, um:
+- Gesetzlichen Verpflichtungen nachzukommen
+- Unsere Rechte oder unser Eigentum zu schützen und zu verteidigen
+- Mögliches Fehlverhalten zu verhindern oder zu untersuchen
+- Die persönliche Sicherheit von Benutzern oder der Öffentlichkeit zu schützen
 
-## Your Choices and Rights
+## Ihre Wahlmöglichkeiten und Rechte
 
-### Account Information
+### Kontoinformationen
 
-If you have created an account, you can review and update your account information by logging into your account settings.
+Wenn Sie ein Konto erstellt haben, können Sie Ihre Kontoinformationen überprüfen und aktualisieren, indem Sie sich in Ihre Kontoeinstellungen einloggen.
 
-### Account Deletion
+### Kontolöschung
 
-You can request to delete your account at any time:
-- Through the Web App settings
-- By sending an email to contact@cosmicrafts.com
+Sie können jederzeit die Löschung Ihres Kontos beantragen:
+- Über die Web-App-Einstellungen
+- Durch Senden einer E-Mail an contact@cosmicrafts.com
 
-When you delete your account:
-- We will initiate a 30-day delay period in case you wish to recover your account
-- During this period, your account will be deactivated but not permanently deleted
-- If you change your mind, you can reactivate your account by logging in
-- After the 30-day period, we will permanently delete your account information from our systems
+Wenn Sie Ihr Konto löschen:
+- Wir leiten eine 30-tägige Verzögerungsphase ein, falls Sie Ihr Konto wiederherstellen möchten
+- Während dieser Zeit wird Ihr Konto deaktiviert, aber nicht dauerhaft gelöscht
+- Wenn Sie Ihre Meinung ändern, können Sie Ihr Konto durch Anmeldung reaktivieren
+- Nach Ablauf der 30-Tage-Frist werden wir Ihre Kontoinformationen dauerhaft aus unseren Systemen löschen
 
-**Important Note about On-Chain Data**: While we can delete information we control directly, data that has been recorded on public blockchains cannot be deleted or modified due to the immutable nature of blockchain technology. This includes transaction history, NFT ownership records, and any other data that has been committed to a blockchain.
+**Wichtiger Hinweis zu On-Chain-Daten**: Während wir Informationen löschen können, die wir direkt kontrollieren, können Daten, die auf öffentlichen Blockchains aufgezeichnet wurden, aufgrund der unveränderlichen Natur der Blockchain-Technologie nicht gelöscht oder geändert werden. Dazu gehören Transaktionshistorie, NFT-Eigentumsaufzeichnungen und alle anderen Daten, die in eine Blockchain eingetragen wurden.
 
-### Cookie Preferences
+### Cookie-Präferenzen
 
-Most web browsers allow you to control cookies through their settings. You may set your browser to refuse all or some cookies or to alert you when cookies are being sent.
+Die meisten Webbrowser ermöglichen es Ihnen, Cookies über ihre Einstellungen zu kontrollieren. Sie können Ihren Browser so einstellen, dass er alle oder einige Cookies ablehnt oder Sie benachrichtigt, wenn Cookies gesendet werden.
 
-### Communications
+### Kommunikation
 
-You can opt out of receiving promotional communications from us by following the instructions in those communications.
+Sie können den Erhalt von Werbenachrichten von uns abbestellen, indem Sie den Anweisungen in diesen Mitteilungen folgen.
 
-### Your Privacy Rights
+### Ihre Datenschutzrechte
 
-Depending on your location, you may have certain rights regarding your personal information, such as:
-- The right to access information we have about you
-- The right to request deletion of your information
-- The right to object to the processing of your information
+Je nach Ihrem Standort haben Sie möglicherweise bestimmte Rechte in Bezug auf Ihre personenbezogenen Daten, wie zum Beispiel:
+- Das Recht auf Zugang zu Informationen, die wir über Sie haben
+- Das Recht, die Löschung Ihrer Informationen zu beantragen
+- Das Recht, der Verarbeitung Ihrer Informationen zu widersprechen
 
-To exercise these rights, please contact us at contact@cosmicrafts.com.
+Um diese Rechte auszuüben, kontaktieren Sie uns bitte unter contact@cosmicrafts.com.
 
-## Data Security
+## Datensicherheit
 
-We implement appropriate technical and organizational measures to protect the limited information we collect. However, no method of transmission over the Internet or electronic storage is 100% secure, so we cannot guarantee absolute security.
+Wir implementieren angemessene technische und organisatorische Maßnahmen zum Schutz der begrenzten Informationen, die wir sammeln. Keine Methode der Übertragung über das Internet oder der elektronischen Speicherung ist jedoch zu 100% sicher, daher können wir keine absolute Sicherheit garantieren.
 
-## Children's Privacy
+## Datenschutz für Kinder
 
-Our Services are not directed to children under 13. We do not knowingly collect personal information from children under 13. If we become aware that a child under 13 has provided us with personal information, we will take steps to delete such information.
+Unsere Dienste richten sich nicht an Kinder unter 13 Jahren. Wir sammeln wissentlich keine personenbezogenen Daten von Kindern unter 13 Jahren. Wenn wir erfahren, dass ein Kind unter 13 Jahren uns personenbezogene Daten zur Verfügung gestellt hat, werden wir Maßnahmen ergreifen, um diese Informationen zu löschen.
 
-### Minors and Cryptocurrency Usage
+### Minderjährige und Kryptowährungsnutzung
 
-While our games do not contain adult content such as nudity or graphic violence, and are generally suitable for users aged 13+, we strongly emphasize the following:
+Obwohl unsere Spiele keine Inhalte für Erwachsene wie Nacktheit oder grafische Gewalt enthalten und generell für Benutzer ab 13 Jahren geeignet sind, betonen wir Folgendes:
 
-- **Parental Supervision Required**: If you are under 18 or the legal age of majority in your country, you should use our Services only with the involvement and supervision of a parent or guardian, particularly when engaging with cryptocurrency features.
+- **Elterliche Aufsicht erforderlich**: Wenn Sie unter 18 Jahren oder dem gesetzlichen Volljährigkeitsalter in Ihrem Land sind, sollten Sie unsere Dienste nur mit der Beteiligung und Aufsicht eines Elternteils oder Erziehungsberechtigten nutzen, insbesondere bei der Nutzung von Kryptowährungsfunktionen.
 
-- **Irreversible Transactions**: Cryptocurrency transactions are almost always irreversible. Once completed, these transactions typically cannot be undone or refunded. This makes parental supervision particularly important.
+- **Unumkehrbare Transaktionen**: Kryptowährungstransaktionen sind fast immer unumkehrbar. Sobald sie abgeschlossen sind, können diese Transaktionen in der Regel nicht rückgängig gemacht oder erstattet werden. Dies macht die elterliche Aufsicht besonders wichtig.
 
-- **Regulatory Variations**: Cryptocurrency regulations vary significantly between countries. What may be legal or allowed in one jurisdiction may be restricted or prohibited in another. Parents and guardians should familiarize themselves with local regulations before allowing minors to engage with cryptocurrency features.
+- **Regulatorische Unterschiede**: Die Vorschriften für Kryptowährungen variieren erheblich zwischen den Ländern. Was in einer Rechtsordnung legal oder erlaubt sein mag, kann in einer anderen eingeschränkt oder verboten sein. Eltern und Erziehungsberechtigte sollten sich mit den lokalen Vorschriften vertraut machen, bevor sie Minderjährigen die Nutzung von Kryptowährungsfunktionen erlauben.
 
-- **Educational Approach**: We encourage parents to use our platform as an opportunity to educate minors about digital assets, blockchain technology, and responsible financial habits in a supervised environment.
+- **Pädagogischer Ansatz**: Wir ermutigen Eltern, unsere Plattform als Gelegenheit zu nutzen, um Minderjährige in einer beaufsichtigten Umgebung über digitale Vermögenswerte, Blockchain-Technologie und verantwortungsvolle finanzielle Gewohnheiten aufzuklären.
 
-If you are a parent or guardian and discover that your child has created an account without your consent, please contact us immediately at contact@cosmicrafts.com.
+Wenn Sie ein Elternteil oder Erziehungsberechtigter sind und feststellen, dass Ihr Kind ohne Ihre Zustimmung ein Konto erstellt hat, kontaktieren Sie uns bitte umgehend unter contact@cosmicrafts.com.
 
-## Changes to This Privacy Policy
+## Änderungen an dieser Datenschutzrichtlinie
 
-We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
+Wir können diese Datenschutzrichtlinie von Zeit zu Zeit aktualisieren. Die aktualisierte Version wird durch ein aktualisiertes "Datum des Inkrafttretens" gekennzeichnet, und die aktualisierte Version wird wirksam, sobald sie zugänglich ist. Wir empfehlen Ihnen, diese Datenschutzrichtlinie regelmäßig zu überprüfen, um darüber informiert zu sein, wie wir Ihre Informationen schützen.
 
-## Contact Information
+## Kontaktinformationen
 
-If you have any questions about this Privacy Policy, please contact us at:
+Wenn Sie Fragen zu dieser Datenschutzrichtlinie haben, kontaktieren Sie uns bitte unter:
 
-**Email**: contact@cosmicrafts.com
+**E-Mail**: contact@cosmicrafts.com
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+Für Angelegenheiten, die aus regulatorischen Gründen eine physische Adresse erfordern, kontaktieren Sie uns bitte zuerst per E-Mail.
 
-## International Data Transfers
+## Internationale Datenübertragungen
 
-Given our minimal data collection practices, there is very limited data that might be transferred internationally. The anonymous usage statistics we collect may be processed on servers located outside your country of residence. By using our Services, you consent to this processing.
+Angesichts unserer minimalen Datenerhebungspraktiken gibt es sehr begrenzte Daten, die international übertragen werden könnten. Die anonymen Nutzungsstatistiken, die wir sammeln, können auf Servern verarbeitet werden, die sich außerhalb Ihres Wohnsitzlandes befinden. Durch die Nutzung unserer Dienste stimmen Sie dieser Verarbeitung zu.
 
-## Retention of Information
+## Aufbewahrung von Informationen
 
-We retain the limited information we collect only for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. Anonymous usage data may be retained indefinitely as it cannot be linked to individual users.
+Wir bewahren die begrenzten Informationen, die wir sammeln, nur so lange auf, wie es zur Erfüllung der in dieser Datenschutzrichtlinie dargelegten Zwecke erforderlich ist, es sei denn, eine längere Aufbewahrungsfrist ist gesetzlich vorgeschrieben oder erlaubt. Anonyme Nutzungsdaten können auf unbestimmte Zeit aufbewahrt werden, da sie nicht mit einzelnen Benutzern verknüpft werden können.
 
-## Legal Basis for Processing Personal Information (EEA and UK Users)
+## Rechtsgrundlage für die Verarbeitung personenbezogener Daten (EWR- und UK-Benutzer)
 
-If you are located in the European Economic Area (EEA) or the United Kingdom, our legal basis for collecting and using your information depends on the specific information concerned and the context in which we collect it.
+Wenn Sie sich im Europäischen Wirtschaftsraum (EWR) oder im Vereinigten Königreich befinden, hängt unsere Rechtsgrundlage für die Erhebung und Verwendung Ihrer Informationen von den spezifischen Informationen und dem Kontext ab, in dem wir sie erheben.
 
-Generally, we collect minimal information based on the following legal grounds:
-- To perform our contract with you (e.g., to maintain your account if you choose to create one)
-- For our legitimate interests (e.g., to provide and improve our Services)
-- With your consent (e.g., for optional browser preferences)
-- To comply with legal obligations where applicable
+Im Allgemeinen sammeln wir minimale Informationen auf der Grundlage der folgenden Rechtsgrundlagen:
+- Zur Erfüllung unseres Vertrags mit Ihnen (z.B. zur Aufrechterhaltung Ihres Kontos, wenn Sie sich entscheiden, eines zu erstellen)
+- Für unsere berechtigten Interessen (z.B. zur Bereitstellung und Verbesserung unserer Dienste)
+- Mit Ihrer Einwilligung (z.B. für optionale Browser-Präferenzen)
+- Zur Erfüllung gesetzlicher Verpflichtungen, wo zutreffend
 
-## California Privacy Rights
+## Datenschutzrechte in Kalifornien
 
-If you are a California resident, you may have certain rights under the California Consumer Privacy Act (CCPA) and other California privacy laws.
+Wenn Sie in Kalifornien ansässig sind, haben Sie möglicherweise bestimmte Rechte gemäß dem California Consumer Privacy Act (CCPA) und anderen kalifornischen Datenschutzgesetzen.
 
-Given our minimal data collection practices, we typically do not "sell" or "share" personal information as those terms are defined under California law. We also do not use or disclose sensitive personal information for purposes that would require an opt-out right under California law.
+Angesichts unserer minimalen Datenerhebungspraktiken "verkaufen" oder "teilen" wir in der Regel keine personenbezogenen Daten im Sinne des kalifornischen Rechts. Wir verwenden oder legen auch keine sensiblen personenbezogenen Daten für Zwecke offen, die nach kalifornischem Recht ein Widerspruchsrecht erfordern würden.
 
-## Changes to This Privacy Policy
+## Dienste von Drittanbietern
 
-We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
+Unsere Dienste können Links zu Websites oder Diensten von Drittanbietern enthalten. Wir sind nicht verantwortlich für die Datenschutzpraktiken oder Inhalte dieser Websites von Drittanbietern. Wir empfehlen Ihnen, die Datenschutzrichtlinien jeder Website zu lesen, die Sie besuchen.
 
-## Contact Information
-
-If you have any questions about this Privacy Policy, please contact us at:
-
-**Email**: contact@cosmicrafts.com
-
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
-
-## Third-Party Services
-
-Our Services may contain links to third-party websites or services. We are not responsible for the privacy practices or content of these third-party sites. We encourage you to read the privacy policies of every website you visit.
-
-## Platform-Specific Provisions
+## Plattformspezifische Bestimmungen
 
 ### Apple App Store
 
-For users accessing our Services through Apple's App Store:
-- We only collect and use personal information as necessary to provide the requested features and functions of the app.
-- We do not use information obtained through the App Store for targeting users with advertising in other apps.
-- We comply with all applicable Apple guidelines regarding privacy and data handling.
+Für Benutzer, die auf unsere Dienste über Apples App Store zugreifen:
+- Wir sammeln und verwenden personenbezogene Daten nur, soweit dies zur Bereitstellung der angeforderten Funktionen und Funktionalitäten der App erforderlich ist.
+- Wir verwenden keine Informationen, die über den App Store erhalten wurden, um Benutzer mit Werbung in anderen Apps zu erreichen.
+- Wir halten uns an alle geltenden Apple-Richtlinien bezüglich Datenschutz und Datenverarbeitung.
 
 ### Google Play Store
 
-For users accessing our Services through Google Play:
-- We adhere to Google Play's User Data Policy.
-- We provide notice and obtain consent for the collection of personal information as required by Google Play policies.
-- We maintain accurate and complete privacy disclosures in our store listing and within the app.
+Für Benutzer, die auf unsere Dienste über Google Play zugreifen:
+- Wir halten uns an die Nutzerdatenrichtlinie von Google Play.
+- Wir informieren und holen die Zustimmung für die Erhebung personenbezogener Daten ein, wie von den Google Play-Richtlinien gefordert.
+- Wir führen genaue und vollständige Datenschutzangaben in unserer Store-Auflistung und innerhalb der App.
 
 ### Epic Games Store
 
-For users accessing our Services through Epic Games Store:
-- We comply with Epic's distribution agreement and privacy requirements.
-- We provide clear information about data collection practices in accordance with Epic's guidelines.
+Für Benutzer, die auf unsere Dienste über den Epic Games Store zugreifen:
+- Wir halten uns an Epics Vertriebsvereinbarung und Datenschutzanforderungen.
+- Wir stellen klare Informationen über Datenerhebungspraktiken gemäß den Richtlinien von Epic bereit.
 
 ### Crazy Games
 
-For users accessing our Services through Crazy Games:
-- We adhere to Crazy Games' privacy requirements and publishing guidelines.
-- We ensure transparent communication regarding data collection and use.
+Für Benutzer, die auf unsere Dienste über Crazy Games zugreifen:
+- Wir halten uns an die Datenschutzanforderungen und Veröffentlichungsrichtlinien von Crazy Games.
+- Wir sorgen für transparente Kommunikation bezüglich Datenerhebung und -nutzung.
 
-## Changes to This Privacy Policy
+## Änderungen an dieser Datenschutzrichtlinie
 
-We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Effective Date" at the top.
+Wir können unsere Datenschutzrichtlinie von Zeit zu Zeit aktualisieren. Wir werden Sie über alle Änderungen informieren, indem wir die neue Datenschutzrichtlinie auf dieser Seite veröffentlichen und das "Datum des Inkrafttretens" oben aktualisieren.
 
-We encourage you to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
+Wir empfehlen Ihnen, diese Datenschutzrichtlinie regelmäßig auf Änderungen zu überprüfen. Änderungen an dieser Datenschutzrichtlinie sind wirksam, wenn sie auf dieser Seite veröffentlicht werden.
 
-## Contact Us
+## Kontaktieren Sie uns
 
-If you have any questions about this Privacy Policy or our data practices, please contact us at:
+Wenn Sie Fragen zu dieser Datenschutzrichtlinie oder unseren Datenpraktiken haben, kontaktieren Sie uns bitte unter:
 
-**Email**: contact@cosmicrafts.com  
+**E-Mail**: contact@cosmicrafts.com  
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+Für Angelegenheiten, die aus regulatorischen Gründen eine physische Adresse erfordern, kontaktieren Sie uns bitte zuerst per E-Mail.
 
 ---
 
-*Last updated: April 15, 2025* 
+*Zuletzt aktualisiert: 4. Marz 2025* 

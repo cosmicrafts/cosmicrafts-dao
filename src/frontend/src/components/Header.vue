@@ -437,8 +437,15 @@ header {
     display: flex; /* Visible on mobile */
   }
   .connect-container {
-  right: 1.25rem;
+  right: .5rem;
 
+}
+
+
+.button.outline {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: .7rem;
 }
 
   .nav-links {

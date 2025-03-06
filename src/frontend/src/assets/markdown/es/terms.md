@@ -8,7 +8,7 @@ Bienvenido a Cosmicrafts. Estos Términos de Servicio ("Términos") rigen tu acc
 Al acceder o utilizar nuestros Servicios, aceptas estar sujeto a estos Términos. Si no estás de acuerdo con alguna parte de los Términos, no tienes permiso para acceder a los Servicios.
 
 ## Fecha de Vigencia
-Estos Términos son efectivos a partir del 15 de abril de 2025.
+Estos Términos son efectivos a partir del 4 de marzo de 2025.
 
 ## Definiciones
 - **Plataforma**: Se refiere al universo de Cosmicrafts, incluyendo todos los sitios web, juegos, aplicaciones y servicios proporcionados por Cosmicrafts.
@@ -154,7 +154,7 @@ Cosmicrafts utiliza herramientas y servicios de inteligencia artificial para cre
 
 4. **Creencia de Uso Justo**: Creemos que nuestro uso constituye uso justo y/o uso transformativo bajo las leyes de derechos de autor aplicables. Utilizamos estos servicios de IA bajo términos de licencia comercial que generalmente incluyen indemnizaciones y protecciones legales.
 
-5. **Proceso para Preocupaciones de PI**: Si crees que el contenido generado por IA en nuestra plataforma infringe tus derechos de propiedad intelectual, por favor contáctanos en ip-concerns@cosmicrafts.com antes de buscar otros recursos legales. Revisaremos rápidamente tu reclamación y, si es apropiado, eliminaremos o modificaremos el contenido en cuestión.
+5. **Proceso para Preocupaciones de PI**: Si crees que el contenido generado por IA en nuestra plataforma infringe tus derechos de propiedad intelectual, por favor contáctanos en contact@cosmicrafts.comantes de buscar otros recursos legales. Revisaremos rápidamente tu reclamación y, si es apropiado, eliminaremos o modificaremos el contenido en cuestión.
 
 6. **Responsabilidad del Proveedor de Servicios**: De acuerdo con nuestros acuerdos con servicios de IA, la responsabilidad legal primaria por el contenido generado por IA típicamente reside en el proveedor del servicio de IA según se especifica en sus términos de servicio.
 
@@ -300,4 +300,4 @@ Para asuntos que requieran una dirección física para cumplimiento regulatorio,
 
 ---
 
-*Última actualización: 15 de abril de 2025*
+*Última actualización: 4 de marzo de 2025*
