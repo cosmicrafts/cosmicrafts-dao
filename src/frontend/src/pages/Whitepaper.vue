@@ -824,19 +824,6 @@ export default {
   animation: fade-in 1s ease forwards 0.4s;
 }
 
-@media (max-width: 1600px) {
-  .content-wrapper {
-    padding: 2rem 4rem;
-  }
-}
-
-
-@media (max-width: 1440px) {
-  .content-wrapper {
-    padding: 2rem 2rem;
-  }
-}
-
 
 /* Responsive styles */
 @media (max-width: 1280px) {
@@ -879,11 +866,7 @@ export default {
     display: block;
   }
   
-  .content-wrapper {
-    padding-bottom: 5rem; /* Add space for the mobile navigation button */
-    padding: 1rem 1rem 5rem 1rem; /* Reduced horizontal padding */
-    margin: 1rem auto; /* Reduced top/bottom margin */
-  }
+
   
   /* Optimize table display on mobile */
   .markdown-content table {
@@ -1002,9 +985,6 @@ export default {
   .mobile-navigation-container {
     display: block;
   }
-  
-  .content-wrapper {
-    padding-bottom: 4rem; /* Add space for the mobile navigation button */
-  }
+
 }
 </style>

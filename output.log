@@ -1,26 +1,26 @@
 Sending message with
 
   Call type:   update
-  Sender:      p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
+  Sender:      qxnaf-6mxu5-564fa-pwzv3-54lny-aj3xw-jyzvw-b5lmv-m7bdt-277fc-cae
   Canister id: ryjl3-tyaaa-aaaaa-aaaba-cai
   Method name: transfer
   Arguments:   (
   record {
-    to = blob "\08\46\85\73\8f\b5\02\87\6f\86\ce\f4\78\8d\82\3d\0a\e3\e3\90\84\01\58\81\67\17\7c\f1\0b\c5\59\9e";
+    to = blob "\07\f7\86\52\a7\fb\90\91\ac\9b\9c\03\3c\1f\bb\86\65\be\98\b9\69\a0\d5\66\32\c3\6d\ba\3c\21\c6\c9";
     fee = record { e8s = 10_000 : nat64 };
     memo = 109_330_329_069_923 : nat64;
     from_subaccount = null;
     created_at_time = opt record {
-      timestamp_nanos = 1_740_447_521_424_164_047 : nat64;
+      timestamp_nanos = 1_741_224_447_620_104_891 : nat64;
     };
     amount = record { e8s = 10_000_000_000 : nat64 };
   },
 )
-Request ID: 0x641f37105c23e71aed236fa6faf932d41bf71350f0c5059475b23b9883df4bcd
+Request ID: 0xf917b44c3d217fe1390a4064ec9a3c899f88b6780e444e6404b9fe9c33e6f276
 The request is being processed...
 The request is being processed...
 The request is being processed...
-Transfer sent at block index 16
+Transfer sent at block index 19
 Sending message with
 
   Call type:   update
@@ -34,7 +34,7 @@ Sending message with
       ClaimOrRefresh = record {
         by = opt variant {
           MemoAndController = record {
-            controller = opt principal "p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae";
+            controller = opt principal "qxnaf-6mxu5-564fa-pwzv3-54lny-aj3xw-jyzvw-b5lmv-m7bdt-277fc-cae";
             memo = 109_330_329_069_923 : nat64;
           }
         };
@@ -43,8 +43,7 @@ Sending message with
     neuron_id_or_subaccount = null;
   },
 )
-Request ID: 0x9c5dfb46d4832427a4183b030839c321d8ed9445f004d95b5e33d06c8355eb1c
+Request ID: 0x2f67964aedf0d4e11ae3ec37604884e8dd388a4b78ebc56e695d0249b7326d8a
 The request is being processed...
 The request is being processed...
-The request is being processed...
-Successfully staked ICP in neuron 5308039975492457871
+Successfully staked ICP in neuron 13726370099347694611

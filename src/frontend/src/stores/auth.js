@@ -291,7 +291,7 @@ async getPlayerByPrincipal(principal) {
         if (!isConnected) {
           console.log('Connecting to Plug Wallet...');
           const connected = await window.ic.plug.requestConnect({
-            whitelist: ['lqso3-syaaa-aaaap-qpoeq-cai'], // Replace with your canister ID
+            whitelist: ['opcce-byaaa-aaaak-qcgda-cai'], // Replace with your canister ID
           });
           if (!connected) {
             throw new Error('Failed to connect to Plug Wallet.');

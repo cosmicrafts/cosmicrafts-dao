@@ -7,6 +7,33 @@
 
 At its core, **Cosmicrafts DAO** revolves around building a franchise that integrates **fun-first gameplay**, **functional NFTs**, **deflationary tokenomics**, and a an **interconnected backend** where players' profiles, progress, and assets carry over across all games in the franchise.
 
+```mermaid
+graph TD
+    A[Cosmicrafts DAO Core Vision] --> B[Fun-First Gameplay]
+    A --> C[Functional NFTs]
+    A --> D[Deflationary Tokenomics]
+    A --> E[Interconnected Backend]
+    
+    B --> B1[Competitive Multiplayer]
+    B --> B2[Engaging Mechanics]
+    B --> B3[Rich Content]
+    
+    C --> C1[Game-Enhancing Assets]
+    C --> C2[Cross-Game Portability]
+    C --> C3[Real Ownership]
+    
+    D --> D1[Token Utility]
+    D --> D2[Sustainable Rewards]
+    D --> D3[Value Preservation]
+    
+    E --> E1[Unified Player Profiles]
+    E --> E2[Seamless Asset Transfer]
+    E --> E3[Consistent Progress]
+    
+    style A fill:#00c3ff,stroke:#333,stroke-width:2px
+    style B,C,D,E fill:#1a2d40,stroke:#333,stroke-width:1px
+```
+
 ### Gameplay-Centric Design
 
 1. **Core Gameplay Prioritization**:
@@ -36,6 +63,58 @@ A rigorous development process ensures high-quality standards, including:
 
 Cosmicrafts' backend architecture serves as the foundation for its interconnected games. It is designed to be modular, scalable, and reusable across multiple games, and compatible with [BOOM DAO's](https://boomdao.xyz/) [World Engine](https://docs.boomdao.xyz/world-engine). 
 
+```mermaid
+flowchart TD
+    subgraph "Cosmicrafts Backend Framework"
+        Core[Core System Layer]
+        Game[Game Logic Layer]
+        Asset[Asset Management Layer]
+        API[API Layer]
+        
+        Core --> Game
+        Core --> Asset
+        Game --> API
+        Asset --> API
+    end
+    
+    subgraph "Connected Games"
+        Game1[Game A]
+        Game2[Game B]
+        Game3[Game C]
+    end
+    
+    API --> Game1
+    API --> Game2
+    API --> Game3
+    
+    subgraph "Player Experience"
+        Player[Player]
+        Profile[Unified Profile]
+        Inventory[Shared Inventory]
+        Progress[Cross-Game Progress]
+    end
+    
+    Player --> Game1
+    Player --> Game2
+    Player --> Game3
+    
+    Game1 --> Profile
+    Game2 --> Profile
+    Game3 --> Profile
+    
+    Game1 --> Inventory
+    Game2 --> Inventory
+    Game3 --> Inventory
+    
+    Game1 --> Progress
+    Game2 --> Progress
+    Game3 --> Progress
+    
+    style Core fill:#00c3ff,stroke:#333,stroke-width:2px
+    style Game,Asset,API fill:#1a2d40,stroke:#333,stroke-width:1px
+    style Game1,Game2,Game3 fill:#00ff9530,stroke:#00ff95,stroke-width:1px
+    style Player,Profile,Inventory,Progress fill:#ffa20030,stroke:#ffa200,stroke-width:1px
+```
 
 ### Key Features
 
@@ -420,3 +499,139 @@ The **Core Features** of Cosmicrafts showcase a unified, interconnected gaming e
 > Cosmicrafts delivers a franchise experience that's both immersive for players and profitable for stakeholders.
 
 ---
+
+## 2. NFT Integration
+
+Cosmicrafts implements a comprehensive NFT system that enhances gameplay while providing tangible value to players. Our NFTs are more than collectibles—they're functional assets that contribute to the gaming experience.
+
+```mermaid
+mindmap
+  root((NFT<br>Integration))
+    Functional Utility
+      Combat Advantages
+      Resource Gathering
+      Building Templates
+      Skill Modifiers
+    Cross-Game Compatibility
+      Shared Inventory
+      Uniform Standards
+      Seamless Transfer
+    Customization
+      Visual Skins
+      Effect Modifications
+      Sound Packs
+    Economic Value
+      Secondary Marketplace
+      Trading Opportunities
+      Collection Value
+```
+
+### Key NFT Features
+
+## 3. Game Development Roadmap
+
+```mermaid
+timeline
+    title Cosmicrafts Game Development Roadmap
+    section Phase 1: Foundation
+      2023 Q3-Q4 : Core Engine Expansion : Asset System Upgrade : Cosmicrafts 1.0 Release
+    section Phase 2: Expansion
+      2024 Q1-Q2 : Multiplayer Enhancements : Tournament System : New Game Modes
+    section Phase 3: Franchise Growth
+      2024 Q3-2025 Q2 : Second Game Development : Cross-Game Asset System : Expanded Universe
+    section Phase 4: Ecosystem Maturity
+      2025 Q3+ : Third Game Development : Developer SDK : Community-Created Games
+```
+
+### Game Release Strategy
+
+## 4. Tokenomics Integration
+
+```mermaid
+graph TD
+    subgraph "In-Game Token Utility"
+        A[SPIRAL Token] --> B[Governance]
+        A --> C[In-Game Currency]
+        A --> D[Staking Rewards]
+        A --> E[NFT Marketplace]
+        
+        B --> B1[Proposal Voting]
+        B --> B2[Game Direction]
+        
+        C --> C1[Item Purchases]
+        C --> C2[Upgrades]
+        
+        D --> D1[Passive Income]
+        D --> D2[Exclusive Access]
+        
+        E --> E1[Buy/Sell NFTs]
+        E --> E2[Create Collections]
+    end
+    
+    style A fill:#00c3ff,stroke:#333,stroke-width:2px
+    style B,C,D,E fill:#1a2d40,stroke:#333,stroke-width:1px
+```
+
+### Economic Mechanics
+
+## 5. Esports & Competitive Gaming
+
+```mermaid
+flowchart TD
+    A[Competitive Gaming Ecosystem] --> B[Tournament System]
+    A --> C[Ranking & Matchmaking]
+    A --> D[Rewards Structure]
+    A --> E[Spectator Experience]
+    
+    B --> B1[Weekly Tournaments]
+    B --> B2[Seasonal Championships]
+    B --> B3[Special Events]
+    
+    C --> C1[Skill-Based Matchmaking]
+    C --> C2[Global Leaderboards]
+    C --> C3[Achievement System]
+    
+    D --> D1[SPIRAL Token Prizes]
+    D --> D2[Exclusive NFTs]
+    D --> D3[Status Badges]
+    
+    E --> E1[Live Streaming]
+    E --> E2[Betting System]
+    E --> E3[Replay Analysis]
+    
+    style A fill:#00c3ff,stroke:#333,stroke-width:2px
+    style B,C,D,E fill:#1a2d40,stroke:#333,stroke-width:1px
+```
+
+### Competitive Features
+
+## 6. Community Creation Tools
+
+```mermaid
+graph LR
+    A[Creator Ecosystem] --> B[Asset Creation Tools]
+    A --> C[Game Mode Designer]
+    A --> D[Map Editor]
+    A --> E[Marketplace Integration]
+    
+    B --> B1[3D Models]
+    B --> B2[Textures]
+    B --> B3[Animations]
+    
+    C --> C1[Rule Configuration]
+    C --> C2[Objective Setting]
+    C --> C3[Balance Testing]
+    
+    D --> D1[Terrain Editor]
+    D --> D2[Object Placement]
+    D --> D3[Environment Design]
+    
+    E --> E1[Publish Creations]
+    E --> E2[Set Pricing]
+    E --> E3[Earn Revenue]
+    
+    style A fill:#00c3ff,stroke:#333,stroke-width:2px
+    style B,C,D,E fill:#1a2d40,stroke:#333,stroke-width:1px
+```
+
+### Creation System Features

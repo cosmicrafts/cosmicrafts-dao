@@ -1,14 +1,8 @@
 {
   "backend": {
-    "ic": "lqso3-syaaa-aaaap-qpoeq-cai"
+    "ic": "opcce-byaaa-aaaak-qcgda-cai"
   },
   "frontend": {
     "ic": "lxtip-7aaaa-aaaap-qpoea-cai"
-  },
-  "galaxy": {
-    "ic": "opcce-byaaa-aaaak-qcgda-cai"
-  },
-  "game": {
-    "ic": "5yv6n-paaaa-aaaap-qpvga-cai"
   }
 }

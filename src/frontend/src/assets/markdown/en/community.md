@@ -27,6 +27,46 @@ Participation in the DAO should be rewarding and fun. We'll integrate **quests, 
 
 **Rewards**: Exclusive NFTs with unique in-game utility or cosmetic value, early access to upcoming content, exclusive in-game items, and prestigious community recognition badges displayed on your profile.
 
+**🎨 Visual Suggestion**: Flowchart showing the player journey from DAO voting → participation → events → rewards.
+
+```mermaid
+flowchart LR
+    A["👤 Community Member"] --> B["🗳️ DAO Participation"]
+    A --> C["🎮 Game Engagement"]
+    A --> D["🤝 Community Contribution"]
+    
+    B --> B1["Voting on Proposals"]
+    B --> B2["Creating Proposals"]
+    B --> B3["Treasury Management"]
+    
+    C --> C1["Tournaments"]
+    C --> C2["Seasonal Events"]
+    C --> C3["Game Nights"]
+    
+    D --> D1["Forum Activity"]
+    D --> D2["Content Creation"]
+    D --> D3["Bug Reporting"]
+    
+    B1 --> E["🏆 Rewards"]
+    B2 --> E
+    B3 --> E
+    C1 --> E
+    C2 --> E
+    C3 --> E
+    D1 --> E
+    D2 --> E
+    D3 --> E
+    
+    E --> E1["Exclusive NFTs"]
+    E --> E2["SPIRAL Tokens"]
+    E --> E3["Status Badges"]
+    E --> E4["Game Perks"]
+    
+    style A fill:#00c3ff,stroke:#333,stroke-width:2px
+    style B,C,D fill:#1a2d40,stroke:#333,stroke-width:1px
+    style E fill:#00ff9530,stroke:#00ff95,stroke-width:2px
+```
+
 ---
 
 ### **In-Game Events & Tournaments**
@@ -44,6 +84,44 @@ We're fostering **two-way communication** to ensure the community's voice drives
 - **Content Highlights**: Behind-the-scenes updates, sneak peeks, and spotlights on standout community members and their contributions.
 
 **🎨 Visual Suggestion**: Flowchart showing the player journey from DAO voting → participation → events → rewards.
+
+```mermaid
+flowchart LR
+    A["👤 Community Member"] --> B["🗳️ DAO Participation"]
+    A --> C["🎮 Game Engagement"]
+    A --> D["🤝 Community Contribution"]
+    
+    B --> B1["Voting on Proposals"]
+    B --> B2["Creating Proposals"]
+    B --> B3["Treasury Management"]
+    
+    C --> C1["Tournaments"]
+    C --> C2["Seasonal Events"]
+    C --> C3["Game Nights"]
+    
+    D --> D1["Forum Activity"]
+    D --> D2["Content Creation"]
+    D --> D3["Bug Reporting"]
+    
+    B1 --> E["🏆 Rewards"]
+    B2 --> E
+    B3 --> E
+    C1 --> E
+    C2 --> E
+    C3 --> E
+    D1 --> E
+    D2 --> E
+    D3 --> E
+    
+    E --> E1["Exclusive NFTs"]
+    E --> E2["SPIRAL Tokens"]
+    E --> E3["Status Badges"]
+    E --> E4["Game Perks"]
+    
+    style A fill:#00c3ff,stroke:#333,stroke-width:2px
+    style B,C,D fill:#1a2d40,stroke:#333,stroke-width:1px
+    style E fill:#00ff9530,stroke:#00ff95,stroke-width:2px
+```
 
 ---
 
@@ -76,6 +154,65 @@ We'll help developers grow through:
 - **Feedback Channels**: Developers can showcase their work to the community and gather feedback.
 
 **🎨 Visual Suggestion**: Timeline illustrating hackathons, grant cycles, and mentorship milestones.
+
+---
+
+### **Ecosystem Contribution Recognition**
+
+**🎨 Visual Suggestion**: Circular diagram showing the collaborative relationship between Cosmicrafts, individual creators, and the overall ecosystem.
+
+```mermaid
+graph TD
+    subgraph "Cosmicrafts Ecosystem"
+        A["🚀 Cosmicrafts<br>Core Platform"] --> B["👩‍💻 Developer<br>Community"]
+        B --> A
+        
+        A --> C["🎨 Content<br>Creators"]
+        C --> A
+        
+        A --> D["🏛️ DAO<br>Governance"]
+        D --> A
+        
+        B --> E["🔌 Plugin<br>Marketplace"]
+        E --> B
+        
+        C --> F["🖼️ NFT<br>Marketplace"]
+        F --> C
+        
+        D --> G["💰 Treasury<br>Funding"]
+        G --> D
+        
+        B -->|"Builds for"| C
+        C -->|"Creates for"| B
+        B -->|"Proposes to"| D
+        D -->|"Funds"| B
+        C -->|"Proposes to"| D
+        D -->|"Funds"| C
+    end
+    
+    style A fill:#00c3ff,stroke:#333,stroke-width:2px
+    style B,C,D fill:#1a2d40,stroke:#333,stroke-width:1px
+    style E,F,G fill:#00ff9520,stroke:#00ff95,stroke-width:1px
+```
+
+---
+
+### **Community Game Jam Events**
+
+**🎨 Visual Suggestion**: Timeline showing the game jam process from ideation to DAO funding.
+
+```mermaid
+timeline
+    title Cosmicrafts Game Jam Process
+    section Preparation
+      Week 1 : Theme Voting : Team Formation : Resource Provision
+    section Development
+      Week 2-3 : Rapid Prototyping : Community Check-ins : Mentor Support
+    section Showcase
+      Week 4 : Public Presentations : Community Voting : Expert Panel Review
+    section DAO Integration
+      Week 5+ : Top Projects Proposal : Treasury Funding Vote : Integration Plan
+```
 
 ---
 
