@@ -100,26 +100,28 @@
         </div>
         <div class="modal-content">
           <table class="shortcuts-table">
-            <tr>
-              <td><span class="key">ESC</span></td>
-              <td>Toggle menu / Close windows</td>
-            </tr>
-            <tr>
-              <td><span class="key">C</span></td>
-              <td>Open chat</td>
-            </tr>
-            <tr>
-              <td><span class="key">M</span></td>
-              <td>Toggle sound</td>
-            </tr>
-            <tr>
-              <td><span class="key">F</span></td>
-              <td>Toggle fullscreen</td>
-            </tr>
-            <tr>
-              <td><span class="key">H</span></td>
-              <td>Go home</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td><span class="key">ESC</span></td>
+                <td>Toggle menu / Close windows</td>
+              </tr>
+              <tr>
+                <td><span class="key">C</span></td>
+                <td>Open chat</td>
+              </tr>
+              <tr>
+                <td><span class="key">M</span></td>
+                <td>Toggle sound</td>
+              </tr>
+              <tr>
+                <td><span class="key">F</span></td>
+                <td>Toggle fullscreen</td>
+              </tr>
+              <tr>
+                <td><span class="key">H</span></td>
+                <td>Go home</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -128,7 +130,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps({
@@ -136,7 +138,7 @@ const props = defineProps({
   otherWindowsOpen: Boolean
 });
 
-const emit = defineEmits(['close', 'update:isOpen']);
+const emit = defineEmits(['close']);
 
 const router = useRouter();
 const showKeyboardShortcuts = ref(false);
@@ -144,7 +146,6 @@ const soundEnabled = ref(true); // Get from a store in a real implementation
 
 // Methods
 const close = () => {
-  emit('update:isOpen', false);
   emit('close');
 };
 

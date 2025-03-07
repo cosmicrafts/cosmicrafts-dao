@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
   // Card styling
@@ -69,8 +69,6 @@ const props = defineProps({
     default: ''
   }
 });
-
-const emit = defineEmits(['click']);
 
 const showHeader = computed(() => {
   return props.title || props.icon || !!slots.title || !!slots.action;

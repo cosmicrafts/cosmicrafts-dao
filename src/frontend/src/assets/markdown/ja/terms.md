@@ -146,118 +146,79 @@ Cosmicraftsはあなたの体験を保護するためのいくつかのツール
 - 当社が提供していない自動化された手段やインターフェースを使用してサービスにアクセスすること
 - 合理的にプライベートであるべき機密個人情報をオンチェーンに保存すること
 
-## Virtual Assets and Transactions
+## 仮想資産と取引
 
-### Decentralization and User Responsibility
-All digital assets, including but not limited to cryptocurrency tokens, NFTs, and in-game items that exist on blockchain networks are decentralized by nature. You acknowledge and agree that:
+### 分散化とユーザーの責任
+ブロックチェーンネットワーク上に存在する暗号通貨トークン、NFT、ゲーム内アイテムなどのすべてのデジタル資産は、本質的に分散化されています。あなたは以下の点を認識し、同意するものとします：
 
-1. **No Control**: World of Unreal, LLC do not control, maintain, or have custody of your digital assets that exist on blockchain networks.
+1. **管理の不在**: World of Unreal, LLCは、ブロックチェーンネットワーク上に存在するあなたのデジタル資産を管理、維持、または保管していません。
 
-2. **No Responsibility**: We bear no responsibility for any issues arising from blockchain transactions, including but not limited to lost private keys, phishing attacks, smart contract vulnerabilities, network failures, high gas fees, or regulatory changes.
+2. **責任の不在**: 当社は、プライベートキーの紛失、フィッシング攻撃、スマートコントラクトの脆弱性、ネットワークの障害、高額なガス料金、規制の変更など、ブロックチェーン取引に起因するいかなる問題についても責任を負いません。
 
-3. **No Recovery**: We cannot recover or restore lost digital assets, reverse transactions, or assist with forgotten passwords or private keys.
+3. **復旧の不可能性**: 当社は、紛失したデジタル資産の回復や復元、取引の取り消し、忘れたパスワードやプライベートキーに関する支援を行うことはできません。
 
-4. **Self-Custody**: You are solely responsible for securing your own wallet, private keys, seed phrases, and other credentials necessary to access your digital assets.
+4. **自己管理**: あなたは、自分のウォレット、プライベートキー、シードフレーズ、その他の資格情報を安全に保管する責任があります。
 
-### Platform Moderation and DAO Appeals
+5. **自己責任**: あなたは、デジタル資産の購入、保持、取引、または売却に関するすべての決定について、完全な責任とリスクを負うことを認めます。
 
-While Cosmicrafts operates in a decentralized environment, we maintain certain limited administrative capabilities to protect users and the platform integrity:
+### プラットフォームの調整とDAOのアプローチ
 
-1. **NFT Confiscation/Burning**: In cases of clear policy violations, fraud, illegal content, or other significant infractions, Cosmicrafts administrators may exercise the right to confiscate (burn) NFTs. This is an emergency measure intended to protect our community and platform.
+Cosmicraftsは分散型環境で運営されていますが、ユーザーとプラットフォームの完全性を保護するために、一定の限定的な管理機能を維持しています：
 
-2. **Limitations of Real-time Protection**: The decentralized nature of blockchain means damage can occur rapidly (e.g., stolen NFTs can be resold within seconds), often before moderation can intervene. We cannot guarantee protection against all forms of malicious activity.
+1. **コンテンツの監視**: 当社は、違法、有害、または不適切なコンテンツを削除または非表示にする権利を留保します。
 
-3. **DAO Appeal Process**: Users who believe their NFTs were wrongfully confiscated may appeal to the Cosmicrafts DAO for review. The appeal process works as follows:
-   - Submit a formal appeal through the designated DAO governance portal
-   - Provide evidence supporting your case
-   - The DAO will review and vote on the appeal according to governance procedures
-   - If approved by the DAO, confiscated NFTs may be restored
+2. **アカウントの制限**: 利用規約に違反するアカウントに対して、一時的または永続的な制限を課すことがあります。
 
-4. **Final Authority**: The DAO's decision on appeals is considered final. Neither the Cosmicrafts Foundation nor World of Unreal, LLC can override DAO governance decisions because the smart contracts are under the DAO jurisdiction.
+3. **DAOガバナンス**: プラットフォームの重要な決定は、Cosmicrafts DAOのガバナンスプロセスを通じて行われます。
 
-5. **Dispute Resolution**: For disputes between users regarding digital assets (such as theft claims, fraudulent sales, etc.), the proper channel for resolution is through the DAO governance system, not through Cosmicrafts support. The DAO will judge such cases based on evidence and community standards.
+4. **異議申し立て**: アカウントの制限に対する異議申し立ては、DAOガバナンスシステムを通じて検討されます。
 
-### Value and Exchange
-1. **Market Value**: Certain digital assets may have market value and may be tradable on decentralized exchanges (DEXes), centralized exchanges (CEXes), or other trading platforms. However, this value is highly volatile and speculative.
+### 価値と取引
 
-2. **Cross-Chain Assets**: Our platform may support cross-chain assets from various blockchains, including but not limited to Internet Computer Protocol (ICP), Bitcoin (including Runes and Ordinals), Solana, and Ethereum. Each blockchain has its own risks, technical limitations, and regulatory considerations.
+1. **NFTの没収/バーン**: 明確な規約違反、詐欺、違法コンテンツ、またはその他の重大な違反の場合、Cosmicraftsの管理者はNFTを没収（バーン）する権利を行使することがあります。これは、コミュニティとプラットフォームを保護するための緊急措置です。
 
-3. **No Guarantees**: We make no guarantees regarding the value, tradability, or liquidity of any digital assets obtained through our platform. The value of these assets can change dramatically based on market conditions, regulatory actions, or technological developments.
+2. **リアルタイム保護の限界**: ブロックチェーンの分散型の性質により、被害は急速に発生する可能性があります（例：盗まれたNFTは数秒以内に転売される可能性があります）。これは多くの場合、モデレーションが介入する前に発生します。当社は、あらゆる形態の悪意のある活動に対する保護を保証することはできません。
 
-4. **No Investment Advice**: Nothing in our platform or communications constitutes financial or investment advice. Any decisions you make regarding the purchase, sale, or holding of digital assets are made at your own risk.
+3. **DAO異議申し立てプロセス**: NFTが不当に没収されたと考えるユーザーは、Cosmicrafts DAOに審査を申し立てることができます。異議申し立てプロセスは以下の通りです：
+   - 指定されたDAOガバナンスポータルを通じて正式な異議申し立てを提出
+   - あなたの主張を裏付ける証拠を提供
+   - DAOはガバナンス手続きに従って異議申し立てを審査し、投票を行う
+   - DAOによって承認された場合、没収されたNFTが復元される可能性があります
 
-### NFTs and Digital Collectibles
-NFTs and digital collectibles obtained through our platform are stored on blockchain networks. You acknowledge that:
+4. **最終決定権**: 異議申し立てに関するDAOの決定は最終的なものとみなされます。スマートコントラクトがDAOの管轄下にあるため、Cosmicrafts FoundationもWorld of Unreal, LLCもDAOのガバナンス決定を覆すことはできません。
 
-1. **Token Standard**: Our NFTs may use various token standards (e.g., ERC-721, ERC-1155, BEP-721, or equivalent standards on other blockchains). The specific rights conferred by an NFT are limited to those explicitly stated in our Terms or the applicable smart contract.
+5. **紛争解決**: デジタル資産に関するユーザー間の紛争（盗難の申し立て、不正な販売など）については、Cosmicraftsのサポートではなく、DAOガバナンスシステムを通じて解決を図る必要があります。DAOは証拠とコミュニティ基準に基づいてこのような事案を判断します。
 
-2. **License Only**: Your purchase of an NFT grants you a license to the associated digital content, but not ownership of the underlying intellectual property rights, copyright, or trademark.
+## 知的財産権
 
-3. **Permanent Transactions**: NFT transactions on blockchain networks are permanent and irreversible once confirmed. We cannot reverse, cancel, or refund any NFT transactions under any circumstances.
+### 当社のコンテンツ
+プラットフォーム上のすべてのコンテンツ（テキスト、グラフィック、ロゴ、アイコン、画像、音声クリップ、デジタルダウンロード、データ編集、ソフトウェアを含むがこれらに限定されない）は、World of Unreal, LLC（「Cosmicrafts」として事業を行う）またはそのコンテンツ提供者の財産であり、国際著作権法によって保護されています。
 
-   **Appeal Process for Special Cases**: While blockchain transactions are irreversible as a general rule, in exceptional circumstances, users may appeal to the Cosmicrafts DAO as a last resort for transaction disputes. To initiate this process:
-   - First post your case in the community forums for preliminary discussion
-   - You must have the minimum required amount of SPIRAL tokens staked to create a neuron and submit a formal proposal
-- Follow the governance proposal process as outlined in the [Whitepaper](/whitepaper)
-   - The DAO has final authority on all such appeals
-   - World of Unreal LLC has no responsibility or authority over these decisions
+### 知的財産権の所有権とDAOライセンス
+World of Unreal, LLCは、Cosmicraftsに関連するすべての著作権、商標、特許、およびその他の知的財産権の完全な法的所有権を保持しています。分散型の開発とガバナンスを促進するため、World of Unreal, LLCはCosmicrafts DAOに特定の運営ライセンスを付与しています。
 
-4. **Asset Persistence**: While we strive to maintain the infrastructure supporting our digital assets, we make no guarantees regarding the continued availability or functionality of metadata, artwork, or other content associated with NFTs if our services are discontinued.
+### ユーザーコンテンツ
+1. プラットフォームにコンテンツを投稿することにより、あなたは当社に対し、そのコンテンツを使用、複製、修正、適応、公開、翻訳、派生物の作成、配布、実行、および表示する世界的、非独占的、永続的、取消不能、ロイヤリティフリーのライセンスを付与します。
 
-### Transactions
-All purchases and transactions on our platform are final. We reserve the right to refuse any purchase or transaction at our discretion. For on-chain transactions:
+2. あなたは、投稿するコンテンツに対して必要なすべての権利、ライセンス、同意、許可を有していることを表明し、保証します。
 
-1. **Network Fees**: 
-   - On the Internet Computer Protocol (ICP), transactions are generally free for users, as the DAO pays for the computing power required to operate smart contracts.
-   - For transactions on other blockchains (e.g., Ethereum, Solana, Bitcoin), you are responsible for all network fees (gas fees) associated with those transactions.
-   - The cost of network fees varies depending on network congestion and complexity of the transaction.
+### 商標とブランド資産
+1. Cosmicrafts、そのロゴ、および関連するすべての商標は、World of Unreal, LLCの商標または登録商標です。
 
-2. **Transaction Delays**: We are not responsible for any delays, failures, or errors in transaction processing that occur on blockchain networks.
+2. 当社の書面による明示的な許可なく、これらの商標を使用することはできません。
 
-3. **Tax Implications**: You are solely responsible for determining and paying any applicable taxes related to your cryptocurrency transactions or NFT trading.
+### 著作権侵害の通知
+著作権侵害の申し立てがある場合は、以下の情報を含めて当社にご連絡ください：
 
-### Cryptocurrency
-We may accept cryptocurrency as payment for certain Services and offer cryptocurrency-based features. You acknowledge that:
+1. 侵害されたとされる著作権で保護された作品の説明
+2. 侵害しているとされるコンテンツの場所
+3. あなたの連絡先情報
+4. 申し立てが誠実であることの声明
+5. 著作権所有者またはその代理人としてのあなたの署名
 
-1. **High Risk**: Cryptocurrency investments are highly speculative and volatile. You should never invest more than you can afford to lose.
-
-2. **Regulatory Uncertainty**: The regulatory landscape for cryptocurrencies and digital assets is uncertain and evolving. New regulations may impact the value, utility, or legality of digital assets at any time.
-
-3. **Technical Vulnerabilities**: Blockchain networks and smart contracts may contain bugs, vulnerabilities, or other technical issues that could result in the loss of your assets.
-
-4. **Market Risks**: Cryptocurrency markets may be subject to manipulation, extreme volatility, liquidity issues, and other market risks outside our control.
-
-### In-App Purchases
-For purchases made through mobile applications available on app stores such as Google Play Store, Apple App Store, Epic Games Store, or Crazy Games:
-
-1. All in-app purchases are subject to the terms of service and payment policies of the respective app store.
-2. For refunds related to in-app purchases, you must contact the respective app store through which the purchase was made.
-3. You acknowledge that once a purchase is made, it is considered complete and non-refundable except as may be permitted by the app store's refund policies or applicable law.
-4. Parents and guardians are responsible for monitoring and approving children's purchases.
-
-## Intellectual Property
-
-### Our Content
-All content on the Platform, including but not limited to text, graphics, logos, icons, images, audio clips, digital downloads, data compilations, and software, is the property of World of Unreal, LLC (doing business as "Cosmicrafts") or its content suppliers and is protected by international copyright laws. 
-
-### Intellectual Property Ownership and DAO License
-World of Unreal, LLC maintains full legal ownership of all copyrights, trademarks, patents, and other intellectual property rights associated with Cosmicrafts. To facilitate decentralized development and governance, World of Unreal, LLC has granted a specific operating license to the Cosmicrafts DAO.
-
-This license allows the DAO to use, develop, and distribute the Cosmicrafts brand and platform according to governance decisions, while World of Unreal, LLC retains ultimate legal ownership. This structure provides traditional legal protection for Cosmicrafts intellectual property while enabling decentralized operations.
-
-For full details of this licensing arrangement, please refer to the Legal Notices document.
-
-### AI生成デジタルアート
-
-Cosmicraftsは、プラットフォーム用のデジタルアートを作成するためにAIツールとサービスを使用しています：
-
-1. **創造的表現**: 当社のAI生成アートは、他の知的財産のコピーではなく、当社独自の世界内での独創的な創造的表現となることを意図しています。既存の作品との類似性は偶然であるか、一般的な芸術的影響を表しています。
-
-2. **ライセンスとコンプライアンス**: 当社は、サービスプロバイダーとの適切な商業ライセンス契約の下でAIツールを使用しています。AI技術の使用に関する適用されるすべての法律と規制を遵守するよう努めています。
-
-3. **所有権**: World of Unreal, LLCは、DAOに付与されたライセンス条件に従い、当社のプラットフォーム用に生成されたAIコンテンツのすべての知的財産権を保持します。
-
-4. **侵害の通知**: 当社のプラットフォーム上のAI生成コンテンツがあなたの権利を侵害していると思われる場合は、申し立ての詳細とともにcontact@cosmicrafts.comまでご連絡ください。
+申し立ては以下のいずれかの方法で提出できます：
+- メール: contact@cosmicrafts.com
+- [フォーム](/report)を通じて
 
 ## プライバシー
 
@@ -449,6 +410,65 @@ Cosmicraftsは、ユーザーがブロックチェーンネットワークと対
 4. **ガバナンス文書**: DAOガバナンスへの参加は、適切なガバナンス手続きを通じて随時更新される可能性のある追加のガバナンス文書の対象となります。
 
 5. **信託関係なし**: World of Unreal, LLC、Cosmicrafts Foundation、およびDAOは、トークン保有者に対して信託義務を負いません。トークン保有者は、ガバナンストークンを保有しているという理由だけで、互いに対して信託義務を負いません。
+
+### 市場価値と取引
+
+1. **市場価値**: 一部のデジタル資産は市場価値を持ち、分散型取引所（DEX）、中央集権型取引所（CEX）、またはその他の取引プラットフォームで取引可能な場合があります。ただし、この価値は非常に変動的で投機的です。
+
+2. **クロスチェーン資産**: 当社のプラットフォームは、Internet Computer Protocol（ICP）、Bitcoin（RunesとOrdinalsを含む）、Solana、Ethereumなど、様々なブロックチェーンからのクロスチェーン資産をサポートする場合があります。各ブロックチェーンには、独自のリスク、技術的制限、規制上の考慮事項があります。
+
+3. **保証なし**: 当社は、プラットフォームを通じて取得したデジタル資産の価値、取引可能性、または流動性について一切の保証をしません。これらの資産の価値は、市場状況、規制措置、または技術的発展に基づいて大きく変動する可能性があります。
+
+4. **投資アドバイスなし**: 当社のプラットフォームまたはコミュニケーションにおいて、金融または投資アドバイスを構成するものはありません。デジタル資産の購入、売却、または保有に関するあなたの決定は、すべてあなた自身のリスクで行われます。
+
+### NFTとデジタルコレクティブル
+当社のプラットフォームを通じて取得したNFTとデジタルコレクティブルは、ブロックチェーンネットワーク上に保存されます。あなたは以下の点を認識するものとします：
+
+1. **トークン規格**: 当社のNFTは、様々なトークン規格（例：ERC-721、ERC-1155、BEP-721、または他のブロックチェーン上の同等の規格）を使用する場合があります。NFTによって付与される具体的な権利は、当社の利用規約または適用されるスマートコントラクトで明示的に記載されているものに限定されます。
+
+2. **ライセンスのみ**: NFTの購入により、関連するデジタルコンテンツのライセンスが付与されますが、基礎となる知的財産権、著作権、または商標の所有権は付与されません。
+
+3. **取引の永続性**: ブロックチェーンネットワーク上のNFT取引は、確認後は永続的で取り消すことができません。当社は、いかなる状況においてもNFT取引を取り消し、キャンセル、または返金することはできません。
+
+   **特別なケースの異議申し立てプロセス**: ブロックチェーン取引は一般的に取り消し不可能ですが、例外的な状況では、取引の紛争に関する最後の手段としてCosmicrafts DAOに異議を申し立てることができます。このプロセスを開始するには：
+   - まず、予備的な議論のためにコミュニティフォーラムにケースを投稿する
+   - 正式な提案を提出するためには、必要最小限のSPIRALトークンをステークしてニューロンを作成する必要があります
+   - [ホワイトペーパー](/whitepaper)に記載されているガバナンス提案プロセスに従う
+   - DAOがすべてのこのような異議申し立てに関する最終決定権を持ちます
+   - World of Unreal LLCはこれらの決定に対する責任も権限も持ちません
+
+4. **資産の永続性**: 当社はデジタル資産を支えるインフラストラクチャの維持に努めていますが、当社のサービスが中止された場合のNFTに関連するメタデータ、アートワーク、またはその他のコンテンツの継続的な利用可能性や機能性について保証することはできません。
+
+### 取引
+当社のプラットフォームでのすべての購入と取引は最終的なものです。当社は、独自の判断で任意の購入または取引を拒否する権利を留保します。オンチェーン取引について：
+
+1. **ネットワーク手数料**: 
+   - Internet Computer Protocol（ICP）では、DAOがスマートコントラクトの運用に必要な計算能力の費用を負担するため、一般的にユーザーの取引は無料です。
+   - 他のブロックチェーン（例：Ethereum、Solana、Bitcoin）での取引については、それらの取引に関連するすべてのネットワーク手数料（ガス代）はユーザーの責任となります。
+   - ネットワーク手数料のコストは、ネットワークの混雑状況と取引の複雑さによって異なります。
+
+2. **取引の遅延**: 当社は、ブロックチェーンネットワーク上で発生する取引処理の遅延、失敗、またはエラーについて責任を負いません。
+
+3. **税務上の影響**: 暗号通貨取引やNFT取引に関連する適用税金の判断と支払いは、すべてあなたの責任となります。
+
+### 暗号通貨
+当社は特定のサービスの支払いとして暗号通貨を受け入れ、暗号通貨ベースの機能を提供する場合があります。あなたは以下の点を認識するものとします：
+
+1. **高リスク**: 暗号通貨投資は非常に投機的で変動が大きいものです。失っても困らない金額以上を投資すべきではありません。
+
+2. **規制の不確実性**: 暗号通貨とデジタル資産に関する規制環境は不確実で進化し続けています。新しい規制により、デジタル資産の価値、有用性、または合法性が随時影響を受ける可能性があります。
+
+3. **技術的脆弱性**: ブロックチェーンネットワークとスマートコントラクトには、あなたの資産の損失につながる可能性のあるバグ、脆弱性、またはその他の技術的な問題が含まれている可能性があります。
+
+4. **市場リスク**: 暗号通貨市場は、操作、極端な変動性、流動性の問題、および当社の管理外にある他の市場リスクの影響を受ける可能性があります。
+
+### アプリ内購入
+Google Play Store、Apple App Store、Epic Games Store、またはCrazy Gamesなどのアプリストアで利用可能なモバイルアプリケーションを通じて行われる購入について：
+
+1. すべてのアプリ内購入は、それぞれのアプリストアの利用規約と支払いポリシーの対象となります。
+2. アプリ内購入に関する返金については、購入が行われたアプリストアに直接連絡する必要があります。
+3. 購入が完了すると、アプリストアの返金ポリシーまたは適用法で認められる場合を除き、返金不可とみなされることを認めます。
+4. 保護者は、子供の購入を監視し承認する責任があります。
 
 ---
 

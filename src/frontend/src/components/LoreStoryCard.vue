@@ -16,6 +16,8 @@
       required: true,
     },
   });
+
+  const emit = defineEmits(['explore']);
   </script>
   
   <style scoped>
