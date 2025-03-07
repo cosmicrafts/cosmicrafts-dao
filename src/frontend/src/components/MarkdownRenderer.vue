@@ -128,7 +128,15 @@ export default {
       try {
         console.log(`Loading markdown: ${lang}/${this.fileName}`);
         const content = await import(`@/assets/markdown/${lang}/${this.fileName}.md?raw`);
-        this.processMarkdown(content.default);
+        
+        // Pre-process the markdown to convert headings to custom HTML elements
+        const processedContent = content.default
+          .replace(/^# (.*?)$/gm, '# <span id="$1" style="color: #0FB9FD;">$1</span>')
+          .replace(/^## (.*?)$/gm, '## <span id="$1" style="color: #4DCFFF;">$1</span>')
+          .replace(/^### (.*?)$/gm, '### <span id="$1" style="color: #7CDFFF;">$1</span>')
+          .replace(/^#### (.*?)$/gm, '#### <span id="$1" style="color: #B5EBFF;">$1</span>');
+        
+        this.processMarkdown(processedContent);
       } catch (error) {
         console.error(`Failed to load markdown for ${lang}/${this.fileName}`, error);
         
@@ -137,7 +145,15 @@ export default {
           try {
             console.log(`Falling back to English for ${this.fileName}`);
             const fallbackContent = await import(`@/assets/markdown/en/${this.fileName}.md?raw`);
-            this.processMarkdown(fallbackContent.default);
+            
+            // Pre-process the markdown
+            const processedContent = fallbackContent.default
+              .replace(/^# (.*?)$/gm, '# <span id="$1" style="color: #0FB9FD;">$1</span>')
+              .replace(/^## (.*?)$/gm, '## <span id="$1" style="color: #4DCFFF;">$1</span>')
+              .replace(/^### (.*?)$/gm, '### <span id="$1" style="color: #7CDFFF;">$1</span>')
+              .replace(/^#### (.*?)$/gm, '#### <span id="$1" style="color: #B5EBFF;">$1</span>');
+            
+            this.processMarkdown(processedContent);
           } catch (fallbackError) {
             console.error(`Failed to load English fallback for ${this.fileName}`, fallbackError);
             this.htmlContent = `<div class="error-container">
@@ -225,6 +241,32 @@ export default {
         linkify: true,
       });
       
+      // Custom image renderer to resolve Vite paths
+      const defaultImageRender = md.renderer.rules.image || function (tokens, idx, options, env, self) {
+        return self.renderToken(tokens, idx, options);
+      };
+
+      md.renderer.rules.image = function (tokens, idx, options, env, self) {
+        const token = tokens[idx];
+        const srcIndex = token.attrIndex("src");
+        if (srcIndex >= 0) {
+          const src = token.attrs[srcIndex][1];
+          token.attrs[srcIndex][1] = new URL(`../assets/webp/${src}`, import.meta.url).href;
+        }
+        return defaultImageRender(tokens, idx, options, env, self);
+      };
+
+      // Override default heading renderer to add our class
+      const defaultHeadingRender = md.renderer.rules.heading_open || function (tokens, idx, options, env, self) {
+        return self.renderToken(tokens, idx, options);
+      };
+
+      md.renderer.rules.heading_open = function (tokens, idx, options, env, self) {
+        const token = tokens[idx];
+        token.attrJoin('class', 'cosmic-heading');
+        return defaultHeadingRender(tokens, idx, options, env, self);
+      };
+
       // Add anchor links to headings
       md.use(markdownItAnchor, {
         slugify: (s) => s.trim().toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-"),
@@ -266,21 +308,6 @@ export default {
       
       // Add syntax highlighting
       md.use(markdownItHighlightjs);
-
-      // Custom image renderer to resolve Vite paths
-      const defaultImageRender = md.renderer.rules.image || function (tokens, idx, options, env, self) {
-        return self.renderToken(tokens, idx, options);
-      };
-
-      md.renderer.rules.image = function (tokens, idx, options, env, self) {
-        const token = tokens[idx];
-        const srcIndex = token.attrIndex("src");
-        if (srcIndex >= 0) {
-          const src = token.attrs[srcIndex][1];
-          token.attrs[srcIndex][1] = new URL(`../assets/webp/${src}`, import.meta.url).href;
-        }
-        return defaultImageRender(tokens, idx, options, env, self);
-      };
 
       // Custom link renderer for internal/external links
       const defaultLinkRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
@@ -343,6 +370,9 @@ export default {
       processedContent = processedContent.replace(/- \[x\]/g, '- <input type="checkbox" checked disabled class="task-list-item-checkbox"> ');
 
       this.htmlContent = md.render(processedContent);
+
+      // We're keeping the actual heading elements now, so no need to replace them with spans
+      // The styling is handled by CSS and the heading_open renderer
       this.$nextTick(() => this.emitRendered());
     },
     emitRendered() {
@@ -480,7 +510,7 @@ export default {
 }
 
 .toc-content.toc-expanded {
-  max-height: 300px; /* Reduced from 500px */
+  max-height: 300px;
   overflow-y: auto;
   margin-top: 0.5rem;
 }
@@ -532,6 +562,64 @@ h1 .header-anchor:hover,
 h2 .header-anchor:hover,
 h3 .header-anchor:hover {
   opacity: 1;
+}
+
+/* Base styles for markdown content */
+.markdown-content {
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+/* Override any default heading styles with high specificity */
+.markdown-content h1.cosmic-heading,
+.markdown-content h2.cosmic-heading,
+.markdown-content h3.cosmic-heading,
+.markdown-content h4.cosmic-heading {
+  font-family: 'Montserrat', sans-serif !important;
+  width: 100% !important;
+  display: block !important;
+  margin: 1rem 0 !important;
+  position: relative !important;
+  text-shadow: 0 0 8px rgba(15, 185, 253, 0.2) !important;
+}
+
+.markdown-content h1.cosmic-heading {
+  font-size: 2.5rem !important;
+  font-weight: 900 !important;
+  margin-bottom: 1.5rem !important;
+  color: #0FB9FD !important; /* Logo blue */
+}
+
+.markdown-content h2.cosmic-heading {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
+  color: #4DCFFF !important; /* Lighter blue */
+}
+
+.markdown-content h3.cosmic-heading {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  color: #7CDFFF !important; /* Even lighter blue */
+}
+
+.markdown-content h4.cosmic-heading {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.75rem !important;
+  color: #B5EBFF !important; /* Very light blue */
+}
+
+.markdown-content h1.cosmic-heading:hover,
+.markdown-content h2.cosmic-heading:hover,
+.markdown-content h3.cosmic-heading:hover,
+.markdown-content h4.cosmic-heading:hover {
+  color: #FFFFFF !important;
+  text-shadow: 0 0 8px rgba(15, 185, 253, 0.4) !important;
 }
 
 .info-container, .warning-container {
@@ -692,7 +780,7 @@ pre.mermaid {
   }
   
   .toc-content.toc-expanded {
-    max-height: 250px;
+    max-height: 300px;
   }
   
   .toc-container a {
@@ -705,5 +793,46 @@ pre.mermaid {
     padding: 1rem;
     margin: 1rem 0;
   }
+}
+
+.cosmic-heading {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+  font-family: 'Montserrat', sans-serif !important;
+  width: 100% !important;
+  display: block !important;
+  margin: 1rem 0 !important;
+}
+
+h1.cosmic-heading {
+  font-size: 2.5rem !important;
+  font-weight: 900 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+h2.cosmic-heading {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
+}
+
+h3.cosmic-heading {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+h4.cosmic-heading {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.cosmic-heading:hover {
+  color: #4DCFFF !important;
+  text-shadow: 0 0 8px rgba(15, 185, 253, 0.4) !important;
 }
 </style>

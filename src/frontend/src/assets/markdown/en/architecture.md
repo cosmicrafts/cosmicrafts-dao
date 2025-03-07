@@ -29,7 +29,7 @@ graph TD
 
 Cosmicrafts implements a hybrid architecture that strategically integrates on-chain and off-chain components, leveraging Internet Computer's scalability, cost-efficiency, and decentralized infrastructure.
 
-Unlike traditional games, Cosmicrafts implements critical game logic, asset management, and governance in a single unified canister, while using specialized WebSocket technologies for real-time multiplayer. This approach reduces latency while eliminating single points of failure.
+Unlike traditional games, Cosmicrafts implements smart contracts on critical game logic, governance, and asset management, while using WebSocket for real-time multiplayer. This approach allows to run the game in real-time server while having the inherent security of the Internet Computer.
 
 <div class="implementation-details">
 

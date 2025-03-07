@@ -254,177 +254,18 @@ a:hover {
   color: var(--color-text-secondary);
 }
 
-.markdown-content h1 {
-  font-size: 2.5rem;
-  font-weight: var(--weight-black);
-  color: var(--color-title-primary);
-  border-bottom: 2px solid var(--color-primary);
-  padding-bottom: 0.75rem;
-  margin-bottom: 1.5rem;
-  text-shadow: 0 2px 12px rgba(15, 185, 253, 0.3);
-  position: relative;
-  display: inline-block;
-  transition: color 0.15s ease-in-out, text-shadow 0.25s ease-in-out;
+/* Style the header anchors but keep them visible */
+.header-anchor {
+  opacity: 0.3;
+  color: var(--color-primary);
+  text-decoration: none;
+  margin-left: 0.5rem;
+  font-size: 0.8em;
 }
 
-.markdown-content h1::before,
-.markdown-content h1::after {
-  content: '';
-  position: absolute;
-  height: .15rem;
-  width: 50%;
-  background-color: var(--color-accent);
-  transition: transform 0.45s ease, box-shadow 0.65s ease;
-  box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.948);
-  transform: scaleX(0);
-  z-index: 1;
-}
-
-.markdown-content h1::before {
-  top: -.1rem;
-  left: -4%;
-  transform-origin: left;
-}
-
-.markdown-content h1::after {
-  bottom: calc(0.75rem + 2px); /* Adjust for padding-bottom and border */
-  right: -4%;
-  transform-origin: right;
-}
-
-.markdown-content h1:hover::before,
-.markdown-content h1:hover::after {
-  transform: scaleX(1.25);
-  box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.936);
-}
-
-.markdown-content h2 {
-  font-size: 2rem;
-  font-weight: var(--weight-extra-bold);
-  color: var(--color-title-secondary);
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  text-shadow: 0 2px 8px rgba(15, 185, 253, 0.25);
-  position: relative;
-  display: inline-block;
-  transition: color 0.15s ease-in-out, text-shadow 0.25s ease-in-out;
-}
-
-.markdown-content h2::before,
-.markdown-content h2::after {
-  content: '';
-  position: absolute;
-  height: .15rem;
-  width: 50%;
-  background-color: var(--color-accent);
-  transition: transform 0.45s ease, box-shadow 0.65s ease;
-  box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.948);
-  transform: scaleX(0);
-  z-index: 1;
-}
-
-.markdown-content h2::before {
-  top: -.1rem;
-  left: -4%;
-  transform-origin: left;
-}
-
-.markdown-content h2::after {
-  bottom: -1px;
-  right: -4%;
-  transform-origin: right;
-}
-
-.markdown-content h2:hover::before,
-.markdown-content h2:hover::after {
-  transform: scaleX(1.25);
-  box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.936);
-}
-
-.markdown-content h3 {
-  font-size: 1.5rem;
-  font-weight: var(--weight-bold);
-  color: var(--color-title-tertiary);
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  text-shadow: 0 1px 6px rgba(15, 185, 253, 0.2);
-  position: relative;
-  display: inline-block;
-  transition: color 0.15s ease-in-out, text-shadow 0.25s ease-in-out;
-}
-
-.markdown-content h3::before,
-.markdown-content h3::after {
-  content: '';
-  position: absolute;
-  height: .15rem;
-  width: 50%;
-  background-color: var(--color-accent);
-  transition: transform 0.45s ease, box-shadow 0.65s ease;
-  box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.948);
-  transform: scaleX(0);
-  z-index: 1;
-}
-
-.markdown-content h3::before {
-  top: -.1rem;
-  left: -4%;
-  transform-origin: left;
-}
-
-.markdown-content h3::after {
-  bottom: -1px;
-  right: -4%;
-  transform-origin: right;
-}
-
-.markdown-content h3:hover::before,
-.markdown-content h3:hover::after {
-  transform: scaleX(1.25);
-  box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.936);
-}
-
-.markdown-content h4 {
-  font-size: 1.25rem;
-  font-weight: var(--weight-bold);
-  color: var(--color-text-primary);
-  margin-top: 1.25rem;
-  margin-bottom: 0.75rem;
-  text-shadow: 0 1px 4px rgba(15, 185, 253, 0.15);
-  position: relative;
-  display: inline-block;
-  transition: color 0.15s ease-in-out, text-shadow 0.25s ease-in-out;
-}
-
-.markdown-content h4::before,
-.markdown-content h4::after {
-  content: '';
-  position: absolute;
-  height: .15rem;
-  width: 50%;
-  background-color: var(--color-accent);
-  transition: transform 0.45s ease, box-shadow 0.65s ease;
-  box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.948);
-  transform: scaleX(0);
-  z-index: 1;
-}
-
-.markdown-content h4::before {
-  top: -.1rem;
-  left: -4%;
-  transform-origin: left;
-}
-
-.markdown-content h4::after {
-  bottom: -1px;
-  right: -4%;
-  transform-origin: right;
-}
-
-.markdown-content h4:hover::before,
-.markdown-content h4:hover::after {
-  transform: scaleX(1.25);
-  box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.936);
+.header-anchor:hover {
+  opacity: 1;
+  text-decoration: none;
 }
 
 .markdown-content p {
@@ -509,6 +350,15 @@ a:hover {
   background: rgba(15, 185, 253, 0.1);
   color: var(--color-text-primary);
   font-weight: 600;
+}
+
+/* Force markdown heading colors globally */
+html body .markdown-content h1,
+html body .markdown-content h2, 
+html body .markdown-content h3,
+html body .markdown-content h4 {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* Responsive styles remain unchanged */

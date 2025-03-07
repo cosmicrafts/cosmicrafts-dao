@@ -141,7 +141,8 @@
     ]
   },
   "footer": {
-    "stayConnected": "Bağlı Kalalım",
+    "stayConnected": "Bağlantıda Kalalım",
+    "explore": "Keşfet",
     "careers": "Kariyer",
     "about": "Hakkımızda",
     "support": "Yardıma mı ihtiyacın var?",

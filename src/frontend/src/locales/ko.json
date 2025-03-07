@@ -141,7 +141,8 @@
     ]
   },
   "footer": {
-    "stayConnected": "우리와 함께하세요",
+    "stayConnected": "연결을 유지합시다",
+    "explore": "탐색",
     "careers": "채용",
     "about": "소개",
     "support": "지원",

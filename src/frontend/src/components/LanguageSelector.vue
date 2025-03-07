@@ -100,7 +100,7 @@ onBeforeUnmount(() => {
   font-size: 1.25rem;
   transition: background-color 0.1s ease;
   font-weight: 600;
-  z-index: 10;
+  z-index: 1000000;
 }
 
 .lang-icon {
@@ -129,7 +129,7 @@ onBeforeUnmount(() => {
 .dropdown-menu {
   position: absolute;
   display: grid;
-  grid-template-columns: repeat(2, 3fr);
+  grid-template-columns: repeat(4, 2fr);
   gap: 2rem;
   background: linear-gradient(to bottom, rgba(30, 43, 56, 0.658), rgba(23, 33, 43, 0.705));
   border: 1px solid #3a3a3a;

@@ -24,10 +24,10 @@
   --color-secondary: #FF9100;
   --color-accent: #FFB800;
   
-  /* Title Colors */
-  --color-title-primary: #0FB9FD;    /* Same as logo blue */
-  --color-title-secondary: #7CDFFF;  /* Lighter blue for secondary titles */
-  --color-title-tertiary: #B5EBFF;   /* Even lighter blue for tertiary titles */
+  /* Title Colors - Changed to white for markdown content */
+  --color-title-primary: #FFFFFF;   /* Changed from logo blue to white */
+  --color-title-secondary: #FFFFFF; /* Changed from lighter blue to white */
+  --color-title-tertiary: #FFFFFF;  /* Changed from even lighter blue to white */
   
   /* Status Colors */
   --color-success: #00E5A4;
