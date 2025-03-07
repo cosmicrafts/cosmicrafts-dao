@@ -1,24 +1,28 @@
 /* Cosmicrafts Mermaid Theme
-   A clean, focused theme specifically designed for diagrams in architecture.md */
+   A clean, focused theme specifically designed for diagrams in our cosmic-styled site */
 
 /* ===== Core Variables ===== */
 :root {
-  /* Core Brand Colors */
-  --cosmic-blue: #00c3ff;
-  --cosmic-green: #00ff95;
-  --cosmic-orange: #ffa200;
-  --cosmic-red: #ef4444;
-  --cosmic-dark: #1e2b38;
+  /* Core Brand Colors - Updated to match universal.css */
+  --cosmic-blue: #0FB9FD;
+  --cosmic-blue-light: #4DCFFF;
+  --cosmic-blue-dark: #0A8BC0;
+  --cosmic-green: #00E5A4;
+  --cosmic-orange: #FF9100;
+  --cosmic-accent: #FFB800;
+  --cosmic-red: #FF4B4B;
+  --cosmic-dark: #0E1824;
+  --cosmic-darker: #0A1420;
   
   /* Layer Colors - Fill with opacity */
-  --user-fill: #1e2b38;
-  --frontend-fill: rgba(0, 195, 255, 0.12);
-  --blockchain-fill: rgba(0, 153, 51, 0.12);
-  --token-fill: rgba(255, 162, 0, 0.12);
-  --dao-fill: rgba(239, 68, 68, 0.12);
+  --user-fill: rgba(14, 24, 36, 0.7);
+  --frontend-fill: rgba(15, 185, 253, 0.08);
+  --blockchain-fill: rgba(0, 229, 164, 0.08);
+  --token-fill: rgba(255, 145, 0, 0.08);
+  --dao-fill: rgba(255, 75, 75, 0.08);
   
   /* Border Colors - Solid */
-  --user-border: rgba(255, 255, 255, 0.3);
+  --user-border: rgba(255, 255, 255, 0.15);
   --frontend-border: var(--cosmic-blue);
   --blockchain-border: var(--cosmic-green);
   --token-border: var(--cosmic-orange);
@@ -26,11 +30,18 @@
   
   /* Text */
   --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.85);
+  --text-tertiary: rgba(255, 255, 255, 0.7);
   
   /* Dimensions */
-  --stroke-width: .25px;
-  --node-radius: 36px;
+  --stroke-width: 1px;
+  --node-radius: 8px;
   --font-size: 14px;
+  
+  /* Shadows and Effects */
+  --node-shadow: 0 4px 12px rgba(15, 185, 253, 0.15);
+  --node-glow: 0 0 15px rgba(15, 185, 253, 0.3);
+  --line-color: rgba(15, 185, 253, 0.5);
 }
 
 
@@ -38,6 +49,7 @@
 .mermaid svg {
   max-width: 100% !important;
   height: auto !important;
+  background: transparent !important;
 }
 
 /* ===== Node Shapes ===== */
@@ -52,13 +64,96 @@
   rx: var(--node-radius) !important;
   ry: var(--node-radius) !important;
   stroke-width: var(--stroke-width) !important;
+  fill: var(--frontend-fill) !important;
+  stroke: var(--frontend-border) !important;
+  filter: drop-shadow(var(--node-shadow)) !important;
+  transition: all 0.3s ease !important;
 }
 
+/* Node hover effects */
+.mermaid svg .node:hover rect,
+.mermaid svg rect.node:hover,
+.mermaid svg .node:hover circle,
+.mermaid svg circle.node:hover,
+.mermaid svg .node:hover polygon,
+.mermaid svg polygon.node:hover,
+.mermaid svg .node:hover path,
+.mermaid svg path.node:hover {
+  filter: drop-shadow(var(--node-glow)) !important;
+  stroke-width: 1.5px !important;
+  transform: translateY(-2px);
+}
 
+/* Text styling */
+.mermaid svg .node text,
+.mermaid svg text.node,
+.mermaid svg .edgeLabel text,
+.mermaid svg text.edgeLabel {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: var(--font-size) !important;
+  fill: var(--text-primary) !important;
+  font-weight: 500 !important;
+}
 
+/* Edge/Arrow styling */
+.mermaid svg .edgePath path,
+.mermaid svg path.edgePath {
+  stroke: var(--line-color) !important;
+  stroke-width: 1.25px !important;
+  opacity: 0.9 !important;
+  marker-end: url(#arrowhead) !important;
+}
 
+/* Edge label box */
+.mermaid svg .edgeLabel rect,
+.mermaid svg rect.edgeLabel {
+  fill: var(--cosmic-dark) !important;
+  opacity: 0.8 !important;
+  rx: 4px !important;
+  ry: 4px !important;
+}
+
+/* Cluster (subgraph) styling */
+.mermaid svg .cluster rect,
+.mermaid svg rect.cluster {
+  rx: 12px !important;
+  ry: 12px !important;
+  fill: rgba(15, 185, 253, 0.03) !important;
+  stroke: rgba(15, 185, 253, 0.2) !important;
+  stroke-dasharray: 5 !important;
+  stroke-width: 1px !important;
+}
+
+/* Class-specific styling */
+.mermaid svg .node.user rect { 
+  fill: var(--user-fill) !important; 
+  stroke: var(--user-border) !important;
+}
+.mermaid svg .node.frontend rect { 
+  fill: var(--frontend-fill) !important; 
+  stroke: var(--frontend-border) !important;
+}
+.mermaid svg .node.blockchain rect { 
+  fill: var(--blockchain-fill) !important; 
+  stroke: var(--blockchain-border) !important;
+}
+.mermaid svg .node.token rect { 
+  fill: var(--token-fill) !important; 
+  stroke: var(--token-border) !important;
+}
+.mermaid svg .node.dao rect { 
+  fill: var(--dao-fill) !important; 
+  stroke: var(--dao-border) !important;
+}
+
+/* Small diagrams */
 .mermaid-small {
-  transform: scale(1) !important;
+  transform: scale(0.9) !important;
   transform-origin: center center !important;
-  margin: 1rem auto !important;
+  margin: 1.5rem auto !important;
+  max-width: 100% !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+  background: rgba(15, 185, 253, 0.02) !important;
+  border: var(--border-thin) !important;
 }
