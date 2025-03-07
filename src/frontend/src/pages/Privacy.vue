@@ -71,24 +71,12 @@ const scrollToSection = (sectionId) => {
 .animated-title {
   margin-bottom: 2rem;
   text-align: center;
-  animation: fadeInDown 1s ease-out;
 }
 
 .privacy-content {
   padding: 4rem;
 }
 
-/* Animation for headings when scrolled to */
-@keyframes highlightSection {
-  0% { background-color: rgba(255, 255, 255, 0); }
-  30% { background-color: rgba(112, 0, 255, 0.2); }
-  100% { background-color: rgba(255, 255, 255, 0); }
-}
-
-:deep(.highlight-section) {
-  animation: highlightSection 1.5s ease-out;
-  border-radius: 0.25rem;
-}
 
 @media (max-width: 768px) {
   .privacy-content {

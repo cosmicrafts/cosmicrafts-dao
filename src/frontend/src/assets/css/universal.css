@@ -4,33 +4,40 @@
 
 :root {
   /* Color System */
-  --color-background: #242731;
-  --color-background-darker: #000000;
-  --color-surface-primary: rgba(30, 43, 56, 0.5);
-  --color-surface-secondary: rgba(23, 33, 43, 0.7);
-  --color-surface-tertiary: rgba(0, 0, 0, 0.2);
+  --color-background: #0E1824;
+  --color-background-darker: #0A1420;
+  --color-surface-primary: rgba(15, 185, 253, 0.05);
+  --color-surface-secondary: rgba(15, 185, 253, 0.08);
+  --color-surface-tertiary: rgba(15, 185, 253, 0.02);
   
   /* Text Colors */
   --color-text-primary: #ffffff;
-  --color-text-secondary: rgba(255, 255, 255, 0.8);
-  --color-text-tertiary: rgba(255, 255, 255, 0.6);
-  --color-text-disabled: rgba(255, 255, 255, 0.4);
+  --color-text-secondary: rgba(255, 255, 255, 0.85);
+  --color-text-tertiary: rgba(255, 255, 255, 0.7);
+  --color-text-disabled: rgba(255, 255, 255, 0.5);
   
   /* Brand Colors */
-  --color-primary: #00c3ff;
-  --color-primary-hover: #33cfff;
-  --color-secondary: #ff00c3;
-  --color-accent: #ffa200;
+  --color-primary: #0FB9FD;
+  --color-primary-light: #4DCFFF;
+  --color-primary-hover: #4DCFFF;
+  --color-primary-dark: #0A8BC0;
+  --color-secondary: #FF9100;
+  --color-accent: #FFB800;
+  
+  /* Title Colors */
+  --color-title-primary: #0FB9FD;    /* Same as logo blue */
+  --color-title-secondary: #7CDFFF;  /* Lighter blue for secondary titles */
+  --color-title-tertiary: #B5EBFF;   /* Even lighter blue for tertiary titles */
   
   /* Status Colors */
-  --color-success: #00ff95;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-  --color-info: #4a6cff;
+  --color-success: #00E5A4;
+  --color-warning: #FFB800;
+  --color-error: #FF4B4B;
+  --color-info: #0FB9FD;
   
   /* Border */
-  --border-thin: 1px solid rgba(255, 255, 255, 0.1);
-  --border-medium: 2px solid rgba(255, 255, 255, 0.15);
+  --border-thin: 1px solid rgba(15, 185, 253, 0.1);
+  --border-medium: 2px solid rgba(15, 185, 253, 0.15);
   --border-highlight: 1px solid var(--color-primary);
   
   /* Border Radius */
@@ -41,11 +48,11 @@
   --radius-circle: 50%;
   
   /* Shadows */
-  --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.3);
-  --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.25);
   --shadow-large: 0 8px 16px rgba(0, 0, 0, 0.3);
-  --shadow-glow-primary: 0 0 10px rgba(0, 195, 255, 0.5);
-  --shadow-glow-secondary: 0 0 10px rgba(255, 0, 195, 0.5);
+  --shadow-glow-primary: 0 0 20px rgba(15, 185, 253, 0.25);
+  --shadow-glow-secondary: 0 0 20px rgba(255, 145, 0, 0.25);
   
   /* Spacing */
   --space-xs: 0.25rem;
@@ -85,11 +92,11 @@
   --transition-slow: 0.3s ease;
   
   /* Gradients */
-  --gradient-primary: linear-gradient(to bottom, rgba(30, 43, 56, 0.9), rgba(23, 33, 43, .95));
-  --gradient-hero: radial-gradient(circle at center, #0a0e1a, #000000);
-  --gradient-accent: linear-gradient(90deg, #00d9ff, #ff00c3);
-  --gradient-button: linear-gradient(to bottom, #3886de, #246ed6);
-  --gradient-button-hover: linear-gradient(to bottom, #3d92f3, #287aed);
+  --gradient-primary: linear-gradient(135deg, rgba(15, 185, 253, 0.1), rgba(10, 139, 192, 0.1));
+  --gradient-hero: radial-gradient(circle at center, #0A1420, #050A10);
+  --gradient-accent: linear-gradient(90deg, #0FB9FD, #FF9100);
+  --gradient-button: linear-gradient(to bottom, #0FB9FD, #0A8BC0);
+  --gradient-button-hover: linear-gradient(to bottom, #4DCFFF, #0FB9FD);
 }
 
 /* ======== UTILITY CLASSES ======== */
