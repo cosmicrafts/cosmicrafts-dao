@@ -68,7 +68,7 @@
       <!-- Legal Content -->
       <div class="cosmic-card legal-content">
         <h2 class="legal-policy-title">Legal Terms and Conditions</h2>
-        <div class="last-updated">Last Updated: June 1, 2023</div>
+        <div class="last-updated">Last Updated: March 4, 2023</div>
         
         <MarkdownRenderer 
           fileName="legal" 

@@ -15,7 +15,7 @@ NnsProposal:
       Proposal to create an SNS DAO for Cosmicrafts.
 
       # About
-      Cosmicrafts offers you a seat at the table of a Metaverse franchise built entirely on the Internet Computer, we're introducing a new era of franchise ownership, stakeholder participation, and meaningful economic rewards. Backed by cutting-edge technology and over 8 years of development behind it, we've got a brand ready to grow, backed by a solid foundation and a system designed for action.      
+      Cosmicrafts brings you a seat at the table of a Metaverse franchise built entirely on the Internet Computer, we're introducing a new era of franchise ownership, stakeholder participation, and meaningful economic rewards. Backed by cutting-edge technology and over 8 years of development behind it, we've got a brand ready to grow, backed by a solid foundation and a system designed for action.      
       [Cosmicrafts](https://cosmicrafts.com/)
       
       ## Token distribution
@@ -29,9 +29,9 @@ NnsProposal:
       * The Ledger Transaction fee is 0.01 SPIRAL
       
       **Decentralization SWAP**
-      * Min participation - 1 ICP
-      * Min participants -  100
-      * Min to be raised -  1 ICP
+      * Min participation - 100 ICP
+      * Min participants -  10
+      * Min to be raised -  100 ICP
       * Max to be raised -  1,000,000 ICP
 
       **Learn more**
@@ -60,45 +60,45 @@ Neurons:
     minimum_creation_stake: 1000 tokens
 
 Voting:
-    minimum_dissolve_delay: 1 month
+    minimum_dissolve_delay: 30 days
     MaximumVotingPowerBonuses:
         DissolveDelay:
             duration: 8 years
             bonus: 100%
         Age:
-            duration: 4 years
-            bonus: 25%
+            duration: 365 days
+            bonus: 100%
     RewardRate:
-        initial: 0%
-        final: 0%
-        transition_duration: 0 years
+        initial: 8%
+        final: 1%
+        transition_duration: 8 years
 
 Distribution:
     Neurons:
         
         # 2Link
-        - principal: p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
+        - principal: ezxsa-vsskc-ppkoa-zey4i-ytkcr-qd7d3-iswqy-xliwk-vxbme-xh6cm-oqe
           stake: 16_000_000 tokens
           memo: 0
           dissolve_delay: 1 year
           vesting_period: 1 year
 
         # Anmi Capital
-        - principal: m2eja-bglg2-vc6vj-veszz-do5vs-hqofl-gfc2t-mw6v5-ru2ur-wfqoe-nqe
+        - principal: ezxsa-vsskc-ppkoa-zey4i-ytkcr-qd7d3-iswqy-xliwk-vxbme-xh6cm-oqe
           stake: 10_000_000 tokens
           memo: 1
           dissolve_delay: 1 year
           vesting_period: 1 year   
 
         # Genesis
-        - principal: p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
+        - principal: ezxsa-vsskc-ppkoa-zey4i-ytkcr-qd7d3-iswqy-xliwk-vxbme-xh6cm-oqe
           stake: 4_000_000 tokens
           memo: 2
-          dissolve_delay: 1 year
-          vesting_period: 1 year
+          dissolve_delay: 0 years
+          vesting_period: 8 years
 
         # Developer Team
-        - principal: p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
+        - principal: ezxsa-vsskc-ppkoa-zey4i-ytkcr-qd7d3-iswqy-xliwk-vxbme-xh6cm-oqe
           stake: 80_000_000 tokens
           memo: 3
           dissolve_delay: 8 years
@@ -118,7 +118,7 @@ Swap:
     restricted_countries:
         - AQ
     VestingSchedule:
-        events: 2
-        interval: 1 month
+        events: 4
+        interval: 3 month
     duration: 1 day
-    neurons_fund_participation: true
+    neurons_fund_participation: false

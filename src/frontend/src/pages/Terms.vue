@@ -71,7 +71,7 @@
       <!-- Terms Content -->
       <div class="cosmic-card terms-content">
         <h2 class="terms-policy-title">Terms of Service</h2>
-        <div class="last-updated">Last Updated: June 1, 2023</div>
+        <div class="last-updated">Last Updated: March 4, 2023</div>
         
         <MarkdownRenderer 
           fileName="terms" 

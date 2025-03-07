@@ -74,7 +74,7 @@
       <!-- Privacy Policy Content -->
       <div class="cosmic-card privacy-content">
         <h2 class="privacy-policy-title">Privacy Policy</h2>
-        <div class="last-updated">Last Updated: June 1, 2023</div>
+        <div class="last-updated">Last Updated: March 4, 2023</div>
         
         <MarkdownRenderer 
           fileName="privacy" 
