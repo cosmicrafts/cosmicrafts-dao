@@ -387,14 +387,15 @@ const toggleSection = (section) => {
 }
 
 .copyright-logo {
-  width: 50px;
-  height: 50px;
+  width: 72px;
   filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.5));
+  margin-top: 0.75rem;
 }
 
 .copyright {
   text-align: right;
-  font-size: 0.8rem;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
   color: var(--color-text-tertiary);
 }
 
@@ -407,7 +408,7 @@ const toggleSection = (section) => {
 .mobile-social-bar {
   display: flex;
   justify-content: center;
-  gap: 1.25rem;
+  gap: 2rem;
   margin-bottom: 2rem;
   padding: 0 1.5rem;
 }
@@ -517,21 +518,20 @@ const toggleSection = (section) => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1rem 1.5rem 0;
-  margin-top: 0.5rem;
+  padding: 1rem;
   border-top: 1px solid rgba(15, 185, 253, 0.1);
 }
 
 .mobile-copyright-logo {
-  width: 50px;
-  height: 50px;
-  margin-bottom: 0.75rem;
+  width: 64px;
+  height: 64;
+  margin-bottom: 0.25rem;
   filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.5));
 }
 
 .mobile-copyright {
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   color: var(--color-text-tertiary);
 }
 
@@ -552,25 +552,13 @@ const toggleSection = (section) => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .desktop-footer {
     display: none;
   }
   
   .mobile-footer {
     display: block;
-  }
-}
-
-/* Tablet specific adjustments */
-@media (min-width: 769px) and (max-width: 992px) {
-  .copyright-container {
-    flex-direction: column;
-    align-items: flex-end;
-  }
-  
-  .copyright-logo {
-    margin-top: 0.5rem;
   }
 }
 </style>
