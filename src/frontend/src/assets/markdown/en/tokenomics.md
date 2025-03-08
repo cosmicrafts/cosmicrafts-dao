@@ -1,7 +1,5 @@
 # Tokenomics
 
-[[toc:2-2]]
-
 ## Overview
 
 The SPIRAL token is the economic foundation of the Cosmicrafts ecosystem, designed to:
@@ -13,8 +11,6 @@ The SPIRAL token is the economic foundation of the Cosmicrafts ecosystem, design
 Total Supply: **1 billion SPIRAL tokens**
 
 ## Strategic Distribution
-
-<div class="token-management">
 
 ### Token Allocation Strategy
 
@@ -30,8 +26,6 @@ Core Mechanisms:
 - **Governance Threshold**: 1,000 SPIRAL minimum stake
 - **Treasury Security**: Multi-sig and DAO approval required
 - **Full Auditability**: All operations tracked on-chain
-
-</div>
 
 ## Vesting Strategy
 

@@ -1,13 +1,17 @@
 <template>
-  <div class="whitepaper-container">
+  <div class="whitepaper-container cosmic-sidepanel-layout">
     <!-- Left Sidebar (Navigation) -->
-    <aside class="left-sidebar">
+    <aside class="left-sidebar cosmic-left-panel">
       <div class="sidebar-content">
         <ul>
           <li
             v-for="section in sections"
             :key="section.id"
-            :class="{ active: activeSection === section.id }"
+            :class="{ 
+              'sidebar-nav-item': true,
+              'left': true,
+              'active': activeSection === section.id 
+            }"
             @click="changeSection(section.id)"
           >
             {{ section.title }}
@@ -17,13 +21,10 @@
     </aside>
 
     <!-- Main Content Area -->
-    <main class="main-content">
+    <main class="main-content cosmic-main-content">
       <div class="content-wrapper">
         <!-- Content Transition and Markdown Rendering -->
-        <transition
-          name="fade-slide"
-          @after-leave="() => { generateTOC(); this.observeSections(); }"
-        >
+        <transition name="content-transition" @after-leave="afterTransition">
           <MarkdownRenderer
             :fileName="activeSection"
             @rendered="generateTOC"
@@ -34,58 +35,56 @@
 
         <!-- Navigation Buttons -->
         <div class="navigation-buttons">
-          <transition name="fade-button">
-            <button
-              v-if="showPreviousButton"
-              class="button prev"
-              @click="navigatePrevious"
-            >
-              <span class="arrow">
-                <img src="/src/assets/icons/prev.svg" alt="arrow" />
-              </span>
-              <small>Previous</small>
-              <span>{{ previousSection?.title }}</span>
-            </button>
-          </transition>
+          <button
+            v-if="showPreviousButton"
+            class="button outline prev"
+            @click="navigatePrevious"
+          >
+            <span class="arrow">
+              <img src="/src/assets/icons/prev.svg" alt="arrow" />
+            </span>
+            <small>Previous</small>
+            <span>{{ previousSection?.title }}</span>
+          </button>
 
-          <transition name="fade-button">
-            <button
-              v-if="showNextButton"
-              class="button next"
-              @click="navigateNext"
-            >
-              <small>Next</small>
-              <span>{{ nextSection?.title }}</span>
-              <span class="arrow">
-                <img src="/src/assets/icons/next.svg" alt="arrow" />
-              </span>
-            </button>
-          </transition>
+          <button
+            v-if="showNextButton"
+            class="button outline next"
+            @click="navigateNext"
+          >
+            <small>Next</small>
+            <span>{{ nextSection?.title }}</span>
+            <span class="arrow">
+              <img src="/src/assets/icons/next.svg" alt="arrow" />
+            </span>
+          </button>
         </div>
       </div>
     </main>
 
     <!-- Right Sidebar (Table of Contents) -->
-    <aside class="right-sidebar">
+    <aside class="right-sidebar cosmic-right-panel">
       <div class="sidebar-content">
-        <transition name="fade-slide-toc">
-          <ul v-if="toc.length > 0">
-            <li
-              v-for="cue in toc"
-              :key="cue.id"
-              :class="{ active: cue.id === activeHeading }"
-              @click="scrollToHeading(cue.id)"
-            >
-              {{ cue.text }}
-            </li>
-          </ul>
-        </transition>
+        <ul v-if="toc.length > 0">
+          <li
+            v-for="cue in toc"
+            :key="cue.id"
+            :class="{ 
+              'sidebar-nav-item': true,
+              'right': true,
+              'active': cue.id === activeHeading 
+            }"
+            @click="scrollToHeading(cue.id)"
+          >
+            {{ cue.text }}
+          </li>
+        </ul>
       </div>
     </aside>
 
     <!-- Mobile Navigation -->
     <div class="mobile-navigation-container">
-      <!-- Mobile Navigation Button (Always Visible) -->
+      <!-- Mobile Navigation Button -->
       <button class="mobile-nav-button" @click="toggleMobileNav">
         <span>Whitepaper Sections</span>
         <span class="mobile-nav-icon" :class="{ 'open': showMobileNav }">▼</span>
@@ -124,8 +123,7 @@ export default {
         { id: "core-features", title: "Core Features" },       
         { id: "governance", title: "Governance" },
         { id: "tokenomics", title: "Tokenomics" },
-        { id: "community", title: "Community" },
-        { id: "sustainability", title: "Sustainability" },
+        { id: "community", title: "Community" }
       ],
       toc: [],
       activeHeading: null,
@@ -154,14 +152,11 @@ export default {
   watch: {
     activeSection() {
       this.updateButtonVisibility();
-      // Update URL hash when section changes
       this.updateUrlHash();
     },
     activeHeading() {
-      // Update URL hash when active heading changes
       this.updateUrlHash();
     },
-    // Watch for hash changes in the URL
     '$route.hash': {
       immediate: true,
       handler(hash) {
@@ -172,7 +167,11 @@ export default {
     }
   },
   methods: {
-    // Updates the URL hash with current section and heading
+    afterTransition() {
+      this.generateTOC();
+      this.observeSections();
+    },
+    
     updateUrlHash() {
       if (!this.activeSection) return;
       
@@ -180,52 +179,41 @@ export default {
         ? `#${this.activeSection}#${this.activeHeading}` 
         : `#${this.activeSection}`;
       
-      // Update URL without triggering navigation
       if (window.location.hash !== hash) {
         history.replaceState(null, null, hash);
       }
     },
     
-    // Handles URL hash changes
     handleUrlHash(hash) {
       if (!hash) return;
       
-      // Remove the leading # character
       const hashValue = hash.startsWith('#') ? hash.substring(1) : hash;
       
-      // Check if it's a nested hash (#section#heading)
       if (hashValue.includes('#')) {
         const [sectionId, headingId] = hashValue.split('#');
         
-        // First change to the correct section
         if (sectionId && this.sections.some(s => s.id === sectionId)) {
-          // Only change section if it's different from the current one
           if (this.activeSection !== sectionId) {
             this.changeSection(sectionId, false);
             
-            // After section is loaded, scroll to heading
             this.$nextTick(() => {
               setTimeout(() => {
                 if (headingId) {
                   this.scrollToHeading(headingId, false);
                 }
-              }, 500); // Give time for content to render
+              }, 300);
             });
           } else if (headingId) {
-            // If already on the correct section, just scroll to heading
             this.scrollToHeading(headingId, false);
           }
         }
       } else if (this.sections.some(s => s.id === hashValue)) {
-        // It's just a section hash
         this.changeSection(hashValue, false);
       } else {
-        // It might be just a heading hash
         this.scrollToHeading(hashValue, false);
       }
     },
     
-    // Changes the active section
     changeSection(sectionId, updateUrl = true) {
       this.activeSection = sectionId;
       this.toc = [];
@@ -233,74 +221,57 @@ export default {
       this.$nextTick(() => {
         this.generateTOC();
         
-        // Scroll to the top of the main content
         const mainContent = document.querySelector(".main-content");
         if (mainContent) {
           mainContent.scrollTop = 0;
         }
         
-        // Update URL if needed
         if (updateUrl) {
           this.updateUrlHash();
         }
       });
     },
 
-    // Navigation controls
     navigatePrevious() {
       if (this.previousSection) this.changeSection(this.previousSection.id);
     },
+    
     navigateNext() {
       if (this.nextSection) this.changeSection(this.nextSection.id);
     },
 
-    // Handles TOC navigation
     handleNavigateToSection(sectionIdOrHeadingId) {
-      // Check if it contains both section and heading (section#heading format)
       if (sectionIdOrHeadingId.includes('#')) {
         const [sectionId, headingId] = sectionIdOrHeadingId.split('#');
         
-        // Check if it's a valid section
         if (this.sections.some(s => s.id === sectionId)) {
-          // Change to the section first
           if (this.activeSection !== sectionId) {
             this.changeSection(sectionId, false);
             
-            // After section is loaded, scroll to heading
             this.$nextTick(() => {
-              setTimeout(() => {
-                this.scrollToHeading(headingId);
-              }, 500); // Give time for content to render
+              setTimeout(() => this.scrollToHeading(headingId), 300);
             });
           } else {
-            // Already on the correct section, just scroll to heading
             this.scrollToHeading(headingId);
           }
         }
         return;
       }
       
-      // Check if it's a known section ID (normal case)
       const section = this.sections.find((s) => s.id === sectionIdOrHeadingId);
       
       if (section) {
-        // It's a section, change to it
         this.changeSection(sectionIdOrHeadingId);
       } else {
-        // It's a heading, scroll to it
         this.scrollToHeading(sectionIdOrHeadingId);
       }
     },
 
-    // Updates the visibility of navigation buttons
     updateButtonVisibility() {
-      setTimeout(() => {
-        this.showPreviousButton = !!this.previousSection;
-        this.showNextButton = !!this.nextSection;
-      }, 100);
+      this.showPreviousButton = !!this.previousSection;
+      this.showNextButton = !!this.nextSection;
     },
 
-    // Generates the table of contents
     generateTOC() {
       this.toc = [];
       const contentElement = document.querySelector(".main-content");
@@ -309,16 +280,12 @@ export default {
       const headings = contentElement.querySelectorAll("h2");
       if (!headings.length) return;
 
-      this.toc = Array.from(headings).map((heading, index) => {
-        // Use the heading text for the ID to make it more readable in URLs
+      this.toc = Array.from(headings).map((heading) => {
         const headingText = heading.textContent.trim();
         const headingId = this.slugify(headingText);
         heading.id = headingId;
         
-        return { 
-          id: headingId, 
-          text: headingText 
-        };
+        return { id: headingId, text: headingText };
       });
 
       if (this.toc.length > 0) {
@@ -328,67 +295,54 @@ export default {
       this.$nextTick(() => this.observeSections());
     },
 
-    // Scrolls to a specific heading
     scrollToHeading(id) {
-    const target = document.getElementById(id);
+      const target = document.getElementById(id);
       if (target) {
-        // Calculate the header offset (20% from the top)
         const headerOffset = window.innerHeight * 0.2;
-
-        // Get the main content element for scrolling
         const mainContent = document.querySelector(".main-content");
         if (!mainContent) return;
 
-        // Calculate the target position relative to the main content
         const targetPosition = target.offsetTop - headerOffset;
 
-        // Scroll the main content to the target
         mainContent.scrollTo({
           top: targetPosition,
           behavior: "smooth"
         });
 
-        // Update the active heading
         this.activeHeading = id;
       }
     },
     
-    // Creates a URL-friendly slug from text
     slugify(text) {
       return text
         .toLowerCase()
-        .replace(/[^\w\s-]/g, '') // Remove non-word characters
-        .replace(/\s+/g, '-')     // Replace spaces with hyphens
-        .replace(/--+/g, '-')     // Replace multiple hyphens with single hyphen
-        .trim();                  // Trim leading/trailing whitespace
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/--+/g, '-')
+        .trim();
     },
 
-    // Observes which section is currently in view
     observeSections() {
       if (!this.toc.length) return;
       
-      // Clear any existing observer
       if (this.sectionObserver) {
         this.sectionObserver.disconnect();
       }
       
-      // Create a new IntersectionObserver
       this.sectionObserver = new IntersectionObserver(
         (entries) => {
-          // Find the first visible heading
           const visibleHeading = entries.find(entry => entry.isIntersecting);
           if (visibleHeading) {
             this.activeHeading = visibleHeading.target.id;
           }
         },
         {
-          root: document.querySelector('.main-content'), // Use main-content as the viewport
-          rootMargin: "-100px 0px -70% 0px", // Adjust margins to determine when a section is "active"
+          root: document.querySelector('.main-content'),
+          rootMargin: "-100px 0px -70% 0px",
           threshold: 0
         }
       );
       
-      // Observe all headings
       this.toc.forEach(heading => {
         const element = document.getElementById(heading.id);
         if (element) {
@@ -397,25 +351,21 @@ export default {
       });
     },
 
-    // Toggles the mobile TOC expansion
     toggleMobileNav() {
       this.showMobileNav = !this.showMobileNav;
     },
     
-    // Changes the section and closes the mobile navigation
     changeSectionAndCloseNav(sectionId) {
       this.changeSection(sectionId);
       this.showMobileNav = false;
     },
   },
 
-  // Lifecycle hooks
   mounted() {
     this.updateButtonVisibility();
     this.generateTOC();
     this.$nextTick(() => this.observeSections());
     
-    // Apply animation classes after component is mounted
     setTimeout(() => {
       const container = document.querySelector('.whitepaper-container');
       if (container) {
@@ -427,273 +377,56 @@ export default {
 </script>
 
 <style>
-/* Main container layout */
-.whitepaper-container {
-  display: grid;
-  grid-template-columns: 250px 1fr 250px;
-  grid-template-areas: "left-sidebar main-content right-sidebar";
-  height: 100vh;
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-/* Left sidebar styles */
-.left-sidebar {
-  grid-area: left-sidebar;
-  border-right: 1px solid rgba(58, 58, 58, 0.24);
-  height: 100%;
-  overflow: hidden;
-}
-
-.left-sidebar .sidebar-content {
-  height: 100%;
-  overflow-y: auto;
-  padding: 1rem;
-}
-
-.left-sidebar ul {
-  font-size: 0.9rem;
-  font-weight: bold;
-  margin-top: 5rem;
-  list-style: none;
-  padding: 0;
-}
-
-.left-sidebar li {
-  position: relative;
-  cursor: pointer;
-  margin-bottom: 1rem;
-  font-weight: bold;
-  color: #ffffff;
-  transition: color 0.25s ease-in-out, transform 0.25s ease-in-out,
-    text-shadow 0.25s ease-in-out, border-color 0.25s ease-in-out;
-  padding: 0.4rem 1rem;
-  text-align: left;
-}
-
-.left-sidebar li:hover {
-  color: #00c3ff;
-  border-bottom: 1px solid #00c3ff;
-  border-top: 1px solid #00c3ff;
-  text-shadow: 0px 0px 2px rgba(0, 191, 255, 0.686);
-  padding-bottom: 0.5rem;
-  font-size: 0.925rem;
-  margin-left: 0.25rem;
-}
-
-.left-sidebar li::before,
-.left-sidebar li::after {
-  content: '';
-  position: absolute;
-  height: 1.5px;
-  width: 50%;
-  background-color: #ffa200;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.948);
-  transform: scaleX(0);
-}
-
-.left-sidebar li::before {
-  top: -1px;
-  left: -0.25rem;
-  transform-origin: left;
-}
-
-.left-sidebar li::after {
-  bottom: -1px;
-  right: -0.25rem;
-  transform-origin: right;
-}
-
-.left-sidebar li:hover::before,
-.left-sidebar li:hover::after {
-  transform: scaleX(1.5);
-  box-shadow: 0px 0px 8px rgb(255, 162, 0);
-}
-
-.left-sidebar li.active {
-  color: #00c3ff;
-  font-weight: bold;
-  font-size: 1rem;
-  text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.88);
-  background-color: rgba(255, 255, 255, 0.056);
-  border-radius: 8px;
-  padding: 0.8rem 1rem;
-  border-top: 1.5px solid #00c3ff;
-  border-bottom: 3px solid rgb(255, 162, 0);
-  margin-left: -0.5rem;
-}
-
-.left-sidebar li.active::before,
-.left-sidebar li.active::after {
-  display: none;
-}
-
-/* Main content styles */
-.main-content {
-  grid-area: main-content;
-  height: 100%;
-  overflow-y: auto;
-  position: relative;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-}
-
-.main-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.main-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.main-content::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-}
-
+/* Content wrapper custom styling */
 .content-wrapper {
   max-width: 100%;
-  margin: 2rem auto;
-  padding: 2rem 12rem;
+  margin: 0 auto;
+  padding: 4rem 4rem;
   position: relative;
 }
 
-/* Right sidebar styles */
-.right-sidebar {
-  grid-area: right-sidebar;
-  border-left: 1px solid rgba(58, 58, 58, 0.24);
-  height: 100%;
-  overflow: hidden;
-}
-
-.right-sidebar .sidebar-content {
-  height: 100%;
-  overflow-y: auto;
-  padding: 1rem;
-}
-
-.right-sidebar ul {
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin-top: 5rem;
-  list-style: none;
-  padding: 0.4rem 0.4rem;
-}
-
-.right-sidebar li {
-  position: relative;
-  cursor: pointer;
-  margin-bottom: 0.75rem;
-  font-weight: bold;
-  color: #ffffff;
-  transition: color 0.25s ease-in-out, transform 0.25s ease-in-out,
-    text-shadow 0.25s ease-in-out, border-color 0.25s ease-in-out;
-  padding: 0.4rem 0.1rem;
-  text-align: left;
-}
-
-.right-sidebar li.active::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -0.5rem;
-  right: -0.5rem;
-  bottom: 0;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
-  z-index: -1;
-  transition: all 0.3s ease-in-out;
-}
-
-.right-sidebar li:hover {
-  color: #00c3ff;
-  border-bottom: 1px solid #00c3ff;
-  border-top: 1px solid #00c3ff;
-  text-shadow: 0px 0px 2px rgba(0, 191, 255, 0.686);
-  padding-bottom: 0.5rem;
-  transform: scale(1.05);
-}
-
-.right-sidebar li::before,
-.right-sidebar li::after {
-  content: '';
-  position: absolute;
-  height: 1.5px;
-  width: 50%;
-  background-color: #ffa200;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.948);
-  transform: scaleX(0);
-}
-
-.right-sidebar li::before {
-  top: -1px;
-  left: -0.25rem;
-  transform-origin: left;
-}
-
-.right-sidebar li::after {
-  bottom: -1px;
-  right: -0.25rem;
-  transform-origin: right;
-}
-
-.right-sidebar li:hover::before,
-.right-sidebar li:hover::after {
-  transform: scaleX(1.5);
-  box-shadow: 0px 0px 8px rgb(255, 162, 0);
-}
-
-.right-sidebar li.active {
-  color: #00c3ff;
-  font-weight: bold;
-  font-size: 0.75rem;
-  text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.88);
-  background-color: rgba(255, 255, 255, 0.056);
-  border-radius: 8px;
-  padding: 0.4rem 0.5rem;
-  border-top: 1.5px solid #00c3ff;
-  border-bottom: 3px solid rgb(255, 162, 0);
-}
-
-.right-sidebar li.active::before,
-.right-sidebar li.active::after {
-  display: none;
-}
 
 /* Navigation buttons */
 .navigation-buttons {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 2rem;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin: 3rem auto;
+  max-width: 800px;
+  padding: 0 1rem;
 }
 
 .navigation-buttons .button {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%;
+  width: auto;
+  min-width: 200px;
+  max-width: 300px;
   justify-content: center;
-  padding: 1rem 1rem;
-  border: 1px solid #3a3a3a76;
-  background: linear-gradient(180deg, #252c3f, #191e2b);
+  padding: 1rem 1.5rem;
+  position: relative;
+  border: 1px solid rgba(58, 58, 58, 0.24);
+  background: rgba(30, 43, 56, 0.65);
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.1s ease;
-  position: relative;
+  transition: all 0.2s ease;
 }
 
 .navigation-buttons .button:hover {
-  background: linear-gradient(180deg, #007bff, #265ef9);
+  background: rgba(30, 43, 56, 0.85);
+  border-color: rgba(0, 195, 255, 0.5);
 }
 
 .navigation-buttons .button.prev {
-  align-items: flex-end;
+  padding-left: 3rem;
+  text-align: left;
+}
+
+.navigation-buttons .button.next {
+  padding-right: 3rem;
   text-align: right;
+  align-items: flex-end;
 }
 
 .navigation-buttons .button span {
@@ -703,7 +436,8 @@ export default {
 }
 
 .navigation-buttons small {
-  color: rgb(176, 176, 176);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
 }
 
 .navigation-buttons .button .arrow {
@@ -720,97 +454,234 @@ export default {
   right: 1rem;
 }
 
-/* Transitions */
-.fade-slide-enter-active {
-  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+.sidebar-content {
+  height: calc(100vh - 8rem);
+  overflow-y: auto;
+  padding: 6rem 1.25rem;
 }
 
-.fade-slide-leave-active {
-  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+.left-sidebar ul, 
+.right-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.fade-slide-enter-from {
-  opacity: 0;
-  transform: translateY(20px);
+.right-sidebar ul {
+  padding-right: 0.5rem;
 }
 
-.fade-slide-enter-to {
+.right-sidebar .sidebar-content {
+  padding: 1.25rem 1rem;
+}
+
+/* Refined sidebar navigation styles */
+.sidebar-nav-item {
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-weight: 400;
+  transition: 
+    background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border-left-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: background-color, border-left-color, color, opacity;
+}
+
+.sidebar-nav-item:hover {
+  background: rgba(0, 195, 255, 0.08);
+  border-left-color: rgba(0, 195, 255, 0.5);
+  color: var(--color-text-primary);
+}
+
+.sidebar-nav-item.active {
+  background: rgba(0, 195, 255, 0.15);
+  border-left-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Left sidebar specific styles */
+.sidebar-nav-item.left {
+  font-size: 0.95rem;
+  padding: 0.85rem 1rem;
+}
+
+/* Right sidebar specific styles */
+.sidebar-nav-item.right {
+  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  line-height: 1.4;
+  opacity: 0.85;
+  transition: 
+    background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border-left-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-nav-item.right:hover {
   opacity: 1;
-  transform: translateY(0);
+  background: rgba(0, 195, 255, 0.08);
+  border-left-color: rgba(0, 195, 255, 0.5);
 }
 
-.fade-slide-leave-from {
+.sidebar-nav-item.right.active {
   opacity: 1;
-  transform: translateY(0);
+  background: rgba(0, 195, 255, 0.15);
+  border-left-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
+/* Mobile Navigation */
+.mobile-navigation-container {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  border-top: 1px solid rgba(58, 58, 58, 0.24);
+  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.85), rgba(23, 33, 43, 0.92));
+  backdrop-filter: blur(8px);
 }
 
-.fade-slide-toc-enter-active {
-  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+.mobile-nav-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1.25rem 2rem;
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.fade-slide-toc-leave-active {
-  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+.mobile-nav-icon {
+  transition: transform 0.3s ease;
+  color: rgba(0, 195, 255, 0.7);
 }
 
-.fade-slide-toc-enter-from {
-  opacity: 0;
-  transform: translateY(20px);
+.mobile-nav-icon.open {
+  transform: rotate(180deg);
 }
 
-.fade-slide-toc-enter-to {
-  opacity: 1;
-  transform: translateY(0);
+.mobile-nav-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  background: rgba(23, 33, 43, 0.8);
+  backdrop-filter: blur(8px);
 }
 
-.fade-slide-toc-leave-from {
-  opacity: 1;
-  transform: translateY(0);
+.mobile-nav-menu.expanded {
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
-.fade-slide-toc-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
+.mobile-nav-menu ul {
+  list-style-type: none;
+  padding: 1rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-nav-menu li {
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 400;
+  border-left: 2px solid transparent;
+  color: #fff;
+  background: rgba(30, 43, 56, 0.5);
+  transition: 
+    background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border-left-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: background-color, border-left-color, color;
+}
+
+.mobile-nav-menu li:hover {
+  border-left-color: rgba(0, 195, 255, 0.7);
+  background: rgba(30, 43, 56, 0.7);
+  color: rgba(0, 195, 255, 0.9);
+}
+
+.mobile-nav-menu li.active {
+  border-left-color: rgba(0, 195, 255, 0.9);
+  color: rgba(0, 195, 255, 0.9);
+  font-weight: 600;
+  background: rgba(30, 43, 56, 0.7);
+}
+
+/* Responsive Layout Adjustments */
+@media (min-width: 1280px) {
+  .cosmic-sidepanel-layout {
+    grid-template-columns: 280px minmax(600px, 1fr) 240px;
+    gap: 2rem;
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 1279px) {
+  .cosmic-sidepanel-layout {
+    grid-template-columns: 240px 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+  
+  .right-sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .whitepaper-container {
+    padding-top: 6rem; /* Slightly less padding on mobile */
+  }
+
+  .cosmic-sidepanel-layout {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+  
+  .left-sidebar {
+    display: none;
+  }
+  
+  .content-wrapper {
+    padding: 1.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .mobile-navigation-container {
+    display: block;
+  }
+  
+  .navigation-buttons {
+    flex-direction: column;
+    gap: 1rem;
+    margin: 2rem auto;
+  }
+  
+  .navigation-buttons .button {
+    width: 100%;
+    max-width: none;
+  }
 }
 
 /* Animations */
-@keyframes slide-in-left {
-  from {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slide-in-right {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .whitepaper-container.animated .left-sidebar {
   animation: slide-in-left 0.8s ease forwards;
 }
@@ -824,167 +695,18 @@ export default {
   animation: fade-in 1s ease forwards 0.4s;
 }
 
-
-/* Responsive styles */
-@media (max-width: 1280px) {
-
-  .content-wrapper {
-  max-width: 100%;
-  margin: 2rem auto;
-  padding: 2rem 2rem;
-  position: relative;
-}
-  .whitepaper-container {
-    grid-template-columns: 200px 1fr;
-    grid-template-areas: "left-sidebar main-content";
-  }
-  
-  .right-sidebar {
-    display: none;
-  }
+@keyframes slide-in-left {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
-@media (max-width: 768px) {
-  .whitepaper-container {
-    grid-template-columns: 1fr;
-    grid-template-areas: "main-content";
-  }
-  
-  .left-sidebar {
-    display: none;
-  }
-  
-  .navigation-buttons {
-    gap: 1rem;
-  }
-  
-  .navigation-buttons .button {
-    padding: 0.8rem;
-  }
-  
-  .mobile-navigation-container {
-    display: block;
-  }
-  
-
-  
-  /* Optimize table display on mobile */
-  .markdown-content table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-  
-  /* Reduce image sizes on mobile */
-  .markdown-content img {
-    max-width: 100%;
-    height: auto;
-  }
+@keyframes slide-in-right {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
-/* Mobile Navigation Container */
-.mobile-navigation-container {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 9999;
-}
-
-/* Mobile Navigation Button */
-.mobile-nav-button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 1.25rem 2rem;
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.6), rgba(23, 33, 43, .9));
-  backdrop-filter: blur(8px);
-  border: none;
-  border-top: 1px solid var(--color-primary, #00c3ff3a);
-  color: #04d5ff;
-  font-weight: 600;
-  font-size: 1.1rem;
-  cursor: pointer;
-  box-shadow: 0 -4px 15px rgba(0, 195, 255, 0.099);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 -4px 15px rgba(0, 195, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 -4px 20px rgba(0, 195, 255, 0.5);
-  }
-  100% {
-    box-shadow: 0 -4px 15px rgba(0, 195, 255, 0.3);
-  }
-}
-
-.mobile-nav-icon {
-  transition: transform var(--transition-medium, 1.6s ease);
-  font-size: 1rem;
-}
-
-.mobile-nav-icon.open {
-  transform: rotate(180deg);
-}
-
-/* Mobile Navigation Menu */
-.mobile-nav-menu {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height var(--transition-slow, 0.3s ease);
-  background-color: var(--color-surface-primary, rgba(30, 43, 56, 0.9));
-  backdrop-filter: blur(8px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.mobile-nav-menu.expanded {
-  max-height: 70vh;
-  overflow-y: auto;
-}
-
-.mobile-nav-menu ul {
-  list-style-type: none;
-  padding: 0.75rem;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.mobile-nav-menu li {
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-small, 4px);
-  background-color: var(--color-surface-tertiary, rgba(0, 0, 0, 0.2));
-  cursor: pointer;
-  transition: all var(--transition-medium, 0.2s ease);
-  font-weight: var(--weight-medium, 500);
-  border-left: 2px solid transparent;
-  color: var(--color-text-primary, #ffffff);
-}
-
-.mobile-nav-menu li:hover {
-  background-color: rgba(0, 195, 255, 0.1);
-  border-left: 2px solid var(--color-primary, #00c3ff);
-  transform: translateX(2px);
-}
-
-.mobile-nav-menu li.active {
-  background-color: rgba(0, 195, 255, 0.15);
-  border-left: 3px solid var(--color-primary, #00c3ff);
-  color: var(--color-primary, #00c3ff);
-  font-weight: var(--weight-bold, 700);
-  text-shadow: var(--shadow-glow-primary, 0 0 10px rgba(0, 195, 255, 0.5));
-}
-
-@media (max-width: 768px) {
-  .mobile-navigation-container {
-    display: block;
-  }
-
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>

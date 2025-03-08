@@ -331,10 +331,19 @@ a:hover {
   box-shadow: var(--shadow-medium);
 }
 
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  display: block;
+  margin: 1.5rem 0;
+  -webkit-overflow-scrolling: touch;
+}
+
 .markdown-content table {
   width: 100%;
+  min-width: 650px; /* Ensures table won't shrink below readable size */
   border-collapse: collapse;
-  margin: 1.5rem 0;
+  margin: 0; /* Reset margin as it's handled by table-scroll */
   background: var(--color-surface-primary);
   border-radius: var(--radius-medium);
   overflow: hidden;

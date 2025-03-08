@@ -104,7 +104,6 @@ For technical stakeholders interested in product capabilities:
 
 1. [**Core Features**](/core-features) - Product capabilities and functionality
 2. [**Architecture**](/architecture) - Technical infrastructure and blockchain integration
-3. [**Sustainability**](/sustainability) - Long-term economic models
-4. [**Community**](/community) - User growth strategies and engagement mechanisms
+3. [**Community**](/community) - User growth strategies and engagement mechanisms
 
 Join us in revolutionizing the economics of gaming by transforming players into stakeholders and creating true digital ownership in the metaverse.
