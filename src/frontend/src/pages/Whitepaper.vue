@@ -470,10 +470,10 @@ export default {
   
   --transition-standard: all 0.3s ease;
   
-  --left-sidebar-width: 320px;
-  --right-sidebar-width: 280px;
+  --left-sidebar-width: 360px;
+  --right-sidebar-width: 240px;
   --main-content-min-width: 600px;
-  --sidebar-padding: 1.25rem;
+  --sidebar-padding: 1rem;
   --content-max-width: 900px;
 }
 
@@ -517,7 +517,7 @@ export default {
 .sidebar-content {
   height: 100%;
   overflow-y: auto;
-  padding: 6rem var(--sidebar-padding) 4rem;
+  padding: 6.5rem var(--sidebar-padding) 4rem;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -528,7 +528,7 @@ export default {
 /* Fix for sidebar lists */
 .sidebar ul {
   width: 100%;
-  padding: 0;
+  padding: .25rem;
   margin: 0;
   list-style-type: none;
   box-sizing: border-box;
@@ -539,7 +539,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   padding: 0 0.5rem;
   width: 100%;
   box-sizing: border-box;
@@ -549,7 +549,7 @@ export default {
   font-size: 1.5rem;
   color: var(--color-primary);
   background: var(--color-primary-alpha-10);
-  padding: 0.75rem;
+  padding: 1rem;
   border-radius: 50%;
   box-shadow: var(--shadow-primary);
   flex-shrink: 0;
@@ -562,7 +562,8 @@ export default {
 }
 
 .header-text strong {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--color-text-primary);
   white-space: nowrap;
   overflow: hidden;
@@ -571,7 +572,7 @@ export default {
 
 .header-text small {
   font-size: 0.85rem;
-  color: var(--color-text-secondary);
+  color: #grey;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -592,7 +593,7 @@ export default {
   position: relative;
   border-radius: 6px;
   background: transparent;
-  color: var(--color-text-secondary);
+  color: grey;
   font-weight: 700;
   cursor: pointer;
   border-top: 1px solid transparent;
@@ -649,7 +650,7 @@ export default {
 .section-text small {
   font-size: 0.75rem;
   font-weight: 400;
-  color: var(--color-text-secondary);
+  color: grey;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -826,7 +827,7 @@ export default {
 }
 
 .navigation-buttons small {
-  color: var(--color-text-secondary);
+  color: grey;
   font-size: 0.8rem;
 }
 
@@ -913,7 +914,7 @@ export default {
 
 .button-text small {
   font-size: 0.85rem;
-  color: var(--color-text-secondary);
+  color: grey;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1077,9 +1078,7 @@ export default {
 
 /* Responsive Layouts */
 @media (max-width: 1280px) {
-  :root {
-    --left-sidebar-width: 280px;
-  }
+
   
   .cosmic-sidepanel-layout {
     grid-template-columns: var(--left-sidebar-width) 1fr;
