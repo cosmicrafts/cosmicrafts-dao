@@ -666,7 +666,7 @@ export default {
   position: relative;
   height: calc(100vh - 8rem);
   overflow-y: auto;
-  padding: 6rem 1.25rem 4rem; /* Match content padding */
+  padding: 6rem 0.5rem 4rem;
 }
 
 .right-sidebar .sidebar-content {
@@ -706,13 +706,12 @@ export default {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin: 0.5rem 0.75rem;
-  padding: 1rem 1.25rem;
+  margin: 0.25rem 0;
+  padding: 1rem 0.75rem;
   background: rgba(30, 43, 56, 0.6);
   border: 1px solid rgba(0, 195, 255, 0.1);
   border-radius: 12px;
-  width: calc(100% - 1.5rem);
-  max-width: 100%;
+  width: 100%;
   transition: all 0.3s ease;
 }
 
@@ -954,49 +953,29 @@ export default {
 
 /* Responsive Layout Adjustments */
 @media (min-width: 1280px) {
-
-
-  /* Sidebar item adjustments for desktop */
-  .sidebar-nav-item.left {
-    width: calc(100% - 1.5rem);
-    padding: 1.1rem 1.25rem;
-    margin: 0.5rem 0.75rem;
-  }
-
-  .sidebar-content {
-    padding: 6rem 1rem 4rem;
-    width: 100%;
-    max-width: 500px;
-    overflow-x: hidden;
-  }
-}
-
-/* Large screens */
-@media (min-width: 1600px) {
   .cosmic-sidepanel-layout {
-    grid-template-columns: 520px minmax(700px, 1fr) 340px;
-    gap: .5rem;
-    padding: 1rem;
+    grid-template-columns: 600px minmax(700px, 1fr) 400px;
+  }
+
+  .cosmic-left-panel, .left-sidebar {
+    width: 600px !important;
+    min-width: 600px !important;
+  }
+
+  .cosmic-right-panel, .right-sidebar {
+    width: 400px !important;
+    min-width: 400px !important;
   }
 }
 
 @media (max-width: 1279px) {
-
-  
-  .right-sidebar {
-    display: none;
+  .cosmic-sidepanel-layout {
+    grid-template-columns: 600px 1fr;
   }
 
-  /* Adjust left sidebar for medium screens */
-  .sidebar-nav-item.left {
-    width: calc(100% - 3rem);
-    padding: 1rem 1.25rem;
-    margin: 0.5rem 0.75rem;
-  }
-
-  .sidebar-content {
-    width: 100%;
-    overflow-x:auto;
+  .cosmic-left-panel, .left-sidebar {
+    width: 600px !important;
+    min-width: 600px !important;
   }
 }
 
@@ -1085,6 +1064,44 @@ export default {
   to { 
     opacity: 1; 
     transform: translateY(0); 
+  }
+}
+
+.whitepaper-container {
+  /* Sidebar width controls - adjust these values to change sidebar widths */
+  --left-sidebar-width: 600px;
+  --right-sidebar-width: 400px;
+  --main-content-min-width: 700px;
+}
+
+/* Main layout - uses the width variables */
+.cosmic-sidepanel-layout {
+  display: grid;
+  grid-template-areas: "left main right";
+  grid-template-columns: var(--left-sidebar-width) minmax(var(--main-content-min-width), 1fr) var(--right-sidebar-width);
+  gap: 0;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+/* Left panel sizing */
+.cosmic-left-panel, .left-sidebar {
+  width: var(--left-sidebar-width) !important;
+  min-width: var(--left-sidebar-width) !important;
+}
+
+/* Right panel sizing */
+.cosmic-right-panel, .right-sidebar {
+  width: var(--right-sidebar-width) !important;
+  min-width: var(--right-sidebar-width) !important;
+}
+
+/* Responsive adjustments using the same variables */
+@media (max-width: 1279px) {
+  .cosmic-sidepanel-layout {
+    grid-template-columns: var(--left-sidebar-width) 1fr;
+    grid-template-areas: "left main";
   }
 }
 
