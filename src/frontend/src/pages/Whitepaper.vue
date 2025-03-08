@@ -3,6 +3,13 @@
     <!-- Left Sidebar (Navigation) -->
     <aside class="left-sidebar cosmic-left-panel">
       <div class="sidebar-content">
+        <div class="sidebar-header">
+          <i class="fas fa-book-open"></i>
+          <span class="header-text">
+            <strong>Whitepaper</strong>
+            <small>Documentation</small>
+          </span>
+        </div>
         <ul>
           <li
             v-for="section in sections"
@@ -14,7 +21,11 @@
             }"
             @click="changeSection(section.id)"
           >
-            {{ section.title }}
+            <i class="fas" :class="getSectionIcon(section.id)"></i>
+            <span class="section-text">
+              <strong>{{ section.title }}</strong>
+              <small>{{ getSectionDescription(section.id) }}</small>
+            </span>
           </li>
         </ul>
       </div>
@@ -91,8 +102,14 @@
     <div class="mobile-navigation-container">
       <!-- Mobile Navigation Button -->
       <button class="mobile-nav-button" @click="toggleMobileNav">
-        <span>Whitepaper Sections</span>
-        <span class="mobile-nav-icon" :class="{ 'open': showMobileNav }">▼</span>
+        <div class="button-content">
+          <i class="fas fa-book-open"></i>
+          <span class="button-text">
+            <strong>Whitepaper Sections</strong>
+            <small>Navigate through chapters</small>
+          </span>
+        </div>
+        <i class="fas fa-chevron-down nav-icon" :class="{ 'open': showMobileNav }"></i>
       </button>
       
       <!-- Mobile Navigation Menu -->
@@ -104,7 +121,11 @@
             :class="{ active: activeSection === section.id }"
             @click="changeSectionAndCloseNav(section.id)"
           >
-            {{ section.title }}
+            <i class="fas" :class="getSectionIcon(section.id)"></i>
+            <span class="section-text">
+              <strong>{{ section.title }}</strong>
+              <small>{{ getSectionDescription(section.id) }}</small>
+            </span>
           </li>
         </ul>
       </div>
@@ -372,6 +393,30 @@ export default {
     changeSectionAndCloseNav(sectionId) {
       this.changeSection(sectionId);
       this.showMobileNav = false;
+    },
+
+    getSectionIcon(sectionId) {
+      const icons = {
+        'introduction': 'fa-star',
+        'architecture': 'fa-layer-group',
+        'core-features': 'fa-cube',
+        'governance': 'fa-landmark',
+        'tokenomics': 'fa-coins',
+        'community': 'fa-users'
+      };
+      return icons[sectionId] || 'fa-file-alt';
+    },
+
+    getSectionDescription(sectionId) {
+      const descriptions = {
+        'introduction': 'Project overview and vision',
+        'architecture': 'Technical foundation and structure',
+        'core-features': 'Key platform capabilities',
+        'governance': 'Decision-making framework',
+        'tokenomics': 'Token economics and distribution',
+        'community': 'Ecosystem and participation'
+      };
+      return descriptions[sectionId] || '';
     },
   },
 
@@ -642,25 +687,10 @@ export default {
 }
 
 /* Refined sidebar navigation styles */
-.sidebar-nav-item {
-  padding: 0.75rem 1rem;
-  margin-bottom: 0.5rem;
-  border-radius: 6px;
-  border-left: 2px solid transparent;
-  background: transparent;
-  color: var(--color-text-secondary);
-  font-weight: 400;
-  transition: 
-    background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    border-left-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: background-color, border-left-color, color, opacity;
-}
 
 .sidebar-nav-item:hover {
   background: rgba(0, 195, 255, 0.08);
-  border-left-color: rgba(0, 195, 255, 0.5);
+  border-left-color: rgb(0, 195, 255);
   color: var(--color-text-primary);
 }
 
@@ -673,8 +703,75 @@ export default {
 
 /* Left sidebar specific styles */
 .sidebar-nav-item.left {
-  font-size: 0.95rem;
-  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(30, 43, 56, 0.6);
+  border: 1px solid rgba(0, 195, 255, 0.1);
+  border-radius: 12px;
+  width: calc(100% - 1.5rem);
+  max-width: 100%;
+  transition: all 0.3s ease;
+}
+
+.sidebar-nav-item.left i {
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  background: rgba(0, 195, 255, 0.1);
+  padding: 0.75rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.section-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.section-text strong {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.section-text small {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.2;
+}
+
+/* Navigation Item States */
+.sidebar-nav-item.left:hover {
+  background: rgba(30, 43, 56, 0.8);
+  border-color: rgba(0, 195, 255, 0.3);
+  transform: translateX(4px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-nav-item.left:hover i {
+  background: rgba(0, 195, 255, 0.2);
+  box-shadow: 0 0 20px rgba(0, 195, 255, 0.4);
+  transform: scale(1.1);
+}
+
+.sidebar-nav-item.left.active {
+  background: rgba(0, 195, 255, 0.15);
+  border-color: var(--color-primary);
+  border-left: 3px solid var(--color-accent);
+  box-shadow: 0 4px 25px rgba(0, 195, 255, 0.15);
+}
+
+.sidebar-nav-item.left.active i {
+  background: rgba(0, 195, 255, 0.25);
+  box-shadow: 0 0 25px rgba(0, 195, 255, 0.5);
 }
 
 /* Right sidebar specific styles */
@@ -711,9 +808,13 @@ export default {
   left: 0;
   width: 100%;
   z-index: 9999;
-  border-top: 1px solid rgba(58, 58, 58, 0.24);
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.85), rgba(23, 33, 43, 0.92));
-  backdrop-filter: blur(8px);
+  background: linear-gradient(to bottom, 
+    rgba(30, 43, 56, 0.98),
+    rgba(23, 33, 43, 0.99)
+  );
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 162, 0, 0.15);
+  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.25);
 }
 
 .mobile-nav-button {
@@ -721,120 +822,166 @@ export default {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 1.25rem 2rem;
-  background: transparent;
+  padding: 1.25rem 1.5rem;
+  background: rgba(30, 43, 56, 0.95);
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: #fff;
-  font-weight: bold;
-  font-size: 0.9rem;
+  border-top: 1px solid var(--color-accent);
+  color: var(--color-text-primary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.mobile-nav-icon {
+.button-content {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.button-content i {
+  font-size: 1.5rem;
+  color: var(--color-accent);
+  background: rgba(255, 162, 0, 0.1);
+  padding: 0.85rem;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 162, 0, 0.2);
+}
+
+.button-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.button-text strong {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}
+
+.button-text small {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.nav-icon {
+  color: var(--color-accent);
+  font-size: 1.25rem;
   transition: transform 0.3s ease;
-  color: rgba(0, 195, 255, 0.7);
+  background: rgba(255, 162, 0, 0.1);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
-.mobile-nav-icon.open {
+.nav-icon.open {
   transform: rotate(180deg);
+  background: rgba(255, 162, 0, 0.2);
+  box-shadow: 0 0 20px rgba(255, 162, 0, 0.3);
 }
 
 .mobile-nav-menu {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease;
-  background: rgba(23, 33, 43, 0.8);
-  backdrop-filter: blur(8px);
+  background: rgba(23, 33, 43, 0.98);
 }
 
 .mobile-nav-menu.expanded {
   max-height: 70vh;
   overflow-y: auto;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(255, 162, 0, 0.1);
 }
 
 .mobile-nav-menu ul {
-  list-style-type: none;
+  list-style: none;
   padding: 1rem;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
 }
 
 .mobile-nav-menu li {
-  padding: 0.75rem 1rem;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  background: rgba(30, 43, 56, 0.6);
+  border: 1px solid rgba(0, 195, 255, 0.1);
   cursor: pointer;
-  font-weight: 400;
-  border-left: 2px solid transparent;
-  color: #fff;
-  background: rgba(30, 43, 56, 0.5);
-  transition: 
-    background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    border-left-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: background-color, border-left-color, color;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav-menu li i {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  background: rgba(0, 195, 255, 0.1);
+  padding: 0.75rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
 }
 
 .mobile-nav-menu li:hover {
-  border-left-color: rgba(0, 195, 255, 0.7);
-  background: rgba(30, 43, 56, 0.7);
-  color: rgba(0, 195, 255, 0.9);
+  background: rgba(0, 195, 255, 0.08);
+  transform: translateX(8px);
+}
+
+.mobile-nav-menu li:hover i {
+  background: rgba(0, 195, 255, 0.2);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0, 195, 255, 0.3);
 }
 
 .mobile-nav-menu li.active {
-  border-left-color: rgba(0, 195, 255, 0.9);
-  color: rgba(0, 195, 255, 0.9);
-  font-weight: 600;
-  background: rgba(30, 43, 56, 0.7);
+  background: rgba(0, 195, 255, 0.15);
+  border-color: var(--color-primary);
+}
+
+.mobile-nav-menu li.active i {
+  background: rgba(0, 195, 255, 0.2);
+  box-shadow: 0 0 20px rgba(0, 195, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+  .mobile-navigation-container {
+    display: block;
+  }
 }
 
 /* Responsive Layout Adjustments */
 @media (min-width: 1280px) {
-  .cosmic-sidepanel-layout {
-    grid-template-columns: 380px minmax(700px, 1fr) 340px;
-    gap: .5rem;
-    padding: 0 3rem;
-  }
 
-  /* Increase text size in sidebars for better readability */
+
+  /* Sidebar item adjustments for desktop */
   .sidebar-nav-item.left {
-    font-size: 1.05rem;
-    padding: 1rem 1.25rem;
+    width: calc(100% - 1.5rem);
+    padding: 1.1rem 1.25rem;
+    margin: 0.5rem 0.75rem;
   }
 
-  .sidebar-nav-item.right {
-    font-size: 0.9rem;
-    padding: 0.65rem 1.25rem;
-    line-height: 1.5;
-  }
-
-  /* Adjust padding for wider sidebars */
   .sidebar-content {
-    padding: 6rem 1.5rem;
-  }
-
-  .right-sidebar .sidebar-content {
-    padding: 6rem 1.5rem;
+    padding: 6rem 1rem 4rem;
+    width: 100%;
+    max-width: 500px;
+    overflow-x: hidden;
   }
 }
 
 /* Large screens */
 @media (min-width: 1600px) {
   .cosmic-sidepanel-layout {
-    grid-template-columns: 380px minmax(700px, 1fr) 340px;
+    grid-template-columns: 520px minmax(700px, 1fr) 340px;
     gap: .5rem;
-    padding: 0 3rem;
+    padding: 1rem;
   }
 }
 
 @media (max-width: 1279px) {
-  .cosmic-sidepanel-layout {
-    grid-template-columns: 300px 1fr;
-    padding: 0 1.5rem;
-  }
+
   
   .right-sidebar {
     display: none;
@@ -842,16 +989,14 @@ export default {
 
   /* Adjust left sidebar for medium screens */
   .sidebar-nav-item.left {
-    font-size: 1rem;
-    padding: 0.9rem 1.2rem;
+    width: calc(100% - 3rem);
+    padding: 1rem 1.25rem;
+    margin: 0.5rem 0.75rem;
   }
 
-  .content-wrapper {
-    padding: 4rem; /* Restore full padding when right sidebar is hidden */
-  }
-  
-  .cosmic-main-content {
-    margin-right: 0; /* Reset margin when right sidebar is hidden */
+  .sidebar-content {
+    width: 100%;
+    overflow-x:auto;
   }
 }
 
