@@ -254,6 +254,25 @@ a:hover {
   color: var(--color-text-secondary);
 }
 
+/* Add scroll margin to all markdown headings */
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content .cosmic-heading {
+  scroll-margin-top: 8rem; /* Add margin for header */
+}
+
+@media (max-width: 768px) {
+  .markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3,
+  .markdown-content h4,
+  .markdown-content .cosmic-heading {
+    scroll-margin-top: 6rem; /* Slightly less margin on mobile */
+  }
+}
+
 /* Style the header anchors but keep them visible */
 .header-anchor {
   opacity: 0.3;

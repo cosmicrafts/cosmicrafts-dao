@@ -112,8 +112,7 @@ const scrollToSection = (sectionId) => {
   // Find the heading element by ID
   const element = document.getElementById(targetId);
   if (element) {
-    // Calculate the header offset (20% of viewport height)
-    const headerOffset = window.innerHeight * 0.2;
+    const headerOffset = 120; // Fixed header height (approximately)
     
     // Calculate the target position
     const elementPosition = element.getBoundingClientRect().top;

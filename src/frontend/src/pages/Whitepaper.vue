@@ -23,62 +23,67 @@
     <!-- Main Content Area -->
     <main class="main-content cosmic-main-content">
       <div class="content-wrapper">
-        <!-- Content Transition and Markdown Rendering -->
-        <transition name="content-transition" @after-leave="afterTransition">
-          <MarkdownRenderer
-            :fileName="activeSection"
-            @rendered="generateTOC"
-            @navigateToSection="handleNavigateToSection"
-            :key="activeSection"
-          />
+        <transition name="content-transition" mode="out-in">
+          <div :key="activeSection" class="content-container">
+            <!-- Content Transition and Markdown Rendering -->
+            <div class="markdown-container">
+              <MarkdownRenderer
+                :fileName="activeSection"
+                @rendered="generateTOC"
+                @navigateToSection="handleNavigateToSection"
+              />
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="navigation-buttons">
+              <button
+                v-if="showPreviousButton"
+                class="button outline prev"
+                @click="navigatePrevious"
+              >
+                <span class="arrow">
+                  <img src="/src/assets/icons/prev.svg" alt="arrow" />
+                </span>
+                <small>Previous</small>
+                <span>{{ previousSection?.title }}</span>
+              </button>
+
+              <button
+                v-if="showNextButton"
+                class="button outline next"
+                @click="navigateNext"
+              >
+                <small>Next</small>
+                <span>{{ nextSection?.title }}</span>
+                <span class="arrow">
+                  <img src="/src/assets/icons/next.svg" alt="arrow" />
+                </span>
+              </button>
+            </div>
+          </div>
         </transition>
-
-        <!-- Navigation Buttons -->
-        <div class="navigation-buttons">
-          <button
-            v-if="showPreviousButton"
-            class="button outline prev"
-            @click="navigatePrevious"
-          >
-            <span class="arrow">
-              <img src="/src/assets/icons/prev.svg" alt="arrow" />
-            </span>
-            <small>Previous</small>
-            <span>{{ previousSection?.title }}</span>
-          </button>
-
-          <button
-            v-if="showNextButton"
-            class="button outline next"
-            @click="navigateNext"
-          >
-            <small>Next</small>
-            <span>{{ nextSection?.title }}</span>
-            <span class="arrow">
-              <img src="/src/assets/icons/next.svg" alt="arrow" />
-            </span>
-          </button>
-        </div>
       </div>
     </main>
 
     <!-- Right Sidebar (Table of Contents) -->
     <aside class="right-sidebar cosmic-right-panel">
       <div class="sidebar-content">
-        <ul v-if="toc.length > 0">
-          <li
-            v-for="cue in toc"
-            :key="cue.id"
-            :class="{ 
-              'sidebar-nav-item': true,
-              'right': true,
-              'active': cue.id === activeHeading 
-            }"
-            @click="scrollToHeading(cue.id)"
-          >
-            {{ cue.text }}
-          </li>
-        </ul>
+        <transition name="content-transition" mode="out-in">
+          <ul v-if="toc.length > 0" :key="activeSection">
+            <li
+              v-for="cue in toc"
+              :key="cue.id"
+              :class="{ 
+                'sidebar-nav-item': true,
+                'right': true,
+                'active': cue.id === activeHeading 
+              }"
+              @click="scrollToHeading(cue.id)"
+            >
+              {{ cue.text }}
+            </li>
+          </ul>
+        </transition>
       </div>
     </aside>
 
@@ -180,7 +185,7 @@ export default {
         : `#${this.activeSection}`;
       
       if (window.location.hash !== hash) {
-        history.replaceState(null, null, hash);
+        history.replaceState(history.state, '', hash);
       }
     },
     
@@ -217,18 +222,27 @@ export default {
     changeSection(sectionId, updateUrl = true) {
       this.activeSection = sectionId;
       this.toc = [];
+      this.updateButtonVisibility();
       
+      // Wait for the transition to complete before scrolling
       this.$nextTick(() => {
+        // Generate TOC first
         this.generateTOC();
-        
-        const mainContent = document.querySelector(".main-content");
-        if (mainContent) {
-          mainContent.scrollTop = 0;
-        }
         
         if (updateUrl) {
           this.updateUrlHash();
         }
+        
+        // Add a small delay to ensure content is rendered
+        setTimeout(() => {
+          const mainContent = document.querySelector(".main-content");
+          if (mainContent) {
+            mainContent.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+            });
+          }
+        }, 50);
       });
     },
 
@@ -284,7 +298,6 @@ export default {
         const headingText = heading.textContent.trim();
         const headingId = this.slugify(headingText);
         heading.id = headingId;
-        
         return { id: headingId, text: headingText };
       });
 
@@ -292,13 +305,14 @@ export default {
         this.activeHeading = this.toc[0].id;
       }
       
+      // Observe sections after TOC is generated
       this.$nextTick(() => this.observeSections());
     },
 
     scrollToHeading(id) {
       const target = document.getElementById(id);
       if (target) {
-        const headerOffset = window.innerHeight * 0.2;
+        const headerOffset = 120; // Fixed header height (approximately)
         const mainContent = document.querySelector(".main-content");
         if (!mainContent) return;
 
@@ -362,22 +376,117 @@ export default {
   },
 
   mounted() {
+    // Initialize buttons and TOC immediately
     this.updateButtonVisibility();
-    this.generateTOC();
-    this.$nextTick(() => this.observeSections());
     
-    setTimeout(() => {
+    // Add animation class after a brief delay
+    this.$nextTick(() => {
       const container = document.querySelector('.whitepaper-container');
       if (container) {
         container.classList.add('animated');
       }
-    }, 100);
+      
+      // Generate TOC after initial animation
+      setTimeout(() => {
+        this.generateTOC();
+        this.observeSections();
+      }, 100);
+    });
   },
 };
 </script>
 
 <style>
-/* Content wrapper custom styling */
+/* Content container and transitions */
+.content-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  position: relative;
+}
+
+.content-transition-enter-active,
+.content-transition-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  position: absolute;
+  width: 100%;
+}
+
+.content-transition-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.content-transition-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Main content wrapper */
+.content-wrapper {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 6rem 4rem 4rem; /* Increased top padding */
+  padding-right: 0;
+  position: relative;
+  min-height: calc(100vh - 8rem);
+}
+
+/* Main content scrollbar styling */
+.cosmic-main-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 195, 255, 0.3) rgba(30, 43, 56, 0.3);
+  padding-right: 0;
+  margin-right: -8px; /* Pull content to align with scrollbar */
+}
+
+.cosmic-main-content::-webkit-scrollbar {
+  width: 8px;
+  background-color: rgba(30, 43, 56, 0.3);
+}
+
+.cosmic-main-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 195, 255, 0.3);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.cosmic-main-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 195, 255, 0.5);
+}
+
+.cosmic-main-content::-webkit-scrollbar-track {
+  background-color: rgba(30, 43, 56, 0.3);
+}
+
+/* Adjust right sidebar to align with scrollbar */
+.right-sidebar {
+  border-left: 1px solid rgba(58, 58, 58, 0.24);
+  margin-left: 0; /* Reset margin */
+}
+
+/* Navigation buttons */
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 3rem auto;
+  max-width: 800px;
+  padding: 0 1rem;
+}
+
+/* Right sidebar transitions */
+.right-sidebar .content-transition-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.right-sidebar .content-transition-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+/* Content wrapper and container styles */
 .content-wrapper {
   max-width: 100%;
   margin: 0 auto;
@@ -385,24 +494,77 @@ export default {
   position: relative;
 }
 
+.markdown-container {
+  position: relative;
+  min-height: 300px;
+}
 
-/* Navigation buttons */
-.navigation-buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-  margin: 3rem auto;
-  max-width: 800px;
-  padding: 0 1rem;
+/* Content Transitions */
+.content-transition-enter-active,
+.content-transition-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  position: relative;
+}
+
+.content-transition-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.content-transition-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Main content specific transitions */
+.markdown-container .content-transition-enter-active {
+  position: relative;
+  z-index: 2;
+}
+
+.markdown-container .content-transition-leave-active {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  z-index: 1;
+}
+
+/* Right sidebar specific transitions */
+.right-sidebar .content-transition-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.right-sidebar .content-transition-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.right-sidebar .content-transition-enter-active,
+.right-sidebar .content-transition-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
+
+/* Button fade transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 .navigation-buttons .button {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: auto;
-  min-width: 200px;
-  max-width: 300px;
+  width: 100%;
   justify-content: center;
   padding: 1rem 1.5rem;
   position: relative;
@@ -454,10 +616,22 @@ export default {
   right: 1rem;
 }
 
+/* Sidebar content styles */
 .sidebar-content {
+  position: relative;
   height: calc(100vh - 8rem);
   overflow-y: auto;
-  padding: 6rem 1.25rem;
+  padding: 6rem 1.25rem 4rem; /* Match content padding */
+}
+
+.right-sidebar .sidebar-content {
+  padding: 6rem 1rem 4rem; /* Match content padding */
+}
+
+.right-sidebar ul {
+  position: relative;
+  width: 100%;
+  padding-right: 0.5rem;
 }
 
 .left-sidebar ul, 
@@ -465,14 +639,6 @@ export default {
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.right-sidebar ul {
-  padding-right: 0.5rem;
-}
-
-.right-sidebar .sidebar-content {
-  padding: 1.25rem 1rem;
 }
 
 /* Refined sidebar navigation styles */
@@ -628,21 +794,65 @@ export default {
 /* Responsive Layout Adjustments */
 @media (min-width: 1280px) {
   .cosmic-sidepanel-layout {
-    grid-template-columns: 280px minmax(600px, 1fr) 240px;
-    gap: 2rem;
+    grid-template-columns: 320px minmax(600px, 1fr) 300px;
+    gap: 2.5rem;
     padding: 0 2rem;
+  }
+
+  /* Increase text size in sidebars for better readability */
+  .sidebar-nav-item.left {
+    font-size: 1.05rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .sidebar-nav-item.right {
+    font-size: 0.9rem;
+    padding: 0.65rem 1.25rem;
+    line-height: 1.5;
+  }
+
+  /* Adjust padding for wider sidebars */
+  .sidebar-content {
+    padding: 6rem 1.5rem;
+  }
+
+  .right-sidebar .sidebar-content {
+    padding: 6rem 1.5rem;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1600px) {
+  .cosmic-sidepanel-layout {
+    grid-template-columns: 380px minmax(700px, 1fr) 340px;
+    gap: 3rem;
+    padding: 0 3rem;
   }
 }
 
 @media (max-width: 1279px) {
   .cosmic-sidepanel-layout {
-    grid-template-columns: 240px 1fr;
-    gap: 1.5rem;
-    padding: 0 1rem;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    padding: 0 1.5rem;
   }
   
   .right-sidebar {
     display: none;
+  }
+
+  /* Adjust left sidebar for medium screens */
+  .sidebar-nav-item.left {
+    font-size: 1rem;
+    padding: 0.9rem 1.2rem;
+  }
+
+  .content-wrapper {
+    padding: 4rem; /* Restore full padding when right sidebar is hidden */
+  }
+  
+  .cosmic-main-content {
+    margin-right: 0; /* Reset margin when right sidebar is hidden */
   }
 }
 
@@ -661,8 +871,7 @@ export default {
   }
   
   .content-wrapper {
-    padding: 1.5rem;
-    padding-bottom: 5rem;
+    padding: 5rem 1.5rem 5rem; /* Adjust for mobile */
   }
 
   .mobile-navigation-container {
@@ -679,34 +888,63 @@ export default {
     width: 100%;
     max-width: none;
   }
+  
+  .cosmic-heading {
+    scroll-margin-top: 6rem; /* Slightly less margin on mobile */
+  }
 }
 
 /* Animations */
 .whitepaper-container.animated .left-sidebar {
-  animation: slide-in-left 0.8s ease forwards;
+  opacity: 0;
+  animation: slide-in-left 0.6s ease forwards;
 }
 
 .whitepaper-container.animated .right-sidebar {
-  animation: slide-in-right 0.8s ease forwards 0.2s;
+  opacity: 0;
+  animation: slide-in-right 0.6s ease forwards 0.1s;
 }
 
 .whitepaper-container.animated .main-content {
   opacity: 0;
-  animation: fade-in 1s ease forwards 0.4s;
+  animation: fade-in 0.6s ease forwards 0.2s;
 }
 
 @keyframes slide-in-left {
-  from { transform: translateX(-20px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from { 
+    transform: translateX(-20px); 
+    opacity: 0; 
+  }
+  to { 
+    transform: translateX(0); 
+    opacity: 1; 
+  }
 }
 
 @keyframes slide-in-right {
-  from { transform: translateX(20px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from { 
+    transform: translateX(20px); 
+    opacity: 0; 
+  }
+  to { 
+    transform: translateX(0); 
+    opacity: 1; 
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Add scroll margin to headings to account for fixed header */
+.cosmic-heading {
+  scroll-margin-top: 8rem; /* Add margin for header */
 }
 </style>
