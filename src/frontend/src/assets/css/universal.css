@@ -460,8 +460,8 @@
 .sidebar-nav-item::after {
   content: '';
   position: absolute;
-  height: .15rem;
-  width: 50%;
+  height: .05rem;
+  width: 60%;
   background-color: var(--color-accent);
   transition: transform 0.45s ease, box-shadow 0.65s ease;
   box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.948);
@@ -472,16 +472,15 @@
 
 .sidebar-nav-item::before {
   top: -.1rem;
-  left: -4%;
+  left: 5%;
   transform-origin: left;
 }
 
 .sidebar-nav-item::after {
   bottom: -1px;
-  right: -4%;
+  right: 5%;
   transform-origin: right;
 }
-
 .sidebar-nav-item:hover {
   color: var(--color-primary);
   border-bottom: 1px solid var(--color-primary);
@@ -637,3 +636,4 @@
     display: none;
   }
 } 
+
