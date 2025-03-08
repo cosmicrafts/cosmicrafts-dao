@@ -442,18 +442,268 @@ export default {
 </script>
 
 <style>
+/* Base Layout */
+.whitepaper-container {
+  /* Sidebar width controls - adjust these values to change sidebar widths */
+  --left-sidebar-width: 320px;    /* Reduced from 600px for better proportions */
+  --right-sidebar-width: 280px;   /* Reduced from 400px for better proportions */
+  --main-content-min-width: 600px;
+  --sidebar-padding: 1.25rem;
+  --color-primary: #00c3ff;
+  --color-accent: #ffa200;
+  --color-text-primary: rgba(255, 255, 255, 0.95);
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+  --weight-bold: 700;
+}
 
-
-
-/* Navigation buttons */
-.navigation-buttons {
-  display: flex;
-  justify-content: center;
-  gap: .75rem;
+/* Main Grid Layout */
+.cosmic-sidepanel-layout {
+  display: grid;
+  grid-template-columns: var(--left-sidebar-width) minmax(var(--main-content-min-width), 1fr) var(--right-sidebar-width);
+  grid-template-areas: "left-panel main-content right-panel";
+  height: 100vh;
   width: 100%;
-  max-width: 900px;
-  margin: 2rem auto;
-  flex-direction: row;
+  overflow: hidden;
+  position: relative;
+  gap: 0;
+}
+
+/* Left Panel */
+.cosmic-left-panel, .left-sidebar {
+  grid-area: left-panel;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid rgba(58, 58, 58, 0.24);
+  width: var(--left-sidebar-width);
+  min-width: var(--left-sidebar-width);
+}
+
+/* Right Panel */
+.cosmic-right-panel, .right-sidebar {
+  grid-area: right-panel;
+  height: 100%;
+  overflow: hidden;
+  border-left: 1px solid rgba(58, 58, 58, 0.24);
+  width: var(--right-sidebar-width);
+  min-width: var(--right-sidebar-width);
+}
+
+/* Main Content Area */
+.cosmic-main-content, .main-content {
+  grid-area: main-content;
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+/* Sidebar Content Styles */
+.sidebar-content {
+  height: 100%;
+  overflow-y: auto;
+  padding: 6rem var(--sidebar-padding) 4rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.left-sidebar .sidebar-content {
+  align-items: flex-start;
+}
+
+.right-sidebar .sidebar-content {
+  align-items: flex-start;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+}
+
+.sidebar-header i {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  background: rgba(0, 195, 255, 0.1);
+  padding: 0.75rem;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 195, 255, 0.2);
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-text strong {
+  font-size: 1.25rem;
+  color: var(--color-text-primary);
+}
+
+.header-text small {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* Base Navigation Item Styles */
+.sidebar-nav-item {
+  position: relative;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  box-sizing: border-box;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .75);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+/* Left Sidebar Navigation */
+.sidebar-nav-item.left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+  padding: 0.85rem 1rem;
+  background: rgba(30, 43, 56, 0.6);
+  border: 1px solid rgba(0, 195, 255, 0.1);
+  border-radius: 12px;
+}
+
+.sidebar-nav-item.left i {
+  font-size: 1rem;
+  color: var(--color-primary);
+  background: rgba(0, 195, 255, 0.117);
+  padding: 0.75rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.section-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.section-text strong {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.section-text small {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right Sidebar Navigation */
+.sidebar-nav-item.right {
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem 0;
+  line-height: 1.4;
+  opacity: 0.85;
+  text-align: left;
+}
+
+/* Navigation Item States */
+.sidebar-nav-item.left:hover {
+  background: rgba(30, 43, 56, 0.8);
+  border-color: rgba(0, 195, 255, 0.3);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-nav-item.left:hover i {
+  background: rgba(0, 195, 255, 0.2);
+  box-shadow: 0 0 8px rgb(0, 195, 255);
+  transform: scale(1.1);
+}
+
+.sidebar-nav-item.left.active {
+  background: rgba(0, 195, 255, 0.15);
+  border-color: var(--color-primary);
+  border-left: 3px solid var(--color-accent);
+  box-shadow: 0 4px 25px rgba(0, 195, 255, 0.15);
+}
+
+.sidebar-nav-item.left.active i {
+  background: rgba(0, 195, 255, 0.15);
+  box-shadow: 0 0 8px rgb(0, 195, 255);
+}
+
+.sidebar-nav-item.right:hover {
+  color: var(--color-primary);
+  background: rgba(0, 195, 255, 0.08);
+  transform: translateX(4px);
+}
+
+.sidebar-nav-item.right.active {
+  color: var(--color-primary);
+  font-weight: 600;
+  background: rgba(0, 195, 255, 0.15);
+  border-left: 2px solid var(--color-accent);
+  text-shadow: 0 0 12px rgba(0, 195, 255, 0.3);
+}
+
+/* Decorative elements for nav items */
+.sidebar-nav-item::before,
+.sidebar-nav-item::after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 60%;
+  background-color: var(--color-accent);
+  transition: transform 0.45s ease, box-shadow 0.65s ease;
+  box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.5);
+  transform: scaleX(0);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.sidebar-nav-item::before {
+  top: -1px;
+  left: 5%;
+  transform-origin: left;
+}
+
+.sidebar-nav-item::after {
+  bottom: -1px;
+  right: 5%;
+  transform-origin: right;
+}
+
+.sidebar-nav-item:hover::before,
+.sidebar-nav-item:hover::after {
+  transform: scaleX(1);
+  opacity: 0.7;
+}
+
+.sidebar-nav-item.active::before,
+.sidebar-nav-item.active::after {
+  transform: scaleX(1);
+  opacity: 1;
+  box-shadow: 0 0 10px var(--color-accent);
 }
 
 /* Content wrapper and container styles */
@@ -465,7 +715,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   min-height: 100%;
 }
 
@@ -475,41 +724,20 @@ export default {
   margin: 0 auto;
 }
 
-/* Sidebar content container styles */
-.sidebar-content {
-  height: calc(100vh - 8rem);
-  overflow-y: auto;
-  padding: 6rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.right-sidebar .sidebar-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.right-sidebar ul,
-.left-sidebar ul {
-  width: 100%;
-  max-width: 85%;
-  margin: 0 auto;
-}
-
-/* Main content specific styles */
-.main-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .markdown-container {
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
+}
+
+/* Navigation buttons */
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto;
 }
 
 .navigation-buttons .button {
@@ -567,78 +795,6 @@ export default {
 .navigation-buttons .button.next .arrow {
   right: 1rem;
 }
-
-
-/* Left sidebar specific styles */
-.sidebar-nav-item.left {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  margin: 1rem 0;
-  background: rgba(30, 43, 56, 0.6);
-  border: 1px solid rgba(0, 195, 255, 0.1);
-  border-radius: 12px;
-  width: 50%;
-  transition: all 0.3s ease;
-}
-
-.sidebar-nav-item.left i {
-  font-size: 1rem;
-  color: var(--color-primary);
-  background: rgba(0, 195, 255, 0.117);
-  padding: 0.75rem;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-}
-
-.section-text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  width: 100%;
-
-}
-
-.section-text strong {
-  font-size: 1.25rem;
-  color: var(--color-text-primary);
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.section-text small {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: grey;
-  line-height: 1.2;
-}
-
-/* Navigation Item States */
-.sidebar-nav-item.left:hover {
-  background: rgba(30, 43, 56, 0.8);
-  border-color: rgba(0, 195, 255, 0.3);
-  transform: translateX(4px);
-  box-shadow: 0 4px 2px rgba(0, 0, 0, 0.2);
-}
-
-.sidebar-nav-item.left:hover i {
-  background: rgba(0, 195, 255, 0.2);
-  box-shadow: 0 0 8px rgb(0, 195, 255);
-  transform: scale(1.1);
-}
-
-.sidebar-nav-item.left.active {
-  background: rgba(0, 195, 255, 0.193);
-  border-color: var(--color-primary);
-  border-left: 3px solid var(--color-accent);
-  box-shadow: 0 4px 25px rgba(0, 195, 255, 0.15);
-}
-
-.sidebar-nav-item.left.active i {
-  background: rgba(0, 195, 255, 0.057);
-  box-shadow: 0 0 8px rgb(0, 195, 255);
-}
-
 
 /* Mobile Navigation */
 .mobile-navigation-container {
@@ -786,7 +942,6 @@ export default {
   box-shadow: 0 0 20px rgba(0, 195, 255, 0.4);
 }
 
-
 /* Animations */
 .whitepaper-container.animated .left-sidebar {
   opacity: 0;
@@ -869,12 +1024,12 @@ export default {
 /* Right sidebar specific transitions */
 .right-sidebar .content-transition-enter-from {
   opacity: 0;
-  transform: translateX(20px);
+  transform: translateX(-20px);
 }
 
 .right-sidebar .content-transition-leave-to {
   opacity: 0;
-  transform: translateX(-20px);
+  transform: translateX(20px);
 }
 
 .right-sidebar .content-transition-enter-active,
@@ -885,15 +1040,38 @@ export default {
   left: 0;
 }
 
-/* Button fade transition */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+/* Responsive Layouts */
+@media (max-width: 1280px) {
+  .whitepaper-container {
+    --left-sidebar-width: 280px;
+  }
+  
+  .cosmic-sidepanel-layout {
+    grid-template-columns: var(--left-sidebar-width) 1fr;
+    grid-template-areas: "left-panel main-content";
+  }
+  
+  .cosmic-right-panel {
+    display: none;
+  }
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
+@media (max-width: 768px) {
+  .cosmic-sidepanel-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas: "main-content";
+  }
+  
+  .cosmic-left-panel {
+    display: none;
+  }
+  
+  .mobile-navigation-container {
+    display: block;
+  }
+  
+  .content-wrapper {
+    padding-bottom: 6rem; /* Add space for mobile nav */
+  }
 }
 </style>
