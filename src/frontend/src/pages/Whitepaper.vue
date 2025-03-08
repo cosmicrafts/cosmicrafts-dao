@@ -469,11 +469,11 @@ export default {
 .navigation-buttons {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  margin: 3rem auto;
-  max-width: 800px;
-  padding: 0 1rem;
+  gap: .75rem;
+  width: 100%;
+  flex-direction: row;
 }
+
 
 /* Right sidebar transitions */
 .right-sidebar .content-transition-enter-from {
@@ -794,9 +794,9 @@ export default {
 /* Responsive Layout Adjustments */
 @media (min-width: 1280px) {
   .cosmic-sidepanel-layout {
-    grid-template-columns: 320px minmax(600px, 1fr) 300px;
-    gap: 2.5rem;
-    padding: 0 2rem;
+    grid-template-columns: 380px minmax(700px, 1fr) 340px;
+    gap: .5rem;
+    padding: 0 3rem;
   }
 
   /* Increase text size in sidebars for better readability */
@@ -825,7 +825,7 @@ export default {
 @media (min-width: 1600px) {
   .cosmic-sidepanel-layout {
     grid-template-columns: 380px minmax(700px, 1fr) 340px;
-    gap: 3rem;
+    gap: .5rem;
     padding: 0 3rem;
   }
 }
@@ -833,7 +833,6 @@ export default {
 @media (max-width: 1279px) {
   .cosmic-sidepanel-layout {
     grid-template-columns: 300px 1fr;
-    gap: 2rem;
     padding: 0 1.5rem;
   }
   
@@ -879,9 +878,10 @@ export default {
   }
   
   .navigation-buttons {
-    flex-direction: column;
-    gap: 1rem;
-    margin: 2rem auto;
+    width: 100%;
+    flex-direction: row;
+    gap: .75rem;
+    margin: 1rem auto;
   }
   
   .navigation-buttons .button {
@@ -943,8 +943,4 @@ export default {
   }
 }
 
-/* Add scroll margin to headings to account for fixed header */
-.cosmic-heading {
-  scroll-margin-top: 8rem; /* Add margin for header */
-}
 </style>
