@@ -1,7 +1,7 @@
 <template>
   <div class="whitepaper-container cosmic-sidepanel-layout">
     <!-- Left Sidebar (Navigation) -->
-    <aside class="left-sidebar cosmic-left-panel">
+    <aside class="sidebar left-sidebar">
       <div class="sidebar-content">
         <div class="sidebar-header">
           <i class="fas fa-book-open"></i>
@@ -32,7 +32,7 @@
     </aside>
 
     <!-- Main Content Area -->
-    <main class="main-content cosmic-main-content">
+    <main class="main-content">
       <div class="content-wrapper">
         <transition name="content-transition" mode="out-in">
           <div :key="activeSection" class="content-container">
@@ -77,7 +77,7 @@
     </main>
 
     <!-- Right Sidebar (Table of Contents) -->
-    <aside class="right-sidebar cosmic-right-panel">
+    <aside class="sidebar right-sidebar">
       <div class="sidebar-content">
         <transition name="content-transition" mode="out-in">
           <ul v-if="toc.length > 0" :key="activeSection">
@@ -442,21 +442,42 @@ export default {
 </script>
 
 <style>
-/* Base Layout */
-.whitepaper-container {
-  /* Sidebar width controls - adjust these values to change sidebar widths */
-  --left-sidebar-width: 320px;    /* Reduced from 600px for better proportions */
-  --right-sidebar-width: 280px;   /* Reduced from 400px for better proportions */
-  --main-content-min-width: 600px;
-  --sidebar-padding: 1.25rem;
+/* Base Variables */
+:root {
   --color-primary: #00c3ff;
+  --color-primary-alpha-10: rgba(0, 195, 255, 0.1);
+  --color-primary-alpha-15: rgba(0, 195, 255, 0.15);
+  --color-primary-alpha-20: rgba(0, 195, 255, 0.2);
+  --color-primary-alpha-30: rgba(0, 195, 255, 0.3);
+  --color-primary-alpha-50: rgba(0, 195, 255, 0.5);
+  
   --color-accent: #ffa200;
+  --color-accent-alpha-10: rgba(255, 162, 0, 0.1);
+  --color-accent-alpha-15: rgba(255, 162, 0, 0.15);
+  --color-accent-alpha-20: rgba(255, 162, 0, 0.2);
+  --color-accent-alpha-30: rgba(255, 162, 0, 0.3);
+  
+  --color-bg-dark: rgba(30, 43, 56, 0.6);
+  --color-bg-darker: rgba(23, 33, 43, 0.98);
+  
+  --color-border: rgba(58, 58, 58, 0.24);
+  
   --color-text-primary: rgba(255, 255, 255, 0.95);
   --color-text-secondary: rgba(255, 255, 255, 0.7);
-  --weight-bold: 700;
+  
+  --shadow-primary: 0 0 15px var(--color-primary-alpha-20);
+  --shadow-accent: 0 0 15px var(--color-accent-alpha-20);
+  
+  --transition-standard: all 0.3s ease;
+  
+  --left-sidebar-width: 320px;
+  --right-sidebar-width: 280px;
+  --main-content-min-width: 600px;
+  --sidebar-padding: 1.25rem;
+  --content-max-width: 900px;
 }
 
-/* Main Grid Layout */
+/* Main Layout */
 .cosmic-sidepanel-layout {
   display: grid;
   grid-template-columns: var(--left-sidebar-width) minmax(var(--main-content-min-width), 1fr) var(--right-sidebar-width);
@@ -465,40 +486,34 @@ export default {
   width: 100%;
   overflow: hidden;
   position: relative;
-  gap: 0;
 }
 
-/* Left Panel */
-.cosmic-left-panel, .left-sidebar {
-  grid-area: left-panel;
+/* Sidebar Base Styles */
+.sidebar {
   height: 100%;
   overflow: hidden;
-  border-right: 1px solid rgba(58, 58, 58, 0.24);
+  border-color: var(--color-border);
+  border-style: solid;
+  border-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.left-sidebar {
+  grid-area: left-panel;
   width: var(--left-sidebar-width);
   min-width: var(--left-sidebar-width);
+  border-right-width: 1px;
 }
 
-/* Right Panel */
-.cosmic-right-panel, .right-sidebar {
+.right-sidebar {
   grid-area: right-panel;
-  height: 100%;
-  overflow: hidden;
-  border-left: 1px solid rgba(58, 58, 58, 0.24);
   width: var(--right-sidebar-width);
   min-width: var(--right-sidebar-width);
+  border-left-width: 1px;
 }
 
-/* Main Content Area */
-.cosmic-main-content, .main-content {
-  grid-area: main-content;
-  height: 100%;
-  overflow-y: auto;
-  position: relative;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-}
-
-/* Sidebar Content Styles */
+/* Sidebar Content */
 .sidebar-content {
   height: 100%;
   overflow-y: auto;
@@ -506,14 +521,17 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
+  align-items: flex-start;
+  box-sizing: border-box;
 }
 
-.left-sidebar .sidebar-content {
-  align-items: flex-start;
-}
-
-.right-sidebar .sidebar-content {
-  align-items: flex-start;
+/* Fix for sidebar lists */
+.sidebar ul {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  box-sizing: border-box;
 }
 
 /* Sidebar Header */
@@ -523,45 +541,65 @@ export default {
   gap: 1rem;
   margin-bottom: 2rem;
   padding: 0 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sidebar-header i {
   font-size: 1.5rem;
   color: var(--color-primary);
-  background: rgba(0, 195, 255, 0.1);
+  background: var(--color-primary-alpha-10);
   padding: 0.75rem;
   border-radius: 50%;
-  box-shadow: 0 0 15px rgba(0, 195, 255, 0.2);
+  box-shadow: var(--shadow-primary);
+  flex-shrink: 0;
 }
 
 .header-text {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .header-text strong {
   font-size: 1.25rem;
   color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .header-text small {
   font-size: 0.85rem;
   color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Base Navigation Item Styles */
+/* Main Content Area */
+.main-content {
+  grid-area: main-content;
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+/* Navigation Items Base */
 .sidebar-nav-item {
   position: relative;
   border-radius: 6px;
   background: transparent;
   color: var(--color-text-secondary);
-  font-weight: var(--weight-bold);
+  font-weight: 700;
   cursor: pointer;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   box-sizing: border-box;
   text-shadow: 0 2px 4px rgba(0, 0, 0, .75);
-  transition: all 0.3s ease;
+  transition: var(--transition-standard);
   width: 100%;
 }
 
@@ -572,18 +610,20 @@ export default {
   gap: 0.75rem;
   margin: 0.5rem 0;
   padding: 0.85rem 1rem;
-  background: rgba(30, 43, 56, 0.6);
-  border: 1px solid rgba(0, 195, 255, 0.1);
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-primary-alpha-10);
   border-radius: 12px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .sidebar-nav-item.left i {
   font-size: 1rem;
   color: var(--color-primary);
-  background: rgba(0, 195, 255, 0.117);
+  background: var(--color-primary-alpha-10);
   padding: 0.75rem;
   border-radius: 50%;
-  transition: all 0.3s ease;
+  transition: var(--transition-standard);
   flex-shrink: 0;
 }
 
@@ -593,6 +633,7 @@ export default {
   gap: 0.25rem;
   width: 100%;
   overflow: hidden;
+  min-width: 0; /* Critical for text-overflow to work */
 }
 
 .section-text strong {
@@ -623,46 +664,50 @@ export default {
   line-height: 1.4;
   opacity: 0.85;
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
 }
 
 /* Navigation Item States */
 .sidebar-nav-item.left:hover {
   background: rgba(30, 43, 56, 0.8);
-  border-color: rgba(0, 195, 255, 0.3);
+  border-color: var(--color-primary-alpha-30);
   transform: translateX(4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar-nav-item.left:hover i {
-  background: rgba(0, 195, 255, 0.2);
-  box-shadow: 0 0 8px rgb(0, 195, 255);
+  background: var(--color-primary-alpha-20);
+  box-shadow: 0 0 8px var(--color-primary);
   transform: scale(1.1);
 }
 
 .sidebar-nav-item.left.active {
-  background: rgba(0, 195, 255, 0.15);
+  background: var(--color-primary-alpha-15);
   border-color: var(--color-primary);
   border-left: 3px solid var(--color-accent);
-  box-shadow: 0 4px 25px rgba(0, 195, 255, 0.15);
+  box-shadow: 0 4px 25px var(--color-primary-alpha-15);
 }
 
 .sidebar-nav-item.left.active i {
-  background: rgba(0, 195, 255, 0.15);
-  box-shadow: 0 0 8px rgb(0, 195, 255);
+  background: var(--color-primary-alpha-15);
+  box-shadow: 0 0 8px var(--color-primary);
 }
 
 .sidebar-nav-item.right:hover {
   color: var(--color-primary);
-  background: rgba(0, 195, 255, 0.08);
+  background: var(--color-primary-alpha-10);
   transform: translateX(4px);
 }
 
 .sidebar-nav-item.right.active {
   color: var(--color-primary);
   font-weight: 600;
-  background: rgba(0, 195, 255, 0.15);
+  background: var(--color-primary-alpha-15);
   border-left: 2px solid var(--color-accent);
-  text-shadow: 0 0 12px rgba(0, 195, 255, 0.3);
+  text-shadow: 0 0 12px var(--color-primary-alpha-30);
 }
 
 /* Decorative elements for nav items */
@@ -674,7 +719,7 @@ export default {
   width: 60%;
   background-color: var(--color-accent);
   transition: transform 0.45s ease, box-shadow 0.65s ease;
-  box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.5);
+  box-shadow: 0px 0px 4px var(--color-accent-alpha-50);
   transform: scaleX(0);
   z-index: 1;
   pointer-events: none;
@@ -706,7 +751,7 @@ export default {
   box-shadow: 0 0 10px var(--color-accent);
 }
 
-/* Content wrapper and container styles */
+/* Content Containers */
 .content-wrapper {
   max-width: 100%;
   margin: 0 auto;
@@ -716,18 +761,15 @@ export default {
   flex-direction: column;
   align-items: center;
   min-height: 100%;
+  box-sizing: border-box;
 }
 
-.content-container {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
+.content-container,
 .markdown-container {
   width: 100%;
-  max-width: 900px;
+  max-width: var(--content-max-width);
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* Navigation buttons */
@@ -736,33 +778,35 @@ export default {
   justify-content: space-between;
   gap: 1rem;
   width: 100%;
-  max-width: 900px;
+  max-width: var(--content-max-width);
   margin: 2rem auto;
+  box-sizing: border-box;
 }
 
 .navigation-buttons .button {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   width: 100%;
   justify-content: center;
   padding: 1rem 1.5rem;
   position: relative;
-  border: 1px solid rgba(58, 58, 58, 0.24);
+  border: 1px solid var(--color-border);
   background: rgba(30, 43, 56, 0.65);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .navigation-buttons .button:hover {
   background: rgba(30, 43, 56, 0.85);
-  border-color: rgba(0, 195, 255, 0.5);
+  border-color: var(--color-primary-alpha-50);
 }
 
 .navigation-buttons .button.prev {
   padding-left: 3rem;
   text-align: left;
+  align-items: flex-start;
 }
 
 .navigation-buttons .button.next {
@@ -775,10 +819,14 @@ export default {
   font-size: 1rem;
   font-weight: bold;
   margin-top: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .navigation-buttons small {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   font-size: 0.8rem;
 }
 
@@ -806,11 +854,12 @@ export default {
   z-index: 9999;
   background: linear-gradient(to bottom, 
     rgba(30, 43, 56, 0.98),
-    rgba(23, 33, 43, 0.99)
+    var(--color-bg-darker)
   );
   backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(255, 162, 0, 0.15);
+  border-top: 1px solid var(--color-accent-alpha-15);
   box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
 }
 
 .mobile-nav-button {
@@ -824,9 +873,10 @@ export default {
   border-top: 1px solid var(--color-accent);
   color: var(--color-text-primary);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-standard);
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .button-content {
@@ -838,65 +888,78 @@ export default {
 .button-content i {
   font-size: 1.5rem;
   color: var(--color-accent);
-  background: rgba(255, 162, 0, 0.1);
+  background: var(--color-accent-alpha-10);
   padding: 0.85rem;
   border-radius: 50%;
-  box-shadow: 0 0 20px rgba(255, 162, 0, 0.2);
+  box-shadow: var(--shadow-accent);
+  flex-shrink: 0;
 }
 
 .button-text {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .button-text strong {
   font-size: 1.1rem;
   color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .button-text small {
   font-size: 0.85rem;
   color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav-icon {
   color: var(--color-accent);
   font-size: 1.25rem;
   transition: transform 0.3s ease;
-  background: rgba(255, 162, 0, 0.1);
+  background: var(--color-accent-alpha-10);
   width: 2rem;
   height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .nav-icon.open {
   transform: rotate(180deg);
-  background: rgba(255, 162, 0, 0.2);
-  box-shadow: 0 0 20px rgba(255, 162, 0, 0.3);
+  background: var(--color-accent-alpha-20);
+  box-shadow: 0 0 20px var(--color-accent-alpha-30);
 }
 
 .mobile-nav-menu {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease;
-  background: rgba(23, 33, 43, 0.98);
+  background: var(--color-bg-darker);
+  box-sizing: border-box;
 }
 
 .mobile-nav-menu.expanded {
   max-height: 70vh;
   overflow-y: auto;
   padding: 1rem 0;
-  border-top: 1px solid rgba(255, 162, 0, 0.1);
+  border-top: 1px solid var(--color-accent-alpha-10);
 }
 
 .mobile-nav-menu ul {
   list-style: none;
   padding: 1rem;
   margin: 0;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .mobile-nav-menu li {
@@ -906,40 +969,43 @@ export default {
   padding: 1rem;
   margin: 0.5rem 0;
   border-radius: 8px;
-  background: rgba(30, 43, 56, 0.6);
-  border: 1px solid rgba(0, 195, 255, 0.1);
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-primary-alpha-10);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-standard);
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .mobile-nav-menu li i {
   font-size: 1.25rem;
   color: var(--color-primary);
-  background: rgba(0, 195, 255, 0.1);
+  background: var(--color-primary-alpha-10);
   padding: 0.75rem;
   border-radius: 50%;
-  transition: all 0.3s ease;
+  transition: var(--transition-standard);
+  flex-shrink: 0;
 }
 
 .mobile-nav-menu li:hover {
-  background: rgba(0, 195, 255, 0.08);
+  background: var(--color-primary-alpha-10);
   transform: translateX(8px);
 }
 
 .mobile-nav-menu li:hover i {
-  background: rgba(0, 195, 255, 0.2);
+  background: var(--color-primary-alpha-20);
   transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(0, 195, 255, 0.3);
+  box-shadow: 0 0 15px var(--color-primary-alpha-30);
 }
 
 .mobile-nav-menu li.active {
-  background: rgba(0, 195, 255, 0.15);
+  background: var(--color-primary-alpha-15);
   border-color: var(--color-primary);
 }
 
 .mobile-nav-menu li.active i {
-  background: rgba(0, 195, 255, 0.2);
-  box-shadow: 0 0 20px rgba(0, 195, 255, 0.4);
+  background: var(--color-primary-alpha-20);
+  box-shadow: 0 0 20px var(--color-primary-alpha-30);
 }
 
 /* Animations */
@@ -959,36 +1025,18 @@ export default {
 }
 
 @keyframes slide-in-left {
-  from { 
-    transform: translateX(-20px); 
-    opacity: 0; 
-  }
-  to { 
-    transform: translateX(0); 
-    opacity: 1; 
-  }
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
 @keyframes slide-in-right {
-  from { 
-    transform: translateX(20px); 
-    opacity: 0; 
-  }
-  to { 
-    transform: translateX(0); 
-    opacity: 1; 
-  }
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
 @keyframes fade-in {
-  from { 
-    opacity: 0; 
-    transform: translateY(10px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Content Transitions */
@@ -1006,19 +1054,6 @@ export default {
 .content-transition-leave-to {
   opacity: 0;
   transform: translateY(-20px);
-}
-
-/* Main content specific transitions */
-.markdown-container .content-transition-enter-active {
-  position: relative;
-  z-index: 2;
-}
-
-.markdown-container .content-transition-leave-active {
-  position: absolute;
-  width: 100%;
-  left: 0;
-  z-index: 1;
 }
 
 /* Right sidebar specific transitions */
@@ -1042,7 +1077,7 @@ export default {
 
 /* Responsive Layouts */
 @media (max-width: 1280px) {
-  .whitepaper-container {
+  :root {
     --left-sidebar-width: 280px;
   }
   
@@ -1051,7 +1086,7 @@ export default {
     grid-template-areas: "left-panel main-content";
   }
   
-  .cosmic-right-panel {
+  .right-sidebar {
     display: none;
   }
 }
@@ -1062,7 +1097,7 @@ export default {
     grid-template-areas: "main-content";
   }
   
-  .cosmic-left-panel {
+  .left-sidebar {
     display: none;
   }
   
