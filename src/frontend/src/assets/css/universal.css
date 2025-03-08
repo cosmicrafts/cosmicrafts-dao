@@ -4,7 +4,7 @@
 
 :root {
   /* Color System */
-  --color-background: #0E1824;
+  --color-background: #19222e;
   --color-background-darker: #0A1420;
   --color-surface-primary: rgba(15, 185, 253, 0.05);
   --color-surface-secondary: rgba(15, 185, 253, 0.08);
@@ -92,7 +92,7 @@
   --transition-slow: 0.3s ease;
   
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, rgba(15, 185, 253, 0.1), rgba(10, 139, 192, 0.1));
+  --gradient-primary: linear-gradient(135deg, rgba(253, 15, 15, 0.962), rgba(10, 139, 192, 0.1));
   --gradient-hero: radial-gradient(circle at center, #0A1420, #050A10);
   --gradient-accent: linear-gradient(90deg, #0FB9FD, #FF9100);
   --gradient-button: linear-gradient(to bottom, #0FB9FD, #0A8BC0);
@@ -422,6 +422,4 @@
   font-size: var(--text-3xl);
   margin-bottom: var(--space-md);
 }
-
-/* Add sidebar navigation styles below existing styles */
 

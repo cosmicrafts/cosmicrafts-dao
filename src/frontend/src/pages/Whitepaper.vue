@@ -572,7 +572,7 @@ export default {
 
 .header-text small {
   font-size: 0.85rem;
-  color: #grey;
+  color: grey;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -593,7 +593,7 @@ export default {
   position: relative;
   border-radius: 6px;
   background: transparent;
-  color: grey;
+  color: var(--color-text-secondary);
   font-weight: 700;
   cursor: pointer;
   border-top: 1px solid transparent;
@@ -827,7 +827,7 @@ export default {
 }
 
 .navigation-buttons small {
-  color: grey;
+  color: var(--color-text-secondary);
   font-size: 0.8rem;
 }
 
@@ -854,12 +854,12 @@ export default {
   width: 100%;
   z-index: 9999;
   background: linear-gradient(to bottom, 
-    rgba(30, 43, 56, 0.98),
-    var(--color-bg-darker)
+    rgba(14, 24, 36, 0.95),
+    rgba(10, 20, 32, 0.98)
   );
-  backdrop-filter: blur(12px);
-  border-top: 1px solid var(--color-accent-alpha-15);
-  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(15, 185, 253, 0.15);
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
 }
 
@@ -869,9 +869,9 @@ export default {
   align-items: center;
   width: 100%;
   padding: 1.25rem 1.5rem;
-  background: rgba(30, 43, 56, 0.95);
+  background: rgba(15, 185, 253, 0.05);
   border: none;
-  border-top: 1px solid var(--color-accent);
+  border-top: 1px solid rgba(15, 185, 253, 0.2);
   color: var(--color-text-primary);
   cursor: pointer;
   transition: var(--transition-standard);
@@ -888,11 +888,11 @@ export default {
 
 .button-content i {
   font-size: 1.5rem;
-  color: var(--color-accent);
-  background: var(--color-accent-alpha-10);
+  color: var(--color-primary);
+  background: rgba(15, 185, 253, 0.08);
   padding: 0.85rem;
   border-radius: 50%;
-  box-shadow: var(--shadow-accent);
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.2);
   flex-shrink: 0;
 }
 
@@ -914,19 +914,19 @@ export default {
 
 .button-text small {
   font-size: 0.85rem;
-  color: grey;
+  color: var(--color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .nav-icon {
-  color: var(--color-accent);
+  color: var(--color-primary);
   font-size: 1.25rem;
-  transition: transform 0.3s ease;
-  background: var(--color-accent-alpha-10);
-  width: 2rem;
-  height: 2rem;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  background: rgba(15, 185, 253, 0.08);
+  width: 2.25rem;
+  height: 2.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -936,15 +936,15 @@ export default {
 
 .nav-icon.open {
   transform: rotate(180deg);
-  background: var(--color-accent-alpha-20);
-  box-shadow: 0 0 20px var(--color-accent-alpha-30);
+  background: rgba(15, 185, 253, 0.15);
+  box-shadow: 0 0 25px rgba(15, 185, 253, 0.25);
 }
 
 .mobile-nav-menu {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease;
-  background: var(--color-bg-darker);
+  background: var(--color-background-darker);
   box-sizing: border-box;
 }
 
@@ -952,7 +952,7 @@ export default {
   max-height: 70vh;
   overflow-y: auto;
   padding: 1rem 0;
-  border-top: 1px solid var(--color-accent-alpha-10);
+  border-top: 1px solid rgba(15, 185, 253, 0.1);
 }
 
 .mobile-nav-menu ul {
@@ -970,8 +970,8 @@ export default {
   padding: 1rem;
   margin: 0.5rem 0;
   border-radius: 8px;
-  background: var(--color-bg-dark);
-  border: 1px solid var(--color-primary-alpha-10);
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
   cursor: pointer;
   transition: var(--transition-standard);
   box-sizing: border-box;
@@ -981,7 +981,7 @@ export default {
 .mobile-nav-menu li i {
   font-size: 1.25rem;
   color: var(--color-primary);
-  background: var(--color-primary-alpha-10);
+  background: rgba(15, 185, 253, 0.08);
   padding: 0.75rem;
   border-radius: 50%;
   transition: var(--transition-standard);
@@ -989,24 +989,26 @@ export default {
 }
 
 .mobile-nav-menu li:hover {
-  background: var(--color-primary-alpha-10);
+  background: rgba(15, 185, 253, 0.08);
   transform: translateX(8px);
+  border-color: rgba(15, 185, 253, 0.2);
 }
 
 .mobile-nav-menu li:hover i {
-  background: var(--color-primary-alpha-20);
+  background: rgba(15, 185, 253, 0.15);
   transform: scale(1.1);
-  box-shadow: 0 0 15px var(--color-primary-alpha-30);
+  box-shadow: 0 0 15px rgba(15, 185, 253, 0.25);
 }
 
 .mobile-nav-menu li.active {
-  background: var(--color-primary-alpha-15);
+  background: rgba(15, 185, 253, 0.1);
   border-color: var(--color-primary);
+  box-shadow: 0 4px 20px rgba(15, 185, 253, 0.15);
 }
 
 .mobile-nav-menu li.active i {
-  background: var(--color-primary-alpha-20);
-  box-shadow: 0 0 20px var(--color-primary-alpha-30);
+  background: rgba(15, 185, 253, 0.15);
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.3);
 }
 
 /* Animations */
