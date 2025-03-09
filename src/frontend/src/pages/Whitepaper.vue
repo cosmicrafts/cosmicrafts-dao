@@ -145,11 +145,11 @@ export default {
       activeSection: "introduction",
       sections: [
         { id: "introduction", title: "Introduction" },
-        { id: "architecture", title: "Architecture" },
-        { id: "core-features", title: "Core Features" },       
-        { id: "governance", title: "Governance" },
         { id: "tokenomics", title: "Tokenomics" },
-        { id: "community", title: "Community" }
+        { id: "governance", title: "Governance" },
+        { id: "core-features", title: "Core Features" },       
+        { id: "community", title: "Community" },
+        { id: "architecture", title: "Architecture" }
       ],
       toc: [],
       activeHeading: null,
@@ -409,12 +409,12 @@ export default {
 
     getSectionDescription(sectionId) {
       const descriptions = {
-        'introduction': 'Project overview and vision',
-        'architecture': 'Technical foundation and structure',
-        'core-features': 'Key platform capabilities',
-        'governance': 'Decision-making framework',
-        'tokenomics': 'Token economics and distribution',
-        'community': 'Ecosystem and participation'
+        'introduction': 'Project overview and value proposition',
+        'tokenomics': 'Token distribution and economic model',
+        'governance': 'Stakeholder control and decision-making',
+        'core-features': 'Product capabilities and mechanics',
+        'community': 'Growth strategies and engagement',
+        'architecture': 'Technical implementation details'
       };
       return descriptions[sectionId] || '';
     },

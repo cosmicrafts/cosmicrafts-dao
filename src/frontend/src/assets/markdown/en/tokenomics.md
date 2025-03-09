@@ -2,7 +2,7 @@
 
 ## Overview
 
-The SPIRAL token is the economic foundation of the Cosmicrafts ecosystem, designed to:
+The SPIRAL token is the economic foundation of the Cosmicrafts DAO, designed to:
 - Power governance and reward participation
 - Drive sustainable economic growth
 - Align stakeholder interests through structured incentives
@@ -49,7 +49,7 @@ Core Mechanisms:
   - 8-year vesting, immediate governance participation
 
 ### Public Distribution (120M)
-- **Structure**: 4 quarterly vesting events
+- **Structure**: 4 vesting events at 3-month intervals
 - **Release**: 25% per event
 - **Purpose**: Ensure stable token distribution
 - **Participation**: Open to global community (except Antarctica)
@@ -139,3 +139,7 @@ The 770M treasury allocation follows a strategic distribution model:
    - Market Stability
    - Growth Investments
    - Research & Development
+
+
+## Rewards
+Oh yeah dont forget to elaborate on the rewards section because this comes in the introduction, what are the rewards that we can say for sure are available from the sns init yaml, which is the reward rate and all that

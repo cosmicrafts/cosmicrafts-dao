@@ -92,6 +92,8 @@ The Cosmicrafts DAO distributes its initial voting power to create a balanced an
 | **Maximum Deadline Extension** | 1 day |
 | **Minimum Neuron Creation Stake** | 1000 SPIRAL |
 
+**Note**: Initial voting power percentages reflect the effective governance influence at launch, which differs from token allocation percentages due to neuron dissolve delay configurations, voting power bonuses, and other governance parameters.
+
 ## How Governance Works
 
 The Cosmicrafts DAO leverages proven technology to enable robust and transparent decentralized governance and treasury management.
@@ -103,8 +105,9 @@ The DAO rewards long-term commitment with significant voting power bonuses:
 | Factor | Maximum Bonus | Time to Achieve |
 |--------|---------------|-----------------|
 | **Dissolve Delay** | +100% | 8 years |
-| **Neuron Age** | +25% | 4 years |
+| **Neuron Age** | +100% | 1 year |
 | **Minimum Dissolve Delay** | N/A | 1 month |
+| **Combined Cap** | 3x base power | N/A |
 
 ### Decentralized Governance Areas
 

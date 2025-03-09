@@ -136,9 +136,9 @@ graph TD
 
 </div>
 
-## Summary: The Cosmicrafts Ecosystem
+## Summary: The Cosmicrafts DAO
 
-The Cosmicrafts ecosystem delivers value through an interconnected set of systems, each designed to enhance player experience and stakeholder returns:
+The Cosmicrafts DAO delivers value through an interconnected set of systems, each designed to enhance player experience and stakeholder returns:
 
 ```mermaid
 graph TD

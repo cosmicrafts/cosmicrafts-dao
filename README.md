@@ -55,7 +55,7 @@ All [critical operations](https://tokenminds.co/blog/web3-development/the-benfef
 - **Tokens:** The tokens for in-game transactions, compatible with DEXs and CEXs for trading.
 - **NFTs:** Handles dynamic metadata, enabling upgrades, rarity traits, and cross-game utilities.
 
->This architecture ensures trust, enhances transparency, and establishes a robust foundation for expanding the Cosmicrafts ecosystem.
+>This architecture ensures trust, enhances transparency, and establishes a robust foundation for expanding the Cosmicrafts DAO.
 
 ---
 

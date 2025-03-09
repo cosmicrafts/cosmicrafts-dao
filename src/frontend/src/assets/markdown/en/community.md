@@ -160,3 +160,6 @@ Join our growing ecosystem:
 - Website: [cosmicrafts.com](https://cosmicrafts.com)
 
 </div>
+
+## Treasury Management
+Yes also dont forget to elaborate on this to have principles on how we set the rules, although they can pretty much propose and vote at will once they have tokens right? thats why its a DAO but well at least lets have a spirit 

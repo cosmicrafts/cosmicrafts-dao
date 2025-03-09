@@ -61,31 +61,31 @@ const toggleSection = (section) => {
           <h4 class="footer-heading">{{ t('footer.stayConnected') }}</h4>
           <ul class="social-links">
             <li>
-              <a href="#" class="social-icon-link">
+              <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="social-icon-link">
                 <img src="@/assets/icons/discord.svg" alt="Discord" />
                 <span class="social-hover-text">Discord</span>
               </a>
             </li>
             <li>
-              <a href="#" class="social-icon-link">
+              <a href="https://twitter.com/CosmicraftsDAO" class="social-icon-link">
                 <img src="@/assets/icons/x.svg" alt="Twitter" />
                 <span class="social-hover-text">Twitter</span>
               </a>
             </li>
             <li>
-              <a href="#" class="social-icon-link">
+              <a href="https://facebook.com/CosmicraftsDAO" class="social-icon-link">
                 <img src="@/assets/icons/facebook.svg" alt="Facebook" />
                 <span class="social-hover-text">Facebook</span>
               </a>
             </li>
             <li>
-              <a href="#" class="social-icon-link">
+              <a href="https://dscvr.one/p/cosmicrafts" class="social-icon-link">
                 <img src="@/assets/icons/dscvr.svg" alt="DSCVR" />
                 <span class="social-hover-text">DSCVR</span>
               </a>
             </li>
             <li>
-              <a href="#" class="social-icon-link">
+              <a href="https://distrikt.app/u/cosmicrafts" class="social-icon-link">
                 <img src="@/assets/icons/distrikt.svg" alt="Distrikt" />
                 <span class="social-hover-text">Distrikt</span>
               </a>
@@ -116,19 +116,19 @@ const toggleSection = (section) => {
     
     <!-- Mobile Footer Social Bar -->
     <div class="mobile-social-bar">
-      <a href="#" class="mobile-social-icon">
+      <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="mobile-social-icon">
         <img src="@/assets/icons/discord.svg" alt="Discord" />
       </a>
-      <a href="#" class="mobile-social-icon">
+      <a href="https://twitter.com/CosmicraftsDAO" class="mobile-social-icon">
         <img src="@/assets/icons/x.svg" alt="Twitter" />
       </a>
-      <a href="#" class="mobile-social-icon">
+      <a href="https://facebook.com/CosmicraftsDAO" class="mobile-social-icon">
         <img src="@/assets/icons/facebook.svg" alt="Facebook" />
       </a>
-      <a href="#" class="mobile-social-icon">
+      <a href="https://dscvr.one/p/cosmicrafts" class="mobile-social-icon">
         <img src="@/assets/icons/dscvr.svg" alt="DSCVR" />
       </a>
-      <a href="#" class="mobile-social-icon">
+      <a href="https://distrikt.app/u/cosmicrafts" class="mobile-social-icon">
         <img src="@/assets/icons/distrikt.svg" alt="Distrikt" />
       </a>
     </div>

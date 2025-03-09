@@ -1,10 +1,12 @@
 # Introduction
 
-![DAO Mission](daobanner.webp)
+![Executive Summary](executivesummary.webp)
 
 [[toc:2-2]]
 
 **Cosmicrafts DAO** is pioneering the gaming industry through Web3 technology, creating the first fully on-chain gaming franchise with real ownership economics. In development since 2016 and built entirely on the [Internet Computer](https://internetcomputer.org) since 2021, we've consistently advanced our vision of blockchain gaming without the limitations that have held back previous Web3 ventures.
+
+> This isn't all about funding development anymore; it's about driving adoption and scaling up. The game is already built, the infrastructure is solid, and the framework is in place.
 
 ## The Opportunity
 
@@ -14,96 +16,87 @@ While traditional gaming extracts value from players, Cosmicrafts:
 - **Transforms players into stakeholders** with governance rights and economic benefits
 - **Delivers quality gameplay** that appeals to mainstream and crypto-native audiences alike
 
+### Challenges We're Solving
+
+1. **Traditional Gaming Limitations**
+   - Value flows one-way from players to publishers
+   - Players have no ownership of their digital assets
+   - No say in franchise direction despite massive investment of time and money
+
+2. **Web3 Gaming Failures**
+   - Focus on speculative trading over enjoyable gameplay
+   - Technical barriers that alienate mainstream players
+   - Poor-quality products that fail to deliver on promises
+
 ## Our Traction
 
 Cosmicrafts has built a solid foundation with measurable achievements since inception:
 
 ### Proven Track Record
-- **Enduring Presence**: 8+ years of continuous development, surviving 3 major market cycles
+- **Enduring Presence**: [8+ years of continuous development](https://drive.google.com/drive/folders/0B88rGI6X8bgYTFdTblVGcG81bmc?resourcekey=0-CB6fdqNSdQAnHCgAzEV7vg&usp=sharing), surviving 2 major market cycles
 - **DFINITY Grant Recipient**: [Official grant project](https://dfinity.org/grants/) from 2021-2024
-- **Supernova Winner**: [Community Awards winner](https://medium.com/dfinity/cosmicrafts-wins-the-supernova-hackathon-community-choice-award-c9ed27e3bd80), 14,664 votes
-- **NFT Success**: [Genesis collection](https://funded.app/projects/cosmicrafts-9388300) sold out in 47 seconds, 100% floor price increase
-- **10,000+ Beta Testers**: 28-minute average session times (42% higher than industry average)
-- **Community Growth**: 5,000+ Discord members, 18,000+ Twitter followers
+- **Supernova Hackathon Winner**: Voted as the top ICP [Community Choice Award!](https://medium.com/dfinity/cosmicrafts-wins-the-supernova-hackathon-community-choice-award-c9ed27e3bd80)
+- **NFT Success**: [Genesis collection](https://funded.app/projects/cosmicrafts-9388300) sold out in 47 seconds, [airdropped 17,664 NFTs](https://nftanvil.com/collections) to the community.
+- **10,000+ Beta Testers**: [28-minute average session times](https://cusyh-iyaaa-aaaah-qcpba-cai.raw.ic0.app) recorded (42% higher than industry average)
+- **Community Growth**: [6,000+ Discord members](https://discord.gg/cosmicrafts-884272584491941888), [18,000+ X followers](https://x.com/cosmicrafts)
 - **Multiple Platforms**: Featured on [Epic Games](https://store.epicgames.com/en-US/p/cosmicrafts-499a8f) and [itch.io](https://ohsalmeron.itch.io/cosmicrafts)
 
 ### Strategic Positioning
-- **Ecosystem Partnerships**: 50+ collaborations with ICP ecosystem projects
-- **Technical Infrastructure**: 1.2 million+ on-chain transactions with 99.97% uptime
-- **Media Recognition**: Featured in 12+ industry publications
-- **Market Readiness**: Complete product serving players across 47 countries
+- **Ecosystem Partnerships**: [50+ collaborations](https://x.com/search?q=cosmicrafts&src=typed_querys) with Web3 projects
+- **Technical Infrastructure**: [1.2 million+ on-chain transactions](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai) with 99.97% uptime
+- **Media Recognition**: Featured in multiple publications including [Binance](https://www.binance.com/en/square/post/4810541428922), [ICP Lab 5.0](https://x.com/dfinity/status/1702618623989461307), with regular [updates on Medium](https://cosmicrafts.medium.com/)
 
-## Cosmicrafts Value Proposition
 
-<div class="community-highlight">
 
-## Why Cosmicrafts Stands Out
 
-1. **Fully Operational Product**: Already built and playable with a proven track record
-2. **Authentic Gaming Experience**: Designed by gamers for gamers
-3. **Technical Execution**: Web3 functionality that enhances gaming experience
-4. **Community Ownership**: True DAO governance with meaningful participation
-5. **Scalable Framework**: Architecture designed for an expanding universe
-
-</div>
+## Value Proposition
 
 ### 1. Complete Product & Proven Technology
 
-Unlike most Web3 projects seeking investment to build a product, Cosmicrafts is already built and playable. Your participation directly fuels growth and adoption, not development uncertainty.
+Unlike most Web3 projects seeking funding to build a product, Cosmicrafts is [already built and playable](https://play.cosmicrafts.com). Your participation directly fuels growth and adoption, not development uncertainty.
 
 ### 2. Multiple Value Mechanisms
 
 As a Spiral token holder, you benefit from:
 
 - **Direct Participation**
-  - **Staking**: Earn passive income by locking tokens
-  - **Governance**: Direct the DAO's future
-  - **Treasury**: Strategic resource allocation
+  - **Staking**: [Earn passive income](/whitepaper#tokenomics#rewards) by locking tokens
+  - **Governance**: [Direct the DAO's future](/whitepaper#governance) through voting
+  - **Treasury**: Strategic [resource allocation](/whitepaper#community#treasurymanagement) management
 
 - **Ecosystem Engagement**
-  - **Marketplace**: Trade assets with other players
-  - **In-game Economy**: Participate in the game economy
-  - **Asset Utility**: Use assets across multiple games
+  - **Marketplace**: [Trade assets](https://market.cosmicrafts.com) with other players
+  - **In-game Economy**: [Participate in the game economy](https://github.com/cosmicrafts/tokenomics)
+  - **Asset Utility**: [Use assets across multiple games](https://medium.com/cosmicrafts/cross-game-asset-utility-explained-d8e721f6c91a)
 
 ### 3. Proven Operational Expertise
 
 Our team has demonstrated exceptional execution:
-- Successfully built and launched a fully on-chain RTS game in 2021
-- Maintained continuous development through multiple market cycles
-- Navigated the technical challenges of blockchain gaming
+- Successfully built and launched a [fully on-chain RTS game](https://github.com/cosmicrafts) in 2021
+- Maintained [continuous development](https://github.com/cosmicrafts/commits) through multiple market cycles
+- Navigated the [technical challenges](https://cosmicrafts.medium.com/building-on-icp-our-journey-f5e892a3c741) of blockchain gaming
+
+### 4. Unique Advantages
+
+- **No Blockchain Complexity**: [Players enjoy Web3 benefits](https://www.blockchaingamer.biz/features/interviews/32377/icp-rts-cosmicrafts-fully-onchain/) without technical barriers
+- **Evolving Assets**: [NFTs that gain experience](https://medium.com/cosmicrafts/introducing-soul-bound-units-d7f891e5c2a3) and history through gameplay
+- **Deflationary Economics**: [Token burn mechanics](https://dashboard.internetcomputer.org/canister/bkyz2-fmaaa-aaaaa-qaaaq-cai/transactions) create sustainable value
+- **Strategic Growth Focus**: [DAO resources](https://dashboard.internetcomputer.org/sns/bkyz2-fmaaa-aaaaa-qaaaq-cai/treasury) directed to user acquisition and expansion
 
 ---
 
 This whitepaper details the Cosmicrafts DAO ecosystem, from technical architecture to tokenomics. Explore how your participation can help redefine gaming through true digital ownership.
 
-```mermaid
-flowchart LR
-    A[Start Here] --> B[Introduction]
-    B --> C[Tokenomics]
-    B --> D[Governance]
-    
-    C --> E[Core Features]
-    D --> E
-    
-    E --> F[Architecture]
-    
-    style A fill:#00c3ff,stroke:#333,stroke-width:2px
-    style B fill:#00ff9530,stroke:#00ff95,stroke-width:2px
-    style C,D,E,F fill:#1a2d40,stroke:#333,stroke-width:1px
-```
+## Reading Path
 
-## Recommended Reading Path
+For stakeholders looking to understand the opportunity quickly, we recommend focusing on:
 
-For stakeholders looking to understand the ecosystem:
-
-1. [**Introduction**](/introduction) - Overview of the project
+1. [**Introduction**](/introduction) - Overview and value proposition
 2. [**Tokenomics**](/tokenomics) - Token distribution, utility, and value drivers
 3. [**Governance**](/governance) - Stakeholder control and decision-making mechanisms
 
-For technical stakeholders interested in product capabilities:
+For those interested in a deeper technical understanding:
 
-1. [**Core Features**](/core-features) - Product capabilities and functionality
-2. [**Architecture**](/architecture) - Technical infrastructure and blockchain integration
-3. [**Community**](/community) - User growth strategies and engagement mechanisms
-
-Join us in revolutionizing the economics of gaming by transforming players into stakeholders and creating true digital ownership in the metaverse.
+4. [**Core Features**](/core-features) - Product capabilities and gameplay mechanics
+5. [**Community**](/community) - Growth strategies and engagement plans
+6. [**Architecture**](/architecture) - Technical infrastructure details
