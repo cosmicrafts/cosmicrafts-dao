@@ -47,9 +47,13 @@ graph TD
 
 </div>
 
+
+## NFTs
+NFTs that gain experience and history through gameplay explained and fused out with other nft sections but its gotta be called NFTs because of the intro
+
 <div class="feature-highlight">
 
-## NFT System Implementation
+## NFTs System Implementation
 
 | Feature | Implementation | Player Benefit |
 |---------|----------------|----------------|

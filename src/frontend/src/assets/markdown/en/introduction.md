@@ -62,26 +62,19 @@ As a Spiral token holder, you benefit from:
 - **Direct Participation**
   - **Staking**: [Earn passive income](/whitepaper#tokenomics#rewards) by locking tokens
   - **Governance**: [Direct the DAO's future](/whitepaper#governance) through voting
-  - **Treasury**: Strategic [resource allocation](/whitepaper#community#treasurymanagement) management
+  - **Treasury**: Strategic [resource allocation](/whitepaper#community#treasury-management) management
 
 - **Ecosystem Engagement**
-  - **Marketplace**: [Trade assets](https://market.cosmicrafts.com) with other players
-  - **In-game Economy**: [Participate in the game economy](https://github.com/cosmicrafts/tokenomics)
-  - **Asset Utility**: [Use assets across multiple games](https://medium.com/cosmicrafts/cross-game-asset-utility-explained-d8e721f6c91a)
+  - **Marketplace**: [Trade assets](/whitepaper#community#marketplace) with other players
+  - **In-game Economy**: [Participate in the game economy](/whitepaper#core-features)
+  - **Asset Utility**: [Use assets across multiple games](/whitepaper#architecture#unified-canister)
 
-### 3. Proven Operational Expertise
+### 3. Unique Advantages
 
-Our team has demonstrated exceptional execution:
-- Successfully built and launched a [fully on-chain RTS game](https://github.com/cosmicrafts) in 2021
-- Maintained [continuous development](https://github.com/cosmicrafts/commits) through multiple market cycles
-- Navigated the [technical challenges](https://cosmicrafts.medium.com/building-on-icp-our-journey-f5e892a3c741) of blockchain gaming
-
-### 4. Unique Advantages
-
-- **No Blockchain Complexity**: [Players enjoy Web3 benefits](https://www.blockchaingamer.biz/features/interviews/32377/icp-rts-cosmicrafts-fully-onchain/) without technical barriers
-- **Evolving Assets**: [NFTs that gain experience](https://medium.com/cosmicrafts/introducing-soul-bound-units-d7f891e5c2a3) and history through gameplay
-- **Deflationary Economics**: [Token burn mechanics](https://dashboard.internetcomputer.org/canister/bkyz2-fmaaa-aaaaa-qaaaq-cai/transactions) create sustainable value
-- **Strategic Growth Focus**: [DAO resources](https://dashboard.internetcomputer.org/sns/bkyz2-fmaaa-aaaaa-qaaaq-cai/treasury) directed to user acquisition and expansion
+- **No Blockchain Complexity**: [Players enjoy Web3 benefits](/whitepaper#architecture#no-gas-fees) without technical barriers
+- **Evolving Assets**: [NFTs that gain experience](/whitepaper#core-features#nfts) and history through gameplay
+- **Deflationary Economics**: [Token burn mechanics](/whitepaper#tokenomics#burn-mechanisms) create sustainable value
+- **Strategic Growth Focus**: DAO resources directed to [user acquisition and expansion](/whitepaper#community)
 
 ---
 

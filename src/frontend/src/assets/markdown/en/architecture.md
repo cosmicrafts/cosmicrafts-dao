@@ -42,6 +42,15 @@ Cosmicrafts implements a hybrid architecture that strategically integrates block
 - Efficient resource utilization
 - Sustainable operational costs
 
+## Unified Canister
+Let's elaborate the thing about why single canister performs much faster without external calls when are not needed
+
+## No gas fees
+Elaborate further how ICP design doesnt require users to pay for blockchain transactions making the experience similar to traditional web2 services like buying in Amazon, or playing a game from Steam.
+
+
+
+
 ## Player Experience
 
 ### 1. Seamless Gaming
@@ -109,3 +118,4 @@ Cosmicrafts implements a hybrid architecture that strategically integrates block
 - New gameplay features
 - Enhanced social features
 - Advanced economic tools
+

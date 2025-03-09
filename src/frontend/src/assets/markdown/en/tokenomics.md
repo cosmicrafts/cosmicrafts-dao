@@ -95,6 +95,9 @@ Core Mechanisms:
   - Transition: 8-year linear reduction
   - Purpose: Long-term staking incentivization
 
+## Burn mechanisms
+Explained all the burn mechanisms that it has like microtransactions, which ones and yeah elaborate
+
 ## Utility Framework
 
 1. **Governance Rights**

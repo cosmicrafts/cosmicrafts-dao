@@ -46,6 +46,13 @@ Our community activities emphasize:
 - Direct interaction
 :::
 
+## Marketplace
+Of course we need to put the bases for a decentralized market here, orchestrated by the DAO itself! let's put the bases and add RoadMap references
+
+
+## Treasury Management
+Yes also dont forget to elaborate on this to have principles on how we set the rules, although they can pretty much propose and vote at will once they have tokens right? thats why its a DAO but well at least lets have a spirit 
+
 ## Growth & Expansion
 
 <div class="strategy-box">
@@ -161,5 +168,3 @@ Join our growing ecosystem:
 
 </div>
 
-## Treasury Management
-Yes also dont forget to elaborate on this to have principles on how we set the rules, although they can pretty much propose and vote at will once they have tokens right? thats why its a DAO but well at least lets have a spirit 
