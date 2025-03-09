@@ -127,73 +127,86 @@ Early backers basket of neurons.
   - Maximum: 100,000 ICP per participant
   - Total Maximum: 1,000,000 ICP
 
-## Governance Architecture
-
-### Neuron Framework
-- **Base Requirements**
-  - Minimum Stake: 1,000 SPIRAL
-  - Minimum Lock Period: 30 days
-  - Proposal Rejection Fee: 1,000 SPIRAL
-  - Voting Period: 7 days
-  - Quiet Period Extension: 1 day maximum
-
-### Power Multipliers
-- **Time-Based Bonuses**
-  - Dissolve Delay: Up to 100% bonus at 8 years
-  - Age Bonus: Up to 100% at 365 days
-  
-### Reward Economics
-- **Dynamic Rate Structure**
-  - Initial Rate: 8% APY
-  - Final Rate: 1% APY
-  - Transition Period: 8 years
-  - Purpose: Long-term staking incentivization
-
 ## Utility Framework
 
-1. **Governance Rights**
-   - Proposal Creation & Voting
-   - Treasury Management
-   - Protocol Parameters
-   - Revenue Distribution
+### Governance Functions
 
-2. **Economic Functions**
-   - Transaction Fee: 0.01 SPIRAL
-   - Cross-Game Transactions
-   - NFT Market Operations
-   - Premium Feature Access
+| Feature | Description | Requirements |
+|---------|-------------|--------------|
+| **Proposal Creation** | Submit new proposals for community voting | Minimum 1,000 SPIRAL stake |
+| **Voting Rights** | Participate in DAO decision-making | Active neuron required |
+| **Protocol Parameters** | Vote on system-wide parameter changes | Active participation in governance |
 
-3. **Community Engagement**
-   - Staking Incentives
-   - Tournament Participation
-   - Early Access Rights
-   - Special Event Entry
+### Economic Utilities
 
-## Strategic Treasury Management
+| Function | Value | Purpose |
+|----------|--------|----------|
+| **Transaction Fee** | 0.01 SPIRAL | Network maintenance and deflation |
+| **Cross-Game Trading** | Variable | Enable value transfer between games |
+| **NFT Operations** | Market-based | Facilitate digital asset trading |
+| **Premium Features** | Tier-based | Access to advanced platform features |
+
+### Community Benefits
+
+| Benefit | Type | Details |
+|---------|------|----------|
+| **Staking Rewards** | Economic | Dynamic APY based on lock period |
+| **Tournament Access** | Gaming | Priority entry to competitive events |
+| **Early Access** | Product | Preview of new features and games |
+| **Special Events** | Social | Exclusive community gatherings and activities |
+
+### Treasury Management
 
 The 760M treasury allocation follows a strategic distribution model:
 
-1. **Core Development (40%)**
-   - Game Engine Evolution
-   - Infrastructure Scaling
-   - Security Framework
-   - Feature Innovation
-   - Cross-Chain Integration
-
-2. **Community Growth (30%)**
-   - Competitive Rewards
-   - Marketing Amplification
-   - Strategic Partnerships
-   - User Acquisition
-   - Event Organization
-
-3. **Economic Sustainability (30%)**
-   - Liquidity Programs
-   - Emergency Reserves
-   - Market Stability
-   - Growth Investments
-   - Research & Development
+| Focus Area | Allocation | Key Initiatives |
+|------------|------------|-----------------|
+| **Core Development** | 40% | • Game Engine Evolution<br>• Infrastructure Scaling<br>• Security Framework<br>• Feature Innovation<br>• Cross-Chain Integration |
+| **Community Growth** | 30% | • Competitive Rewards<br>• Marketing Amplification<br>• Strategic Partnerships<br>• User Acquisition<br>• Event Organization |
+| **Economic Sustainability** | 30% | • Liquidity Programs<br>• Emergency Reserves<br>• Market Stability<br>• Growth Investments<br>• Research & Development |
 
 ## Rewards
 
-The SPIRAL token implements a dynamic reward structure designed to incentivize long-term participation and governance:
+### Staking Incentives
+
+| Parameter | Value | Duration |
+|-----------|--------|----------|
+| **Initial Rate** | 8% APY | Start of protocol |
+| **Final Rate** | 1% APY | After transition |
+| **Transition Period** | 8 years | Linear reduction |
+
+### Voting Power Bonuses
+
+| Bonus Type | Maximum Bonus | Time to Achieve |
+|------------|---------------|-----------------|
+| **Dissolve Delay** | +100% | 8 years lock |
+| **Age Maturity** | +100% | 365 days |
+
+The reward structure is designed to:
+- Encourage long-term participation
+- Align stakeholder interests
+- Maintain sustainable token economics
+- Support protocol governance
+
+## Neuron Staking Mechanics
+
+### Base Requirements
+
+| Parameter | Value | Description |
+|-----------|--------|-------------|
+| **Minimum Stake** | 1,000 SPIRAL | Base amount required to create a neuron |
+| **Minimum Lock Period** | 30 days | Shortest allowed dissolve delay |
+| **Maximum Lock Period** | 8 years | Longest possible dissolve delay |
+| **Transaction Fee** | 0.01 SPIRAL | Network operation cost |
+
+### Maturity Schedule
+
+| Lock Period | Bonus Multiplier | Effective Power |
+|-------------|------------------|-----------------|
+| 30 days | 1.0x | Base Power |
+| 6 months | 1.25x | +25% |
+| 1 year | 1.5x | +50% |
+| 2 years | 1.75x | +75% |
+| 4 years | 1.85x | +85% |
+| 8 years | 2.0x | +100% |
+

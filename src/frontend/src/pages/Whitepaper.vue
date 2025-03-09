@@ -147,9 +147,9 @@ export default {
         { id: "introduction", title: "Introduction" },
         { id: "tokenomics", title: "Tokenomics" },
         { id: "governance", title: "Governance" },
-        { id: "core-features", title: "Core Features" },       
         { id: "community", title: "Community" },
-        { id: "architecture", title: "Architecture" }
+        { id: "architecture", title: "Architecture" },
+        { id: "core-features", title: "Core Features" }
       ],
       toc: [],
       activeHeading: null,
