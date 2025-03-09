@@ -31,54 +31,63 @@ export default {
     const mermaidScript = document.createElement('script');
     mermaidScript.src = 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js';
     mermaidScript.onload = () => {
-      // Initialize Mermaid with custom theme
       window.mermaid.initialize({ 
-        startOnLoad: false, // Important: set to false for manual initialization
-        theme: 'dark',
-        securityLevel: 'loose', // Required for interactive features
+        startOnLoad: false,
+        theme: 'base',
+        securityLevel: 'loose',
         themeVariables: {
-          primaryColor: '#00c3ff',
+          darkMode: true,
+          background: '#19222e',
+          mainBkg: '#19222e',
+          primaryColor: '#0FB9FD',
+          primaryBorderColor: '#0A8BC0',
           primaryTextColor: '#ffffff',
-          primaryBorderColor: '#00c3ff',
-          lineColor: '#00c3ff',
-          secondaryColor: '#ffa200',
-          tertiaryColor: '#121725',
-          background: 'transparent', // Changed to transparent to fix black background
-          mainBkg: 'transparent', // Changed to transparent to fix black background
-          secondaryBorderColor: '#ffa200',
+          secondaryColor: '#FF9100',
+          secondaryBorderColor: '#CC7400',
+          secondaryTextColor: '#ffffff',
+          tertiaryColor: '#00E5A4',
+          tertiaryBorderColor: '#00B380',
+          tertiaryTextColor: '#ffffff',
+          noteTextColor: '#ffffff',
+          noteBkgColor: 'rgba(15, 185, 253, 0.1)',
+          noteBorderColor: '#0FB9FD',
+          lineColor: 'rgba(15, 185, 253, 0.5)',
           textColor: '#ffffff',
-          nodeBorder: '#00c3ff',
-          clusterBkg: 'rgba(18, 23, 37, 0.7)',
-          titleColor: '#00c3ff',
-          edgeLabelBackground: 'rgba(18, 23, 37, 0.7)',
-          nodeTextColor: '#ffffff'
+          nodeBorder: '#0FB9FD',
+          clusterBkg: 'rgba(15, 185, 253, 0.05)',
+          clusterBorder: '#0FB9FD',
+          defaultLinkColor: 'rgba(15, 185, 253, 0.5)',
+          titleColor: '#0FB9FD',
+          edgeLabelBackground: 'rgba(15, 185, 253, 0.05)',
+          // Pie chart specific
+          pie1: '#0FB9FD',
+          pie2: '#00E5A4',
+          pie3: '#FF9100',
+          pie4: '#FFB800',
+          pie5: '#4DCFFF',
+          pie6: '#00B380',
+          pie7: '#CC7400',
+          pie8: '#CC9400',
+          pieStrokeWidth: '2px',
+          pieStrokeColor: '#0FB9FD',
+          pieSectionTextColor: '#ffffff',
+          pieTitleTextColor: '#ffffff',
+          pieLegendTextColor: '#ffffff',
+          pieSectionTextSize: '14px',
+          pieTitleTextSize: '20px',
+          pieLegendTextSize: '14px',
+          pieOuterStrokeWidth: '2px',
+          pieOuterStrokeColor: '#0FB9FD',
+          pieOpacity: '0.9'
         },
         flowchart: {
           htmlLabels: true,
-          curve: 'basis'
-        },
-        sequence: {
-          diagramMarginX: 50,
-          diagramMarginY: 30,
-          actorMargin: 100,
-          width: 150,
-          height: 65,
-          boxMargin: 10,
-          boxTextMargin: 5,
-          noteMargin: 10,
-          messageMargin: 35
-        },
-        // Enable built-in zoom and pan
-        pan: {
-          enabled: true,
-          zoomFactor: 0.3, // How much to zoom per scroll
-        },
-        zoom: {
-          enabled: true,
+          curve: 'basis',
+          nodeSpacing: 50,
+          rankSpacing: 50,
+          padding: 15
         }
       });
-      
-      // Render the markdown content
       this.renderMermaidDiagrams();
     };
     document.head.appendChild(mermaidScript);
@@ -580,46 +589,50 @@ h3 .header-anchor:hover {
   display: block !important;
   margin: 1rem 0 !important;
   position: relative !important;
-  text-shadow: 0 0 8px rgba(15, 185, 253, 0.2) !important;
+  color: var(--color-title-primary) !important;
 }
 
 .markdown-content h1.cosmic-heading {
-  font-size: 2.5rem !important;
-  font-weight: 900 !important;
-  margin-bottom: 1.5rem !important;
-  color: #0FB9FD !important; /* Logo blue */
+  font-size: 3rem !important;
+  font-weight: var(--weight-black) !important;
+  margin-bottom: 2rem !important;
+  letter-spacing: -0.02em !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+  color: var(--color-primary) !important;
 }
 
 .markdown-content h2.cosmic-heading {
-  font-size: 2rem !important;
-  font-weight: 800 !important;
-  margin-top: 2rem !important;
-  margin-bottom: 1rem !important;
-  color: #4DCFFF !important; /* Lighter blue */
+  font-size: 2.25rem !important;
+  font-weight: var(--weight-extra-bold) !important;
+  margin-top: 2.5rem !important;
+  margin-bottom: 1.5rem !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+  color: var(--color-primary-light) !important;
 }
 
 .markdown-content h3.cosmic-heading {
-  font-size: 1.5rem !important;
-  font-weight: 700 !important;
-  margin-top: 1.5rem !important;
-  margin-bottom: 1rem !important;
-  color: #7CDFFF !important; /* Even lighter blue */
+  font-size: 1.75rem !important;
+  font-weight: var(--weight-black) !important;
+  margin-top: 2rem !important;
+  margin-bottom: 1.25rem !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+  color: var(--color-text-primary) !important;
 }
 
 .markdown-content h4.cosmic-heading {
-  font-size: 1.25rem !important;
-  font-weight: 700 !important;
-  margin-top: 1.25rem !important;
-  margin-bottom: 0.75rem !important;
-  color: #B5EBFF !important; /* Very light blue */
+  font-size: 1.35rem !important;
+  font-weight: var(--weight-bold) !important;
+  margin-top: 1.75rem !important;
+  margin-bottom: 1rem !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  color: var(--color-text-secondary) !important;
 }
 
 .markdown-content h1.cosmic-heading:hover,
 .markdown-content h2.cosmic-heading:hover,
 .markdown-content h3.cosmic-heading:hover,
 .markdown-content h4.cosmic-heading:hover {
-  color: #FFFFFF !important;
-  text-shadow: 0 0 8px rgba(15, 185, 253, 0.4) !important;
+  text-shadow: 0 0 15px var(--color-primary-alpha-30) !important;
 }
 
 .info-container, .warning-container {
@@ -663,55 +676,40 @@ h3 .header-anchor:hover {
 
 /* Mermaid diagram styles */
 .mermaid {
-  background-color: rgba(29, 37, 55, 0.7);
-  border-radius: var(--radius-medium);
-  padding: 1.5rem;
+  background-color: transparent;
+  border-radius: 0;
+  padding: 1.5rem 0;
   margin: 1.5rem 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  border-left: 3px solid var(--color-primary);
-  overflow: auto;
+  box-shadow: none;
+  border-left: none;
+  overflow: visible;
   text-align: center;
+  width: 100%;
 }
 
 /* Remove pre default styling */
 pre.mermaid {
   white-space: pre-wrap;
   font-family: inherit;
+  background: transparent;
 }
 
 /* Enhance mermaid diagram text */
 .mermaid text {
   font-family: 'Montserrat', sans-serif !important;
   font-weight: 500 !important;
+  fill: #ffffff !important;
 }
 
 /* Style for pie charts */
 .mermaid .pieCircle {
-  stroke: #121725 !important;
+  stroke: transparent !important;
   stroke-width: 2px !important;
 }
 
-/* Style for flowcharts */
-.mermaid .node rect, 
-.mermaid .node circle, 
-.mermaid .node ellipse, 
-.mermaid .node polygon, 
-.mermaid .node path {
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.5)) !important;
-}
-
-/* Style for sequence diagrams */
-.mermaid .actor {
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.5)) !important;
-}
-
-/* Style for gantt charts */
-.mermaid .section {
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.5)) !important;
-}
-
-/* Style for mermaid SVG */
+/* Remove any background from SVG */
 .mermaid svg {
+  background: transparent !important;
   max-width: 100%;
   height: auto !important;
 }
@@ -797,7 +795,7 @@ pre.mermaid {
 
 .cosmic-heading {
   color: #FFFFFF !important;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
   font-family: 'Montserrat', sans-serif !important;
   width: 100% !important;
   display: block !important;
@@ -808,6 +806,8 @@ h1.cosmic-heading {
   font-size: 2.5rem !important;
   font-weight: 900 !important;
   margin-bottom: 1.5rem !important;
+  letter-spacing: -0.02em !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
 }
 
 h2.cosmic-heading {
@@ -818,8 +818,8 @@ h2.cosmic-heading {
 }
 
 h3.cosmic-heading {
-  font-size: 1.5rem !important;
-  font-weight: 700 !important;
+  font-size: 1.75rem !important;
+  font-weight: 900 !important;
   margin-top: 1.5rem !important;
   margin-bottom: 1rem !important;
 }
@@ -832,7 +832,7 @@ h4.cosmic-heading {
 }
 
 .cosmic-heading:hover {
-  color: #4DCFFF !important;
-  text-shadow: 0 0 8px rgba(15, 185, 253, 0.4) !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.3) !important;
 }
 </style>

@@ -11,12 +11,12 @@ Sending message with
     memo = 109_330_329_069_923 : nat64;
     from_subaccount = null;
     created_at_time = opt record {
-      timestamp_nanos = 1_741_299_134_380_801_159 : nat64;
+      timestamp_nanos = 1_741_544_008_687_530_705 : nat64;
     };
     amount = record { e8s = 10_000_000_000 : nat64 };
   },
 )
-Request ID: 0x6d52563cf007d6f063f36570731549e98e577ee1bdb066e82c1b987917d62f9c
+Request ID: 0xfa9bd02d34343e57d4fe964923623ebbae92f5eb97c680162742874da027ca90
 The request is being processed...
 The request is being processed...
 The request is being processed...
@@ -43,8 +43,8 @@ Sending message with
     neuron_id_or_subaccount = null;
   },
 )
-Request ID: 0x7153098790d539e2fd3eefbcc724f44dffdbb48bc663af048c1ff03b66a654e7
+Request ID: 0x76bd452fe0a02b37451b602fef0416fd87ac5d3cc4bbf03931f94a9418f2d85f
 The request is being processed...
 The request is being processed...
 The request is being processed...
-Successfully staked ICP in neuron 2795481649219355980
+Successfully staked ICP in neuron 308213213574245087

@@ -385,8 +385,31 @@ html body .markdown-content h1,
 html body .markdown-content h2, 
 html body .markdown-content h3,
 html body .markdown-content h4 {
+  font-family: 'Montserrat', sans-serif !important;
   color: #FFFFFF !important;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+html body .markdown-content h1 {
+  font-size: 2.5rem !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.02em !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+}
+
+html body .markdown-content h2 {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+}
+
+html body .markdown-content h3 {
+  font-size: 1.75rem !important;
+  font-weight: 900 !important;
+}
+
+html body .markdown-content h4 {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
 }
 
 /* Responsive styles remain unchanged */

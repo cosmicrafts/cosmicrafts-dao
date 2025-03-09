@@ -1,5 +1,5 @@
 # Tokenomics
-
+![Tokenomics](spiralbanner.webp)
 ## Overview
 
 The SPIRAL token is the economic foundation of the Cosmicrafts DAO, designed to:
@@ -10,93 +10,144 @@ The SPIRAL token is the economic foundation of the Cosmicrafts DAO, designed to:
 
 Total Supply: **1 billion SPIRAL tokens**
 
+<div class="tokenomics-diagram">
+  <img src="src/assets/icons/tokenomics.svg" alt="SPIRAL Token Allocation" />
+</div>
+
+<style>
+.tokenomics-diagram {
+  text-align: center;
+  width: 100%;
+  margin: 2rem auto;
+}
+
+  .vesting-schedule{
+    max-width: 75%;
+  }
+
+.tokenomics-diagram img {
+  width: 65%;
+  max-width: 800px;
+  height: auto;
+  filter: none;
+  box-shadow: none;
+  background: transparent;
+  margin: 0 auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .tokenomics-diagram img {
+    width: 100%;
+    max-width: 100%;
+  }
+  .vesting-schedule{
+    width: 100%;
+    max-width: 100%;
+  }
+}
+</style>
+
 ## Strategic Distribution
 
 ### Token Allocation Strategy
 
 | Holder | Amount | Purpose | Lock Period |
 |--------|---------|---------|-------------|
-| **Treasury** | 770M (77%) | Ecosystem growth | DAO-controlled |
-| **SNS Swap** | 120M (12%) | Public sale | 4 quarterly releases |
+| **Treasury** | 760M (76%) | Ecosystem growth | DAO-controlled |
+| **SNS Swap** | 120M (12%) | Public sale | 8 quarterly releases |
 | **Developer Team** | 80M (8%) | Core team | 8-year vesting |
-| **Seed Investors** | 30M (3%) | Early backers | 1-year vesting |
+| **Seed Investors** | 40M (4%) | Early backers | Varied vesting |
 
 Core Mechanisms:
-- **Deflationary Model**: 0.01 SPIRAL transaction fee with partial burn
+- **Deflationary Model**: 0.01 SPIRAL transaction fee
 - **Governance Threshold**: 1,000 SPIRAL minimum stake
-- **Treasury Security**: Multi-sig and DAO approval required
+- **Treasury Security**: DAO approval required
 - **Full Auditability**: All operations tracked on-chain
 
 ## Vesting Strategy
 
-### Developer Team Allocation (80M)
-- **Purpose**: Ensure long-term commitment and value creation
-- **Structure**: 8-year linear vesting with 8-year dissolve delay
-- **Release**: Quarterly unlocks after initial cliff
-- **Voting Power**: Full governance rights on locked tokens
+<div class="vesting-schedule">
+  <img src="src/assets/icons/vesting.svg" alt="SPIRAL Token Vesting Schedule" />
+</div>
 
-### Strategic Investors (30M)
-- **2Link (16M)**
-  - Strategic blockchain infrastructure partner
-  - 1-year vesting with 1-year dissolve delay
-  
-- **Anmi Capital (10M)**
-  - Gaming industry expertise and network
-  - 1-year vesting with 1-year dissolve delay
-  
-- **Genesis (4M)**
-  - Technical development support
-  - 8-year vesting, immediate governance participation
+<style>
+.vesting-schedule {
+  background: transparent;
+  border-radius: var(--radius-medium);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.vesting-schedule img {
+  width: 100%;
+  height: auto;
+  max-width: 800px;
+  margin: 0 auto;
+  display: block;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .vesting-schedule {
+    padding: 1rem;
+  }
+}
+</style>
+
+### Developer Team Allocation (80M)
+Allocated to the Cosmicrafts Foundation 
+- **Purpose**: Ensure long-term commitment and value creation
+- **Structure**: 8-year dissolve delay
+- **Governance**: Full voting power with locked tokens
+
+### Strategic Investors (40M)
+
+#### 2Link (16M)
+Strategic blockchain infrastructure partner
+- 8 neurons of 2M each
+- Quarterly vesting schedule
+
+#### Anmi Capital (10M)
+Blockchain industry expertise and network
+- 8 neurons of 1.25M each
+- Quarterly vesting schedule
+
+#### Genesis (14M)
+Early backers basket of neurons.
+- 8 neurons of 1.75M each
+- Yearly vesting schedule
 
 ### Public Distribution (120M)
-- **Structure**: 4 vesting events at 3-month intervals
-- **Release**: 25% per event
+- **Structure**: 8 vesting events at 3-month intervals
+- **Release**: 12.5% per event (15M SPIRAL)
 - **Purpose**: Ensure stable token distribution
-- **Participation**: Open to global community (except Antarctica)
-
-## SNS Swap Mechanics
-
-### Participation Framework
-- **Individual Limits**
-  - Entry Floor: 100 ICP
-  - Entry Ceiling: 100,000 ICP
-- **Global Parameters**
-  - Maximum Raise: 1,000,000 ICP
-  - Minimum Participants: 10
-  - Duration: 24 hours
-  - Geographic Restriction: Antarctica excluded
-
-### Valuation Matrix (at $10/ICP)
-| Participation | Token Price | Total Valuation | Notes |
-|--------------|-------------|-----------------|--------|
-| 100 ICP | $0.00008 | $80,000 | Minimum scenario |
-| 500,000 ICP | $0.04 | $40M | Target scenario |
-| 1,000,000 ICP | $0.08 | $80M | Maximum scenario |
+- **Participation Limits**:
+  - Minimum: 100 ICP
+  - Maximum: 100,000 ICP per participant
+  - Total Maximum: 1,000,000 ICP
 
 ## Governance Architecture
 
 ### Neuron Framework
 - **Base Requirements**
   - Minimum Stake: 1,000 SPIRAL
-  - Lock Period: 30+ days
-  - Proposal Cost: 1,000 SPIRAL
-  - Decision Window: 7 days
+  - Minimum Lock Period: 30 days
+  - Proposal Rejection Fee: 1,000 SPIRAL
+  - Voting Period: 7 days
+  - Quiet Period Extension: 1 day maximum
 
 ### Power Multipliers
 - **Time-Based Bonuses**
-  - Dissolve Delay: +100% at 8 years
-  - Age Maturity: +100% at 1 year
-  - Combined Cap: 3x base power
+  - Dissolve Delay: Up to 100% bonus at 8 years
+  - Age Bonus: Up to 100% at 365 days
   
 ### Reward Economics
 - **Dynamic Rate Structure**
-  - Initial: 8% APY
-  - Final: 1% APY
-  - Transition: 8-year linear reduction
+  - Initial Rate: 8% APY
+  - Final Rate: 1% APY
+  - Transition Period: 8 years
   - Purpose: Long-term staking incentivization
-
-## Burn mechanisms
-Explained all the burn mechanisms that it has like microtransactions, which ones and yeah elaborate
 
 ## Utility Framework
 
@@ -107,7 +158,7 @@ Explained all the burn mechanisms that it has like microtransactions, which ones
    - Revenue Distribution
 
 2. **Economic Functions**
-   - Reduced Platform Fees
+   - Transaction Fee: 0.01 SPIRAL
    - Cross-Game Transactions
    - NFT Market Operations
    - Premium Feature Access
@@ -120,7 +171,7 @@ Explained all the burn mechanisms that it has like microtransactions, which ones
 
 ## Strategic Treasury Management
 
-The 770M treasury allocation follows a strategic distribution model:
+The 760M treasury allocation follows a strategic distribution model:
 
 1. **Core Development (40%)**
    - Game Engine Evolution
@@ -143,6 +194,6 @@ The 770M treasury allocation follows a strategic distribution model:
    - Growth Investments
    - Research & Development
 
-
 ## Rewards
-Oh yeah dont forget to elaborate on the rewards section because this comes in the introduction, what are the rewards that we can say for sure are available from the sns init yaml, which is the reward rate and all that
+
+The SPIRAL token implements a dynamic reward structure designed to incentivize long-term participation and governance:
