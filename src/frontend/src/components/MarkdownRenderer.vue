@@ -141,150 +141,90 @@ export default {
     },
     async loadMarkdown(lang) {
       try {
-        console.log(`Loading markdown: ${lang}/${this.fileName}`);
-        const content = await import(`@/assets/markdown/${lang}/${this.fileName}.md?raw`);
+        if (!lang) {
+          console.error('No language specified for markdown loading');
+          lang = 'en';
+        }
         
-        // Always load the English version for heading mapping
-        let englishContent = null;
-        let englishHeadings = {};
+        if (!this.fileName) {
+          console.error('No fileName specified for markdown loading');
+          throw new Error('fileName is required');
+        }
+        
+        console.log(`Attempting to load markdown: ${lang}/${this.fileName}`);
+        let content;
+        let usedFallback = false;
         
         try {
-          // Always load English as the canonical source for heading IDs
-          if (lang !== 'en') {
-            console.log(`Loading English version for canonical heading IDs`);
-            englishContent = await import(`@/assets/markdown/en/${this.fileName}.md?raw`);
-            
-            // Extract English headings with their positions
-            const enHeadingRegex = /^(#{1,4})\s+(.*?)$/gm;
-            let match;
-            let h2Index = 0;
-            
-            // Create mapping of positions to English headings
-            while ((match = enHeadingRegex.exec(englishContent.default)) !== null) {
-              const level = match[1].length; // Get heading level by number of # characters
-              const headingText = match[2].trim();
-              
-              if (level === 2) { // Only map h2 headings
-                // Create clean slug as the canonical ID
-                const cleanSlug = this.createCleanSlug(headingText);
-                
-                // Store by position for mapping with non-English content
-                englishHeadings[h2Index] = {
-                  text: headingText,
-                  slug: cleanSlug
-                };
-                h2Index++;
-              }
-            }
-            
-            console.log("English heading mapping:", englishHeadings);
-          }
-        } catch (enError) {
-          console.warn(`Couldn't load English file for heading mapping: ${enError.message}`);
-        }
-        
-        // Process the current language's markdown content
-        let processedContent = content.default;
-        let h2Index = 0;
-        
-        // Process h1 headings (title)
-        processedContent = processedContent.replace(/^#\s+(.*?)$/gm, (match, text) => {
-          return `# <span class="heading-text" data-heading-id="title">${text.trim()}</span>`;
-        });
-        
-        // Process h2 headings with English-based IDs
-        processedContent = processedContent.replace(/^##\s+(.*?)$/gm, (match, text) => {
-          const localHeadingText = text.trim();
-          let headingId;
+          // First try to load the requested language
+          content = await import(`@/assets/markdown/${lang}/${this.fileName}.md?raw`);
+          console.log(`Successfully loaded ${lang}/${this.fileName}`);
+        } catch (importError) {
+          console.warn(`Failed to load ${lang}/${this.fileName}, falling back to English...`, importError);
           
-          // Use English heading ID if available
-          if (lang !== 'en' && englishHeadings[h2Index]) {
-            // Use the English slug as the canonical ID
-            headingId = englishHeadings[h2Index].slug;
-            
-            // Add data attributes for debugging
-            const originalEnglish = englishHeadings[h2Index].text;
-            console.log(`Mapped heading: "${localHeadingText}" → "${originalEnglish}" → ID: "${headingId}"`);
-          } else {
-            // For English or fallback
-            headingId = this.createCleanSlug(localHeadingText);
-            console.log(`Created heading ID for: "${localHeadingText}" → "${headingId}"`);
-          }
-          
-          h2Index++;
-          return `## <span class="heading-text" data-heading-id="${headingId}" data-heading-index="${h2Index-1}">${localHeadingText}</span>`;
-        });
-        
-        // Process h3 and h4 headings
-        processedContent = processedContent.replace(/^###\s+(.*?)$/gm, (match, text) => {
-          const headingText = text.trim();
-          // Use simple slug for h3-h4, since they're less likely to be directly linked
-          const headingId = this.createCleanSlug(headingText);
-          return `### <span class="heading-text" data-heading-id="${headingId}">${headingText}</span>`;
-        });
-        
-        processedContent = processedContent.replace(/^####\s+(.*?)$/gm, (match, text) => {
-          const headingText = text.trim();
-          const headingId = this.createCleanSlug(headingText);
-          return `#### <span class="heading-text" data-heading-id="${headingId}">${headingText}</span>`;
-        });
-        
-        this.processMarkdown(processedContent);
-      } catch (error) {
-        console.error(`Failed to load markdown for ${lang}/${this.fileName}`, error);
-        
-        // Fallback to English
-        if (lang !== 'en') {
           try {
-            console.log(`Falling back to English for ${this.fileName}`);
-            const fallbackContent = await import(`@/assets/markdown/en/${this.fileName}.md?raw`);
-            
-            // Process the English content
-            let processedContent = fallbackContent.default;
-            
-            // Handle h1 headings
-            processedContent = processedContent.replace(/^#\s+(.*?)$/gm, (match, text) => {
-              const headingText = text.trim();
-              return `# <span class="heading-text" data-heading-id="title">${headingText}</span>`;
-            });
-            
-            // Handle h2 headings
-            processedContent = processedContent.replace(/^##\s+(.*?)$/gm, (match, text) => {
-              const headingText = text.trim();
-              const headingId = this.createCleanSlug(headingText);
-              return `## <span class="heading-text" data-heading-id="${headingId}">${headingText}</span>`;
-            });
-            
-            // Handle h3 and h4 headings
-            processedContent = processedContent.replace(/^###\s+(.*?)$/gm, (match, text) => {
-              const headingText = text.trim();
-              const headingId = this.createCleanSlug(headingText);
-              return `### <span class="heading-text" data-heading-id="${headingId}">${headingText}</span>`;
-            });
-            
-            processedContent = processedContent.replace(/^####\s+(.*?)$/gm, (match, text) => {
-              const headingText = text.trim();
-              const headingId = this.createCleanSlug(headingText);
-              return `#### <span class="heading-text" data-heading-id="${headingId}">${headingText}</span>`;
-            });
-            
-            this.processMarkdown(processedContent);
+            // Fallback to English if the requested language fails
+            content = await import(`@/assets/markdown/en/${this.fileName}.md?raw`);
+            usedFallback = true;
+            console.log(`Successfully loaded English fallback for ${this.fileName}`);
           } catch (fallbackError) {
             console.error(`Failed to load English fallback for ${this.fileName}`, fallbackError);
-            this.htmlContent = `<div class="error-container">
-              <h2>Content Not Available</h2>
-              <p>The requested content is not available in this language.</p>
-              <p>Requested file: ${this.fileName}.md</p>
-            </div>`;
+            this.htmlContent = `<div class="error-message">Failed to load content for ${this.fileName}</div>`;
+            return;
           }
-        } else {
-          console.error(`Content not available for ${this.fileName} in any language`);
-          this.htmlContent = `<div class="error-container">
-            <h2>Content Not Available</h2>
-            <p>The requested content could not be found.</p>
-            <p>Requested file: ${this.fileName}.md</p>
-          </div>`;
         }
+        
+        if (!content || !content.default) {
+          console.error(`Invalid content loaded for ${this.fileName}`);
+          this.htmlContent = `<div class="error-message">Invalid content for ${this.fileName}</div>`;
+          return;
+        }
+        
+        // Process the content
+        let processedContent = content.default;
+        
+        // Initialize markdown-it with options
+        const md = new MarkdownIt({
+          html: true,
+          typographer: true,
+          linkify: true,
+        });
+        
+        // Add TOC plugin first
+        md.use(markdownItToc, {
+          containerClass: 'toc-container',
+          listClass: 'toc-list',
+          itemClass: 'toc-item',
+          linkClass: 'toc-link',
+          level: [1, 2, 3]
+        });
+        
+        // Add anchor links to headings
+        md.use(markdownItAnchor, {
+          permalink: markdownItAnchor.permalink.headerLink({
+            class: 'header-anchor',
+            safariReaderFix: true
+          })
+        });
+        
+        // Add TOC if not present and this is a legal document
+        if (this.fileName === 'terms' || this.fileName === 'privacy' || this.fileName === 'legal') {
+          if (!processedContent.includes('[[toc]]')) {
+            processedContent = '[[toc]]\n\n' + processedContent;
+          }
+        }
+        
+        // Render the markdown
+        this.htmlContent = md.render(processedContent);
+        
+        // Emit the rendered event
+        this.$nextTick(() => {
+          this.emitRendered();
+        });
+        
+      } catch (error) {
+        console.error(`Error in loadMarkdown for ${this.fileName}:`, error);
+        this.htmlContent = `<div class="error-message">Error loading content</div>`;
       }
     },
     processMarkdown(content) {
@@ -314,7 +254,56 @@ export default {
         linkify: true,
       });
       
-      // Custom image renderer to correctly resolve paths for WebP and SVG images
+      // Add TOC plugin first
+      md.use(markdownItToc, {
+        containerClass: 'toc-container',
+        listClass: 'toc-list',
+        itemClass: 'toc-item',
+        linkClass: 'toc-link',
+        level: [1, 2, 3]
+      });
+
+      // Add anchor links to headings
+      md.use(markdownItAnchor, {
+        permalink: markdownItAnchor.permalink.headerLink({
+          class: 'header-anchor',
+          safariReaderFix: true
+        })
+      });
+      
+      // Custom container for legal documents
+      md.use(markdownItContainer, 'info', {
+        validate: function(params) {
+          return params.trim().match(/^info\s+(.*)$/);
+        },
+        render: function (tokens, idx) {
+          if (tokens[idx].nesting === 1) {
+            const m = tokens[idx].info.trim().match(/^info\s+(.*)$/);
+            return `<div class="info-container">${m[1] ? `<div class="info-title">${md.utils.escapeHtml(m[1])}</div>` : ''}\n`;
+          } else {
+            return '</div>\n';
+          }
+        }
+      });
+
+      md.use(markdownItContainer, 'warning', {
+        validate: function(params) {
+          return params.trim().match(/^warning\s+(.*)$/);
+        },
+        render: function (tokens, idx) {
+          if (tokens[idx].nesting === 1) {
+            const m = tokens[idx].info.trim().match(/^warning\s+(.*)$/);
+            return `<div class="warning-container">${m[1] ? `<div class="warning-title">${md.utils.escapeHtml(m[1])}</div>` : ''}\n`;
+          } else {
+            return '</div>\n';
+          }
+        }
+      });
+
+      // Add syntax highlighting
+      md.use(markdownItHighlightjs);
+      
+      // Custom image renderer
       const defaultImageRender = md.renderer.rules.image || function (tokens, idx, options, env, self) {
         return self.renderToken(tokens, idx, options);
       };
@@ -326,52 +315,25 @@ export default {
         if (srcIndex >= 0) {
           const src = token.attrs[srcIndex][1];
           
-          // Check if it's an absolute URL or relative
           if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) {
-            // External URL - keep as is
             return defaultImageRender(tokens, idx, options, env, self);
           }
           
-          // Handle different image types
           try {
             if (src.endsWith('.svg')) {
-              // SVG images usually reside in icons folder
               token.attrs[srcIndex][1] = new URL(`../assets/icons/${src}`, import.meta.url).href;
             } else {
-              // Default to webp folder for other images
               token.attrs[srcIndex][1] = new URL(`../assets/webp/${src}`, import.meta.url).href;
             }
           } catch (e) {
             console.error(`Error resolving image path for ${src}:`, e);
-            // Keep original source if there's an error
           }
         }
         
         return defaultImageRender(tokens, idx, options, env, self);
       };
-      
-      // Add anchor links to headings with stable IDs
-      md.use(markdownItAnchor, {
-        slugify: (s) => {
-          // Extract the heading ID from the data attribute
-          const match = s.match(/data-heading-id="([^"]+)"/);
-          if (match) {
-            console.log(`Found data-heading-id: ${match[1]}`);
-            return match[1];
-          }
-          
-          // If no data-heading-id, create a text-based ID
-          const textContent = s.replace(/<[^>]*>/g, '').trim();
-          console.log(`Creating text-based ID for: "${textContent}"`);
-          return this.slugify(textContent);
-        },
-        permalink: markdownItAnchor.permalink.headerLink({
-          class: 'header-anchor',
-          safariReaderFix: true
-        })
-      });
-      
-      // Add classes to headings and ensure consistent IDs
+
+      // Add classes to headings
       const defaultHeadingOpen = md.renderer.rules.heading_open || function(tokens, idx, options, env, self) {
         return self.renderToken(tokens, idx, options);
       };
@@ -379,31 +341,21 @@ export default {
       md.renderer.rules.heading_open = function(tokens, idx, options, env, self) {
         const token = tokens[idx];
         token.attrJoin('class', 'cosmic-heading');
-        
-        // Ensure consistency in section IDs across languages
-        if (token.tag === 'h2') {
-          // Look ahead to check for data-heading-id
-          const nextToken = tokens[idx + 1];
-          const contentHtml = nextToken?.content || '';
-          const idMatch = contentHtml.match(/data-heading-id="([^"]+)"/);
-          
-          if (idMatch) {
-            // Use the extracted ID from the data-heading-id attribute
-            console.log(`Setting explicit ID for h2: ${idMatch[1]}`);
-            token.attrSet('id', idMatch[1]);
-          }
-        }
-        
         return defaultHeadingOpen(tokens, idx, options, env, self);
       };
       
-      // Custom containers, syntax highlighting, etc.
-      md.use(markdownItContainer, 'info');
-      md.use(markdownItContainer, 'warning');
-      md.use(markdownItHighlightjs);
+      // Process the content
+      let finalContent = processedContent;
+      
+      // Add TOC if not present and this is a legal document
+      if (this.fileName === 'terms' || this.fileName === 'privacy' || this.fileName === 'legal') {
+        if (!finalContent.includes('[[toc]]')) {
+          finalContent = '[[toc]]\n\n' + finalContent;
+        }
+      }
       
       // Render the markdown
-      this.htmlContent = md.render(processedContent);
+      this.htmlContent = md.render(finalContent);
       
       // Render mermaid diagrams after content is rendered
       this.$nextTick(() => {
@@ -697,109 +649,87 @@ export default {
 </script>
 
 <style>
-/* Styles for enhanced markdown features */
-.toc-container {
-  background-color: var(--color-surface-primary);
-  border-radius: var(--radius-medium);
-  padding: 0.75rem;
-  margin-bottom: 1.5rem;
-  border-left: 2px solid var(--color-primary);
-  font-size: 0.9rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.toc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  padding: 0.25rem 0;
-  transition: all 0.2s ease;
-}
-
-.toc-header:hover {
-  background-color: rgba(0, 195, 255, 0.05);
-}
-
-.toc-title {
-  margin: 0;
-  font-size: 1rem;
-  color: var(--color-primary);
-  font-weight: 600;
-}
-
-.toc-toggle-icon {
-  display: inline-block;
-  transition: transform 0.2s ease;
-  color: var(--color-primary);
-  font-size: 0.8rem;
-}
-
-.toc-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-}
-
-.toc-content.toc-expanded {
-  max-height: 300px;
-  overflow-y: auto;
-  margin-top: 0.5rem;
-}
-
-.toc-container ul {
-  list-style-type: none;
-  padding-left: 0.75rem;
-  margin: 0;
-}
-
-.toc-container li {
-  margin-bottom: 0.4rem;
-  font-size: 0.85rem;
-  line-height: 1.3;
-}
-
-.toc-container a {
-  color: var(--color-text-primary);
-  text-decoration: none;
-  transition: color 0.2s ease;
-  display: block;
-  padding: 0.2rem 0.4rem;
-  border-radius: var(--radius-small);
-}
-
-.toc-container a:hover {
-  color: var(--color-primary);
-  background-color: rgba(0, 195, 255, 0.05);
-}
-
-/* Updated header anchor styles for the new permalink approach */
-.header-anchor {
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-}
-
-.header-anchor:hover {
-  text-decoration: underline;
-}
-
-h1 .header-anchor,
-h2 .header-anchor,
-h3 .header-anchor {
-  opacity: 0.7;
-}
-
-h1 .header-anchor:hover,
-h2 .header-anchor:hover,
-h3 .header-anchor:hover {
-  opacity: 1;
-}
-
 /* Base styles for markdown content */
 .markdown-content {
   line-height: 1.6;
   color: var(--color-text-secondary);
+}
+
+/* Error message styles */
+.error-message {
+  background-color: var(--color-surface-primary);
+  border-radius: var(--radius-medium);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-left: 4px solid var(--color-error);
+  color: var(--color-error);
+  font-weight: var(--weight-medium);
+  text-align: center;
+}
+
+/* Table of Contents styles */
+.toc-container {
+  background-color: var(--color-surface-primary);
+  border-radius: var(--radius-medium);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-primary);
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-item {
+  margin: 0.5rem 0;
+  padding-left: 1rem;
+}
+
+.toc-link {
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: block;
+  padding: 0.25rem 0;
+}
+
+.toc-link:hover {
+  color: var(--color-primary);
+}
+
+/* Legal document containers */
+.info-container, .warning-container {
+  background-color: var(--color-surface-primary);
+  border-radius: var(--radius-medium);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-left: 4px solid;
+}
+
+.info-container {
+  border-color: var(--color-info);
+  background: linear-gradient(to right, rgba(15, 185, 253, 0.08), rgba(15, 185, 253, 0.03));
+}
+
+.warning-container {
+  border-color: var(--color-warning);
+  background: linear-gradient(to right, rgba(255, 145, 0, 0.08), rgba(255, 145, 0, 0.03));
+}
+
+.info-title, .warning-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.info-title {
+  color: var(--color-info);
+}
+
+.warning-title {
+  color: var(--color-warning);
 }
 
 /* Override any default heading styles with high specificity */
@@ -851,211 +781,50 @@ h3 .header-anchor:hover {
   color: var(--color-text-secondary) !important;
 }
 
-.markdown-content h1.cosmic-heading:hover,
-.markdown-content h2.cosmic-heading:hover,
-.markdown-content h3.cosmic-heading:hover,
-.markdown-content h4.cosmic-heading:hover {
-  text-shadow: 0 0 15px var(--color-primary-alpha-30) !important;
-}
-
-.info-container, .warning-container {
-  padding: 1rem;
-  margin: 1rem 0;
-  border-radius: var(--radius-medium);
-}
-
-.info-container {
-  background-color: rgba(0, 123, 255, 0.1);
-  border-left: 4px solid var(--color-info);
-}
-
-.warning-container {
-  background-color: rgba(255, 193, 7, 0.1);
-  border-left: 4px solid var(--color-warning);
-}
-
-.info-title, .warning-title {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.info-title {
-  color: var(--color-info);
-}
-
-.warning-title {
-  color: var(--color-warning);
-}
-
-/* Task list styles */
-.task-list-item {
-  list-style-type: none;
+/* Header anchor styles */
+.header-anchor {
+  color: var(--color-primary);
+  text-decoration: none;
+  opacity: 0;
   margin-left: -1.5rem;
+  padding-right: 0.5rem;
+  transition: opacity 0.2s ease;
 }
 
-.task-list-item-checkbox {
-  margin-right: 0.5rem;
+.cosmic-heading:hover .header-anchor {
+  opacity: 1;
 }
 
-/* Mermaid diagram styles */
-.mermaid {
-  background-color: transparent;
-  border-radius: 0;
-  padding: 1.5rem 0;
-  margin: 1.5rem auto;
-  box-shadow: none;
-  border-left: none;
-  overflow: visible;
-  text-align: center;
-  width: 65%;
-}
-
-/* Remove pre default styling */
-pre.mermaid {
-  white-space: pre-wrap;
-  font-family: inherit;
-  background: transparent;
-}
-
-/* Enhance mermaid diagram text */
-.mermaid text {
-  font-family: 'Montserrat', sans-serif !important;
-  font-weight: 500 !important;
-  fill: #ffffff !important;
-}
-
-/* Style for pie charts */
-.mermaid .pieCircle {
-  stroke: transparent !important;
-  stroke-width: 2px !important;
-}
-
-/* Remove any background from SVG */
-.mermaid svg {
-  background: transparent !important;
-  max-width: 100%;
-  height: auto !important;
-}
-
-/* Mobile optimizations for mermaid diagrams */
+/* Mobile optimizations */
 @media (max-width: 768px) {
-  .mermaid {
-    width: 100%;
-    padding: 1rem 0;
-    margin: 1rem auto;
-  }
-}
-
-/* Mobile navigation styles */
-.mobile-nav {
-  display: none;
-}
-
-.mobile-nav h2 {
-  display: none;
-}
-
-.mobile-nav ul {
-  display: none;
-}
-
-.mobile-nav li {
-  display: none;
-}
-
-.mobile-nav a {
-  display: none;
-}
-
-.mobile-nav a:hover {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .mobile-nav {
-    display: none;
-  }
-}
-
-/* Mobile optimizations for info and warning boxes */
-@media (max-width: 768px) {
-  .info-container, .warning-container {
-    padding: 0.75rem;
-    margin: 0.75rem 0;
-    font-size: 0.9rem;
-  }
-  
-  .info-title, .warning-title {
-    font-size: 1rem;
-    margin-bottom: 0.4rem;
-  }
-  
   .toc-container {
-    padding: 0.6rem;
-    margin-bottom: 1.25rem;
-    font-size: 0.85rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
   }
-  
-  .toc-title {
-    font-size: 0.95rem;
-  }
-  
-  .toc-container ul {
-    padding-left: 0.5rem;
-  }
-  
-  .toc-container li {
-    margin-bottom: 0.3rem;
-    font-size: 0.8rem;
-  }
-  
-  .toc-content.toc-expanded {
-    max-height: 300px;
-  }
-  
-  .toc-container a {
-    padding: 0.15rem 0.3rem;
-  }
-  
-  /* Make mermaid diagrams scrollable on mobile */
-  .mermaid {
-    overflow-x: auto;
+
+  .info-container, .warning-container {
     padding: 1rem;
     margin: 1rem 0;
   }
-}
 
-.markdown-content table {
-  width: 100%;
-  min-width: 650px; /* Ensures table won't shrink below readable size */
-  border-collapse: collapse;
-  margin: 0; /* Reset margin as it's handled by table-scroll */
-  background: var(--color-surface-primary);
-  border-radius: var(--radius-medium);
-  overflow: hidden;
-  font-size: 1rem;
-}
-
-.markdown-content th,
-.markdown-content td {
-  padding: 0.75rem 1rem;
-  border: 1px solid rgba(15, 185, 253, 0.1);
-}
-
-.markdown-content th {
-  background: rgba(15, 185, 253, 0.1);
-  color: var(--color-text-primary);
-  font-weight: 600;
-}
-
-@media (max-width: 768px) {
-  .markdown-content table {
-    font-size: 0.85rem;
+  .info-title, .warning-title {
+    font-size: 1rem;
   }
-  
-  .markdown-content th,
-  .markdown-content td {
-    padding: 0.5rem 0.75rem;
+
+  .markdown-content h1.cosmic-heading {
+    font-size: 2.5rem !important;
+  }
+
+  .markdown-content h2.cosmic-heading {
+    font-size: 2rem !important;
+  }
+
+  .markdown-content h3.cosmic-heading {
+    font-size: 1.5rem !important;
+  }
+
+  .markdown-content h4.cosmic-heading {
+    font-size: 1.25rem !important;
   }
 }
 </style>
