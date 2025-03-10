@@ -51,7 +51,7 @@
   "dao": "DAO",
   "dashboard": "Tablero",
   "connect": "Enchúfate",
-  "whitepaper": "Documento técnico",
+  "whitepaper": "Libro Blanco",
   "login": "Iniciar sesión",
   "myProfile": "Mi Perfil",
   "settings": "Configuración",
@@ -161,7 +161,41 @@
     "discover": "Descubre"
   },
   "whitepaper": {
-    "title": "Libro Blanco de Cosmicrafts"
+    "title": "Libro Blanco",
+    "navigation": {
+      "sections": {
+        "introduction": {
+          "title": "Introducción",
+          "description": "Visión general y propuesta de valor"
+        },
+        "tokenomics": {
+          "title": "Tokenomía",
+          "description": "Economía de tokens y distribución"
+        },
+        "governance": {
+          "title": "Gobernanza",
+          "description": "Sistema de toma de decisiones"
+        },
+        "community": {
+          "title": "Comunidad",
+          "description": "Participación y crecimiento"
+        },
+        "architecture": {
+          "title": "Arquitectura",
+          "description": "Infraestructura técnica"
+        },
+        "core-features": {
+          "title": "Características Principales",
+          "description": "Funcionalidades del producto"
+        }
+      },
+      "documentation": "Documentación",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "chapters": "Capítulos",
+      "mobileTitle": "Secciones del Libro Blanco",
+      "mobileSubtitle": "Navega por los capítulos"
+    }
   },
   "loadingScreen": {
   "messages": {

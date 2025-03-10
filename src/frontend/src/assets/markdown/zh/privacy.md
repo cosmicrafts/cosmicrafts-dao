@@ -1,246 +1,264 @@
-# 隐私政策
+# Privacy Policy
 
 [[toc:2-3]]
 
-## 简介
+## Introduction
 
-在 Cosmicrafts，我们致力于保护您的隐私并提供安全的游戏体验。本隐私政策解释了我们在您使用我们的网站、游戏、应用程序和服务（统称为"服务"）时如何收集、使用、存储和保护您的个人信息。
+At Cosmicrafts, we are committed to protecting your privacy and providing a secure gaming experience. This Privacy Policy explains how we collect, use, store, and protect your personal information when you use our website, games, applications, and services (collectively referred to as "Services").
 
-通过访问或使用我们的服务，即表示您同意根据本隐私政策收集和使用信息。如果您不同意我们的政策和做法，请不要使用我们的服务。
+By accessing or using our Services, you agree to the collection and use of information in accordance with this Privacy Policy. If you do not agree with our policies and practices, please do not use our Services.
 
-## 生效日期
+## Effective Date
 
-本隐私政策自2025年3月4日起生效。
+This Privacy Policy is effective as of March 4, 2025.
 
-## 我们收集的信息
+## Information We Collect
 
-Cosmicrafts 致力于数据最小化和用户隐私。我们只收集提供服务所必需的最少信息：
+Cosmicrafts is committed to data minimization and user privacy. We collect only the minimal information necessary to provide our services:
 
-### 有限信息收集
+### Limited Information Collection
 
-- **区域偏好**：我们可能会收集有关您的语言和区域偏好的信息，以提供本地化内容。此信息是可选的，可以在您的设置中管理。
+- **Regional Preferences**: We may collect information about your language and region preferences to provide localized content. This information is optional and can be managed in your settings.
 
-- **匿名使用数据**：我们可能会收集匿名的、汇总的使用统计数据，以帮助我们改进服务。这些数据无法用于识别您的个人身份。
+- **Anonymous Usage Data**: We may collect anonymous, aggregated usage statistics to help us improve our service. This data cannot be used to identify you personally.
 
-- **账户注册信息**：当您创建账户时，我们收集：
-  - **用户名**：用于在平台中识别您（限12个字符）
-  - **头像选择**：您在平台中选择的视觉表示
-  - **推荐码**：如果您是由其他用户推荐的，则为可选信息
-  - **语言偏好**：您偏好的平台界面语言
+- **Account Registration Information**: When you create an account, we collect:
+  - **Username**: Used to identify you in the platform (limited to 12 characters)
+  - **Avatar Selection**: Your chosen visual representation in the platform
+  - **Referral Code**: Optional information if you were referred by another user
+  - **Language Preference**: Your preferred language for the platform interface
 
-除非您为特定目的（如双重认证）明确提供，否则我们不会收集姓名、地址或电话号码等个人信息。
+No personal information such as names, addresses, or phone numbers are collected unless explicitly provided by you for specific purposes (such as 2FA).
 
-### Web3 和链上数据存储
+### Web3 and On-Chain Data Storage
 
-作为 Web3 平台，Cosmicrafts 在数据存储方面与传统应用程序有所不同：
+As a Web3 platform, Cosmicrafts operates differently from traditional applications regarding data storage:
 
-- **区块链数据库**：我们所有的数据库都存储在区块链网络上，这意味着信息在设计上通常是公开和透明的。
+- **Blockchain Databases**: All of our databases are stored on blockchain networks, which means information is typically public and transparent by design.
 
-- **默认公开**：您选择通过我们的平台共享或存储的任何信息可能在公共区块链上可见。我们默认不加密或隐藏这些数据。
+- **Public By Default**: Any information you choose to share or store through our platform may be visible on public blockchains. We do not encrypt or hide this data by default.
 
-- **用户责任**：您对通过我们的平台选择共享的任何信息负责。在使用我们的服务共享或存储信息之前，您应该仔细考虑区块链技术的公开性质。
+- **User Responsibility**: You are responsible for any information you choose to share through our platform. Before sharing or storing information using our Services, you should carefully consider the public nature of blockchain technology.
 
-- **无私密存储**：与传统网络应用程序不同，我们通常不维护用户信息的私密、中心化数据库。大多数数据存在于我们直接控制之外的去中心化网络上。
+- **No Private Storage**: Unlike traditional web applications, we generally do not maintain private, centralized databases for user information. Most data exists on decentralized networks outside our direct control.
 
-- **有限的隐私控制**：虽然我们可能提供一些隐私设置，但这些设置基于区块链技术有技术限制。标记为"私密"的信息仍可能对区块链验证者可见或通过区块链浏览器可见。
+- **Limited Privacy Controls**: While we may offer some privacy settings, these have technical limitations based on blockchain technology. Information marked as "private" may still be visible to blockchain validators or through blockchain explorers.
 
-### 区块链钱包信息
+### Blockchain Wallet Information
 
-如果您选择将区块链钱包连接到我们的平台：
+If you choose to connect a blockchain wallet to our platform:
 
-- **我们从不在我们的服务器上存储您的私钥或助记词**。您的密钥存储在您的设备本地。
-- **密钥以 JSON 格式存储在您浏览器的本地存储中**。这些密钥在技术上可以自动加密和解密，尽管我们目前没有为这些数据实施基于密码的加密。
-- **您的密钥永远不会离开您的设备**。当您连接 MetaMask、Phantom、Plug 或 Internet Identity 等钱包时，我们只接收和处理公共钱包地址以显示您的链上资产。
-- **认证通过签名进行**。我们不会请求您的私钥，而是要求您的钱包签署一个独特的消息，证明您的所有权而不暴露敏感信息。
-- **所有区块链交易都在链上处理**，不存储在我们的服务器上。
-- **加密的未来计划**：我们计划在未来更新中为本地存储的钱包信息添加基于密码的加密，进一步增强您的钱包数据安全性。
+- **We never store your private keys or seed phrases on our servers**. Your keys are stored locally on your device.
+- **Keys are stored as JSON in your browser's local storage**. These keys can be technically encrypted and decrypted automatically, though we do not currently implement password-based encryption for this data.
+- **Your keys never leave your device**. When you connect wallets like MetaMask, Phantom, Plug, or Internet Identity, we only receive and process the public wallet address to display your on-chain assets.
+- **Authentication happens through signatures**. Rather than requesting your private keys, we ask your wallet to sign a unique message that proves your ownership without exposing sensitive information.
+- **All blockchain transactions are processed on-chain** and are not stored on our servers.
+- **Future plans for encryption**: We plan to add password-based encryption for locally stored wallet information in future updates, further enhancing security of your wallet data.
 
-### 自动收集的信息
+### Information Collected Automatically
 
-我们可能通过 cookie 和类似技术收集非常有限的技术信息：
-- 浏览器类型和版本（以确保兼容性）
-- 基于 IP 地址的大致位置（仅用于区域内容交付）
-- 基本设备信息（用于优化显示）
+We may collect very limited technical information through cookies and similar technologies:
+- Browser type and version (to ensure compatibility)
+- Approximate location based on IP address (for regional content delivery only)
+- Basic device information (to optimize display)
 
-您可以通过浏览器设置控制或禁用 cookie。我们不使用跟踪 cookie 进行广告。
+You can control or disable cookies through your browser settings. We do not use tracking cookies for advertising purposes.
 
-## 我们如何使用您的信息
+## How We Use Your Information
 
-我们仅将收集的有限信息用于以下目的：
+We use the limited information we collect solely for the following purposes:
 
-### 提供和改进服务
-- 提供和维护我们的服务
-- 启用语言偏好等基本功能
-- 基于匿名使用模式改进用户体验
+### Provide and Improve Services
+- Deliver and maintain our Services
+- Enable basic features such as language preferences
+- Improve user experience based on anonymous usage patterns
 
-### 安全和保护
-- 防止未经授权访问用户账户
-- 调试以识别和修复错误
+### Security and Protection
+- Protect against unauthorized access to user accounts
+- Debug to identify and repair errors
 
-### 联系信息
+### Contact Information
 
-如果您对这些条款有任何问题，请通过以下方式联系我们：
+If you have any questions about these Terms, please contact us at:
 
-**电子邮件**：contact@cosmicrafts.com
+**Email**: contact@cosmicrafts.com  
 
-对于需要实际地址以符合监管要求的事项，请先通过电子邮件联系我们。
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
 
-## 数据共享和披露
+## Data Sharing and Disclosure
 
-鉴于我们的最小数据收集实践，我们可共享的数据非常有限。但在某些情况下，我们可能会共享我们拥有的有限信息：
+Given our minimal data collection practices, we have very limited data to share. However, in certain circumstances, we may share the limited information we have:
 
-### 基本服务提供商
+### Essential Service Providers
 
-我们可能会与少数精心挑选的服务提供商共享基本技术信息，这些提供商帮助我们：
-- 网站托管和基础设施
-- 分析（以匿名形式）
-- 客户支持系统
+We may share basic technical information with a few carefully selected service providers who help us with:
+- Website hosting and infrastructure
+- Analytics (in anonymized form)
+- Customer support systems
 
-这些提供商只能访问执行其功能所需的最少信息，并受保密义务约束。
+These providers access only the minimum information needed to perform their functions and are bound by confidentiality obligations.
 
-### 法律要求
+### Legal Requirements
 
-如果法律要求或我们善意地认为此类行动是必要的，我们可能会披露信息，以：
-- 遵守法律义务
-- 保护和维护我们的权利或财产
-- 防止或调查可能的不当行为
-- 保护用户或公众的人身安全
+We may disclose information if required to do so by law or if we believe in good faith that such action is necessary to:
+- Comply with legal obligations
+- Protect and defend our rights or property
+- Prevent or investigate possible wrongdoing
+- Protect the personal safety of users or the public
 
-## 您的选择和权利
+## Your Choices and Rights
 
-### 账户信息
+### Account Information
 
-如果您已创建账户，您可以通过登录账户设置来查看和更新您的账户信息。
+If you have created an account, you can review and update your account information by logging into your account settings.
 
-### 账户删除
+### Account Deletion
 
-您可以随时请求删除您的账户：
-- 通过网页应用设置
-- 发送电子邮件至 contact@cosmicrafts.com
+You can request to delete your account at any time:
+- Through the Web App settings
+- By sending an email to contact@cosmicrafts.com
 
-当您删除账户时：
-- 我们将启动30天的延迟期，以防您希望恢复您的账户
-- 在此期间，您的账户将被停用但不会永久删除
-- 如果您改变主意，您可以通过登录重新激活您的账户
-- 30天后，我们将从我们的系统中永久删除您的账户信息
+When you delete your account:
+- We will initiate a 30-day delay period in case you wish to recover your account
+- During this period, your account will be deactivated but not permanently deleted
+- If you change your mind, you can reactivate your account by logging in
+- After the 30-day period, we will permanently delete your account information from our systems
 
-**关于链上数据的重要说明**：虽然我们可以删除我们直接控制的信息，但由于区块链技术的不可变性质，已记录在公共区块链上的数据无法删除或修改。这包括交易历史、NFT 所有权记录和任何其他已提交到区块链的数据。
+**Important Note about On-Chain Data**: While we can delete information we control directly, data that has been recorded on public blockchains cannot be deleted or modified due to the immutable nature of blockchain technology. This includes transaction history, NFT ownership records, and any other data that has been committed to a blockchain.
 
-### Cookie 偏好
+### Cookie Preferences
 
-大多数网络浏览器允许您通过其设置控制 cookie。您可以设置您的浏览器拒绝所有或某些 cookie，或在发送 cookie 时提醒您。
+Most web browsers allow you to control cookies through their settings. You may set your browser to refuse all or some cookies or to alert you when cookies are being sent.
 
-### 通信
+### Communications
 
-您可以按照这些通信中的说明选择不接收我们的促销通信。
+You can opt out of receiving promotional communications from us by following the instructions in those communications.
 
-### 您的隐私权
+### Your Privacy Rights
 
-根据您的位置，您可能对您的个人信息拥有某些权利，例如：
-- 访问我们拥有的关于您的信息的权利
-- 请求删除您的信息的权利
-- 反对处理您的信息的权利
+Depending on your location, you may have certain rights regarding your personal information, such as:
+- The right to access information we have about you
+- The right to request deletion of your information
+- The right to object to the processing of your information
 
-要行使这些权利，请通过 contact@cosmicrafts.com 联系我们。
+To exercise these rights, please contact us at contact@cosmicrafts.com.
 
-## 数据安全
+## Data Security
 
-我们实施适当的技术和组织措施来保护我们收集的有限信息。但是，通过互联网传输或电子存储的方法都不是100%安全的，因此我们不能保证绝对的安全性。
+We implement appropriate technical and organizational measures to protect the limited information we collect. However, no method of transmission over the Internet or electronic storage is 100% secure, so we cannot guarantee absolute security.
 
-## 儿童隐私
+## Children's Privacy
 
-我们的服务不面向13岁以下的儿童。我们不会故意收集13岁以下儿童的个人信息。如果我们发现13岁以下的儿童向我们提供了个人信息，我们将采取措施删除此类信息。
+Our Services are not directed to children under 13. We do not knowingly collect personal information from children under 13. If we become aware that a child under 13 has provided us with personal information, we will take steps to delete such information.
 
-### 未成年人和加密货币使用
+### Minors and Cryptocurrency Usage
 
-虽然我们的游戏不包含成人内容（如裸露或暴力画面），并且通常适合13岁以上的用户，但我们强调以下几点：
+While our games do not contain adult content such as nudity or graphic violence, and are generally suitable for users aged 13+, we strongly emphasize the following:
 
-- **需要父母监督**：如果您未满18岁或未达到您所在国家/地区的法定成年年龄，您应该在父母或监护人的参与和监督下使用我们的服务，特别是在使用加密货币功能时。
+- **Parental Supervision Required**: If you are under 18 or the legal age of majority in your country, you should use our Services only with the involvement and supervision of a parent or guardian, particularly when engaging with cryptocurrency features.
 
-- **不可逆交易**：加密货币交易几乎总是不可逆的。一旦完成，这些交易通常无法撤销或退款。这使得父母监督特别重要。
+- **Irreversible Transactions**: Cryptocurrency transactions are almost always irreversible. Once completed, these transactions typically cannot be undone or refunded. This makes parental supervision particularly important.
 
-- **监管差异**：加密货币法规在不同国家之间差异很大。在一个司法管辖区合法或允许的事情在另一个司法管辖区可能受到限制或禁止。在允许未成年人使用加密货币功能之前，父母和监护人应熟悉当地法规。
+- **Regulatory Variations**: Cryptocurrency regulations vary significantly between countries. What may be legal or allowed in one jurisdiction may be restricted or prohibited in another. Parents and guardians should familiarize themselves with local regulations before allowing minors to engage with cryptocurrency features.
 
-- **教育方法**：我们鼓励父母利用我们的平台作为一个机会，在受监督的环境中教育未成年人了解数字资产、区块链技术和负责任的财务习惯。
+- **Educational Approach**: We encourage parents to use our platform as an opportunity to educate minors about digital assets, blockchain technology, and responsible financial habits in a supervised environment.
 
-如果您是父母或监护人，发现您的孩子在未经您同意的情况下创建了账户，请立即通过 contact@cosmicrafts.com 联系我们。
+If you are a parent or guardian and discover that your child has created an account without your consent, please contact us immediately at contact@cosmicrafts.com.
 
-## 本隐私政策的变更
+## Changes to This Privacy Policy
 
-我们可能会不时更新本隐私政策。更新后的版本将通过更新的"生效日期"指示，更新后的版本将在可访问时立即生效。我们建议您经常查看本隐私政策，以了解我们如何保护您的信息。
+We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
 
-## 联系信息
+## Contact Information
 
-如果您对本隐私政策有任何问题，请通过以下方式联系我们：
+If you have any questions about this Privacy Policy, please contact us at:
 
-**电子邮件**：contact@cosmicrafts.com
+**Email**: contact@cosmicrafts.com
 
-对于需要实际地址以符合监管要求的事项，请先通过电子邮件联系我们。
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
 
-## 国际数据传输
+## International Data Transfers
 
-鉴于我们的最小数据收集实践，可能进行国际传输的数据非常有限。我们收集的匿名使用统计数据可能在位于您居住国以外的服务器上处理。使用我们的服务即表示您同意此处理。
+Given our minimal data collection practices, there is very limited data that might be transferred internationally. The anonymous usage statistics we collect may be processed on servers located outside your country of residence. By using our Services, you consent to this processing.
 
-## 信息保留
+## Retention of Information
 
-我们仅在实现本隐私政策中概述的目的所需的时间内保留我们收集的有限信息，除非法律要求或允许更长的保留期。匿名使用数据可能会无限期保留，因为它无法与个人用户关联。
+We retain the limited information we collect only for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. Anonymous usage data may be retained indefinitely as it cannot be linked to individual users.
 
-## 处理个人信息的法律依据（EEA 和英国用户）
+## Legal Basis for Processing Personal Information (EEA and UK Users)
 
-如果您位于欧洲经济区（EEA）或英国，我们收集和使用您的信息的法律依据取决于相关的具体信息和我们收集信息的背景。
+If you are located in the European Economic Area (EEA) or the United Kingdom, our legal basis for collecting and using your information depends on the specific information concerned and the context in which we collect it.
 
-通常，我们基于以下法律依据收集最少信息：
-- 履行我们与您的合同（例如，如果您选择创建账户，则维护您的账户）
-- 为了我们的合法利益（例如，提供和改进我们的服务）
-- 经您同意（例如，可选的浏览器偏好）
-- 在适用的情况下遵守法律义务
+Generally, we collect minimal information based on the following legal grounds:
+- To perform our contract with you (e.g., to maintain your account if you choose to create one)
+- For our legitimate interests (e.g., to provide and improve our Services)
+- With your consent (e.g., for optional browser preferences)
+- To comply with legal obligations where applicable
 
-## 加利福尼亚隐私权
+## California Privacy Rights
 
-如果您是加利福尼亚州居民，您可能根据《加利福尼亚消费者隐私法》（CCPA）和其他加利福尼亚隐私法律拥有某些权利。
+If you are a California resident, you may have certain rights under the California Consumer Privacy Act (CCPA) and other California privacy laws.
 
-鉴于我们的最小数据收集实践，我们通常不会"出售"或"共享"个人信息（根据加利福尼亚州法律对这些术语的定义）。我们也不会使用或披露敏感个人信息用于加利福尼亚州法律规定需要选择退出权的目的。
+Given our minimal data collection practices, we typically do not "sell" or "share" personal information as those terms are defined under California law. We also do not use or disclose sensitive personal information for purposes that would require an opt-out right under California law.
 
-## 第三方服务
+## Changes to This Privacy Policy
 
-我们的服务可能包含指向第三方网站或服务的链接。我们不对这些第三方网站的隐私做法或内容负责。我们建议您阅读您访问的每个网站的隐私政策。
+We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
 
-## 平台特定条款
+## Contact Information
+
+If you have any questions about this Privacy Policy, please contact us at:
+
+**Email**: contact@cosmicrafts.com
+
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
+
+## Third-Party Services
+
+Our Services may contain links to third-party websites or services. We are not responsible for the privacy practices or content of these third-party sites. We encourage you to read the privacy policies of every website you visit.
+
+## Platform-Specific Provisions
 
 ### Apple App Store
 
-对于通过 Apple App Store 访问我们服务的用户：
-- 我们仅收集和使用提供所请求的应用功能和功能所必需的个人信息。
-- 我们不会使用通过 App Store 获得的信息在其他应用中定向用户投放广告。
-- 我们遵守所有适用的 Apple 关于隐私和数据处理的指导原则。
+For users accessing our Services through Apple's App Store:
+- We only collect and use personal information as necessary to provide the requested features and functions of the app.
+- We do not use information obtained through the App Store for targeting users with advertising in other apps.
+- We comply with all applicable Apple guidelines regarding privacy and data handling.
 
 ### Google Play Store
 
-对于通过 Google Play 访问我们服务的用户：
-- 我们遵守 Google Play 的用户数据政策。
-- 我们按照 Google Play 政策的要求，就收集个人信息提供通知并获得同意。
-- 我们在商店列表和应用内维护准确和完整的隐私披露。
+For users accessing our Services through Google Play:
+- We adhere to Google Play's User Data Policy.
+- We provide notice and obtain consent for the collection of personal information as required by Google Play policies.
+- We maintain accurate and complete privacy disclosures in our store listing and within the app.
 
 ### Epic Games Store
 
-对于通过 Epic Games Store 访问我们服务的用户：
-- 我们遵守 Epic 的分发协议和隐私要求。
-- 我们按照 Epic 的指导原则提供有关数据收集实践的明确信息。
+For users accessing our Services through Epic Games Store:
+- We comply with Epic's distribution agreement and privacy requirements.
+- We provide clear information about data collection practices in accordance with Epic's guidelines.
 
 ### Crazy Games
 
-对于通过 Crazy Games 访问我们服务的用户：
-- 我们遵守 Crazy Games 的隐私要求和发布指南。
-- 我们确保关于数据收集和使用的透明沟通。
+For users accessing our Services through Crazy Games:
+- We adhere to Crazy Games' privacy requirements and publishing guidelines.
+- We ensure transparent communication regarding data collection and use.
 
-## 联系我们
+## Changes to This Privacy Policy
 
-如果您对本隐私政策或我们的数据实践有任何问题，请通过以下方式联系我们：
+We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Effective Date" at the top.
 
-**电子邮件**：contact@cosmicrafts.com
+We encourage you to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
 
-对于需要实际地址以符合监管要求的事项，请先通过电子邮件联系我们。
+## Contact Us
+
+If you have any questions about this Privacy Policy or our data practices, please contact us at:
+
+**Email**: contact@cosmicrafts.com  
+
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
 
 ---
 
-*最后更新：2025年3月4日* 
+*Last updated: March 4, 2025* 

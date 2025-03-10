@@ -324,5 +324,42 @@
     "9": "октябрь",
     "10": "ноябрь",
     "11": "декабрь"
+  },
+  "whitepaper": {
+    "title": "Белая книга",
+    "navigation": {
+      "sections": {
+        "introduction": {
+          "title": "Введение",
+          "description": "Обзор и ценностное предложение"
+        },
+        "tokenomics": {
+          "title": "Токеномика",
+          "description": "Распределение токенов и экономика"
+        },
+        "governance": {
+          "title": "Управление",
+          "description": "Система принятия решений"
+        },
+        "community": {
+          "title": "Сообщество",
+          "description": "Участие и рост"
+        },
+        "architecture": {
+          "title": "Архитектура",
+          "description": "Техническая инфраструктура"
+        },
+        "core-features": {
+          "title": "Основные функции",
+          "description": "Возможности продукта"
+        }
+      },
+      "documentation": "Документация",
+      "previous": "Назад",
+      "next": "Вперед",
+      "chapters": "Главы",
+      "mobileTitle": "Разделы белой книги",
+      "mobileSubtitle": "Навигация по главам"
+    }
   }
 }

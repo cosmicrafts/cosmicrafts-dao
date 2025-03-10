@@ -1,238 +1,264 @@
-# سياسة الخصوصية
+# Privacy Policy
 
 [[toc:2-3]]
 
-## مقدمة
+## Introduction
 
-في Cosmicrafts، نحن ملتزمون بحماية خصوصيتك وتوفير تجربة ألعاب آمنة. توضح سياسة الخصوصية هذه كيفية جمع واستخدام وتخزين وحماية معلوماتك الشخصية عند استخدام موقعنا الإلكتروني والألعاب والتطبيقات والخدمات (يشار إليها مجتمعة باسم "الخدمات").
+At Cosmicrafts, we are committed to protecting your privacy and providing a secure gaming experience. This Privacy Policy explains how we collect, use, store, and protect your personal information when you use our website, games, applications, and services (collectively referred to as "Services").
 
-من خلال الوصول إلى خدماتنا أو استخدامها، فإنك توافق على جمع واستخدام المعلومات وفقاً لسياسة الخصوصية هذه. إذا كنت لا توافق على سياساتنا وممارساتنا، يرجى عدم استخدام خدماتنا.
+By accessing or using our Services, you agree to the collection and use of information in accordance with this Privacy Policy. If you do not agree with our policies and practices, please do not use our Services.
 
-## تاريخ السريان
+## Effective Date
 
-تسري سياسة الخصوصية هذه اعتباراً من 4 مارس 2025.
+This Privacy Policy is effective as of March 4, 2025.
 
-## المعلومات التي نجمعها
+## Information We Collect
 
-Cosmicrafts ملتزم بتقليل البيانات وخصوصية المستخدم. نحن نجمع فقط الحد الأدنى من المعلومات الضرورية لتقديم خدماتنا:
+Cosmicrafts is committed to data minimization and user privacy. We collect only the minimal information necessary to provide our services:
 
-### جمع المعلومات المحدودة
+### Limited Information Collection
 
-- **تفضيلات المنطقة**: قد نجمع معلومات حول تفضيلات لغتك ومنطقتك لتقديم محتوى محلي. هذه المعلومات اختيارية ويمكن إدارتها في إعداداتك.
+- **Regional Preferences**: We may collect information about your language and region preferences to provide localized content. This information is optional and can be managed in your settings.
 
-- **بيانات الاستخدام المجهولة**: قد نجمع إحصائيات استخدام مجهولة ومجمعة لمساعدتنا في تحسين خدمتنا. لا يمكن استخدام هذه البيانات لتحديد هويتك شخصياً.
+- **Anonymous Usage Data**: We may collect anonymous, aggregated usage statistics to help us improve our service. This data cannot be used to identify you personally.
 
-- **معلومات تسجيل الحساب**: عند إنشاء حساب، نجمع:
-  - **اسم المستخدم**: يستخدم لتحديد هويتك في المنصة (محدود بـ 12 حرفاً)
-  - **اختيار الصورة الرمزية**: تمثيلك المرئي في المنصة
-  - **رمز الإحالة**: معلومات اختيارية إذا تمت إحالتك من قبل مستخدم آخر
-  - **تفضيل اللغة**: لغتك المفضلة لواجهة المنصة
+- **Account Registration Information**: When you create an account, we collect:
+  - **Username**: Used to identify you in the platform (limited to 12 characters)
+  - **Avatar Selection**: Your chosen visual representation in the platform
+  - **Referral Code**: Optional information if you were referred by another user
+  - **Language Preference**: Your preferred language for the platform interface
 
-لا يتم جمع معلومات شخصية مثل الأسماء أو العناوين أو أرقام الهواتف ما لم تقدمها صراحةً لأغراض محددة (مثل المصادقة الثنائية).
+No personal information such as names, addresses, or phone numbers are collected unless explicitly provided by you for specific purposes (such as 2FA).
 
-### تخزين البيانات في Web3 وعلى السلسلة
+### Web3 and On-Chain Data Storage
 
-كمنصة Web3، يعمل Cosmicrafts بشكل مختلف عن التطبيقات التقليدية فيما يتعلق بتخزين البيانات:
+As a Web3 platform, Cosmicrafts operates differently from traditional applications regarding data storage:
 
-- **قواعد بيانات سلسلة الكتل**: يتم تخزين جميع قواعد بياناتنا على شبكات سلسلة الكتل، مما يعني أن المعلومات عامة وشفافة بطبيعتها.
+- **Blockchain Databases**: All of our databases are stored on blockchain networks, which means information is typically public and transparent by design.
 
-- **عامة بشكل افتراضي**: أي معلومات تختار مشاركتها أو تخزينها من خلال منصتنا قد تكون مرئية على سلاسل الكتل العامة. نحن لا نشفر أو نخفي هذه البيانات بشكل افتراضي.
+- **Public By Default**: Any information you choose to share or store through our platform may be visible on public blockchains. We do not encrypt or hide this data by default.
 
-- **مسؤولية المستخدم**: أنت مسؤول عن أي معلومات تختار مشاركتها من خلال منصتنا. قبل مشاركة أو تخزين المعلومات باستخدام خدماتنا، يجب عليك النظر بعناية في الطبيعة العامة لتقنية سلسلة الكتل.
+- **User Responsibility**: You are responsible for any information you choose to share through our platform. Before sharing or storing information using our Services, you should carefully consider the public nature of blockchain technology.
 
-- **لا تخزين خاص**: على عكس تطبيقات الويب التقليدية، نحن عموماً لا نحتفظ بقواعد بيانات خاصة ومركزية لمعلومات المستخدم. معظم البيانات موجودة على شبكات لامركزية خارج سيطرتنا المباشرة.
+- **No Private Storage**: Unlike traditional web applications, we generally do not maintain private, centralized databases for user information. Most data exists on decentralized networks outside our direct control.
 
-- **ضوابط خصوصية محدودة**: في حين قد نقدم بعض إعدادات الخصوصية، إلا أن لديها قيوداً تقنية تستند إلى تقنية سلسلة الكتل. قد تظل المعلومات المميزة على أنها "خاصة" مرئية لمصادقي سلسلة الكتل أو من خلال مستكشفات سلسلة الكتل.
+- **Limited Privacy Controls**: While we may offer some privacy settings, these have technical limitations based on blockchain technology. Information marked as "private" may still be visible to blockchain validators or through blockchain explorers.
 
-### معلومات محفظة سلسلة الكتل
+### Blockchain Wallet Information
 
-إذا اخترت ربط محفظة سلسلة الكتل بمنصتنا:
+If you choose to connect a blockchain wallet to our platform:
 
-- **لا نقوم أبداً بتخزين مفاتيحك الخاصة أو عبارات البذور على خوادمنا**. يتم تخزين مفاتيحك محلياً على جهازك.
-- **يتم تخزين المفاتيح كـ JSON في التخزين المحلي لمتصفحك**. يمكن تشفير وفك تشفير هذه المفاتيح تقنياً بشكل تلقائي، على الرغم من أننا لا نقوم حالياً بتنفيذ التشفير المستند إلى كلمة المرور لهذه البيانات.
-- **مفاتيحك لا تغادر جهازك أبداً**. عندما تقوم بتوصيل محافظ مثل MetaMask أو Phantom أو Plug أو Internet Identity، نتلقى ونعالج فقط عنوان المحفظة العام لعرض أصولك على السلسلة.
-- **تتم المصادقة من خلال التوقيعات**. بدلاً من طلب مفاتيحك الخاصة، نطلب من محفظتك توقيع رسالة فريدة تثبت ملكيتك دون كشف معلومات حساسة.
-- **تتم معالجة جميع معاملات سلسلة الكتل على السلسلة** ولا يتم تخزينها على خوادمنا.
-- **خطط مستقبلية للتشفير**: نخطط لإضافة تشفير قائم على كلمة المرور لمعلومات المحفظة المخزنة محلياً في التحديثات المستقبلية، مما يعزز أمان بيانات محفظتك بشكل أكبر.
+- **We never store your private keys or seed phrases on our servers**. Your keys are stored locally on your device.
+- **Keys are stored as JSON in your browser's local storage**. These keys can be technically encrypted and decrypted automatically, though we do not currently implement password-based encryption for this data.
+- **Your keys never leave your device**. When you connect wallets like MetaMask, Phantom, Plug, or Internet Identity, we only receive and process the public wallet address to display your on-chain assets.
+- **Authentication happens through signatures**. Rather than requesting your private keys, we ask your wallet to sign a unique message that proves your ownership without exposing sensitive information.
+- **All blockchain transactions are processed on-chain** and are not stored on our servers.
+- **Future plans for encryption**: We plan to add password-based encryption for locally stored wallet information in future updates, further enhancing security of your wallet data.
 
-### المعلومات التي يتم جمعها تلقائياً
+### Information Collected Automatically
 
-قد نجمع معلومات تقنية محدودة جداً من خلال ملفات تعريف الارتباط والتقنيات المماثلة:
-- نوع المتصفح وإصداره (لضمان التوافق)
-- الموقع التقريبي بناءً على عنوان IP (لتقديم المحتوى الإقليمي فقط)
-- معلومات الجهاز الأساسية (لتحسين العرض)
+We may collect very limited technical information through cookies and similar technologies:
+- Browser type and version (to ensure compatibility)
+- Approximate location based on IP address (for regional content delivery only)
+- Basic device information (to optimize display)
 
-يمكنك التحكم في ملفات تعريف الارتباط أو تعطيلها من خلال إعدادات متصفحك. نحن لا نستخدم ملفات تعريف الارتباط التتبعية لأغراض الإعلان.
+You can control or disable cookies through your browser settings. We do not use tracking cookies for advertising purposes.
 
-## كيف نستخدم معلوماتك
+## How We Use Your Information
 
-نستخدم المعلومات المحدودة التي نجمعها فقط للأغراض التالية:
+We use the limited information we collect solely for the following purposes:
 
-### تقديم وتحسين الخدمات
-- تقديم وصيانة خدماتنا
-- تمكين الميزات الأساسية مثل تفضيلات اللغة
-- تحسين تجربة المستخدم بناءً على أنماط الاستخدام المجهولة
+### Provide and Improve Services
+- Deliver and maintain our Services
+- Enable basic features such as language preferences
+- Improve user experience based on anonymous usage patterns
 
-### الأمن والحماية
-- الحماية من الوصول غير المصرح به إلى حسابات المستخدمين
-- تصحيح الأخطاء لتحديد وإصلاح المشكلات
+### Security and Protection
+- Protect against unauthorized access to user accounts
+- Debug to identify and repair errors
 
-### معلومات الاتصال
+### Contact Information
 
-إذا كان لديك أي أسئلة حول هذه الشروط، يرجى الاتصال بنا على:
+If you have any questions about these Terms, please contact us at:
 
-**البريد الإلكتروني**: contact@cosmicrafts.com
+**Email**: contact@cosmicrafts.com  
 
-للمسائل التي تتطلب عنواناً فعلياً للامتثال التنظيمي، يرجى الاتصال بنا عبر البريد الإلكتروني أولاً.
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
 
-## مشاركة البيانات والإفصاح عنها
+## Data Sharing and Disclosure
 
-نظراً لممارسات جمع البيانات المحدودة لدينا، لدينا بيانات محدودة جداً للمشاركة. ومع ذلك، في ظروف معينة، قد نشارك المعلومات المحدودة التي لدينا:
+Given our minimal data collection practices, we have very limited data to share. However, in certain circumstances, we may share the limited information we have:
 
-### مزودو الخدمات الأساسية
+### Essential Service Providers
 
-قد نشارك معلومات تقنية أساسية مع عدد قليل من مزودي الخدمات المختارين بعناية الذين يساعدوننا في:
-- استضافة الموقع والبنية التحتية
-- التحليلات (بشكل مجهول)
-- أنظمة دعم العملاء
+We may share basic technical information with a few carefully selected service providers who help us with:
+- Website hosting and infrastructure
+- Analytics (in anonymized form)
+- Customer support systems
 
-يصل هؤلاء المزودون فقط إلى الحد الأدنى من المعلومات اللازمة لأداء وظائفهم وهم ملزمون بالتزامات السرية.
+These providers access only the minimum information needed to perform their functions and are bound by confidentiality obligations.
 
-### المتطلبات القانونية
+### Legal Requirements
 
-قد نكشف عن المعلومات إذا كان ذلك مطلوباً بموجب القانون أو إذا كنا نعتقد بحسن نية أن مثل هذا الإجراء ضروري من أجل:
-- الامتثال للالتزامات القانونية
-- حماية والدفاع عن حقوقنا أو ممتلكاتنا
-- منع أو التحقيق في المخالفات المحتملة
-- حماية السلامة الشخصية للمستخدمين أو الجمهور
+We may disclose information if required to do so by law or if we believe in good faith that such action is necessary to:
+- Comply with legal obligations
+- Protect and defend our rights or property
+- Prevent or investigate possible wrongdoing
+- Protect the personal safety of users or the public
 
-## خياراتك وحقوقك
+## Your Choices and Rights
 
-### معلومات الحساب
+### Account Information
 
-إذا قمت بإنشاء حساب، يمكنك مراجعة وتحديث معلومات حسابك عن طريق تسجيل الدخول إلى إعدادات حسابك.
+If you have created an account, you can review and update your account information by logging into your account settings.
 
-### حذف الحساب
+### Account Deletion
 
-يمكنك طلب حذف حسابك في أي وقت:
-- من خلال إعدادات تطبيق الويب
-- عن طريق إرسال بريد إلكتروني إلى contact@cosmicrafts.com
+You can request to delete your account at any time:
+- Through the Web App settings
+- By sending an email to contact@cosmicrafts.com
 
-عند حذف حسابك:
-- سنبدأ فترة تأخير مدتها 30 يوماً في حالة رغبتك في استعادة حسابك
-- خلال هذه الفترة، سيتم تعطيل حسابك ولكن لن يتم حذفه بشكل دائم
-- إذا غيرت رأيك، يمكنك إعادة تنشيط حسابك عن طريق تسجيل الدخول
-- بعد فترة الـ 30 يوماً، سنقوم بحذف معلومات حسابك بشكل دائم من أنظمتنا
+When you delete your account:
+- We will initiate a 30-day delay period in case you wish to recover your account
+- During this period, your account will be deactivated but not permanently deleted
+- If you change your mind, you can reactivate your account by logging in
+- After the 30-day period, we will permanently delete your account information from our systems
 
-**ملاحظة مهمة حول البيانات على السلسلة**: في حين يمكننا حذف المعلومات التي نتحكم فيها مباشرة، لا يمكن حذف أو تعديل البيانات التي تم تسجيلها على سلاسل الكتل العامة بسبب الطبيعة غير القابلة للتغيير لتقنية سلسلة الكتل. يشمل ذلك سجل المعاملات وسجلات ملكية NFT وأي بيانات أخرى تم تسجيلها على سلسلة الكتل.
+**Important Note about On-Chain Data**: While we can delete information we control directly, data that has been recorded on public blockchains cannot be deleted or modified due to the immutable nature of blockchain technology. This includes transaction history, NFT ownership records, and any other data that has been committed to a blockchain.
 
-### تفضيلات ملفات تعريف الارتباط
+### Cookie Preferences
 
-تسمح معظم متصفحات الويب بالتحكم في ملفات تعريف الارتباط من خلال إعداداتها. يمكنك ضبط متصفحك لرفض جميع أو بعض ملفات تعريف الارتباط أو لتنبيهك عند إرسال ملفات تعريف الارتباط.
+Most web browsers allow you to control cookies through their settings. You may set your browser to refuse all or some cookies or to alert you when cookies are being sent.
 
-### المراسلات
+### Communications
 
-يمكنك إلغاء الاشتراك في تلقي المراسلات الترويجية منا باتباع التعليمات الموجودة في تلك المراسلات.
+You can opt out of receiving promotional communications from us by following the instructions in those communications.
 
-### حقوق الخصوصية الخاصة بك
+### Your Privacy Rights
 
-اعتماداً على موقعك، قد يكون لديك حقوق معينة فيما يتعلق بمعلوماتك الشخصية، مثل:
-- الحق في الوصول إلى المعلومات التي لدينا عنك
-- الحق في طلب حذف معلوماتك
-- الحق في الاعتراض على معالجة معلوماتك
+Depending on your location, you may have certain rights regarding your personal information, such as:
+- The right to access information we have about you
+- The right to request deletion of your information
+- The right to object to the processing of your information
 
-لممارسة هذه الحقوق، يرجى الاتصال بنا على contact@cosmicrafts.com.
+To exercise these rights, please contact us at contact@cosmicrafts.com.
 
-## أمن البيانات
+## Data Security
 
-نحن نطبق تدابير تقنية وتنظيمية مناسبة لحماية المعلومات المحدودة التي نجمعها. ومع ذلك، لا توجد طريقة نقل عبر الإنترنت أو تخزين إلكتروني آمنة بنسبة 100٪، لذلك لا يمكننا ضمان الأمان المطلق.
+We implement appropriate technical and organizational measures to protect the limited information we collect. However, no method of transmission over the Internet or electronic storage is 100% secure, so we cannot guarantee absolute security.
 
-## خصوصية الأطفال
+## Children's Privacy
 
-خدماتنا غير موجهة للأطفال دون سن 13 عاماً. نحن لا نجمع عن علم معلومات شخصية من الأطفال دون سن 13 عاماً. إذا علمنا أن طفلاً دون سن 13 عاماً قد قدم لنا معلومات شخصية، سنتخذ خطوات لحذف هذه المعلومات.
+Our Services are not directed to children under 13. We do not knowingly collect personal information from children under 13. If we become aware that a child under 13 has provided us with personal information, we will take steps to delete such information.
 
-### القاصرون واستخدام العملات المشفرة
+### Minors and Cryptocurrency Usage
 
-في حين أن ألعابنا لا تحتوي على محتوى للبالغين مثل العري أو العنف الصريح، وهي مناسبة عموماً للمستخدمين الذين تزيد أعمارهم عن 13 عاماً، نؤكد بشدة على ما يلي:
+While our games do not contain adult content such as nudity or graphic violence, and are generally suitable for users aged 13+, we strongly emphasize the following:
 
-- **الإشراف الأبوي مطلوب**: إذا كنت دون سن 18 عاماً أو دون السن القانوني للرشد في بلدك، يجب عليك استخدام خدماتنا فقط بمشاركة وإشراف أحد الوالدين أو الوصي، خاصة عند التعامل مع ميزات العملات المشفرة.
+- **Parental Supervision Required**: If you are under 18 or the legal age of majority in your country, you should use our Services only with the involvement and supervision of a parent or guardian, particularly when engaging with cryptocurrency features.
 
-- **المعاملات غير قابلة للعكس**: معاملات العملات المشفرة غير قابلة للعكس في معظم الحالات. بمجرد اكتمالها، لا يمكن عادةً التراجع عن هذه المعاملات أو استرداد قيمتها. هذا يجعل الإشراف الأبوي مهماً بشكل خاص.
+- **Irreversible Transactions**: Cryptocurrency transactions are almost always irreversible. Once completed, these transactions typically cannot be undone or refunded. This makes parental supervision particularly important.
 
-- **الاختلافات التنظيمية**: تختلف لوائح العملات المشفرة بشكل كبير بين البلدان. ما قد يكون قانونياً أو مسموحاً به في ولاية قضائية قد يكون مقيداً أو محظوراً في أخرى. يجب على الآباء والأوصياء التعرف على اللوائح المحلية قبل السماح للقاصرين بالتعامل مع ميزات العملات المشفرة.
+- **Regulatory Variations**: Cryptocurrency regulations vary significantly between countries. What may be legal or allowed in one jurisdiction may be restricted or prohibited in another. Parents and guardians should familiarize themselves with local regulations before allowing minors to engage with cryptocurrency features.
 
-- **النهج التعليمي**: نشجع الآباء على استخدام منصتنا كفرصة لتعليم القاصرين حول الأصول الرقمية وتقنية سلسلة الكتل والعادات المالية المسؤولة في بيئة خاضعة للإشراف.
+- **Educational Approach**: We encourage parents to use our platform as an opportunity to educate minors about digital assets, blockchain technology, and responsible financial habits in a supervised environment.
 
-إذا كنت أحد الوالدين أو الوصي واكتشفت أن طفلك قد أنشأ حساباً دون موافقتك، يرجى الاتصال بنا فوراً على contact@cosmicrafts.com.
+If you are a parent or guardian and discover that your child has created an account without your consent, please contact us immediately at contact@cosmicrafts.com.
 
-## التغييرات في سياسة الخصوصية هذه
+## Changes to This Privacy Policy
 
-قد نقوم بتحديث سياسة الخصوصية هذه من وقت لآخر. سيتم الإشارة إلى النسخة المحدثة من خلال "تاريخ السريان" المحدث وستكون النسخة المحدثة سارية المفعول بمجرد إتاحتها. نشجعك على مراجعة سياسة الخصوصية هذه بشكل متكرر لتكون على علم بكيفية حمايتنا لمعلوماتك.
+We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
 
-## معلومات الاتصال
+## Contact Information
 
-إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه، يرجى الاتصال بنا على:
+If you have any questions about this Privacy Policy, please contact us at:
 
-**البريد الإلكتروني**: contact@cosmicrafts.com
+**Email**: contact@cosmicrafts.com
 
-للمسائل التي تتطلب عنواناً فعلياً للامتثال التنظيمي، يرجى الاتصال بنا عبر البريد الإلكتروني أولاً.
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
 
-## نقل البيانات الدولي
+## International Data Transfers
 
-نظراً لممارسات جمع البيانات المحدودة لدينا، هناك بيانات محدودة جداً قد يتم نقلها دولياً. قد تتم معالجة إحصائيات الاستخدام المجهولة التي نجمعها على خوادم موجودة خارج بلد إقامتك. باستخدام خدماتنا، فإنك توافق على هذه المعالجة.
+Given our minimal data collection practices, there is very limited data that might be transferred internationally. The anonymous usage statistics we collect may be processed on servers located outside your country of residence. By using our Services, you consent to this processing.
 
-## الاحتفاظ بالمعلومات
+## Retention of Information
 
-نحتفظ بالمعلومات المحدودة التي نجمعها فقط طالما كان ذلك ضرورياً لتحقيق الأغراض الموضحة في سياسة الخصوصية هذه، ما لم تكن هناك فترة احتفاظ أطول مطلوبة أو مسموح بها بموجب القانون. قد يتم الاحتفاظ ببيانات الاستخدام المجهولة إلى أجل غير مسمى حيث لا يمكن ربطها بمستخدمين فرديين.
+We retain the limited information we collect only for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. Anonymous usage data may be retained indefinitely as it cannot be linked to individual users.
 
-## الأساس القانوني لمعالجة المعلومات الشخصية (لمستخدمي المنطقة الاقتصادية الأوروبية والمملكة المتحدة)
+## Legal Basis for Processing Personal Information (EEA and UK Users)
 
-إذا كنت موجوداً في المنطقة الاقتصادية الأوروبية (EEA) أو المملكة المتحدة، فإن أساسنا القانوني لجمع واستخدام معلوماتك يعتمد على المعلومات المحددة المعنية وسياق جمعها.
+If you are located in the European Economic Area (EEA) or the United Kingdom, our legal basis for collecting and using your information depends on the specific information concerned and the context in which we collect it.
 
-بشكل عام، نجمع معلومات محدودة بناءً على الأسس القانونية التالية:
-- لتنفيذ عقدنا معك (على سبيل المثال، للحفاظ على حسابك إذا اخترت إنشاء واحد)
-- لمصالحنا المشروعة (على سبيل المثال، لتقديم وتحسين خدماتنا)
-- بموافقتك (على سبيل المثال، لتفضيلات المتصفح الاختيارية)
-- للامتثال للالتزامات القانونية حيثما ينطبق ذلك
+Generally, we collect minimal information based on the following legal grounds:
+- To perform our contract with you (e.g., to maintain your account if you choose to create one)
+- For our legitimate interests (e.g., to provide and improve our Services)
+- With your consent (e.g., for optional browser preferences)
+- To comply with legal obligations where applicable
 
-## حقوق خصوصية كاليفورنيا
+## California Privacy Rights
 
-إذا كنت مقيماً في كاليفورنيا، فقد يكون لديك حقوق معينة بموجب قانون خصوصية المستهلك في كاليفورنيا (CCPA) وقوانين الخصوصية الأخرى في كاليفورنيا.
+If you are a California resident, you may have certain rights under the California Consumer Privacy Act (CCPA) and other California privacy laws.
 
-نظراً لممارسات جمع البيانات المحدودة لدينا، نحن عادةً لا "نبيع" أو "نشارك" المعلومات الشخصية كما هو محدد بموجب قانون كاليفورنيا. كما أننا لا نستخدم أو نكشف عن معلومات شخصية حساسة لأغراض تتطلب حق إلغاء الاشتراك بموجب قانون كاليفورنيا.
+Given our minimal data collection practices, we typically do not "sell" or "share" personal information as those terms are defined under California law. We also do not use or disclose sensitive personal information for purposes that would require an opt-out right under California law.
 
-## الخدمات من الطرف الثالث
+## Changes to This Privacy Policy
 
-قد تحتوي خدماتنا على روابط لمواقع أو خدمات الطرف الثالث. نحن لسنا مسؤولين عن ممارسات الخصوصية أو محتوى هذه المواقع التابعة لجهات خارجية. نشجعك على قراءة سياسات الخصوصية لكل موقع ويب تزوره.
+We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
 
-## أحكام خاصة بالمنصات
+## Contact Information
 
-### متجر تطبيقات Apple
+If you have any questions about this Privacy Policy, please contact us at:
 
-للمستخدمين الذين يصلون إلى خدماتنا من خلال متجر تطبيقات Apple:
-- نحن نجمع ونستخدم المعلومات الشخصية فقط حسب الضرورة لتوفير الميزات والوظائف المطلوبة للتطبيق.
-- لا نستخدم المعلومات التي تم الحصول عليها من خلال متجر التطبيقات لاستهداف المستخدمين بالإعلانات في التطبيقات الأخرى.
-- نحن نمتثل لجميع إرشادات Apple المعمول بها فيما يتعلق بالخصوصية والتعامل مع البيانات.
+**Email**: contact@cosmicrafts.com
 
-### متجر Google Play
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
 
-للمستخدمين الذين يصلون إلى خدماتنا من خلال Google Play:
-- نحن نلتزم بسياسة بيانات المستخدم الخاصة بـ Google Play.
-- نقدم إشعاراً ونحصل على موافقة لجمع المعلومات الشخصية كما هو مطلوب بموجب سياسات Google Play.
-- نحافظ على إفصاحات خصوصية دقيقة وكاملة في قائمة متجرنا وداخل التطبيق.
+## Third-Party Services
 
-### متجر Epic Games
+Our Services may contain links to third-party websites or services. We are not responsible for the privacy practices or content of these third-party sites. We encourage you to read the privacy policies of every website you visit.
 
-للمستخدمين الذين يصلون إلى خدماتنا من خلال متجر Epic Games:
-- نمتثل لاتفاقية التوزيع ومتطلبات الخصوصية الخاصة بـ Epic.
-- نقدم معلومات واضحة حول ممارسات جمع البيانات وفقاً لإرشادات Epic.
+## Platform-Specific Provisions
+
+### Apple App Store
+
+For users accessing our Services through Apple's App Store:
+- We only collect and use personal information as necessary to provide the requested features and functions of the app.
+- We do not use information obtained through the App Store for targeting users with advertising in other apps.
+- We comply with all applicable Apple guidelines regarding privacy and data handling.
+
+### Google Play Store
+
+For users accessing our Services through Google Play:
+- We adhere to Google Play's User Data Policy.
+- We provide notice and obtain consent for the collection of personal information as required by Google Play policies.
+- We maintain accurate and complete privacy disclosures in our store listing and within the app.
+
+### Epic Games Store
+
+For users accessing our Services through Epic Games Store:
+- We comply with Epic's distribution agreement and privacy requirements.
+- We provide clear information about data collection practices in accordance with Epic's guidelines.
 
 ### Crazy Games
 
-للمستخدمين الذين يصلون إلى خدماتنا من خلال Crazy Games:
-- نلتزم بمتطلبات الخصوصية وإرشادات النشر الخاصة بـ Crazy Games.
-- نضمن التواصل الشفاف فيما يتعلق بجمع البيانات واستخدامها.
+For users accessing our Services through Crazy Games:
+- We adhere to Crazy Games' privacy requirements and publishing guidelines.
+- We ensure transparent communication regarding data collection and use.
+
+## Changes to This Privacy Policy
+
+We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Effective Date" at the top.
+
+We encourage you to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
+
+## Contact Us
+
+If you have any questions about this Privacy Policy or our data practices, please contact us at:
+
+**Email**: contact@cosmicrafts.com  
+
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
 
 ---
 
-*آخر تحديث: 4 مارس 2025* 
+*Last updated: March 4, 2025* 

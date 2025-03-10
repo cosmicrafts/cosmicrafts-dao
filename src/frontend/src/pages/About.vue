@@ -117,6 +117,105 @@
         </div>
       </div>
 
+      <!-- Resources & Community Section -->
+      <div class="cosmic-card resources-section">
+        <div class="section-header">
+          <i class="fas fa-globe"></i>
+          <h2 class="section-title">Resources & Community</h2>
+        </div>
+
+        <div class="resources-grid">
+          <!-- Quick Access Resources -->
+          <div class="resource-block">
+            <h3>Quick Access</h3>
+            <div class="resource-cards">
+              <div class="resource-card">
+                <i class="fas fa-robot"></i>
+                <h4>AI Assistant</h4>
+                <p>Press 'A' in-game for instant help</p>
+              </div>
+              <div class="resource-card">
+                <i class="fas fa-book"></i>
+                <h4>Documentation</h4>
+                <p>Comprehensive guides and technical details</p>
+              </div>
+              <div class="resource-card">
+                <i class="fab fa-github"></i>
+                <h4>GitHub</h4>
+                <p>View our open-source code and contribute</p>
+              </div>
+              <div class="resource-card">
+                <i class="fas fa-chart-line"></i>
+                <h4>Dashboard</h4>
+                <p>Monitor your assets and DAO participation</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Community Channels -->
+          <div class="community-block">
+            <h3>Community Channels</h3>
+            <div class="channel-grid">
+              <a href="https://discord.gg/cosmicrafts" class="channel-card discord">
+                <i class="fab fa-discord"></i>
+                <span>Discord</span>
+              </a>
+              <a href="https://twitter.com/CosmicraftsDAO" class="channel-card twitter">
+                <i class="fab fa-twitter"></i>
+                <span>Twitter</span>
+              </a>
+              <a href="https://t.me/cosmicrafts" class="channel-card telegram">
+                <i class="fab fa-telegram"></i>
+                <span>Telegram</span>
+              </a>
+              <a href="https://forum.cosmicrafts.com" class="channel-card forum">
+                <i class="fas fa-comments"></i>
+                <span>Forum</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- AI Assistant Features -->
+          <div class="ai-assistant-block">
+            <h3>AI Assistant Features</h3>
+            <div class="features-list">
+              <div class="feature-item">
+                <i class="fas fa-gamepad"></i>
+                <span>Game mechanics and strategies</span>
+              </div>
+              <div class="feature-item">
+                <i class="fas fa-coins"></i>
+                <span>Token and NFT information</span>
+              </div>
+              <div class="feature-item">
+                <i class="fas fa-headset"></i>
+                <span>Technical support</span>
+              </div>
+              <div class="feature-item">
+                <i class="fas fa-globe"></i>
+                <span>Real-time translations</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- International Communities -->
+          <div class="international-block">
+            <h3>International Communities</h3>
+            <div class="language-grid">
+              <div class="language-tag">English</div>
+              <div class="language-tag">Spanish</div>
+              <div class="language-tag">Chinese</div>
+              <div class="language-tag">Japanese</div>
+              <div class="language-tag">Korean</div>
+              <div class="language-tag">Russian</div>
+              <div class="language-tag">French</div>
+              <div class="language-tag">German</div>
+              <div class="language-tag">Portuguese</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Join Us Section -->
       <div class="cosmic-card join-section">
         <div class="join-content">
@@ -567,6 +666,147 @@
   font-size: 0.95rem;
   line-height: 1.6;
   color: var(--color-text-secondary);
+}
+
+/* Resources Section Styling */
+.resources-grid {
+  display: grid;
+  gap: 3rem;
+}
+
+.resource-block h3,
+.community-block h3,
+.ai-assistant-block h3,
+.international-block h3 {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+}
+
+/* Resource Cards */
+.resource-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.resource-card {
+  background: rgba(15, 185, 253, 0.05);
+  padding: 1.5rem;
+  border-radius: var(--radius-medium);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.resource-card:hover {
+  transform: translateY(-5px);
+  background: rgba(15, 185, 253, 0.1);
+}
+
+.resource-card i {
+  font-size: 2rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.resource-card h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.resource-card p {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+/* Community Channels */
+.channel-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.channel-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  border-radius: var(--radius-medium);
+  text-decoration: none;
+  color: var(--color-text-primary);
+  transition: all 0.3s ease;
+}
+
+.channel-card i {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.channel-card.discord {
+  background: rgba(114, 137, 218, 0.1);
+}
+
+.channel-card.twitter {
+  background: rgba(29, 161, 242, 0.1);
+}
+
+.channel-card.telegram {
+  background: rgba(0, 136, 204, 0.1);
+}
+
+.channel-card.forum {
+  background: rgba(255, 145, 0, 0.1);
+}
+
+.channel-card:hover {
+  transform: translateY(-5px);
+  background: rgba(15, 185, 253, 0.2);
+}
+
+/* AI Assistant Features */
+.features-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(15, 185, 253, 0.05);
+  border-radius: var(--radius-medium);
+  transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+  background: rgba(15, 185, 253, 0.1);
+  transform: translateX(5px);
+}
+
+.feature-item i {
+  color: var(--color-primary);
+}
+
+/* International Communities */
+.language-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.language-tag {
+  padding: 0.5rem 1rem;
+  background: rgba(15, 185, 253, 0.05);
+  border-radius: var(--radius-circle);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.language-tag:hover {
+  background: rgba(15, 185, 253, 0.2);
+  transform: translateY(-2px);
 }
 
 /* Join Section Styling */

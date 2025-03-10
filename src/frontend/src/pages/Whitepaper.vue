@@ -6,8 +6,8 @@
         <div class="sidebar-header">
           <i class="fas fa-book-open"></i>
           <span class="header-text">
-            <strong>Whitepaper</strong>
-            <small>Documentation</small>
+            <strong>{{ $t('whitepaper.title') }}</strong>
+            <small>{{ $t('whitepaper.navigation.documentation') }}</small>
           </span>
         </div>
         <ul>
@@ -23,8 +23,8 @@
           >
             <i class="fas" :class="getSectionIcon(section.id)"></i>
             <span class="section-text">
-              <strong>{{ section.title }}</strong>
-              <small>{{ getSectionDescription(section.id) }}</small>
+              <strong>{{ $t(`whitepaper.navigation.sections.${section.id}.title`) }}</strong>
+              <small>{{ $t(`whitepaper.navigation.sections.${section.id}.description`) }}</small>
             </span>
           </li>
         </ul>
@@ -55,8 +55,8 @@
                 <span class="arrow">
                   <img src="/src/assets/icons/prev.svg" alt="arrow" />
                 </span>
-                <small>Previous</small>
-                <span>{{ previousSection?.title }}</span>
+                <small>{{ $t('whitepaper.navigation.previous') }}</small>
+                <span>{{ $t(`whitepaper.navigation.sections.${previousSection?.id}.title`) }}</span>
               </button>
 
               <button
@@ -64,8 +64,8 @@
                 class="button outline next"
                 @click="navigateNext"
               >
-                <small>Next</small>
-                <span>{{ nextSection?.title }}</span>
+                <small>{{ $t('whitepaper.navigation.next') }}</small>
+                <span>{{ $t(`whitepaper.navigation.sections.${nextSection?.id}.title`) }}</span>
                 <span class="arrow">
                   <img src="/src/assets/icons/next.svg" alt="arrow" />
                 </span>
@@ -105,8 +105,8 @@
         <div class="button-content">
           <i class="fas fa-book-open"></i>
           <span class="button-text">
-            <strong>Whitepaper Sections</strong>
-            <small>Navigate through chapters</small>
+            <strong>{{ $t('whitepaper.navigation.mobileTitle') }}</strong>
+            <small>{{ $t('whitepaper.navigation.mobileSubtitle') }}</small>
           </span>
         </div>
         <i class="fas fa-chevron-down nav-icon" :class="{ 'open': showMobileNav }"></i>
@@ -123,8 +123,8 @@
           >
             <i class="fas" :class="getSectionIcon(section.id)"></i>
             <span class="section-text">
-              <strong>{{ section.title }}</strong>
-              <small>{{ getSectionDescription(section.id) }}</small>
+              <strong>{{ $t(`whitepaper.navigation.sections.${section.id}.title`) }}</strong>
+              <small>{{ $t(`whitepaper.navigation.sections.${section.id}.description`) }}</small>
             </span>
           </li>
         </ul>
@@ -144,12 +144,12 @@ export default {
     return {
       activeSection: "introduction",
       sections: [
-        { id: "introduction", title: "Introduction" },
-        { id: "tokenomics", title: "Tokenomics" },
-        { id: "governance", title: "Governance" },
-        { id: "community", title: "Community" },
-        { id: "architecture", title: "Architecture" },
-        { id: "core-features", title: "Core Features" }
+        { id: "introduction" },
+        { id: "tokenomics" },
+        { id: "governance" },
+        { id: "community" },
+        { id: "architecture" },
+        { id: "core-features" }
       ],
       toc: [],
       activeHeading: null,

@@ -196,7 +196,41 @@
     "discover": "Discover"
   },
   "whitepaper": {
-    "title": "Cosmicrafts Whitepaper"
+    "title": "Cosmicrafts Whitepaper",
+    "navigation": {
+      "sections": {
+        "introduction": {
+          "title": "Introduction",
+          "description": "Overview and value proposition"
+        },
+        "tokenomics": {
+          "title": "Tokenomics",
+          "description": "Token distribution and economics"
+        },
+        "governance": {
+          "title": "Governance",
+          "description": "Decision-making system"
+        },
+        "community": {
+          "title": "Community",
+          "description": "Participation and growth"
+        },
+        "architecture": {
+          "title": "Architecture",
+          "description": "Technical infrastructure"
+        },
+        "core-features": {
+          "title": "Core Features",
+          "description": "Product capabilities"
+        }
+      },
+      "documentation": "Documentation",
+      "previous": "Previous",
+      "next": "Next",
+      "chapters": "Chapters",
+      "mobileTitle": "Whitepaper Sections",
+      "mobileSubtitle": "Navigate through chapters"
+    }
   },
   "profilePage": {
     "profileError": "Profile Error",

@@ -1,242 +1,264 @@
-# Gizlilik Politikası
+# Privacy Policy
 
 [[toc:2-3]]
 
-## Giriş
+## Introduction
 
-Cosmicrafts olarak, gizliliğinizi korumayı ve güvenli bir oyun deneyimi sunmayı taahhüt ediyoruz. Bu Gizlilik Politikası, web sitemizi, oyunlarımızı, uygulamalarımızı ve hizmetlerimizi (toplu olarak "Hizmetler" olarak anılacaktır) kullandığınızda kişisel bilgilerinizi nasıl topladığımızı, kullandığımızı, sakladığımızı ve koruduğumuzu açıklamaktadır.
+At Cosmicrafts, we are committed to protecting your privacy and providing a secure gaming experience. This Privacy Policy explains how we collect, use, store, and protect your personal information when you use our website, games, applications, and services (collectively referred to as "Services").
 
-Hizmetlerimize erişerek veya kullanarak, bu Gizlilik Politikası'na uygun olarak bilgilerin toplanmasını ve kullanılmasını kabul etmiş olursunuz. Politikalarımız ve uygulamalarımızla aynı fikirde değilseniz, lütfen Hizmetlerimizi kullanmayın.
+By accessing or using our Services, you agree to the collection and use of information in accordance with this Privacy Policy. If you do not agree with our policies and practices, please do not use our Services.
 
-## Yürürlük Tarihi
+## Effective Date
 
-Bu Gizlilik Politikası 4 Mart 2025 tarihinden itibaren geçerlidir.
+This Privacy Policy is effective as of March 4, 2025.
 
-## Topladığımız Bilgiler
+## Information We Collect
 
-Cosmicrafts, veri minimizasyonuna ve kullanıcı gizliliğine bağlıdır. Yalnızca hizmetlerimizi sağlamak için gerekli minimum bilgiyi topluyoruz:
+Cosmicrafts is committed to data minimization and user privacy. We collect only the minimal information necessary to provide our services:
 
-### Sınırlı Bilgi Toplama
+### Limited Information Collection
 
-- **Bölgesel Tercihler**: Yerelleştirilmiş içerik sağlamak için dil ve bölge tercihleriniz hakkında bilgi toplayabiliriz. Bu bilgiler isteğe bağlıdır ve ayarlarınızdan yönetilebilir.
+- **Regional Preferences**: We may collect information about your language and region preferences to provide localized content. This information is optional and can be managed in your settings.
 
-- **Anonim Kullanım Verileri**: Hizmetimizi iyileştirmemize yardımcı olmak için anonim, toplu kullanım istatistiklerini toplayabiliriz. Bu veriler sizi kişisel olarak tanımlamak için kullanılamaz.
+- **Anonymous Usage Data**: We may collect anonymous, aggregated usage statistics to help us improve our service. This data cannot be used to identify you personally.
 
-- **Hesap Kayıt Bilgileri**: Bir hesap oluşturduğunuzda şunları toplarız:
-  - **Kullanıcı Adı**: Platformda sizi tanımlamak için kullanılır (12 karakterle sınırlıdır)
-  - **Avatar Seçimi**: Platformdaki görsel temsiliniz
-  - **Referans Kodu**: Başka bir kullanıcı tarafından yönlendirildiyseniz isteğe bağlı bilgi
-  - **Dil Tercihi**: Platform arayüzü için tercih ettiğiniz dil
+- **Account Registration Information**: When you create an account, we collect:
+  - **Username**: Used to identify you in the platform (limited to 12 characters)
+  - **Avatar Selection**: Your chosen visual representation in the platform
+  - **Referral Code**: Optional information if you were referred by another user
+  - **Language Preference**: Your preferred language for the platform interface
 
-Belirli amaçlar için (2FA gibi) açıkça siz tarafından sağlanmadıkça isimler, adresler veya telefon numaraları gibi kişisel bilgiler toplanmaz.
+No personal information such as names, addresses, or phone numbers are collected unless explicitly provided by you for specific purposes (such as 2FA).
 
-### Web3 ve Zincir Üstü Veri Depolama
+### Web3 and On-Chain Data Storage
 
-Bir Web3 platformu olarak, Cosmicrafts veri depolama konusunda geleneksel uygulamalardan farklı çalışır:
+As a Web3 platform, Cosmicrafts operates differently from traditional applications regarding data storage:
 
-- **Blokzincir Veritabanları**: Tüm veritabanlarımız blokzincir ağlarında depolanır, bu da bilgilerin tasarım gereği genellikle halka açık ve şeffaf olduğu anlamına gelir.
+- **Blockchain Databases**: All of our databases are stored on blockchain networks, which means information is typically public and transparent by design.
 
-- **Varsayılan Olarak Halka Açık**: Platformumuz aracılığıyla paylaşmayı veya depolamayı seçtiğiniz her türlü bilgi, halka açık blokzincirlerde görünür olabilir. Bu verileri varsayılan olarak şifrelemez veya gizlemeyiz.
+- **Public By Default**: Any information you choose to share or store through our platform may be visible on public blockchains. We do not encrypt or hide this data by default.
 
-- **Kullanıcı Sorumluluğu**: Platformumuz aracılığıyla paylaşmayı seçtiğiniz bilgilerden siz sorumlusunuz. Hizmetlerimizi kullanarak bilgi paylaşmadan veya depolamadan önce, blokzincir teknolojisinin halka açık doğasını dikkatlice değerlendirmelisiniz.
+- **User Responsibility**: You are responsible for any information you choose to share through our platform. Before sharing or storing information using our Services, you should carefully consider the public nature of blockchain technology.
 
-- **Özel Depolama Yok**: Geleneksel web uygulamalarının aksine, genellikle kullanıcı bilgileri için özel, merkezi veritabanları tutmuyoruz. Çoğu veri, doğrudan kontrolümüz dışındaki merkezi olmayan ağlarda bulunur.
+- **No Private Storage**: Unlike traditional web applications, we generally do not maintain private, centralized databases for user information. Most data exists on decentralized networks outside our direct control.
 
-- **Sınırlı Gizlilik Kontrolleri**: Bazı gizlilik ayarları sunsak da, bunlar blokzincir teknolojisine dayalı teknik sınırlamalara sahiptir. "Özel" olarak işaretlenen bilgiler yine de blokzincir doğrulayıcıları tarafından veya blokzincir gezginleri aracılığıyla görülebilir.
+- **Limited Privacy Controls**: While we may offer some privacy settings, these have technical limitations based on blockchain technology. Information marked as "private" may still be visible to blockchain validators or through blockchain explorers.
 
-### Blokzincir Cüzdan Bilgileri
+### Blockchain Wallet Information
 
-Platformumuza bir blokzincir cüzdanı bağlamayı seçerseniz:
+If you choose to connect a blockchain wallet to our platform:
 
-- **Özel anahtarlarınızı veya tohum ifadelerinizi sunucularımızda asla saklamayız**. Anahtarlarınız cihazınızda yerel olarak saklanır.
-- **Anahtarlar tarayıcınızın yerel depolamasında JSON olarak saklanır**. Bu anahtarlar teknik olarak otomatik şifreleme ve şifre çözme işlemine tabi tutulabilir, ancak şu anda bu veriler için şifre tabanlı şifreleme uygulamıyoruz.
-- **Anahtarlarınız asla cihazınızdan çıkmaz**. MetaMask, Phantom, Plug veya Internet Identity gibi cüzdanları bağladığınızda, yalnızca zincir üstü varlıklarınızı görüntülemek için gerekli olan halka açık cüzdan adresini alır ve işleriz.
-- **Kimlik doğrulama imzalar aracılığıyla gerçekleşir**. Özel anahtarlarınızı istemek yerine, hassas bilgileri açığa çıkarmadan sahipliğinizi kanıtlayan benzersiz bir mesajı imzalamanızı isteriz.
-- **Tüm blokzincir işlemleri zincir üzerinde işlenir** ve sunucularımızda saklanmaz.
-- **Gelecekteki şifreleme planları**: Gelecekteki güncellemelerde, yerel olarak depolanan cüzdan bilgilerinin güvenliğini daha da artırmak için şifre tabanlı şifreleme eklemeyi planlıyoruz.
+- **We never store your private keys or seed phrases on our servers**. Your keys are stored locally on your device.
+- **Keys are stored as JSON in your browser's local storage**. These keys can be technically encrypted and decrypted automatically, though we do not currently implement password-based encryption for this data.
+- **Your keys never leave your device**. When you connect wallets like MetaMask, Phantom, Plug, or Internet Identity, we only receive and process the public wallet address to display your on-chain assets.
+- **Authentication happens through signatures**. Rather than requesting your private keys, we ask your wallet to sign a unique message that proves your ownership without exposing sensitive information.
+- **All blockchain transactions are processed on-chain** and are not stored on our servers.
+- **Future plans for encryption**: We plan to add password-based encryption for locally stored wallet information in future updates, further enhancing security of your wallet data.
 
-### Otomatik Olarak Toplanan Bilgiler
+### Information Collected Automatically
 
-Çerezler ve benzer teknolojiler aracılığıyla çok sınırlı teknik bilgi toplayabiliriz:
-- Tarayıcı türü ve sürümü (uyumluluğu sağlamak için)
-- IP adresine dayalı yaklaşık konum (yalnızca bölgesel içerik dağıtımı için)
-- Temel cihaz bilgileri (görüntüyü optimize etmek için)
+We may collect very limited technical information through cookies and similar technologies:
+- Browser type and version (to ensure compatibility)
+- Approximate location based on IP address (for regional content delivery only)
+- Basic device information (to optimize display)
 
-Çerezleri tarayıcı ayarlarınız aracılığıyla kontrol edebilir veya devre dışı bırakabilirsiniz. Reklam amaçlı izleme çerezleri kullanmıyoruz.
+You can control or disable cookies through your browser settings. We do not use tracking cookies for advertising purposes.
 
-## Bilgilerinizi Nasıl Kullanıyoruz
+## How We Use Your Information
 
-Topladığımız sınırlı bilgileri yalnızca aşağıdaki amaçlar için kullanıyoruz:
+We use the limited information we collect solely for the following purposes:
 
-### Hizmetleri Sağlama ve İyileştirme
-- Hizmetlerimizi sunma ve sürdürme
-- Dil tercihleri gibi temel özellikleri etkinleştirme
-- Anonim kullanım kalıplarına dayalı olarak kullanıcı deneyimini iyileştirme
+### Provide and Improve Services
+- Deliver and maintain our Services
+- Enable basic features such as language preferences
+- Improve user experience based on anonymous usage patterns
 
-### Güvenlik ve Koruma
-- Kullanıcı hesaplarına yetkisiz erişime karşı koruma
-- Hataları tanımlamak ve onarmak için hata ayıklama
+### Security and Protection
+- Protect against unauthorized access to user accounts
+- Debug to identify and repair errors
 
-### İletişim Bilgileri
+### Contact Information
 
-Bu Gizlilik Politikası hakkında sorularınız varsa, lütfen bizimle iletişime geçin:
+If you have any questions about these Terms, please contact us at:
 
-**E-posta**: contact@cosmicrafts.com
+**Email**: contact@cosmicrafts.com  
 
-Düzenleyici uyumluluk için fiziksel adres gerektiren konularda, lütfen önce e-posta yoluyla iletişime geçin.
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
 
-## Veri Paylaşımı ve İfşa
+## Data Sharing and Disclosure
 
-Minimal veri toplama uygulamalarımız göz önüne alındığında, paylaşacak çok sınırlı veriye sahibiz. Ancak, belirli durumlarda sahip olduğumuz sınırlı bilgileri paylaşabiliriz:
+Given our minimal data collection practices, we have very limited data to share. However, in certain circumstances, we may share the limited information we have:
 
-### Temel Hizmet Sağlayıcılar
+### Essential Service Providers
 
-Aşağıdaki konularda bize yardımcı olan dikkatle seçilmiş birkaç hizmet sağlayıcıyla temel teknik bilgileri paylaşabiliriz:
-- Web sitesi barındırma ve altyapı
-- Analitik (anonim formda)
-- Müşteri destek sistemleri
+We may share basic technical information with a few carefully selected service providers who help us with:
+- Website hosting and infrastructure
+- Analytics (in anonymized form)
+- Customer support systems
 
-Bu sağlayıcılar yalnızca işlevlerini yerine getirmek için gereken minimum bilgiye erişir ve gizlilik yükümlülükleriyle bağlıdır.
+These providers access only the minimum information needed to perform their functions and are bound by confidentiality obligations.
 
-### Yasal Gereklilikler
+### Legal Requirements
 
-Yasalar gerektirdiğinde veya iyi niyetle aşağıdaki durumların gerekli olduğuna inandığımızda bilgileri ifşa edebiliriz:
-- Yasal yükümlülüklere uymak
-- Haklarımızı veya mülkiyetimizi korumak ve savunmak
-- Olası yanlış davranışları önlemek veya araştırmak
-- Kullanıcıların veya halkın kişisel güvenliğini korumak
+We may disclose information if required to do so by law or if we believe in good faith that such action is necessary to:
+- Comply with legal obligations
+- Protect and defend our rights or property
+- Prevent or investigate possible wrongdoing
+- Protect the personal safety of users or the public
 
-## Seçimleriniz ve Haklarınız
+## Your Choices and Rights
 
-### Hesap Bilgileri
+### Account Information
 
-Bir hesap oluşturduysanız, hesap ayarlarınıza giriş yaparak hesap bilgilerinizi inceleyebilir ve güncelleyebilirsiniz.
+If you have created an account, you can review and update your account information by logging into your account settings.
 
-### Hesap Silme
+### Account Deletion
 
-Hesabınızı istediğiniz zaman silinmesini talep edebilirsiniz:
-- Web Uygulaması ayarları üzerinden
-- contact@cosmicrafts.com adresine e-posta göndererek
+You can request to delete your account at any time:
+- Through the Web App settings
+- By sending an email to contact@cosmicrafts.com
 
-Hesabınızı sildiğinizde:
-- Hesabınızı kurtarmak istemeniz durumunda 30 günlük bir bekleme süresi başlatırız
-- Bu süre boyunca hesabınız devre dışı bırakılır ancak kalıcı olarak silinmez
-- Fikrinizi değiştirirseniz, giriş yaparak hesabınızı yeniden etkinleştirebilirsiniz
-- 30 günlük sürenin ardından, hesap bilgilerinizi sistemlerimizden kalıcı olarak sileriz
+When you delete your account:
+- We will initiate a 30-day delay period in case you wish to recover your account
+- During this period, your account will be deactivated but not permanently deleted
+- If you change your mind, you can reactivate your account by logging in
+- After the 30-day period, we will permanently delete your account information from our systems
 
-**Zincir Üstü Veriler Hakkında Önemli Not**: Doğrudan kontrol ettiğimiz bilgileri silebilsek de, blokzincir teknolojisinin değiştirilemez doğası nedeniyle halka açık blokzincirlere kaydedilen veriler silinemez veya değiştirilemez. Bu, işlem geçmişi, NFT sahiplik kayıtları ve blokzincire kaydedilmiş diğer verileri içerir.
+**Important Note about On-Chain Data**: While we can delete information we control directly, data that has been recorded on public blockchains cannot be deleted or modified due to the immutable nature of blockchain technology. This includes transaction history, NFT ownership records, and any other data that has been committed to a blockchain.
 
-### Çerez Tercihleri
+### Cookie Preferences
 
-Çoğu web tarayıcısı, ayarları aracılığıyla çerezleri kontrol etmenize olanak tanır. Tarayıcınızı tüm çerezleri veya bazı çerezleri reddetmek ya da çerezler gönderildiğinde sizi uyarmak üzere ayarlayabilirsiniz.
+Most web browsers allow you to control cookies through their settings. You may set your browser to refuse all or some cookies or to alert you when cookies are being sent.
 
-### İletişimler
+### Communications
 
-Bu iletişimlerdeki talimatları izleyerek bizden tanıtım amaçlı iletişimleri almayı reddedebilirsiniz.
+You can opt out of receiving promotional communications from us by following the instructions in those communications.
 
-### Gizlilik Haklarınız
+### Your Privacy Rights
 
-Bulunduğunuz yere bağlı olarak, kişisel bilgilerinizle ilgili aşağıdaki haklara sahip olabilirsiniz:
-- Hakkınızda sahip olduğumuz bilgilere erişim hakkı
-- Bilgilerinizin silinmesini talep etme hakkı
-- Bilgilerinizin işlenmesine itiraz etme hakkı
+Depending on your location, you may have certain rights regarding your personal information, such as:
+- The right to access information we have about you
+- The right to request deletion of your information
+- The right to object to the processing of your information
 
-Bu hakları kullanmak için lütfen contact@cosmicrafts.com adresinden bizimle iletişime geçin.
+To exercise these rights, please contact us at contact@cosmicrafts.com.
 
-## Veri Güvenliği
+## Data Security
 
-Topladığımız sınırlı bilgileri korumak için uygun teknik ve organizasyonel önlemleri uyguluyoruz. Ancak, İnternet üzerinden iletim veya elektronik depolama yöntemlerinin hiçbiri %100 güvenli değildir, bu nedenle mutlak güvenliği garanti edemeyiz.
+We implement appropriate technical and organizational measures to protect the limited information we collect. However, no method of transmission over the Internet or electronic storage is 100% secure, so we cannot guarantee absolute security.
 
-## Çocukların Gizliliği
+## Children's Privacy
 
-Hizmetlerimiz 13 yaşın altındaki çocuklara yönelik değildir. 13 yaşın altındaki çocuklardan bilerek kişisel bilgi toplamayız. 13 yaşın altındaki bir çocuğun bize kişisel bilgi sağladığını öğrenirsek, bu bilgileri silmek için adımlar atarız.
+Our Services are not directed to children under 13. We do not knowingly collect personal information from children under 13. If we become aware that a child under 13 has provided us with personal information, we will take steps to delete such information.
 
-### Reşit Olmayanlar ve Kripto Para Kullanımı
+### Minors and Cryptocurrency Usage
 
-Oyunlarımız çıplaklık veya grafik şiddet gibi yetişkin içeriği içermemesine ve genellikle 13+ yaş kullanıcılar için uygun olmasına rağmen, aşağıdakileri önemle vurguluyoruz:
+While our games do not contain adult content such as nudity or graphic violence, and are generally suitable for users aged 13+, we strongly emphasize the following:
 
-- **Ebeveyn Gözetimi Gerekli**: 18 yaşın altındaysanız veya ülkenizdeki yasal reşit olma yaşının altındaysanız, Hizmetlerimizi yalnızca bir ebeveyn veya vasinin katılımı ve gözetimi altında, özellikle kripto para özellikleriyle etkileşimde bulunurken kullanmalısınız.
+- **Parental Supervision Required**: If you are under 18 or the legal age of majority in your country, you should use our Services only with the involvement and supervision of a parent or guardian, particularly when engaging with cryptocurrency features.
 
-- **Geri Alınamaz İşlemler**: Kripto para işlemleri neredeyse her zaman geri alınamaz. Tamamlandıktan sonra, bu işlemler genellikle geri alınamaz veya iade edilemez. Bu durum ebeveyn gözetimini özellikle önemli kılar.
+- **Irreversible Transactions**: Cryptocurrency transactions are almost always irreversible. Once completed, these transactions typically cannot be undone or refunded. This makes parental supervision particularly important.
 
-- **Düzenleyici Farklılıklar**: Kripto para düzenlemeleri ülkeler arasında önemli ölçüde farklılık gösterir. Bir yargı bölgesinde yasal veya izin verilen şey, başka bir yerde kısıtlanmış veya yasaklanmış olabilir. Ebeveynler ve vasiler, reşit olmayanlara kripto para özelliklerini kullanma izni vermeden önce yerel düzenlemeleri öğrenmelidir.
+- **Regulatory Variations**: Cryptocurrency regulations vary significantly between countries. What may be legal or allowed in one jurisdiction may be restricted or prohibited in another. Parents and guardians should familiarize themselves with local regulations before allowing minors to engage with cryptocurrency features.
 
-- **Eğitimsel Yaklaşım**: Ebeveynleri, platformumuzu gözetimli bir ortamda dijital varlıklar, blokzincir teknolojisi ve sorumlu finansal alışkanlıklar konusunda reşit olmayanları eğitmek için bir fırsat olarak kullanmaya teşvik ediyoruz.
+- **Educational Approach**: We encourage parents to use our platform as an opportunity to educate minors about digital assets, blockchain technology, and responsible financial habits in a supervised environment.
 
-Ebeveyn veya vasi iseniz ve çocuğunuzun sizin izniniz olmadan bir hesap oluşturduğunu keşfederseniz, lütfen derhal contact@cosmicrafts.com adresinden bizimle iletişime geçin.
+If you are a parent or guardian and discover that your child has created an account without your consent, please contact us immediately at contact@cosmicrafts.com.
 
-## Bu Gizlilik Politikasındaki Değişiklikler
+## Changes to This Privacy Policy
 
-Bu Gizlilik Politikasını zaman zaman güncelleyebiliriz. Güncellenmiş versiyon, güncellenmiş bir "Yürürlük Tarihi" ile belirtilecek ve erişilebilir olduğu andan itibaren geçerli olacaktır. Bilgilerinizi nasıl koruduğumuz konusunda bilgilendirilmek için bu Gizlilik Politikasını sık sık gözden geçirmenizi öneririz.
+We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
 
-## İletişim Bilgileri
+## Contact Information
 
-Bu Gizlilik Politikası hakkında sorularınız varsa, lütfen bizimle iletişime geçin:
+If you have any questions about this Privacy Policy, please contact us at:
 
-**E-posta**: contact@cosmicrafts.com
+**Email**: contact@cosmicrafts.com
 
-Düzenleyici uyumluluk için fiziksel adres gerektiren konularda, lütfen önce e-posta yoluyla iletişime geçin.
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
 
-## Uluslararası Veri Transferleri
+## International Data Transfers
 
-Minimal veri toplama uygulamalarımız göz önüne alındığında, uluslararası olarak transfer edilebilecek çok sınırlı veri vardır. Topladığımız anonim kullanım istatistikleri, ikamet ettiğiniz ülke dışındaki sunucularda işlenebilir. Hizmetlerimizi kullanarak, bu işlemeye onay vermiş olursunuz.
+Given our minimal data collection practices, there is very limited data that might be transferred internationally. The anonymous usage statistics we collect may be processed on servers located outside your country of residence. By using our Services, you consent to this processing.
 
-## Bilgilerin Saklanması
+## Retention of Information
 
-Topladığımız sınırlı bilgileri yalnızca bu Gizlilik Politikası'nda belirtilen amaçları yerine getirmek için gerekli olan süre boyunca veya yasaların gerektirdiği veya izin verdiği daha uzun bir süre boyunca saklarız. Anonim kullanım verileri, bireysel kullanıcılarla ilişkilendirilemediği için süresiz olarak saklanabilir.
+We retain the limited information we collect only for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. Anonymous usage data may be retained indefinitely as it cannot be linked to individual users.
 
-## Kişisel Bilgilerin İşlenmesinin Yasal Dayanağı (AEA ve Birleşik Krallık Kullanıcıları)
+## Legal Basis for Processing Personal Information (EEA and UK Users)
 
-Avrupa Ekonomik Alanı (AEA) veya Birleşik Krallık'ta bulunuyorsanız, bilgilerinizi toplama ve kullanma yasal dayanağımız, söz konusu bilgilere ve bunları topladığımız bağlama bağlıdır.
+If you are located in the European Economic Area (EEA) or the United Kingdom, our legal basis for collecting and using your information depends on the specific information concerned and the context in which we collect it.
 
-Genellikle minimal bilgiyi aşağıdaki yasal dayanaklara göre toplarız:
-- Sizinle olan sözleşmemizi yerine getirmek için (örneğin, oluşturmayı seçerseniz hesabınızı sürdürmek)
-- Meşru menfaatlerimiz için (örneğin, Hizmetlerimizi sağlamak ve iyileştirmek)
-- Sizin onayınızla (örneğin, isteğe bağlı tarayıcı tercihleri için)
-- Geçerli olduğunda yasal yükümlülüklere uymak için
+Generally, we collect minimal information based on the following legal grounds:
+- To perform our contract with you (e.g., to maintain your account if you choose to create one)
+- For our legitimate interests (e.g., to provide and improve our Services)
+- With your consent (e.g., for optional browser preferences)
+- To comply with legal obligations where applicable
 
-## Kaliforniya Gizlilik Hakları
+## California Privacy Rights
 
-Kaliforniya'da ikamet ediyorsanız, Kaliforniya Tüketici Gizlilik Yasası (CCPA) ve diğer Kaliforniya gizlilik yasaları kapsamında belirli haklara sahip olabilirsiniz.
+If you are a California resident, you may have certain rights under the California Consumer Privacy Act (CCPA) and other California privacy laws.
 
-Minimal veri toplama uygulamalarımız göz önüne alındığında, genellikle Kaliforniya yasası kapsamında tanımlandığı şekliyle kişisel bilgileri "satmaz" veya "paylaşmayız". Ayrıca, Kaliforniya yasası kapsamında devre dışı bırakma hakkı gerektiren amaçlar için hassas kişisel bilgileri kullanmaz veya ifşa etmeyiz.
+Given our minimal data collection practices, we typically do not "sell" or "share" personal information as those terms are defined under California law. We also do not use or disclose sensitive personal information for purposes that would require an opt-out right under California law.
 
-## Üçüncü Taraf Hizmetleri
+## Changes to This Privacy Policy
 
-Hizmetlerimiz üçüncü taraf web sitelerine veya hizmetlerine bağlantılar içerebilir. Bu üçüncü taraf sitelerin gizlilik uygulamalarından veya içeriğinden sorumlu değiliz. Ziyaret ettiğiniz her web sitesinin gizlilik politikalarını okumanızı öneririz.
+We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
 
-## Platform Özel Hükümleri
+## Contact Information
+
+If you have any questions about this Privacy Policy, please contact us at:
+
+**Email**: contact@cosmicrafts.com
+
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
+
+## Third-Party Services
+
+Our Services may contain links to third-party websites or services. We are not responsible for the privacy practices or content of these third-party sites. We encourage you to read the privacy policies of every website you visit.
+
+## Platform-Specific Provisions
 
 ### Apple App Store
 
-Apple'ın App Store'u aracılığıyla Hizmetlerimize erişen kullanıcılar için:
-- Kişisel bilgileri yalnızca uygulamanın istenen özelliklerini ve işlevlerini sağlamak için gerektiği ölçüde toplar ve kullanırız.
-- App Store aracılığıyla elde edilen bilgileri diğer uygulamalarda kullanıcılara reklam göstermek için kullanmayız.
-- Gizlilik ve veri işleme konusunda tüm geçerli Apple yönergelerine uyarız.
+For users accessing our Services through Apple's App Store:
+- We only collect and use personal information as necessary to provide the requested features and functions of the app.
+- We do not use information obtained through the App Store for targeting users with advertising in other apps.
+- We comply with all applicable Apple guidelines regarding privacy and data handling.
 
 ### Google Play Store
 
-Google Play aracılığıyla Hizmetlerimize erişen kullanıcılar için:
-- Google Play'in Kullanıcı Verileri Politikası'na uyarız.
-- Google Play politikalarının gerektirdiği şekilde kişisel bilgilerin toplanması için bildirim sağlar ve onay alırız.
-- Mağaza listemizde ve uygulama içinde doğru ve eksiksiz gizlilik açıklamalarını sürdürürüz.
+For users accessing our Services through Google Play:
+- We adhere to Google Play's User Data Policy.
+- We provide notice and obtain consent for the collection of personal information as required by Google Play policies.
+- We maintain accurate and complete privacy disclosures in our store listing and within the app.
 
 ### Epic Games Store
 
-Epic Games Store aracılığıyla Hizmetlerimize erişen kullanıcılar için:
-- Epic'in dağıtım sözleşmesine ve gizlilik gerekliliklerine uyarız.
-- Epic'in yönergelerine uygun olarak veri toplama uygulamaları hakkında açık bilgi sağlarız.
+For users accessing our Services through Epic Games Store:
+- We comply with Epic's distribution agreement and privacy requirements.
+- We provide clear information about data collection practices in accordance with Epic's guidelines.
 
 ### Crazy Games
 
-Crazy Games aracılığıyla Hizmetlerimize erişen kullanıcılar için:
-- Crazy Games'in gizlilik gerekliliklerine ve yayın yönergelerine uyarız.
-- Veri toplama ve kullanımı konusunda şeffaf iletişim sağlarız.
+For users accessing our Services through Crazy Games:
+- We adhere to Crazy Games' privacy requirements and publishing guidelines.
+- We ensure transparent communication regarding data collection and use.
 
-## Bu Gizlilik Politikasındaki Değişiklikler
+## Changes to This Privacy Policy
 
-Gizlilik Politikamızı zaman zaman güncelleyebiliriz. Yeni Gizlilik Politikası'nı bu sayfada yayınlayarak ve üstteki "Yürürlük Tarihi"ni güncelleyerek sizi değişikliklerden haberdar edeceğiz.
+We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Effective Date" at the top.
+
+We encourage you to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
+
+## Contact Us
+
+If you have any questions about this Privacy Policy or our data practices, please contact us at:
+
+**Email**: contact@cosmicrafts.com  
+
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
 
 ---
 
-*Son güncelleme: 4 Mart 2025* 
+*Last updated: March 4, 2025* 

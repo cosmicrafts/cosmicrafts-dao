@@ -1,132 +1,132 @@
-# Rechtliche Hinweise
+# Legal Notices
 
 [[toc:2-3]]
 
-## Einführung
+## Introduction
 
-Diese Seite mit rechtlichen Hinweisen enthält wichtige rechtliche Informationen zu Cosmicrafts, einschließlich Hinweise zum geistigen Eigentum, Haftungsausschlüsse und andere rechtliche Anforderungen. Durch den Zugriff auf oder die Nutzung der Cosmicrafts-Plattform, Website, Spiele und Dienste erkennen Sie die auf dieser Seite dargelegten Hinweise und Bedingungen an und stimmen ihnen zu.
+This Legal Notices page contains important legal information related to Cosmicrafts, including intellectual property notices, disclaimers, and other legal requirements. By accessing or using the Cosmicrafts platform, website, games, and services, you acknowledge and agree to the notices and terms outlined on this page.
 
-## Urheberrechtshinweis
+## Copyright Notice
 
-© 2025 World of Unreal, LLC, handelnd als Cosmicrafts. Alle Rechte vorbehalten.
+© 2025 World of Unreal, LLC operating as Cosmicrafts. All rights reserved.
 
-Alle Inhalte auf dieser Website und in unseren Spielen, einschließlich, aber nicht beschränkt auf Text, Grafiken, Logos, Symbole, Bilder, Audio-Clips, digitale Downloads, Datenzusammenstellungen und Software, sind Eigentum von World of Unreal, LLC (handelnd als "Cosmicrafts") oder seiner Inhaltsanbieter und durch internationale Urheberrechtsgesetze geschützt.
+All content on this website and within our games, including but not limited to text, graphics, logos, icons, images, audio clips, digital downloads, data compilations, and software, is the property of World of Unreal, LLC (doing business as "Cosmicrafts") or its content suppliers and is protected by international copyright laws.
 
-Die Zusammenstellung aller Inhalte auf dieser Website ist das ausschließliche Eigentum von World of Unreal, LLC und durch internationale Urheberrechtsgesetze geschützt. Die Reproduktion, Änderung, Verteilung, Übertragung, Wiederveröffentlichung, Anzeige oder Aufführung der Inhalte auf dieser Website ist ohne die ausdrückliche schriftliche Genehmigung von World of Unreal, LLC strengstens untersagt.
+The compilation of all content on this site is the exclusive property of World of Unreal, LLC and is protected by international copyright laws. The reproduction, modification, distribution, transmission, republication, display, or performance of the content on this site is strictly prohibited without the express written permission of World of Unreal, LLC.
 
-## Markeninformationen
+## Trademark Information
 
-Cosmicrafts™ und das Cosmicrafts-Logo sind Marken im Besitz von World of Unreal, LLC. Alle zugehörigen Produkt- und Dienstleistungsnamen, Designmarken und Slogans sind Marken oder eingetragene Marken von World of Unreal, LLC oder seinen verbundenen Unternehmen in verschiedenen Rechtsordnungen. Alle anderen Marken, die nicht im Besitz von World of Unreal, LLC sind und auf dieser Website erscheinen, sind Eigentum ihrer jeweiligen Inhaber, die mit Cosmicrafts verbunden, verbunden oder von diesem gesponsert sein können oder auch nicht.
+Cosmicrafts™ and the Cosmicrafts logo are trademarks owned by World of Unreal, LLC. All related product and service names, design marks, and slogans are trademarks or registered trademarks of World of Unreal, LLC or its affiliates in various jurisdictions. All other trademarks not owned by World of Unreal, LLC that appear on this site are the property of their respective owners, who may or may not be affiliated with, connected to, or sponsored by Cosmicrafts.
 
-## Patente
+## Patents
 
-Produkte und Dienstleistungen von Cosmicrafts sind durch ein oder mehrere Patente geschützt. Relevante Patentinformationen können auf schriftliche Anfrage an unsere Rechtsabteilung zur Verfügung gestellt werden.
+Cosmicrafts products and services are protected by one or more patents. Relevant patent information can be provided upon written request to our legal department.
 
-## Digital Millennium Copyright Act (DMCA) Richtlinie
+## Digital Millennium Copyright Act (DMCA) Policy
 
-### Meldung von Urheberrechtsverletzungen
+### Reporting Copyright Infringement
 
-Wenn Sie ein Urheberrechtsinhaber oder ein Bevollmächtigter sind und glauben, dass Inhalte auf unserer Website Ihr Urheberrecht verletzen, können Sie gemäß dem Digital Millennium Copyright Act (DMCA) eine Benachrichtigung einreichen, indem Sie unserem Copyright-Beauftragten die folgenden Informationen schriftlich zur Verfügung stellen:
+If you are a copyright owner or an agent thereof and believe that any content on our site infringes upon your copyright, you may submit a notification pursuant to the Digital Millennium Copyright Act (DMCA) by providing our Copyright Agent with the following information in writing:
 
-1. Eine physische oder elektronische Unterschrift einer Person, die befugt ist, im Namen des Inhabers eines ausschließlichen Rechts zu handeln, das angeblich verletzt wurde;
-2. Identifizierung des urheberrechtlich geschützten Werks, das angeblich verletzt wurde;
-3. Identifizierung des Materials, das angeblich verletzend ist oder Gegenstand einer verletzenden Aktivität ist und entfernt werden soll oder zu dem der Zugang deaktiviert werden soll, sowie Informationen, die ausreichen, um uns die Lokalisierung des Materials zu ermöglichen;
-4. Informationen, die ausreichen, um uns die Kontaktaufnahme mit Ihnen zu ermöglichen, wie eine Adresse, Telefonnummer und, falls verfügbar, eine E-Mail-Adresse;
-5. Eine Erklärung, dass Sie in gutem Glauben davon ausgehen, dass die Verwendung des Materials in der beanstandeten Weise nicht vom Urheberrechtsinhaber, seinem Vertreter oder dem Gesetz autorisiert ist; und
-6. Eine Erklärung, dass die Informationen in der Benachrichtigung korrekt sind und dass Sie unter Strafe des Meineids befugt sind, im Namen des Inhabers eines ausschließlichen Rechts zu handeln, das angeblich verletzt wurde.
+1. A physical or electronic signature of a person authorized to act on behalf of the owner of an exclusive right that is allegedly infringed;
+2. Identification of the copyrighted work claimed to have been infringed;
+3. Identification of the material that is claimed to be infringing or to be the subject of infringing activity and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit us to locate the material;
+4. Information reasonably sufficient to permit us to contact you, such as an address, telephone number, and, if available, an email address;
+5. A statement that you have a good faith belief that use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law; and
+6. A statement that the information in the notification is accurate, and under penalty of perjury, that you are authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.
 
-Unser benannter Copyright-Beauftragter für den Empfang von Benachrichtigungen über behauptete Verstöße ist:
+Our designated Copyright Agent to receive notifications of claimed infringement is:
 
-Rechtsabteilung  
-E-Mail: contact@cosmicrafts.com
+Legal Department  
+Email: contact@cosmicrafts.com
 
-Für formelle rechtliche Mitteilungen, die eine physische Adresse erfordern, kontaktieren Sie uns bitte zuerst per E-Mail.
+For formal legal notices requiring a physical address, please contact us via email first.
 
-### Verfahren für Gegendarstellungen
+### Counter-Notification Procedures
 
-Wenn Sie glauben, dass Ihre Inhalte aufgrund eines Fehlers oder einer falschen Identifizierung entfernt oder deaktiviert wurden, können Sie unserem Copyright-Beauftragten eine Gegendarstellung vorlegen, die Folgendes enthält:
+If you believe that your content was removed or disabled as a result of a mistake or misidentification, you may submit a counter-notification to our Copyright Agent containing:
 
-1. Ihre physische oder elektronische Unterschrift;
-2. Identifizierung des Materials, das entfernt wurde oder zu dem der Zugang deaktiviert wurde, und des Ortes, an dem das Material erschien, bevor es entfernt oder der Zugang dazu deaktiviert wurde;
-3. Eine Erklärung unter Strafe des Meineids, dass Sie in gutem Glauben davon ausgehen, dass das Material aufgrund eines Fehlers oder einer falschen Identifizierung entfernt oder deaktiviert wurde; und
-4. Ihren Namen, Ihre Adresse und Telefonnummer sowie eine Erklärung, dass Sie der Zuständigkeit des Bundesbezirksgerichts für den Gerichtsbezirk, in dem sich Ihre Adresse befindet, zustimmen, oder, wenn Ihre Adresse außerhalb der Vereinigten Staaten liegt, für jeden Gerichtsbezirk, in dem Cosmicrafts gefunden werden kann, und dass Sie die Zustellung von Prozessdokumenten von der Person akzeptieren werden, die die Benachrichtigung über die angebliche Verletzung vorgelegt hat.
+1. Your physical or electronic signature;
+2. Identification of the material that has been removed or to which access has been disabled and the location at which the material appeared before it was removed or access to it was disabled;
+3. A statement under penalty of perjury that you have a good faith belief that the material was removed or disabled as a result of mistake or misidentification; and
+4. Your name, address, and telephone number, and a statement that you consent to the jurisdiction of the Federal District Court for the judicial district in which your address is located, or if your address is outside of the United States, for any judicial district in which Cosmicrafts may be found, and that you will accept service of process from the person who provided notification of the alleged infringement.
 
-Nach Erhalt einer Gegendarstellung können wir diese an die Partei weiterleiten, die die ursprüngliche DMCA-Benachrichtigung eingereicht hat. Nachdem wir die Gegendarstellung weitergeleitet haben, hat die Partei, die die ursprüngliche DMCA-Benachrichtigung eingereicht hat, zehn (10) Geschäftstage Zeit, um uns mitzuteilen, dass sie eine Klage eingereicht hat, die eine gerichtliche Anordnung anstrebt, um die angeblich verletzende Partei daran zu hindern, sich an verletzenden Aktivitäten im Zusammenhang mit dem Material auf unserer Website zu beteiligen.
+Upon receipt of a counter-notification, we may forward it to the party who submitted the original DMCA notification. After we forward the counter-notification, the party who submitted the original DMCA notification will have ten (10) business days to notify us that they have filed an action seeking a court order to restrain the allegedly infringing party from engaging in infringing activity relating to the material on our site.
 
-## Hinweise zu Software von Drittanbietern
+## Third-Party Software Notices
 
-Cosmicrafts verwendet verschiedene Open-Source-Software von Drittanbietern. Wir würdigen und danken den Entwicklern dieser wertvollen Tools, die unsere Plattform ermöglichen.
+Cosmicrafts uses various third-party open source software. We acknowledge and thank the developers of these valuable tools that make our platform possible.
 
-## Open-Source-Lizenzen
+## Open Source Licenses
 
-### Frontend-Abhängigkeiten
+### Frontend Dependencies
 
-Das Cosmicrafts-Frontend basiert auf den folgenden Open-Source-Bibliotheken, jeweils mit ihren entsprechenden Lizenzen:
+The Cosmicrafts frontend relies on the following open source libraries, each with their respective licenses:
 
-| Paket | Lizenz |
+| Package | License |
 | ------- | ------- |
-| Vue 3 | MIT-Lizenz |
-| Vue Router | MIT-Lizenz |
-| Vue i18n | MIT-Lizenz |
-| Pinia | MIT-Lizenz |
-| @dfinity/agent | Apache-2.0-Lizenz |
-| @dfinity/auth-client | Apache-2.0-Lizenz |
-| @dfinity/candid | Apache-2.0-Lizenz |
-| @dfinity/identity | Apache-2.0-Lizenz |
-| @dfinity/principal | Apache-2.0-Lizenz |
-| @heroicons/vue | MIT-Lizenz |
-| @solana/web3.js | MIT-Lizenz |
-| bip39 | ISC-Lizenz |
-| brotli-wasm | MIT-Lizenz |
-| buffer | MIT-Lizenz |
-| highlight.js | BSD-3-Clause-Lizenz |
-| lodash-es | MIT-Lizenz |
-| lottie-web | MIT-Lizenz |
-| markdown-it | MIT-Lizenz |
-| markdown-it-anchor | MIT-Lizenz |
-| markdown-it-container | MIT-Lizenz |
-| markdown-it-emoji | MIT-Lizenz |
-| markdown-it-highlightjs | MIT-Lizenz |
-| markdown-it-task-lists | MIT-Lizenz |
-| markdown-it-toc-done-right | MIT-Lizenz |
-| phaser | MIT-Lizenz |
+| Vue 3 | MIT License |
+| Vue Router | MIT License |
+| Vue i18n | MIT License |
+| Pinia | MIT License |
+| @dfinity/agent | Apache-2.0 License |
+| @dfinity/auth-client | Apache-2.0 License |
+| @dfinity/candid | Apache-2.0 License |
+| @dfinity/identity | Apache-2.0 License |
+| @dfinity/principal | Apache-2.0 License |
+| @heroicons/vue | MIT License |
+| @solana/web3.js | MIT License |
+| bip39 | ISC License |
+| brotli-wasm | MIT License |
+| buffer | MIT License |
+| highlight.js | BSD-3-Clause License |
+| lodash-es | MIT License |
+| lottie-web | MIT License |
+| markdown-it | MIT License |
+| markdown-it-anchor | MIT License |
+| markdown-it-container | MIT License |
+| markdown-it-emoji | MIT License |
+| markdown-it-highlightjs | MIT License |
+| markdown-it-task-lists | MIT License |
+| markdown-it-toc-done-right | MIT License |
+| phaser | MIT License |
 | tweetnacl | The Unlicense |
-| unity-webgl | Unity-Bedingungen |
-| vite | MIT-Lizenz |
+| unity-webgl | Unity Terms |
+| vite | MIT License |
 
-### Spiel-Abhängigkeiten (Rust)
+### Game Dependencies (Rust)
 
-Die Spielkomponenten verwenden die folgenden Rust-Crates:
+The game components utilize the following Rust crates:
 
-| Crate | Lizenz |
+| Crate | License |
 | ----- | ------- |
-| bevy | MIT-Lizenz |
-| serde | Apache-2.0/MIT-Lizenz |
-| serde_json | Apache-2.0/MIT-Lizenz |
-| rand | MIT-Lizenz und Apache-2.0-Lizenz |
-| wasm-bindgen | MIT-Lizenz |
-| bevy_pancam | MIT-Lizenz |
-| bevy_enoki | MIT-Lizenz |
-| bevy_dev_tools | MIT-Lizenz |
-| ron | MIT/Apache-2.0-Lizenz |
+| bevy | MIT License |
+| serde | Apache-2.0/MIT License |
+| serde_json | Apache-2.0/MIT License |
+| rand | MIT License and Apache-2.0 License |
+| wasm-bindgen | MIT License |
+| bevy_pancam | MIT License |
+| bevy_enoki | MIT License |
+| bevy_dev_tools | MIT License |
+| ron | MIT/Apache-2.0 License |
 
-### Galaxy-Abhängigkeiten (Rust)
+### Galaxy Dependencies (Rust)
 
-Das Galaxy-Backend verwendet die folgenden Rust-Crates:
+The galaxy backend utilizes the following Rust crates:
 
-| Crate | Lizenz |
+| Crate | License |
 | ----- | ------- |
-| ic-cdk | Apache-2.0-Lizenz |
-| ic-cdk-macros | Apache-2.0-Lizenz |
-| ic-cdk-timers | Apache-2.0-Lizenz |
-| candid | Apache-2.0-Lizenz |
-| serde | Apache-2.0/MIT-Lizenz |
-| getrandom | MIT/Apache-2.0-Lizenz |
-| rstar | MIT/Apache-2.0-Lizenz |
+| ic-cdk | Apache-2.0 License |
+| ic-cdk-macros | Apache-2.0 License |
+| ic-cdk-timers | Apache-2.0 License |
+| candid | Apache-2.0 License |
+| serde | Apache-2.0/MIT License |
+| getrandom | MIT/Apache-2.0 License |
+| rstar | MIT/Apache-2.0 License |
 
 ## Unity Engine
 
-Cosmicrafts verwendet Unity®-Software unter einer Personal-Lizenz für qualifizierte Einzelentwickler und kleine Unternehmen. Unity ist eine Marke oder eingetragene Marke von Unity Technologies oder seinen verbundenen Unternehmen in den USA und anderswo. Unity-Software wird unter den Bedingungen der [Unity Personal-Lizenzvereinbarung](https://unity.com/legal/terms-of-service) verwendet.
+Cosmicrafts utilizes Unity® software under a Personal License for qualifying individual developers and small companies. Unity is a trademark or registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere. Unity software is used under the terms of the [Unity Personal License Agreement](https://unity.com/legal/terms-of-service).
 
 ## Distribution Platform Notices
 
@@ -201,122 +201,122 @@ In accordance with our agreements with AI image generation services:
 2. We utilize these services under their commercial licensing terms, which generally include certain indemnifications and legal protections.
 3. If an intellectual property dispute cannot be resolved directly, we may facilitate communication between the concerned party and the relevant AI service provider.
 
-This approach allows us, to create unique visual assets while respecting intellectual property rights and providing a clear path for addressing any concerns.
+This approach allows us to create unique visual assets while respecting intellectual property rights and providing a clear path for addressing any concerns.
 
-## Kontakt für rechtliche Anfragen
+## Contact For Legal Inquiries
 
-Für rechtliche Anfragen bezüglich Software von Drittanbietern, Lizenzen oder anderen rechtlichen Angelegenheiten kontaktieren Sie uns bitte unter:
+For any legal inquiries regarding third-party software, licenses, or other legal matters, please contact:
 
-**E-Mail:** contact@cosmicrafts.com
+**Email:** contact@cosmicrafts.com
 
-## Exportkontrollgesetze
+## Export Control Laws
 
-Die von Cosmicrafts bereitgestellte Software, Spiele und Technologie unterliegen den Exportkontrollgesetzen und -vorschriften der Vereinigten Staaten und lokalen Gesetzen. Durch den Erwerb oder die Nutzung von Cosmicrafts-Produkten versichern und garantieren Sie, dass Sie alle geltenden Exportgesetze und -vorschriften einhalten werden.
+The software, games, and technology provided by Cosmicrafts are subject to United States and local export control laws and regulations. By acquiring or using Cosmicrafts products, you represent and warrant that you will comply with all applicable export laws and regulations.
 
-## Finanzielle Offenlegungen
+## Financial Disclosures
 
-### Virtuelle Währung und Assets
+### Virtual Currency and Assets
 
-Cosmicrafts bietet virtuelle Währungen und digitale Assets an, die mit echtem Geld gekauft werden können. Diese virtuellen Währungen und Assets:
+Cosmicrafts offers virtual currencies and digital assets that may be purchased with real money. These virtual currencies and assets:
 
-1. Haben keinen realen Wert und können nicht gegen echtes Geld oder reale Gegenstände von Cosmicrafts eingetauscht werden;
-2. Sind nicht erstattungsfähig und können nicht zwischen Konten übertragen werden, es sei denn, dies ist innerhalb der Plattform ausdrücklich erlaubt;
-3. Können nach angemessener Ankündigung nach Ermessen von Cosmicrafts geändert, modifiziert oder entfernt werden;
-4. Unterliegen den Nutzungsbedingungen bezüglich Eigentums- und Nutzungsrechten.
+1. Have no real-world value and cannot be exchanged for real money or real-world items from Cosmicrafts;
+2. Are non-refundable and cannot be transferred between accounts unless explicitly permitted within the platform;
+3. May be altered, modified, or removed at Cosmicrafts' discretion with reasonable notice;
+4. Are subject to the Terms of Service regarding ownership and usage rights.
 
-### Kryptowährungs-Risikohinweis
+### Cryptocurrency Risk Disclosure
 
-Wo zutreffend, beinhalten bestimmte Funktionen der Cosmicrafts-Plattform Kryptowährungstransaktionen. Bitte beachten Sie, dass:
+Where applicable, certain features of the Cosmicrafts platform involve cryptocurrency transactions. Please be aware that:
 
-1. Kryptowährungswerte volatil sein können und erheblich schwanken können;
-2. Kryptowährungstransaktionen in der Regel nicht rückgängig gemacht werden können;
-3. Sie für die Sicherheit Ihrer Kryptowährungs-Wallet und privaten Schlüssel verantwortlich sind;
-4. Der regulatorische Status von Kryptowährungen sich ändern kann und die Verfügbarkeit von Diensten beeinflussen kann;
-5. Cosmicrafts nicht für Verluste aufgrund von Marktvolatilität, Benutzerfehlern oder technischen Problemen außerhalb unserer Kontrolle verantwortlich ist.
+1. Cryptocurrency values can be volatile and may fluctuate significantly;
+2. Cryptocurrency transactions are generally irreversible;
+3. You are responsible for the security of your cryptocurrency wallet and private keys;
+4. Regulatory status of cryptocurrencies may change and may affect the availability of services;
+5. Cosmicrafts is not responsible for any losses due to market volatility, user error, or technical issues outside our control.
 
-## Gesundheits- und Sicherheitswarnungen
+## Health and Safety Warnings
 
-### Warnung zur Photosensibilität
+### Photosensitivity Warning
 
-Ein kleiner Prozentsatz von Menschen kann Anfälle oder Bewusstlosigkeit erleben, wenn sie bestimmten Lichtmustern oder blinkenden Lichtern ausgesetzt sind, die in unseren Spielen vorkommen können. Wenn Sie oder jemand in Ihrer Familie eine Vorgeschichte von Anfällen oder Epilepsie hat, konsultieren Sie einen Arzt, bevor Sie unsere Spiele spielen. Hören Sie sofort auf zu spielen und konsultieren Sie einen Arzt, wenn Sie Symptome wie Benommenheit, veränderte Sicht, Augen- oder Muskelzuckungen, Zittern oder Schütteln von Armen oder Beinen, Desorientierung, Verwirrung oder vorübergehenden Bewusstseinsverlust erleben.
+A small percentage of people may experience seizures or blackouts when exposed to certain light patterns or flashing lights that may appear in our games. If you or anyone in your family has a history of seizures or epilepsy, consult a doctor before playing our games. Immediately stop playing and consult a doctor if you experience any symptoms including lightheadedness, altered vision, eye or muscle twitches, jerking or shaking of arms or legs, disorientation, confusion, or momentary loss of awareness.
 
-### Virtual-Reality-Warnungen
+### Virtual Reality Warnings
 
-Bei der Nutzung von Virtual-Reality-Funktionen in unseren Spielen beachten Sie bitte die folgenden Vorsichtsmaßnahmen:
+When using virtual reality features in our games, please observe the following precautions:
 
-1. Lesen und befolgen Sie alle Sicherheits- und Betriebsanweisungen, die mit Ihrem VR-System geliefert werden;
-2. Machen Sie mindestens alle 30 Minuten eine 10- bis 15-minütige Pause, auch wenn Sie glauben, keine zu benötigen;
-3. Verwenden Sie VR nicht, wenn Sie müde sind, Schlaf benötigen, unter dem Einfluss von Alkohol oder Drogen stehen oder Verdauungsprobleme haben;
-4. Stellen Sie die Nutzung sofort ein, wenn Sie Beschwerden wie Reisekrankheit, Schwindel, Augenbelastung oder Übelkeit verspüren.
+1. Read and follow all safety and operating instructions provided with your VR system;
+2. Take at least a 10 to 15 minute break every 30 minutes, even if you don't think you need it;
+3. Do not use VR when you are tired, need sleep, are under the influence of alcohol or drugs, or have digestive problems;
+4. Immediately discontinue use if you experience any discomfort, including motion sickness, dizziness, eye strain, or nausea.
 
-## Geltendes Recht
+## Governing Law
 
-Diese rechtlichen Hinweise und alle Streitigkeiten, die aus diesen Hinweisen oder der Cosmicrafts-Plattform entstehen oder damit zusammenhängen, unterliegen den Gesetzen des Bundesstaates Kalifornien, ohne Berücksichtigung seiner Grundsätze zu Gesetzeskonflikten. Jede Rechtsklage oder jedes Verfahren im Zusammenhang mit diesen rechtlichen Hinweisen wird ausschließlich vor den staatlichen oder bundesstaatlichen Gerichten im Los Angeles County, Kalifornien, eingereicht.
+These Legal Notices and any disputes arising out of or related to these notices or the Cosmicrafts platform shall be governed by the laws of the State of California, without regard to its conflict of law principles. Any legal action or proceeding relating to these Legal Notices shall be brought exclusively in the state or federal courts located in Los Angeles County, California.
 
-## Kontaktinformationen
+## Contact Information
 
-Wenn Sie Fragen zu diesen rechtlichen Hinweisen haben, kontaktieren Sie uns bitte unter:
+If you have any questions about these Legal Notices, please contact us at:
 
-**E-Mail**: contact@cosmicrafts.com  
+**Email**: contact@cosmicrafts.com  
 
-Für Angelegenheiten, die aus regulatorischen Gründen eine physische Adresse erfordern, kontaktieren Sie uns bitte zuerst per E-Mail.
+For matters requiring a physical address for regulatory compliance, please contact us via email first.
 
-## Organisationsstruktur und Governance
+## Organizational Structure and Governance
 
-### Dezentrales Governance-Modell
+### Decentralized Governance Model
 
-Cosmicrafts arbeitet unter einem hybriden Governance-Modell:
+Cosmicrafts operates under a hybrid governance model:
 
-1. **Juristische Person**: World of Unreal, LLC ist eine Delaware Limited Liability Company, die 2022 gegründet wurde. Die LLC dient als juristische Person, die mit traditionellen Rechtssystemen interagiert, bestimmte geistige Eigentumsrechte hält, Verträge mit Dritten abschließt und die Einhaltung geltender Gesetze und Vorschriften verwaltet.
+1. **Legal Entity**: World of Unreal, LLC is a Delaware limited liability company established in 2022. The LLC serves as the legal entity that interfaces with traditional legal systems, holds certain intellectual property rights, enters into contracts with third parties, and manages compliance with applicable laws and regulations.
 
-2. **Cosmicrafts Foundation**: Eine gemeinnützige Organisation, die als wichtiger Beitragender zur Entwicklung der Cosmicrafts-Plattform und des Ökosystems dient. Die Stiftung unterstützt Forschung, Entwicklung und Gemeinschaftsinitiativen.
+2. **Cosmicrafts Foundation**: A non-profit organization that serves as a major contributor to the development of the Cosmicrafts platform and ecosystem. The Foundation supports research, development, and community initiatives.
 
-3. **Dezentralisierte Governance**: Seit 2025 hat Cosmicrafts eine dezentralisierte Governance-Struktur durch die Cosmicrafts DAO (Decentralized Autonomous Organization) implementiert. Diese Struktur ermöglicht es Token-Inhabern, an bestimmten Entscheidungsprozessen in Bezug auf die Plattformentwicklung, Funktionen und Ökosystem-Initiativen teilzunehmen.
+3. **Decentralized Governance**: As of 2025, Cosmicrafts has implemented a decentralized governance structure through the Cosmicrafts DAO (Decentralized Autonomous Organization). This structure allows token holders to participate in certain decision-making processes related to the platform development, features, and ecosystem initiatives.
 
-### Geistige Eigentumsrechte und DAO-Lizenz
+### Intellectual Property Rights and DAO License
 
-World of Unreal, LLC behält das volle rechtliche Eigentum an allen Urheberrechten, Marken und anderen geistigen Eigentumsrechten an der Cosmicrafts-Marke, den Assets und der Software. Um jedoch eine dezentralisierte Entwicklung und Governance zu ermöglichen, gewährt World of Unreal, LLC die folgenden Lizenzen:
+World of Unreal, LLC retains full legal ownership of all copyrights, trademarks, and other intellectual property rights to the Cosmicrafts brand, assets, and software. However, to enable decentralized development and governance, World of Unreal, LLC grants the following licenses:
 
-1. **DAO-Betriebslizenz**: World of Unreal, LLC gewährt der Cosmicrafts DAO eine nicht-exklusive, weltweite, gebührenfreie Lizenz zur Nutzung, Entwicklung, Änderung und Verbreitung der Cosmicrafts-Marke, Software und zugehörigen Materialien in Übereinstimmung mit den Governance-Prozessen der DAO.
+1. **DAO Operating License**: World of Unreal, LLC grants to the Cosmicrafts DAO a non-exclusive, worldwide, royalty-free license to use, develop, modify, and distribute the Cosmicrafts brand, software, and related materials in accordance with the DAO's governance processes.
 
-2. **Lizenzbeschränkungen**: Diese Lizenz ist an folgende Bedingungen geknüpft:
-   - Einhaltung von Markenrichtlinien und Qualitätsstandards
-   - Einhaltung geltender Gesetze und Vorschriften
-   - Aufrechterhaltung der Integrität und Sicherheit der Plattform
-   - Andere Bedingungen, die von World of Unreal, LLC von Zeit zu Zeit festgelegt werden können
+2. **License Limitations**: This license is conditional upon:
+   - Adherence to brand guidelines and quality standards
+   - Compliance with applicable laws and regulations
+   - Maintaining the integrity and security of the platform
+   - Other conditions as may be specified by World of Unreal, LLC from time to time
 
-3. **Rechtlicher Schutz**: World of Unreal, LLC behält sich das Recht vor, rechtliche Schritte gegen Dritte einzuleiten, die die geistigen Eigentumsrechte von Cosmicrafts verletzen, und fungiert als rechtlicher Beschützer dieser Rechte im Namen des breiteren Cosmicrafts-Ökosystems.
+3. **Legal Protection**: World of Unreal, LLC retains the right to take legal action against third parties that infringe upon Cosmicrafts intellectual property rights, acting as the legal protector of these rights on behalf of the broader Cosmicrafts ecosystem.
 
-Diese Lizenzvereinbarung ermöglicht es der DAO, das Cosmicrafts-Ökosystem zu betreiben und zu entwickeln, während sichergestellt wird, dass die geistigen Eigentumsrechte durch World of Unreal, LLC im Rahmen traditioneller rechtlicher Rahmenbedingungen geschützt bleiben.
+This licensing arrangement enables the DAO to operate and develop the Cosmicrafts ecosystem while ensuring that the intellectual property rights remain protected under traditional legal frameworks through World of Unreal, LLC.
 
-### Beziehung zwischen juristischen Personen und DAO
+### Relationship Between Legal Entities and DAO
 
-Die Beziehung zwischen World of Unreal, LLC, Cosmicrafts Foundation und der Cosmicrafts DAO ist wie folgt strukturiert:
+The relationship between World of Unreal, LLC, Cosmicrafts Foundation, and the Cosmicrafts DAO is structured as follows:
 
-1. **Rechtlicher Rahmen**: World of Unreal, LLC dient als "rechtliche Hülle" für die Cosmicrafts DAO und bietet eine anerkannte juristische Person, die mit traditionellen Geschäfts- und Rechtssystemen interagieren kann.
+1. **Legal Framework**: World of Unreal, LLC serves as a "legal wrapper" for the Cosmicrafts DAO, providing a recognized legal entity that can interface with traditional business and legal systems.
 
-2. **Stiftungsunterstützung**: Die Cosmicrafts Foundation bietet Unterstützung, Ressourcen und Infrastruktur für das Wachstum und die Entwicklung des Ökosystems. Sie fungiert als separate juristische Person mit Fokus auf nicht-kommerzielle Aspekte des Ökosystems.
+2. **Foundation Support**: The Cosmicrafts Foundation provides support, resources, and infrastructure for the ecosystem's growth and development. It operates as a separate legal entity with a focus on non-commercial aspects of the ecosystem.
 
-3. **Progressive Dezentralisierung**: Die Governance von Cosmicrafts unterliegt einer progressiven Dezentralisierung, wobei die Entscheidungsbefugnis schrittweise auf die dezentralisierte Gemeinschaft übergeht, in Übereinstimmung mit geltenden Gesetzen und Vorschriften.
+3. **Progressive Decentralization**: The governance of Cosmicrafts is subject to progressive decentralization, with decision-making authority gradually transitioning to the decentralized community, in accordance with applicable laws and regulations.
 
-4. **Geistiges Eigentum**: Bestimmte geistige Eigentumsrechte, einschließlich, aber nicht beschränkt auf die Marke "Cosmicrafts", sind Eigentum von World of Unreal, LLC, werden aber dem Cosmicrafts-Ökosystem unter Bedingungen lizenziert, die eine dezentralisierte Governance und Gemeinschaftseigentum unterstützen.
+4. **Intellectual Property**: Certain intellectual property, including but not limited to the "Cosmicrafts" trademark, is owned by World of Unreal, LLC, but licensed to the Cosmicrafts ecosystem under terms that support decentralized governance and community ownership.
 
-5. **Rechtliche Compliance**: World of Unreal, LLC behält bestimmte Befugnisse, um die Einhaltung geltender Gesetze, Vorschriften und Plattformrichtlinien zu gewährleisten, auch in Bereichen, in denen die Governance dezentralisiert wurde.
+5. **Legal Compliance**: World of Unreal, LLC retains certain powers to ensure compliance with applicable laws, regulations, and platform policies, even in areas where governance has been decentralized.
 
-### Rechtlicher Status der DAO-Teilnahme
+### Legal Status of DAO Participation
 
-Bitte beachten Sie, dass:
+Please be aware that:
 
-1. Die Teilnahme an der DAO-Governance den Nutzungsbedingungen unterliegt und aufgrund der sich entwickelnden Natur der Gesetze bezüglich dezentralisierter Organisationen rechtliche Unsicherheiten mit sich bringen kann.
+1. Participation in DAO governance is subject to the Terms of Service and may involve legal uncertainties due to the evolving nature of laws regarding decentralized organizations.
 
-2. Der Besitz von Tokens stellt kein Eigentum an World of Unreal, LLC oder Cosmicrafts Foundation dar und begründet auch keine traditionelle rechtliche Partnerschaft, kein Joint Venture oder eine andere anerkannte rechtliche Beziehung zwischen Token-Inhabern und diesen Einheiten.
+2. Token ownership does not constitute ownership of World of Unreal, LLC or Cosmicrafts Foundation, nor does it create a traditional legal partnership, joint venture, or other recognized legal relationship between token holders and these entities.
 
-3. Die mit Governance-Tokens verbundenen Rechte sind auf diejenigen beschränkt, die ausdrücklich in den Nutzungsbedingungen und allen anwendbaren DAO-Governance-Dokumentationen beschrieben sind.
+3. The rights associated with governance tokens are limited to those explicitly described in the Terms of Service and any applicable DAO governance documentation.
 
-4. Die Cosmicrafts DAO selbst ist keine traditionelle juristische Person, sondern fungiert als dezentralisiertes Protokoll, das durch Smart Contracts und die kollektive Entscheidungsfindung der Token-Inhaber gesteuert wird.
+4. The Cosmicrafts DAO itself is not a traditional legal entity but operates as a decentralized protocol governed by smart contracts and the collective decision-making of token holders.
 
-5. World of Unreal, LLC und Cosmicrafts Foundation können ihre Beziehung zur DAO ändern, um sich an sich entwickelnde Vorschriften oder rechtliche Anforderungen anzupassen.
+5. World of Unreal, LLC and Cosmicrafts Foundation may modify their relationship with the DAO to comply with evolving regulations or legal requirements.
 
 ---
 
-*Zuletzt aktualisiert: 4. März 2025* 
+*Last updated: March 4, 2025* 

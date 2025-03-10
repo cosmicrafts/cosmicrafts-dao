@@ -323,5 +323,42 @@
     "10": "novembre",
     "11": "décembre"
   }
+},
+"whitepaper": {
+  "title": "Livre Blanc",
+  "navigation": {
+    "sections": {
+      "introduction": {
+        "title": "Introduction",
+        "description": "Aperçu et proposition de valeur"
+      },
+      "tokenomics": {
+        "title": "Tokenomie",
+        "description": "Distribution et économie des tokens"
+      },
+      "governance": {
+        "title": "Gouvernance",
+        "description": "Système de prise de décision"
+      },
+      "community": {
+        "title": "Communauté",
+        "description": "Participation et croissance"
+      },
+      "architecture": {
+        "title": "Architecture",
+        "description": "Infrastructure technique"
+      },
+      "core-features": {
+        "title": "Fonctionnalités Principales",
+        "description": "Capacités du produit"
+      }
+    },
+    "documentation": "Documentation",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "chapters": "Chapitres",
+    "mobileTitle": "Sections du Livre Blanc",
+    "mobileSubtitle": "Naviguer dans les chapitres"
+  }
 }
 }

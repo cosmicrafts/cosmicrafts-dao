@@ -323,5 +323,42 @@
   "9": "outubro",
   "10": "novembro",
   "11": "dezembro"
+},
+"whitepaper": {
+  "title": "Whitepaper",
+  "navigation": {
+    "sections": {
+      "introduction": {
+        "title": "Introdução",
+        "description": "Visão geral e proposta de valor"
+      },
+      "tokenomics": {
+        "title": "Tokenomics",
+        "description": "Distribuição de tokens e economia"
+      },
+      "governance": {
+        "title": "Governança",
+        "description": "Sistema de tomada de decisão"
+      },
+      "community": {
+        "title": "Comunidade",
+        "description": "Participação e crescimento"
+      },
+      "architecture": {
+        "title": "Arquitetura",
+        "description": "Infraestrutura técnica"
+      },
+      "core-features": {
+        "title": "Recursos Principais",
+        "description": "Capacidades do produto"
+      }
+    },
+    "documentation": "Documentação",
+    "previous": "Anterior",
+    "next": "Próximo",
+    "chapters": "Capítulos",
+    "mobileTitle": "Seções do Whitepaper",
+    "mobileSubtitle": "Navegar por capítulos"
+  }
 }
 }
