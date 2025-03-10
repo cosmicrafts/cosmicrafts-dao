@@ -48,6 +48,9 @@
               />
             </div>
 
+            <!-- Loading TOC message -->
+            <div class="loading-toc" v-if="toc.length === 0">Loading table of contents...</div>
+
             <!-- Navigation Buttons -->
             <div class="navigation-buttons">
               <button
@@ -204,11 +207,15 @@ export default {
     updateUrlHash() {
       if (!this.activeSection) return;
       
-      const hash = this.activeHeading 
-        ? `#${this.activeSection}#${this.activeHeading}` 
-        : `#${this.activeSection}`;
+      // Create a clean URL hash without any prefixes
+      let hash = `#${this.activeSection}`;
+      
+      if (this.activeHeading) {
+        hash += `#${this.activeHeading}`;
+      }
       
       if (window.location.hash !== hash) {
+        console.log(`Updating URL hash to: ${hash}`);
         history.replaceState(history.state, '', hash);
       }
     },
@@ -221,9 +228,12 @@ export default {
       if (hashValue.includes('#')) {
         const [sectionId, headingId] = hashValue.split('#');
         
-        if (sectionId && this.sections.some(s => s.id === sectionId)) {
-          if (this.activeSection !== sectionId) {
-            this.changeSection(sectionId, false);
+        // Ensure we're using English section IDs
+        const normalizedSectionId = this.normalizeSection(sectionId);
+        
+        if (normalizedSectionId && this.sections.some(s => s.id === normalizedSectionId)) {
+          if (this.activeSection !== normalizedSectionId) {
+            this.changeSection(normalizedSectionId, false);
             
             this.$nextTick(() => {
               setTimeout(() => {
@@ -241,6 +251,131 @@ export default {
       } else {
         this.scrollToHeading(hashValue, false);
       }
+    },
+    
+    // Helper to ensure section IDs are always English
+    normalizeSection(sectionId) {
+      // List of valid English section IDs
+      const validSections = [
+        "introduction",
+        "tokenomics",
+        "governance",
+        "community",
+        "architecture",
+        "core-features"
+      ];
+      
+      // If it's already a valid section ID, return it
+      if (validSections.includes(sectionId)) {
+        return sectionId;
+      }
+      
+      // Try to map translated section names back to English
+      // This could be expanded with more mappings if needed
+      const sectionMap = {
+        // Japanese
+        "はじめに": "introduction",
+        "トークノミクス": "tokenomics",
+        "ガバナンス": "governance",
+        "コミュニティ": "community",
+        "アーキテクチャ": "architecture",
+        "主な機能": "core-features",
+        
+        // Chinese
+        "介绍": "introduction",
+        "代币经济学": "tokenomics",
+        "治理": "governance",
+        "社区": "community",
+        "架构": "architecture",
+        "核心功能": "core-features",
+        
+        // Korean
+        "소개": "introduction",
+        "토크노믹스": "tokenomics",
+        "거버넌스": "governance",
+        "커뮤니티": "community",
+        "아키텍처": "architecture",
+        "핵심 기능": "core-features",
+        
+        // Russian
+        "введение": "introduction",
+        "токеномика": "tokenomics",
+        "управление": "governance",
+        "сообщество": "community",
+        "архитектура": "architecture",
+        "основные функции": "core-features",
+        
+        // Spanish
+        "introducción": "introduction",
+        "tokenomía": "tokenomics",
+        "gobernanza": "governance",
+        "comunidad": "community",
+        "arquitectura": "architecture",
+        "características-principales": "core-features",
+        
+        // French
+        "présentation": "introduction",
+        "tokénomie": "tokenomics",
+        "gouvernance": "governance",
+        "communauté": "community",
+        "architecture": "architecture",
+        "fonctionnalités-clés": "core-features",
+        
+        // German
+        "einführung": "introduction",
+        "tokenomie": "tokenomics",
+        "verwaltung": "governance",
+        "gemeinschaft": "community",
+        "architektur": "architecture",
+        "kernfunktionen": "core-features",
+        
+        // Arabic
+        "مقدمة": "introduction",
+        "اقتصاديات-التوكن": "tokenomics",
+        "الحوكمة": "governance",
+        "المجتمع": "community",
+        "البنية": "architecture",
+        "الميزات-الأساسية": "core-features",
+        
+        // Vietnamese
+        "giới-thiệu": "introduction",
+        "tokenomics": "tokenomics",
+        "quản-trị": "governance",
+        "cộng-đồng": "community",
+        "kiến-trúc": "architecture",
+        "tính-năng-chính": "core-features",
+        
+        // Portuguese
+        "introdução": "introduction",
+        "tokenomia": "tokenomics",
+        "governança": "governance",
+        "comunidade": "community",
+        "arquitetura": "architecture",
+        "recursos-principais": "core-features",
+        
+        // Turkish
+        "giriş": "introduction",
+        "token-ekonomisi": "tokenomics",
+        "yönetişim": "governance",
+        "topluluk": "community",
+        "mimari": "architecture",
+        "temel-özellikler": "core-features",
+        
+        // Common variations and partial matches
+        "intro": "introduction",
+        "token": "tokenomics",
+        "govern": "governance",
+        "commun": "community",
+        "arch": "architecture",
+        "features": "core-features",
+        "core": "core-features"
+      };
+      
+      // Log the section ID normalization for debugging
+      console.log(`Normalizing section ID: ${sectionId} -> ${sectionMap[sectionId] || sectionId}`);
+      
+      // Return the mapped section or the original if not found
+      return sectionMap[sectionId] || sectionId;
     },
     
     changeSection(sectionId, updateUrl = true) {
@@ -280,9 +415,12 @@ export default {
       if (sectionIdOrHeadingId.includes('#')) {
         const [sectionId, headingId] = sectionIdOrHeadingId.split('#');
         
-        if (this.sections.some(s => s.id === sectionId)) {
-          if (this.activeSection !== sectionId) {
-            this.changeSection(sectionId, false);
+        // Normalize section ID to ensure it's English
+        const normalizedSectionId = this.normalizeSection(sectionId);
+        
+        if (this.sections.some(s => s.id === normalizedSectionId)) {
+          if (this.activeSection !== normalizedSectionId) {
+            this.changeSection(normalizedSectionId, false);
             
             this.$nextTick(() => {
               setTimeout(() => this.scrollToHeading(headingId), 300);
@@ -294,10 +432,12 @@ export default {
         return;
       }
       
-      const section = this.sections.find((s) => s.id === sectionIdOrHeadingId);
+      // Normalize the single section ID
+      const normalizedSectionId = this.normalizeSection(sectionIdOrHeadingId);
+      const section = this.sections.find((s) => s.id === normalizedSectionId);
       
       if (section) {
-        this.changeSection(sectionIdOrHeadingId);
+        this.changeSection(normalizedSectionId);
       } else {
         this.scrollToHeading(sectionIdOrHeadingId);
       }
@@ -316,11 +456,16 @@ export default {
     },
 
     scrollToHeading(id) {
+      console.log(`Whitepaper trying to scroll to heading: "${id}"`);
+      
       // Get reference to markdown renderer component
       const markdownRenderer = this.$refs.markdownRenderer;
       if (markdownRenderer) {
+        console.log(`Using markdown renderer to scroll to: "${id}"`);
         markdownRenderer.scrollToHeading(id);
       } else {
+        console.warn(`MarkdownRenderer not available, falling back to direct scrolling`);
+        
         const target = document.getElementById(id);
         if (target) {
           const headerOffset = 120;
@@ -328,6 +473,7 @@ export default {
           if (!mainContent) return;
 
           const targetPosition = target.offsetTop - headerOffset;
+          console.log(`Direct scrolling to position: ${targetPosition}`);
 
           mainContent.scrollTo({
             top: targetPosition,
@@ -335,6 +481,9 @@ export default {
           });
 
           this.activeHeading = id;
+          console.log(`Updated active heading to: "${id}"`);
+        } else {
+          console.error(`Heading not found with ID: "${id}"`);
         }
       }
     },
@@ -384,11 +533,26 @@ export default {
     
     handleTocUpdated(newToc) {
       console.log("TOC Updated:", newToc); // Debug log
+      if (Array.isArray(newToc)) {
+        // Log the actual TOC structure to debug
+        newToc.forEach(item => {
+          console.log(`TOC item: ID=${item.id}, Text=${item.text}`);
+        });
+      }
+      
       this.toc = newToc || [];
       if (newToc && newToc.length > 0 && !this.activeHeading) {
         this.activeHeading = newToc[0].id;
       }
       this.updateButtonVisibility();
+      
+      // Add a loading message when TOC is empty
+      if (this.toc.length === 0) {
+        const rightSidebar = document.querySelector('.right-sidebar .sidebar-content');
+        if (rightSidebar) {
+          rightSidebar.innerHTML = '<div class="loading-toc">Loading table of contents...</div>';
+        }
+      }
     },
   },
 
@@ -745,6 +909,16 @@ export default {
   box-sizing: border-box;
 }
 
+/* Loading TOC message */
+.loading-toc {
+  padding: 1rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
 /* Navigation buttons */
 .navigation-buttons {
   display: flex;
@@ -916,7 +1090,7 @@ export default {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease;
-  background: var(--color-background-darker);
+  background: var(--color-bg-darker);
   box-sizing: border-box;
 }
 

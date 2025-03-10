@@ -144,29 +144,129 @@ export default {
         console.log(`Loading markdown: ${lang}/${this.fileName}`);
         const content = await import(`@/assets/markdown/${lang}/${this.fileName}.md?raw`);
         
-        // Pre-process the markdown to convert headings to custom HTML elements
-        const processedContent = content.default
-          .replace(/^# (.*?)$/gm, '# <span id="$1" style="color: #0FB9FD;">$1</span>')
-          .replace(/^## (.*?)$/gm, '## <span id="$1" style="color: #4DCFFF;">$1</span>')
-          .replace(/^### (.*?)$/gm, '### <span id="$1" style="color: #7CDFFF;">$1</span>')
-          .replace(/^#### (.*?)$/gm, '#### <span id="$1" style="color: #B5EBFF;">$1</span>');
+        // Always load the English version for heading mapping
+        let englishContent = null;
+        let englishHeadings = {};
+        
+        try {
+          // Always load English as the canonical source for heading IDs
+          if (lang !== 'en') {
+            console.log(`Loading English version for canonical heading IDs`);
+            englishContent = await import(`@/assets/markdown/en/${this.fileName}.md?raw`);
+            
+            // Extract English headings with their positions
+            const enHeadingRegex = /^(#{1,4})\s+(.*?)$/gm;
+            let match;
+            let h2Index = 0;
+            
+            // Create mapping of positions to English headings
+            while ((match = enHeadingRegex.exec(englishContent.default)) !== null) {
+              const level = match[1].length; // Get heading level by number of # characters
+              const headingText = match[2].trim();
+              
+              if (level === 2) { // Only map h2 headings
+                // Create clean slug as the canonical ID
+                const cleanSlug = this.createCleanSlug(headingText);
+                
+                // Store by position for mapping with non-English content
+                englishHeadings[h2Index] = {
+                  text: headingText,
+                  slug: cleanSlug
+                };
+                h2Index++;
+              }
+            }
+            
+            console.log("English heading mapping:", englishHeadings);
+          }
+        } catch (enError) {
+          console.warn(`Couldn't load English file for heading mapping: ${enError.message}`);
+        }
+        
+        // Process the current language's markdown content
+        let processedContent = content.default;
+        let h2Index = 0;
+        
+        // Process h1 headings (title)
+        processedContent = processedContent.replace(/^#\s+(.*?)$/gm, (match, text) => {
+          return `# <span class="heading-text" data-heading-id="title">${text.trim()}</span>`;
+        });
+        
+        // Process h2 headings with English-based IDs
+        processedContent = processedContent.replace(/^##\s+(.*?)$/gm, (match, text) => {
+          const localHeadingText = text.trim();
+          let headingId;
+          
+          // Use English heading ID if available
+          if (lang !== 'en' && englishHeadings[h2Index]) {
+            // Use the English slug as the canonical ID
+            headingId = englishHeadings[h2Index].slug;
+            
+            // Add data attributes for debugging
+            const originalEnglish = englishHeadings[h2Index].text;
+            console.log(`Mapped heading: "${localHeadingText}" → "${originalEnglish}" → ID: "${headingId}"`);
+          } else {
+            // For English or fallback
+            headingId = this.createCleanSlug(localHeadingText);
+            console.log(`Created heading ID for: "${localHeadingText}" → "${headingId}"`);
+          }
+          
+          h2Index++;
+          return `## <span class="heading-text" data-heading-id="${headingId}" data-heading-index="${h2Index-1}">${localHeadingText}</span>`;
+        });
+        
+        // Process h3 and h4 headings
+        processedContent = processedContent.replace(/^###\s+(.*?)$/gm, (match, text) => {
+          const headingText = text.trim();
+          // Use simple slug for h3-h4, since they're less likely to be directly linked
+          const headingId = this.createCleanSlug(headingText);
+          return `### <span class="heading-text" data-heading-id="${headingId}">${headingText}</span>`;
+        });
+        
+        processedContent = processedContent.replace(/^####\s+(.*?)$/gm, (match, text) => {
+          const headingText = text.trim();
+          const headingId = this.createCleanSlug(headingText);
+          return `#### <span class="heading-text" data-heading-id="${headingId}">${headingText}</span>`;
+        });
         
         this.processMarkdown(processedContent);
       } catch (error) {
         console.error(`Failed to load markdown for ${lang}/${this.fileName}`, error);
         
-        // Try to fall back to English if the current language file doesn't exist
+        // Fallback to English
         if (lang !== 'en') {
           try {
             console.log(`Falling back to English for ${this.fileName}`);
             const fallbackContent = await import(`@/assets/markdown/en/${this.fileName}.md?raw`);
             
-            // Pre-process the markdown
-            const processedContent = fallbackContent.default
-              .replace(/^# (.*?)$/gm, '# <span id="$1" style="color: #0FB9FD;">$1</span>')
-              .replace(/^## (.*?)$/gm, '## <span id="$1" style="color: #4DCFFF;">$1</span>')
-              .replace(/^### (.*?)$/gm, '### <span id="$1" style="color: #7CDFFF;">$1</span>')
-              .replace(/^#### (.*?)$/gm, '#### <span id="$1" style="color: #B5EBFF;">$1</span>');
+            // Process the English content
+            let processedContent = fallbackContent.default;
+            
+            // Handle h1 headings
+            processedContent = processedContent.replace(/^#\s+(.*?)$/gm, (match, text) => {
+              const headingText = text.trim();
+              return `# <span class="heading-text" data-heading-id="title">${headingText}</span>`;
+            });
+            
+            // Handle h2 headings
+            processedContent = processedContent.replace(/^##\s+(.*?)$/gm, (match, text) => {
+              const headingText = text.trim();
+              const headingId = this.createCleanSlug(headingText);
+              return `## <span class="heading-text" data-heading-id="${headingId}">${headingText}</span>`;
+            });
+            
+            // Handle h3 and h4 headings
+            processedContent = processedContent.replace(/^###\s+(.*?)$/gm, (match, text) => {
+              const headingText = text.trim();
+              const headingId = this.createCleanSlug(headingText);
+              return `### <span class="heading-text" data-heading-id="${headingId}">${headingText}</span>`;
+            });
+            
+            processedContent = processedContent.replace(/^####\s+(.*?)$/gm, (match, text) => {
+              const headingText = text.trim();
+              const headingId = this.createCleanSlug(headingText);
+              return `#### <span class="heading-text" data-heading-id="${headingId}">${headingText}</span>`;
+            });
             
             this.processMarkdown(processedContent);
           } catch (fallbackError) {
@@ -196,34 +296,69 @@ export default {
       // Reset heading index
       this.headingIndex = 1;
       
-      // Replace heading markers with numeric indexes
-      content = content.replace(/^(#{1,6})\s*(.+?)$/gm, (match, hashes, text) => {
-        // Extract the clean text - preserve original but add data attribute
-        const headingIndex = this.headingIndex++;
-        const cleanText = text.trim().replace(/[#*`]/g, '');
-        return `${hashes} <span class="heading-text" data-heading-id="section-${headingIndex}">${cleanText}</span>`;
-      });
-      
       // Process TOC markers
       const tocMatch = content.match(this.tocRegex);
       if (tocMatch) {
         content = content.replace(this.tocRegex, '<div class="toc-placeholder"></div>');
       }
       
-      // Initialize markdown-it
+      // Initialize markdown-it with basic options
       const md = new MarkdownIt({
         html: true,
         typographer: true,
         linkify: true,
       });
       
+      // Custom image renderer to correctly resolve paths for WebP and SVG images
+      const defaultImageRender = md.renderer.rules.image || function (tokens, idx, options, env, self) {
+        return self.renderToken(tokens, idx, options);
+      };
+
+      md.renderer.rules.image = function (tokens, idx, options, env, self) {
+        const token = tokens[idx];
+        const srcIndex = token.attrIndex("src");
+        
+        if (srcIndex >= 0) {
+          const src = token.attrs[srcIndex][1];
+          
+          // Check if it's an absolute URL or relative
+          if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) {
+            // External URL - keep as is
+            return defaultImageRender(tokens, idx, options, env, self);
+          }
+          
+          // Handle different image types
+          try {
+            if (src.endsWith('.svg')) {
+              // SVG images usually reside in icons folder
+              token.attrs[srcIndex][1] = new URL(`../assets/icons/${src}`, import.meta.url).href;
+            } else {
+              // Default to webp folder for other images
+              token.attrs[srcIndex][1] = new URL(`../assets/webp/${src}`, import.meta.url).href;
+            }
+          } catch (e) {
+            console.error(`Error resolving image path for ${src}:`, e);
+            // Keep original source if there's an error
+          }
+        }
+        
+        return defaultImageRender(tokens, idx, options, env, self);
+      };
+      
       // Add anchor links to headings with stable IDs
       md.use(markdownItAnchor, {
         slugify: (s) => {
           // Extract the heading ID from the data attribute
           const match = s.match(/data-heading-id="([^"]+)"/);
-          if (match) return match[1];
-          return `section-fallback-${Math.floor(Math.random() * 10000)}`;
+          if (match) {
+            console.log(`Found data-heading-id: ${match[1]}`);
+            return match[1];
+          }
+          
+          // If no data-heading-id, create a text-based ID
+          const textContent = s.replace(/<[^>]*>/g, '').trim();
+          console.log(`Creating text-based ID for: "${textContent}"`);
+          return this.slugify(textContent);
         },
         permalink: markdownItAnchor.permalink.headerLink({
           class: 'header-anchor',
@@ -231,7 +366,7 @@ export default {
         })
       });
       
-      // Add classes to headings
+      // Add classes to headings and ensure consistent IDs
       const defaultHeadingOpen = md.renderer.rules.heading_open || function(tokens, idx, options, env, self) {
         return self.renderToken(tokens, idx, options);
       };
@@ -239,6 +374,21 @@ export default {
       md.renderer.rules.heading_open = function(tokens, idx, options, env, self) {
         const token = tokens[idx];
         token.attrJoin('class', 'cosmic-heading');
+        
+        // Ensure consistency in section IDs across languages
+        if (token.tag === 'h2') {
+          // Look ahead to check for data-heading-id
+          const nextToken = tokens[idx + 1];
+          const contentHtml = nextToken?.content || '';
+          const idMatch = contentHtml.match(/data-heading-id="([^"]+)"/);
+          
+          if (idMatch) {
+            // Use the extracted ID from the data-heading-id attribute
+            console.log(`Setting explicit ID for h2: ${idMatch[1]}`);
+            token.attrSet('id', idMatch[1]);
+          }
+        }
+        
         return defaultHeadingOpen(tokens, idx, options, env, self);
       };
       
@@ -269,6 +419,8 @@ export default {
       const contentElement = document.querySelector(".main-content");
       if (!contentElement) return;
       
+      console.log(`Generating TOC for ${this.fileName}`);
+      
       // Get all h2 headings - try different selectors to ensure we find the headings
       let headings = contentElement.querySelectorAll("h2.cosmic-heading");
       
@@ -287,13 +439,17 @@ export default {
         return;
       }
 
+      console.log(`Found ${headings.length} h2 headings for TOC`);
       this.toc = [];
       
       // Create an array of objects with id and text for each heading
       headings.forEach((heading, index) => {
-        // Create a consistent ID if needed
-        const headingId = heading.id || `section-${index}`;
-        heading.id = headingId;
+        // Use the ID that was already set by markdownItAnchor
+        const headingId = heading.id;
+        if (!headingId) {
+          console.warn(`Heading #${index} has no ID:`, heading.outerHTML);
+          return; // Skip headings without IDs
+        }
         
         // Get text content from either the special span or the heading itself
         let headingText = "";
@@ -312,16 +468,19 @@ export default {
         });
         
         // Log for debugging
-        console.log(`Found heading: "${headingText}" with ID: ${headingId}`);
+        console.log(`TOC entry [${index}]: ID="${headingId}", Text="${headingText}"`);
       });
 
       if (this.toc.length > 0) {
         // Set the first heading as active initially
         this.activeHeading = this.toc[0].id;
+        console.log(`Set initial active heading: ${this.activeHeading}`);
         
         // Emit both event formats for maximum compatibility
         this.$emit('toc-updated', this.toc);
         this.$emit('tocUpdated', this.toc);
+      } else {
+        console.warn("Generated TOC is empty!");
       }
 
       // Set up scroll tracking
@@ -382,19 +541,37 @@ export default {
       contentElement.addEventListener('scroll', this.scrollHandler, { passive: true });
     },
     scrollToHeading(headingId) {
+      console.log(`Scrolling to heading: "${headingId}"`);
+      
       const heading = document.getElementById(headingId);
-      if (!heading) return;
+      if (!heading) {
+        console.warn(`Heading not found with ID: "${headingId}"`);
+        
+        // Try logging all headings to debug
+        const allHeadings = document.querySelectorAll('h1, h2, h3, h4');
+        console.log(`All ${allHeadings.length} headings in document:`);
+        allHeadings.forEach((h, i) => console.log(`Heading ${i}: ${h.tagName}, ID=${h.id}, content="${h.textContent}"`));
+        
+        return;
+      }
+      
+      console.log(`Found heading: "${heading.textContent.trim()}" with tag ${heading.tagName}`);
       
       const contentElement = document.querySelector(".main-content");
       if (!contentElement) return;
       
       const offsetTop = heading.offsetTop;
+      const headerOffset = 100; // Offset for fixed headers
+      
+      console.log(`Scrolling to position: ${offsetTop - headerOffset}`);
+      
       contentElement.scrollTo({
-        top: offsetTop - 100, // Offset for header
+        top: offsetTop - headerOffset,
         behavior: 'smooth'
       });
       
       this.activeHeading = headingId;
+      console.log(`Updated active heading to: "${headingId}"`);
       this.$emit('heading-change', this.activeHeading);
     },
     beforeDestroy() {
@@ -477,6 +654,36 @@ export default {
           }
         }
       });
+    },
+    // Helper method to create clean IDs from heading text
+    slugify(text) {
+      if (!text) return '';
+      
+      // For English, create a clean slug
+      return text.toLowerCase()
+        .replace(/[^\w\s-]/g, '') // Remove special chars except spaces and hyphens
+        .replace(/\s+/g, '-')     // Replace spaces with hyphens
+        .replace(/-+/g, '-')      // Remove consecutive hyphens
+        .replace(/^-+|-+$/g, '')  // Remove trailing/leading hyphens
+        || 'section';             // Fallback if empty
+    },
+    // Create a clean, URL-friendly slug from text
+    createCleanSlug(text) {
+      if (!text) return 'untitled';
+      
+      // First, convert to lowercase and normalize Unicode characters
+      return text.toLowerCase()
+        // Remove accents and convert to base latin characters
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        // Remove non-alphanumeric characters (except spaces and hyphens)
+        .replace(/[^\w\s-]/g, '')
+        // Replace spaces with hyphens
+        .replace(/\s+/g, '-')
+        // Remove consecutive hyphens
+        .replace(/-+/g, '-')
+        // Remove leading/trailing hyphens
+        .replace(/^-+|-+$/g, '');
     },
   },
 };
