@@ -3,13 +3,25 @@
 
 ## Overview
 
-Cosmicrafts implements a hybrid architecture that strategically integrates blockchain and WebSockets to deliver:
+Cosmicrafts implements a hybrid architecture that strategically integrates  blockchain and WebSockets to deliver:
+
 - Secure asset ownership and trading
 - Fast, responsive gameplay
 - Transparent governance
 - Scalable infrastructure
 
 ## Core Technical Design
+
+::: info Technical Implementation
+The Motoko programming language enables our single-canister design through:
+- Advanced memory management
+- Efficient state representation
+- Powerful type system
+- Optimized asynchronous operations within a single canister
+
+Our smart contracts are [open source on GitHub](https://github.com/cosmicrafts/cosmicrafts-dao) and [deployed publicly](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai) on the Internet Computer for full transparency.
+:::
+
 
 ### Unified Canister Architecture
 
@@ -32,7 +44,7 @@ This architecture enables complex game operations like trading, crafting, and ba
 ```mermaid
 graph TD
     %% Core User Layer
-    User(("👤"))
+    User(("🧑 User"))
     
     %% Frontend Layer
     subgraph "Frontend Layer"
@@ -76,16 +88,34 @@ graph TD
     class WS,API comms
     class Canister,DAO blockchain
 ```
+## Real-Time Communication Layer
 
-::: info Technical Implementation
-The Motoko programming language enables our single-canister design through:
-- Advanced memory management
-- Efficient state representation
-- Powerful type system
-- Optimized asynchronous operations within a single canister
+A critical component of our architecture is the real-time communication system required for multiplayer gameplay. We utilize:
 
-Our smart contracts are [open source on GitHub](https://github.com/cosmicrafts/cosmicrafts-dao) and [deployed publicly](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai) on the Internet Computer for full transparency.
-:::
+### IC WebSocket Gateway
+- **[IC WebSocket Gateway](https://github.com/omnia-network/ic-websocket-gateway)**: Provides WebSocket capabilities with ICP's cryptographic security
+  - Enables real-time bidirectional communication
+  - Maintains blockchain security guarantees
+  - Supports multiple simultaneous connections
+
+### Security Features
+- **Message Signing**: All WebSocket messages are cryptographically signed
+- **SSL/TLS Encryption**: Secure transport layer for all communications
+- **Keep-alive Monitoring**: Automatic connection health checks
+
+
+<div class="table-scroll">
+
+| Feature | Implementation | Benefit |
+|---------|----------------|----------|
+| Real-time Updates | WebSocket Protocol | Sub-second latency for game actions |
+| Message Security | Cryptographic Signing | Tamper-proof communication |
+| Connection Management | Automatic Reconnection | Seamless gameplay experience |
+| State Synchronization | Sequence Numbers | Consistent game state across clients |
+| Transport Security | SSL/TLS | Protected data transmission |
+
+</div>
+
 
 ## Resource Management & Operations
 
@@ -121,82 +151,62 @@ To maintain our gas-free environment and ensure optimal performance, Cosmicrafts
 
 </div>
 
-::: info Infrastructure Resilience
-Our monitoring stack ensures operational continuity through:
-- Automated cycles management to prevent outages
-- Memory utilization alerts to optimize storage
-- Update call tracking for load balancing
-- Comprehensive logging for rapid issue resolution
-:::
+## Dependencies & External Services
 
-## Strategic Components
+### Game Engine Dependencies
+- **Current: Unity**
+  - Industry-standard game development platform
+  - WebGL export for browser-based gameplay
+  - Cross-platform deployment capabilities
+  - Integration with ICP.NET for blockchain features
 
-### Digital Asset Management
+- **Planned Migration: Bevy**
+  - Open-source game engine written in Rust
+  - Better performance characteristics
+  - Full open-source technology stack
+  - Native WebAssembly support
+  - Aligns with our commitment to open-source development
 
-- **Secure Ownership**: Blockchain-verified ownership of in-game items and currencies
-- **Transparent Trading**: Fully visible marketplace operations and history
-- **Verifiable Properties**: Cryptographically-secured item attributes and rarity
+### Frontend Dependencies
+- **ICP Integration**: 
+  - [ICP.NET](https://github.com/edjCase/ICP.NET) - .NET/C#/Unity library for native Internet Computer communication
+  - Enables seamless blockchain integration in Unity games
+  - Provides client generation for canister interfaces
+  - Handles WebSocket connections and API interfaces
 
-### Game Operations
+- **Web Framework**:
+  - Vue.js with TypeScript
+  - Vite for build tooling
+  - PWA capabilities
+  - Internationalization support via vue-i18n
+  - Markdown rendering with advanced features
 
-- **Responsive Gameplay**: Real-time action with minimal latency
-- **Fair Competition**: Transparent matchmaking and tournament systems
-- **Secure Profiles**: Protected player identities and achievements
+### Backend Dependencies
+- **Motoko Package Manager**:
+  - [MOPS](https://mops.one/) - Official package manager for Motoko
+  - Manages Motoko dependencies and versioning
 
-### Community Governance
+### Infrastructure Services
+- **Internet Computer Protocol**:
+  - Core blockchain infrastructure
+  - Provides decentralized compute and storage
+  - Handles consensus and node operations
+  - Manages canister lifecycle
 
-- **Transparent Decision-Making**: Open voting and proposal systems
-- **Community-Driven Development**: Direct stakeholder input into priorities 
-- **Efficient Treasury Management**: Optimized resource allocation
+- **IC WebSocket Gateway**:
+  - [Real-time communication infrastructure](https://github.com/omnia-network/ic-websocket-gateway)
+  - Enables multiplayer gameplay features
+  - Provides secure WebSocket connections
+  - Integrates with ICP's security model
 
-## Performance & User Experience
+## Security Review Status
 
-### Speed and Responsiveness
+While a comprehensive security audit is planned for the future, we are currently:
 
-- **Instant Feedback**: Immediate game actions and responses
-- **Fast Transactions**: Quick processing of all economic activities
-- **Smooth Multiplayer**: Seamless interaction between players
+- Building user base and maturing canister functionality
+- Planning for professional audit once sufficient scale is reached
+- Following security best practices and internal review processes
 
-### Security and Trust
 
-- **Verified Ownership**: Cryptographically-secured digital assets
-- **Transparent Operations**: Visible and auditable systems
-- **Protected Accounts**: Advanced security measures for player safety
 
-### Mainstream Player Experience
-
-- **No Learning Curve**: No blockchain knowledge required
-- **Familiar Interactions**: Traditional gaming experiences  
-- **True Digital Ownership**: Full control of in-game assets
-- **Community Participation**: Direct input into development decisions
-
-## Infrastructure & Scaling
-
-### Comprehensive Security
-
-- **Asset Protection**: Secure ownership verification and protected trading systems
-- **Account Security**: Strong authentication and fraud prevention  
-- **Operational Safety**: Regular security audits and continuous monitoring
-
-### Scalability Framework
-
-- **Player Growth**: Efficient support for expanding user base
-- **Feature Expansion**: Seamless integration of new game modes and capabilities
-- **Economic Scaling**: Support for growing transaction volume and marketplace activities
-
-## Future-Ready Foundation
-
-Our architecture is designed for long-term evolution and growth:
-
-- **Adaptability**: Flexible systems that easily incorporate new technologies
-- **Sustainability**: Efficient resource usage and cost-effective operations
-- **Innovation Support**: Technical foundation for advanced gameplay and economic features
-
-::: info Continuous Evolution
-The Cosmicrafts architecture is designed for progressive enhancement, allowing us to:
-- Implement emerging technologies
-- Optimize based on real-world usage patterns
-- Expand capabilities without disrupting existing systems
-- Scale with the growth of our community
-:::
-
+> For a comprehensive understanding of how these features are implemented, continue reading our [Core Features](/core-features) documentation.

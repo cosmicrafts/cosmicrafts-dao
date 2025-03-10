@@ -9,8 +9,6 @@ The Cosmicrafts community is the driving force behind our ecosystem's growth and
 - Strategic ecosystem expansion
 - Content creation and cultural growth
 
-Through transparent treasury management, creator empowerment, and strategic partnerships, we build a vibrant digital society where members directly influence platform development while sharing in its success.
-
 ## Treasury Management
 
 The DAO treasury is the foundation for sustainable growth and community initiatives. All funding allocations require community approval through the SNS proposal system.
