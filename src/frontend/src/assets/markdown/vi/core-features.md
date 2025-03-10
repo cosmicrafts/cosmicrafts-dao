@@ -1,158 +1,160 @@
 # Tính Năng Cốt Lõi
 
-
+![Core Features](corebanner.webp)
 
 ## Tổng Quan
 
-Cosmicrafts kết hợp gameplay hấp dẫn với cơ chế blockchain sáng tạo để tạo ra trải nghiệm game độc đáo. Các tính năng cốt lõi của chúng tôi được thiết kế để phục vụ cả người chơi truyền thống và người dùng crypto.
+Về cốt lõi, **Cosmicrafts DAO** triển khai một canister thống nhất xử lý tất cả chức năng game cốt lõi thông qua một số hệ thống tích hợp. Kiến trúc của chúng tôi đảm bảo tương tác liền mạch giữa các thành phần khác nhau trong khi vẫn duy trì tính bảo mật và minh bạch của công nghệ blockchain.
+
+---
 
 ## Hệ Thống Người Chơi
 
-### Hồ Sơ và Tiến Trình
+Hệ thống Người Chơi tạo nên xương sống của tương tác người dùng trong Cosmicrafts, quản lý mọi thứ từ hồ sơ cơ bản đến tương tác xã hội phức tạp.
 
-| Thành Phần | Mô Tả | Lưu Trữ |
-|------------|-------------|----------|
-| Thông Tin Cơ Bản | Tên, hình đại diện, tiểu sử | Trên chuỗi |
-| Thống Kê | Điểm số, thành tích, xếp hạng | Trên chuỗi |
-| Tùy Chọn | Cài đặt, tùy chỉnh | Ngoài chuỗi |
+### Quản Lý Hồ Sơ
 
-### Hệ Thống Cấp Độ
+<div class="table-scroll">
 
-| Cấp Độ | Yêu Cầu XP | Phần Thưởng |
-|----------|--------------|----------|
-| Tân Binh (1-10) | 1,000 XP | Tài nguyên cơ bản |
-| Cựu Binh (11-30) | 5,000 XP | Trang bị đặc biệt |
-| Tinh Anh (31-50) | 15,000 XP | NFT độc quyền |
-| Huyền Thoại (51+) | 50,000 XP | Token SPIRAL |
+| Tính Năng | Mô Tả | Lợi Ích Người Chơi |
+|---------|-------------|----------------|
+| Tạo Hồ Sơ | ID duy nhất với tên người dùng và avatar tùy chỉnh | Danh tính cá nhân trong metaverse |
+| Hệ Thống Cấp Độ | Tiến trình dựa trên kinh nghiệm với phần thưởng | Lộ trình tiến triển rõ ràng |
+| Theo Dõi Chỉ Số | Số liệu hiệu suất toàn diện | Thông tin chi tiết về hiệu suất |
+| Hệ Thống Danh Hiệu | Danh hiệu mở khóa thể hiện thành tích | Công nhận trạng thái |
+
+</div>
+
+### Tính Năng Xã Hội
+
+Người chơi có thể xây dựng mạng lưới của họ thông qua:
+- Yêu cầu và quản lý bạn bè
+- Kiểm soát cài đặt quyền riêng tư
+- Thông báo thời gian thực
+- Quản lý người dùng bị chặn
+- Theo dõi hoạt động xã hội
 
 ## Hệ Thống Tài Sản
 
-### NFT Tiến Hóa
+Hệ thống tài sản của chúng tôi tận dụng tiêu chuẩn ICRC-7 để cung cấp quyền sở hữu thực và khả năng tương tác.
 
-Tài sản NFT trong Cosmicrafts có thể phát triển theo thời gian:
+### Danh Mục NFT
 
-| Thuộc Tính | Cơ Chế | Tác Động |
-|------------|------------|----------|
-| Kinh Nghiệm | Tích lũy qua sử dụng | Tăng sức mạnh |
-| Độ Hiếm | Dựa trên lịch sử | Tăng giá trị |
-| Đặc Tính | Mở khóa qua gameplay | Khả năng mới |
-
-### Chế Tạo và Nâng Cấp
-
-| Hoạt Động | Yêu Cầu | Kết Quả |
-|----------|--------------|---------|
-| Chế Tạo | Tài nguyên + Công thức | NFT mới |
-| Nâng Cấp | NFT + Vật liệu | Cải thiện thuộc tính |
-| Hợp Nhất | Nhiều NFT | NFT cao cấp |
+```mermaid
+graph LR
+    A[Loại NFT] --> B[NFT Linh Hồn]
+    A --> C[Đơn Vị Game]
+    A --> D[Mỹ Phẩm]
+    A --> E[Phần Thưởng]
+    
+    B --> B1[Theo Dõi Tiến Độ]
+    B --> B2[Hiển Thị Thành Tích]
+    
+    C --> C1[Tàu Vũ Trụ]
+    C --> C2[Nhân Vật]
+    C --> C3[Đơn Vị Chiến Đấu]
+    
+    D --> D1[Avatar]
+    D --> D2[Skin]
+    
+    E --> E1[Cúp]
+    E --> E2[Vật Phẩm Đặc Biệt]
+```
 
 ## Hệ Thống Kinh Tế
 
-### Tài Nguyên Trong Game
+Nền kinh tế hai token của chúng tôi tạo ra một hệ sinh thái cân bằng cho cả người chơi miễn phí và cao cấp.
 
-| Loại | Thu Thập | Sử Dụng |
-|--------|------------|---------|
-| Năng Lượng | Tái tạo theo thời gian | Hành động trong game |
-| Vật Liệu | Thu thập trong game | Chế tạo và nâng cấp |
-| Token | Phần thưởng gameplay | Giao dịch và quản trị |
+### Cấu Trúc Token
 
-### Giao Dịch P2P
+<div class="table-scroll">
 
-| Tính Năng | Mô Tả | Phí |
-|----------|-------------|------|
-| Trao Đổi Trực Tiếp | Giao dịch người với người | 1% |
-| Đấu Giá | Đặt giá và đấu giá | 2% |
-| Cho Thuê | Cho thuê tài sản NFT | 3% |
+| Token | Mục Đích | Cách Nhận | Sử Dụng |
+|-------|---------|-------------|--------|
+| Spiral | Quản Trị & Cao Cấp | Mua/Stake | Bỏ Phiếu, Tính Năng Cao Cấp |
+| Stardust | Tiền Tệ Trong Game | Phần Thưởng Gameplay | Tính Năng Cơ Bản, Chế Tạo |
 
-## Hệ Thống Ghép Cặp
+</div>
 
-### Xếp Hạng và ELO
+## Hệ Thống Ghép Trận
 
-| Xếp Hạng | ELO | Phần Thưởng |
-|----------|-----|-------------|
-| Đồng | 0-1000 | Cơ bản |
-| Bạc | 1001-2000 | Nâng cao |
-| Vàng | 2001-3000 | Cao cấp |
-| Bạch Kim | 3000+ | Độc quyền |
+Hệ thống ghép trận của chúng tôi đảm bảo gameplay công bằng và hấp dẫn thông qua việc ghép cặp người chơi tinh vi.
 
-### Chế Độ Chơi
+### Tính Năng Chính
 
-| Chế Độ | Mô Tả | Phần Thưởng |
-|--------|-------------|----------|
-| Thường | Chơi tự do | Thấp |
-| Xếp Hạng | Thi đấu cạnh tranh | Trung bình |
-| Giải Đấu | Sự kiện đặc biệt | Cao |
+```mermaid
+graph TD
+    A[Ghép Trận] --> B[Nhóm Người Chơi]
+    B --> C[Ghép Cặp ELO]
+    C --> D[Tạo Trận]
+    D --> E[Theo Dõi Trạng Thái]
+    
+    E --> F[Đang Diễn Ra]
+    E --> G[Hoàn Thành]
+    E --> H[Đã Hủy]
+```
 
-## Hệ Thống Nhiệm Vụ và Thành Tích
+- Ghép cặp dựa trên kỹ năng động
+- Cập nhật trạng thái thời gian thực
+- Xác thực trận đấu tự động
+- Điều chỉnh xếp hạng dựa trên hiệu suất
 
-### Nhiệm Vụ Hàng Ngày
+## Hệ Thống Nhiệm Vụ & Thành Tích
 
-| Loại | Yêu Cầu | Phần Thưởng |
-|--------|--------------|----------|
-| Dễ | 15 phút chơi | 50 XP |
-| Trung Bình | 3 trận thắng | 100 XP |
-| Khó | 10 NFT nâng cấp | 200 XP |
+Hệ thống tiến triển toàn diện thưởng cho người chơi về thành tích của họ.
 
-### Thành Tích
+### Loại Nhiệm Vụ
 
-| Cấp Độ | Yêu Cầu | Phần Thưởng |
-|----------|--------------|----------|
-| Đồng | Hoàn thành cơ bản | Huy hiệu |
-| Bạc | Thử thách trung bình | Token |
-| Vàng | Thành tích khó | NFT |
-| Bạch Kim | Thành tích đặc biệt | Độc quyền |
+<div class="table-scroll">
 
-## Hệ Thống Ghi Chép
+| Loại | Tần Suất | Phần Thưởng | Mục Đích |
+|------|-----------|---------|----------|
+| Hàng Ngày | 24 giờ | Phần thưởng nhỏ | Tham gia thường xuyên |
+| Hàng Tuần | 7 ngày | Phần thưởng trung bình | Hoạt động bền vững |
+| Đặc Biệt | Theo sự kiện | Phần thưởng độc đáo | Sự kiện cộng đồng |
 
-### Theo Dõi Hoạt Động
+</div>
 
-| Dữ Liệu | Lưu Trữ | Mục Đích |
-|---------|----------|---------|
-| Gameplay | Ngoài chuỗi | Phân tích |
-| Giao Dịch | Trên chuỗi | Minh bạch |
-| Thành Tích | Hỗn hợp | Xác minh |
+### Danh Mục Thành Tích
+- Thành Thạo Chiến Đấu
+- Thành Tích Kinh Tế
+- Tương Tác Xã Hội
+- Hoàn Thành Bộ Sưu Tập
+- Sự Kiện Đặc Biệt
 
-### Phân Tích
+## Hệ Thống Ghi Nhật Ký
 
-| Chỉ Số | Theo Dõi | Sử Dụng |
-|----------|----------|---------|
-| Tương Tác | Hàng ngày | Cải thiện |
-| Hiệu Suất | Hàng tuần | Cân bằng |
-| Kinh Tế | Hàng tháng | Điều chỉnh |
+Hệ thống ghi nhật ký minh bạch của chúng tôi theo dõi tất cả sự kiện và giao dịch quan trọng.
 
-## Bảo Mật và Hiệu Suất
+### Hoạt Động Được Theo Dõi
 
-### Chống Gian Lận
+<div class="table-scroll">
 
-| Biện Pháp | Mục Tiêu | Phương Pháp |
-|----------|--------|----------|
-| Xác Thực | Bot | Captcha |
-| Giám Sát | Hack | ML/AI |
-| Phát Hiện | Khai Thác | Heuristics |
+| Danh Mục | Sự Kiện Theo Dõi | Mục Đích |
+|----------|---------------|----------|
+| Gameplay | Trận Đấu, Chỉ Số | Phân Tích Hiệu Suất |
+| Kinh Tế | Giao Dịch, Trao Đổi | Giám Sát Kinh Tế |
+| Xã Hội | Tương Tác, Bạn Bè | Sức Khỏe Cộng Đồng |
+| Tiến Triển | Cấp Độ, Thành Tích | Phát Triển Người Chơi |
+
+</div>
+
+## Bảo Mật & Hiệu Suất
+
+### Biện Pháp Bảo Mật
+- Kiểm soát quản trị
+- Giao thức an toàn nâng cấp
+- Xác thực đầu vào
+- Giới hạn tốc độ
+- Xác minh giao dịch
 
 ### Tối Ưu Hóa
+- Hiệu quả canister đơn
+- Truy xuất dữ liệu nhanh
+- Quản lý bộ nhớ
+- Tối ưu hóa truy vấn
 
-| Lĩnh Vực | Mục Tiêu | Phương Pháp |
-|----------|--------|----------|
-| Client | <50ms độ trễ | Đệm |
-| Server | >1000 TPS | Sharding |
-| Mạng | 99.9% uptime | CDN |
+---
 
-## Lộ Trình Tính Năng
-
-### Giai Đoạn 1: Nền Tảng (Q1-Q2 2024)
-- Hệ thống người chơi cơ bản
-- NFT đơn giản
-- Giao dịch P2P
-- Nhiệm vụ hàng ngày
-
-### Giai Đoạn 2: Mở Rộng (Q3-Q4 2024)
-- NFT tiến hóa
-- Giải đấu
-- Cho thuê tài sản
-- Phân tích nâng cao
-
-### Giai Đoạn 3: Tiên Tiến (2025+)
-- AI/ML trong gameplay
-- Tích hợp DAO
-- Công cụ cộng đồng
-- Tối ưu hóa quy mô
+## Kết Luận
+Cosmicrafts đại diện cho một mô hình mới trong game blockchain duy trì tiêu chuẩn cao nhất về chất lượng, bảo mật và hiệu suất.

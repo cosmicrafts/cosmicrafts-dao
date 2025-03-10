@@ -1,189 +1,187 @@
 # Cộng Đồng
-
-
+![Community](communitybanner.webp)
 
 ## Tổng Quan
 
-Cộng đồng Cosmicrafts DAO là động lực thúc đẩy sự phát triển của hệ sinh thái. Bằng cách kết hợp các ưu đãi kinh tế và sự tham gia tích cực, chúng tôi xây dựng một hệ sinh thái bền vững mang lại lợi ích cho tất cả người tham gia.
+Cộng đồng Cosmicrafts là động lực thúc đẩy sự phát triển và tiến hóa của hệ sinh thái của chúng tôi. Khung cộng đồng của chúng tôi cân bằng:
+- Sự tham gia và quản trị toàn diện
+- Phát triển kinh tế bền vững
+- Mở rộng hệ sinh thái chiến lược
+- Sáng tạo nội dung và phát triển văn hóa
 
 ## Quản Lý Kho Bạc
 
-### Yêu Cầu Phân Bổ Quỹ
+Kho bạc DAO là nền tảng cho tăng trưởng bền vững và sáng kiến cộng đồng. Tất cả phân bổ quỹ đều yêu cầu phê duyệt của cộng đồng thông qua hệ thống đề xuất SNS.
 
-| Danh Mục | Tỷ Lệ | Trọng Tâm |
-|---------|-----------|---------|
-| Phát Triển Sản Phẩm | 40% | Cải thiện game và nền tảng |
-| Phát Triển Cộng Đồng | 30% | Tiếp thị và tham gia |
-| Thanh Khoản | 20% | Ổn định thị trường |
-| Dự Trữ | 10% | Khẩn cấp và cơ hội |
+<div class="table-scroll">
 
-### Lĩnh Vực Trọng Tâm
+| Lĩnh Vực Trọng Tâm | Triển Khai | Yêu Cầu |
+|------------|----------------|--------------|
+| **Thu Hút Người Dùng** | Chiến dịch tiếp thị, Đối tác chiến lược | - Chỉ số ROI rõ ràng<br>- Phân tích đối tượng mục tiêu<br>- Theo dõi hiệu suất |
+| **Phát Triển** | Duy trì đội ngũ cốt lõi, Cải tiến kỹ thuật | - Yêu cầu kỹ năng<br>- Phù hợp lộ trình dự án<br>- Định nghĩa cột mốc |
+| **Sáng Kiến Cộng Đồng** | Sự kiện, Sáng tạo nội dung, Phát triển thị trường | - Chỉ số thành công<br>- Chi tiết ngân sách<br>- Thời gian và kết quả |
 
-1. **Phát Triển Sản Phẩm**
-   - Cải thiện game
-   - Cập nhật nền tảng
-   - Công cụ cộng đồng
-   - Tích hợp hệ sinh thái
+</div>
 
-2. **Phát Triển Cộng Đồng**
-   - Chiến dịch tiếp thị
-   - Chương trình đại sứ
-   - Sự kiện cộng đồng
-   - Chương trình giáo dục
-
-3. **Quản Lý Thanh Khoản**
-   - Ưu đãi nhà cung cấp thanh khoản
-   - Ổn định thị trường
-   - Chương trình mua lại
-   - Quỹ khẩn cấp
+::: info Yêu Cầu Đề Xuất
+Tất cả đề xuất kho bạc phải bao gồm:
+- Phân bổ ngân sách chi tiết
+- Chỉ số tác động dự kiến
+- Thời gian thực hiện
+- Đánh giá rủi ro
+- Tiêu chí thành công
+:::
 
 ## Chương Trình Người Sáng Tạo Nội Dung
 
+Chương trình Người Sáng Tạo Nội Dung nhằm xây dựng một hệ sinh thái bền vững của những người sáng tạo nội dung giúp phát triển và thu hút cộng đồng Cosmicrafts. Tất cả điều khoản và thù lao của chương trình đều phải được DAO phê duyệt.
+
 ### Khung Tiêu Chuẩn
 
-| Cấp Độ | Yêu Cầu | Phần Thưởng |
-|----------|--------------|----------|
-| Mới Bắt Đầu | 100 người theo dõi | 100 SPIRAL/tháng |
-| Trung Cấp | 1,000 người theo dõi | 500 SPIRAL/tháng |
-| Cao Cấp | 10,000 người theo dõi | 2,500 SPIRAL/tháng |
-| Tinh Anh | 100,000+ người theo dõi | 10,000 SPIRAL/tháng |
+<div class="table-scroll">
 
-### Cơ Cấu Thù Lao
+| Cấp Độ | Yêu Cầu | Tiêu Chí Đánh Giá |
+|------|--------------|-------------------|
+| **Mới Nổi** | - Hiện diện tích cực trên mạng xã hội<br>- Lịch trình nội dung nhất quán | - Chất lượng nội dung<br>- Chỉ số tương tác<br>- Tính xác thực của khán giả |
+| **Đã Thiết Lập** | - Thành tích đã được chứng minh<br>- Nội dung hướng đến tương tác<br>- Tham gia cộng đồng | - Phạm vi tiếp cận và tác động<br>- Hiệu suất nội dung<br>- Phản hồi cộng đồng |
+| **Đối Tác** | - Phạm vi tiếp cận khán giả lớn<br>- Sản xuất chất lượng cao<br>- Phù hợp giá trị chiến lược | - Tác động dài hạn<br>- Phù hợp thương hiệu<br>- Lãnh đạo cộng đồng |
 
-| Hoạt Động | Phần Thưởng Cơ Bản | Bội Số |
-|----------|----------------|------------|
-| Video | 50 SPIRAL | Lên đến 3x |
-| Phát Trực Tiếp | 100 SPIRAL/giờ | Lên đến 2x |
-| Bài Viết | 75 SPIRAL | Lên đến 2.5x |
-| Nghệ Thuật | 200 SPIRAL | Lên đến 2x |
+</div>
 
-### Tiêu Chí Đánh Giá
+### Cấu Trúc Thù Lao
 
-| Tiêu Chí | Trọng Số | Mục Tiêu |
-|----------|--------|--------|
-| Lượt Xem | 30% | Tăng trưởng hàng tháng |
-| Tương Tác | 40% | Tỷ lệ tương tác |
-| Chất Lượng | 20% | Đánh giá đồng cấp |
-| Nhất Quán | 10% | Xuất bản thường xuyên |
+Người sáng tạo nội dung có thể gửi đề xuất đến DAO cho:
+- Thù lao dựa trên hiệu suất
+- Tài trợ dự án cụ thể
+- Tài trợ sự kiện
+- Cơ hội hợp tác chiến lược
+
+::: info Hướng Dẫn Đề Xuất
+Người sáng tạo phải bao gồm:
+- Chiến lược nội dung chi tiết
+- Chỉ số hiệu suất
+- Phân tích đối tượng mục tiêu
+- Đánh giá tác động dự kiến
+- Yêu cầu ngân sách
+:::
+
+### Chỉ Số Đánh Giá
+
+<div class="table-scroll">
+
+| Danh Mục | Chỉ Số | Đánh Giá Tác Động |
+|----------|---------|-------------------|
+| **Phạm Vi** | - Người xem duy nhất<br>- Phân bố địa lý<br>- Giữ chân khán giả | Đo lường qua phân tích nền tảng |
+| **Tương Tác** | - Hoạt động bình luận<br>- Tỷ lệ chia sẻ<br>- Tương tác cộng đồng | Theo dõi qua công cụ tương tác |
+| **Chất Lượng** | - Giá trị sản xuất<br>- Tính độc đáo nội dung<br>- Phản hồi cộng đồng | Đánh giá chất lượng định kỳ |
+
+</div>
+
+::: info Phát Triển Chương Trình
+Cộng đồng DAO sẽ:
+- Xác định mô hình thù lao cụ thể
+- Thiết lập tiêu chí đánh giá
+- Điều chỉnh thông số chương trình
+- Xem xét và phê duyệt đề xuất người sáng tạo
+:::
 
 ## Thị Trường
 
+Thị trường do DAO quản lý đóng vai trò là trung tâm cho giao dịch tài sản số và thương mại cộng đồng.
+
 ### Tính Năng Cốt Lõi
 
-| Tính Năng | Mô Tả | Trạng Thái Phát Triển |
-|---------|-------------|-----------------|
-| Giao Dịch P2P | Trao đổi tài sản trực tiếp | Hoàn thành |
-| Đấu Giá | Đấu giá NFT | Đang phát triển |
-| Niêm Yết Hàng Loạt | Danh sách nhiều mục | Đã lên kế hoạch |
-| Giao Dịch Tự Động | Nhà tạo lập thị trường | Đã lên kế hoạch |
+<div class="table-scroll">
 
-### Kiểm Soát Cộng Đồng
+| Tính Năng | Triển Khai | Kiểm Soát Cộng Đồng |
+|---------|----------------|------------------|
+| **Giao Dịch Đa Chuỗi** | - Hỗ trợ đa chuỗi<br>- Tích hợp cầu nối<br>- Tiêu chuẩn phổ quát | - Lựa chọn giao thức<br>- Cấu trúc phí<br>- Ưu tiên tích hợp |
+| **Tiêu Chuẩn Tài Sản** | - Tương thích NFT<br>- Tiêu chuẩn metadata<br>- Hệ thống xác minh | - Phê duyệt định dạng<br>- Hướng dẫn chất lượng<br>- Tiêu chí niêm yết |
+| **Mô Hình Doanh Thu** | - Phân phối phí<br>- Phần thưởng stake<br>- Tiền bản quyền người sáng tạo | - Thiết lập tỷ lệ<br>- Phân bổ phần thưởng<br>- Phần chia kho bạc |
 
-| Chức Năng | Yêu Cầu | Tác Động |
-|----------|--------------|----------|
-| Niêm Yết Tài Sản | Bỏ phiếu cộng đồng | Chấp nhận tài sản |
-| Điều Chỉnh Phí | Đề xuất + bỏ phiếu | Cấu trúc phí |
-| Quy Tắc Giao Dịch | Đồng thuận ủy ban | Tiêu chuẩn thị trường |
-| Chương Trình Ưu Đãi | Phê duyệt kho bạc | Phân phối phần thưởng |
+</div>
+
+::: info Phát Triển Thị Trường
+Cộng đồng thúc đẩy phát triển thị trường thông qua:
+- Đề xuất tính năng
+- Bỏ phiếu tích hợp
+- Điều chỉnh thông số
+- Cập nhật mô hình doanh thu
+:::
 
 ## Quản Lý Thanh Khoản
 
-### Hoạt Động
+DAO giám sát hoạt động thanh khoản chiến lược để đảm bảo hiệu quả thị trường và ổn định token.
 
-| Hoạt Động | Tần Suất | Người Chịu Trách Nhiệm |
-|----------|------------|------------|
-| Giám Sát Thanh Khoản | Liên tục | Hệ thống |
-| Điều Chỉnh Ưu Đãi | Hàng tuần | Ủy ban thanh khoản |
-| Đánh Giá Rủi Ro | Hàng tháng | Kiểm toán viên cộng đồng |
-| Báo Cáo Hiệu Suất | Hàng quý | Đội phân tích |
+<div class="table-scroll">
 
-### Yêu Cầu Quản Trị
+| Hoạt Động | Quy Trình | Yêu Cầu Quản Trị |
+|-----------|---------|------------------------|
+| **Thanh Khoản DEX** | - Điều chỉnh thanh khoản định kỳ<br>- Đa dạng hóa pool<br>- Tối ưu hóa lợi suất | - Yêu cầu bỏ phiếu cộng đồng<br>- Thời gian đề xuất tối thiểu 7 ngày<br>- Phân tích tác động chi tiết |
+| **Tích Hợp CEX** | - Tiêu chí lựa chọn sàn<br>- Yêu cầu niêm yết<br>- Phân bổ thanh khoản | - Đánh giá tác động kho bạc<br>- Xác minh bảo mật<br>- Phù hợp chiến lược dài hạn |
+| **Tạo Lập Thị Trường** | - Tạo lập thị trường tự động<br>- Độ sâu sổ lệnh<br>- Quản lý biến động | - Thiết lập thông số<br>- Giám sát hiệu suất<br>- Đánh giá rủi ro kho bạc |
 
-| Quyết Định | Ngưỡng Bỏ Phiếu | Thời Gian Thực Hiện |
-|----------|----------------|-----------------|
-| Điều Chỉnh Thông Số | 51% | 24 giờ |
-| Phân Bổ Quỹ | 66% | 48 giờ |
-| Thay Đổi Hệ Thống | 75% | 72 giờ |
-| Hành Động Khẩn Cấp | 90% | Ngay lập tức |
+</div>
+
+::: info Hoạt Động Thanh Khoản
+Tất cả hoạt động thanh khoản phải:
+- Trải qua đánh giá bảo mật kỹ lưỡng
+- Bao gồm chiến lược vào và ra rõ ràng
+- Xác định biện pháp giảm thiểu rủi ro
+- Thiết lập yêu cầu báo cáo
+- Phù hợp với mục tiêu kinh tế token dài hạn
+:::
 
 ## Đầu Tư Tổ Chức
 
-### Loại Đầu Tư
+DAO có thể phê duyệt phân bổ kho bạc chiến lược cho đối tác tổ chức để thúc đẩy tăng trưởng và phát triển.
 
-| Loại | Tối Thiểu | Thời Gian Khóa |
-|--------|------------|-------------|
-| Chiến Lược | 100,000 SPIRAL | 24 tháng |
-| Đối Tác | 50,000 SPIRAL | 12 tháng |
-| Tổ Chức | 25,000 SPIRAL | 6 tháng |
+<div class="table-scroll">
 
-### Yêu Cầu
+| Loại Đầu Tư | Khung | Yêu Cầu |
+|-----------------|-----------|--------------|
+| **Bán Chiến Lược** | - Phân bổ token riêng<br>- Đa dạng hóa kho bạc<br>- Phát triển đối tác | - Yêu cầu giải phóng<br>- Phù hợp mục tiêu DAO<br>- Giá trị gia tăng ngoài vốn |
+| **Đối Tác DAO** | - Hợp tác giữa các DAO<br>- Tích hợp hệ sinh thái<br>- Phát triển chung | - Phân tích lợi ích chung<br>- Tương thích kỹ thuật<br>- Đánh giá tạo giá trị |
+| **Tài Trợ Hệ Sinh Thái** | - Tài trợ cho dự án hệ sinh thái<br>- Chương trình ươm tạo<br>- Hỗ trợ phát triển | - Kết quả đo lường được<br>- Phân phối theo cột mốc<br>- Tích hợp công nghệ |
 
-1. **Xác Minh**
-   - Thẩm định
-   - Xác minh danh tính
-   - Đánh giá uy tín
+</div>
 
-2. **Cam Kết**
-   - Tham gia quản trị
-   - Hỗ trợ hệ sinh thái
-   - Cung cấp chuyên môn
-
-3. **Đóng Góp**
-   - Phát triển kinh doanh
-   - Đối tác chiến lược
-   - Mở rộng thị trường
+::: info Yêu Cầu Tổ Chức
+Đối tác tổ chức tiềm năng phải chứng minh:
+- Cam kết dài hạn với hệ sinh thái
+- Đóng góp giá trị cụ thể ngoài vốn
+- Phù hợp với giá trị cộng đồng
+- Chuyên môn kỹ thuật hoặc thị trường
+- Hoạt động và báo cáo minh bạch
+:::
 
 ## Tăng Trưởng Chiến Lược
 
+Sáng kiến do cộng đồng thúc đẩy cho việc mở rộng hệ sinh thái bền vững.
+
 ### Thu Hút Người Dùng
 
-| Kênh | Ngân Sách | ROI Mục Tiêu |
-|----------|----------|--------------|
-| Tiếp Thị Số | 30% | 3x |
-| Đối Tác | 40% | 4x |
-| Chương Trình Giới Thiệu | 20% | 5x |
-| Quan Hệ Công Chúng | 10% | 2x |
+<div class="table-scroll">
 
-### Giữ Chân Người Dùng
+| Kênh | Chiến Lược | Chỉ Số Thành Công |
+|---------|----------|----------------|
+| **Đối Tác Nội Dung** | - Hợp tác người sáng tạo<br>- Liên minh chiến lược<br>- Đại sứ cộng đồng | - Tăng trưởng khán giả<br>- Tỷ lệ tương tác<br>- Chỉ số chuyển đổi |
+| **Sự Kiện Cộng Đồng** | - Giải đấu<br>- Sự kiện đặc biệt<br>- Gặp gỡ khu vực | - Tỷ lệ tham gia<br>- Chỉ số giữ chân<br>- Phản hồi cộng đồng |
+| **Chương Trình Khuyến Khích** | - Hệ thống giới thiệu<br>- Phần thưởng thành tích<br>- Thử thách xã hội | - Chi phí thu hút người dùng<br>- Tỷ lệ giữ chân<br>- Tăng trưởng mạng lưới |
 
-| Chiến Lược | Tiêu Chí | Mục Tiêu |
-|--------------|----------|--------|
-| Chương Trình Trung Thành | Tỷ lệ giữ chân | 80% |
-| Cải Thiện Sản Phẩm | Sự hài lòng của người dùng | 90% |
-| Hỗ Trợ Cộng Đồng | Thời gian phản hồi | <2 giờ |
-| Phần Thưởng | Sự tham gia của người dùng | 70% hoạt động |
+</div>
 
-### Sáng Kiến Tăng Trưởng
+### Khung Giữ Chân
 
-1. **Chương Trình Đại Sứ**
-   - Tuyển dụng và đào tạo
-   - Hệ thống phần thưởng
-   - Mục tiêu mở rộng
+::: info Yếu Tố Chính
+- Hệ thống phần thưởng tiến triển
+- Khuyến khích tương tác xã hội
+- Cơ hội lãnh đạo cộng đồng
+- Sự kiện và cuộc thi thường xuyên
+- Hỗ trợ sáng tạo nội dung
+:::
 
-2. **Đối Tác Hệ Sinh Thái**
-   - Tích hợp sản phẩm
-   - Chia sẻ tài nguyên
-   - Tiếp thị chung
-
-3. **Chương Trình Giáo Dục**
-   - Nội dung giáo dục
-   - Hội thảo
-   - Chương trình cố vấn
-
-## Lộ Trình Cộng Đồng
-
-### Giai Đoạn 1: Thành Lập (Tháng 1-6)
-- Ra mắt chương trình người sáng tạo nội dung
-- Thành lập chương trình đại sứ
-- Tạo kênh cộng đồng
-
-### Giai Đoạn 2: Tăng Trưởng (Tháng 7-12)
-- Mở rộng chương trình phần thưởng
-- Ra mắt đối tác chiến lược
-- Cải thiện công cụ cộng đồng
-
-### Giai Đoạn 3: Mở Rộng (Tháng 13+)
-- Chương trình tổ chức
-- Mở rộng toàn cầu
-- Tích hợp hệ sinh thái
+::: info Cơ Sở Hạ Tầng Kỹ Thuật
+Kiến trúc kỹ thuật Cosmicrafts cung cấp cho cộng đồng của chúng tôi môi trường phản hồi nhanh, không tốn gas cho tương tác và tham gia liền mạch. Để biết chi tiết về thiết kế canister đơn và triển khai kỹ thuật của chúng tôi, xem phần [Kiến Trúc](/architecture).
+:::
 

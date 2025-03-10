@@ -1,142 +1,187 @@
 # Kinh Tế Token
-
-
-
+![Tokenomics](spiralbanner.webp)
 ## Tổng Quan
 
-Token SPIRAL là xương sống của hệ sinh thái Cosmicrafts DAO, cho phép quản trị, phần thưởng và sự tham gia vào hệ sinh thái. Token được thiết kế không chỉ là một token đầu cơ - nó là một công cụ đa chức năng hỗ trợ sự phát triển bền vững của hệ sinh thái.
+Token SPIRAL là nền tảng kinh tế của Cosmicrafts DAO, được thiết kế để:
+- Tăng cường quản trị và khen thưởng sự tham gia
+- Thúc đẩy tăng trưởng kinh tế bền vững
+- Điều chỉnh lợi ích của các bên thông qua cơ chế khuyến khích có cấu trúc
+- Cho phép chuyển giá trị và tiện ích giữa các trò chơi
 
-### Tổng Cung
+Tổng Cung: **1 tỷ token SPIRAL**
 
-Tổng cung của token SPIRAL là 100,000,000 (một trăm triệu) token.
+<div class="tokenomics-diagram">
+  <img src="src/assets/icons/tokenomics.svg" alt="Phân Bổ Token SPIRAL" />
+</div>
+
+<style>
+.tokenomics-diagram {
+  text-align: center;
+  width: 100%;
+  margin: 2rem auto;
+}
+
+  .vesting-schedule{
+    max-width: 75%;
+  }
+
+.tokenomics-diagram img {
+  width: 65%;
+  max-width: 800px;
+  height: auto;
+  filter: none;
+  box-shadow: none;
+  background: transparent;
+  margin: 0 auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .tokenomics-diagram img {
+    width: 100%;
+    max-width: 100%;
+  }
+  .vesting-schedule{
+    width: 100%;
+    max-width: 100%;
+  }
+}
+</style>
 
 ## Phân Phối Chiến Lược
 
-Việc phân phối token được thiết kế để đảm bảo tăng trưởng bền vững dài hạn và sự tham gia tích cực từ tất cả các bên liên quan.
+### Chiến Lược Phân Bổ Token
 
-### Chiến Lược Phân Bổ
+| Chủ Sở Hữu | Số Lượng | Mục Đích | Thời Gian Khóa |
+|--------|---------|---------|-----------|
+| **Kho Bạc** | 760M (76%) | Phát triển hệ sinh thái | Kiểm soát bởi DAO |
+| **Hoán Đổi SNS** | 120M (12%) | Bán công khai | 8 đợt giải phóng theo quý |
+| **Đội Ngũ Phát Triển** | 80M (8%) | Đội ngũ cốt lõi | Giải phóng trong 8 năm |
+| **Nhà Đầu Tư Seed** | 40M (4%) | Người ủng hộ sớm | Giải phóng linh hoạt |
 
-| Người Nắm Giữ | Số Lượng | Mục Đích | Thời Gian Khóa |
-|----------|---------|---------|------------|
-| Cộng Đồng | 40% | Phần thưởng game, chương trình người sáng tạo nội dung, khuyến khích thanh khoản | Giải phóng dần |
-| Kho Bạc | 25% | Tài trợ phát triển, tiếp thị, tài trợ | Khóa 12 tháng |
-| Đội Ngũ | 15% | Thù lao cho đội ngũ và cố vấn | Khóa 24 tháng |
-| Nhà Đầu Tư | 20% | Tài trợ dự án | Khóa 18 tháng |
+Cơ Chế Cốt Lõi:
+- **Mô Hình Giảm Phát**: Phí giao dịch 0.01 SPIRAL
+- **Ngưỡng Quản Trị**: Tối thiểu 1,000 SPIRAL để stake
+- **Bảo Mật Kho Bạc**: Yêu cầu phê duyệt của DAO
+- **Kiểm Toán Đầy Đủ**: Mọi hoạt động được theo dõi trên chuỗi
 
-### Chiến Lược Giải Phóng
+## Chiến Lược Giải Phóng
 
-Lịch giải phóng được thiết kế để tránh áp lực bán và đảm bảo phân phối công bằng:
+<div class="vesting-schedule">
+  <img src="src/assets/icons/vesting.svg" alt="Lịch Trình Giải Phóng Token SPIRAL" />
+</div>
 
-- **Cộng Đồng**: Giải phóng dần trong 48 tháng
-- **Kho Bạc**: Giải phóng 10% mỗi 3 tháng sau thời gian khóa ban đầu
-- **Đội Ngũ**: Giải phóng 5% mỗi 3 tháng sau thời gian khóa ban đầu
-- **Nhà Đầu Tư**: Giải phóng 8.33% mỗi 3 tháng sau thời gian khóa ban đầu
+<style>
+.vesting-schedule {
+  background: transparent;
+  border-radius: var(--radius-medium);
+  padding: 2rem;
+  margin: 2rem 0;
+}
 
-## Cơ Chế Cốt Lõi
+.vesting-schedule img {
+  width: 100%;
+  height: auto;
+  max-width: 800px;
+  margin: 0 auto;
+  display: block;
+  box-shadow: none;
+}
 
-### 1. Chức Năng Quản Trị
+@media (max-width: 768px) {
+  .vesting-schedule {
+    padding: 1rem;
+  }
+}
+</style>
 
-| Chức Năng | Mô Tả | Yêu Cầu Token |
-|----------|-------------|-----------------|
-| Bỏ Phiếu Đề Xuất | Tham gia quyết định DAO | 1,000 SPIRAL |
-| Tạo Đề Xuất | Đệ trình đề xuất để bỏ phiếu | 5,000 SPIRAL |
-| Ủy Ban Quản Trị | Tham gia ủy ban chuyên môn | 10,000 SPIRAL |
-| Quyền Phủ Quyết | Ngăn chặn đề xuất có hại | 100,000 SPIRAL |
+### Phân Bổ Cho Đội Ngũ Phát Triển (80M)
+Được phân bổ cho Quỹ Cosmicrafts
+- **Mục Đích**: Đảm bảo cam kết dài hạn và tạo giá trị
+- **Cấu Trúc**: Thời gian giải phóng 8 năm
+- **Quản Trị**: Quyền biểu quyết đầy đủ với token đã khóa
 
-### 2. Lợi Ích Kinh Tế
+### Nhà Đầu Tư Chiến Lược (40M)
 
-| Lợi Ích | Mô Tả | Yêu Cầu Token |
-|----------|-------------|-----------------|
-| Chia Sẻ Doanh Thu | Phần trăm doanh thu thị trường | 2,500 SPIRAL |
-| Giảm Giá Thị Trường | Giảm phí giao dịch | 5,000 SPIRAL |
-| Bội Số Phần Thưởng | Tỷ lệ phần thưởng nâng cao | 7,500 SPIRAL |
-| Truy Cập Độc Quyền | Nội dung và tính năng đặc biệt | 15,000 SPIRAL |
+#### 2Link (16M)
+Đối tác cơ sở hạ tầng blockchain chiến lược
+- 8 nơ-ron, mỗi nơ-ron 2M
+- Lịch giải phóng theo quý
 
-### 3. Lợi Ích Cộng Đồng
+#### Anmi Capital (10M)
+Chuyên môn và mạng lưới trong ngành blockchain
+- 8 nơ-ron, mỗi nơ-ron 1.25M
+- Lịch giải phóng theo quý
 
-| Lợi Ích | Mô Tả | Yêu Cầu Token |
-|----------|-------------|-----------------|
-| Truy Cập Sớm | Trải nghiệm tính năng mới đầu tiên | 1,000 SPIRAL |
-| Hỗ Trợ Cao Cấp | Hỗ trợ ưu tiên chuyên biệt | 2,500 SPIRAL |
-| Trạng Thái VIP | Huy hiệu và đặc quyền đặc biệt | 5,000 SPIRAL |
-| Ảnh Hưởng Sản Phẩm | Đóng góp vào lộ trình | 10,000 SPIRAL |
+#### Genesis (14M)
+Nhóm nơ-ron của những người ủng hộ sớm
+- 8 nơ-ron, mỗi nơ-ron 1.75M
+- Lịch giải phóng theo năm
+
+### Phân Phối Công Khai (120M)
+- **Cấu Trúc**: 8 sự kiện giải phóng cách nhau 3 tháng
+- **Giải Phóng**: 12.5% mỗi đợt (15M SPIRAL)
+- **Mục Đích**: Đảm bảo phân phối token ổn định
+- **Giới Hạn Tham Gia**:
+  - Tối thiểu: 100 ICP
+  - Tối đa: 100,000 ICP mỗi người tham gia
+  - Tổng Tối Đa: 1,000,000 ICP
+
+## Khung Tiện Ích
+
+### Chức Năng Quản Trị
+
+| Tính Năng | Mô Tả | Yêu Cầu |
+|---------|-------------|--------------|
+| **Tạo Đề Xuất** | Gửi đề xuất mới để cộng đồng bỏ phiếu | Tối thiểu 1,000 SPIRAL stake |
+| **Quyền Bỏ Phiếu** | Tham gia vào quá trình ra quyết định của DAO | Yêu cầu nơ-ron hoạt động |
+| **Thông Số Giao Thức** | Bỏ phiếu về thay đổi thông số toàn hệ thống | Tham gia tích cực vào quản trị |
+
+### Tiện Ích Kinh Tế
+
+| Chức Năng | Giá Trị | Mục Đích |
+|----------|--------|----------|
+| **Phí Giao Dịch** | 0.01 SPIRAL | Bảo trì mạng và giảm phát |
+| **Giao Dịch Liên Trò Chơi** | Linh hoạt | Cho phép chuyển giá trị giữa các trò chơi |
+| **Hoạt Động NFT** | Dựa trên thị trường | Tạo điều kiện giao dịch tài sản số |
+| **Tính Năng Cao Cấp** | Theo cấp độ | Truy cập vào tính năng nâng cao của nền tảng |
+
+### Lợi Ích Cộng Đồng
+
+| Lợi Ích | Loại | Chi Tiết |
+|---------|------|----------|
+| **Phần Thưởng Stake** | Kinh tế | APY động dựa trên thời gian khóa |
+| **Truy Cập Giải Đấu** | Trò chơi | Ưu tiên tham gia sự kiện cạnh tranh |
+| **Truy Cập Sớm** | Sản phẩm | Xem trước tính năng và trò chơi mới |
+| **Sự Kiện Đặc Biệt** | Xã hội | Các cuộc gặp gỡ và hoạt động cộng đồng độc quyền |
 
 ## Phần Thưởng
+Cấu trúc phần thưởng được thiết kế để:
+- Khuyến khích sự tham gia dài hạn
+- Điều chỉnh lợi ích của các bên liên quan
+- Duy trì kinh tế token bền vững
+- Hỗ trợ quản trị giao thức
+- Cho phép phân phối giá trị do cộng đồng điều hành
 
-### Phần Thưởng Staking
+### Khuyến Khích Stake
 
-| Cấp Độ | Thời Gian Khóa | APY | Yêu Cầu Token |
-|----------|-------------|-----|-----------------|
-| Đồng | 3 tháng | 12% | 1,000 SPIRAL |
-| Bạc | 6 tháng | 18% | 5,000 SPIRAL |
-| Vàng | 12 tháng | 24% | 10,000 SPIRAL |
-| Bạch Kim | 24 tháng | 32% | 25,000 SPIRAL |
+| Thông Số | Giá Trị | Thời Gian |
+|-----------|--------|----------|
+| **Tỷ Lệ Ban Đầu** | 8% APY | Bắt đầu giao thức |
+| **Tỷ Lệ Cuối** | 1% APY | Sau chuyển đổi |
+| **Thời Gian Chuyển Đổi** | 8 năm | Giảm tuyến tính |
 
-### Bội Số Hiệu Suất
+### Bonus Quyền Biểu Quyết
 
-| Hoạt Động | Bội Số | Phần Thưởng Tối Đa |
-|----------|------------|----------------|
-| Tham Gia Quản Trị | 1.2x | 5,000 SPIRAL/tháng |
-| Tạo Nội Dung | 1.5x | 10,000 SPIRAL/tháng |
-| Cung Cấp Thanh Khoản | 1.3x | 7,500 SPIRAL/tháng |
-| Phát Triển Hệ Sinh Thái | 1.4x | 15,000 SPIRAL/tháng |
+| Loại Bonus | Bonus Tối Đa | Thời Gian Đạt Được |
+|------------|---------------|-----------------|
+| **Độ Trễ Giải Phóng** | +100% | Khóa 8 năm |
+| **Độ Trưởng Thành** | +100% | 365 ngày |
 
-## Cơ Chế Đốt
+### Khuyến Khích Bổ Sung
 
-Để tạo áp lực tăng giá bền vững cho token, các cơ chế đốt sau được thực hiện:
-
-### 1. Đốt Giao Dịch
-- 1% phí thị trường
-- 2% doanh số bán NFT ban đầu
-- 0.5% giao dịch P2P
-
-### 2. Đốt Sự Kiện
-- 5% phần thưởng sự kiện đặc biệt
-- 3% giải thưởng giải đấu
-- 2% phần thưởng theo mùa
-
-### 3. Đốt Quản Trị
-- 10% phí tạo đề xuất
-- 5% phân phối kho bạc
-- 1% phần thưởng bỏ phiếu
-
-## Tính Bền Vững Dài Hạn
-
-Mô hình kinh tế token của Cosmicrafts được thiết kế để cân bằng giữa:
-
-1. **Tăng Trưởng Bền Vững**
-   - Phân phối token dần dần
-   - Nhiều cơ chế đốt
-   - Khuyến khích staking dài hạn
-
-2. **Tham Gia Tích Cực**
-   - Phần thưởng nhiều cấp độ
-   - Lợi ích tăng dần
-   - Bội số hiệu suất
-
-3. **Giá Trị Hệ Sinh Thái**
-   - Chia sẻ doanh thu cho người nắm giữ
-   - Lợi ích độc quyền
-   - Ảnh hưởng quản trị
-
-## Lộ Trình Kinh Tế
-
-### Giai Đoạn 1: Ra Mắt (Tháng 1-6)
-- Ra mắt token ban đầu
-- Kích hoạt staking cơ bản
-- Bắt đầu phần thưởng cộng đồng
-
-### Giai Đoạn 2: Tăng Trưởng (Tháng 7-12)
-- Kích hoạt chia sẻ doanh thu
-- Ra mắt chương trình người sáng tạo nội dung
-- Mở rộng khuyến khích thanh khoản
-
-### Giai Đoạn 3: Mở Rộng (Tháng 13-24)
-- Thêm cấp độ phần thưởng mới
-- Tích hợp đối tác hệ sinh thái
-- Cải thiện cơ chế đốt
-
-### Giai Đoạn 4: Trưởng Thành (Tháng 25+)
-- Kích hoạt quản trị đầy đủ
-- Ra mắt sản phẩm tài chính mới
-- Mở rộng tích hợp game
+DAO có thể triển khai và quản lý các cơ chế phần thưởng bổ sung bao gồm:
+- Chia sẻ doanh thu từ hoạt động nền tảng
+- Mô hình phân phối dựa trên hiệu suất
+- Chương trình phần thưởng do cộng đồng điều hành
+- Sáng kiến phát triển hệ sinh thái
