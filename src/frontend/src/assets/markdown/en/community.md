@@ -1,170 +1,189 @@
 # Community
+![Community](communitybanner.webp)
 
 ## Overview
 
-Cosmicrafts builds value through strategic community engagement, content creation, and global events. Our community programs focus on sustainable growth, user acquisition, and long-term retention through structured incentives and clear value propositions.
+The Cosmicrafts community is the driving force behind our ecosystem's growth and evolution. Our community framework balances:
+- Inclusive participation and governance
+- Sustainable economic development
+- Strategic ecosystem expansion
+- Content creation and cultural growth
 
-<div class="feature-highlight">
+Through transparent treasury management, creator empowerment, and strategic partnerships, we build a vibrant digital society where members directly influence platform development while sharing in its success.
 
-## Content Creation Program
+## Treasury Management
+
+The DAO treasury is the foundation for sustainable growth and community initiatives. All funding allocations require community approval through the SNS proposal system.
 
 <div class="table-scroll">
 
-| Program Element | Benefits | Implementation |
-|----------------|----------|----------------|
-| **Strategic Support** | Content grants, Revenue sharing | Performance-based distribution |
-| **Early Access** | Features, Assets, Tools | Priority creator access |
-| **Professional Tools** | Production resources | Specialized creator toolkit |
-| **Recognition** | Platform features, Custom items | Merit-based rewards |
+| Focus Area | Implementation | Requirements |
+|------------|----------------|--------------|
+| **User Acquisition** | Marketing campaigns, Strategic partnerships | - Clear ROI metrics<br>- Target audience analysis<br>- Performance tracking |
+| **Development** | Core team maintenance, Technical improvements | - Skill requirements<br>- Project roadmap alignment<br>- Milestone definitions |
+| **Community Initiatives** | Events, Content creation, Market development | - Success metrics<br>- Budget breakdown<br>- Timeline and deliverables |
 
 </div>
-</div>
 
-## Community Engagement
+::: info Proposal Requirements
+All treasury proposals must include:
+- Detailed budget allocation
+- Expected impact metrics
+- Implementation timeline
+- Risk assessment
+- Success criteria
+:::
 
-### Competitive Events
+## Content Creators Program
 
-<div class="event-structure">
+The Content Creators Program aims to build a sustainable ecosystem of content creators who help grow and engage the Cosmicrafts community. All program terms and compensation are subject to DAO approval.
+
+### Qualification Framework
+
 <div class="table-scroll">
 
-| Event Type | Frequency | Rewards |
-|------------|-----------|---------|
-| Tournaments | Weekly | SPIRAL + NFTs |
-| Championships | Seasonal | Major prize pools |
-| Special Events | Monthly | Unique rewards |
+| Tier | Requirements | Evaluation Criteria |
+|------|--------------|-------------------|
+| **Emerging** | - Active social media presence<br>- Consistent content schedule | - Content quality<br>- Engagement metrics<br>- Audience authenticity |
+| **Established** | - Proven track record<br>- Engagement-driven content<br>- Community participation | - Reach and impact<br>- Content performance<br>- Community feedback |
+| **Partner** | - Significant audience reach<br>- High-quality production<br>- Strategic value alignment | - Long-term impact<br>- Brand alignment<br>- Community leadership |
 
 </div>
+
+### Compensation Structure
+
+Content creators can submit proposals to the DAO for:
+- Performance-based compensation
+- Project-specific funding
+- Event sponsorship
+- Strategic collaboration opportunities
+
+::: info Proposal Guidelines
+Creators must include:
+- Detailed content strategy
+- Performance metrics
+- Target audience analysis
+- Expected impact assessment
+- Budget requirements
+:::
+
+### Evaluation Metrics
+
+<div class="table-scroll">
+
+| Category | Metrics | Impact Assessment |
+|----------|---------|-------------------|
+| **Reach** | - Unique viewers<br>- Geographic distribution<br>- Audience retention | Measured through platform analytics |
+| **Engagement** | - Comment activity<br>- Share rates<br>- Community interaction | Tracked via engagement tools |
+| **Quality** | - Production value<br>- Content originality<br>- Community feedback | Regular quality assessments |
+
 </div>
 
-### Social Activities
-
-::: info Engagement Focus
-Our community activities emphasize:
-- Regular gaming sessions
-- Team competitions
-- Special events
-- Direct interaction
+::: info Program Evolution
+The DAO community will:
+- Define specific compensation models
+- Establish evaluation criteria
+- Adjust program parameters
+- Review and approve creator proposals
 :::
 
 ## Marketplace
-Of course we need to put the bases for a decentralized market here, orchestrated by the DAO itself! let's put the bases and add RoadMap references
 
+The DAO-governed marketplace serves as the central hub for digital asset trading and community commerce.
 
-## Treasury Management
-Yes also dont forget to elaborate on this to have principles on how we set the rules, although they can pretty much propose and vote at will once they have tokens right? thats why its a DAO but well at least lets have a spirit 
-
-## Growth & Expansion
-
-<div class="strategy-box">
-
-### User Acquisition Strategy
+### Core Features
 
 <div class="table-scroll">
 
-| Channel | Approach | Target Outcome |
-|---------|----------|----------------|
-| Content Partnerships | Strategic collaborations | Audience growth |
-| Referral System | Community incentives | Organic expansion |
-| Regional Programs | Local focus | Market penetration |
-| Marketing | Targeted campaigns | Brand awareness |
+| Feature | Implementation | Community Control |
+|---------|----------------|------------------|
+| **Cross-Chain Trading** | - Multi-chain support<br>- Bridge integrations<br>- Universal standards | - Protocol selection<br>- Fee structures<br>- Integration priorities |
+| **Asset Standards** | - NFT compatibility<br>- Metadata standards<br>- Verification systems | - Format approval<br>- Quality guidelines<br>- Listing criteria |
+| **Revenue Model** | - Fee distribution<br>- Staking rewards<br>- Creator royalties | - Rate setting<br>- Reward allocation<br>- Treasury share |
 
 </div>
+
+::: info Marketplace Evolution
+The community drives marketplace development through:
+- Feature proposals
+- Integration voting
+- Parameter adjustment
+- Revenue model updates
+:::
+
+## Liquidity Management
+
+The DAO oversees strategic liquidity operations to ensure market efficiency and token stability.
+
+<div class="table-scroll">
+
+| Operation | Process | Governance Requirements |
+|-----------|---------|------------------------|
+| **DEX Liquidity** | - Periodic liquidity adjustments<br>- Pool diversification<br>- Yield optimization | - Community vote required<br>- Minimum 7-day proposal period<br>- Detailed impact analysis |
+| **CEX Integration** | - Exchange selection criteria<br>- Listing requirements<br>- Liquidity allocation | - Treasury impact assessment<br>- Security verification<br>- Long-term strategy alignment |
+| **Market Making** | - Automated market making<br>- Order book depth<br>- Volatility management | - Parameter setting<br>- Performance monitoring<br>- Treasury risk assessment |
+
+</div>
+
+::: info Liquidity Operations
+All liquidity operations must:
+- Undergo thorough security review
+- Include clear entry and exit strategies
+- Define risk mitigation measures
+- Establish reporting requirements
+- Align with long-term tokenomics goals
+:::
+
+## Institutional Investment
+
+The DAO may approve strategic treasury allocations to institutional partners to accelerate growth and development.
+
+<div class="table-scroll">
+
+| Investment Type | Framework | Requirements |
+|-----------------|-----------|--------------|
+| **Strategic Sales** | - Private token allocations<br>- Treasury diversification<br>- Partnership development | - Vesting requirements<br>- Alignment with DAO objectives<br>- Value-add beyond capital |
+| **DAO Partnerships** | - Cross-DAO collaborations<br>- Ecosystem integration<br>- Joint development | - Mutual benefit analysis<br>- Technical compatibility<br>- Value creation assessment |
+| **Ecosystem Funding** | - Grants for ecosystem projects<br>- Incubation programs<br>- Development support | - Measurable outcomes<br>- Milestone-based distribution<br>- Technology integration |
+
+</div>
+
+::: info Institutional Requirements
+Potential institutional partners must demonstrate:
+- Long-term commitment to the ecosystem
+- Specific value contribution beyond capital
+- Alignment with community values
+- Technical or market expertise
+- Transparent operations and reporting
+:::
+
+## Strategic Growth
+
+Community-driven initiatives for sustainable ecosystem expansion.
+
+### User Acquisition
+
+<div class="table-scroll">
+
+| Channel | Strategy | Success Metrics |
+|---------|----------|----------------|
+| **Content Partnerships** | - Creator collaborations<br>- Strategic alliances<br>- Community ambassadors | - Audience growth<br>- Engagement rates<br>- Conversion metrics |
+| **Community Events** | - Tournaments<br>- Special events<br>- Regional meetups | - Participation rates<br>- Retention metrics<br>- Community feedback |
+| **Incentive Programs** | - Referral systems<br>- Achievement rewards<br>- Social challenges | - User acquisition cost<br>- Retention rates<br>- Network growth |
+
 </div>
 
 ### Retention Framework
 
-::: success Key Programs
-✓ Activity rewards
-✓ Achievement system
-✓ Social incentives
-✓ Leadership opportunities
+::: info Key Elements
+- Progressive reward systems
+- Social engagement incentives
+- Community leadership opportunities
+- Regular events and competitions
+- Content creation support
 :::
 
-## Platform Infrastructure
-
-<div class="platform-overview">
-<div class="table-scroll">
-
-| Platform | Purpose | Features |
-|----------|---------|----------|
-| Discord | Community Hub | Events, Support, Discussion |
-| Social Media | Brand Presence | Updates, Engagement |
-| Content Hub | Creator Platform | Showcase, Distribution |
-
-</div>
-</div>
-
-## Global Strategy
-
-<div class="global-reach">
-
-### Regional Development
-
-<div class="table-scroll">
-
-| Focus Area | Implementation | Goal |
-|------------|----------------|------|
-| Language Support | Multi-language teams | Global accessibility |
-| Event Timing | Timezone optimization | Worldwide participation |
-| Cultural Integration | Local community focus | Regional relevance |
-| Community Building | Local leadership | Sustainable growth |
-
-</div>
-</div>
-
-## Strategic Events
-
-<div class="event-highlight">
-
-### Partnership Framework
-
-<div class="table-scroll">
-
-| Event Type | Support Level | Outcome |
-|------------|---------------|----------|
-| Gaming Conventions | Full presence | Brand exposure |
-| Local Events | Resource support | Community building |
-| Game Jams | Prize sponsorship | Developer engagement |
-| Esports | Tournament integration | Competitive growth |
-
-</div>
-</div>
-
-## Performance Tracking
-
-### Growth Metrics
-
-<div class="metrics-dashboard">
-<div class="table-scroll">
-
-| Metric Category | Key Indicators | Target |
-|----------------|----------------|--------|
-| Community Growth | Size, Engagement | 25% quarterly |
-| Content Impact | Reach, Performance | 40% engagement |
-| Event Success | Participation, Retention | 80% satisfaction |
-| Platform Activity | Daily/Monthly Active | 50% monthly growth |
-
-</div>
-</div>
-
-## Development Cycle
-
-::: info Continuous Improvement
-Our iterative approach ensures:
-1. Regular performance review
-2. Community feedback integration
-3. Strategic adjustments
-4. Transparent communication
+::: info Technical Infrastructure
+The Cosmicrafts technical architecture provides our community with a responsive, gas-free environment for seamless interaction and participation. For details on our single-canister design and technical implementation, see the [Architecture](/architecture) section.
 :::
-
-<div class="contact-box">
-
-## Connect With Us
-
-Join our growing ecosystem:
-- Discord: [discord.gg/cosmicrafts](https://discord.gg/cosmicrafts)
-- Twitter: [@CosmicraftsDAO](https://twitter.com/CosmicraftsDAO)
-- Website: [cosmicrafts.com](https://cosmicrafts.com)
-
-</div>
 

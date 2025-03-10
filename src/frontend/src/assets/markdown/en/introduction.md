@@ -67,7 +67,7 @@ As a Spiral token holder, you benefit from:
 - **Ecosystem Engagement**
   - **Marketplace**: [Trade assets](/whitepaper#community#marketplace) with other players
   - **In-game Economy**: [Participate in the game economy](/whitepaper#core-features)
-  - **Asset Utility**: [Use assets across multiple games](/whitepaper#architecture#unified-canister)
+  - **Asset Utility**: [Use assets across multiple games](/whitepaper#architecture#core-technical-design)
 
 ### 3. Unique Advantages
 

@@ -1,5 +1,5 @@
 # Governance
-![Governance](spiralbanner.webp)
+![Governance](govbanner.webp)
 
 ## Introduction
 
@@ -15,29 +15,53 @@ This document outlines the governance framework of the Cosmicrafts DAO, focusing
 
 ## DAO Core Principles
 
-| Principle | Description | Implementation |
-|-----------|-------------|----------------|
-| **Meritocratic Governance** | • Power scales with commitment and contribution<br>• Technical excellence drives decision-making<br>• Long-term alignment through stake-weighted voting | • On-chain verification of proposals<br>• Automated execution of decisions<br>• Time-locked stake requirements |
-| **Sustainable Innovation** | • Technology-first approach to growth<br>• Resource allocation driven by value creation<br>• Scalable and future-proof development | • Smart contract-based treasury management<br>• Performance-based incentives<br>• Data-driven proposal evaluation |
-| **Ecosystem Integration** | • Cross-game value creation<br>• Interoperable systems and assets<br>• Community-driven expansion | • Standardized integration protocols<br>• Cross-chain compatibility<br>• Unified technical standards |
+| Principle | Description |
+|-----------|-------------|
+| **Community Sovereignty** | • Collective decision-making power<br>• Transparent governance process<br>• On-chain voting and automated execution<br>|
+| **Sustainable Growth** | • Long-term value creation<br>• Balanced ecosystem development<br>• Community-driven treasury management<br>• Data-driven evaluation system |
+| **Open Participation** | • Inclusive governance structure<br>• Low barriers to entry<br>• Community-driven expansion<br>• Multi-chain accessibility |
 
-### System Components
-
-- Neuron-based voting system with dissolve delay bonuses
-- Proposal filtering and categorization
-- Execution of approved proposals
-- Quadratic voting elements to prevent whale dominance
 
 ## Voting Power Distribution
 
-### Initial Token Allocation
+<div class="tokenomics-diagram">
+  <img src="src/assets/icons/votingpower.svg" alt="SPIRAL Token Allocation" />
+</div>
 
-```mermaid
-pie title Initial Voting Power Distribution
-    "SNS Participants" : 50
-    "Developer Team" : 33.3
-    "Genesis/Seed" : 16.7
-```
+<style>
+.tokenomics-diagram {
+  text-align: center;
+  width: 100%;
+  margin: 4rem auto;
+}
+
+.tokenomics-diagram img {
+  width: 65%;
+  max-width: 800px;
+  height: auto;
+  filter: none;
+  box-shadow: none;
+  background: transparent;
+  margin: 0 auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .tokenomics-diagram img {
+    width: 100%;
+    max-width: 100%;
+  }
+
+}
+</style>
+
+::: info Dynamic Voting Power
+The actual distribution of voting power will fluctuate based on stakeholder decisions regarding:
+- Amount of tokens staked in neurons
+- Length of dissolve delay chosen
+- Age of neurons accumulated
+These factors can significantly shift the relative influence of different stakeholder groups over time.
+:::
 
 | Stakeholder Group | Voting Share | Base Tokens | Purpose |
 |-------------------|--------------|-------------|----------|
@@ -45,35 +69,7 @@ pie title Initial Voting Power Distribution
 | **Developer Team** | 33.3% | 80M | - Strategic decision-making<br>- 8-year dissolve delay with 1-year vesting<br>- Gradual reduction of influence |
 | **Genesis/Seed** | 16.7% | 40M | - Early supporter representation<br>- Staggered dissolve delays (0-7 years)<br>- Balanced initial influence |
 
-::: info Treasury Note
-While the Treasury holds 76% (760M) of total tokens, these are not part of the initial voting power distribution. Treasury allocations are controlled through DAO governance decisions made by the voting participants above.
-:::
 
-### Potential Voting Power
-
-::: info Voting Power Dynamics
-The actual governance power can shift significantly based on:
-1. Dissolve delay commitments
-2. Neuron age accumulation
-3. Active participation patterns
-
-For example:
-- SNS Participants (50%) could reach up to 150% equivalent power with max multipliers
-- Developer Team (33.3%) could reach up to 100% equivalent power with max multipliers
-- Genesis/Seed (16.7%) varies based on their dissolve delay schedule
-:::
-
-```mermaid
-graph TD
-    A[Base Voting Share] --> B[Dissolve Delay Bonus]
-    B --> C[Age Bonus]
-    C --> D[Final Voting Power]
-    
-    style A fill:#3498db,stroke:#2980b9
-    style B fill:#e74c3c,stroke:#c0392b
-    style C fill:#2ecc71,stroke:#27ae60
-    style D fill:#f1c40f,stroke:#f39c12
-```
 
 ### Power Multipliers
 
@@ -84,45 +80,22 @@ graph TD
 | **Minimum Dissolve Delay** | N/A | 1 month |
 | **Combined Cap** | 3x base power | N/A |
 
-## Neuron Fund Integration
+## SNS Integration
 
-The Cosmicrafts DAO incorporates a Neuron Fund (NF) mechanism, inspired by the Internet Computer's Network Nervous System (NNS), to enhance governance participation and ecosystem development.
+The Cosmicrafts DAO leverages the Internet Computer's [Service Nervous System (SNS)](https://internetcomputer.org/docs/building-apps/governing-apps/overview) for its governance infrastructure. This provides a battle-tested, secure framework for decentralized decision-making.
 
-### Key Components
+### Key Features
 
-1. **Participation Mechanism**
-   - Users can opt-in to the NF through the DAO interface
-   - Maturity exposure to ecosystem initiatives
-   - Flexible entry and exit options
+- **Neuron-Based Voting**: Stake SPIRAL tokens to create neurons and participate in governance
+- **Dissolve Delay Bonuses**: Longer lockup periods increase voting power
+- **Age Bonuses**: Neurons gain more voting power over time
+- **Proposal System**: Standard SNS proposal framework for all governance actions
 
-2. **Matched Funding Framework**
-   ```mermaid
-   graph TD
-       A[Direct Participation] --> B[Calculate Match]
-       B --> C[NF Contribution]
-       C --> D[Treasury Allocation]
-       D --> E[SNS Neurons]
-   ```
-
-3. **Governance Rights**
-   - Hotkey-based voting delegation
-   - Proportional voting power based on maturity
-   - Maximum of 3 delegated voting keys
-
-### Maturity and Rewards
-
-| Action | Effect on Maturity | Reward Mechanism |
-|--------|-------------------|------------------|
-| **Join NF** | Exposure to ecosystem risks | Participation in ecosystem growth |
-| **Successful Swap** | Proportional reduction | SNS neuron allocation |
-| **Failed Swap** | Maturity restored | Protection against losses |
-| **Dissolve Event** | Value determination | Proportional maturity increase |
-
-::: warning Important Note
-The Neuron Fund's participation in ecosystem initiatives is determined by market interest through the Matched Funding scheme, ensuring alignment with community sentiment.
+::: info SNS Configuration
+For detailed technical parameters of our SNS setup, including minimum stakes, voting periods, and reward rates, refer to the SNS initialization parameters in our documentation.
 :::
 
-## Governance Parameters
+### Governance Parameters
 
 | Parameter | Value | Purpose |
 |-----------|--------|---------|
@@ -130,6 +103,30 @@ The Neuron Fund's participation in ecosystem initiatives is determined by market
 | **Initial Voting Period** | 7 days | Standard deliberation time |
 | **Maximum Deadline Extension** | 1 day | Allow for late participation |
 | **Minimum Neuron Creation Stake** | 1000 SPIRAL | Base participation threshold |
+
+
+## Neuron Staking Mechanics
+
+### Base Requirements
+
+| Parameter | Value | Description |
+|-----------|--------|-------------|
+| **Minimum Stake** | 1,000 SPIRAL | Base amount required to create a neuron |
+| **Minimum Lock Period** | 30 days | Shortest allowed dissolve delay |
+| **Maximum Lock Period** | 8 years | Longest possible dissolve delay |
+| **Transaction Fee** | 0.01 SPIRAL | Network operation cost |
+
+### Maturity Schedule
+
+| Lock Period | Bonus Multiplier | Effective Power |
+|-------------|------------------|-----------------|
+| 30 days | 1.0x | Base Power |
+| 6 months | 1.25x | +25% |
+| 1 year | 1.5x | +50% |
+| 2 years | 1.75x | +75% |
+| 4 years | 1.85x | +85% |
+| 8 years | 2.0x | +100% |
+
 
 ## Decision Making Framework
 
@@ -159,17 +156,7 @@ The Neuron Fund's participation in ecosystem initiatives is determined by market
 | **Voting** | 7 days | Active neuron required |
 | **Execution** | Variable | Automated if approved |
 
-## Relationship with Tokenomics
-
-The Governance and Tokenomics systems of Cosmicrafts DAO are deeply interconnected but serve distinct purposes:
-
-| Governance Aspect | Tokenomics Aspect | Relationship |
-|-------------------|-------------------|--------------|
-| **Voting Power** | **Token Staking** | Governance power derives from staked tokens; longer commitments increase influence |
-| **Treasury Management** | **Economic Sustainability** | Governance processes decide treasury allocations that drive economic outcomes |
-| **Proposal System** | **Token Utility** | The ability to create proposals is a core utility of the SPIRAL token |
-| **DAO Evolution** | **Economic Projections** | Governance maturity develops alongside economic growth metrics |
-
-::: info Note
-For detailed information about token economics, rewards, and incentive structures, please refer to the [Tokenomics](/tokenomics) document.
+::: info Community Implementation
+For practical details about treasury management, community programs, and ecosystem growth initiatives, see our [Community](/community) framework.
 :::
+

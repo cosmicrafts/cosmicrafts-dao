@@ -155,17 +155,14 @@ Early backers basket of neurons.
 | **Early Access** | Product | Preview of new features and games |
 | **Special Events** | Social | Exclusive community gatherings and activities |
 
-### Treasury Management
-
-The 760M treasury allocation follows a strategic distribution model:
-
-| Focus Area | Allocation | Key Initiatives |
-|------------|------------|-----------------|
-| **Core Development** | 40% | • Game Engine Evolution<br>• Infrastructure Scaling<br>• Security Framework<br>• Feature Innovation<br>• Cross-Chain Integration |
-| **Community Growth** | 30% | • Competitive Rewards<br>• Marketing Amplification<br>• Strategic Partnerships<br>• User Acquisition<br>• Event Organization |
-| **Economic Sustainability** | 30% | • Liquidity Programs<br>• Emergency Reserves<br>• Market Stability<br>• Growth Investments<br>• Research & Development |
-
 ## Rewards
+The reward structure is designed to:
+- Encourage long-term participation
+- Align stakeholder interests
+- Maintain sustainable token economics
+- Support protocol governance
+- Enable community-driven value distribution
+
 
 ### Staking Incentives
 
@@ -182,31 +179,10 @@ The 760M treasury allocation follows a strategic distribution model:
 | **Dissolve Delay** | +100% | 8 years lock |
 | **Age Maturity** | +100% | 365 days |
 
-The reward structure is designed to:
-- Encourage long-term participation
-- Align stakeholder interests
-- Maintain sustainable token economics
-- Support protocol governance
+### Additional Incentives
 
-## Neuron Staking Mechanics
-
-### Base Requirements
-
-| Parameter | Value | Description |
-|-----------|--------|-------------|
-| **Minimum Stake** | 1,000 SPIRAL | Base amount required to create a neuron |
-| **Minimum Lock Period** | 30 days | Shortest allowed dissolve delay |
-| **Maximum Lock Period** | 8 years | Longest possible dissolve delay |
-| **Transaction Fee** | 0.01 SPIRAL | Network operation cost |
-
-### Maturity Schedule
-
-| Lock Period | Bonus Multiplier | Effective Power |
-|-------------|------------------|-----------------|
-| 30 days | 1.0x | Base Power |
-| 6 months | 1.25x | +25% |
-| 1 year | 1.5x | +50% |
-| 2 years | 1.75x | +75% |
-| 4 years | 1.85x | +85% |
-| 8 years | 2.0x | +100% |
-
+The DAO can implement and govern additional reward mechanisms including:
+- Revenue sharing from platform activities
+- Performance-based distribution models
+- Community-driven reward programs
+- Ecosystem growth initiatives

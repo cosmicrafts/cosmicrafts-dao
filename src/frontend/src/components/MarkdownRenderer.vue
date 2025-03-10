@@ -679,12 +679,12 @@ h3 .header-anchor:hover {
   background-color: transparent;
   border-radius: 0;
   padding: 1.5rem 0;
-  margin: 1.5rem 0;
+  margin: 1.5rem auto;
   box-shadow: none;
   border-left: none;
   overflow: visible;
   text-align: center;
-  width: 100%;
+  width: 65%;
 }
 
 /* Remove pre default styling */
@@ -712,6 +712,15 @@ pre.mermaid {
   background: transparent !important;
   max-width: 100%;
   height: auto !important;
+}
+
+/* Mobile optimizations for mermaid diagrams */
+@media (max-width: 768px) {
+  .mermaid {
+    width: 100%;
+    padding: 1rem 0;
+    margin: 1rem auto;
+  }
 }
 
 /* Mobile navigation styles */
@@ -834,5 +843,39 @@ h4.cosmic-heading {
 .cosmic-heading:hover {
   color: #FFFFFF !important;
   text-shadow: 0 0 12px rgba(255, 255, 255, 0.3) !important;
+}
+
+.markdown-content table {
+  width: 100%;
+  min-width: 650px; /* Ensures table won't shrink below readable size */
+  border-collapse: collapse;
+  margin: 0; /* Reset margin as it's handled by table-scroll */
+  background: var(--color-surface-primary);
+  border-radius: var(--radius-medium);
+  overflow: hidden;
+  font-size: 1rem;
+}
+
+.markdown-content th,
+.markdown-content td {
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(15, 185, 253, 0.1);
+}
+
+.markdown-content th {
+  background: rgba(15, 185, 253, 0.1);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .markdown-content table {
+    font-size: 0.85rem;
+  }
+  
+  .markdown-content th,
+  .markdown-content td {
+    padding: 0.5rem 0.75rem;
+  }
 }
 </style>
