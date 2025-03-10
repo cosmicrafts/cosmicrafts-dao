@@ -7,16 +7,14 @@
       <div class="cosmic-card mission-section">
         <div class="section-header">
           <i class="fas fa-rocket"></i>
-          <h2 class="section-title">Our Mission</h2>
+          <h2 class="section-title">{{ $t('about.mission.title') }}</h2>
         </div>
         
         <div class="mission-content">
           <div class="mission-text">
-            <p>At Cosmicrafts, we're pioneering a new frontier in space gaming by integrating blockchain technology, immersive storytelling, and community governance.</p>
-            
-            <p>Our vision is to create a metaverse where players not only explore the cosmos but also shape its development through our decentralized autonomous organization (DAO).</p>
-            
-            <p>Through innovative game mechanics and cutting-edge technology, we're building experiences that inspire collaboration, strategy, and a genuine sense of ownership in our digital universe.</p>
+            <p>{{ $t('about.mission.description') }}</p>
+            <p>{{ $t('about.mission.vision') }}</p>
+            <p>{{ $t('about.mission.innovation') }}</p>
           </div>
           
           <div class="mission-image">
@@ -29,7 +27,7 @@
       <div class="cosmic-card team-section">
         <div class="section-header">
           <i class="fas fa-users"></i>
-          <h2 class="section-title">Meet the Team</h2>
+          <h2 class="section-title">{{ $t('about.team.title') }}</h2>
         </div>
         
         <div class="team-grid">
@@ -39,7 +37,7 @@
               <div class="team-member-glow"></div>
             </div>
             <h3>Alex Stellar</h3>
-            <p class="team-role">Founder & CEO</p>
+            <p class="team-role">{{ $t('about.team.roles.ceo') }}</p>
             <p class="team-bio">Visionary space enthusiast with over 10 years in game development and blockchain technology.</p>
           </div>
           
@@ -49,7 +47,7 @@
               <div class="team-member-glow"></div>
             </div>
             <h3>Luna Orbit</h3>
-            <p class="team-role">Lead Game Designer</p>
+            <p class="team-role">{{ $t('about.team.roles.gameDesigner') }}</p>
             <p class="team-bio">Award-winning designer specializing in strategy games and player-driven economics.</p>
           </div>
           
@@ -59,7 +57,7 @@
               <div class="team-member-glow"></div>
             </div>
             <h3>Orion Nebula</h3>
-            <p class="team-role">Blockchain Architect</p>
+            <p class="team-role">{{ $t('about.team.roles.blockchain') }}</p>
             <p class="team-bio">DeFi innovator with expertise in Internet Computer, Ethereum, and cross-chain solutions.</p>
           </div>
           
@@ -69,7 +67,7 @@
               <div class="team-member-glow"></div>
             </div>
             <h3>Nova Comet</h3>
-            <p class="team-role">Community Manager</p>
+            <p class="team-role">{{ $t('about.team.roles.community') }}</p>
             <p class="team-bio">Community builder passionate about creating inclusive, engaged player communities.</p>
           </div>
         </div>
@@ -79,7 +77,7 @@
       <div class="cosmic-card values-section">
         <div class="section-header">
           <i class="fas fa-star"></i>
-          <h2 class="section-title">Our Core Values</h2>
+          <h2 class="section-title">{{ $t('about.values.title') }}</h2>
         </div>
         
         <div class="values-grid">
@@ -87,32 +85,32 @@
             <div class="value-icon">
               <i class="fas fa-lightbulb"></i>
             </div>
-            <h3>Innovation</h3>
-            <p>We constantly push the boundaries of what's possible in gaming, combining cutting-edge technology with creative game design.</p>
+            <h3>{{ $t('about.values.innovation.title') }}</h3>
+            <p>{{ $t('about.values.innovation.description') }}</p>
           </div>
           
           <div class="value-card">
             <div class="value-icon">
               <i class="fas fa-users"></i>
             </div>
-            <h3>Community</h3>
-            <p>Our players are co-creators and stakeholders, empowered through our DAO to participate in governance and decision-making.</p>
+            <h3>{{ $t('about.values.community.title') }}</h3>
+            <p>{{ $t('about.values.community.description') }}</p>
           </div>
           
           <div class="value-card">
             <div class="value-icon">
               <i class="fas fa-clipboard-check"></i>
             </div>
-            <h3>Transparency</h3>
-            <p>We believe in open development, clear communication, and building trust with our community through honesty and accessibility.</p>
+            <h3>{{ $t('about.values.transparency.title') }}</h3>
+            <p>{{ $t('about.values.transparency.description') }}</p>
           </div>
           
           <div class="value-card">
             <div class="value-icon">
               <i class="fas fa-leaf"></i>
             </div>
-            <h3>Sustainability</h3>
-            <p>We're committed to energy-efficient blockchain solutions and creating a long-term, sustainable ecosystem for our games and players.</p>
+            <h3>{{ $t('about.values.sustainability.title') }}</h3>
+            <p>{{ $t('about.values.sustainability.description') }}</p>
           </div>
         </div>
       </div>

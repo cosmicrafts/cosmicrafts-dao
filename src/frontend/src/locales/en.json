@@ -153,6 +153,7 @@
     "privacy": "Privacy",
     "legal": "Legal",
     "terms": "Terms",
+    "contact": "Contact",
     "cookiePolicy": "Cookie Policy",
     "cookieSettings": "Cookie Settings",
     "language": "Language",
@@ -297,7 +298,6 @@
     "editProfileModal": {
       "title": "Edit Profile",
       "username": "Username",
-      "title": "Title",
       "description": "Description",
       "cancel": "Cancel",
       "saveChanges": "Save Changes"
@@ -396,5 +396,91 @@
     "9": "October",
     "10": "November",
     "11": "December"
+  },
+  "about": {
+    "title": "About Cosmicrafts",
+    "mission": {
+      "title": "Our Mission",
+      "description": "At Cosmicrafts, we're pioneering a new frontier in space gaming by integrating blockchain technology, immersive storytelling, and community governance.",
+      "vision": "Our vision is to create a metaverse where players not only explore the cosmos but also shape its development through our decentralized autonomous organization (DAO).",
+      "innovation": "Through innovative game mechanics and cutting-edge technology, we're building experiences that inspire collaboration, strategy, and a genuine sense of ownership in our digital universe."
+    },
+    "team": {
+      "title": "Meet the Team",
+      "roles": {
+        "ceo": "Founder & CEO",
+        "gameDesigner": "Lead Game Designer",
+        "blockchain": "Blockchain Architect",
+        "community": "Community Manager"
+      }
+    },
+    "values": {
+      "title": "Our Core Values",
+      "innovation": {
+        "title": "Innovation",
+        "description": "We constantly push the boundaries of what's possible in gaming, combining cutting-edge technology with creative game design."
+      },
+      "community": {
+        "title": "Community",
+        "description": "Our players are co-creators and stakeholders, empowered through our DAO to participate in governance and decision-making."
+      },
+      "transparency": {
+        "title": "Transparency",
+        "description": "We believe in open development, clear communication, and building trust with our community through honesty and accessibility."
+      },
+      "sustainability": {
+        "title": "Sustainability",
+        "description": "We're committed to energy-efficient blockchain solutions and creating a long-term, sustainable ecosystem for our games and players."
+      }
+    }
+  },
+  "careers": {
+    "title": "Join Our Mission",
+    "subtitle": "Help us shape the future of space gaming",
+    "whyUs": {
+      "title": "Why Cosmicrafts?",
+      "description": "We're pioneering the next generation of space strategy games, combining blockchain technology with immersive gameplay. Join our diverse team of innovators, creators, and space enthusiasts."
+    },
+    "perks": {
+      "remote": "Remote-First Culture",
+      "pay": "Competitive Pay",
+      "hours": "Flexible Hours",
+      "learning": "Learning Budget"
+    },
+    "positions": {
+      "location": "Location",
+      "type": "Type",
+      "applyNow": "Apply Now",
+      "compensation": "We offer competitive compensation, flexible work arrangements, and comprehensive benefits."
+    },
+    "contact": {
+      "title": "You have a unique skillset?",
+      "description": "We're always looking for talented individuals to join our crew. Send us your resume and tell us how you can contribute to our mission.",
+      "button": "Contact Us"
+    }
+  },
+  "contact": {
+    "support": {
+      "title": "Support Center",
+      "subtitle": "Need help? Choose your preferred way to get support. Our team is here to help you 24/7.",
+      "chat": {
+        "title": "Live Chat Support",
+        "description": "Get instant help from our support team. Available 24/7 for all your questions and issues.",
+        "button": "Start Chat",
+        "close": "Close Chat",
+        "shortcut": "Press 'A' to open chat"
+      },
+      "discord": {
+        "title": "Join Our Discord",
+        "description": "Connect with our community, get help from other players, and stay updated with the latest news.",
+        "button": "Join Discord"
+      },
+      "email": {
+        "title": "Email Support",
+        "description": "Send us an email for detailed inquiries or if you prefer written communication.",
+        "button": "Send Email",
+        "responseTime": "Response within 24 hours"
+      }
+    }
   }
 }

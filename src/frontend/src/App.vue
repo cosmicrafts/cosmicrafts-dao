@@ -1,6 +1,6 @@
 <!-- File: App.vue -->
 <script setup>
-import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
+import { computed, ref, onMounted, onUnmounted, watch, provide } from 'vue';
 import { useRoute } from 'vue-router';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
@@ -37,6 +37,9 @@ watch(
 // State for tracking if other windows are open
 const isEscMenuOpen = ref(false);
 const chatRef = ref(null);
+
+// Provide chat reference to child components
+provide('chatRef', chatRef);
 
 // Method to check if any other windows are open
 const areOtherWindowsOpen = () => {
@@ -96,9 +99,11 @@ const closeEscMenu = () => {
 </script>
 
 <template>
+  <!-- Persistent Chat Component -->
+  <Chat ref="chatRef" />
+  
   <main id="app" @keydown.esc="handleEscKey">
     <Header />
-    <Chat ref="chatRef" />
     <Modal />
     <router-view v-scroll-to-top />
     <Footer v-if="!isWhitepaper && !isGame" />

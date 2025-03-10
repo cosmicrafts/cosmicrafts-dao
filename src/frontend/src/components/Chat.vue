@@ -989,7 +989,8 @@ const handleClickOutside = (event: MouseEvent): void => {
 
 // Make isOpen available to parent components through the template ref
 defineExpose({
-  isOpen
+  isOpen,
+  toggleChat
 });
 </script>
 

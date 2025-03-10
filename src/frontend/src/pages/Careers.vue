@@ -2,31 +2,31 @@
   <section class="careers-section">
     <div class="careers-container">
       <header class="careers-header">
-        <h1 class="page-title">Join Our Mission</h1>
-        <p class="page-subtitle">Help us shape the future of space gaming</p>
+        <h1 class="page-title">{{ $t('careers.title') }}</h1>
+        <p class="page-subtitle">{{ $t('careers.subtitle') }}</p>
       </header>
 
       <div class="content-wrapper">
         <div class="intro-section">
           <div class="mission-statement">
-            <h2>Why Cosmicrafts?</h2>
-            <p>We're pioneering the next generation of space strategy games, combining blockchain technology with immersive gameplay. Join our diverse team of innovators, creators, and space enthusiasts.</p>
+            <h2>{{ $t('careers.whyUs.title') }}</h2>
+            <p>{{ $t('careers.whyUs.description') }}</p>
             <div class="perks-grid">
               <div class="perk-item">
                 <i class="fas fa-globe"></i>
-                <span>Remote-First Culture</span>
+                <span>{{ $t('careers.perks.remote') }}</span>
               </div>
               <div class="perk-item">
                 <i class="fas fa-coins"></i>
-                <span>Competitive Pay</span>
+                <span>{{ $t('careers.perks.pay') }}</span>
               </div>
               <div class="perk-item">
                 <i class="fas fa-laptop-house"></i>
-                <span>Flexible Hours</span>
+                <span>{{ $t('careers.perks.hours') }}</span>
               </div>
               <div class="perk-item">
                 <i class="fas fa-graduation-cap"></i>
-                <span>Learning Budget</span>
+                <span>{{ $t('careers.perks.learning') }}</span>
               </div>
             </div>
           </div>
@@ -84,10 +84,10 @@
                   <a :href="'mailto:careers@cosmicrafts.com?subject=Application for ' + position.title"
                      class="apply-button">
                     <i class="fas fa-rocket"></i>
-                    Apply Now
+                    {{ $t('careers.positions.applyNow') }}
                   </a>
                   <p class="compensation-note">
-                    We offer competitive compensation, flexible work arrangements, and comprehensive benefits.
+                    {{ $t('careers.positions.compensation') }}
                   </p>
                 </div>
               </div>
@@ -97,11 +97,11 @@
 
         <div class="careers-footer">
           <div class="contact-card">
-            <h2>You have a unique skillset?</h2>
-            <p>We're always looking for talented individuals to join our crew. Send us your resume and tell us how you can contribute to our mission.</p>
+            <h2>{{ $t('careers.contact.title') }}</h2>
+            <p>{{ $t('careers.contact.description') }}</p>
             <a href="mailto:careers@cosmicrafts.com" class="contact-button">
               <i class="fas fa-paper-plane"></i>
-              Contact Us
+              {{ $t('careers.contact.button') }}
             </a>
           </div>
         </div>

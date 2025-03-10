@@ -42,7 +42,7 @@ const toggleSection = (section) => {
           <ul class="footer-links">
             <li><router-link to="/careers" class="footer-link">{{ t('footer.careers') }}</router-link></li>
             <li><router-link to="/about" class="footer-link">{{ t('footer.about') }}</router-link></li>
-            <li><a href="#" class="footer-link">{{ t('footer.support') }}</a></li>
+            <li><router-link to="/contact" class="footer-link">{{ t('footer.contact') }}</router-link></li>
           </ul>
         </div>
         
@@ -151,7 +151,7 @@ const toggleSection = (section) => {
           <ul class="mobile-link-list">
             <li><router-link to="/careers">{{ t('footer.careers') }}</router-link></li>
             <li><router-link to="/about">{{ t('footer.about') }}</router-link></li>
-            <li><a href="#">{{ t('footer.support') }}</a></li>
+            <li><router-link to="/contact">{{ t('footer.contact') }}</router-link></li>
           </ul>
         </div>
       </div>
