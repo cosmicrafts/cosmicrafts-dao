@@ -3,15 +3,15 @@
   <section class="cosmic-page-bg with-subtle-grid">
     <div class="support-container">
       <header class="support-header">
-        <h1 class="page-title">{{ $t('contact.support.title') }}</h1>
+        <h1 class="title-large text-gradient animated-title">{{ $t('contact.support.title') }}</h1>
         <p class="page-subtitle">{{ $t('contact.support.subtitle') }}</p>
       </header>
 
       <div class="support-options-grid">
-        <!-- Live Chat Option -->
-        <div class="support-card">
+        <!-- AI Assistant Option -->
+        <div class="cosmic-card support-card">
           <div class="support-icon">
-            <i class="fas fa-comments"></i>
+            <i class="fas fa-robot"></i>
           </div>
           <div class="support-content">
             <h3>{{ $t('contact.support.chat.title') }}</h3>
@@ -28,7 +28,7 @@
         </div>
 
         <!-- Discord Community Support -->
-        <div class="support-card">
+        <div class="cosmic-card support-card featured">
           <div class="support-icon">
             <i class="fab fa-discord"></i>
           </div>
@@ -43,7 +43,7 @@
         </div>
 
         <!-- Email Support -->
-        <div class="support-card">
+        <div class="cosmic-card support-card">
           <div class="support-icon">
             <i class="fas fa-envelope"></i>
           </div>
@@ -58,6 +58,18 @@
               <i class="fas fa-clock"></i>
               {{ $t('contact.support.email.responseTime') }}
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coming Soon Section -->
+      <div class="cosmic-card coming-soon-section">
+        <div class="coming-soon-content">
+          <h2>{{ $t('contact.support.comingSoon.title') }}</h2>
+          <p>{{ $t('contact.support.comingSoon.description') }}</p>
+          <div class="coming-soon-badge">
+            <i class="fas fa-rocket"></i>
+            Coming Soon
           </div>
         </div>
       </div>
@@ -103,8 +115,8 @@ const openChat = (event) => {
 .support-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 8rem 2rem 4rem; /* Increased top padding to account for header */
-  min-height: calc(100vh - 6rem); /* Adjust for header height */
+  padding: 8rem 2rem 4rem;
+  min-height: calc(100vh - 6rem);
   display: flex;
   flex-direction: column;
 }
@@ -112,18 +124,25 @@ const openChat = (event) => {
 .support-header {
   text-align: center;
   margin-bottom: 4rem;
-  padding-top: 2rem; /* Additional padding for better spacing */
+  padding-top: 2rem;
 }
 
-.page-title {
+.animated-title {
   font-size: 3.5rem;
-  font-weight: var(--weight-extra-bold);
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  font-weight: var(--weight-black);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   margin-bottom: 1rem;
   letter-spacing: -0.02em;
+  text-shadow: var(--shadow-text-medium);
+  animation: fadeInDown 1s ease-out;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .page-subtitle {
@@ -131,6 +150,7 @@ const openChat = (event) => {
   color: var(--color-text-secondary);
   max-width: 600px;
   margin: 0 auto;
+  animation: fadeIn 1s ease-out 0.3s both;
 }
 
 .support-options-grid {
@@ -141,17 +161,23 @@ const openChat = (event) => {
 }
 
 .support-card {
-  background: var(--color-surface-primary);
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.05) 0%,
+    rgba(15, 185, 253, 0.02) 100%
+  );
+  backdrop-filter: blur(8px);
   border-radius: var(--radius-large);
   padding: 2.5rem;
-  border: var(--border-thin);
-  transition: all 0.3s ease;
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   position: relative;
   overflow: hidden;
+  animation: fadeIn 1s ease-out;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .support-card::before {
@@ -160,19 +186,41 @@ const openChat = (event) => {
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent,
+    var(--color-primary),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.support-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.1) 0%,
+    rgba(15, 185, 253, 0.05) 50%,
+    rgba(255, 145, 0, 0.05) 100%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .support-card:hover {
   transform: translateY(-4px);
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-glow-primary);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: 0 8px 30px rgba(15, 185, 253, 0.15),
+              0 0 0 1px rgba(15, 185, 253, 0.1) inset;
 }
 
 .support-card:hover::before {
+  opacity: 1;
+}
+
+.support-card:hover::after {
   opacity: 1;
 }
 
@@ -182,28 +230,51 @@ const openChat = (event) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-surface-secondary);
+  background: rgba(15, 185, 253, 0.08);
   border-radius: 50%;
   margin-bottom: 1.5rem;
-  border: var(--border-thin);
-  transition: all 0.3s ease;
+  border: 1px solid rgba(15, 185, 253, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.support-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.1),
+    rgba(15, 185, 253, 0.05)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .support-card:hover .support-icon {
   transform: scale(1.1);
-  background: var(--color-surface-primary);
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-glow-primary);
+  background: rgba(15, 185, 253, 0.12);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.2),
+              0 0 0 1px rgba(15, 185, 253, 0.2) inset;
+}
+
+.support-card:hover .support-icon::after {
+  opacity: 1;
 }
 
 .support-icon i {
   font-size: 2rem;
   color: var(--color-primary);
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .support-card:hover .support-icon i {
   transform: scale(1.1);
+  color: var(--color-primary-light);
+  text-shadow: 0 0 10px rgba(15, 185, 253, 0.5);
 }
 
 .support-content {
@@ -218,6 +289,7 @@ const openChat = (event) => {
   color: var(--color-text-primary);
   margin-bottom: 1rem;
   font-weight: var(--weight-bold);
+  text-shadow: var(--shadow-text-light);
 }
 
 .support-content p {
@@ -242,18 +314,45 @@ const openChat = (event) => {
   transition: all 0.3s ease;
   text-decoration: none;
   min-width: 200px;
-  max-width: 300px; /* Added max-width */
+  max-width: 300px;
   width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 .cosmic-button.primary {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: var(--gradient-button);
   color: var(--color-text-primary);
+  text-shadow: var(--shadow-text-light);
+  box-shadow: var(--shadow-small),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .cosmic-button.primary:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-glow-primary);
+  box-shadow: var(--shadow-glow-primary),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: var(--gradient-button-hover);
+}
+
+.cosmic-button.primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.cosmic-button.primary:hover::before {
+  left: 100%;
 }
 
 .shortcut-hint {
@@ -276,6 +375,7 @@ const openChat = (event) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  opacity: 0.8;
 }
 
 .response-time i {
@@ -292,14 +392,14 @@ const openChat = (event) => {
 
 @media (max-width: 768px) {
   .support-container {
-    padding: 7rem 1rem 2rem; /* Adjusted padding for mobile */
+    padding: 7rem 1rem 2rem;
   }
 
   .support-header {
     padding-top: 1rem;
   }
 
-  .page-title {
+  .animated-title {
     font-size: 2.5rem;
   }
 
@@ -325,9 +425,198 @@ const openChat = (event) => {
   }
 
   .cosmic-button {
-    max-width: 90%; /* Mobile max-width */
+    max-width: 90%;
     min-width: unset;
-    margin: 0 auto; /* Center the button */
+    margin: 0 auto;
   }
+
+  .coming-soon-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+  }
+
+  .coming-soon-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .coming-soon-content p {
+    font-size: 1rem;
+  }
+}
+
+/* Featured Card Style - Enhanced */
+.support-card.featured {
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.08) 0%,
+    rgba(15, 185, 253, 0.05) 50%,
+    rgba(255, 145, 0, 0.08) 100%
+  );
+  border: 1px solid rgba(255, 145, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.support-card.featured::before {
+  background: linear-gradient(90deg,
+    transparent,
+    var(--color-secondary),
+    var(--color-primary),
+    var(--color-secondary),
+    transparent
+  );
+  opacity: 1;
+  height: 2px;
+}
+
+.support-card.featured::after {
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.1) 0%,
+    rgba(255, 145, 0, 0.1) 100%
+  );
+}
+
+.support-card.featured:hover {
+  border-color: var(--color-secondary);
+  box-shadow: 0 8px 30px rgba(255, 145, 0, 0.15),
+              0 0 0 1px rgba(255, 145, 0, 0.2) inset;
+}
+
+.support-card.featured .support-icon {
+  background: rgba(255, 145, 0, 0.1);
+  border-color: rgba(255, 145, 0, 0.3);
+}
+
+.support-card.featured .support-icon::after {
+  background: linear-gradient(135deg,
+    rgba(255, 145, 0, 0.15),
+    rgba(255, 145, 0, 0.05)
+  );
+}
+
+.support-card.featured:hover .support-icon {
+  background: rgba(255, 145, 0, 0.15);
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 20px rgba(255, 145, 0, 0.25),
+              0 0 0 1px rgba(255, 145, 0, 0.3) inset;
+}
+
+.support-card.featured:hover .support-icon i {
+  color: var(--color-secondary);
+  text-shadow: 0 0 10px rgba(255, 145, 0, 0.5);
+}
+
+/* Coming Soon Section - Enhanced */
+.coming-soon-section {
+  margin-top: 4rem;
+  padding: 2rem;
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.05) 0%,
+    rgba(15, 185, 253, 0.02) 100%
+  );
+  border-radius: var(--radius-large);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  text-align: center;
+  animation: slideIn 1.2s ease-out;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.coming-soon-section:hover {
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: 0 8px 30px rgba(15, 185, 253, 0.15),
+              0 0 0 1px rgba(15, 185, 253, 0.1) inset;
+}
+
+.coming-soon-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.coming-soon-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: var(--weight-black);
+}
+
+.coming-soon-content p {
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.coming-soon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.08) 0%,
+    rgba(15, 185, 253, 0.05) 100%
+  );
+  border-radius: var(--radius-medium);
+  color: var(--color-text-primary);
+  font-weight: var(--weight-bold);
+  border: 1px solid rgba(15, 185, 253, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.coming-soon-badge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.1),
+    rgba(15, 185, 253, 0.05)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.coming-soon-badge:hover {
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.2),
+              0 0 0 1px rgba(15, 185, 253, 0.2) inset;
+  transform: translateY(-2px);
+}
+
+.coming-soon-badge:hover::after {
+  opacity: 1;
+}
+
+.coming-soon-badge i {
+  color: var(--color-primary);
+  animation: rocket-pulse 2s infinite;
+  position: relative;
+  z-index: 1;
+}
+
+.coming-soon-badge:hover i {
+  color: var(--color-primary-light);
+  text-shadow: 0 0 10px rgba(15, 185, 253, 0.5);
+}
+
+@keyframes rocket-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style> 

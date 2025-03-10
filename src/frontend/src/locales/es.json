@@ -369,6 +369,34 @@
 },
 "terms": {
   "title": "Términos de Servicio"
+},
+"contact": {
+  "support": {
+    "title": "¿Necesitas Ayuda?",
+    "subtitle": "Estamos aquí para ayudarte a través de múltiples canales. Elige la opción que mejor te funcione.",
+    "chat": {
+      "title": "Asistente IA",
+      "description": "Obtén ayuda instantánea de nuestro asistente IA para preguntas comunes, mecánicas de juego y solución de problemas básicos. Disponible 24/7",
+      "button": "Chatear con IA",
+      "close": "Cerrar Chat",
+      "shortcut": "Presiona 'A' para abrir el chat"
+    },
+    "discord": {
+      "title": "Comunidad y Soporte",
+      "description": "Únete a nuestra activa comunidad de Discord para obtener ayuda en tiempo real de nuestro equipo y jugadores experimentados. Este es actualmente nuestro canal principal de soporte.",
+      "button": "Unirse a Discord"
+    },
+    "email": {
+      "title": "Envíanos un Email",
+      "description": "Para problemas complejos o consultas comerciales, contáctanos por email. Te responderemos lo antes posible.",
+      "button": "Enviar Email",
+      "responseTime": "Intentamos responder dentro de las 48 horas"
+    },
+    "comingSoon": {
+      "title": "Próximamente: Sistema de Tickets en Blockchain",
+      "description": "Estamos desarrollando un sistema de soporte descentralizado donde tus tickets y su resolución serán registrados en la blockchain de Internet Computer, garantizando transparencia y responsabilidad."
+    }
+  }
 }
 }
 

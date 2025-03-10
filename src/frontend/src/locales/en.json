@@ -461,25 +461,29 @@
   },
   "contact": {
     "support": {
-      "title": "Support Center",
-      "subtitle": "Need help? Choose your preferred way to get support. Our team is here to help you 24/7.",
+      "title": "Need Help?",
+      "subtitle": "We're here to assist you through multiple channels. Choose the option that works best for you.",
       "chat": {
-        "title": "Live Chat Support",
-        "description": "Get instant help from our support team. Available 24/7 for all your questions and issues.",
-        "button": "Start Chat",
+        "title": "AI Assistant",
+        "description": "Get instant help from our AI assistant for common questions, game mechanics, and basic troubleshooting. Available 24/7",
+        "button": "Chat with AI",
         "close": "Close Chat",
         "shortcut": "Press 'A' to open chat"
       },
       "discord": {
-        "title": "Join Our Discord",
-        "description": "Connect with our community, get help from other players, and stay updated with the latest news.",
+        "title": "Community & Support",
+        "description": "Join our active Discord community for real-time help from our team and experienced players. This is currently our primary support channel.",
         "button": "Join Discord"
       },
       "email": {
-        "title": "Email Support",
-        "description": "Send us an email for detailed inquiries or if you prefer written communication.",
+        "title": "Email Us",
+        "description": "For complex issues or business inquiries, reach out via email. We'll get back to you as soon as possible.",
         "button": "Send Email",
-        "responseTime": "Response within 24 hours"
+        "responseTime": "We aim to respond within 48 hours"
+      },
+      "comingSoon": {
+        "title": "Coming Soon: On-Chain Ticket System",
+        "description": "We're developing a decentralized support system where your tickets and their resolution will be tracked on the Internet Computer blockchain, ensuring transparency and accountability."
       }
     }
   }

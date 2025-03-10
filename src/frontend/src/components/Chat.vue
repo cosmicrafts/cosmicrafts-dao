@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChatBubbleOvalLeftEllipsisIcon, FaceSmileIcon, XMarkIcon, PaperAirplaneIcon } from "@heroicons/vue/24/solid";
+import { FaceSmileIcon, XMarkIcon, PaperAirplaneIcon } from "@heroicons/vue/24/solid";
 import { ref, nextTick, onMounted, onUnmounted, watch, computed } from "vue";
 
 import EmojiPicker from './EmojiPicker.vue';
@@ -995,7 +995,7 @@ defineExpose({
 </script>
 
 <template>
-  <!-- ✅ Floating Chat Button (hidden when chat is maximized) -->
+  <!-- Floating Chat Button (hidden when chat is maximized) -->
   <div
     v-if="!isMaximized || !showChat"
     ref="chatToggle"
@@ -1007,7 +1007,7 @@ defineExpose({
     @touchstart="handleTouchStart"
   >
     <transition name="rotate-icon">
-      <ChatBubbleOvalLeftEllipsisIcon v-if="!showChat" class="icon" />
+      <i v-if="!showChat" class="fas fa-robot icon"></i>
       <XMarkIcon v-else class="icon" />
     </transition>
     
@@ -1166,8 +1166,23 @@ defineExpose({
 }
 
 .chat-toggle .icon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.chat-toggle i.icon {
+  font-size: 1.25rem; /* Slightly smaller than before */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
   color: white;
 }
 
