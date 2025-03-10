@@ -1,6 +1,6 @@
 # Tính Năng Cốt Lõi
 
-[[toc:2-2]]
+
 
 ## Tổng Quan
 

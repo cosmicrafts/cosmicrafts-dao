@@ -1,6 +1,6 @@
 # Quản Trị
 
-[[toc:2-2]]
+
 
 ## Giới Thiệu
 

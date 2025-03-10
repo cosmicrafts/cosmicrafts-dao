@@ -1,181 +1,176 @@
-# 기술 아키텍처
+# 아키텍처
 
-[[toc:2-2]]
+![Architecture](architecturebanner.webp)
 
 ## 개요
 
-Cosmicrafts의 기술 아키텍처는 블록체인과 WebSocket을 결합하여 다음을 제공합니다:
-- 안전하고 투명한 자산 소유권
-- 빠르고 원활한 게임플레이
-- 투명한 거버넌스
-- 확장 가능한 인프라
+Cosmicrafts는 플레이어에게 원활한 게임 경험을 제공하면서 블록체인 기술의 이점을 모두 활용하는 하이브리드 아키텍처를 채택했습니다. 이 문서에서는 기술 스택, 데이터 흐름, 확장성 전략을 자세히 설명합니다.
+
+::: info 기술적 주의사항
+이 문서는 개발자와 기술적으로 지식이 있는 커뮤니티 회원을 위한 참조용입니다. 일부 세부 사항은 개발이 진행됨에 따라 변경될 수 있습니다.
+:::
 
 ## 핵심 기술 설계
 
-### Motoko 프로그래밍 언어
+Cosmicrafts는 Internet Computer Protocol(ICP)를 주요 블록체인 인프라로 활용하는 단일 캐니스터 패턴을 기반으로 합니다.
 
-Cosmicrafts는 Internet Computer를 위해 특별히 설계된 [Motoko](https://internetcomputer.org/docs/current/motoko/main/motoko)로 구축되었습니다. 이를 통해:
+### 모토코 기반 개발
 
-- 고급 메모리 관리
-- 효율적인 상태 표현
-- 비동기 작업 최적화
-- Internet Computer와의 네이티브 통합
+개발 언어로 Motoko를 선택한 이유:
 
-Our smart contracts are [open source on GitHub](https://github.com/cosmicrafts/cosmicrafts-dao) and [deployed publicly](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai) on the Internet Computer for full transparency.
+1. **네이티브 ICP 호환성** - 최적의 통합 및 성능을 위해 설계됨
+2. **타입 안전성** - 런타임 오류 감소 및 코드 품질 향상
+3. **비동기 패턴** - 원활한 사용자 경험을 위한 효율적인 병렬 처리
+4. **업그레이드 가능성** - 중단 없는 기능 업데이트 지원
+5. **모듈식 설계** - 재사용 가능한 구성 요소 및 확장 지원
 
-### 통합 캐니스터 아키텍처
-
-전통적인 다중 캐니스터 시스템과 달리, Cosmicrafts는 단일 캐니스터 설계를 사용합니다:
-
-| 방식 | 전통적 | Cosmicrafts |
-|------------|--------------|-------------|
-| 지연 시간 | 높음 (다중 호출) | 낮음 (1회 호출) |
-| 계산 비용 | 높음 (동기화) | 낮음 (비동기) |
-| 복잡성 | 높음 (다중 실패 지점) | 낮음 (단순화) |
-| 확장성 | 제한적 | 선형적 |
-
-This architecture enables complex game operations like trading, crafting, and battling to execute immediately without the latency typically associated with blockchain applications. Players experience performance similar to traditional gaming platforms, while still benefiting from blockchain's security and ownership features.
-
-### 실시간 통신 계층
-
-Cosmicrafts는 안전한 양방향 통신을 위해 [IC WebSocket Gateway](https://github.com/dfinity/ic-websocket-gateway)를 사용합니다:
-
-- **보안**
-  - 메시지 서명
-  - SSL/TLS 암호화
-  - 사용자 인증
-
-- **성능**
-  - 낮은 지연 시간
-  - 지속적 연결
-  - 즉각적 상태 업데이트
+### 단일 캐니스터 설계
 
 <div class="table-scroll">
 
-| Feature | Implementation | Benefit |
-|---------|----------------|----------|
-| Real-time Updates | WebSocket Protocol | Sub-second latency for game actions |
-| Message Security | Cryptographic Signing | Tamper-proof communication |
-| Connection Management | Automatic Reconnection | Seamless gameplay experience |
-| State Synchronization | Sequence Numbers | Consistent game state across clients |
-| Transport Security | SSL/TLS | Protected data transmission |
+| 구성 요소 | 설명 | 이점 |
+|--------|-------------|----------|
+| **상태 관리** | 중앙 집중식 원장 | 트랜잭션 일관성 |
+| **비즈니스 로직** | 게임 규칙 및 메커니즘 | 체인 내 검증 |
+| **자산 처리** | NFT 로직 및 메타데이터 | 온체인 소유권 |
+| **인터페이스** | API 호출 | 단순화된 액세스 |
 
 </div>
 
-## 리소스 관리
+### 가스 없는 사용자 경험
 
-### 가스 없는 환경
+Cosmicrafts의 주요 장점 중 하나는 역방향 가스 모델입니다:
 
-Internet Computer는 가스 없는 환경을 제공하여 사용자 경험을 단순화합니다:
+```mermaid
+flowchart LR
+    A[플레이어] -- "1. 작업 요청" --> B[게임 클라이언트]
+    B -- "2. API 호출" --> C[Cosmicrafts 캐니스터]
+    C -- "3. 실행" --> C
+    C -- "4. 결과 반환" --> B
+    B -- "5. 업데이트된 상태" --> A
+    D[사이클 준비금] -. "가스 비용 충당" .-> C
+```
 
-- 가스 비용 없음
-- 암호화폐 지갑 불필요
-- 기술적 장벽 없음
+이 방식을 통해 플레이어는 지갑이나 가스 비용에 대한 이해 없이 게임과 상호 작용할 수 있습니다.
 
-Unlike other blockchains where users must manage gas fees, the Internet Computer handles computation costs behind the scenes. This allows Cosmicrafts to deliver:
+## 통합 아키텍처
 
-- **Mainstream Accessibility**: No cryptocurrency knowledge required to play
-- **Micro-Transactions**: Even small in-game actions remain economically viable
-- **Predictable Experience**: No surprising costs or failed transactions due to gas issues
+Cosmicrafts는 프론트엔드, 백엔드, 블록체인 계층 간의 원활한 통합을 위해 다음과 같은 접근 방식을 사용합니다:
 
-### 운영 모니터링
+<div class="table-scroll">
 
-| 지표 | 목표 | 모니터링 |
-|----------|--------|----------|
-| 가동 시간 | 99.9% | 연속 |
-| 지연 시간 | <100ms | 시간별 |
-| 처리량 | >1000 TPS | 일별 |
-| 메모리 사용량 | <80% | 주별 |
+| 계층 | 구성 요소 | 기술 |
+|-------|-----------|-----------|
+| **프론트엔드** | 사용자 인터페이스 | Vue.js, Three.js |
+| **백엔드** | 게임 로직 | Motoko, Rust |
+| **블록체인** | 데이터 지속성 | ICP 캐니스터 |
+| **스토리지** | 자산 및 메타데이터 | ICP 자산 캐니스터 |
+| **확장 서비스** | 분석, 알림 | 하이브리드 오프체인 |
 
-## 의존성 및 외부 서비스
+</div>
 
-### 게임 엔진
+## 실시간 통신 계층
 
-- **현재**
-  - 클라이언트용 Unity
-  - 서버용 Motoko
-  - 웹용 WebGL
+Cosmicrafts의 주요 기술적 혁신은 블록체인 기반 게임에서 실시간 상호 작용을 가능하게 하는 통신 계층입니다.
 
-- **계획됨**
-  - Unreal Engine
-  - 네이티브 모바일
-  - VR/AR 지원
+### 메시지 브로커 시스템
 
-### 프론트엔드
+```mermaid
+sequenceDiagram
+    participant P1 as 플레이어 1
+    participant PS as 중계 서버
+    participant IC as Internet Computer
+    participant P2 as 플레이어 2
+    
+    P1->>PS: 게임 액션 전송
+    PS->>IC: 액션 검증 요청
+    IC->>PS: 검증 결과
+    PS->>P1: 확인 전송
+    PS->>P2: 액션 브로드캐스트
+    P2->>PS: 응답 액션
+    PS->>IC: 트랜잭션 기록
+    IC->>PS: 확인
+    PS->>P1: 응답 전달
+    PS->>P2: 트랜잭션 확인
+```
 
-- **프레임워크**
-  - React
-  - TypeScript
-  - TailwindCSS
+이 하이브리드 접근 방식은 다음을 제공합니다:
+- 플레이어 작업에 대한 지연 시간이 짧음
+- 중요한 트랜잭션에 대한 블록체인 확인
+- 실시간 업데이트를 위한 최적화된 네트워크 트래픽
 
-- **통합**
-  - Internet Identity
-  - Plug Wallet
-  - NFID
+## 자원 관리
 
-### 백엔드
+### 온체인 vs 오프체인 데이터
 
-- **핵심**
-  - Internet Computer
-  - Motoko
-  - Rust
+데이터 관리 계층화 전략:
 
-- **서비스**
-  - IC WebSocket Gateway
-  - Asset Canister
-  - SNS DAO
+<div class="table-scroll">
 
-### 인프라
+| 데이터 종류 | 저장 위치 | 이유 |
+|------------|-----------|------|
+| **자산 소유권** | 온체인 | 불변성 및 검증 |
+| **게임 상태** | 온체인 | 조작 방지 |
+| **플레이어 진행** | 온체인 | 투명성 |
+| **게임 자산** | 하이브리드 | 성능과 확장성 |
+| **임시 데이터** | 오프체인 | 효율성 |
+| **미디어 자산** | 분산 스토리지 | 대역폭 최적화 |
 
-- **저장소**
-  - Asset Canister
-  - IPFS
-  - Arweave
+</div>
 
-- **분석**
-  - Prometheus
-  - Grafana
-  - ELK Stack
+### 확장성 고려사항
+
+플랫폼이 성장함에 따라 다음과 같은 확장 메커니즘을 구현할 계획입니다:
+
+1. **샤딩** - 특정 게임 인스턴스 또는 지역에 대한 전용 캐니스터
+2. **계층적 데이터 구조** - 자주 액세스하는 데이터의 가용성 최적화
+3. **점진적 업그레이드** - 서비스 중단 없이 시스템 개선
+4. **여러 서브넷 활용** - 네트워크 부하 분산
 
 ## 보안 평가
 
-::: warning 감사 상태
-현재 사용자 기반 구축과 캐니스터 기능 개선에 집중하고 있습니다. 포괄적인 보안 감사는 향후 계획되어 있습니다.
+Cosmicrafts는 다음과 같은 포괄적인 보안 전략을 채택했습니다:
+
+::: info 보안 상태
+시스템은 현재 내부 테스트 중이며, 정식 출시 전에 제3자 보안 감사를 받을 예정입니다.
 :::
 
-### 보안 우선순위
+### 주요 보안 조치
 
-1. **자산 보호**
-   - 엔드투엔드 암호화
-   - 다중 인증
-   - 콜드 스토리지
+<div class="table-scroll">
 
-2. **데이터 보호**
-   - 저장소 암호화
-   - 자동 백업
-   - 접근 제어
+| 영역 | 조치 | 상태 |
+|------|--------|--------|
+| **스마트 계약** | 정형 검증 | 진행 중 |
+| **공격 표면** | 위협 모델링 | 완료 |
+| **ID 관리** | Internet Identity 통합 | 구현됨 |
+| **액세스 제어** | 권한 기반 체계 | 구현됨 |
+| **자산 보안** | 소유권 증명 | 구현됨 |
+| **데이터 무결성** | 체인 내 검증 | 진행 중 |
 
-3. **거래 보호**
-   - 부정 방지
-   - 이상 탐지
-   - 속도 제한
+</div>
 
 ## 기술 로드맵
 
-### 1단계: 기반 (2024년 1-2분기)
-- 캐니스터 최적화
-- WebSocket 개선
-- API 확장
+Cosmicrafts의 기술 개발은 다음과 같은 단계로 계획되어 있습니다:
 
-### 2단계: 확장 (2024년 3-4분기)
-- L2 통합
-- 멀티체인 지원
-- 분석 도구
+### 페이즈 1: 기반 (2023 Q4 - 2024 Q1)
+- 핵심 게임 메커니즘 구현
+- 단일 캐니스터 아키텍처 완성
+- 기본 자산 관리 시스템
+- 프론트엔드 인터페이스
 
-### 3단계: 고도화 (2025년+)
-- AI/ML 통합
-- VR/AR 지원
-- 규모 최적화
+### 페이즈 2: 확장 (2024 Q2 - Q3)
+- 실시간 통신 계층 강화
+- 복잡한 게임 메커니즘 추가
+- NFT 거래 기능
+- 사용자 확장을 위한 최적화
+
+### 페이즈 3: 고도화 (2024 Q4 이후)
+- 크로스플랫폼 지원 개선
+- DAO 거버넌스 통합
+- 다중 게임 인스턴스 지원
+- 제3자 개발자 도구
 
 ```mermaid
 graph TD

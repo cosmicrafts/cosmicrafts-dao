@@ -269,7 +269,7 @@ a:hover {
   .markdown-content h3,
   .markdown-content h4,
   .markdown-content .cosmic-heading {
-    scroll-margin-top: 6rem; /* Slightly less margin on mobile */
+    scroll-margin-top: 2rem; /* Slightly less margin on mobile */
   }
 }
 

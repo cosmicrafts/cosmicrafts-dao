@@ -2,7 +2,7 @@
 
 ![Tóm Tắt Điều Hành](executivesummary.webp)
 
-[[toc:2-2]]
+
 
 **Cosmicrafts DAO** đang tiên phong trong ngành công nghiệp game thông qua công nghệ Web3, tạo ra thương hiệu game chuỗi hoàn toàn đầu tiên với nền kinh tế sở hữu thực. Được phát triển từ năm 2016 và được xây dựng hoàn toàn trên [Internet Computer](https://internetcomputer.org) từ năm 2021, chúng tôi liên tục thúc đẩy tầm nhìn về game blockchain mà không bị giới hạn bởi những rào cản đã kìm hãm các dự án Web3 trước đây.
 

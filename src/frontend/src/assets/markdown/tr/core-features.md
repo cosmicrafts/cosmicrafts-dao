@@ -1,173 +1,160 @@
 # Temel Özellikler
 
-[[toc:2-2]]
+![Core Features](corebanner.webp)
 
 ## Genel Bakış
 
-Cosmicrafts, sürükleyici ve güvenli bir oyun deneyimi sağlamak için tasarlanmış kapsamlı bir özellik seti sunar. Her özellik performans, güvenlik ve ölçeklenebilirlik odaklı olarak inşa edilmiştir.
+Özünde, **Cosmicrafts DAO** tüm temel oyun işlevlerini çeşitli entegre sistemler aracılığıyla yöneten birleşik bir canister uygular. Mimarimiz, blokzincir teknolojisinin güvenliğini ve şeffaflığını korurken farklı bileşenler arasında sorunsuz etkileşim sağlar.
+
+---
 
 ## Oyuncu Sistemi
 
-### Profiller
+Oyuncu Sistemi, temel profillerden karmaşık sosyal etkileşimlere kadar her şeyi yöneterek Cosmicrafts içindeki kullanıcı etkileşiminin omurgasını oluşturur.
 
-| Öğe | Açıklama | Özelleştirme |
-|---------|-------------|--------------|
-| Kimlik | Blokzincirde benzersiz tanımlayıcı | Sabit |
-| Avatar | Dijital temsil | Özelleştirilebilir |
-| İstatistikler | Performans kaydı | Otomatik güncelleme |
-| Başarılar | Kazanılan rozetler | Görüntülenebilir |
+### Profil Yönetimi
 
-### İlerleme
+<div class="table-scroll">
 
-| Seviye | Gereksinimler | Ödüller |
-|----------|--------------|----------|
-| Başlangıç | 0-100 puan | Temel erişim |
-| Orta | 101-500 puan | Ek özellikler |
-| İleri | 501-1000 puan | Özel içerik |
-| Uzman | 1000+ puan | Özel ödüller |
+| Özellik | Açıklama | Oyuncu Faydası |
+|---------|-------------|----------------|
+| Profil Oluşturma | Özelleştirilebilir kullanıcı adları ve avatarlar ile benzersiz kimlikler | Metaverse'de kişisel kimlik |
+| Seviye Sistemi | Ödüllü deneyim tabanlı ilerleme | Net ilerleme yolu |
+| İstatistik Takibi | Kapsamlı performans metrikleri | Performans içgörüleri |
+| Unvan Sistemi | Başarıları gösteren açılabilir unvanlar | Statü tanınırlığı |
+
+</div>
+
+### Sosyal Özellikler
+
+Oyuncular ağlarını şunlar aracılığıyla oluşturabilir:
+- Arkadaşlık istekleri ve yönetimi
+- Gizlilik ayarları kontrolü
+- Gerçek zamanlı bildirimler
+- Engellenen kullanıcı yönetimi
+- Sosyal aktivite takibi
 
 ## Varlık Sistemi
 
-### NFT'ler
+Varlık sistemimiz, gerçek sahiplik ve birlikte çalışabilirlik sağlamak için ICRC-7 standardından yararlanır.
 
-| Tür | Özellikler | Yetenekler |
-|--------|------------|------------|
-| Karakterler | Geliştirilebilir | Özelleştirilebilir |
-| Silahlar | Yükseltilebilir | Takas edilebilir |
-| Araçlar | Modifiye edilebilir | Kullanılabilir |
-| Eşyalar | Çeşitli | Birleştirilebilir |
+### NFT Kategorileri
 
-### Gelişim
-
-1. **Deneyim Kazanma**
-   - Kullanım yoluyla
-   - Savaşlar yoluyla
-   - Görevler yoluyla
-
-2. **Yükseltmeler**
-   - Yetenek geliştirme
-   - Özellik ekleme
-   - Güç artırma
-
-3. **Özelleştirme**
-   - Görünüm değiştirme
-   - Özellik modifikasyonu
-   - Eşya ekleme
+```mermaid
+graph LR
+    A[NFT Türleri] --> B[Ruh NFT'leri]
+    A --> C[Oyun Birimleri]
+    A --> D[Kozmetikler]
+    A --> E[Ödüller]
+    
+    B --> B1[İlerleme Takibi]
+    B --> B2[Başarı Gösterimi]
+    
+    C --> C1[Uzay Gemileri]
+    C --> C2[Karakterler]
+    C --> C3[Savaş Birimleri]
+    
+    D --> D1[Avatarlar]
+    D --> D2[Görünümler]
+    
+    E --> E1[Kupalar]
+    E --> E2[Özel Eşyalar]
+```
 
 ## Ekonomi Sistemi
 
-### Para Birimleri
+Çift token ekonomimiz, hem ücretsiz hem de premium oyuncular için dengeli bir ekosistem oluşturur.
 
-| Para Birimi | Kullanım | Elde Etme |
-|---------|-----------|--------------|
-| SPIRAL | Yönetişim tokeni | Ticaret, ödüller |
-| Krediler | Oyun içi para | Oynama, görevler |
-| Kristaller | Nadir öğeler | Etkinlikler, başarılar |
+### Token Yapısı
 
-### Ticaret
+<div class="table-scroll">
 
-| Tür | Ücretler | Kısıtlamalar |
-|--------|--------|----------|
-| P2P | %1 | Yok |
-| Pazar | %2 | Minimum limit |
-| Açık Artırma | %3 | Zaman sınırı |
+| Token | Amaç | Edinme | Kullanım |
+|-------|---------|-------------|--------|
+| Spiral | Yönetişim & Premium | Satın Alma/Stake | Oylama, Premium Özellikler |
+| Stardust | Oyun İçi Para Birimi | Oyun Ödülleri | Temel Özellikler, Üretim |
+
+</div>
 
 ## Eşleştirme Sistemi
 
-### Eşleştirme Algoritmaları
+Eşleştirme sistemimiz, gelişmiş oyuncu eşleştirme yoluyla adil ve ilgi çekici oyun deneyimi sağlar.
 
-| Tür | Kriterler | Süre |
-|--------|-----------|--------|
-| Normal | Beceri seviyesi | >30 saniye |
-| Rekabetçi | Sıralama | >60 saniye |
-| Özel | Belirlenmiş | Anında |
+### Temel Özellikler
 
-### Sıralama
+```mermaid
+graph TD
+    A[Eşleştirme] --> B[Oyuncu Havuzu]
+    B --> C[ELO Eşleştirme]
+    C --> D[Maç Oluşturma]
+    D --> E[Durum Takibi]
+    
+    E --> F[Devam Ediyor]
+    E --> G[Tamamlandı]
+    E --> H[İptal Edildi]
+```
 
-| Seviye | Puanlar | Ödüller |
-|----------|--------|----------|
-| Bronz | 0-1000 | Temel |
-| Gümüş | 1001-2000 | Gelişmiş |
-| Altın | 2001-3000 | İleri |
-| Elit | 3000+ | Özel |
+- Dinamik beceri tabanlı eşleştirme
+- Gerçek zamanlı durum güncellemeleri
+- Otomatik maç doğrulama
+- Performans tabanlı derece ayarlamaları
 
 ## Görev ve Başarı Sistemi
 
-### Görevler
+Oyuncuları başarıları için ödüllendiren kapsamlı bir ilerleme sistemi.
 
-| Tür | Ödüller | Süre |
-|--------|----------|--------|
-| Günlük | Küçük | 24 saat |
-| Haftalık | Orta | 7 gün |
-| Sezonluk | Büyük | 90 gün |
+### Görev Türleri
 
-### Başarılar
+<div class="table-scroll">
 
-| Seviye | Gereksinimler | Ödüller |
-|----------|--------------|----------|
-| Normal | Kolay | Sembolik |
-| Nadir | Orta | Değerli |
-| Efsanevi | Zor | Özel |
-| Gizli | Özel | Benzersiz |
+| Tür | Sıklık | Ödüller | Amaç |
+|------|-----------|---------|----------|
+| Günlük | 24 saat | Küçük ödüller | Düzenli katılım |
+| Haftalık | 7 gün | Orta ödüller | Sürdürülebilir aktivite |
+| Özel | Etkinlik bazlı | Benzersiz ödüller | Topluluk etkinlikleri |
+
+</div>
+
+### Başarı Kategorileri
+- Savaş Ustalığı
+- Ekonomik Başarı
+- Sosyal Katılım
+- Koleksiyon Tamamlama
+- Özel Etkinlikler
 
 ## Kayıt Sistemi
 
-### Olay Kaydı
+Şeffaf kayıt sistemimiz tüm önemli olayları ve işlemleri takip eder.
 
-| Olay | Veri | Saklama |
-|--------|----------|----------|
-| İşlemler | Tam | Sürekli |
-| Maçlar | Özet | 90 gün |
-| Sohbet | Sınırlı | 30 gün |
+### İzlenen Aktiviteler
 
-### Analitik
+<div class="table-scroll">
 
-| Tür | Amaç | Güncelleme |
-|--------|---------|----------|
-| Oyuncu | Performans | Anında |
-| Sistem | Sağlık | Sürekli |
-| Ekonomi | Denge | Günlük |
+| Kategori | İzlenen Olaylar | Amaç |
+|----------|---------------|----------|
+| Oynanış | Maçlar, İstatistikler | Performans Analizi |
+| Ekonomi | İşlemler, Takaslar | Ekonomik İzleme |
+| Sosyal | Etkileşimler, Arkadaşlar | Topluluk Sağlığı |
+| İlerleme | Seviyeler, Başarılar | Oyuncu Gelişimi |
+
+</div>
 
 ## Güvenlik ve Performans
 
 ### Güvenlik Önlemleri
+- Yönetimsel kontroller
+- Güncelleme güvenlik protokolleri
+- Girdi doğrulama
+- Hız sınırlama
+- İşlem doğrulama
 
-1. **Hesap Koruması**
-   - Çok faktörlü kimlik doğrulama
-   - Aktivite izleme
-   - Hesap kurtarma
+### Optimizasyonlar
+- Tek canister verimliliği
+- Hızlı veri erişimi
+- Bellek yönetimi
+- Sorgu optimizasyonu
 
-2. **İşlem Güvenliği**
-   - Dijital imza
-   - Veri şifreleme
-   - Çoklu onay
+---
 
-3. **Sistem Koruması**
-   - Sürekli izleme
-   - Güvenlik güncellemeleri
-   - Yedekleme
-
-### Performans İyileştirmeleri
-
-| Alan | Hedef | Uygulama |
-|---------|--------|-------------|
-| Gecikme | <100ms | Ağ optimizasyonu |
-| Kare Hızı | 60fps | Grafik optimizasyonu |
-| Yükleme | <3s | Önbellek |
-
-## Özellik Yol Haritası
-
-### Aşama 1: Temel (1-3 Ay)
-- Temel oyuncu sistemi
-- Basit ticaret
-- Temel eşleştirme
-
-### Aşama 2: Genişleme (4-6 Ay)
-- Gelişmiş NFT sistemi
-- Rekabetçi eşleştirme
-- Kapsamlı başarı sistemi
-
-### Aşama 3: İyileştirme (7+ Ay)
-- Gelişmiş ekonomi
-- Özel etkinlikler
-- Sosyal özellikler
+## Sonuç
+Cosmicrafts, en yüksek kalite, güvenlik ve performans standartlarını koruyarak blokzincir oyunlarında yeni bir paradigmayı temsil eder.

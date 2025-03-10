@@ -53,7 +53,7 @@ Total Supply: **1 billion SPIRAL tokens**
 ### Token Allocation Strategy
 
 | Holder | Amount | Purpose | Lock Period |
-|--------|---------|---------|-------------|
+|--------|---------|---------|-----------|
 | **Treasury** | 760M (76%) | Ecosystem growth | DAO-controlled |
 | **SNS Swap** | 120M (12%) | Public sale | 8 quarterly releases |
 | **Developer Team** | 80M (8%) | Core team | 8-year vesting |

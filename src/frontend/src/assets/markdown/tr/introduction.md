@@ -2,7 +2,7 @@
 
 ![Yönetici Özeti](executivesummary.webp)
 
-[[toc:2-2]]
+
 
 **Cosmicrafts DAO**, Web3 teknolojisi aracılığıyla oyun endüstrisinde öncülük yaparak, gerçek sahiplik ekonomisine sahip ilk tam blokzincir oyun serisini oluşturuyor. 2016'dan beri geliştirme aşamasında olan ve 2021'den beri tamamen [Internet Computer](https://internetcomputer.org) üzerinde inşa edilen projemiz, önceki Web3 girişimlerini kısıtlayan sınırlamalar olmadan blokzincir oyun vizyonumuzu ilerletmeye devam ediyor.
 

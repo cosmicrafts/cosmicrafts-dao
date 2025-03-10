@@ -293,14 +293,19 @@ export default {
         return;
       }
       
-      // Reset heading index
-      this.headingIndex = 1;
-      
       // Process TOC markers
       const tocMatch = content.match(this.tocRegex);
       if (tocMatch) {
         content = content.replace(this.tocRegex, '<div class="toc-placeholder"></div>');
       }
+
+      // Replace Mermaid code blocks with a placeholder
+      const mermaidRegex = /```mermaid([\s\S]*?)```/g;
+      let processedContent = content.replace(mermaidRegex, (match, diagram) => {
+        // Trim whitespace and ensure the diagram has proper syntax
+        const trimmedDiagram = diagram.trim();
+        return `<pre class="mermaid">${trimmedDiagram}</pre>`;
+      });
       
       // Initialize markdown-it with basic options
       const md = new MarkdownIt({
@@ -398,9 +403,13 @@ export default {
       md.use(markdownItHighlightjs);
       
       // Render the markdown
-      this.htmlContent = md.render(content);
+      this.htmlContent = md.render(processedContent);
       
-      this.$nextTick(() => this.emitRendered());
+      // Render mermaid diagrams after content is rendered
+      this.$nextTick(() => {
+        this.renderMermaidDiagrams();
+        this.emitRendered();
+      });
     },
     emitRendered() {
       // Emit the rendered event
@@ -647,8 +656,6 @@ export default {
             }).catch(error => {
               console.error('Error rendering mermaid diagrams:', error);
             });
-            
-            // No need to add custom zoom controls anymore
           } catch (error) {
             console.error('Error initializing mermaid diagrams:', error);
           }
@@ -1016,49 +1023,6 @@ pre.mermaid {
     padding: 1rem;
     margin: 1rem 0;
   }
-}
-
-.cosmic-heading {
-  color: #FFFFFF !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
-  font-family: 'Montserrat', sans-serif !important;
-  width: 100% !important;
-  display: block !important;
-  margin: 1rem 0 !important;
-}
-
-h1.cosmic-heading {
-  font-size: 2.5rem !important;
-  font-weight: 900 !important;
-  margin-bottom: 1.5rem !important;
-  letter-spacing: -0.02em !important;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
-}
-
-h2.cosmic-heading {
-  font-size: 2rem !important;
-  font-weight: 800 !important;
-  margin-top: 2rem !important;
-  margin-bottom: 1rem !important;
-}
-
-h3.cosmic-heading {
-  font-size: 1.75rem !important;
-  font-weight: 900 !important;
-  margin-top: 1.5rem !important;
-  margin-bottom: 1rem !important;
-}
-
-h4.cosmic-heading {
-  font-size: 1.25rem !important;
-  font-weight: 700 !important;
-  margin-top: 1.25rem !important;
-  margin-bottom: 0.75rem !important;
-}
-
-.cosmic-heading:hover {
-  color: #FFFFFF !important;
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.3) !important;
 }
 
 .markdown-content table {

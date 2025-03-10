@@ -1,6 +1,5 @@
 # 架构
-
-[[toc:2-2]]
+![Architecture](architecturebanner.webp)
 
 ## 概述
 

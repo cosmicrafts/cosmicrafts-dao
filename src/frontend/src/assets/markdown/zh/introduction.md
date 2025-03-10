@@ -2,7 +2,7 @@
 
 ![执行摘要](executivesummary.webp)
 
-[[toc:2-2]]
+
 
 **Cosmicrafts DAO**通过Web3技术引领游戏行业，创造首个具有真实所有权经济的完全链上游戏系列。自2016年开始开发，并从2021年起完全构建在[Internet Computer](https://internetcomputer.org)之上，我们始终推进着区块链游戏的愿景，突破了此前Web3项目的局限。
 

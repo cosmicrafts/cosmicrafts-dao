@@ -1,6 +1,6 @@
 # Kiến Trúc Kỹ Thuật
 
-[[toc:2-2]]
+
 
 ## Tổng Quan
 

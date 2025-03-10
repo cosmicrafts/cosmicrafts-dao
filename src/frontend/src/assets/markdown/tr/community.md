@@ -1,189 +1,187 @@
 # Topluluk
-
-[[toc:2-2]]
+![Community](communitybanner.webp)
 
 ## Genel Bakış
 
-Cosmicrafts DAO topluluğu, ekosistem büyümesinin merkezindedir. Ekonomik teşvikler ve aktif katılımı birleştirerek, tüm katılımcıların faydalandığı sürdürülebilir bir ekosistem inşa ediyoruz.
+Cosmicrafts topluluğu, ekosistemimizin büyümesi ve gelişiminin itici gücüdür. Topluluk çerçevemiz şunları dengeler:
+- Kapsayıcı katılım ve yönetişim
+- Sürdürülebilir ekonomik gelişim
+- Stratejik ekosistem genişlemesi
+- İçerik oluşturma ve kültürel büyüme
 
 ## Hazine Yönetimi
 
-### Fon Tahsis Gereksinimleri
+DAO hazinesi, sürdürülebilir büyüme ve topluluk girişimleri için temeldir. Tüm fon tahsisleri SNS teklif sistemi aracılığıyla topluluk onayı gerektirir.
 
-| Kategori | Oran | Odak |
-|---------|-----------|---------|
-| Ürün Geliştirme | %40 | Oyun ve platform iyileştirmeleri |
-| Topluluk Büyümesi | %30 | Pazarlama ve katılım |
-| Likidite | %20 | Piyasa istikrarı |
-| Rezerv | %10 | Acil durumlar ve fırsatlar |
+<div class="table-scroll">
 
-### Odak Alanları
+| Odak Alanı | Uygulama | Gereksinimler |
+|------------|----------------|--------------|
+| **Kullanıcı Edinimi** | Pazarlama kampanyaları, Stratejik ortaklıklar | - Net ROI metrikleri<br>- Hedef kitle analizi<br>- Performans takibi |
+| **Geliştirme** | Çekirdek ekip bakımı, Teknik iyileştirmeler | - Yetenek gereksinimleri<br>- Proje yol haritası uyumu<br>- Kilometre taşı tanımları |
+| **Topluluk Girişimleri** | Etkinlikler, İçerik oluşturma, Pazar geliştirme | - Başarı metrikleri<br>- Bütçe dökümü<br>- Zaman çizelgesi ve teslim edilecekler |
 
-1. **Ürün Geliştirme**
-   - Oyun iyileştirmeleri
-   - Platform güncellemeleri
-   - Topluluk araçları
-   - Ekosistem entegrasyonu
+</div>
 
-2. **Topluluk Büyümesi**
-   - Pazarlama kampanyaları
-   - Elçi programları
-   - Topluluk etkinlikleri
-   - Eğitim programları
+::: info Teklif Gereksinimleri
+Tüm hazine teklifleri şunları içermelidir:
+- Detaylı bütçe tahsisi
+- Beklenen etki metrikleri
+- Uygulama zaman çizelgesi
+- Risk değerlendirmesi
+- Başarı kriterleri
+:::
 
-3. **Likidite Yönetimi**
-   - Likidite sağlayıcı teşvikleri
-   - Piyasa istikrarı
-   - Geri alım programları
-   - Acil durum fonları
+## İçerik Oluşturucu Programı
 
-## İçerik Üretici Programı
+İçerik Oluşturucu Programı, Cosmicrafts topluluğunun büyümesine ve katılımına yardımcı olan sürdürülebilir bir içerik oluşturucu ekosistemi oluşturmayı amaçlar. Tüm program şartları ve ücretlendirme DAO onayına tabidir.
 
 ### Yeterlilik Çerçevesi
 
-| Seviye | Gereksinimler | Ödüller |
-|----------|--------------|----------|
-| Başlangıç | 100 takipçi | 100 SPIRAL/ay |
-| Orta | 1,000 takipçi | 500 SPIRAL/ay |
-| İleri | 10,000 takipçi | 2,500 SPIRAL/ay |
-| Elit | 100,000+ takipçi | 10,000 SPIRAL/ay |
+<div class="table-scroll">
 
-### Ödeme Yapısı
+| Seviye | Gereksinimler | Değerlendirme Kriterleri |
+|------|--------------|-------------------|
+| **Gelişen** | - Aktif sosyal medya varlığı<br>- Tutarlı içerik programı | - İçerik kalitesi<br>- Etkileşim metrikleri<br>- Kitle özgünlüğü |
+| **Yerleşik** | - Kanıtlanmış geçmiş<br>- Etkileşim odaklı içerik<br>- Topluluk katılımı | - Erişim ve etki<br>- İçerik performansı<br>- Topluluk geri bildirimi |
+| **Ortak** | - Önemli kitle erişimi<br>- Yüksek kaliteli üretim<br>- Stratejik değer uyumu | - Uzun vadeli etki<br>- Marka uyumu<br>- Topluluk liderliği |
 
-| Aktivite | Temel Ödül | Çarpanlar |
-|----------|----------------|------------|
-| Video İçerikleri | 50 SPIRAL | 3x'e kadar |
-| Canlı Yayın | 100 SPIRAL/saat | 2x'e kadar |
-| Makaleler | 75 SPIRAL | 2.5x'e kadar |
-| Sanat | 200 SPIRAL | 2x'e kadar |
+</div>
+
+### Ücretlendirme Yapısı
+
+İçerik oluşturucular DAO'ya şunlar için teklifte bulunabilir:
+- Performansa dayalı ücretlendirme
+- Projeye özel finansman
+- Etkinlik sponsorluğu
+- Stratejik işbirliği fırsatları
+
+::: info Teklif Yönergeleri
+Oluşturucular şunları içermelidir:
+- Detaylı içerik stratejisi
+- Performans metrikleri
+- Hedef kitle analizi
+- Beklenen etki değerlendirmesi
+- Bütçe gereksinimleri
+:::
 
 ### Değerlendirme Metrikleri
 
-| Metrik | Ağırlık | Hedef |
-|----------|--------|--------|
-| Görüntülenme | %30 | Aylık büyüme |
-| Etkileşim | %40 | Etkileşim oranı |
-| Kalite | %20 | Akran değerlendirmesi |
-| Tutarlılık | %10 | Düzenli yayın |
+<div class="table-scroll">
 
-## Pazar
+| Kategori | Metrikler | Etki Değerlendirmesi |
+|----------|---------|-------------------|
+| **Erişim** | - Benzersiz izleyiciler<br>- Coğrafi dağılım<br>- Kitle tutma | Platform analitiği ile ölçülür |
+| **Etkileşim** | - Yorum aktivitesi<br>- Paylaşım oranları<br>- Topluluk etkileşimi | Etkileşim araçları ile takip edilir |
+| **Kalite** | - Üretim değeri<br>- İçerik özgünlüğü<br>- Topluluk geri bildirimi | Düzenli kalite değerlendirmeleri |
+
+</div>
+
+::: info Program Gelişimi
+DAO topluluğu:
+- Belirli ücretlendirme modellerini tanımlayacak
+- Değerlendirme kriterlerini belirleyecek
+- Program parametrelerini ayarlayacak
+- Oluşturucu tekliflerini inceleyecek ve onaylayacak
+:::
+
+## Pazar Yeri
+
+DAO tarafından yönetilen pazar yeri, dijital varlık ticareti ve topluluk ticareti için merkezi bir merkez görevi görür.
 
 ### Temel Özellikler
 
-| Özellik | Açıklama | Geliştirme Durumu |
-|---------|-------------|-----------------|
-| P2P Ticaret | Doğrudan varlık takası | Tamamlandı |
-| Açık Artırmalar | NFT açık artırmaları | Geliştirme aşamasında |
-| Toplu Listeleme | Çoklu listeleme | Planlandı |
-| Otomatik Ticaret | Piyasa yapıcılar | Planlandı |
+<div class="table-scroll">
 
-### Topluluk Kontrolü
+| Özellik | Uygulama | Topluluk Kontrolü |
+|---------|----------------|------------------|
+| **Zincirler Arası Ticaret** | - Çoklu zincir desteği<br>- Köprü entegrasyonları<br>- Evrensel standartlar | - Protokol seçimi<br>- Ücret yapıları<br>- Entegrasyon öncelikleri |
+| **Varlık Standartları** | - NFT uyumluluğu<br>- Metadata standartları<br>- Doğrulama sistemleri | - Format onayı<br>- Kalite yönergeleri<br>- Listeleme kriterleri |
+| **Gelir Modeli** | - Ücret dağıtımı<br>- Stake ödülleri<br>- Oluşturucu telif hakları | - Oran belirleme<br>- Ödül tahsisi<br>- Hazine payı |
 
-| İşlev | Gereksinimler | Etki |
-|----------|--------------|----------|
-| Varlık Listesi | Topluluk oylaması | Varlık kabulü |
-| Ücret Ayarlamaları | Teklif + oylama | Ücret yapısı |
-| Ticaret Kuralları | Komite konsensüsü | Pazar standartları |
-| Teşvik Programları | Hazine onayı | Ödül dağıtımı |
+</div>
+
+::: info Pazar Yeri Gelişimi
+Topluluk pazar yeri gelişimini şunlar aracılığıyla yönlendirir:
+- Özellik teklifleri
+- Entegrasyon oylaması
+- Parametre ayarlaması
+- Gelir modeli güncellemeleri
+:::
 
 ## Likidite Yönetimi
 
-### Operasyonlar
+DAO, pazar verimliliğini ve token istikrarını sağlamak için stratejik likidite operasyonlarını denetler.
 
-| Aktivite | Sıklık | Sorumlu |
-|----------|------------|------------|
-| Likidite İzleme | Sürekli | Sistem |
-| Teşvik Ayarlamaları | Haftalık | Likidite komitesi |
-| Risk Değerlendirmesi | Aylık | Topluluk denetçileri |
-| Performans Raporları | 3 Aylık | Analitik ekibi |
+<div class="table-scroll">
 
-### Yönetişim Gereksinimleri
+| Operasyon | Süreç | Yönetişim Gereksinimleri |
+|-----------|---------|------------------------|
+| **DEX Likidite** | - Periyodik likidite ayarlamaları<br>- Havuz çeşitlendirme<br>- Getiri optimizasyonu | - Topluluk oylaması gerekli<br>- Minimum 7 günlük teklif süresi<br>- Detaylı etki analizi |
+| **CEX Entegrasyonu** | - Borsa seçim kriterleri<br>- Listeleme gereksinimleri<br>- Likidite tahsisi | - Hazine etki değerlendirmesi<br>- Güvenlik doğrulaması<br>- Uzun vadeli strateji uyumu |
+| **Piyasa Yapıcılığı** | - Otomatik piyasa yapıcılığı<br>- Emir defteri derinliği<br>- Volatilite yönetimi | - Parametre ayarlama<br>- Performans izleme<br>- Hazine risk değerlendirmesi |
 
-| Karar | Oylama Eşiği | Uygulama Süresi |
-|----------|----------------|-----------------|
-| Parametre Ayarları | %51 | 24 saat |
-| Fon Tahsisi | %66 | 48 saat |
-| Sistem Değişiklikleri | %75 | 72 saat |
-| Acil Durum Eylemleri | %90 | Anında |
+</div>
+
+::: info Likidite Operasyonları
+Tüm likidite operasyonları:
+- Kapsamlı güvenlik incelemesinden geçmeli
+- Net giriş ve çıkış stratejileri içermeli
+- Risk azaltma önlemlerini tanımlamalı
+- Raporlama gereksinimlerini belirlemeli
+- Uzun vadeli tokenomik hedeflerle uyumlu olmalı
+:::
 
 ## Kurumsal Yatırım
 
-### Yatırım Türleri
+DAO, büyüme ve gelişmeyi hızlandırmak için kurumsal ortaklara stratejik hazine tahsislerini onaylayabilir.
 
-| Tür | Minimum | Kilitleme Süresi |
-|--------|------------|-------------|
-| Stratejik | 100,000 SPIRAL | 24 ay |
-| Ortaklık | 50,000 SPIRAL | 12 ay |
-| Kurumsal | 25,000 SPIRAL | 6 ay |
+<div class="table-scroll">
 
-### Gereksinimler
+| Yatırım Türü | Çerçeve | Gereksinimler |
+|-----------------|-----------|--------------|
+| **Stratejik Satışlar** | - Özel token tahsisleri<br>- Hazine çeşitlendirme<br>- Ortaklık geliştirme | - Hak ediş gereksinimleri<br>- DAO hedefleriyle uyum<br>- Sermaye ötesinde değer katma |
+| **DAO Ortaklıkları** | - DAO'lar arası işbirlikleri<br>- Ekosistem entegrasyonu<br>- Ortak geliştirme | - Karşılıklı fayda analizi<br>- Teknik uyumluluk<br>- Değer yaratma değerlendirmesi |
+| **Ekosistem Finansmanı** | - Ekosistem projeleri için hibeler<br>- Kuluçka programları<br>- Geliştirme desteği | - Ölçülebilir sonuçlar<br>- Kilometre taşı bazlı dağıtım<br>- Teknoloji entegrasyonu |
 
-1. **Doğrulama**
-   - Due diligence
-   - Kimlik doğrulama
-   - İtibar incelemesi
+</div>
 
-2. **Taahhütler**
-   - Yönetişime katılım
-   - Ekosistem desteği
-   - Uzmanlık sağlama
-
-3. **Katkılar**
-   - İş geliştirme
-   - Stratejik ortaklıklar
-   - Pazar genişletme
+::: info Kurumsal Gereksinimler
+Potansiyel kurumsal ortaklar şunları göstermelidir:
+- Ekosisteme uzun vadeli bağlılık
+- Sermaye ötesinde belirli değer katkısı
+- Topluluk değerleriyle uyum
+- Teknik veya pazar uzmanlığı
+- Şeffaf operasyonlar ve raporlama
+:::
 
 ## Stratejik Büyüme
 
-### Kullanıcı Edinme
+Sürdürülebilir ekosistem genişlemesi için topluluk odaklı girişimler.
 
-| Kanal | Bütçe | Hedef ROI |
-|----------|----------|--------------|
-| Dijital Pazarlama | %30 | 3x |
-| Ortaklıklar | %40 | 4x |
-| Referans Programları | %20 | 5x |
-| Halkla İlişkiler | %10 | 2x |
+### Kullanıcı Edinimi
 
-### Kullanıcı Tutma
+<div class="table-scroll">
 
-| Strateji | Metrik | Hedef |
-|--------------|----------|--------|
-| Sadakat Programları | Tutma oranı | %80 |
-| Ürün İyileştirme | Kullanıcı memnuniyeti | %90 |
-| Topluluk Desteği | Yanıt süresi | <2 saat |
-| Ödüller | Kullanıcı katılımı | %70 aktif |
+| Kanal | Strateji | Başarı Metrikleri |
+|---------|----------|----------------|
+| **İçerik Ortaklıkları** | - Oluşturucu işbirlikleri<br>- Stratejik ittifaklar<br>- Topluluk elçileri | - Kitle büyümesi<br>- Etkileşim oranları<br>- Dönüşüm metrikleri |
+| **Topluluk Etkinlikleri** | - Turnuvalar<br>- Özel etkinlikler<br>- Bölgesel buluşmalar | - Katılım oranları<br>- Tutma metrikleri<br>- Topluluk geri bildirimi |
+| **Teşvik Programları** | - Yönlendirme sistemleri<br>- Başarı ödülleri<br>- Sosyal meydan okumalar | - Kullanıcı edinme maliyeti<br>- Tutma oranları<br>- Ağ büyümesi |
 
-### Büyüme Girişimleri
+</div>
 
-1. **Elçi Programı**
-   - İşe alım ve eğitim
-   - Ödül sistemi
-   - Genişleme hedefleri
+### Tutma Çerçevesi
 
-2. **Ekosistem Ortaklıkları**
-   - Ürün entegrasyonu
-   - Kaynak paylaşımı
-   - Ortak pazarlama
+::: info Temel Unsurlar
+- Kademeli ödül sistemleri
+- Sosyal etkileşim teşvikleri
+- Topluluk liderliği fırsatları
+- Düzenli etkinlikler ve yarışmalar
+- İçerik oluşturma desteği
+:::
 
-3. **Eğitim Programları**
-   - Eğitim içeriği
-   - Çalıştaylar
-   - Mentorluk programları
-
-## Topluluk Yol Haritası
-
-### Aşama 1: Kuruluş (1-6 Ay)
-- İçerik üretici programının başlatılması
-- Elçi programının kurulması
-- Topluluk kanallarının oluşturulması
-
-### Aşama 2: Büyüme (7-12 Ay)
-- Ödül programlarının genişletilmesi
-- Stratejik ortaklıkların başlatılması
-- Topluluk araçlarının iyileştirilmesi
-
-### Aşama 3: Genişleme (13+ Ay)
-- Kurumsal programlar
-- Global genişleme
-- Ekosistem entegrasyonu
+::: info Teknik Altyapı
+Cosmicrafts teknik mimarisi, topluluğumuza sorunsuz etkileşim ve katılım için duyarlı, gaz ücretsiz bir ortam sağlar. Tek canister tasarımımız ve teknik uygulamamız hakkında detaylar için [Mimari](/architecture) bölümüne bakın.
+:::
 

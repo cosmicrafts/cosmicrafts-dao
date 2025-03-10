@@ -2,7 +2,7 @@
 
 ![개요](executivesummary.webp)
 
-[[toc:2-2]]
+
 
 **Cosmicrafts DAO**는 Web3 기술을 통해 게임 산업의 선두에 서서, 진정한 소유권 경제를 갖춘 최초의 완전한 체인 게임 브랜드를 만들어가고 있습니다. 2016년부터 개발을 시작하여 2021년부터 [Internet Computer](https://internetcomputer.org)에서 완전히 구축되어, 이전 Web3 프로젝트들을 제한했던 장벽들을 극복한 블록체인 게임에 대한 비전을 지속적으로 추진하고 있습니다.
 
