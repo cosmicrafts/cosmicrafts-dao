@@ -21,7 +21,13 @@ export default {
     return {
       htmlContent: "",
       tocLevels: [2, 2], // Default to level 2 headings only
-      tocRegex: /\[\[toc(?::(\d+)-(\d+))?\]\]/i
+      tocRegex: /\[\[toc(?::(\d+)-(\d+))?\]\]/i,
+      toc: [],
+      activeHeading: null,
+      sectionObserver: null,
+      scrollHandler: null,
+      scrollTimeout: null,
+      headingIndex: 1
     };
   },
   mounted() {
@@ -187,266 +193,269 @@ export default {
         return;
       }
       
+      // Reset heading index
+      this.headingIndex = 1;
+      
+      // Replace heading markers with numeric indexes
+      content = content.replace(/^(#{1,6})\s*(.+?)$/gm, (match, hashes, text) => {
+        // Extract the clean text - preserve original but add data attribute
+        const headingIndex = this.headingIndex++;
+        const cleanText = text.trim().replace(/[#*`]/g, '');
+        return `${hashes} <span class="heading-text" data-heading-id="section-${headingIndex}">${cleanText}</span>`;
+      });
+      
       // Process TOC markers
       const tocMatch = content.match(this.tocRegex);
-      
       if (tocMatch) {
-        // Extract min and max levels if specified
-        if (tocMatch[1] && tocMatch[2]) {
-          this.tocLevels = [parseInt(tocMatch[1]), parseInt(tocMatch[2])];
-        }
-        
-        // Replace the TOC marker with a placeholder
         content = content.replace(this.tocRegex, '<div class="toc-placeholder"></div>');
       }
       
-      // Replace Mermaid code blocks with a placeholder
-      const mermaidRegex = /```mermaid([\s\S]*?)```/g;
-      let processedContent = content.replace(mermaidRegex, (match, diagram) => {
-        // Trim whitespace and ensure the diagram has proper syntax
-        const trimmedDiagram = diagram.trim();
-        return `<pre class="mermaid">${trimmedDiagram}</pre>`;
-      });
-
-      // Add basic emoji support manually
-      const emojiMap = {
-        ':rocket:': '🚀',
-        ':star:': '⭐',
-        ':smile:': '😊',
-        ':warning:': '⚠️',
-        ':information_source:': 'ℹ️',
-        ':bulb:': '💡',
-        ':chart_with_upwards_trend:': '📈',
-        ':thumbsup:': '👍',
-        ':thumbsdown:': '👎',
-        ':check:': '✅',
-        ':x:': '❌',
-        ':tada:': '🎉',
-        ':fire:': '🔥',
-        ':heart:': '❤️',
-        ':zap:': '⚡',
-        ':gear:': '⚙️',
-        ':lock:': '🔒',
-        ':unlock:': '🔓',
-        ':memo:': '📝',
-        ':book:': '📚',
-        ':calendar:': '📅',
-        ':clock:': '🕒',
-        ':money:': '💰',
-        ':gem:': '💎',
-        ':trophy:': '🏆'
-      };
-      
-      // Replace emoji shortcodes in the content
-      Object.keys(emojiMap).forEach(shortcode => {
-        const regex = new RegExp(shortcode, 'g');
-        processedContent = processedContent.replace(regex, emojiMap[shortcode]);
-      });
-
-      // Initialize markdown-it with basic options
+      // Initialize markdown-it
       const md = new MarkdownIt({
         html: true,
         typographer: true,
         linkify: true,
       });
       
-      // Custom image renderer to resolve Vite paths
-      const defaultImageRender = md.renderer.rules.image || function (tokens, idx, options, env, self) {
-        return self.renderToken(tokens, idx, options);
-      };
-
-      md.renderer.rules.image = function (tokens, idx, options, env, self) {
-        const token = tokens[idx];
-        const srcIndex = token.attrIndex("src");
-        if (srcIndex >= 0) {
-          const src = token.attrs[srcIndex][1];
-          token.attrs[srcIndex][1] = new URL(`../assets/webp/${src}`, import.meta.url).href;
-        }
-        return defaultImageRender(tokens, idx, options, env, self);
-      };
-
-      // Override default heading renderer to add our class
-      const defaultHeadingRender = md.renderer.rules.heading_open || function (tokens, idx, options, env, self) {
-        return self.renderToken(tokens, idx, options);
-      };
-
-      md.renderer.rules.heading_open = function (tokens, idx, options, env, self) {
-        const token = tokens[idx];
-        token.attrJoin('class', 'cosmic-heading');
-        return defaultHeadingRender(tokens, idx, options, env, self);
-      };
-
-      // Add anchor links to headings
+      // Add anchor links to headings with stable IDs
       md.use(markdownItAnchor, {
-        slugify: (s) => s.trim().toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-"),
-        level: [1, 2, 3],
+        slugify: (s) => {
+          // Extract the heading ID from the data attribute
+          const match = s.match(/data-heading-id="([^"]+)"/);
+          if (match) return match[1];
+          return `section-fallback-${Math.floor(Math.random() * 10000)}`;
+        },
         permalink: markdownItAnchor.permalink.headerLink({
           class: 'header-anchor',
           safariReaderFix: true
         })
       });
       
-      // Add custom containers
-      md.use(markdownItContainer, 'info', {
-        validate: function(params) {
-          return params.trim().match(/^info\s+(.*)$/);
-        },
-        render: function (tokens, idx) {
-          const m = tokens[idx].info.trim().match(/^info\s+(.*)$/);
-          if (tokens[idx].nesting === 1) {
-            return `<div class="info-container"><div class="info-title">${md.utils.escapeHtml(m[1])}</div>\n`;
-          } else {
-            return '</div>\n';
-          }
-        }
-      });
-      
-      md.use(markdownItContainer, 'warning', {
-        validate: function(params) {
-          return params.trim().match(/^warning\s+(.*)$/);
-        },
-        render: function (tokens, idx) {
-          const m = tokens[idx].info.trim().match(/^warning\s+(.*)$/);
-          if (tokens[idx].nesting === 1) {
-            return `<div class="warning-container"><div class="warning-title">${md.utils.escapeHtml(m[1])}</div>\n`;
-          } else {
-            return '</div>\n';
-          }
-        }
-      });
-      
-      // Add syntax highlighting
-      md.use(markdownItHighlightjs);
-
-      // Custom link renderer for internal/external links
-      const defaultLinkRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
+      // Add classes to headings
+      const defaultHeadingOpen = md.renderer.rules.heading_open || function(tokens, idx, options, env, self) {
         return self.renderToken(tokens, idx, options);
       };
-
-      md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-        const token = tokens[idx];
-        const hrefIndex = token.attrIndex("href");
-        if (hrefIndex >= 0) {
-          const href = token.attrs[hrefIndex][1];
-          
-          // Handle internal links
-          if (href.startsWith("#")) {
-            token.attrPush(["class", "internal-link"]);
-          } 
-          // Handle cross-document links in whitepaper (like /tokenomics or /tokenomics#section)
-          else if (href.startsWith("/") && 
-                  ["introduction", "executive-summary", "architecture", "core-features",
-                   "governance", "tokenomics", "community", "sustainability"].some(section => 
-                   href.startsWith(`/${section}`))) {
-            
-            // Convert to proper nested hash format that our component can handle
-            const pathParts = href.substring(1).split("#");
-            const section = pathParts[0];
-            const heading = pathParts.length > 1 ? pathParts[1] : "";
-            
-            // Update the href attribute to use our nested hash format
-            token.attrs[hrefIndex][1] = heading ? `#${section}#${heading}` : `#${section}`;
-            token.attrPush(["class", "internal-link"]);
-          }
-          else {
-            token.attrPush(["target", "_blank"]);
-            token.attrPush(["rel", "noopener noreferrer"]);
-          }
-        }
-        return defaultLinkRender(tokens, idx, options, env, self);
-      };
-
-      // Only replace TOC placeholder if it exists in the content
-      const tocRegex = /\[\[toc(?::(\d+)-(\d+))?\]\]/gi;
-      if (tocRegex.test(processedContent)) {
-        processedContent = processedContent.replace(tocRegex, (match, minLevel, maxLevel) => {
-          // Store TOC level range as data attributes for later use
-          const minLevelAttr = minLevel ? `data-min-level="${minLevel}"` : '';
-          const maxLevelAttr = maxLevel ? `data-max-level="${maxLevel}"` : '';
-          
-          return `<div class="toc-container" ${minLevelAttr} ${maxLevelAttr}>
-            <div class="toc-header" onclick="this.nextElementSibling.classList.toggle('toc-expanded'); this.querySelector('.toc-toggle-icon').textContent = this.querySelector('.toc-toggle-icon').textContent === '▶' ? '▼' : '▶';">
-              <h3 class="toc-title">Table of Contents</h3>
-              <span class="toc-toggle-icon">▶</span>
-            </div>
-            <div class="toc-content" id="toc-placeholder-${this.fileName}"></div>
-          </div>`;
-        });
-      }
       
-      // Simple task list replacement
-      processedContent = processedContent.replace(/- \[ \]/g, '- <input type="checkbox" disabled class="task-list-item-checkbox"> ');
-      processedContent = processedContent.replace(/- \[x\]/g, '- <input type="checkbox" checked disabled class="task-list-item-checkbox"> ');
-
-      this.htmlContent = md.render(processedContent);
-
-      // We're keeping the actual heading elements now, so no need to replace them with spans
-      // The styling is handled by CSS and the heading_open renderer
+      md.renderer.rules.heading_open = function(tokens, idx, options, env, self) {
+        const token = tokens[idx];
+        token.attrJoin('class', 'cosmic-heading');
+        return defaultHeadingOpen(tokens, idx, options, env, self);
+      };
+      
+      // Custom containers, syntax highlighting, etc.
+      md.use(markdownItContainer, 'info');
+      md.use(markdownItContainer, 'warning');
+      md.use(markdownItHighlightjs);
+      
+      // Render the markdown
+      this.htmlContent = md.render(content);
+      
       this.$nextTick(() => this.emitRendered());
     },
     emitRendered() {
+      // Emit the rendered event
       this.$emit("rendered");
       
       // Generate TOC after rendering
       this.$nextTick(() => {
-        const tocPlaceholder = document.getElementById(`toc-placeholder-${this.fileName}`);
-        if (tocPlaceholder) {
-          // Clear any existing content first
-          tocPlaceholder.innerHTML = '';
-          
-          // Get the TOC container to check for level restrictions
-          const tocContainer = tocPlaceholder.closest('.toc-container');
-          let minLevel = 2; // Default min level (h2)
-          let maxLevel = 3; // Default max level (h3)
-          
-          // Check if we have custom level restrictions
-          if (tocContainer) {
-            if (tocContainer.hasAttribute('data-min-level')) {
-              minLevel = parseInt(tocContainer.getAttribute('data-min-level'));
-            }
-            if (tocContainer.hasAttribute('data-max-level')) {
-              maxLevel = parseInt(tocContainer.getAttribute('data-max-level'));
-            }
-          }
-          
-          // Build selector for the specified heading levels
-          const headingSelectors = [];
-          for (let i = minLevel; i <= maxLevel; i++) {
-            headingSelectors.push(`.markdown-content h${i}`);
-          }
-          
-          const headings = document.querySelectorAll(headingSelectors.join(', '));
-          if (headings.length > 0) {
-            const toc = document.createElement('ul');
-            headings.forEach((heading, index) => {
-              // Create ID if not exists
-              if (!heading.id) {
-                heading.id = `heading-${index}`;
-              }
-              
-              const item = document.createElement('li');
-              const link = document.createElement('a');
-              link.href = `#${heading.id}`;
-              link.textContent = heading.textContent;
-              link.classList.add('internal-link');
-              
-              // Indent based on heading level
-              const headingLevel = parseInt(heading.tagName.substring(1));
-              if (headingLevel > minLevel) {
-                item.style.marginLeft = `${(headingLevel - minLevel) * 1}rem`;
-              }
-              
-              item.appendChild(link);
-              toc.appendChild(item);
-            });
-            
-            tocPlaceholder.appendChild(toc);
-          }
+        // Generate the in-document TOC if needed
+        this.generateInDocumentTOC();
+        
+        // Generate the sidebar TOC
+        this.generateTOC();
+      });
+    },
+    generateTOC() {
+      const contentElement = document.querySelector(".main-content");
+      if (!contentElement) return;
+      
+      // Get all h2 headings - try different selectors to ensure we find the headings
+      let headings = contentElement.querySelectorAll("h2.cosmic-heading");
+      
+      // If no headings found, try without the cosmic-heading class
+      if (!headings.length) {
+        headings = contentElement.querySelectorAll("h2");
+      }
+      
+      // If still no headings, try a more general selector
+      if (!headings.length) {
+        headings = contentElement.querySelectorAll(".markdown-content h2");
+      }
+      
+      if (!headings.length) {
+        console.warn("No h2 headings found for TOC generation");
+        return;
+      }
+
+      this.toc = [];
+      
+      // Create an array of objects with id and text for each heading
+      headings.forEach((heading, index) => {
+        // Create a consistent ID if needed
+        const headingId = heading.id || `section-${index}`;
+        heading.id = headingId;
+        
+        // Get text content from either the special span or the heading itself
+        let headingText = "";
+        const span = heading.querySelector('.heading-text');
+        if (span) {
+          headingText = span.textContent.trim();
+        } else {
+          headingText = heading.textContent.trim();
         }
         
-        // Render Mermaid diagrams after content is fully loaded
-        this.renderMermaidDiagrams();
+        // Add to TOC
+        this.toc.push({
+          id: headingId,
+          text: headingText,
+          element: heading
+        });
+        
+        // Log for debugging
+        console.log(`Found heading: "${headingText}" with ID: ${headingId}`);
       });
+
+      if (this.toc.length > 0) {
+        // Set the first heading as active initially
+        this.activeHeading = this.toc[0].id;
+        
+        // Emit both event formats for maximum compatibility
+        this.$emit('toc-updated', this.toc);
+        this.$emit('tocUpdated', this.toc);
+      }
+
+      // Set up scroll tracking
+      this.setupScrollTracking();
+    },
+    setupScrollTracking() {
+      const contentElement = document.querySelector(".main-content");
+      if (!contentElement || !this.toc.length) return;
+
+      // Clean up existing scroll handler
+      if (this.scrollHandler) {
+        contentElement.removeEventListener('scroll', this.scrollHandler);
+      }
+
+      // Debounced scroll handler
+      let debounceTimer = null;
+      let lastScrollTop = contentElement.scrollTop;
+
+      this.scrollHandler = () => {
+        const scrollTop = contentElement.scrollTop;
+        const scrollDirection = scrollTop > lastScrollTop ? 'down' : 'up';
+        lastScrollTop = scrollTop;
+        
+        // Clear previous timer
+        if (debounceTimer) clearTimeout(debounceTimer);
+        
+        // Set new timer
+        debounceTimer = setTimeout(() => {
+          // Find visible headings
+          const viewportHeight = contentElement.clientHeight;
+          const viewportTop = scrollTop;
+          const viewportMiddle = viewportTop + (viewportHeight / 3); // 1/3 from top
+          
+          let bestHeading = null;
+          let bestDistance = Infinity;
+          
+          // Find heading closest to the middle of the viewport
+          for (const { id, element } of this.toc) {
+            const rect = element.getBoundingClientRect();
+            const offsetTop = rect.top + window.pageYOffset;
+            const distance = Math.abs(offsetTop - viewportMiddle);
+            
+            if (distance < bestDistance) {
+              bestDistance = distance;
+              bestHeading = id;
+            }
+          }
+          
+          // Update active heading if changed
+          if (bestHeading && this.activeHeading !== bestHeading) {
+            this.activeHeading = bestHeading;
+            this.$emit('heading-change', this.activeHeading);
+          }
+        }, 50); // 50ms debounce
+      };
+
+      // Add event listener
+      contentElement.addEventListener('scroll', this.scrollHandler, { passive: true });
+    },
+    scrollToHeading(headingId) {
+      const heading = document.getElementById(headingId);
+      if (!heading) return;
+      
+      const contentElement = document.querySelector(".main-content");
+      if (!contentElement) return;
+      
+      const offsetTop = heading.offsetTop;
+      contentElement.scrollTo({
+        top: offsetTop - 100, // Offset for header
+        behavior: 'smooth'
+      });
+      
+      this.activeHeading = headingId;
+      this.$emit('heading-change', this.activeHeading);
+    },
+    beforeDestroy() {
+      const contentElement = document.querySelector(".main-content");
+      if (contentElement && this.scrollHandler) {
+        contentElement.removeEventListener('scroll', this.scrollHandler);
+      }
+    },
+    generateInDocumentTOC() {
+      const tocPlaceholder = document.getElementById(`toc-placeholder-${this.fileName}`);
+      if (!tocPlaceholder) return;
+      
+      // Clear any existing content first
+      tocPlaceholder.innerHTML = '';
+      
+      // Get the TOC container to check for level restrictions
+      const tocContainer = tocPlaceholder.closest('.toc-container');
+      let minLevel = 2; // Default min level (h2)
+      let maxLevel = 3; // Default max level (h3)
+      
+      // Check if we have custom level restrictions
+      if (tocContainer) {
+        if (tocContainer.hasAttribute('data-min-level')) {
+          minLevel = parseInt(tocContainer.getAttribute('data-min-level'));
+        }
+        if (tocContainer.hasAttribute('data-max-level')) {
+          maxLevel = parseInt(tocContainer.getAttribute('data-max-level'));
+        }
+      }
+      
+      // Build selector for the specified heading levels
+      const headingSelectors = [];
+      for (let i = minLevel; i <= maxLevel; i++) {
+        headingSelectors.push(`.markdown-content h${i}`);
+      }
+      
+      const headings = document.querySelectorAll(headingSelectors.join(', '));
+      if (headings.length > 0) {
+        const toc = document.createElement('ul');
+        headings.forEach((heading, index) => {
+          const item = document.createElement('li');
+          const link = document.createElement('a');
+          link.href = `#${heading.id}`;
+          link.textContent = heading.textContent;
+          link.classList.add('internal-link');
+          
+          // Indent based on heading level
+          const headingLevel = parseInt(heading.tagName.substring(1));
+          if (headingLevel > minLevel) {
+            item.style.marginLeft = `${(headingLevel - minLevel) * 1}rem`;
+          }
+          
+          item.appendChild(link);
+          toc.appendChild(item);
+        });
+        
+        tocPlaceholder.appendChild(toc);
+      }
+      
+      // Render Mermaid diagrams after content is fully loaded
+      this.renderMermaidDiagrams();
     },
     renderMermaidDiagrams() {
       this.$nextTick(() => {

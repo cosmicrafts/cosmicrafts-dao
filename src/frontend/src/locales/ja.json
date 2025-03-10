@@ -326,31 +326,39 @@
   },
   "whitepaper": {
     "title": "ホワイトペーパー",
-    "sections": {
-      "introduction": {
-        "title": "はじめに",
-        "description": "Cosmicrafts DAOの概要とビジョン"
+    "navigation": {
+      "sections": {
+        "introduction": {
+          "title": "はじめに",
+          "description": "概要と価値提案"
+        },
+        "tokenomics": {
+          "title": "トークノミクス",
+          "description": "トークン分配と経済性"
+        },
+        "governance": {
+          "title": "ガバナンス",
+          "description": "意思決定システム"
+        },
+        "community": {
+          "title": "コミュニティ",
+          "description": "参加と成長"
+        },
+        "architecture": {
+          "title": "アーキテクチャ",
+          "description": "技術インフラストラクチャ"
+        },
+        "core-features": {
+          "title": "主要機能",
+          "description": "プロダクト機能"
+        }
       },
-      "tokenomics": {
-        "title": "トークンノミクス",
-        "description": "トークン経済と分配メカニズム"
-      },
-      "governance": {
-        "title": "ガバナンス",
-        "description": "コミュニティ主導の意思決定システム"
-      },
-      "community": {
-        "title": "コミュニティ",
-        "description": "エコシステムの成長と参加の枠組み"
-      },
-      "architecture": {
-        "title": "アーキテクチャ",
-        "description": "技術インフラストラクチャの詳細"
-      },
-      "core-features": {
-        "title": "主要機能",
-        "description": "ゲームプレイとシステムの機能"
-      }
+      "documentation": "ドキュメント",
+      "previous": "前へ",
+      "next": "次へ",
+      "chapters": "チャプター",
+      "mobileTitle": "ホワイトペーパーセクション",
+      "mobileSubtitle": "チャプター間を移動"
     }
   }
 }

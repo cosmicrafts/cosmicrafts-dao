@@ -42,6 +42,9 @@
                 :fileName="activeSection"
                 @rendered="generateTOC"
                 @navigateToSection="handleNavigateToSection"
+                @headingChange="handleHeadingChange"
+                @toc-updated="handleTocUpdated"
+                ref="markdownRenderer"
               />
             </div>
 
@@ -194,8 +197,8 @@ export default {
   },
   methods: {
     afterTransition() {
-      this.generateTOC();
-      this.observeSections();
+      // Skip manual TOC generation as it will be handled by MarkdownRenderer events
+      this.updateButtonVisibility();
     },
     
     updateUrlHash() {
@@ -243,13 +246,11 @@ export default {
     changeSection(sectionId, updateUrl = true) {
       this.activeSection = sectionId;
       this.toc = [];
+      this.activeHeading = null;
       this.updateButtonVisibility();
       
       // Wait for the transition to complete before scrolling
       this.$nextTick(() => {
-        // Generate TOC first
-        this.generateTOC();
-        
         if (updateUrl) {
           this.updateUrlHash();
         }
@@ -308,82 +309,39 @@ export default {
     },
 
     generateTOC() {
-      this.toc = [];
-      const contentElement = document.querySelector(".main-content");
-      if (!contentElement) return;
-      
-      const headings = contentElement.querySelectorAll("h2");
-      if (!headings.length) return;
-
-      this.toc = Array.from(headings).map((heading) => {
-        const headingText = heading.textContent.trim();
-        const headingId = this.slugify(headingText);
-        heading.id = headingId;
-        return { id: headingId, text: headingText };
-      });
-
-      if (this.toc.length > 0) {
-        this.activeHeading = this.toc[0].id;
-      }
-      
-      // Observe sections after TOC is generated
-      this.$nextTick(() => this.observeSections());
+      // This is now a placeholder - the actual TOC generation is handled by MarkdownRenderer
+      // and sent via the @toc-updated event. 
+      // This method is kept for compatibility with existing code references.
+      this.updateButtonVisibility();
     },
 
     scrollToHeading(id) {
-      const target = document.getElementById(id);
-      if (target) {
-        const headerOffset = 120; // Fixed header height (approximately)
-        const mainContent = document.querySelector(".main-content");
-        if (!mainContent) return;
+      // Get reference to markdown renderer component
+      const markdownRenderer = this.$refs.markdownRenderer;
+      if (markdownRenderer) {
+        markdownRenderer.scrollToHeading(id);
+      } else {
+        const target = document.getElementById(id);
+        if (target) {
+          const headerOffset = 120;
+          const mainContent = document.querySelector(".main-content");
+          if (!mainContent) return;
 
-        const targetPosition = target.offsetTop - headerOffset;
+          const targetPosition = target.offsetTop - headerOffset;
 
-        mainContent.scrollTo({
-          top: targetPosition,
-          behavior: "smooth"
-        });
+          mainContent.scrollTo({
+            top: targetPosition,
+            behavior: "smooth"
+          });
 
-        this.activeHeading = id;
+          this.activeHeading = id;
+        }
       }
-    },
-    
-    slugify(text) {
-      return text
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/--+/g, '-')
-        .trim();
     },
 
     observeSections() {
-      if (!this.toc.length) return;
-      
-      if (this.sectionObserver) {
-        this.sectionObserver.disconnect();
-      }
-      
-      this.sectionObserver = new IntersectionObserver(
-        (entries) => {
-          const visibleHeading = entries.find(entry => entry.isIntersecting);
-          if (visibleHeading) {
-            this.activeHeading = visibleHeading.target.id;
-          }
-        },
-        {
-          root: document.querySelector('.main-content'),
-          rootMargin: "-100px 0px -70% 0px",
-          threshold: 0
-        }
-      );
-      
-      this.toc.forEach(heading => {
-        const element = document.getElementById(heading.id);
-        if (element) {
-          this.sectionObserver.observe(element);
-        }
-      });
+      // This is now handled by MarkdownRenderer
+      // This method is kept for compatibility with existing code references.
     },
 
     toggleMobileNav() {
@@ -417,6 +375,20 @@ export default {
         'architecture': 'Technical implementation details'
       };
       return descriptions[sectionId] || '';
+    },
+
+    handleHeadingChange(headingId) {
+      this.activeHeading = headingId;
+      this.updateUrlHash();
+    },
+    
+    handleTocUpdated(newToc) {
+      console.log("TOC Updated:", newToc); // Debug log
+      this.toc = newToc || [];
+      if (newToc && newToc.length > 0 && !this.activeHeading) {
+        this.activeHeading = newToc[0].id;
+      }
+      this.updateButtonVisibility();
     },
   },
 
