@@ -97,7 +97,7 @@ const toggleSection = (section) => {
       <!-- Footer Bottom -->
       <div class="footer-bottom">
         <div class="language-selector-container">
-          <LanguageSelector />
+          <LanguageSelector context="footer" />
         </div>
         
         <div class="copyright-container">
@@ -178,7 +178,7 @@ const toggleSection = (section) => {
     
     <!-- Mobile Language Selector -->
     <div class="mobile-language-selector">
-      <LanguageSelector />
+      <LanguageSelector context="footer" />
     </div>
     
     <!-- Mobile Footer Copyright with Logo -->
@@ -544,7 +544,7 @@ const toggleSection = (section) => {
 .mobile-social-bar {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 1rem;
+  gap: 0.75rem;
   padding: 0 1.5rem;
   margin-bottom: 2rem;
 }
@@ -560,13 +560,50 @@ const toggleSection = (section) => {
   border-radius: 14px;
   position: relative;
   overflow: hidden;
+  transition: all 0.4s var(--cosmic-bounce);
+  transform-style: preserve-3d;
 }
 
 .mobile-social-icon img {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.4));
-  transition: all 0.3s ease;
+  transition: all 0.4s var(--cosmic-bounce);
+  transform: translateZ(20px);
+}
+
+.mobile-social-icon:active {
+  transform: scale(0.95);
+  background: rgba(15, 185, 253, 0.15);
+  border-color: rgba(15, 185, 253, 0.4);
+}
+
+/* Add desktop animations to mobile */
+.mobile-social-icon:hover {
+  transform: translateY(-5px) scale(1.05) translateZ(20px);
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.4);
+  box-shadow: 
+    0 10px 30px rgba(15, 185, 253, 0.2),
+    0 0 0 1px rgba(15, 185, 253, 0.2) inset;
+}
+
+.mobile-social-icon:hover img {
+  transform: scale(1.2) translateZ(30px);
+  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.6));
+}
+
+/* Media query adjustments */
+@media (max-width: 400px) {
+  .mobile-social-bar {
+    gap: 0.5rem;
+    padding: 0 1rem;
+  }
+  
+  .mobile-social-icon img {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .mobile-accordion-container {
