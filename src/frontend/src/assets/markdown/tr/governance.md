@@ -1,9 +1,10 @@
-# Governance
-![Governance](govbanner.webp)
+# Yönetişim
 
-## Introduction
+[[toc:2-2]]
 
-The Cosmicrafts DAO puts the community at the center, giving Stakeholders a real say in how the franchise grows. Built on proven technology, the DAO uses fairness, transparency, and community-driven decision-making to ensure Cosmicrafts stays true to its vision.
+## Giriş
+
+Cosmicrafts DAO, şeffaf ve adil bir yönetişim sistemi aracılığıyla topluluğu güçlendirir. Tüm önemli kararlar topluluk oylaması ile alınır, böylece her paydaşın ekosistemin geleceğinde söz hakkı olması sağlanır.
 
 ::: info Reading Guide
 This document outlines the governance framework of the Cosmicrafts DAO, focusing on decision-making processes, proposal systems, and community participation. It complements the [Tokenomics](/tokenomics) document, which covers economic aspects.
@@ -13,150 +14,177 @@ This document outlines the governance framework of the Cosmicrafts DAO, focusing
 - **Cross-References**: Look for tip boxes linking to relevant tokenomics sections
 :::
 
-## DAO Core Principles
+## Temel İlkeler
 
-| Principle | Description |
-|-----------|-------------|
-| **Community Sovereignty** | • Collective decision-making power<br>• Transparent governance process<br>• On-chain voting and automated execution<br>|
-| **Sustainable Growth** | • Long-term value creation<br>• Balanced ecosystem development<br>• Community-driven treasury management<br>• Data-driven evaluation system |
-| **Open Participation** | • Inclusive governance structure<br>• Low barriers to entry<br>• Community-driven expansion<br>• Multi-chain accessibility |
+| İlke | Açıklama | Uygulama |
+|---------|-------------|--------------|
+| Topluluk Egemenliği | Topluluk ana kararları kontrol eder | Teklif oylaması |
+| Sürdürülebilir Büyüme | Uzun vadeli değer artışı | Yakma ve ödül mekanizmaları |
+| Açık Katılım | Tüm paydaşlar için erişilebilirlik | Düşük katılım eşiği |
 
+## Oylama Gücü Dağılımı
 
-## Voting Power Distribution
+| Grup | Oy Payı | Gerekçe |
+|-----------|--------------|----------------|
+| Token Sahipleri | %40 | Ekonomik katkı |
+| Aktif Oyuncular | %30 | Ekosistem katılımı |
+| İçerik Üreticileri | %20 | Ekosistem zenginleştirme |
+| Çekirdek Ekip | %10 | Teknik uzmanlık |
 
-<div class="tokenomics-diagram">
-  <img src="src/assets/icons/votingpower.svg" alt="SPIRAL Token Allocation" />
-</div>
+### Performans Çarpanları
 
-<style>
-.tokenomics-diagram {
-  text-align: center;
-  width: 100%;
-  margin: 4rem auto;
-}
+| Aktivite | Çarpan | Maksimum |
+|----------|------------|------------|
+| Kilitleme Süresi | 1.5x | 2 yıl |
+| Oylama Aktivitesi | 1.2x | 100 oy |
+| Ekosistem Katkıları | 1.3x | 50 katkı |
+| Teklif Sunma | 1.1x | 10 teklif |
 
-.tokenomics-diagram img {
-  width: 65%;
-  max-width: 800px;
-  height: auto;
-  filter: none;
-  box-shadow: none;
-  background: transparent;
-  margin: 0 auto;
-  display: block;
-}
-
-@media (max-width: 768px) {
-  .tokenomics-diagram img {
-    width: 100%;
-    max-width: 100%;
-  }
-
-}
-</style>
-
-::: info Dynamic Voting Power
-The actual distribution of voting power will fluctuate based on stakeholder decisions regarding:
-- Amount of tokens staked in neurons
-- Length of dissolve delay chosen
-- Age of neurons accumulated
-These factors can significantly shift the relative influence of different stakeholder groups over time.
-:::
-
-| Stakeholder Group | Voting Share | Base Tokens | Purpose |
-|-------------------|--------------|-------------|----------|
-| **SNS Participants** | 50% | 120M | - Largest voting bloc<br>- Community-driven governance<br>- Potential for increased influence through participation |
-| **Developer Team** | 33.3% | 80M | - Strategic decision-making<br>- 8-year dissolve delay with 1-year vesting<br>- Gradual reduction of influence |
-| **Genesis/Seed** | 16.7% | 40M | - Early supporter representation<br>- Staggered dissolve delays (0-7 years)<br>- Balanced initial influence |
-
-
-
-### Power Multipliers
-
-| Factor | Maximum Bonus | Time to Achieve |
-|--------|---------------|-----------------|
-| **Dissolve Delay** | +100% | 8 years |
-| **Neuron Age** | +100% | 1 year |
-| **Minimum Dissolve Delay** | N/A | 1 month |
-| **Combined Cap** | 3x base power | N/A |
-
-## SNS Integration
+## SNS Entegrasyonu
 
 The Cosmicrafts DAO leverages the Internet Computer's [Service Nervous System (SNS)](https://internetcomputer.org/docs/building-apps/governing-apps/overview) for its governance infrastructure. This provides a battle-tested, secure framework for decentralized decision-making.
 
-### Key Features
+### Temel Parametreler
 
-- **Neuron-Based Voting**: Stake SPIRAL tokens to create neurons and participate in governance
-- **Dissolve Delay Bonuses**: Longer lockup periods increase voting power
-- **Age Bonuses**: Neurons gain more voting power over time
-- **Proposal System**: Standard SNS proposal framework for all governance actions
+| Parametre | Değer | Açıklama |
+|-----------|---------|-------------|
+| Minimum Oy | 100 SPIRAL | Minimum katılım |
+| Oylama Süresi | 7 gün | Standart oylama süresi |
+| Yeterlilik | %51 | Minimum katılım |
+| Onay Eşiği | %66 | Gerekli onay yüzdesi |
 
-::: info SNS Configuration
-For detailed technical parameters of our SNS setup, including minimum stakes, voting periods, and reward rates, refer to the SNS initialization parameters in our documentation.
-:::
+### Yönetişim Parametreleri
 
-### Governance Parameters
+| Parametre | Değer | Değiştirilebilir |
+|-----------|---------|---------------|
+| Gecikme Süresi | 24 saat | Evet |
+| Teklif Limiti | 1,000 SPIRAL | Evet |
+| Uygulama Süresi | 48 saat | Evet |
+| Veto Eşiği | %33 | Hayır |
 
-| Parameter | Value | Purpose |
-|-----------|--------|---------|
-| **Rejection Fee** | 1000 SPIRAL | Prevent spam proposals |
-| **Initial Voting Period** | 7 days | Standard deliberation time |
-| **Maximum Deadline Extension** | 1 day | Allow for late participation |
-| **Minimum Neuron Creation Stake** | 1000 SPIRAL | Base participation threshold |
+## Nöron Kilitleme Mekanizmaları
 
+### Kilitleme Seviyeleri
 
-## Neuron Staking Mechanics
+| Seviye | Süre | Çarpan | Gereksinimler |
+|----------|--------|------------|--------------|
+| Bronz | 3 ay | 1.2x | 1,000 SPIRAL |
+| Gümüş | 6 ay | 1.5x | 5,000 SPIRAL |
+| Altın | 12 ay | 2.0x | 10,000 SPIRAL |
+| Platin | 24 ay | 3.0x | 25,000 SPIRAL |
 
-### Base Requirements
+### Kilitleme Ödülleri
 
-| Parameter | Value | Description |
-|-----------|--------|-------------|
-| **Minimum Stake** | 1,000 SPIRAL | Base amount required to create a neuron |
-| **Minimum Lock Period** | 30 days | Shortest allowed dissolve delay |
-| **Maximum Lock Period** | 8 years | Longest possible dissolve delay |
-| **Transaction Fee** | 0.01 SPIRAL | Network operation cost |
+| Tür | Oran | Periyot |
+|--------|--------|----------|
+| Temel | %12 APY | Sürekli |
+| Katılım Bonusu | +%3 | Aylık |
+| Sadakat Bonusu | +%5 | Yıllık |
+| Ekosistem Bonusu | +%2 | 3 Aylık |
 
-### Maturity Schedule
+## Karar Alma Çerçevesi
 
-| Lock Period | Bonus Multiplier | Effective Power |
-|-------------|------------------|-----------------|
-| 30 days | 1.0x | Base Power |
-| 6 months | 1.25x | +25% |
-| 1 year | 1.5x | +50% |
-| 2 years | 1.75x | +75% |
-| 4 years | 1.85x | +85% |
-| 8 years | 2.0x | +100% |
+### Teklif Türleri
 
+| Tür | Açıklama | Onay Eşiği |
+|--------|-------------|-----------------|
+| Teknik | Protokol güncellemeleri | %75 |
+| Mali | Kaynak tahsisi | %66 |
+| Topluluk | Topluluk girişimleri | %51 |
+| Acil | Acil düzeltmeler | %90 |
 
-## Decision Making Framework
+### Teklif Süreci
 
-### Governance Areas
+1. **Sunum**
+   - Teklif sunumu
+   - 3 gün tartışma süresi
+   - Geri bildirime göre güncellemeler
 
-1. **Treasury Management**
-   - Marketing Campaigns
-   - Development Funding
-   - Strategic Partnerships
+2. **Oylama**
+   - 7 gün oylama süresi
+   - Katılım takibi
+   - Sonuç hesaplama
 
-2. **Economic Policies**
-   - Tokenomics Adjustments
-   - Staking Rates
-   - Fee Structures
+3. **Uygulama**
+   - Uygulama takvimi
+   - İlerleme takibi
+   - Sonuç raporları
 
-3. **Development Roadmap**
-   - Feature Prioritization
-   - Game Expansions
-   - Technical Improvements
+### Teklif Gereksinimleri
 
-### Proposal System
+| Öğe | Açıklama | Zorunlu |
+|---------|-------------|------------|
+| Özet | Kısa genel bakış | Evet |
+| Detaylar | Tam açıklama | Evet |
+| Bütçe | Maliyet tahminleri | Gerektiğinde |
+| Zaman Çizelgesi | Uygulama planı | Evet |
+| Riskler | Risk analizi | Evet |
 
-| Stage | Duration | Requirements |
-|-------|----------|--------------|
-| **Submission** | N/A | 1,000 SPIRAL stake |
-| **Review** | 24 hours | Community feedback |
-| **Voting** | 7 days | Active neuron required |
-| **Execution** | Variable | Automated if approved |
+## Teklif Sistemi
 
-::: info Community Implementation
-For practical details about treasury management, community programs, and ecosystem growth initiatives, see our [Community](/community) framework.
-:::
+### Teklif Kategorileri
+
+| Kategori | Örnekler | İşlem Süresi |
+|---------|-----------|---------------|
+| Teknik | Protokol güncellemeleri | 2-4 hafta |
+| Mali | Bütçe tahsisi | 1-2 hafta |
+| Topluluk | Etkinlikler, ödüller | 1 hafta |
+| Acil | Güvenlik düzeltmeleri | 24-48 saat |
+
+### Teklif Yaşam Döngüsü
+
+1. **Taslak Aşaması**
+   - Teklif hazırlama
+   - Topluluk incelemesi
+   - Revizyon
+
+2. **Oylama Aşaması**
+   - Oylamayı açma
+   - Genel tartışma
+   - Oyları kaydetme
+
+3. **Uygulama Aşaması**
+   - Eylem planı
+   - Uygulama
+   - İzleme
+
+4. **Değerlendirme Aşaması**
+   - Sonuçları ölçme
+   - Geri bildirim toplama
+   - Önerilen iyileştirmeler
+
+## Şeffaflık ve Hesap Verebilirlik
+
+### İzleme Mekanizmaları
+
+| Mekanizma | Amaç | Sıklık |
+|---------|---------|-----------|
+| Yönetişim Raporları | Karar takibi | Aylık |
+| Performans İncelemeleri | Sonuç değerlendirme | 3 Aylık |
+| Topluluk Denetimleri | Şeffaflık sağlama | Yıllık |
+
+### Performans Metrikleri
+
+| Metrik | Hedef | Takip |
+|----------|--------|----------|
+| Oylama Katılımı | >%30 | Sürekli |
+| Teklif Uygulaması | >%80 | Aylık |
+| Topluluk Memnuniyeti | >%85 | 3 Aylık |
+
+## Yönetişim Yol Haritası
+
+### Aşama 1: Kuruluş (1-6 Ay)
+- Temel oylama sisteminin başlatılması
+- İlk komitelerin oluşturulması
+- Teklif çerçevesinin kurulması
+
+### Aşama 2: Genişleme (7-12 Ay)
+- Gelişmiş oylama mekanizmalarının eklenmesi
+- Komitelerin genişletilmesi
+- Teklif süreçlerinin iyileştirilmesi
+
+### Aşama 3: Olgunluk (13+ Ay)
+- Tam merkezi olmayan yönetişimin uygulanması
+- Gelişmiş analitik araçların başlatılması
+- Tahkim çözümlerinin entegrasyonu
 

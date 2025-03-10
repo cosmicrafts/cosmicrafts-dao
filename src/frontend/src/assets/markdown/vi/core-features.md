@@ -1,161 +1,158 @@
-# Core Features
+# Tính Năng Cốt Lõi
 
-![Core Features](corebanner.webp)
+[[toc:2-2]]
 
+## Tổng Quan
 
-## Overview
+Cosmicrafts kết hợp gameplay hấp dẫn với cơ chế blockchain sáng tạo để tạo ra trải nghiệm game độc đáo. Các tính năng cốt lõi của chúng tôi được thiết kế để phục vụ cả người chơi truyền thống và người dùng crypto.
 
-At its core, **Cosmicrafts DAO** implements a unified canister that handles all core game functionality through several integrated systems. Our architecture ensures seamless interaction between different components while maintaining the security and transparency of blockchain technology.
+## Hệ Thống Người Chơi
 
----
+### Hồ Sơ và Tiến Trình
 
-## Player System
+| Thành Phần | Mô Tả | Lưu Trữ |
+|------------|-------------|----------|
+| Thông Tin Cơ Bản | Tên, hình đại diện, tiểu sử | Trên chuỗi |
+| Thống Kê | Điểm số, thành tích, xếp hạng | Trên chuỗi |
+| Tùy Chọn | Cài đặt, tùy chỉnh | Ngoài chuỗi |
 
-The Player System forms the backbone of user interaction within Cosmicrafts, managing everything from basic profiles to complex social interactions.
+### Hệ Thống Cấp Độ
 
-### Profile Management
+| Cấp Độ | Yêu Cầu XP | Phần Thưởng |
+|----------|--------------|----------|
+| Tân Binh (1-10) | 1,000 XP | Tài nguyên cơ bản |
+| Cựu Binh (11-30) | 5,000 XP | Trang bị đặc biệt |
+| Tinh Anh (31-50) | 15,000 XP | NFT độc quyền |
+| Huyền Thoại (51+) | 50,000 XP | Token SPIRAL |
 
-<div class="table-scroll">
+## Hệ Thống Tài Sản
 
-| Feature | Description | Player Benefit |
-|---------|-------------|----------------|
-| Profile Creation | Unique IDs with customizable usernames and avatars | Personal identity in the metaverse |
-| Level System | Experience-based progression with rewards | Clear progression path |
-| Stats Tracking | Comprehensive performance metrics | Performance insights |
-| Title System | Unlockable titles showing achievements | Status recognition |
+### NFT Tiến Hóa
 
-</div>
+Tài sản NFT trong Cosmicrafts có thể phát triển theo thời gian:
 
-### Social Features
+| Thuộc Tính | Cơ Chế | Tác Động |
+|------------|------------|----------|
+| Kinh Nghiệm | Tích lũy qua sử dụng | Tăng sức mạnh |
+| Độ Hiếm | Dựa trên lịch sử | Tăng giá trị |
+| Đặc Tính | Mở khóa qua gameplay | Khả năng mới |
 
-Players can build their network through:
-- Friend requests and management
-- Privacy settings control
-- Real-time notifications
-- Blocked user management
-- Social activity tracking
+### Chế Tạo và Nâng Cấp
 
-## Asset System
+| Hoạt Động | Yêu Cầu | Kết Quả |
+|----------|--------------|---------|
+| Chế Tạo | Tài nguyên + Công thức | NFT mới |
+| Nâng Cấp | NFT + Vật liệu | Cải thiện thuộc tính |
+| Hợp Nhất | Nhiều NFT | NFT cao cấp |
 
-Our asset system leverages the ICRC-7 standard to provide true ownership and interoperability.
+## Hệ Thống Kinh Tế
 
-### NFT Categories
+### Tài Nguyên Trong Game
 
-```mermaid
-graph LR
-    A[NFT Types] --> B[Soul NFTs]
-    A --> C[Game Units]
-    A --> D[Cosmetics]
-    A --> E[Rewards]
-    
-    B --> B1[Progress Tracking]
-    B --> B2[Achievement Display]
-    
-    C --> C1[Spaceships]
-    C --> C2[Characters]
-    C --> C3[Combat Units]
-    
-    D --> D1[Avatars]
-    D --> D2[Skins]
-    
-    E --> E1[Trophies]
-    E --> E2[Special Items]
-```
+| Loại | Thu Thập | Sử Dụng |
+|--------|------------|---------|
+| Năng Lượng | Tái tạo theo thời gian | Hành động trong game |
+| Vật Liệu | Thu thập trong game | Chế tạo và nâng cấp |
+| Token | Phần thưởng gameplay | Giao dịch và quản trị |
 
-## Economy System
+### Giao Dịch P2P
 
-Our dual-token economy creates a balanced ecosystem for both free-to-play and premium players.
+| Tính Năng | Mô Tả | Phí |
+|----------|-------------|------|
+| Trao Đổi Trực Tiếp | Giao dịch người với người | 1% |
+| Đấu Giá | Đặt giá và đấu giá | 2% |
+| Cho Thuê | Cho thuê tài sản NFT | 3% |
 
-### Token Structure
+## Hệ Thống Ghép Cặp
 
-<div class="table-scroll">
+### Xếp Hạng và ELO
 
-| Token | Purpose | Acquisition | Usage |
-|-------|---------|-------------|--------|
-| Spiral | Governance & Premium | Purchase/Staking | Voting, Premium Features |
-| Stardust | In-game Currency | Gameplay Rewards | Basic Features, Crafting |
+| Xếp Hạng | ELO | Phần Thưởng |
+|----------|-----|-------------|
+| Đồng | 0-1000 | Cơ bản |
+| Bạc | 1001-2000 | Nâng cao |
+| Vàng | 2001-3000 | Cao cấp |
+| Bạch Kim | 3000+ | Độc quyền |
 
-</div>
+### Chế Độ Chơi
 
-## Matchmaking System
+| Chế Độ | Mô Tả | Phần Thưởng |
+|--------|-------------|----------|
+| Thường | Chơi tự do | Thấp |
+| Xếp Hạng | Thi đấu cạnh tranh | Trung bình |
+| Giải Đấu | Sự kiện đặc biệt | Cao |
 
-Our matchmaking system ensures fair and engaging gameplay through sophisticated player matching.
+## Hệ Thống Nhiệm Vụ và Thành Tích
 
-### Key Features
+### Nhiệm Vụ Hàng Ngày
 
-```mermaid
-graph TD
-    A[Matchmaking] --> B[Player Pool]
-    B --> C[ELO Matching]
-    C --> D[Match Creation]
-    D --> E[Status Tracking]
-    
-    E --> F[In Progress]
-    E --> G[Completed]
-    E --> H[Cancelled]
-```
+| Loại | Yêu Cầu | Phần Thưởng |
+|--------|--------------|----------|
+| Dễ | 15 phút chơi | 50 XP |
+| Trung Bình | 3 trận thắng | 100 XP |
+| Khó | 10 NFT nâng cấp | 200 XP |
 
-- Dynamic skill-based matching
-- Real-time status updates
-- Automatic match validation
-- Performance-based rating adjustments
+### Thành Tích
 
-## Mission & Achievement System
+| Cấp Độ | Yêu Cầu | Phần Thưởng |
+|----------|--------------|----------|
+| Đồng | Hoàn thành cơ bản | Huy hiệu |
+| Bạc | Thử thách trung bình | Token |
+| Vàng | Thành tích khó | NFT |
+| Bạch Kim | Thành tích đặc biệt | Độc quyền |
 
-A comprehensive progression system that rewards players for their accomplishments.
+## Hệ Thống Ghi Chép
 
-### Mission Types
+### Theo Dõi Hoạt Động
 
-<div class="table-scroll">
+| Dữ Liệu | Lưu Trữ | Mục Đích |
+|---------|----------|---------|
+| Gameplay | Ngoài chuỗi | Phân tích |
+| Giao Dịch | Trên chuỗi | Minh bạch |
+| Thành Tích | Hỗn hợp | Xác minh |
 
-| Type | Frequency | Rewards | Purpose |
-|------|-----------|---------|----------|
-| Daily | 24 hours | Small rewards | Regular engagement |
-| Weekly | 7 days | Medium rewards | Sustained activity |
-| Special | Event-based | Unique rewards | Community events |
+### Phân Tích
 
-</div>
+| Chỉ Số | Theo Dõi | Sử Dụng |
+|----------|----------|---------|
+| Tương Tác | Hàng ngày | Cải thiện |
+| Hiệu Suất | Hàng tuần | Cân bằng |
+| Kinh Tế | Hàng tháng | Điều chỉnh |
 
-### Achievement Categories
-- Combat Mastery
-- Economic Achievement
-- Social Engagement
-- Collection Completion
-- Special Events
+## Bảo Mật và Hiệu Suất
 
-## Logging System
+### Chống Gian Lận
 
-Our transparent logging system tracks all important events and transactions.
+| Biện Pháp | Mục Tiêu | Phương Pháp |
+|----------|--------|----------|
+| Xác Thực | Bot | Captcha |
+| Giám Sát | Hack | ML/AI |
+| Phát Hiện | Khai Thác | Heuristics |
 
-### Tracked Activities
+### Tối Ưu Hóa
 
-<div class="table-scroll">
+| Lĩnh Vực | Mục Tiêu | Phương Pháp |
+|----------|--------|----------|
+| Client | <50ms độ trễ | Đệm |
+| Server | >1000 TPS | Sharding |
+| Mạng | 99.9% uptime | CDN |
 
-| Category | Events Tracked | Purpose |
-|----------|---------------|----------|
-| Gameplay | Matches, Stats | Performance Analysis |
-| Economy | Transactions, Trades | Economic Monitoring |
-| Social | Interactions, Friends | Community Health |
-| Progress | Levels, Achievements | Player Development |
+## Lộ Trình Tính Năng
 
-</div>
+### Giai Đoạn 1: Nền Tảng (Q1-Q2 2024)
+- Hệ thống người chơi cơ bản
+- NFT đơn giản
+- Giao dịch P2P
+- Nhiệm vụ hàng ngày
 
-## Security & Performance
+### Giai Đoạn 2: Mở Rộng (Q3-Q4 2024)
+- NFT tiến hóa
+- Giải đấu
+- Cho thuê tài sản
+- Phân tích nâng cao
 
-### Security Measures
-- Administrative controls
-- Upgrade safety protocols
-- Input validation
-- Rate limiting
-- Transaction verification
-
-### Optimizations
-- Single-canister efficiency
-- Fast data retrieval
-- Memory management
-- Query optimization
-
----
-
-## Conclusion
-Cosmicrafts represents a new paradigm in blockchain gaming maintaining the highest standards of quality, security and performance.
+### Giai Đoạn 3: Tiên Tiến (2025+)
+- AI/ML trong gameplay
+- Tích hợp DAO
+- Công cụ cộng đồng
+- Tối ưu hóa quy mô

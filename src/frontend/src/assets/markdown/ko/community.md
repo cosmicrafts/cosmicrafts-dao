@@ -1,187 +1,189 @@
-# Community
-![Community](communitybanner.webp)
+# 커뮤니티
 
-## Overview
+[[toc:2-2]]
 
-The Cosmicrafts community is the driving force behind our ecosystem's growth and evolution. Our community framework balances:
-- Inclusive participation and governance
-- Sustainable economic development
-- Strategic ecosystem expansion
-- Content creation and cultural growth
+## 개요
 
-## Treasury Management
+Cosmicrafts DAO 커뮤니티는 생태계 성장의 원동력입니다. 경제적 인센티브와 적극적인 참여를 결합하여, 모든 참여자에게 혜택을 제공하는 지속 가능한 생태계를 구축합니다.
 
-The DAO treasury is the foundation for sustainable growth and community initiatives. All funding allocations require community approval through the SNS proposal system.
+## 재무부 관리
 
-<div class="table-scroll">
+### 자금 할당 요구사항
 
-| Focus Area | Implementation | Requirements |
-|------------|----------------|--------------|
-| **User Acquisition** | Marketing campaigns, Strategic partnerships | - Clear ROI metrics<br>- Target audience analysis<br>- Performance tracking |
-| **Development** | Core team maintenance, Technical improvements | - Skill requirements<br>- Project roadmap alignment<br>- Milestone definitions |
-| **Community Initiatives** | Events, Content creation, Market development | - Success metrics<br>- Budget breakdown<br>- Timeline and deliverables |
+| 카테고리 | 비율 | 초점 |
+|---------|-----------|---------|
+| 제품 개발 | 40% | 게임 및 플랫폼 개선 |
+| 커뮤니티 개발 | 30% | 마케팅 및 참여 |
+| 유동성 | 20% | 시장 안정화 |
+| 예비금 | 10% | 비상 및 기회 |
 
-</div>
+### 중점 영역
 
-::: info Proposal Requirements
-All treasury proposals must include:
-- Detailed budget allocation
-- Expected impact metrics
-- Implementation timeline
-- Risk assessment
-- Success criteria
-:::
+1. **제품 개발**
+   - 게임 개선
+   - 플랫폼 업데이트
+   - 커뮤니티 도구
+   - 생태계 통합
 
-## Content Creators Program
+2. **커뮤니티 개발**
+   - 마케팅 캠페인
+   - 앰배서더 프로그램
+   - 커뮤니티 이벤트
+   - 교육 프로그램
 
-The Content Creators Program aims to build a sustainable ecosystem of content creators who help grow and engage the Cosmicrafts community. All program terms and compensation are subject to DAO approval.
+3. **유동성 관리**
+   - 유동성 공급자 인센티브
+   - 시장 안정화
+   - 바이백 프로그램
+   - 비상 자금
 
-### Qualification Framework
+## 콘텐츠 크리에이터 프로그램
 
-<div class="table-scroll">
+### 자격 프레임워크
 
-| Tier | Requirements | Evaluation Criteria |
-|------|--------------|-------------------|
-| **Emerging** | - Active social media presence<br>- Consistent content schedule | - Content quality<br>- Engagement metrics<br>- Audience authenticity |
-| **Established** | - Proven track record<br>- Engagement-driven content<br>- Community participation | - Reach and impact<br>- Content performance<br>- Community feedback |
-| **Partner** | - Significant audience reach<br>- High-quality production<br>- Strategic value alignment | - Long-term impact<br>- Brand alignment<br>- Community leadership |
+| 등급 | 요구사항 | 보상 |
+|----------|--------------|----------|
+| 초급 | 100 팔로워 | 100 SPIRAL/월 |
+| 중급 | 1,000 팔로워 | 500 SPIRAL/월 |
+| 고급 | 10,000 팔로워 | 2,500 SPIRAL/월 |
+| 엘리트 | 100,000+ 팔로워 | 10,000 SPIRAL/월 |
 
-</div>
+### 보상 구조
 
-### Compensation Structure
+| 활동 | 기본 보상 | 배수 |
+|----------|----------------|------------|
+| 영상 | 50 SPIRAL | 최대 3x |
+| 스트리밍 | 100 SPIRAL/시간 | 최대 2x |
+| 글 작성 | 75 SPIRAL | 최대 2.5x |
+| 아트워크 | 200 SPIRAL | 최대 2x |
 
-Content creators can submit proposals to the DAO for:
-- Performance-based compensation
-- Project-specific funding
-- Event sponsorship
-- Strategic collaboration opportunities
+### 평가 기준
 
-::: info Proposal Guidelines
-Creators must include:
-- Detailed content strategy
-- Performance metrics
-- Target audience analysis
-- Expected impact assessment
-- Budget requirements
-:::
+| 기준 | 가중치 | 목표 |
+|----------|--------|--------|
+| 조회수 | 30% | 월간 성장 |
+| 참여도 | 40% | 참여율 |
+| 품질 | 20% | 동료 평가 |
+| 일관성 | 10% | 정기적 발행 |
 
-### Evaluation Metrics
+## 마켓플레이스
 
-<div class="table-scroll">
+### 핵심 기능
 
-| Category | Metrics | Impact Assessment |
-|----------|---------|-------------------|
-| **Reach** | - Unique viewers<br>- Geographic distribution<br>- Audience retention | Measured through platform analytics |
-| **Engagement** | - Comment activity<br>- Share rates<br>- Community interaction | Tracked via engagement tools |
-| **Quality** | - Production value<br>- Content originality<br>- Community feedback | Regular quality assessments |
+| 기능 | 설명 | 개발 상태 |
+|---------|-------------|-----------------|
+| P2P 거래 | 직접 자산 교환 | 완료 |
+| 경매 | NFT 경매 | 개발 중 |
+| 대량 리스팅 | 다중 아이템 리스팅 | 계획됨 |
+| 자동 거래 | 마켓메이커 | 계획됨 |
 
-</div>
+### 커뮤니티 제어
 
-::: info Program Evolution
-The DAO community will:
-- Define specific compensation models
-- Establish evaluation criteria
-- Adjust program parameters
-- Review and approve creator proposals
-:::
+| 기능 | 요구사항 | 영향 |
+|----------|--------------|----------|
+| 자산 리스팅 | 커뮤니티 투표 | 자산 승인 |
+| 수수료 조정 | 제안 + 투표 | 수수료 구조 |
+| 거래 규칙 | 위원회 합의 | 시장 표준 |
+| 인센티브 프로그램 | 재무부 승인 | 보상 분배 |
 
-## Marketplace
+## 유동성 관리
 
-The DAO-governed marketplace serves as the central hub for digital asset trading and community commerce.
+### 운영
 
-### Core Features
+| 활동 | 빈도 | 책임자 |
+|----------|------------|------------|
+| 유동성 모니터링 | 지속적 | 시스템 |
+| 인센티브 조정 | 주간 | 유동성 위원회 |
+| 리스크 평가 | 월간 | 커뮤니티 감사관 |
+| 성과 보고 | 분기 | 분석팀 |
 
-<div class="table-scroll">
+### 거버넌스 요구사항
 
-| Feature | Implementation | Community Control |
-|---------|----------------|------------------|
-| **Cross-Chain Trading** | - Multi-chain support<br>- Bridge integrations<br>- Universal standards | - Protocol selection<br>- Fee structures<br>- Integration priorities |
-| **Asset Standards** | - NFT compatibility<br>- Metadata standards<br>- Verification systems | - Format approval<br>- Quality guidelines<br>- Listing criteria |
-| **Revenue Model** | - Fee distribution<br>- Staking rewards<br>- Creator royalties | - Rate setting<br>- Reward allocation<br>- Treasury share |
+| 결정 | 투표 임계값 | 실행 시간 |
+|----------|----------------|-----------------|
+| 매개변수 조정 | 51% | 24시간 |
+| 자금 할당 | 66% | 48시간 |
+| 시스템 변경 | 75% | 72시간 |
+| 긴급 조치 | 90% | 즉시 |
 
-</div>
+## 기관 투자
 
-::: info Marketplace Evolution
-The community drives marketplace development through:
-- Feature proposals
-- Integration voting
-- Parameter adjustment
-- Revenue model updates
-:::
+### 투자 유형
 
-## Liquidity Management
+| 유형 | 최소 금액 | 잠금 기간 |
+|--------|------------|-------------|
+| 전략적 | 100,000 SPIRAL | 24개월 |
+| 파트너 | 50,000 SPIRAL | 12개월 |
+| 기관 | 25,000 SPIRAL | 6개월 |
 
-The DAO oversees strategic liquidity operations to ensure market efficiency and token stability.
+### 요구사항
 
-<div class="table-scroll">
+1. **검증**
+   - 실사
+   - 신원 확인
+   - 평판 평가
 
-| Operation | Process | Governance Requirements |
-|-----------|---------|------------------------|
-| **DEX Liquidity** | - Periodic liquidity adjustments<br>- Pool diversification<br>- Yield optimization | - Community vote required<br>- Minimum 7-day proposal period<br>- Detailed impact analysis |
-| **CEX Integration** | - Exchange selection criteria<br>- Listing requirements<br>- Liquidity allocation | - Treasury impact assessment<br>- Security verification<br>- Long-term strategy alignment |
-| **Market Making** | - Automated market making<br>- Order book depth<br>- Volatility management | - Parameter setting<br>- Performance monitoring<br>- Treasury risk assessment |
+2. **약속**
+   - 거버넌스 참여
+   - 생태계 지원
+   - 전문성 제공
 
-</div>
+3. **기여**
+   - 비즈니스 개발
+   - 전략적 파트너십
+   - 시장 확장
 
-::: info Liquidity Operations
-All liquidity operations must:
-- Undergo thorough security review
-- Include clear entry and exit strategies
-- Define risk mitigation measures
-- Establish reporting requirements
-- Align with long-term tokenomics goals
-:::
+## 전략적 성장
 
-## Institutional Investment
+### 사용자 획득
 
-The DAO may approve strategic treasury allocations to institutional partners to accelerate growth and development.
+| 채널 | 예산 | 목표 ROI |
+|----------|----------|--------------|
+| 디지털 마케팅 | 30% | 3x |
+| 파트너십 | 40% | 4x |
+| 추천 프로그램 | 20% | 5x |
+| 홍보 | 10% | 2x |
 
-<div class="table-scroll">
+### 사용자 유지
 
-| Investment Type | Framework | Requirements |
-|-----------------|-----------|--------------|
-| **Strategic Sales** | - Private token allocations<br>- Treasury diversification<br>- Partnership development | - Vesting requirements<br>- Alignment with DAO objectives<br>- Value-add beyond capital |
-| **DAO Partnerships** | - Cross-DAO collaborations<br>- Ecosystem integration<br>- Joint development | - Mutual benefit analysis<br>- Technical compatibility<br>- Value creation assessment |
-| **Ecosystem Funding** | - Grants for ecosystem projects<br>- Incubation programs<br>- Development support | - Measurable outcomes<br>- Milestone-based distribution<br>- Technology integration |
+| 전략 | 기준 | 목표 |
+|--------------|----------|--------|
+| 충성도 프로그램 | 유지율 | 80% |
+| 제품 개선 | 사용자 만족도 | 90% |
+| 커뮤니티 지원 | 응답 시간 | <2시간 |
+| 보상 | 사용자 참여 | 70% 활성 |
 
-</div>
+### 성장 이니셔티브
 
-::: info Institutional Requirements
-Potential institutional partners must demonstrate:
-- Long-term commitment to the ecosystem
-- Specific value contribution beyond capital
-- Alignment with community values
-- Technical or market expertise
-- Transparent operations and reporting
-:::
+1. **앰배서더 프로그램**
+   - 채용 및 교육
+   - 보상 시스템
+   - 확장 목표
 
-## Strategic Growth
+2. **생태계 파트너십**
+   - 제품 통합
+   - 자원 공유
+   - 공동 마케팅
 
-Community-driven initiatives for sustainable ecosystem expansion.
+3. **교육 프로그램**
+   - 교육 콘텐츠
+   - 워크샵
+   - 멘토링 프로그램
 
-### User Acquisition
+## 커뮤니티 로드맵
 
-<div class="table-scroll">
+### 1단계: 설립 (1-6개월)
+- 콘텐츠 크리에이터 프로그램 출시
+- 앰배서더 프로그램 설립
+- 커뮤니티 채널 생성
 
-| Channel | Strategy | Success Metrics |
-|---------|----------|----------------|
-| **Content Partnerships** | - Creator collaborations<br>- Strategic alliances<br>- Community ambassadors | - Audience growth<br>- Engagement rates<br>- Conversion metrics |
-| **Community Events** | - Tournaments<br>- Special events<br>- Regional meetups | - Participation rates<br>- Retention metrics<br>- Community feedback |
-| **Incentive Programs** | - Referral systems<br>- Achievement rewards<br>- Social challenges | - User acquisition cost<br>- Retention rates<br>- Network growth |
+### 2단계: 성장 (7-12개월)
+- 보상 프로그램 확장
+- 전략적 파트너십 출시
+- 커뮤니티 도구 개선
 
-</div>
-
-### Retention Framework
-
-::: info Key Elements
-- Progressive reward systems
-- Social engagement incentives
-- Community leadership opportunities
-- Regular events and competitions
-- Content creation support
-:::
-
-::: info Technical Infrastructure
-The Cosmicrafts technical architecture provides our community with a responsive, gas-free environment for seamless interaction and participation. For details on our single-canister design and technical implementation, see the [Architecture](/architecture) section.
-:::
+### 3단계: 확장 (13개월+)
+- 기관 프로그램
+- 글로벌 확장
+- 생태계 통합
 

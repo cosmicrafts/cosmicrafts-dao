@@ -1,31 +1,30 @@
-# Governance
-![Governance](govbanner.webp)
+# Управление
+![Управление](govbanner.webp)
 
-## Introduction
+## Введение
 
-The Cosmicrafts DAO puts the community at the center, giving Stakeholders a real say in how the franchise grows. Built on proven technology, the DAO uses fairness, transparency, and community-driven decision-making to ensure Cosmicrafts stays true to its vision.
+Cosmicrafts DAO ставит сообщество в центр, давая стейкхолдерам реальное право голоса в развитии франшизы. Построенная на проверенной технологии, DAO использует справедливость, прозрачность и принятие решений сообществом, чтобы гарантировать, что Cosmicrafts остается верным своему видению.
 
-::: info Reading Guide
-This document outlines the governance framework of the Cosmicrafts DAO, focusing on decision-making processes, proposal systems, and community participation. It complements the [Tokenomics](/tokenomics) document, which covers economic aspects.
+::: info Руководство по чтению
+Этот документ описывает структуру управления Cosmicrafts DAO, фокусируясь на процессах принятия решений, системах предложений и участии сообщества. Он дополняет документ [Токеномика](/tokenomics), который охватывает экономические аспекты.
 
-- **Primary Focus**: Governance processes, voting, and community decision-making
-- **Companion Document**: [Tokenomics](/tokenomics) for token economics and utility
-- **Cross-References**: Look for tip boxes linking to relevant tokenomics sections
+- **Основной фокус**: Процессы управления, голосование и принятие решений сообществом
+- **Сопутствующий документ**: [Токеномика](/tokenomics) для экономики токенов и их полезности
+- **Перекрестные ссылки**: Обратите внимание на информационные блоки со ссылками на соответствующие разделы токеномики
 :::
 
-## DAO Core Principles
+## Основные принципы DAO
 
-| Principle | Description |
-|-----------|-------------|
-| **Community Sovereignty** | • Collective decision-making power<br>• Transparent governance process<br>• On-chain voting and automated execution<br>|
-| **Sustainable Growth** | • Long-term value creation<br>• Balanced ecosystem development<br>• Community-driven treasury management<br>• Data-driven evaluation system |
-| **Open Participation** | • Inclusive governance structure<br>• Low barriers to entry<br>• Community-driven expansion<br>• Multi-chain accessibility |
+| Принцип | Описание |
+|---------|-----------|
+| **Суверенитет сообщества** | • Коллективная сила принятия решений<br>• Прозрачный процесс управления<br>• Онchain голосование и автоматическое исполнение<br>|
+| **Устойчивый рост** | • Создание долгосрочной ценности<br>• Сбалансированное развитие экосистемы<br>• Управление казной сообществом<br>• Система оценки на основе данных |
+| **Открытое участие** | • Инклюзивная структура управления<br>• Низкие барьеры для входа<br>• Расширение под управлением сообщества<br>• Мультичейн доступность |
 
-
-## Voting Power Distribution
+## Распределение силы голоса
 
 <div class="tokenomics-diagram">
-  <img src="src/assets/icons/votingpower.svg" alt="SPIRAL Token Allocation" />
+  <img src="src/assets/icons/votingpower.svg" alt="Распределение силы голоса токена SPIRAL" />
 </div>
 
 <style>
@@ -51,112 +50,107 @@ This document outlines the governance framework of the Cosmicrafts DAO, focusing
     width: 100%;
     max-width: 100%;
   }
-
 }
 </style>
 
-::: info Dynamic Voting Power
-The actual distribution of voting power will fluctuate based on stakeholder decisions regarding:
-- Amount of tokens staked in neurons
-- Length of dissolve delay chosen
-- Age of neurons accumulated
-These factors can significantly shift the relative influence of different stakeholder groups over time.
+::: info Динамическая сила голоса
+Фактическое распределение силы голоса будет колебаться в зависимости от решений стейкхолдеров относительно:
+- Количества токенов, застейканных в нейронах
+- Выбранной длительности задержки растворения
+- Накопленного возраста нейронов
+Эти факторы могут значительно изменить относительное влияние различных групп стейкхолдеров с течением времени.
 :::
 
-| Stakeholder Group | Voting Share | Base Tokens | Purpose |
-|-------------------|--------------|-------------|----------|
-| **SNS Participants** | 50% | 120M | - Largest voting bloc<br>- Community-driven governance<br>- Potential for increased influence through participation |
-| **Developer Team** | 33.3% | 80M | - Strategic decision-making<br>- 8-year dissolve delay with 1-year vesting<br>- Gradual reduction of influence |
-| **Genesis/Seed** | 16.7% | 40M | - Early supporter representation<br>- Staggered dissolve delays (0-7 years)<br>- Balanced initial influence |
+| Группа стейкхолдеров | Доля голосов | Базовые токены | Назначение |
+|----------------------|--------------|----------------|------------|
+| **Участники SNS** | 50% | 120M | - Крупнейший блок голосования<br>- Управление под руководством сообщества<br>- Потенциал увеличения влияния через участие |
+| **Команда разработчиков** | 33,3% | 80M | - Стратегическое принятие решений<br>- 8-летняя задержка растворения с 1-годовым вестингом<br>- Постепенное снижение влияния |
+| **Genesis/Seed** | 16,7% | 40M | - Представительство ранних поддержек<br>- Ступенчатые задержки растворения (0-7 лет)<br>- Сбалансированное начальное влияние |
 
+### Множители мощности
 
+| Фактор | Максимальный бонус | Время достижения |
+|--------|-------------------|------------------|
+| **Задержка растворения** | +100% | 8 лет |
+| **Возраст нейрона** | +100% | 1 год |
+| **Минимальная задержка растворения** | N/A | 1 месяц |
+| **Комбинированный предел** | 3x базовая мощность | N/A |
 
-### Power Multipliers
+## Интеграция SNS
 
-| Factor | Maximum Bonus | Time to Achieve |
-|--------|---------------|-----------------|
-| **Dissolve Delay** | +100% | 8 years |
-| **Neuron Age** | +100% | 1 year |
-| **Minimum Dissolve Delay** | N/A | 1 month |
-| **Combined Cap** | 3x base power | N/A |
+Cosmicrafts DAO использует [Service Nervous System (SNS)](https://internetcomputer.org/docs/building-apps/governing-apps/overview) Internet Computer для своей инфраструктуры управления. Это обеспечивает проверенную, безопасную структуру для децентрализованного принятия решений.
 
-## SNS Integration
+### Ключевые особенности
 
-The Cosmicrafts DAO leverages the Internet Computer's [Service Nervous System (SNS)](https://internetcomputer.org/docs/building-apps/governing-apps/overview) for its governance infrastructure. This provides a battle-tested, secure framework for decentralized decision-making.
+- **Голосование на основе нейронов**: Стейкинг токенов SPIRAL для создания нейронов и участия в управлении
+- **Бонусы за задержку растворения**: Более длительные периоды блокировки увеличивают силу голоса
+- **Возрастные бонусы**: Нейроны получают больше силы голоса со временем
+- **Система предложений**: Стандартная структура предложений SNS для всех действий управления
 
-### Key Features
-
-- **Neuron-Based Voting**: Stake SPIRAL tokens to create neurons and participate in governance
-- **Dissolve Delay Bonuses**: Longer lockup periods increase voting power
-- **Age Bonuses**: Neurons gain more voting power over time
-- **Proposal System**: Standard SNS proposal framework for all governance actions
-
-::: info SNS Configuration
-For detailed technical parameters of our SNS setup, including minimum stakes, voting periods, and reward rates, refer to the SNS initialization parameters in our documentation.
+::: info Конфигурация SNS
+Для подробных технических параметров нашей настройки SNS, включая минимальные стейки, периоды голосования и ставки вознаграждений, обратитесь к параметрам инициализации SNS в нашей документации.
 :::
 
-### Governance Parameters
+### Параметры управления
 
-| Parameter | Value | Purpose |
-|-----------|--------|---------|
-| **Rejection Fee** | 1000 SPIRAL | Prevent spam proposals |
-| **Initial Voting Period** | 7 days | Standard deliberation time |
-| **Maximum Deadline Extension** | 1 day | Allow for late participation |
-| **Minimum Neuron Creation Stake** | 1000 SPIRAL | Base participation threshold |
+| Параметр | Значение | Назначение |
+|----------|----------|------------|
+| **Комиссия за отклонение** | 1000 SPIRAL | Предотвращение спам-предложений |
+| **Начальный период голосования** | 7 дней | Стандартное время обсуждения |
+| **Максимальное продление срока** | 1 день | Возможность позднего участия |
+| **Минимальный стейк для создания нейрона** | 1000 SPIRAL | Базовый порог участия |
 
+## Механика стейкинга нейронов
 
-## Neuron Staking Mechanics
+### Базовые требования
 
-### Base Requirements
+| Параметр | Значение | Описание |
+|----------|----------|-----------|
+| **Минимальный стейк** | 1.000 SPIRAL | Базовая сумма для создания нейрона |
+| **Минимальный период блокировки** | 30 дней | Кратчайшая допустимая задержка растворения |
+| **Максимальный период блокировки** | 8 лет | Самая длительная возможная задержка растворения |
+| **Комиссия за транзакцию** | 0,01 SPIRAL | Стоимость операций сети |
 
-| Parameter | Value | Description |
-|-----------|--------|-------------|
-| **Minimum Stake** | 1,000 SPIRAL | Base amount required to create a neuron |
-| **Minimum Lock Period** | 30 days | Shortest allowed dissolve delay |
-| **Maximum Lock Period** | 8 years | Longest possible dissolve delay |
-| **Transaction Fee** | 0.01 SPIRAL | Network operation cost |
+### График созревания
 
-### Maturity Schedule
+| Период блокировки | Множитель бонуса | Эффективная мощность |
+|-------------------|------------------|---------------------|
+| 30 дней | 1,0x | Базовая мощность |
+| 6 месяцев | 1,25x | +25% |
+| 1 год | 1,5x | +50% |
+| 2 года | 1,75x | +75% |
+| 4 года | 1,85x | +85% |
+| 8 лет | 2,0x | +100% |
 
-| Lock Period | Bonus Multiplier | Effective Power |
-|-------------|------------------|-----------------|
-| 30 days | 1.0x | Base Power |
-| 6 months | 1.25x | +25% |
-| 1 year | 1.5x | +50% |
-| 2 years | 1.75x | +75% |
-| 4 years | 1.85x | +85% |
-| 8 years | 2.0x | +100% |
+## Структура принятия решений
 
+### Области управления
 
-## Decision Making Framework
+1. **Управление казной**
+   - Маркетинговые кампании
+   - Финансирование разработки
+   - Стратегические партнерства
 
-### Governance Areas
+2. **Экономическая политика**
+   - Корректировки токеномики
+   - Ставки стейкинга
+   - Структуры комиссий
 
-1. **Treasury Management**
-   - Marketing Campaigns
-   - Development Funding
-   - Strategic Partnerships
+3. **Дорожная карта разработки**
+   - Приоритизация функций
+   - Расширения игры
+   - Технические улучшения
 
-2. **Economic Policies**
-   - Tokenomics Adjustments
-   - Staking Rates
-   - Fee Structures
+### Система предложений
 
-3. **Development Roadmap**
-   - Feature Prioritization
-   - Game Expansions
-   - Technical Improvements
+| Этап | Длительность | Требования |
+|------|--------------|------------|
+| **Подача** | N/A | Стейк 1.000 SPIRAL |
+| **Рассмотрение** | 24 часа | Обратная связь от сообщества |
+| **Голосование** | 7 дней | Требуется активный нейрон |
+| **Исполнение** | Переменная | Автоматическое при одобрении |
 
-### Proposal System
-
-| Stage | Duration | Requirements |
-|-------|----------|--------------|
-| **Submission** | N/A | 1,000 SPIRAL stake |
-| **Review** | 24 hours | Community feedback |
-| **Voting** | 7 days | Active neuron required |
-| **Execution** | Variable | Automated if approved |
-
-::: info Community Implementation
-For practical details about treasury management, community programs, and ecosystem growth initiatives, see our [Community](/community) framework.
+::: info Реализация в сообществе
+Для практических деталей об управлении казной, программах сообщества и инициативах роста экосистемы, смотрите нашу структуру [Сообщество](/community).
 :::
 

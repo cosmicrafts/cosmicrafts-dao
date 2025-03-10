@@ -1,187 +1,187 @@
-# Community
-![Community](communitybanner.webp)
+# Сообщество
+![Сообщество](communitybanner.webp)
 
-## Overview
+## Обзор
 
-The Cosmicrafts community is the driving force behind our ecosystem's growth and evolution. Our community framework balances:
-- Inclusive participation and governance
-- Sustainable economic development
-- Strategic ecosystem expansion
-- Content creation and cultural growth
+Сообщество Cosmicrafts является движущей силой роста и эволюции нашей экосистемы. Наша структура сообщества балансирует:
+- Инклюзивное участие и управление
+- Устойчивое экономическое развитие
+- Стратегическое расширение экосистемы
+- Создание контента и культурный рост
 
-## Treasury Management
+## Управление казной
 
-The DAO treasury is the foundation for sustainable growth and community initiatives. All funding allocations require community approval through the SNS proposal system.
-
-<div class="table-scroll">
-
-| Focus Area | Implementation | Requirements |
-|------------|----------------|--------------|
-| **User Acquisition** | Marketing campaigns, Strategic partnerships | - Clear ROI metrics<br>- Target audience analysis<br>- Performance tracking |
-| **Development** | Core team maintenance, Technical improvements | - Skill requirements<br>- Project roadmap alignment<br>- Milestone definitions |
-| **Community Initiatives** | Events, Content creation, Market development | - Success metrics<br>- Budget breakdown<br>- Timeline and deliverables |
-
-</div>
-
-::: info Proposal Requirements
-All treasury proposals must include:
-- Detailed budget allocation
-- Expected impact metrics
-- Implementation timeline
-- Risk assessment
-- Success criteria
-:::
-
-## Content Creators Program
-
-The Content Creators Program aims to build a sustainable ecosystem of content creators who help grow and engage the Cosmicrafts community. All program terms and compensation are subject to DAO approval.
-
-### Qualification Framework
+Казна DAO является фундаментом для устойчивого роста и инициатив сообщества. Все распределения средств требуют одобрения сообщества через систему предложений SNS.
 
 <div class="table-scroll">
 
-| Tier | Requirements | Evaluation Criteria |
-|------|--------------|-------------------|
-| **Emerging** | - Active social media presence<br>- Consistent content schedule | - Content quality<br>- Engagement metrics<br>- Audience authenticity |
-| **Established** | - Proven track record<br>- Engagement-driven content<br>- Community participation | - Reach and impact<br>- Content performance<br>- Community feedback |
-| **Partner** | - Significant audience reach<br>- High-quality production<br>- Strategic value alignment | - Long-term impact<br>- Brand alignment<br>- Community leadership |
+| Область фокуса | Реализация | Требования |
+|----------------|------------|------------|
+| **Привлечение пользователей** | Маркетинговые кампании, Стратегические партнерства | - Четкие метрики ROI<br>- Анализ целевой аудитории<br>- Отслеживание эффективности |
+| **Разработка** | Поддержка основной команды, Технические улучшения | - Квалификационные требования<br>- Соответствие дорожной карте<br>- Определение этапов |
+| **Инициативы сообщества** | События, Создание контента, Развитие рынка | - Метрики успеха<br>- Детализация бюджета<br>- График и результаты |
 
 </div>
 
-### Compensation Structure
-
-Content creators can submit proposals to the DAO for:
-- Performance-based compensation
-- Project-specific funding
-- Event sponsorship
-- Strategic collaboration opportunities
-
-::: info Proposal Guidelines
-Creators must include:
-- Detailed content strategy
-- Performance metrics
-- Target audience analysis
-- Expected impact assessment
-- Budget requirements
+::: info Требования к предложениям
+Все предложения по казне должны включать:
+- Детальное распределение бюджета
+- Ожидаемые метрики воздействия
+- График реализации
+- Оценка рисков
+- Критерии успеха
 :::
 
-### Evaluation Metrics
+## Программа создателей контента
+
+Программа создателей контента направлена на построение устойчивой экосистемы создателей, которые помогают росту и вовлечению сообщества Cosmicrafts. Все условия и компенсации программы подлежат одобрению DAO.
+
+### Структура квалификации
 
 <div class="table-scroll">
 
-| Category | Metrics | Impact Assessment |
-|----------|---------|-------------------|
-| **Reach** | - Unique viewers<br>- Geographic distribution<br>- Audience retention | Measured through platform analytics |
-| **Engagement** | - Comment activity<br>- Share rates<br>- Community interaction | Tracked via engagement tools |
-| **Quality** | - Production value<br>- Content originality<br>- Community feedback | Regular quality assessments |
+| Уровень | Требования | Критерии оценки |
+|---------|------------|-----------------|
+| **Начинающий** | - Активное присутствие в социальных сетях<br>- Постоянный график контента | - Качество контента<br>- Метрики вовлечения<br>- Аутентичность аудитории |
+| **Опытный** | - Доказанный опыт<br>- Контент, ориентированный на вовлечение<br>- Участие в сообществе | - Охват и влияние<br>- Эффективность контента<br>- Обратная связь сообщества |
+| **Партнер** | - Значительный охват аудитории<br>- Высококачественное производство<br>- Стратегическое соответствие ценностям | - Долгосрочное влияние<br>- Соответствие бренду<br>- Лидерство в сообществе |
 
 </div>
 
-::: info Program Evolution
-The DAO community will:
-- Define specific compensation models
-- Establish evaluation criteria
-- Adjust program parameters
-- Review and approve creator proposals
+### Структура компенсации
+
+Создатели контента могут подавать предложения в DAO для:
+- Компенсации на основе эффективности
+- Финансирования конкретных проектов
+- Спонсорства мероприятий
+- Возможностей стратегического сотрудничества
+
+::: info Руководство по предложениям
+Создатели должны включить:
+- Детальную стратегию контента
+- Метрики эффективности
+- Анализ целевой аудитории
+- Оценку ожидаемого воздействия
+- Бюджетные требования
 :::
 
-## Marketplace
-
-The DAO-governed marketplace serves as the central hub for digital asset trading and community commerce.
-
-### Core Features
+### Метрики оценки
 
 <div class="table-scroll">
 
-| Feature | Implementation | Community Control |
-|---------|----------------|------------------|
-| **Cross-Chain Trading** | - Multi-chain support<br>- Bridge integrations<br>- Universal standards | - Protocol selection<br>- Fee structures<br>- Integration priorities |
-| **Asset Standards** | - NFT compatibility<br>- Metadata standards<br>- Verification systems | - Format approval<br>- Quality guidelines<br>- Listing criteria |
-| **Revenue Model** | - Fee distribution<br>- Staking rewards<br>- Creator royalties | - Rate setting<br>- Reward allocation<br>- Treasury share |
+| Категория | Метрики | Оценка воздействия |
+|-----------|---------|-------------------|
+| **Охват** | - Уникальные просмотры<br>- Географическое распределение<br>- Удержание аудитории | Измеряется через аналитику платформы |
+| **Вовлечение** | - Активность комментариев<br>- Показатели репостов<br>- Взаимодействие сообщества | Отслеживается через инструменты вовлечения |
+| **Качество** | - Ценность производства<br>- Оригинальность контента<br>- Обратная связь сообщества | Регулярные оценки качества |
 
 </div>
 
-::: info Marketplace Evolution
-The community drives marketplace development through:
-- Feature proposals
-- Integration voting
-- Parameter adjustment
-- Revenue model updates
+::: info Эволюция программы
+Сообщество DAO будет:
+- Определять конкретные модели компенсации
+- Устанавливать критерии оценки
+- Корректировать параметры программы
+- Рассматривать и утверждать предложения создателей
 :::
 
-## Liquidity Management
+## Маркетплейс
 
-The DAO oversees strategic liquidity operations to ensure market efficiency and token stability.
+Управляемый DAO маркетплейс служит центральным хабом для торговли цифровыми активами и коммерции сообщества.
+
+### Основные функции
 
 <div class="table-scroll">
 
-| Operation | Process | Governance Requirements |
-|-----------|---------|------------------------|
-| **DEX Liquidity** | - Periodic liquidity adjustments<br>- Pool diversification<br>- Yield optimization | - Community vote required<br>- Minimum 7-day proposal period<br>- Detailed impact analysis |
-| **CEX Integration** | - Exchange selection criteria<br>- Listing requirements<br>- Liquidity allocation | - Treasury impact assessment<br>- Security verification<br>- Long-term strategy alignment |
-| **Market Making** | - Automated market making<br>- Order book depth<br>- Volatility management | - Parameter setting<br>- Performance monitoring<br>- Treasury risk assessment |
+| Функция | Реализация | Контроль сообщества |
+|---------|------------|---------------------|
+| **Мультичейн торговля** | - Поддержка нескольких сетей<br>- Интеграции мостов<br>- Универсальные стандарты | - Выбор протоколов<br>- Структуры комиссий<br>- Приоритеты интеграции |
+| **Стандарты активов** | - Совместимость NFT<br>- Стандарты метаданных<br>- Системы верификации | - Утверждение форматов<br>- Руководства по качеству<br>- Критерии листинга |
+| **Модель доходов** | - Распределение комиссий<br>- Награды за стейкинг<br>- Роялти создателей | - Установка ставок<br>- Распределение наград<br>- Доля казны |
 
 </div>
 
-::: info Liquidity Operations
-All liquidity operations must:
-- Undergo thorough security review
-- Include clear entry and exit strategies
-- Define risk mitigation measures
-- Establish reporting requirements
-- Align with long-term tokenomics goals
+::: info Эволюция маркетплейса
+Сообщество направляет развитие маркетплейса через:
+- Предложения функций
+- Голосование по интеграциям
+- Настройку параметров
+- Обновления модели доходов
 :::
 
-## Institutional Investment
+## Управление ликвидностью
 
-The DAO may approve strategic treasury allocations to institutional partners to accelerate growth and development.
+DAO контролирует стратегические операции с ликвидностью для обеспечения эффективности рынка и стабильности токена.
 
 <div class="table-scroll">
 
-| Investment Type | Framework | Requirements |
-|-----------------|-----------|--------------|
-| **Strategic Sales** | - Private token allocations<br>- Treasury diversification<br>- Partnership development | - Vesting requirements<br>- Alignment with DAO objectives<br>- Value-add beyond capital |
-| **DAO Partnerships** | - Cross-DAO collaborations<br>- Ecosystem integration<br>- Joint development | - Mutual benefit analysis<br>- Technical compatibility<br>- Value creation assessment |
-| **Ecosystem Funding** | - Grants for ecosystem projects<br>- Incubation programs<br>- Development support | - Measurable outcomes<br>- Milestone-based distribution<br>- Technology integration |
+| Операция | Процесс | Требования управления |
+|----------|---------|----------------------|
+| **Ликвидность DEX** | - Периодические корректировки ликвидности<br>- Диверсификация пулов<br>- Оптимизация доходности | - Требуется голосование сообщества<br>- Минимум 7 дней на предложения<br>- Детальный анализ влияния |
+| **Интеграция CEX** | - Критерии выбора бирж<br>- Требования к листингу<br>- Распределение ликвидности | - Оценка влияния на казну<br>- Проверка безопасности<br>- Соответствие долгосрочной стратегии |
+| **Маркет-мейкинг** | - Автоматический маркет-мейкинг<br>- Глубина ордербука<br>- Управление волатильностью | - Установка параметров<br>- Мониторинг эффективности<br>- Оценка рисков казны |
 
 </div>
 
-::: info Institutional Requirements
-Potential institutional partners must demonstrate:
-- Long-term commitment to the ecosystem
-- Specific value contribution beyond capital
-- Alignment with community values
-- Technical or market expertise
-- Transparent operations and reporting
+::: info Операции с ликвидностью
+Все операции с ликвидностью должны:
+- Пройти тщательную проверку безопасности
+- Включать четкие стратегии входа и выхода
+- Определять меры снижения рисков
+- Устанавливать требования к отчетности
+- Соответствовать долгосрочным целям токеномики
 :::
 
-## Strategic Growth
+## Институциональные инвестиции
 
-Community-driven initiatives for sustainable ecosystem expansion.
-
-### User Acquisition
+DAO может утверждать стратегические распределения из казны для институциональных партнеров для ускорения роста и развития.
 
 <div class="table-scroll">
 
-| Channel | Strategy | Success Metrics |
-|---------|----------|----------------|
-| **Content Partnerships** | - Creator collaborations<br>- Strategic alliances<br>- Community ambassadors | - Audience growth<br>- Engagement rates<br>- Conversion metrics |
-| **Community Events** | - Tournaments<br>- Special events<br>- Regional meetups | - Participation rates<br>- Retention metrics<br>- Community feedback |
-| **Incentive Programs** | - Referral systems<br>- Achievement rewards<br>- Social challenges | - User acquisition cost<br>- Retention rates<br>- Network growth |
+| Тип инвестиций | Структура | Требования |
+|----------------|-----------|------------|
+| **Стратегические продажи** | - Частные распределения токенов<br>- Диверсификация казны<br>- Развитие партнерств | - Требования к вестингу<br>- Соответствие целям DAO<br>- Ценность помимо капитала |
+| **Партнерства DAO** | - МежDAO сотрудничество<br>- Интеграция экосистем<br>- Совместная разработка | - Анализ взаимной выгоды<br>- Техническая совместимость<br>- Оценка создания ценности |
+| **Финансирование экосистемы** | - Гранты для проектов экосистемы<br>- Программы инкубации<br>- Поддержка разработки | - Измеримые результаты<br>- Распределение по этапам<br>- Техническая интеграция |
 
 </div>
 
-### Retention Framework
-
-::: info Key Elements
-- Progressive reward systems
-- Social engagement incentives
-- Community leadership opportunities
-- Regular events and competitions
-- Content creation support
+::: info Институциональные требования
+Потенциальные институциональные партнеры должны продемонстрировать:
+- Долгосрочную приверженность экосистеме
+- Конкретный вклад в ценность помимо капитала
+- Соответствие ценностям сообщества
+- Техническую или рыночную экспертизу
+- Прозрачность операций и отчетности
 :::
 
-::: info Technical Infrastructure
-The Cosmicrafts technical architecture provides our community with a responsive, gas-free environment for seamless interaction and participation. For details on our single-canister design and technical implementation, see the [Architecture](/architecture) section.
+## Стратегический рост
+
+Инициативы под управлением сообщества для устойчивого расширения экосистемы.
+
+### Привлечение пользователей
+
+<div class="table-scroll">
+
+| Канал | Стратегия | Метрики успеха |
+|-------|-----------|----------------|
+| **Партнерства по контенту** | - Сотрудничество с создателями<br>- Стратегические альянсы<br>- Амбассадоры сообщества | - Рост аудитории<br>- Показатели вовлечения<br>- Метрики конверсии |
+| **События сообщества** | - Турниры<br>- Специальные мероприятия<br>- Региональные встречи | - Показатели участия<br>- Метрики удержания<br>- Обратная связь сообщества |
+| **Программы стимулирования** | - Реферальные системы<br>- Награды за достижения<br>- Социальные вызовы | - Стоимость привлечения пользователя<br>- Показатели удержания<br>- Рост сети |
+
+</div>
+
+### Структура удержания
+
+::: info Ключевые элементы
+- Прогрессивные системы наград
+- Стимулы социального вовлечения
+- Возможности лидерства в сообществе
+- Регулярные события и соревнования
+- Поддержка создания контента
+:::
+
+::: info Техническая инфраструктура
+Техническая архитектура Cosmicrafts предоставляет нашему сообществу отзывчивую среду без газовых комиссий для беспрепятственного взаимодействия и участия. Для подробностей о нашем дизайне единого канистера и технической реализации, смотрите раздел [Архитектура](/architecture).
 :::
 

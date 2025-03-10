@@ -323,5 +323,42 @@
     "9": "أكتوبر",
     "10": "نوفمبر",
     "11": "ديسمبر"
+  },
+  "whitepaper": {
+    "title": "الكتاب الأبيض",
+    "navigation": {
+      "sections": {
+        "introduction": {
+          "title": "المقدمة",
+          "description": "نظرة عامة وعرض القيمة"
+        },
+        "tokenomics": {
+          "title": "اقتصاديات التوكن",
+          "description": "توزيع التوكن والاقتصاد"
+        },
+        "governance": {
+          "title": "الحوكمة",
+          "description": "نظام اتخاذ القرار"
+        },
+        "community": {
+          "title": "المجتمع",
+          "description": "المشاركة والنمو"
+        },
+        "architecture": {
+          "title": "البنية التقنية",
+          "description": "البنية التحتية التقنية"
+        },
+        "core-features": {
+          "title": "الميزات الأساسية",
+          "description": "قدرات المنتج"
+        }
+      },
+      "documentation": "التوثيق",
+      "previous": "السابق",
+      "next": "التالي",
+      "chapters": "الفصول",
+      "mobileTitle": "أقسام الكتاب الأبيض",
+      "mobileSubtitle": "تصفح الفصول"
+    }
   }
 }

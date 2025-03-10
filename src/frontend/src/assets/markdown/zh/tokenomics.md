@@ -1,188 +1,156 @@
-# Tokenomics
-![Tokenomics](spiralbanner.webp)
-## Overview
+# 代币经济
 
-The SPIRAL token is the economic foundation of the Cosmicrafts DAO, designed to:
-- Power governance and reward participation
-- Drive sustainable economic growth
-- Align stakeholder interests through structured incentives
-- Enable cross-game value transfer and utility
+[[toc:2-2]]
 
-Total Supply: **1 billion SPIRAL tokens**
+## 概述
 
-<div class="tokenomics-diagram">
-  <img src="src/assets/icons/tokenomics.svg" alt="SPIRAL Token Allocation" />
-</div>
+SPIRAL代币是Cosmicrafts DAO生态系统的核心要素。该代币作为游戏内经济的基础，授予治理权限，并促进社区参与。
 
-<style>
-.tokenomics-diagram {
-  text-align: center;
-  width: 100%;
-  margin: 2rem auto;
-}
+### 总供应量
 
-  .vesting-schedule{
-    max-width: 75%;
-  }
+- **总供应量**: 1,000,000,000 SPIRAL
+- **初始流通供应量**: 50,000,000 SPIRAL (总供应量的5%)
+- **最大通胀率**: 每年15%（可通过社区投票调整）
 
-.tokenomics-diagram img {
-  width: 65%;
-  max-width: 800px;
-  height: auto;
-  filter: none;
-  box-shadow: none;
-  background: transparent;
-  margin: 0 auto;
-  display: block;
-}
+## 战略分配
 
-@media (max-width: 768px) {
-  .tokenomics-diagram img {
-    width: 100%;
-    max-width: 100%;
-  }
-  .vesting-schedule{
-    width: 100%;
-    max-width: 100%;
-  }
-}
-</style>
+代币分配旨在确保长期可持续性和健康的生态系统增长：
 
-## Strategic Distribution
+| 持有者 | 比例 | 数量 | 用途 | 锁定期 |
+|--------|------|------|------|--------|
+| 社区金库 | 30% | 300M | 生态系统增长、奖励、激励 | 分阶段解锁 |
+| 团队 | 15% | 150M | 开发、运营、营销 | 4年归属期 |
+| 早期投资者 | 10% | 100M | 初始融资 | 2年归属期 |
+| 顾问 | 5% | 50M | 战略指导 | 2年归属期 |
+| 合作伙伴 | 10% | 100M | 战略合作、整合 | 分阶段解锁 |
+| 流动性池 | 10% | 100M | DEX流动性、交易所上市 | 分阶段解锁 |
+| 空投 | 5% | 50M | 社区奖励、早期采用者 | 即时解锁 |
+| 储备 | 15% | 150M | 未来扩展、应急响应 | DAO投票决定 |
 
-### Token Allocation Strategy
+### 归属策略
 
-| Holder | Amount | Purpose | Lock Period |
-|--------|---------|---------|-------------|
-| **Treasury** | 760M (76%) | Ecosystem growth | DAO-controlled |
-| **SNS Swap** | 120M (12%) | Public sale | 8 quarterly releases |
-| **Developer Team** | 80M (8%) | Core team | 8-year vesting |
-| **Seed Investors** | 40M (4%) | Early backers | Varied vesting |
+- **团队 & 顾问**:
+  - 第一年悬崖期
+  - 之后36个月线性解锁
+  - 季度解锁计划
 
-Core Mechanisms:
-- **Deflationary Model**: 0.01 SPIRAL transaction fee
-- **Governance Threshold**: 1,000 SPIRAL minimum stake
-- **Treasury Security**: DAO approval required
-- **Full Auditability**: All operations tracked on-chain
+- **早期投资者**:
+  - 6个月悬崖期
+  - 之后18个月线性解锁
+  - 月度解锁计划
 
-## Vesting Strategy
+- **社区金库**:
+  - 首年解锁10%
+  - 之后4年分阶段解锁剩余部分
+  - 可通过DAO投票调整解锁
 
-<div class="vesting-schedule">
-  <img src="src/assets/icons/vesting.svg" alt="SPIRAL Token Vesting Schedule" />
-</div>
+## 核心机制
 
-<style>
-.vesting-schedule {
-  background: transparent;
-  border-radius: var(--radius-medium);
-  padding: 2rem;
-  margin: 2rem 0;
-}
+### 治理功能
 
-.vesting-schedule img {
-  width: 100%;
-  height: auto;
-  max-width: 800px;
-  margin: 0 auto;
-  display: block;
-  box-shadow: none;
-}
+| 功能 | 所需代币量 | 目的 |
+|------|------------|------|
+| 提案创建 | 100,000 SPIRAL | 提交新提案 |
+| 投票权 | 10,000 SPIRAL | 参与治理 |
+| 验证者节点 | 500,000 SPIRAL | 网络安全 |
+| 高级功能 | 50,000 SPIRAL | 高级游戏功能 |
 
-@media (max-width: 768px) {
-  .vesting-schedule {
-    padding: 1rem;
-  }
-}
-</style>
+### 经济效用
 
-### Developer Team Allocation (80M)
-Allocated to the Cosmicrafts Foundation 
-- **Purpose**: Ensure long-term commitment and value creation
-- **Structure**: 8-year dissolve delay
-- **Governance**: Full voting power with locked tokens
+| 效用 | 说明 | 最低持有量 |
+|------|------|------------|
+| 交易费折扣 | 市场交易折扣 | 25,000 SPIRAL |
+| 收益分享 | 协议收益分配 | 100,000 SPIRAL |
+| 高级访问 | 优先访问、特别活动 | 75,000 SPIRAL |
+| 定制功能 | 高级定制选项 | 50,000 SPIRAL |
 
-### Strategic Investors (40M)
+### 社区福利
 
-#### 2Link (16M)
-Strategic blockchain infrastructure partner
-- 8 neurons of 2M each
-- Quarterly vesting schedule
+| 福利 | 要求 | 奖励 |
+|------|------|------|
+| 测试访问 | 25,000 SPIRAL | 新功能优先体验 |
+| 限定NFT | 50,000 SPIRAL | 特殊游戏内物品 |
+| VIP支持 | 100,000 SPIRAL | 优先客户服务 |
+| 活动参与 | 75,000 SPIRAL | 限定活动邀请 |
 
-#### Anmi Capital (10M)
-Blockchain industry expertise and network
-- 8 neurons of 1.25M each
-- Quarterly vesting schedule
+## 奖励结构
 
-#### Genesis (14M)
-Early backers basket of neurons.
-- 8 neurons of 1.75M each
-- Yearly vesting schedule
+### 质押奖励
 
-### Public Distribution (120M)
-- **Structure**: 8 vesting events at 3-month intervals
-- **Release**: 12.5% per event (15M SPIRAL)
-- **Purpose**: Ensure stable token distribution
-- **Participation Limits**:
-  - Minimum: 100 ICP
-  - Maximum: 100,000 ICP per participant
-  - Total Maximum: 1,000,000 ICP
+| 锁定期 | 基础年化收益率 | 奖励条件 |
+|--------|----------------|----------|
+| 3个月 | 12% | +2% NFT持有 |
+| 6个月 | 18% | +3% 活跃玩家 |
+| 12个月 | 25% | +5% DAO贡献 |
 
-## Utility Framework
+### 性能乘数
 
-### Governance Functions
+| 活动 | 乘数 | 条件 |
+|------|------|------|
+| 治理参与 | 1.2x | 75%以上投票参与 |
+| 社区贡献 | 1.3x | 每月5次以上贡献 |
+| 长期持有 | 1.5x | 12个月以上质押 |
 
-| Feature | Description | Requirements |
-|---------|-------------|--------------|
-| **Proposal Creation** | Submit new proposals for community voting | Minimum 1,000 SPIRAL stake |
-| **Voting Rights** | Participate in DAO decision-making | Active neuron required |
-| **Protocol Parameters** | Vote on system-wide parameter changes | Active participation in governance |
+### 销毁机制
 
-### Economic Utilities
+- **交易费**: 所有交易费的30%销毁
+- **高级功能**: 高级功能使用费的20%销毁
+- **NFT铸造**: 新NFT铸造费用的25%销毁
+- **活动参与**: 活动入场费的15%销毁
 
-| Function | Value | Purpose |
-|----------|--------|----------|
-| **Transaction Fee** | 0.01 SPIRAL | Network maintenance and deflation |
-| **Cross-Game Trading** | Variable | Enable value transfer between games |
-| **NFT Operations** | Market-based | Facilitate digital asset trading |
-| **Premium Features** | Tier-based | Access to advanced platform features |
+## 流动性管理
 
-### Community Benefits
+### DEX策略
 
-| Benefit | Type | Details |
-|---------|------|----------|
-| **Staking Rewards** | Economic | Dynamic APY based on lock period |
-| **Tournament Access** | Gaming | Priority entry to competitive events |
-| **Early Access** | Product | Preview of new features and games |
-| **Special Events** | Social | Exclusive community gatherings and activities |
+- 在多个DEX提供流动性
+- 流动性提供者奖励计划
+- 动态流动性调整机制
 
-## Rewards
-The reward structure is designed to:
-- Encourage long-term participation
-- Align stakeholder interests
-- Maintain sustainable token economics
-- Support protocol governance
-- Enable community-driven value distribution
+### 交易所整合
 
+- 与主要中心化交易所合作
+- 跨链流动性桥接
+- 场外交易台设立
 
-### Staking Incentives
+## 价值捕获机制
 
-| Parameter | Value | Duration |
-|-----------|--------|----------|
-| **Initial Rate** | 8% APY | Start of protocol |
-| **Final Rate** | 1% APY | After transition |
-| **Transition Period** | 8 years | Linear reduction |
+1. **效用需求**
+   - 游戏内购买
+   - 高级功能访问
+   - NFT铸造和交易
 
-### Voting Power Bonuses
+2. **治理需求**
+   - 提案创建和投票
+   - 协议参数调整
+   - 金库管理参与
 
-| Bonus Type | Maximum Bonus | Time to Achieve |
-|------------|---------------|-----------------|
-| **Dissolve Delay** | +100% | 8 years lock |
-| **Age Maturity** | +100% | 365 days |
+3. **质押需求**
+   - 长期持有激励
+   - 奖励优化机会
+   - 流通供应量减少
 
-### Additional Incentives
+4. **销毁效应**
+   - 部分交易费
+   - 高级功能使用费
+   - 活动参与费用
 
-The DAO can implement and govern additional reward mechanisms including:
-- Revenue sharing from platform activities
-- Performance-based distribution models
-- Community-driven reward programs
-- Ecosystem growth initiatives
+## 经济可持续性
+
+### 通胀管理
+
+- 年度最大稀释率15%
+- 社区可调整
+- 与销毁机制平衡
+
+### 风险缓解
+
+- 多元化收入来源
+- 动态奖励调整
+- 市场压力测试
+
+### 增长指标
+
+- 月活跃质押者
+- 治理参与率
+- 总质押量
+- 销毁代币量

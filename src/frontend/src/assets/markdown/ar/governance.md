@@ -1,9 +1,10 @@
-# Governance
-![Governance](govbanner.webp)
+# الحوكمة
 
-## Introduction
+[[toc:2-2]]
 
-The Cosmicrafts DAO puts the community at the center, giving Stakeholders a real say in how the franchise grows. Built on proven technology, the DAO uses fairness, transparency, and community-driven decision-making to ensure Cosmicrafts stays true to its vision.
+## مقدمة
+
+تعمل Cosmicrafts DAO على تمكين المجتمع من خلال نظام حوكمة شفاف وعادل. يتم تنفيذ جميع القرارات الرئيسية من خلال تصويت المجتمع، مما يضمن أن يكون لكل صاحب مصلحة صوت في مستقبل النظام البيئي.
 
 ::: info Reading Guide
 This document outlines the governance framework of the Cosmicrafts DAO, focusing on decision-making processes, proposal systems, and community participation. It complements the [Tokenomics](/tokenomics) document, which covers economic aspects.
@@ -13,16 +14,16 @@ This document outlines the governance framework of the Cosmicrafts DAO, focusing
 - **Cross-References**: Look for tip boxes linking to relevant tokenomics sections
 :::
 
-## DAO Core Principles
+## المبادئ الأساسية
 
-| Principle | Description |
-|-----------|-------------|
-| **Community Sovereignty** | • Collective decision-making power<br>• Transparent governance process<br>• On-chain voting and automated execution<br>|
-| **Sustainable Growth** | • Long-term value creation<br>• Balanced ecosystem development<br>• Community-driven treasury management<br>• Data-driven evaluation system |
-| **Open Participation** | • Inclusive governance structure<br>• Low barriers to entry<br>• Community-driven expansion<br>• Multi-chain accessibility |
+| المبدأ | الوصف | التنفيذ |
+|---------|-------------|--------------|
+| سيادة المجتمع | المجتمع يتحكم في القرارات الرئيسية | تصويت على المقترحات |
+| النمو المستدام | تحسين القيمة طويلة المدى | آليات الحرق والمكافآت |
+| المشاركة المفتوحة | إمكانية الوصول لجميع أصحاب المصلحة | حد أدنى منخفض للمشاركة |
 
 
-## Voting Power Distribution
+## توزيع قوة التصويت
 
 <div class="tokenomics-diagram">
   <img src="src/assets/icons/votingpower.svg" alt="SPIRAL Token Allocation" />
@@ -63,100 +64,169 @@ The actual distribution of voting power will fluctuate based on stakeholder deci
 These factors can significantly shift the relative influence of different stakeholder groups over time.
 :::
 
-| Stakeholder Group | Voting Share | Base Tokens | Purpose |
-|-------------------|--------------|-------------|----------|
-| **SNS Participants** | 50% | 120M | - Largest voting bloc<br>- Community-driven governance<br>- Potential for increased influence through participation |
-| **Developer Team** | 33.3% | 80M | - Strategic decision-making<br>- 8-year dissolve delay with 1-year vesting<br>- Gradual reduction of influence |
-| **Genesis/Seed** | 16.7% | 40M | - Early supporter representation<br>- Staggered dissolve delays (0-7 years)<br>- Balanced initial influence |
+| المجموعة | حصة التصويت | الأساس المنطقي |
+|-----------|--------------|----------------|
+| حاملو التوكن | 40% | المساهمة الاقتصادية |
+| اللاعبون النشطون | 30% | مشاركة النظام البيئي |
+| منشئو المحتوى | 20% | إثراء النظام البيئي |
+| الفريق الأساسي | 10% | الخبرة التقنية |
 
 
 
-### Power Multipliers
+### مضاعفات الأداء
 
-| Factor | Maximum Bonus | Time to Achieve |
-|--------|---------------|-----------------|
-| **Dissolve Delay** | +100% | 8 years |
-| **Neuron Age** | +100% | 1 year |
-| **Minimum Dissolve Delay** | N/A | 1 month |
-| **Combined Cap** | 3x base power | N/A |
+| النشاط | المضاعف | الحد الأقصى |
+|----------|------------|------------|
+| مدة التخزين | 1.5x | 2 سنة |
+| نشاط التصويت | 1.2x | 100 تصويت |
+| مساهمات النظام البيئي | 1.3x | 50 مساهمة |
+| تقديم المقترحات | 1.1x | 10 مقترحات |
 
-## SNS Integration
+## تكامل SNS
 
 The Cosmicrafts DAO leverages the Internet Computer's [Service Nervous System (SNS)](https://internetcomputer.org/docs/building-apps/governing-apps/overview) for its governance infrastructure. This provides a battle-tested, secure framework for decentralized decision-making.
 
-### Key Features
+### المعلمات الرئيسية
 
-- **Neuron-Based Voting**: Stake SPIRAL tokens to create neurons and participate in governance
-- **Dissolve Delay Bonuses**: Longer lockup periods increase voting power
-- **Age Bonuses**: Neurons gain more voting power over time
-- **Proposal System**: Standard SNS proposal framework for all governance actions
+| المعلمة | القيمة | الوصف |
+|-----------|---------|-------------|
+| الحد الأدنى للتصويت | 100 SPIRAL | الحد الأدنى للمشاركة |
+| فترة التصويت | 7 أيام | مدة التصويت القياسية |
+| حد النصاب | 51% | الحد الأدنى للمشاركة |
+| عتبة الموافقة | 66% | النسبة المطلوبة للموافقة |
 
-::: info SNS Configuration
-For detailed technical parameters of our SNS setup, including minimum stakes, voting periods, and reward rates, refer to the SNS initialization parameters in our documentation.
-:::
+### معلمات الحوكمة
 
-### Governance Parameters
+| المعلمة | القيمة | قابلة للتعديل |
+|-----------|---------|---------------|
+| فترة التأخير | 24 ساعة | نعم |
+| حد المقترحات | 1,000 SPIRAL | نعم |
+| مدة التنفيذ | 48 ساعة | نعم |
+| عتبة الفيتو | 33% | لا |
 
-| Parameter | Value | Purpose |
-|-----------|--------|---------|
-| **Rejection Fee** | 1000 SPIRAL | Prevent spam proposals |
-| **Initial Voting Period** | 7 days | Standard deliberation time |
-| **Maximum Deadline Extension** | 1 day | Allow for late participation |
-| **Minimum Neuron Creation Stake** | 1000 SPIRAL | Base participation threshold |
+## آليات تخزين العصبونات
 
+### مستويات التخزين
 
-## Neuron Staking Mechanics
+| المستوى | المدة | المضاعف | المتطلبات |
+|----------|--------|------------|--------------|
+| برونزي | 3 أشهر | 1.2x | 1,000 SPIRAL |
+| فضي | 6 أشهر | 1.5x | 5,000 SPIRAL |
+| ذهبي | 12 شهراً | 2.0x | 10,000 SPIRAL |
+| بلاتيني | 24 شهراً | 3.0x | 25,000 SPIRAL |
 
-### Base Requirements
+### مكافآت التخزين
 
-| Parameter | Value | Description |
-|-----------|--------|-------------|
-| **Minimum Stake** | 1,000 SPIRAL | Base amount required to create a neuron |
-| **Minimum Lock Period** | 30 days | Shortest allowed dissolve delay |
-| **Maximum Lock Period** | 8 years | Longest possible dissolve delay |
-| **Transaction Fee** | 0.01 SPIRAL | Network operation cost |
+| النوع | المعدل | الفترة |
+|--------|--------|----------|
+| أساسي | 12% APY | مستمر |
+| مكافأة المشاركة | +3% | شهري |
+| مكافأة الولاء | +5% | سنوي |
+| مكافأة النظام البيئي | +2% | فصلي |
 
-### Maturity Schedule
+## إطار اتخاذ القرار
 
-| Lock Period | Bonus Multiplier | Effective Power |
-|-------------|------------------|-----------------|
-| 30 days | 1.0x | Base Power |
-| 6 months | 1.25x | +25% |
-| 1 year | 1.5x | +50% |
-| 2 years | 1.75x | +75% |
-| 4 years | 1.85x | +85% |
-| 8 years | 2.0x | +100% |
+### أنواع المقترحات
 
+| النوع | الوصف | عتبة الموافقة |
+|--------|-------------|-----------------|
+| تقني | تحديثات البروتوكول | 75% |
+| مالي | تخصيص الموارد | 66% |
+| مجتمعي | مبادرات المجتمع | 51% |
+| طارئ | إصلاحات عاجلة | 90% |
 
-## Decision Making Framework
+### عملية المقترحات
 
-### Governance Areas
+1. **التقديم**
+   - تقديم المقترح
+   - فترة مناقشة 3 أيام
+   - تحديثات بناءً على التعليقات
 
-1. **Treasury Management**
-   - Marketing Campaigns
-   - Development Funding
-   - Strategic Partnerships
+2. **التصويت**
+   - فترة تصويت 7 أيام
+   - تتبع المشاركة
+   - حساب النتائج
 
-2. **Economic Policies**
-   - Tokenomics Adjustments
-   - Staking Rates
-   - Fee Structures
+3. **التنفيذ**
+   - جدول زمني للتنفيذ
+   - مراقبة التقدم
+   - تقارير النتائج
 
-3. **Development Roadmap**
-   - Feature Prioritization
-   - Game Expansions
-   - Technical Improvements
+### متطلبات المقترحات
 
-### Proposal System
+| العنصر | الوصف | إلزامي |
+|---------|-------------|------------|
+| الملخص | نظرة عامة موجزة | نعم |
+| التفاصيل | شرح كامل | نعم |
+| الميزانية | تقديرات التكلفة | عند الاقتضاء |
+| الجدول الزمني | خطة التنفيذ | نعم |
+| المخاطر | تحليل المخاطر | نعم |
 
-| Stage | Duration | Requirements |
-|-------|----------|--------------|
-| **Submission** | N/A | 1,000 SPIRAL stake |
-| **Review** | 24 hours | Community feedback |
-| **Voting** | 7 days | Active neuron required |
-| **Execution** | Variable | Automated if approved |
+## نظام المقترحات
 
-::: info Community Implementation
-For practical details about treasury management, community programs, and ecosystem growth initiatives, see our [Community](/community) framework.
-:::
+### فئات المقترحات
+
+| الفئة | الأمثلة | وقت المعالجة |
+|---------|-----------|---------------|
+| تقنية | تحديثات البروتوكول | 2-4 أسابيع |
+| مالية | تخصيص الميزانية | 1-2 أسابيع |
+| مجتمعية | الفعاليات، المكافآت | 1 أسبوع |
+| طارئة | إصلاحات الأمان | 24-48 ساعة |
+
+### دورة حياة المقترح
+
+1. **مرحلة الصياغة**
+   - إعداد المقترح
+   - مراجعة المجتمع
+   - التنقيح
+
+2. **مرحلة التصويت**
+   - فتح التصويت
+   - مناقشة عامة
+   - تسجيل الأصوات
+
+3. **مرحلة التنفيذ**
+   - خطة العمل
+   - التنفيذ
+   - المراقبة
+
+4. **مرحلة التقييم**
+   - قياس النتائج
+   - جمع التعليقات
+   - التحسينات المقترحة
+
+## الشفافية والمساءلة
+
+### آليات التتبع
+
+| الآلية | الغرض | التكرار |
+|---------|---------|-----------|
+| تقارير الحوكمة | تتبع القرارات | شهري |
+| مراجعات الأداء | تقييم النتائج | فصلي |
+| تدقيقات المجتمع | ضمان الشفافية | سنوي |
+
+### مقاييس الأداء
+
+| المقياس | الهدف | التتبع |
+|----------|--------|----------|
+| مشاركة التصويت | >30% | مستمر |
+| تنفيذ المقترحات | >80% | شهري |
+| رضا المجتمع | >85% | فصلي |
+
+## خارطة طريق الحوكمة
+
+### المرحلة 1: التأسيس (الأشهر 1-6)
+- إطلاق نظام التصويت الأساسي
+- تشكيل اللجان الأولية
+- إنشاء إطار المقترحات
+
+### المرحلة 2: التوسع (الأشهر 7-12)
+- إضافة آليات تصويت متقدمة
+- توسيع نطاق اللجان
+- تحسين عمليات المقترحات
+
+### المرحلة 3: النضج (الأشهر 13+)
+- تنفيذ حوكمة لامركزية بالكامل
+- إطلاق أدوات تحليلية متقدمة
+- تكامل حلول التحكيم
 

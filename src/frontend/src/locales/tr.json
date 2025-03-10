@@ -323,5 +323,42 @@
     "9": "Ekim",
     "10": "Kasım",
     "11": "Aralık"
+  },
+  "whitepaper": {
+    "title": "Teknik Doküman",
+    "navigation": {
+      "sections": {
+        "introduction": {
+          "title": "Giriş",
+          "description": "Genel bakış ve değer önerisi"
+        },
+        "tokenomics": {
+          "title": "Token Ekonomisi",
+          "description": "Token dağıtımı ve ekonomisi"
+        },
+        "governance": {
+          "title": "Yönetişim",
+          "description": "Karar alma sistemi"
+        },
+        "community": {
+          "title": "Topluluk",
+          "description": "Katılım ve büyüme"
+        },
+        "architecture": {
+          "title": "Teknik Mimari",
+          "description": "Teknik altyapı"
+        },
+        "core-features": {
+          "title": "Temel Özellikler",
+          "description": "Ürün özellikleri"
+        }
+      },
+      "documentation": "Dokümantasyon",
+      "previous": "Önceki",
+      "next": "Sonraki",
+      "chapters": "Bölümler",
+      "mobileTitle": "Teknik Doküman Bölümleri",
+      "mobileSubtitle": "Bölümleri Keşfet"
+    }
   }
 }

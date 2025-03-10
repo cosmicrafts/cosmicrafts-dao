@@ -1,95 +1,92 @@
-# Introduction
+# 简介
 
-![Executive Summary](executivesummary.webp)
+![执行摘要](executivesummary.webp)
 
 [[toc:2-2]]
 
-**Cosmicrafts DAO** is pioneering the gaming industry through Web3 technology, creating the first fully on-chain gaming franchise with real ownership economics. In development since 2016 and built entirely on the [Internet Computer](https://internetcomputer.org) since 2021, we've consistently advanced our vision of blockchain gaming without the limitations that have held back previous Web3 ventures.
+**Cosmicrafts DAO**通过Web3技术引领游戏行业，创造首个具有真实所有权经济的完全链上游戏系列。自2016年开始开发，并从2021年起完全构建在[Internet Computer](https://internetcomputer.org)之上，我们始终推进着区块链游戏的愿景，突破了此前Web3项目的局限。
 
-> This isn't all about funding development anymore; it's about driving adoption and scaling up. The game is already built, the infrastructure is solid, and the framework is in place.
+> 现在不仅仅是关于开发资金的问题；而是关于推动采用和扩展。游戏已经构建完成，基础设施稳固，框架已经就位。
 
-## The Opportunity
+## 机遇
 
-While traditional gaming extracts value from players, Cosmicrafts:
+传统游戏从玩家那里提取价值，而Cosmicrafts提供：
 
-- **Creates true digital ownership** for in-game assets
-- **Transforms players into stakeholders** with governance rights and economic benefits
-- **Delivers quality gameplay** that appeals to mainstream and crypto-native audiences alike
+- 游戏内资产的**真实数字所有权**
+- **将玩家转变为利益相关者**，赋予治理权和经济利益
+- **优质游戏体验**，吸引主流和加密用户
 
-### Challenges We're Solving
+### 我们正在解决的挑战
 
-1. **Traditional Gaming Limitations**
-   - Value flows one-way from players to publishers
-   - Players have no ownership of their digital assets
-   - No say in franchise direction despite massive investment of time and money
+1. **传统游戏的局限性**
+   - 价值单向流向发行商
+   - 玩家对其数字资产没有所有权
+   - 投入大量时间和金钱却无法影响游戏方向
 
-2. **Web3 Gaming Failures**
-   - Focus on speculative trading over enjoyable gameplay
-   - Technical barriers that alienate mainstream players
-   - Poor-quality products that fail to deliver on promises
+2. **Web3游戏的失败**
+   - 重点在投机交易而非游戏乐趣
+   - 技术门槛阻碍主流玩家
+   - 低质量产品无法兑现承诺
 
-## Our Traction
+## 我们的发展势头
 
-Cosmicrafts has built a solid foundation with measurable achievements since inception:
+Cosmicrafts自成立以来通过可衡量的成就建立了坚实的基础：
 
-### Proven Track Record
-- **Enduring Presence**: [8+ years of continuous development](https://drive.google.com/drive/folders/0B88rGI6X8bgYTFdTblVGcG81bmc?resourcekey=0-CB6fdqNSdQAnHCgAzEV7vg&usp=sharing), surviving 2 major market cycles
-- **DFINITY Grant Recipient**: [Official grant project](https://dfinity.org/grants/) from 2021-2024
-- **Supernova Hackathon Winner**: Voted as the top ICP [Community Choice Award!](https://medium.com/dfinity/cosmicrafts-wins-the-supernova-hackathon-community-choice-award-c9ed27e3bd80)
-- **NFT Success**: [Genesis collection](https://funded.app/projects/cosmicrafts-9388300) sold out in 47 seconds, [airdropped 17,664 NFTs](https://nftanvil.com/collections) to the community.
-- **10,000+ Beta Testers**: [28-minute average session times](https://cusyh-iyaaa-aaaah-qcpba-cai.raw.ic0.app) recorded (42% higher than industry average)
-- **Community Growth**: [6,000+ Discord members](https://discord.gg/cosmicrafts-884272584491941888), [18,000+ X followers](https://x.com/cosmicrafts)
-- **Multiple Platforms**: Featured on [Epic Games](https://store.epicgames.com/en-US/p/cosmicrafts-499a8f) and [itch.io](https://ohsalmeron.itch.io/cosmicrafts)
+### 成功记录
+- **持久存在**: [8年以上的持续开发](https://drive.google.com/drive/folders/0B88rGI6X8bgYTFdTblVGcG81bmc?resourcekey=0-CB6fdqNSdQAnHCgAzEV7vg&usp=sharing)，经历两个主要市场周期
+- **DFINITY资助获得者**: 2021-2024年的[官方资助项目](https://dfinity.org/grants/)
+- **Supernova黑客马拉松冠军**: 获得ICP[社区选择奖](https://medium.com/dfinity/cosmicrafts-wins-the-supernova-hackathon-community-choice-award-c9ed27e3bd80)！
+- **NFT成功**: [创世系列](https://funded.app/projects/cosmicrafts-9388300)47秒售罄，向社区[空投17,664个NFT](https://nftanvil.com/collections)
+- **10,000+测试玩家**: 记录[28分钟平均会话时长](https://cusyh-iyaaa-aaaah-qcpba-cai.raw.ic0.app)（高于行业平均水平42%）
+- **社区增长**: [Discord 6,000+成员](https://discord.gg/cosmicrafts-884272584491941888)，[X平台18,000+关注者](https://x.com/cosmicrafts)
+- **多平台**: 在[Epic Games](https://store.epicgames.com/en-US/p/cosmicrafts-499a8f)和[itch.io](https://ohsalmeron.itch.io/cosmicrafts)上线
 
-### Strategic Positioning
-- **Ecosystem Partnerships**: [50+ collaborations](https://x.com/search?q=cosmicrafts&src=typed_querys) with Web3 projects
-- **Technical Infrastructure**: [1.2 million+ on-chain transactions](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai) with 99.97% uptime
-- **Media Recognition**: Featured in multiple publications including [Binance](https://www.binance.com/en/square/post/4810541428922), [ICP Lab 5.0](https://x.com/dfinity/status/1702618623989461307), with regular [updates on Medium](https://cosmicrafts.medium.com/)
+### 战略定位
+- **生态系统合作**: 与Web3项目达成[50+合作](https://x.com/search?q=cosmicrafts&src=typed_querys)
+- **技术基础设施**: [120万+链上交易](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai)，99.97%运行时间
+- **媒体认可**: 在[Binance](https://www.binance.com/en/square/post/4810541428922)、[ICP Lab 5.0](https://x.com/dfinity/status/1702618623989461307)等平台报道，在[Medium](https://cosmicrafts.medium.com/)定期更新
 
+## 价值主张
 
+### 1. 完整产品 & 成熟技术
 
+与大多数寻求资金建设产品的Web3项目不同，[Cosmicrafts已经构建完成并可以游玩](https://play.cosmicrafts.com)。您的参与直接推动增长和采用，而不是开发的不确定性。
 
-## Value Proposition
+### 2. 多重价值机制
 
-### 1. Complete Product & Proven Technology
+作为SPIRAL代币持有者，您可以获得：
 
-Unlike most Web3 projects seeking funding to build a product, Cosmicrafts is [already built and playable](https://play.cosmicrafts.com). Your participation directly fuels growth and adoption, not development uncertainty.
+- **直接参与**
+  - **质押**: 锁定代币[赚取被动收入](/whitepaper#tokenomics#rewards)
+  - **治理**: 通过投票[决定DAO的未来](/whitepaper#governance)
+  - **财务**: 管理[战略资源分配](/whitepaper#community#treasury-management)
 
-### 2. Multiple Value Mechanisms
+- **生态系统参与**
+  - **市场**: 与其他玩家[交易资产](/whitepaper#community#marketplace)
+  - **游戏内经济**: [参与游戏经济](/whitepaper#core-features)
+  - **资产效用**: [跨游戏使用资产](/whitepaper#architecture#core-technical-design)
 
-As a Spiral token holder, you benefit from:
+### 3. 独特优势
 
-- **Direct Participation**
-  - **Staking**: [Earn passive income](/whitepaper#tokenomics#rewards) by locking tokens
-  - **Governance**: [Direct the DAO's future](/whitepaper#governance) through voting
-  - **Treasury**: Strategic [resource allocation](/whitepaper#community#treasury-management) management
-
-- **Ecosystem Engagement**
-  - **Marketplace**: [Trade assets](/whitepaper#community#marketplace) with other players
-  - **In-game Economy**: [Participate in the game economy](/whitepaper#core-features)
-  - **Asset Utility**: [Use assets across multiple games](/whitepaper#architecture#core-technical-design)
-
-### 3. Unique Advantages
-
-- **No Blockchain Complexity**: [Players enjoy Web3 benefits](/whitepaper#architecture#no-gas-fees) without technical barriers
-- **Evolving Assets**: [NFTs that gain experience](/whitepaper#core-features#nfts) and history through gameplay
-- **Deflationary Economics**: [Token burn mechanics](/whitepaper#tokenomics#burn-mechanisms) create sustainable value
-- **Strategic Growth Focus**: DAO resources directed to [user acquisition and expansion](/whitepaper#community)
+- **消除区块链复杂性**: [玩家无需技术门槛享受Web3优势](/whitepaper#architecture#no-gas-fees)
+- **进化资产**: [NFT通过游戏获得经验](/whitepaper#core-features#nfts)和历史
+- **通缩经济**: [代币销毁机制](/whitepaper#tokenomics#burn-mechanisms)创造可持续价值
+- **战略增长重点**: DAO资源专注于[用户获取和扩展](/whitepaper#community)
 
 ---
 
-This whitepaper details the Cosmicrafts DAO ecosystem, from technical architecture to tokenomics. Explore how your participation can help redefine gaming through true digital ownership.
+本白皮书详细介绍了Cosmicrafts DAO生态系统，从技术架构到代币经济。探索您的参与如何通过真实数字所有权重新定义游戏。
 
-## Reading Path
+## 阅读指南
 
-For stakeholders looking to understand the opportunity quickly, we recommend focusing on:
+对于希望快速了解机会的利益相关者，我们建议关注：
 
-1. [**Introduction**](/introduction) - Overview and value proposition
-2. [**Tokenomics**](/tokenomics) - Token distribution, utility, and value drivers
-3. [**Governance**](/governance) - Stakeholder control and decision-making mechanisms
+1. [**简介**](/introduction) - 概述和价值主张
+2. [**代币经济**](/tokenomics) - 代币分配、效用和价值驱动因素
+3. [**治理**](/governance) - 利益相关者控制和决策机制
 
-For those interested in a deeper technical understanding:
+对于希望深入了解技术的人士：
 
-4. [**Community**](/community) - Growth strategies and engagement plans
-5. [**Architecture**](/architecture) - Technical infrastructure details
-6. [**Core Features**](/core-features) - Product capabilities and gameplay mechanics
+4. [**社区**](/community) - 增长战略和参与计划
+5. [**架构**](/architecture) - 技术基础设施详情
+6. [**核心功能**](/core-features) - 产品功能和游戏机制

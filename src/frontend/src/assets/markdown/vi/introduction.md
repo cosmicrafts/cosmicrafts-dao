@@ -1,95 +1,92 @@
-# Introduction
+# Giới Thiệu
 
-![Executive Summary](executivesummary.webp)
+![Tóm Tắt Điều Hành](executivesummary.webp)
 
 [[toc:2-2]]
 
-**Cosmicrafts DAO** is pioneering the gaming industry through Web3 technology, creating the first fully on-chain gaming franchise with real ownership economics. In development since 2016 and built entirely on the [Internet Computer](https://internetcomputer.org) since 2021, we've consistently advanced our vision of blockchain gaming without the limitations that have held back previous Web3 ventures.
+**Cosmicrafts DAO** đang tiên phong trong ngành công nghiệp game thông qua công nghệ Web3, tạo ra thương hiệu game chuỗi hoàn toàn đầu tiên với nền kinh tế sở hữu thực. Được phát triển từ năm 2016 và được xây dựng hoàn toàn trên [Internet Computer](https://internetcomputer.org) từ năm 2021, chúng tôi liên tục thúc đẩy tầm nhìn về game blockchain mà không bị giới hạn bởi những rào cản đã kìm hãm các dự án Web3 trước đây.
 
-> This isn't all about funding development anymore; it's about driving adoption and scaling up. The game is already built, the infrastructure is solid, and the framework is in place.
+> Giờ đây không chỉ là về việc tài trợ phát triển nữa; mà là về việc thúc đẩy áp dụng và mở rộng quy mô. Game đã được xây dựng, cơ sở hạ tầng vững chắc, và khung làm việc đã sẵn sàng.
 
-## The Opportunity
+## Cơ Hội
 
-While traditional gaming extracts value from players, Cosmicrafts:
+Trong khi game truyền thống rút giá trị từ người chơi, Cosmicrafts mang đến:
 
-- **Creates true digital ownership** for in-game assets
-- **Transforms players into stakeholders** with governance rights and economic benefits
-- **Delivers quality gameplay** that appeals to mainstream and crypto-native audiences alike
+- **Quyền sở hữu kỹ thuật số thực** cho tài sản trong game
+- **Biến người chơi thành cổ đông** với quyền quản trị và lợi ích kinh tế
+- **Mang lại trải nghiệm chơi game chất lượng** thu hút cả người dùng phổ thông và người dùng crypto
 
-### Challenges We're Solving
+### Những Thách Thức Chúng Tôi Giải Quyết
 
-1. **Traditional Gaming Limitations**
-   - Value flows one-way from players to publishers
-   - Players have no ownership of their digital assets
-   - No say in franchise direction despite massive investment of time and money
+1. **Giới Hạn của Game Truyền Thống**
+   - Dòng giá trị một chiều từ người chơi đến nhà phát hành
+   - Người chơi không có quyền sở hữu tài sản kỹ thuật số của họ
+   - Không có tiếng nói trong định hướng thương hiệu dù đầu tư rất nhiều thời gian và tiền bạc
 
-2. **Web3 Gaming Failures**
-   - Focus on speculative trading over enjoyable gameplay
-   - Technical barriers that alienate mainstream players
-   - Poor-quality products that fail to deliver on promises
+2. **Thất Bại của Game Web3**
+   - Tập trung vào giao dịch đầu cơ thay vì gameplay thú vị
+   - Rào cản kỹ thuật khiến người chơi phổ thông xa lánh
+   - Sản phẩm chất lượng kém không đáp ứng được lời hứa
 
-## Our Traction
+## Sự Phát Triển của Chúng Tôi
 
-Cosmicrafts has built a solid foundation with measurable achievements since inception:
+Cosmicrafts đã xây dựng nền tảng vững chắc với những thành tựu đo lường được kể từ khi thành lập:
 
-### Proven Track Record
-- **Enduring Presence**: [8+ years of continuous development](https://drive.google.com/drive/folders/0B88rGI6X8bgYTFdTblVGcG81bmc?resourcekey=0-CB6fdqNSdQAnHCgAzEV7vg&usp=sharing), surviving 2 major market cycles
-- **DFINITY Grant Recipient**: [Official grant project](https://dfinity.org/grants/) from 2021-2024
-- **Supernova Hackathon Winner**: Voted as the top ICP [Community Choice Award!](https://medium.com/dfinity/cosmicrafts-wins-the-supernova-hackathon-community-choice-award-c9ed27e3bd80)
-- **NFT Success**: [Genesis collection](https://funded.app/projects/cosmicrafts-9388300) sold out in 47 seconds, [airdropped 17,664 NFTs](https://nftanvil.com/collections) to the community.
-- **10,000+ Beta Testers**: [28-minute average session times](https://cusyh-iyaaa-aaaah-qcpba-cai.raw.ic0.app) recorded (42% higher than industry average)
-- **Community Growth**: [6,000+ Discord members](https://discord.gg/cosmicrafts-884272584491941888), [18,000+ X followers](https://x.com/cosmicrafts)
-- **Multiple Platforms**: Featured on [Epic Games](https://store.epicgames.com/en-US/p/cosmicrafts-499a8f) and [itch.io](https://ohsalmeron.itch.io/cosmicrafts)
+### Thành Tích Đã Được Chứng Minh
+- **Sự Hiện Diện Bền Vững**: [Hơn 8 năm phát triển liên tục](https://drive.google.com/drive/folders/0B88rGI6X8bgYTFdTblVGcG81bmc?resourcekey=0-CB6fdqNSdQAnHCgAzEV7vg&usp=sharing), vượt qua 2 chu kỳ thị trường lớn
+- **Nhận Tài Trợ DFINITY**: [Dự án tài trợ chính thức](https://dfinity.org/grants/) từ 2021-2024
+- **Chiến Thắng Hackathon Supernova**: Được bình chọn là [Giải Thưởng Lựa Chọn Cộng Đồng ICP](https://medium.com/dfinity/cosmicrafts-wins-the-supernova-hackathon-community-choice-award-c9ed27e3bd80) hàng đầu!
+- **Thành Công NFT**: [Bộ sưu tập Genesis](https://funded.app/projects/cosmicrafts-9388300) bán hết trong 47 giây, [airdrop 17,664 NFT](https://nftanvil.com/collections) cho cộng đồng
+- **Hơn 10,000 Người Thử Nghiệm Beta**: Ghi nhận [thời gian phiên trung bình 28 phút](https://cusyh-iyaaa-aaaah-qcpba-cai.raw.ic0.app) (cao hơn 42% so với trung bình ngành)
+- **Tăng Trưởng Cộng Đồng**: [Hơn 6,000 thành viên Discord](https://discord.gg/cosmicrafts-884272584491941888), [hơn 18,000 người theo dõi trên X](https://x.com/cosmicrafts)
+- **Đa Nền Tảng**: Có mặt trên [Epic Games](https://store.epicgames.com/en-US/p/cosmicrafts-499a8f) và [itch.io](https://ohsalmeron.itch.io/cosmicrafts)
 
-### Strategic Positioning
-- **Ecosystem Partnerships**: [50+ collaborations](https://x.com/search?q=cosmicrafts&src=typed_querys) with Web3 projects
-- **Technical Infrastructure**: [1.2 million+ on-chain transactions](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai) with 99.97% uptime
-- **Media Recognition**: Featured in multiple publications including [Binance](https://www.binance.com/en/square/post/4810541428922), [ICP Lab 5.0](https://x.com/dfinity/status/1702618623989461307), with regular [updates on Medium](https://cosmicrafts.medium.com/)
+### Vị Thế Chiến Lược
+- **Hợp Tác Hệ Sinh Thái**: [Hơn 50 hợp tác](https://x.com/search?q=cosmicrafts&src=typed_querys) với các dự án Web3
+- **Cơ Sở Hạ Tầng Kỹ Thuật**: [Hơn 1.2 triệu giao dịch trên chuỗi](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai) với thời gian hoạt động 99.97%
+- **Công Nhận Truyền Thông**: Được đề cập trong nhiều ấn phẩm bao gồm [Binance](https://www.binance.com/en/square/post/4810541428922), [ICP Lab 5.0](https://x.com/dfinity/status/1702618623989461307), với các cập nhật thường xuyên trên [Medium](https://cosmicrafts.medium.com/)
 
+## Đề Xuất Giá Trị
 
+### 1. Sản Phẩm Hoàn Chỉnh & Công Nghệ Đã Được Chứng Minh
 
+Khác với hầu hết các dự án Web3 tìm kiếm tài trợ để xây dựng sản phẩm, [Cosmicrafts đã được xây dựng và có thể chơi được](https://play.cosmicrafts.com). Sự tham gia của bạn trực tiếp thúc đẩy tăng trưởng và áp dụng, không phải sự không chắc chắn trong phát triển.
 
-## Value Proposition
+### 2. Nhiều Cơ Chế Giá Trị
 
-### 1. Complete Product & Proven Technology
+Là người nắm giữ token SPIRAL, bạn được hưởng lợi từ:
 
-Unlike most Web3 projects seeking funding to build a product, Cosmicrafts is [already built and playable](https://play.cosmicrafts.com). Your participation directly fuels growth and adoption, not development uncertainty.
+- **Tham Gia Trực Tiếp**
+  - **Staking**: [Kiếm thu nhập thụ động](/whitepaper#tokenomics#rewards) bằng cách khóa token
+  - **Quản Trị**: [Định hướng tương lai của DAO](/whitepaper#governance) thông qua bỏ phiếu
+  - **Kho Bạc**: Quản lý [phân bổ nguồn lực](/whitepaper#community#treasury-management) chiến lược
 
-### 2. Multiple Value Mechanisms
+- **Tham Gia Hệ Sinh Thái**
+  - **Thị Trường**: [Giao dịch tài sản](/whitepaper#community#marketplace) với người chơi khác
+  - **Kinh Tế Trong Game**: [Tham gia vào nền kinh tế game](/whitepaper#core-features)
+  - **Tiện Ích Tài Sản**: [Sử dụng tài sản trên nhiều game](/whitepaper#architecture#core-technical-design)
 
-As a Spiral token holder, you benefit from:
+### 3. Lợi Thế Độc Đáo
 
-- **Direct Participation**
-  - **Staking**: [Earn passive income](/whitepaper#tokenomics#rewards) by locking tokens
-  - **Governance**: [Direct the DAO's future](/whitepaper#governance) through voting
-  - **Treasury**: Strategic [resource allocation](/whitepaper#community#treasury-management) management
-
-- **Ecosystem Engagement**
-  - **Marketplace**: [Trade assets](/whitepaper#community#marketplace) with other players
-  - **In-game Economy**: [Participate in the game economy](/whitepaper#core-features)
-  - **Asset Utility**: [Use assets across multiple games](/whitepaper#architecture#core-technical-design)
-
-### 3. Unique Advantages
-
-- **No Blockchain Complexity**: [Players enjoy Web3 benefits](/whitepaper#architecture#no-gas-fees) without technical barriers
-- **Evolving Assets**: [NFTs that gain experience](/whitepaper#core-features#nfts) and history through gameplay
-- **Deflationary Economics**: [Token burn mechanics](/whitepaper#tokenomics#burn-mechanisms) create sustainable value
-- **Strategic Growth Focus**: DAO resources directed to [user acquisition and expansion](/whitepaper#community)
+- **Không Phức Tạp Blockchain**: [Người chơi tận hưởng lợi ích Web3](/whitepaper#architecture#no-gas-fees) mà không có rào cản kỹ thuật
+- **Tài Sản Phát Triển**: [NFT tích lũy kinh nghiệm](/whitepaper#core-features#nfts) và lịch sử thông qua gameplay
+- **Kinh Tế Giảm Phát**: [Cơ chế đốt token](/whitepaper#tokenomics#burn-mechanisms) tạo giá trị bền vững
+- **Tập Trung Tăng Trưởng Chiến Lược**: Nguồn lực DAO hướng đến [thu hút người dùng và mở rộng](/whitepaper#community)
 
 ---
 
-This whitepaper details the Cosmicrafts DAO ecosystem, from technical architecture to tokenomics. Explore how your participation can help redefine gaming through true digital ownership.
+Sách trắng này mô tả chi tiết hệ sinh thái Cosmicrafts DAO, từ kiến trúc kỹ thuật đến kinh tế token. Khám phá cách sự tham gia của bạn có thể giúp định nghĩa lại game thông qua quyền sở hữu kỹ thuật số thực.
 
-## Reading Path
+## Lộ Trình Đọc
 
-For stakeholders looking to understand the opportunity quickly, we recommend focusing on:
+Dành cho các bên liên quan muốn hiểu nhanh về cơ hội, chúng tôi khuyến nghị tập trung vào:
 
-1. [**Introduction**](/introduction) - Overview and value proposition
-2. [**Tokenomics**](/tokenomics) - Token distribution, utility, and value drivers
-3. [**Governance**](/governance) - Stakeholder control and decision-making mechanisms
+1. [**Giới Thiệu**](/introduction) - Tổng quan và đề xuất giá trị
+2. [**Kinh Tế Token**](/tokenomics) - Phân phối token, tiện ích và động lực giá trị
+3. [**Quản Trị**](/governance) - Kiểm soát của các bên liên quan và cơ chế ra quyết định
 
-For those interested in a deeper technical understanding:
+Dành cho những người quan tâm đến hiểu biết kỹ thuật sâu hơn:
 
-4. [**Community**](/community) - Growth strategies and engagement plans
-5. [**Architecture**](/architecture) - Technical infrastructure details
-6. [**Core Features**](/core-features) - Product capabilities and gameplay mechanics
+4. [**Cộng Đồng**](/community) - Chiến lược tăng trưởng và kế hoạch tham gia
+5. [**Kiến Trúc**](/architecture) - Chi tiết cơ sở hạ tầng kỹ thuật
+6. [**Tính Năng Cốt Lõi**](/core-features) - Khả năng sản phẩm và cơ chế gameplay

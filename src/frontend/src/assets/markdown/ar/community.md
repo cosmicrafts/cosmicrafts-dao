@@ -1,187 +1,189 @@
-# Community
-![Community](communitybanner.webp)
+# المجتمع
 
-## Overview
+[[toc:2-2]]
 
-The Cosmicrafts community is the driving force behind our ecosystem's growth and evolution. Our community framework balances:
-- Inclusive participation and governance
-- Sustainable economic development
-- Strategic ecosystem expansion
-- Content creation and cultural growth
+## نظرة عامة
 
-## Treasury Management
+يعد مجتمع Cosmicrafts DAO محور نمو النظام البيئي. من خلال الجمع بين الحوافز الاقتصادية والمشاركة النشطة، نبني نظاماً بيئياً مستداماً يفيد جميع المشاركين.
 
-The DAO treasury is the foundation for sustainable growth and community initiatives. All funding allocations require community approval through the SNS proposal system.
+## إدارة الخزينة
 
-<div class="table-scroll">
+### متطلبات تخصيص التمويل
 
-| Focus Area | Implementation | Requirements |
-|------------|----------------|--------------|
-| **User Acquisition** | Marketing campaigns, Strategic partnerships | - Clear ROI metrics<br>- Target audience analysis<br>- Performance tracking |
-| **Development** | Core team maintenance, Technical improvements | - Skill requirements<br>- Project roadmap alignment<br>- Milestone definitions |
-| **Community Initiatives** | Events, Content creation, Market development | - Success metrics<br>- Budget breakdown<br>- Timeline and deliverables |
+| الفئة | النسبة | التركيز |
+|---------|-----------|---------|
+| تطوير المنتج | 40% | تحسينات اللعبة والمنصة |
+| نمو المجتمع | 30% | التسويق والمشاركة |
+| السيولة | 20% | استقرار السوق |
+| الاحتياطي | 10% | الطوارئ والفرص |
 
-</div>
+### مجالات التركيز
 
-::: info Proposal Requirements
-All treasury proposals must include:
-- Detailed budget allocation
-- Expected impact metrics
-- Implementation timeline
-- Risk assessment
-- Success criteria
-:::
+1. **تطوير المنتج**
+   - تحسينات اللعبة
+   - تحديثات المنصة
+   - أدوات المجتمع
+   - تكامل النظام البيئي
 
-## Content Creators Program
+2. **نمو المجتمع**
+   - حملات التسويق
+   - برامج السفراء
+   - فعاليات المجتمع
+   - برامج التعليم
 
-The Content Creators Program aims to build a sustainable ecosystem of content creators who help grow and engage the Cosmicrafts community. All program terms and compensation are subject to DAO approval.
+3. **إدارة السيولة**
+   - حوافز مزودي السيولة
+   - استقرار السوق
+   - برامج إعادة الشراء
+   - صناديق الطوارئ
 
-### Qualification Framework
+## برنامج منشئي المحتوى
 
-<div class="table-scroll">
+### إطار التأهيل
 
-| Tier | Requirements | Evaluation Criteria |
-|------|--------------|-------------------|
-| **Emerging** | - Active social media presence<br>- Consistent content schedule | - Content quality<br>- Engagement metrics<br>- Audience authenticity |
-| **Established** | - Proven track record<br>- Engagement-driven content<br>- Community participation | - Reach and impact<br>- Content performance<br>- Community feedback |
-| **Partner** | - Significant audience reach<br>- High-quality production<br>- Strategic value alignment | - Long-term impact<br>- Brand alignment<br>- Community leadership |
+| المستوى | المتطلبات | المكافآت |
+|----------|--------------|----------|
+| مبتدئ | 100 متابع | 100 SPIRAL/شهر |
+| متوسط | 1,000 متابع | 500 SPIRAL/شهر |
+| متقدم | 10,000 متابع | 2,500 SPIRAL/شهر |
+| نخبة | 100,000+ متابع | 10,000 SPIRAL/شهر |
 
-</div>
+### هيكل التعويضات
 
-### Compensation Structure
+| النشاط | المكافأة الأساسية | المضاعفات |
+|----------|----------------|------------|
+| مقاطع الفيديو | 50 SPIRAL | حتى 3x |
+| البث المباشر | 100 SPIRAL/ساعة | حتى 2x |
+| المقالات | 75 SPIRAL | حتى 2.5x |
+| الفن | 200 SPIRAL | حتى 2x |
 
-Content creators can submit proposals to the DAO for:
-- Performance-based compensation
-- Project-specific funding
-- Event sponsorship
-- Strategic collaboration opportunities
+### مقاييس التقييم
 
-::: info Proposal Guidelines
-Creators must include:
-- Detailed content strategy
-- Performance metrics
-- Target audience analysis
-- Expected impact assessment
-- Budget requirements
-:::
+| المقياس | الوزن | الهدف |
+|----------|--------|--------|
+| المشاهدات | 30% | النمو الشهري |
+| المشاركة | 40% | معدل التفاعل |
+| الجودة | 20% | تقييم النظراء |
+| الاتساق | 10% | النشر المنتظم |
 
-### Evaluation Metrics
+## السوق
 
-<div class="table-scroll">
+### الميزات الأساسية
 
-| Category | Metrics | Impact Assessment |
-|----------|---------|-------------------|
-| **Reach** | - Unique viewers<br>- Geographic distribution<br>- Audience retention | Measured through platform analytics |
-| **Engagement** | - Comment activity<br>- Share rates<br>- Community interaction | Tracked via engagement tools |
-| **Quality** | - Production value<br>- Content originality<br>- Community feedback | Regular quality assessments |
+| الميزة | الوصف | حالة التطوير |
+|---------|-------------|-----------------|
+| تداول P2P | تبادل الأصول مباشرة | مكتمل |
+| المزادات | مزادات NFT | قيد التطوير |
+| الإدراج المجمع | قوائم متعددة | مخطط |
+| التداول التلقائي | صناع السوق | مخطط |
 
-</div>
+### تحكم المجتمع
 
-::: info Program Evolution
-The DAO community will:
-- Define specific compensation models
-- Establish evaluation criteria
-- Adjust program parameters
-- Review and approve creator proposals
-:::
+| الوظيفة | المتطلبات | التأثير |
+|----------|--------------|----------|
+| إدراج الأصول | تصويت المجتمع | قبول الأصول |
+| تعديل الرسوم | اقتراح + تصويت | هيكل الرسوم |
+| قواعد التداول | إجماع اللجنة | معايير السوق |
+| برامج الحوافز | موافقة الخزينة | توزيع المكافآت |
 
-## Marketplace
+## إدارة السيولة
 
-The DAO-governed marketplace serves as the central hub for digital asset trading and community commerce.
+### العمليات
 
-### Core Features
+| النشاط | التكرار | المسؤول |
+|----------|------------|------------|
+| مراقبة السيولة | مستمر | النظام |
+| تعديل الحوافز | أسبوعي | لجنة السيولة |
+| تقييم المخاطر | شهري | مدققو المجتمع |
+| تقارير الأداء | فصلي | فريق التحليلات |
 
-<div class="table-scroll">
+### متطلبات الحوكمة
 
-| Feature | Implementation | Community Control |
-|---------|----------------|------------------|
-| **Cross-Chain Trading** | - Multi-chain support<br>- Bridge integrations<br>- Universal standards | - Protocol selection<br>- Fee structures<br>- Integration priorities |
-| **Asset Standards** | - NFT compatibility<br>- Metadata standards<br>- Verification systems | - Format approval<br>- Quality guidelines<br>- Listing criteria |
-| **Revenue Model** | - Fee distribution<br>- Staking rewards<br>- Creator royalties | - Rate setting<br>- Reward allocation<br>- Treasury share |
+| القرار | عتبة التصويت | فترة التنفيذ |
+|----------|----------------|-----------------|
+| تعديل المعلمات | 51% | 24 ساعة |
+| تخصيص الأموال | 66% | 48 ساعة |
+| تغييرات النظام | 75% | 72 ساعة |
+| إجراءات الطوارئ | 90% | فوري |
 
-</div>
+## الاستثمار المؤسسي
 
-::: info Marketplace Evolution
-The community drives marketplace development through:
-- Feature proposals
-- Integration voting
-- Parameter adjustment
-- Revenue model updates
-:::
+### أنواع الاستثمار
 
-## Liquidity Management
+| النوع | الحد الأدنى | فترة القفل |
+|--------|------------|-------------|
+| استراتيجي | 100,000 SPIRAL | 24 شهر |
+| شراكة | 50,000 SPIRAL | 12 شهر |
+| مؤسسي | 25,000 SPIRAL | 6 أشهر |
 
-The DAO oversees strategic liquidity operations to ensure market efficiency and token stability.
+### المتطلبات
 
-<div class="table-scroll">
+1. **التحقق**
+   - العناية الواجبة
+   - التحقق من الهوية
+   - مراجعة السمعة
 
-| Operation | Process | Governance Requirements |
-|-----------|---------|------------------------|
-| **DEX Liquidity** | - Periodic liquidity adjustments<br>- Pool diversification<br>- Yield optimization | - Community vote required<br>- Minimum 7-day proposal period<br>- Detailed impact analysis |
-| **CEX Integration** | - Exchange selection criteria<br>- Listing requirements<br>- Liquidity allocation | - Treasury impact assessment<br>- Security verification<br>- Long-term strategy alignment |
-| **Market Making** | - Automated market making<br>- Order book depth<br>- Volatility management | - Parameter setting<br>- Performance monitoring<br>- Treasury risk assessment |
+2. **الالتزامات**
+   - المشاركة في الحوكمة
+   - دعم النظام البيئي
+   - تقديم الخبرة
 
-</div>
+3. **المساهمات**
+   - تطوير الأعمال
+   - الشراكات الاستراتيجية
+   - توسيع السوق
 
-::: info Liquidity Operations
-All liquidity operations must:
-- Undergo thorough security review
-- Include clear entry and exit strategies
-- Define risk mitigation measures
-- Establish reporting requirements
-- Align with long-term tokenomics goals
-:::
+## النمو الاستراتيجي
 
-## Institutional Investment
+### اكتساب المستخدمين
 
-The DAO may approve strategic treasury allocations to institutional partners to accelerate growth and development.
+| القناة | الميزانية | ROI المستهدف |
+|----------|----------|--------------|
+| التسويق الرقمي | 30% | 3x |
+| الشراكات | 40% | 4x |
+| برامج الإحالة | 20% | 5x |
+| العلاقات العامة | 10% | 2x |
 
-<div class="table-scroll">
+### الاحتفاظ بالمستخدمين
 
-| Investment Type | Framework | Requirements |
-|-----------------|-----------|--------------|
-| **Strategic Sales** | - Private token allocations<br>- Treasury diversification<br>- Partnership development | - Vesting requirements<br>- Alignment with DAO objectives<br>- Value-add beyond capital |
-| **DAO Partnerships** | - Cross-DAO collaborations<br>- Ecosystem integration<br>- Joint development | - Mutual benefit analysis<br>- Technical compatibility<br>- Value creation assessment |
-| **Ecosystem Funding** | - Grants for ecosystem projects<br>- Incubation programs<br>- Development support | - Measurable outcomes<br>- Milestone-based distribution<br>- Technology integration |
+| الاستراتيجية | المقياس | الهدف |
+|--------------|----------|--------|
+| برامج الولاء | معدل الاحتفاظ | 80% |
+| تحسين المنتج | رضا المستخدم | 90% |
+| دعم المجتمع | وقت الاستجابة | <2 ساعة |
+| المكافآت | مشاركة المستخدم | 70% نشط |
 
-</div>
+### مبادرات النمو
 
-::: info Institutional Requirements
-Potential institutional partners must demonstrate:
-- Long-term commitment to the ecosystem
-- Specific value contribution beyond capital
-- Alignment with community values
-- Technical or market expertise
-- Transparent operations and reporting
-:::
+1. **برنامج السفراء**
+   - التوظيف والتدريب
+   - نظام المكافآت
+   - أهداف التوسع
 
-## Strategic Growth
+2. **شراكات النظام البيئي**
+   - تكامل المنتج
+   - مشاركة الموارد
+   - تسويق مشترك
 
-Community-driven initiatives for sustainable ecosystem expansion.
+3. **برامج التعليم**
+   - محتوى تعليمي
+   - ورش عمل
+   - برامج إرشاد
 
-### User Acquisition
+## خارطة طريق المجتمع
 
-<div class="table-scroll">
+### المرحلة 1: التأسيس (الأشهر 1-6)
+- إطلاق برنامج منشئي المحتوى
+- تأسيس برنامج السفراء
+- إنشاء قنوات المجتمع
 
-| Channel | Strategy | Success Metrics |
-|---------|----------|----------------|
-| **Content Partnerships** | - Creator collaborations<br>- Strategic alliances<br>- Community ambassadors | - Audience growth<br>- Engagement rates<br>- Conversion metrics |
-| **Community Events** | - Tournaments<br>- Special events<br>- Regional meetups | - Participation rates<br>- Retention metrics<br>- Community feedback |
-| **Incentive Programs** | - Referral systems<br>- Achievement rewards<br>- Social challenges | - User acquisition cost<br>- Retention rates<br>- Network growth |
+### المرحلة 2: النمو (الأشهر 7-12)
+- توسيع برامج المكافآت
+- إطلاق شراكات استراتيجية
+- تحسين أدوات المجتمع
 
-</div>
-
-### Retention Framework
-
-::: info Key Elements
-- Progressive reward systems
-- Social engagement incentives
-- Community leadership opportunities
-- Regular events and competitions
-- Content creation support
-:::
-
-::: info Technical Infrastructure
-The Cosmicrafts technical architecture provides our community with a responsive, gas-free environment for seamless interaction and participation. For details on our single-canister design and technical implementation, see the [Architecture](/architecture) section.
-:::
+### المرحلة 3: التوسع (الأشهر 13+)
+- برامج مؤسسية
+- توسع عالمي
+- تكامل النظام البيئي
 

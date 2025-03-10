@@ -324,5 +324,42 @@
     "9": "tháng 10",
     "10": "tháng 11",
     "11": "tháng 12"
+  },
+  "whitepaper": {
+    "title": "Sách Trắng",
+    "navigation": {
+      "sections": {
+        "introduction": {
+          "title": "Giới Thiệu",
+          "description": "Tổng quan và đề xuất giá trị"
+        },
+        "tokenomics": {
+          "title": "Kinh Tế Token",
+          "description": "Phân phối và kinh tế token"
+        },
+        "governance": {
+          "title": "Quản Trị",
+          "description": "Hệ thống ra quyết định"
+        },
+        "community": {
+          "title": "Cộng Đồng",
+          "description": "Tham gia và phát triển"
+        },
+        "architecture": {
+          "title": "Kiến Trúc Kỹ Thuật",
+          "description": "Cơ sở hạ tầng kỹ thuật"
+        },
+        "core-features": {
+          "title": "Tính Năng Cốt Lõi",
+          "description": "Khả năng sản phẩm"
+        }
+      },
+      "documentation": "Tài Liệu",
+      "previous": "Trước",
+      "next": "Tiếp",
+      "chapters": "Chương",
+      "mobileTitle": "Các Phần Sách Trắng",
+      "mobileSubtitle": "Khám Phá Các Chương"
+    }
   }
 }

@@ -1,161 +1,191 @@
-# Core Features
+# 主要機能
 
-![Core Features](corebanner.webp)
+[[toc:2-2]]
 
+## 概要
 
-## Overview
+Cosmicraftsは、ブロックチェーン技術とゲームプレイを融合させ、プレイヤーに真のデジタル所有権と没入型のゲーム体験を提供します。以下の機能は、エコシステムの中核を形成します。
 
-At its core, **Cosmicrafts DAO** implements a unified canister that handles all core game functionality through several integrated systems. Our architecture ensures seamless interaction between different components while maintaining the security and transparency of blockchain technology.
+## プレイヤーシステム
 
----
+### アカウント管理
 
-## Player System
+- **Internet Identity統合**
+  - シームレスなWeb3認証
+  - クロスプラットフォーム同期
+  - セキュアなアカウント回復
 
-The Player System forms the backbone of user interaction within Cosmicrafts, managing everything from basic profiles to complex social interactions.
+- **プロフィールカスタマイズ**
+  - カスタマイズ可能なアバター
+  - 実績バッジの表示
+  - ソーシャル統合
 
-### Profile Management
+### プログレッション
 
-<div class="table-scroll">
+| レベル | 必要経験値 | アンロック |
+|--------|------------|------------|
+| 1-10 | 1,000 XP | 基本機能 |
+| 11-25 | 5,000 XP | 中級コンテンツ |
+| 26-50 | 15,000 XP | 上級機能 |
+| 51-100 | 50,000 XP | エリートコンテンツ |
 
-| Feature | Description | Player Benefit |
-|---------|-------------|----------------|
-| Profile Creation | Unique IDs with customizable usernames and avatars | Personal identity in the metaverse |
-| Level System | Experience-based progression with rewards | Clear progression path |
-| Stats Tracking | Comprehensive performance metrics | Performance insights |
-| Title System | Unlockable titles showing achievements | Status recognition |
+## 資産システム
 
-</div>
+### NFT機能
 
-### Social Features
+- **進化するNFT**
+  - ゲームプレイによる成長
+  - 履歴の記録
+  - 属性の強化
 
-Players can build their network through:
-- Friend requests and management
-- Privacy settings control
-- Real-time notifications
-- Blocked user management
-- Social activity tracking
+- **相互運用性**
+  - クロスゲーム使用
+  - 属性の継承
+  - 価値の移転
 
-## Asset System
+### マーケットプレイス
 
-Our asset system leverages the ICRC-7 standard to provide true ownership and interoperability.
+| 機能 | 説明 | 手数料 |
+|------|------|--------|
+| 直接取引 | P2P資産取引 | 1% |
+| オークション | 時間制限付き入札 | 2% |
+| レンタル | 期間限定使用権 | 3% |
+| バンドル | 複数アイテムパッケージ | 1.5% |
 
-### NFT Categories
+## 経済システム
 
-```mermaid
-graph LR
-    A[NFT Types] --> B[Soul NFTs]
-    A --> C[Game Units]
-    A --> D[Cosmetics]
-    A --> E[Rewards]
-    
-    B --> B1[Progress Tracking]
-    B --> B2[Achievement Display]
-    
-    C --> C1[Spaceships]
-    C --> C2[Characters]
-    C --> C3[Combat Units]
-    
-    D --> D1[Avatars]
-    D --> D2[Skins]
-    
-    E --> E1[Trophies]
-    E --> E2[Special Items]
-```
+### 通貨メカニズム
 
-## Economy System
+- **デュアルトークン**
+  - SPIRAL: ガバナンス & 価値保存
+  - COSMIC: ゲーム内通貨
 
-Our dual-token economy creates a balanced ecosystem for both free-to-play and premium players.
+- **価値創造**
+  - プレイ報酬
+  - ステーキング収益
+  - 取引手数料
 
-### Token Structure
+### 報酬構造
 
-<div class="table-scroll">
+| 活動 | 基本報酬 | ボーナス条件 |
+|------|----------|--------------|
+| デイリーミッション | 10 COSMIC | +50% NFT保有 |
+| PvPバトル | 25 COSMIC | +100% ランク戦 |
+| イベント参加 | 50 COSMIC | +75% トーナメント |
+| コミュニティ貢献 | 100 COSMIC | +200% 検証済み |
 
-| Token | Purpose | Acquisition | Usage |
-|-------|---------|-------------|--------|
-| Spiral | Governance & Premium | Purchase/Staking | Voting, Premium Features |
-| Stardust | In-game Currency | Gameplay Rewards | Basic Features, Crafting |
+## マッチメイキングシステム
 
-</div>
+### プレイヤーマッチング
 
-## Matchmaking System
+- **スキルベース**
+  - ELOレーティング
+  - 勝率調整
+  - レベルマッチング
 
-Our matchmaking system ensures fair and engaging gameplay through sophisticated player matching.
+- **カスタマイズ可能な条件**
+  - 地域選択
+  - モード設定
+  - 報酬調整
 
-### Key Features
+### マッチタイプ
 
-```mermaid
-graph TD
-    A[Matchmaking] --> B[Player Pool]
-    B --> C[ELO Matching]
-    C --> D[Match Creation]
-    D --> E[Status Tracking]
-    
-    E --> F[In Progress]
-    E --> G[Completed]
-    E --> H[Cancelled]
-```
+| モード | 説明 | 必要条件 |
+|--------|------|----------|
+| カジュアル | 練習マッチ | なし |
+| ランク戦 | 競争モード | レベル10+ |
+| トーナメント | 大会形式 | 招待制 |
+| カスタム | プライベート | ホスト権限 |
 
-- Dynamic skill-based matching
-- Real-time status updates
-- Automatic match validation
-- Performance-based rating adjustments
+## ミッション & 実績システム
 
-## Mission & Achievement System
+### デイリーミッション
 
-A comprehensive progression system that rewards players for their accomplishments.
+- **3段階の目標**
+  - 基本タスク
+  - 中級チャレンジ
+  - エリートミッション
 
-### Mission Types
+- **報酬スケール**
+  - 即時報酬
+  - ボーナス目標
+  - 週間累積
 
-<div class="table-scroll">
+### 実績トラッキング
 
-| Type | Frequency | Rewards | Purpose |
-|------|-----------|---------|----------|
-| Daily | 24 hours | Small rewards | Regular engagement |
-| Weekly | 7 days | Medium rewards | Sustained activity |
-| Special | Event-based | Unique rewards | Community events |
+| カテゴリ | 指標 | 報酬 |
+|----------|------|------|
+| 戦闘 | KD比、勝率 | バッジ、称号 |
+| 収集 | アイテム、NFT | 特別アイテム |
+| 社会 | 友人、取引 | ソーシャルステータス |
+| マスタリー | スキル、レベル | 特別権限 |
 
-</div>
+## ロギングシステム
 
-### Achievement Categories
-- Combat Mastery
-- Economic Achievement
-- Social Engagement
-- Collection Completion
-- Special Events
+### プレイヤーアクティビティ
 
-## Logging System
+- **詳細な記録**
+  - バトルログ
+  - 取引履歴
+  - 実績進捗
 
-Our transparent logging system tracks all important events and transactions.
+- **分析ツール**
+  - パフォーマンス追跡
+  - 統計分析
+  - 改善提案
 
-### Tracked Activities
+### システムモニタリング
 
-<div class="table-scroll">
+| メトリクス | 追跡項目 | 目的 |
+|------------|----------|------|
+| パフォーマンス | レイテンシー、FPS | 最適化 |
+| セキュリティ | 異常検知、不正 | 保護 |
+| 経済 | インフレ率、取引量 | バランス |
+| コミュニティ | アクティブ率、成長 | エンゲージメント |
 
-| Category | Events Tracked | Purpose |
-|----------|---------------|----------|
-| Gameplay | Matches, Stats | Performance Analysis |
-| Economy | Transactions, Trades | Economic Monitoring |
-| Social | Interactions, Friends | Community Health |
-| Progress | Levels, Achievements | Player Development |
+## セキュリティ & パフォーマンス
 
-</div>
+### セキュリティ機能
 
-## Security & Performance
+- **不正防止**
+  - AIチート検知
+  - 行動分析
+  - リアルタイム監視
 
-### Security Measures
-- Administrative controls
-- Upgrade safety protocols
-- Input validation
-- Rate limiting
-- Transaction verification
+- **資産保護**
+  - マルチシグウォレット
+  - 取引確認
+  - 回復メカニズム
 
-### Optimizations
-- Single-canister efficiency
-- Fast data retrieval
-- Memory management
-- Query optimization
+### パフォーマンス最適化
 
----
+| 要素 | 目標値 | 実装 |
+|------|--------|------|
+| レイテンシー | <50ms | エッジサーバー |
+| FPS | 60+ | 動的調整 |
+| 同時接続 | 10,000+ | 負荷分散 |
+| データ同期 | リアルタイム | P2P更新 |
 
-## Conclusion
-Cosmicrafts represents a new paradigm in blockchain gaming maintaining the highest standards of quality, security and performance.
+## 将来の拡張
+
+### 計画された機能
+
+1. **クロスゲーム統合**
+   - 資産の相互運用性
+   - 統一プロフィール
+   - 共有経済
+
+2. **AIシステム**
+   - 動的難易度調整
+   - パーソナライズド体験
+   - 不正検知強化
+
+3. **ソーシャル機能**
+   - ギルドシステム
+   - トーナメント組織
+   - コミュニティイベント
+
+4. **モバイル展開**
+   - クロスプラットフォーム
+   - モバイル最適化
+   - シームレス同期

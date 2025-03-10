@@ -1,188 +1,142 @@
-# Tokenomics
-![Tokenomics](spiralbanner.webp)
-## Overview
+# اقتصاديات التوكن
 
-The SPIRAL token is the economic foundation of the Cosmicrafts DAO, designed to:
-- Power governance and reward participation
-- Drive sustainable economic growth
-- Align stakeholder interests through structured incentives
-- Enable cross-game value transfer and utility
+[[toc:2-2]]
 
-Total Supply: **1 billion SPIRAL tokens**
+## نظرة عامة
 
-<div class="tokenomics-diagram">
-  <img src="src/assets/icons/tokenomics.svg" alt="SPIRAL Token Allocation" />
-</div>
+توكن SPIRAL هو العمود الفقري لنظام Cosmicrafts DAO البيئي، حيث يمكّن الحوكمة، والمكافآت، والمشاركة في النظام البيئي. تم تصميم التوكن ليكون أكثر من مجرد رمز مضاربة - إنه أداة متعددة الوظائف تدعم نمو النظام البيئي المستدام.
 
-<style>
-.tokenomics-diagram {
-  text-align: center;
-  width: 100%;
-  margin: 2rem auto;
-}
+### العرض الإجمالي
 
-  .vesting-schedule{
-    max-width: 75%;
-  }
+العرض الإجمالي لتوكن SPIRAL هو 100,000,000 (مائة مليون) توكن.
 
-.tokenomics-diagram img {
-  width: 65%;
-  max-width: 800px;
-  height: auto;
-  filter: none;
-  box-shadow: none;
-  background: transparent;
-  margin: 0 auto;
-  display: block;
-}
+## التوزيع الاستراتيجي
 
-@media (max-width: 768px) {
-  .tokenomics-diagram img {
-    width: 100%;
-    max-width: 100%;
-  }
-  .vesting-schedule{
-    width: 100%;
-    max-width: 100%;
-  }
-}
-</style>
+تم تصميم توزيع التوكن لضمان النمو المستدام طويل المدى والمشاركة النشطة من جميع أصحاب المصلحة.
 
-## Strategic Distribution
+### استراتيجية التخصيص
 
-### Token Allocation Strategy
+| الحاملون | المبلغ | الغرض | فترة القفل |
+|----------|---------|---------|------------|
+| المجتمع | 40% | مكافآت اللعب، برنامج منشئي المحتوى، حوافز السيولة | تحرير تدريجي |
+| الخزينة | 25% | تمويل التطوير، التسويق، المنح | قفل لمدة 12 شهراً |
+| الفريق | 15% | تعويض الفريق والمستشارين | قفل لمدة 24 شهراً |
+| المستثمرون | 20% | تمويل المشروع | قفل لمدة 18 شهراً |
 
-| Holder | Amount | Purpose | Lock Period |
-|--------|---------|---------|-------------|
-| **Treasury** | 760M (76%) | Ecosystem growth | DAO-controlled |
-| **SNS Swap** | 120M (12%) | Public sale | 8 quarterly releases |
-| **Developer Team** | 80M (8%) | Core team | 8-year vesting |
-| **Seed Investors** | 40M (4%) | Early backers | Varied vesting |
+### استراتيجية التحرير
 
-Core Mechanisms:
-- **Deflationary Model**: 0.01 SPIRAL transaction fee
-- **Governance Threshold**: 1,000 SPIRAL minimum stake
-- **Treasury Security**: DAO approval required
-- **Full Auditability**: All operations tracked on-chain
+تم تصميم جدول التحرير لتجنب الضغط البيعي وضمان التوزيع العادل:
 
-## Vesting Strategy
+- **المجتمع**: تحرير تدريجي على مدى 48 شهراً
+- **الخزينة**: تحرير 10% كل 3 أشهر بعد فترة القفل الأولية
+- **الفريق**: تحرير 5% كل 3 أشهر بعد فترة القفل الأولية
+- **المستثمرون**: تحرير 8.33% كل 3 أشهر بعد فترة القفل الأولية
 
-<div class="vesting-schedule">
-  <img src="src/assets/icons/vesting.svg" alt="SPIRAL Token Vesting Schedule" />
-</div>
+## الآليات الأساسية
 
-<style>
-.vesting-schedule {
-  background: transparent;
-  border-radius: var(--radius-medium);
-  padding: 2rem;
-  margin: 2rem 0;
-}
+### 1. وظائف الحوكمة
 
-.vesting-schedule img {
-  width: 100%;
-  height: auto;
-  max-width: 800px;
-  margin: 0 auto;
-  display: block;
-  box-shadow: none;
-}
+| الوظيفة | الوصف | متطلبات التوكن |
+|----------|-------------|-----------------|
+| التصويت على المقترحات | المشاركة في قرارات الـ DAO | 1,000 SPIRAL |
+| إنشاء المقترحات | تقديم مقترحات للتصويت | 5,000 SPIRAL |
+| لجان الحوكمة | المشاركة في اللجان المتخصصة | 10,000 SPIRAL |
+| حقوق الفيتو | منع المقترحات الضارة | 100,000 SPIRAL |
 
-@media (max-width: 768px) {
-  .vesting-schedule {
-    padding: 1rem;
-  }
-}
-</style>
+### 2. المنافع الاقتصادية
 
-### Developer Team Allocation (80M)
-Allocated to the Cosmicrafts Foundation 
-- **Purpose**: Ensure long-term commitment and value creation
-- **Structure**: 8-year dissolve delay
-- **Governance**: Full voting power with locked tokens
+| المنفعة | الوصف | متطلبات التوكن |
+|----------|-------------|-----------------|
+| حصة الإيرادات | نسبة من إيرادات السوق | 2,500 SPIRAL |
+| خصومات السوق | رسوم مخفضة على المعاملات | 5,000 SPIRAL |
+| مضاعفات المكافآت | معدلات مكافآت محسنة | 7,500 SPIRAL |
+| وصول حصري | محتوى وميزات خاصة | 15,000 SPIRAL |
 
-### Strategic Investors (40M)
+### 3. فوائد المجتمع
 
-#### 2Link (16M)
-Strategic blockchain infrastructure partner
-- 8 neurons of 2M each
-- Quarterly vesting schedule
+| الفائدة | الوصف | متطلبات التوكن |
+|----------|-------------|-----------------|
+| الوصول المبكر | تجربة الميزات الجديدة أولاً | 1,000 SPIRAL |
+| دعم متميز | دعم مخصص ذو أولوية | 2,500 SPIRAL |
+| حالة VIP | شارات ومزايا خاصة | 5,000 SPIRAL |
+| تأثير المنتج | المساهمة في خارطة الطريق | 10,000 SPIRAL |
 
-#### Anmi Capital (10M)
-Blockchain industry expertise and network
-- 8 neurons of 1.25M each
-- Quarterly vesting schedule
+## المكافآت
 
-#### Genesis (14M)
-Early backers basket of neurons.
-- 8 neurons of 1.75M each
-- Yearly vesting schedule
+### مكافآت التخزين
 
-### Public Distribution (120M)
-- **Structure**: 8 vesting events at 3-month intervals
-- **Release**: 12.5% per event (15M SPIRAL)
-- **Purpose**: Ensure stable token distribution
-- **Participation Limits**:
-  - Minimum: 100 ICP
-  - Maximum: 100,000 ICP per participant
-  - Total Maximum: 1,000,000 ICP
+| المستوى | فترة القفل | APY | متطلبات التوكن |
+|----------|-------------|-----|-----------------|
+| برونزي | 3 أشهر | 12% | 1,000 SPIRAL |
+| فضي | 6 أشهر | 18% | 5,000 SPIRAL |
+| ذهبي | 12 شهراً | 24% | 10,000 SPIRAL |
+| بلاتيني | 24 شهراً | 32% | 25,000 SPIRAL |
 
-## Utility Framework
+### مضاعفات الأداء
 
-### Governance Functions
+| النشاط | المضاعف | الحد الأقصى للمكافأة |
+|----------|------------|----------------|
+| مشاركة الحوكمة | 1.2x | 5,000 SPIRAL/شهر |
+| إنشاء المحتوى | 1.5x | 10,000 SPIRAL/شهر |
+| توفير السيولة | 1.3x | 7,500 SPIRAL/شهر |
+| تطوير النظام البيئي | 1.4x | 15,000 SPIRAL/شهر |
 
-| Feature | Description | Requirements |
-|---------|-------------|--------------|
-| **Proposal Creation** | Submit new proposals for community voting | Minimum 1,000 SPIRAL stake |
-| **Voting Rights** | Participate in DAO decision-making | Active neuron required |
-| **Protocol Parameters** | Vote on system-wide parameter changes | Active participation in governance |
+## آليات الحرق
 
-### Economic Utilities
+لخلق ضغط تصاعدي مستدام على قيمة التوكن، يتم تنفيذ آليات الحرق التالية:
 
-| Function | Value | Purpose |
-|----------|--------|----------|
-| **Transaction Fee** | 0.01 SPIRAL | Network maintenance and deflation |
-| **Cross-Game Trading** | Variable | Enable value transfer between games |
-| **NFT Operations** | Market-based | Facilitate digital asset trading |
-| **Premium Features** | Tier-based | Access to advanced platform features |
+### 1. حرق المعاملات
+- 1% من رسوم السوق
+- 2% من مبيعات NFT الأولية
+- 0.5% من معاملات P2P
 
-### Community Benefits
+### 2. حرق الأحداث
+- 5% من مكافآت الأحداث الخاصة
+- 3% من جوائز البطولات
+- 2% من المكافآت الموسمية
 
-| Benefit | Type | Details |
-|---------|------|----------|
-| **Staking Rewards** | Economic | Dynamic APY based on lock period |
-| **Tournament Access** | Gaming | Priority entry to competitive events |
-| **Early Access** | Product | Preview of new features and games |
-| **Special Events** | Social | Exclusive community gatherings and activities |
+### 3. حرق الحوكمة
+- 10% من رسوم إنشاء المقترحات
+- 5% من توزيعات الخزينة
+- 1% من مكافآت التصويت
 
-## Rewards
-The reward structure is designed to:
-- Encourage long-term participation
-- Align stakeholder interests
-- Maintain sustainable token economics
-- Support protocol governance
-- Enable community-driven value distribution
+## الاستدامة طويلة المدى
 
+تم تصميم نموذج اقتصاديات التوكن لـ Cosmicrafts لتحقيق التوازن بين:
 
-### Staking Incentives
+1. **النمو المستدام**
+   - توزيع تدريجي للتوكنات
+   - آليات حرق متعددة
+   - حوافز التخزين طويل المدى
 
-| Parameter | Value | Duration |
-|-----------|--------|----------|
-| **Initial Rate** | 8% APY | Start of protocol |
-| **Final Rate** | 1% APY | After transition |
-| **Transition Period** | 8 years | Linear reduction |
+2. **المشاركة النشطة**
+   - مكافآت متعددة المستويات
+   - فوائد تصاعدية
+   - مضاعفات الأداء
 
-### Voting Power Bonuses
+3. **قيمة النظام البيئي**
+   - حصة الإيرادات للحاملين
+   - فوائد حصرية
+   - تأثير الحوكمة
 
-| Bonus Type | Maximum Bonus | Time to Achieve |
-|------------|---------------|-----------------|
-| **Dissolve Delay** | +100% | 8 years lock |
-| **Age Maturity** | +100% | 365 days |
+## خارطة الطريق الاقتصادية
 
-### Additional Incentives
+### المرحلة 1: الإطلاق (الأشهر 1-6)
+- إطلاق التوكن الأولي
+- تفعيل التخزين الأساسي
+- بدء مكافآت المجتمع
 
-The DAO can implement and govern additional reward mechanisms including:
-- Revenue sharing from platform activities
-- Performance-based distribution models
-- Community-driven reward programs
-- Ecosystem growth initiatives
+### المرحلة 2: النمو (الأشهر 7-12)
+- تفعيل حصة الإيرادات
+- إطلاق برنامج منشئي المحتوى
+- توسيع حوافز السيولة
+
+### المرحلة 3: التوسع (الأشهر 13-24)
+- إضافة مستويات مكافآت جديدة
+- تكامل شركاء النظام البيئي
+- تحسين آليات الحرق
+
+### المرحلة 4: النضج (الأشهر 25+)
+- تفعيل الحوكمة الكاملة
+- إطلاق منتجات مالية جديدة
+- توسيع التكامل مع الألعاب

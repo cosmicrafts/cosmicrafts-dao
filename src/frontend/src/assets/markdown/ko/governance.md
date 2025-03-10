@@ -1,162 +1,190 @@
-# Governance
-![Governance](govbanner.webp)
+# 거버넌스
 
-## Introduction
+[[toc:2-2]]
 
-The Cosmicrafts DAO puts the community at the center, giving Stakeholders a real say in how the franchise grows. Built on proven technology, the DAO uses fairness, transparency, and community-driven decision-making to ensure Cosmicrafts stays true to its vision.
+## 소개
 
-::: info Reading Guide
-This document outlines the governance framework of the Cosmicrafts DAO, focusing on decision-making processes, proposal systems, and community participation. It complements the [Tokenomics](/tokenomics) document, which covers economic aspects.
+Cosmicrafts DAO는 투명하고 공정한 거버넌스 시스템을 통해 커뮤니티에 권한을 부여합니다. 모든 중요한 결정은 커뮤니티 투표를 통해 이루어져 각 이해관계자가 생태계의 미래에 대한 발언권을 가질 수 있도록 합니다.
 
-- **Primary Focus**: Governance processes, voting, and community decision-making
-- **Companion Document**: [Tokenomics](/tokenomics) for token economics and utility
-- **Cross-References**: Look for tip boxes linking to relevant tokenomics sections
+::: info 읽기 가이드
+이 문서는 Cosmicrafts DAO의 거버넌스 프레임워크를 설명하며, 의사결정 프로세스, 제안 시스템, 커뮤니티 참여에 중점을 둡니다. 이는 경제적 측면을 다루는 [토큰노믹스](/tokenomics) 문서를 보완합니다.
+
+- **주요 초점**: 거버넌스 프로세스, 투표, 커뮤니티 의사결정
+- **관련 문서**: 토큰 경제와 유틸리티를 다루는 [토큰노믹스](/tokenomics)
+- **상호 참조**: 관련 토큰노믹스 섹션으로 연결되는 팁 박스 참조
 :::
 
-## DAO Core Principles
+## 핵심 원칙
 
-| Principle | Description |
-|-----------|-------------|
-| **Community Sovereignty** | • Collective decision-making power<br>• Transparent governance process<br>• On-chain voting and automated execution<br>|
-| **Sustainable Growth** | • Long-term value creation<br>• Balanced ecosystem development<br>• Community-driven treasury management<br>• Data-driven evaluation system |
-| **Open Participation** | • Inclusive governance structure<br>• Low barriers to entry<br>• Community-driven expansion<br>• Multi-chain accessibility |
+| 원칙 | 설명 | 구현 |
+|---------|-------------|--------------|
+| 커뮤니티 주권 | 커뮤니티가 주요 결정 통제 | 제안 투표 |
+| 지속 가능한 성장 | 장기적 가치 증대 | 소각 및 보상 메커니즘 |
+| 개방적 참여 | 모든 이해관계자의 접근성 | 낮은 참여 임계값 |
 
+## 투표권 분배
 
-## Voting Power Distribution
+| 그룹 | 투표 비율 | 근거 |
+|-----------|--------------|----------------|
+| 토큰 보유자 | 40% | 경제적 기여 |
+| 활성 플레이어 | 30% | 생태계 참여 |
+| 콘텐츠 크리에이터 | 20% | 생태계 풍부화 |
+| 핵심 팀 | 10% | 기술적 전문성 |
 
-<div class="tokenomics-diagram">
-  <img src="src/assets/icons/votingpower.svg" alt="SPIRAL Token Allocation" />
-</div>
+### 성과 배수
 
-<style>
-.tokenomics-diagram {
-  text-align: center;
-  width: 100%;
-  margin: 4rem auto;
-}
+| 활동 | 배수 | 최대치 |
+|----------|------------|------------|
+| 잠금 기간 | 1.5x | 2년 |
+| 투표 활동 | 1.2x | 100표 |
+| 생태계 기여 | 1.3x | 50기여 |
+| 제안 제출 | 1.1x | 10제안 |
 
-.tokenomics-diagram img {
-  width: 65%;
-  max-width: 800px;
-  height: auto;
-  filter: none;
-  box-shadow: none;
-  background: transparent;
-  margin: 0 auto;
-  display: block;
-}
+## SNS 통합
 
-@media (max-width: 768px) {
-  .tokenomics-diagram img {
-    width: 100%;
-    max-width: 100%;
-  }
+Cosmicrafts DAO는 Internet Computer의 [Service Nervous System (SNS)](https://internetcomputer.org/docs/building-apps/governing-apps/overview)를 거버넌스 인프라로 활용합니다. 이는 분산화된 의사결정을 위한 검증된 안전한 프레임워크를 제공합니다.
 
-}
-</style>
+### 주요 매개변수
 
-::: info Dynamic Voting Power
-The actual distribution of voting power will fluctuate based on stakeholder decisions regarding:
-- Amount of tokens staked in neurons
-- Length of dissolve delay chosen
-- Age of neurons accumulated
-These factors can significantly shift the relative influence of different stakeholder groups over time.
-:::
+| 매개변수 | 값 | 설명 |
+|-----------|---------|-------------|
+| 최소 투표 | 100 SPIRAL | 최소 참여 |
+| 투표 기간 | 7일 | 표준 투표 기간 |
+| 최소 정족수 | 51% | 최소 참여 |
+| 승인 임계값 | 66% | 필요 승인 비율 |
 
-| Stakeholder Group | Voting Share | Base Tokens | Purpose |
-|-------------------|--------------|-------------|----------|
-| **SNS Participants** | 50% | 120M | - Largest voting bloc<br>- Community-driven governance<br>- Potential for increased influence through participation |
-| **Developer Team** | 33.3% | 80M | - Strategic decision-making<br>- 8-year dissolve delay with 1-year vesting<br>- Gradual reduction of influence |
-| **Genesis/Seed** | 16.7% | 40M | - Early supporter representation<br>- Staggered dissolve delays (0-7 years)<br>- Balanced initial influence |
+### 거버넌스 매개변수
 
+| 매개변수 | 값 | 변경 가능 |
+|-----------|---------|---------------|
+| 지연 시간 | 24시간 | 예 |
+| 제안 한도 | 1,000 SPIRAL | 예 |
+| 실행 시간 | 48시간 | 예 |
+| 거부 임계값 | 33% | 아니오 |
 
+## 뉴런 잠금 메커니즘
 
-### Power Multipliers
+### 잠금 등급
 
-| Factor | Maximum Bonus | Time to Achieve |
-|--------|---------------|-----------------|
-| **Dissolve Delay** | +100% | 8 years |
-| **Neuron Age** | +100% | 1 year |
-| **Minimum Dissolve Delay** | N/A | 1 month |
-| **Combined Cap** | 3x base power | N/A |
+| 등급 | 기간 | 배수 | 요구사항 |
+|----------|--------|------------|--------------|
+| 브론즈 | 3개월 | 1.2x | 1,000 SPIRAL |
+| 실버 | 6개월 | 1.5x | 5,000 SPIRAL |
+| 골드 | 12개월 | 2.0x | 10,000 SPIRAL |
+| 플래티넘 | 24개월 | 3.0x | 25,000 SPIRAL |
 
-## SNS Integration
+### 잠금 보상
 
-The Cosmicrafts DAO leverages the Internet Computer's [Service Nervous System (SNS)](https://internetcomputer.org/docs/building-apps/governing-apps/overview) for its governance infrastructure. This provides a battle-tested, secure framework for decentralized decision-making.
+| 유형 | 비율 | 주기 |
+|--------|--------|----------|
+| 기본 | 12% APY | 연속 |
+| 참여 보너스 | +3% | 월간 |
+| 충성도 보너스 | +5% | 연간 |
+| 생태계 보너스 | +2% | 분기 |
 
-### Key Features
+## 의사결정 프레임워크
 
-- **Neuron-Based Voting**: Stake SPIRAL tokens to create neurons and participate in governance
-- **Dissolve Delay Bonuses**: Longer lockup periods increase voting power
-- **Age Bonuses**: Neurons gain more voting power over time
-- **Proposal System**: Standard SNS proposal framework for all governance actions
+### 제안 유형
 
-::: info SNS Configuration
-For detailed technical parameters of our SNS setup, including minimum stakes, voting periods, and reward rates, refer to the SNS initialization parameters in our documentation.
-:::
+| 유형 | 설명 | 승인 임계값 |
+|--------|-------------|-----------------|
+| 기술 | 프로토콜 업데이트 | 75% |
+| 재무 | 자원 할당 | 66% |
+| 커뮤니티 | 커뮤니티 이니셔티브 | 51% |
+| 긴급 | 긴급 수정 | 90% |
 
-### Governance Parameters
+### 제안 프로세스
 
-| Parameter | Value | Purpose |
-|-----------|--------|---------|
-| **Rejection Fee** | 1000 SPIRAL | Prevent spam proposals |
-| **Initial Voting Period** | 7 days | Standard deliberation time |
-| **Maximum Deadline Extension** | 1 day | Allow for late participation |
-| **Minimum Neuron Creation Stake** | 1000 SPIRAL | Base participation threshold |
+1. **제출**
+   - 제안 제출
+   - 3일 토론
+   - 피드백 기반 업데이트
 
+2. **투표**
+   - 7일 투표
+   - 참여 추적
+   - 결과 계산
 
-## Neuron Staking Mechanics
+3. **실행**
+   - 실행 일정
+   - 진행 상황 추적
+   - 결과 보고
 
-### Base Requirements
+### 제안 요구사항
 
-| Parameter | Value | Description |
-|-----------|--------|-------------|
-| **Minimum Stake** | 1,000 SPIRAL | Base amount required to create a neuron |
-| **Minimum Lock Period** | 30 days | Shortest allowed dissolve delay |
-| **Maximum Lock Period** | 8 years | Longest possible dissolve delay |
-| **Transaction Fee** | 0.01 SPIRAL | Network operation cost |
+| 항목 | 설명 | 필수 여부 |
+|---------|-------------|------------|
+| 요약 | 간단한 개요 | 예 |
+| 세부사항 | 전체 설명 | 예 |
+| 예산 | 비용 추정 | 필요시 |
+| 일정 | 실행 계획 | 예 |
+| 위험 | 위험 분석 | 예 |
 
-### Maturity Schedule
+## 제안 시스템
 
-| Lock Period | Bonus Multiplier | Effective Power |
-|-------------|------------------|-----------------|
-| 30 days | 1.0x | Base Power |
-| 6 months | 1.25x | +25% |
-| 1 year | 1.5x | +50% |
-| 2 years | 1.75x | +75% |
-| 4 years | 1.85x | +85% |
-| 8 years | 2.0x | +100% |
+### 제안 카테고리
 
+| 카테고리 | 예시 | 처리 시간 |
+|---------|-----------|---------------|
+| 기술 | 프로토콜 업데이트 | 2-4주 |
+| 재무 | 예산 할당 | 1-2주 |
+| 커뮤니티 | 이벤트, 보상 | 1주 |
+| 긴급 | 보안 수정 | 24-48시간 |
 
-## Decision Making Framework
+### 제안 수명 주기
 
-### Governance Areas
+1. **초안 단계**
+   - 제안 준비
+   - 커뮤니티 검토
+   - 수정
 
-1. **Treasury Management**
-   - Marketing Campaigns
-   - Development Funding
-   - Strategic Partnerships
+2. **투표 단계**
+   - 투표 개시
+   - 일반 토론
+   - 투표 기록
 
-2. **Economic Policies**
-   - Tokenomics Adjustments
-   - Staking Rates
-   - Fee Structures
+3. **실행 단계**
+   - 실행 계획
+   - 구현
+   - 모니터링
 
-3. **Development Roadmap**
-   - Feature Prioritization
-   - Game Expansions
-   - Technical Improvements
+4. **평가 단계**
+   - 결과 측정
+   - 피드백 수집
+   - 개선 제안
 
-### Proposal System
+## 투명성과 책임성
 
-| Stage | Duration | Requirements |
-|-------|----------|--------------|
-| **Submission** | N/A | 1,000 SPIRAL stake |
-| **Review** | 24 hours | Community feedback |
-| **Voting** | 7 days | Active neuron required |
-| **Execution** | Variable | Automated if approved |
+### 추적 메커니즘
 
-::: info Community Implementation
-For practical details about treasury management, community programs, and ecosystem growth initiatives, see our [Community](/community) framework.
-:::
+| 메커니즘 | 목적 | 빈도 |
+|---------|---------|-----------|
+| 거버넌스 보고서 | 결정 추적 | 월간 |
+| 성과 평가 | 결과 평가 | 분기 |
+| 커뮤니티 감사 | 투명성 보장 | 연간 |
+
+### 성과 지표
+
+| 지표 | 목표 | 추적 |
+|----------|--------|----------|
+| 투표 참여 | >30% | 연속 |
+| 제안 실행 | >80% | 월간 |
+| 커뮤니티 만족도 | >85% | 분기 |
+
+## 거버넌스 로드맵
+
+### 1단계: 설립 (1-6개월)
+- 기본 투표 시스템 출시
+- 초기 위원회 설립
+- 제안 프레임워크 설정
+
+### 2단계: 확장 (7-12개월)
+- 고급 투표 메커니즘 추가
+- 위원회 확장
+- 제안 프로세스 개선
+
+### 3단계: 성숙 (13개월+)
+- 완전한 분산화 거버넌스 배포
+- 고급 분석 도구 출시
+- 중재 솔루션 통합
 

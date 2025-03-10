@@ -325,5 +325,42 @@
     "9": "十月",
     "10": "十一月",
     "11": "十二月"
+  },
+  "whitepaper": {
+    "title": "白皮书",
+    "navigation": {
+      "documentation": "文档",
+      "previous": "上一页",
+      "next": "下一页",
+      "chapters": "章节",
+      "mobileTitle": "白皮书章节",
+      "mobileSubtitle": "浏览章节"
+    },
+    "sections": {
+      "introduction": {
+        "title": "简介",
+        "description": "Cosmicrafts DAO的概述和愿景"
+      },
+      "tokenomics": {
+        "title": "代币经济",
+        "description": "代币分配和经济机制"
+      },
+      "governance": {
+        "title": "治理",
+        "description": "社区主导的决策系统"
+      },
+      "community": {
+        "title": "社区",
+        "description": "生态系统发展和参与框架"
+      },
+      "architecture": {
+        "title": "架构",
+        "description": "技术基础设施详解"
+      },
+      "core-features": {
+        "title": "核心功能",
+        "description": "游戏玩法和系统功能"
+      }
+    }
   }
 }

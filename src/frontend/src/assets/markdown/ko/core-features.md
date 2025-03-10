@@ -1,161 +1,158 @@
-# Core Features
+# 핵심 기능
 
-![Core Features](corebanner.webp)
+[[toc:2-2]]
 
+## 개요
 
-## Overview
+Cosmicrafts는 매력적인 게임플레이와 혁신적인 블록체인 메커니즘을 결합하여 독특한 게임 경험을 만듭니다. 우리의 핵심 기능은 일반 게이머와 암호화폐 사용자 모두를 위해 설계되었습니다.
 
-At its core, **Cosmicrafts DAO** implements a unified canister that handles all core game functionality through several integrated systems. Our architecture ensures seamless interaction between different components while maintaining the security and transparency of blockchain technology.
+## 플레이어 시스템
 
----
+### 프로필 및 진행
 
-## Player System
+| 구성 요소 | 설명 | 저장소 |
+|------------|-------------|----------|
+| 기본 정보 | 이름, 아바타, 소개 | 온체인 |
+| 통계 | 점수, 업적, 순위 | 온체인 |
+| 설정 | 환경 설정, 커스터마이징 | 오프체인 |
 
-The Player System forms the backbone of user interaction within Cosmicrafts, managing everything from basic profiles to complex social interactions.
+### 레벨 시스템
 
-### Profile Management
+| 레벨 | XP 요구량 | 보상 |
+|----------|--------------|----------|
+| 신입 (1-10) | 1,000 XP | 기본 자원 |
+| 베테랑 (11-30) | 5,000 XP | 특별 장비 |
+| 엘리트 (31-50) | 15,000 XP | 독점 NFT |
+| 레전드 (51+) | 50,000 XP | SPIRAL 토큰 |
 
-<div class="table-scroll">
+## 자산 시스템
 
-| Feature | Description | Player Benefit |
-|---------|-------------|----------------|
-| Profile Creation | Unique IDs with customizable usernames and avatars | Personal identity in the metaverse |
-| Level System | Experience-based progression with rewards | Clear progression path |
-| Stats Tracking | Comprehensive performance metrics | Performance insights |
-| Title System | Unlockable titles showing achievements | Status recognition |
+### 진화형 NFT
 
-</div>
+Cosmicrafts의 NFT 자산은 시간이 지남에 따라 발전할 수 있습니다:
 
-### Social Features
+| 속성 | 메커니즘 | 영향 |
+|------------|------------|----------|
+| 경험치 | 사용을 통한 축적 | 능력 향상 |
+| 희귀도 | 이력 기반 | 가치 증가 |
+| 특성 | 게임플레이를 통한 해금 | 새로운 능력 |
 
-Players can build their network through:
-- Friend requests and management
-- Privacy settings control
-- Real-time notifications
-- Blocked user management
-- Social activity tracking
+### 제작 및 업그레이드
 
-## Asset System
+| 활동 | 요구사항 | 결과 |
+|----------|--------------|---------|
+| 제작 | 자원 + 레시피 | 새로운 NFT |
+| 업그레이드 | NFT + 재료 | 속성 개선 |
+| 합성 | 다수의 NFT | 고급 NFT |
 
-Our asset system leverages the ICRC-7 standard to provide true ownership and interoperability.
+## 경제 시스템
 
-### NFT Categories
+### 게임 내 자원
 
-```mermaid
-graph LR
-    A[NFT Types] --> B[Soul NFTs]
-    A --> C[Game Units]
-    A --> D[Cosmetics]
-    A --> E[Rewards]
-    
-    B --> B1[Progress Tracking]
-    B --> B2[Achievement Display]
-    
-    C --> C1[Spaceships]
-    C --> C2[Characters]
-    C --> C3[Combat Units]
-    
-    D --> D1[Avatars]
-    D --> D2[Skins]
-    
-    E --> E1[Trophies]
-    E --> E2[Special Items]
-```
+| 종류 | 획득 | 사용 |
+|--------|------------|---------|
+| 에너지 | 시간에 따른 재생 | 게임 내 행동 |
+| 재료 | 게임 내 수집 | 제작 및 업그레이드 |
+| 토큰 | 게임플레이 보상 | 거래 및 거버넌스 |
 
-## Economy System
+### P2P 거래
 
-Our dual-token economy creates a balanced ecosystem for both free-to-play and premium players.
+| 기능 | 설명 | 수수료 |
+|----------|-------------|------|
+| 직접 거래 | 플레이어 간 거래 | 1% |
+| 경매 | 입찰 및 경매 | 2% |
+| 대여 | NFT 자산 대여 | 3% |
 
-### Token Structure
+## 매칭 시스템
 
-<div class="table-scroll">
+### 랭킹 및 ELO
 
-| Token | Purpose | Acquisition | Usage |
-|-------|---------|-------------|--------|
-| Spiral | Governance & Premium | Purchase/Staking | Voting, Premium Features |
-| Stardust | In-game Currency | Gameplay Rewards | Basic Features, Crafting |
+| 랭크 | ELO | 보상 |
+|----------|-----|-------------|
+| 브론즈 | 0-1000 | 기본 |
+| 실버 | 1001-2000 | 고급 |
+| 골드 | 2001-3000 | 프리미엄 |
+| 플래티넘 | 3000+ | 독점 |
 
-</div>
+### 게임 모드
 
-## Matchmaking System
+| 모드 | 설명 | 보상 |
+|--------|-------------|----------|
+| 일반 | 자유 플레이 | 낮음 |
+| 랭크 | 경쟁 매치 | 중간 |
+| 토너먼트 | 특별 이벤트 | 높음 |
 
-Our matchmaking system ensures fair and engaging gameplay through sophisticated player matching.
+## 미션 및 업적 시스템
 
-### Key Features
+### 일일 미션
 
-```mermaid
-graph TD
-    A[Matchmaking] --> B[Player Pool]
-    B --> C[ELO Matching]
-    C --> D[Match Creation]
-    D --> E[Status Tracking]
-    
-    E --> F[In Progress]
-    E --> G[Completed]
-    E --> H[Cancelled]
-```
+| 난이도 | 요구사항 | 보상 |
+|--------|--------------|----------|
+| 쉬움 | 15분 플레이 | 50 XP |
+| 보통 | 3회 승리 | 100 XP |
+| 어려움 | 10개 NFT 업그레이드 | 200 XP |
 
-- Dynamic skill-based matching
-- Real-time status updates
-- Automatic match validation
-- Performance-based rating adjustments
+### 업적
 
-## Mission & Achievement System
+| 등급 | 요구사항 | 보상 |
+|----------|--------------|----------|
+| 브론즈 | 기본 완료 | 배지 |
+| 실버 | 중급 도전 | 토큰 |
+| 골드 | 어려운 업적 | NFT |
+| 플래티넘 | 특별 업적 | 독점 보상 |
 
-A comprehensive progression system that rewards players for their accomplishments.
+## 로깅 시스템
 
-### Mission Types
+### 활동 추적
 
-<div class="table-scroll">
+| 데이터 | 저장소 | 목적 |
+|---------|----------|---------|
+| 게임플레이 | 오프체인 | 분석 |
+| 거래 | 온체인 | 투명성 |
+| 업적 | 하이브리드 | 검증 |
 
-| Type | Frequency | Rewards | Purpose |
-|------|-----------|---------|----------|
-| Daily | 24 hours | Small rewards | Regular engagement |
-| Weekly | 7 days | Medium rewards | Sustained activity |
-| Special | Event-based | Unique rewards | Community events |
+### 분석
 
-</div>
+| 지표 | 추적 | 용도 |
+|----------|----------|---------|
+| 상호작용 | 일간 | 개선 |
+| 성능 | 주간 | 밸런싱 |
+| 경제 | 월간 | 조정 |
 
-### Achievement Categories
-- Combat Mastery
-- Economic Achievement
-- Social Engagement
-- Collection Completion
-- Special Events
+## 보안 및 성능
 
-## Logging System
+### 부정 방지
 
-Our transparent logging system tracks all important events and transactions.
+| 조치 | 대상 | 방법 |
+|----------|--------|----------|
+| 인증 | 봇 | 캡차 |
+| 감시 | 해킹 | ML/AI |
+| 탐지 | 악용 | 휴리스틱 |
 
-### Tracked Activities
+### 최적화
 
-<div class="table-scroll">
+| 영역 | 목표 | 방법 |
+|----------|--------|----------|
+| 클라이언트 | <50ms 지연 | 캐싱 |
+| 서버 | >1000 TPS | 샤딩 |
+| 네트워크 | 99.9% 가동률 | CDN |
 
-| Category | Events Tracked | Purpose |
-|----------|---------------|----------|
-| Gameplay | Matches, Stats | Performance Analysis |
-| Economy | Transactions, Trades | Economic Monitoring |
-| Social | Interactions, Friends | Community Health |
-| Progress | Levels, Achievements | Player Development |
+## 기능 로드맵
 
-</div>
+### 1단계: 기반 (2024년 1-2분기)
+- 기본 플레이어 시스템
+- 단순 NFT
+- P2P 거래
+- 일일 미션
 
-## Security & Performance
+### 2단계: 확장 (2024년 3-4분기)
+- 진화형 NFT
+- 토너먼트
+- 자산 대여
+- 고급 분석
 
-### Security Measures
-- Administrative controls
-- Upgrade safety protocols
-- Input validation
-- Rate limiting
-- Transaction verification
-
-### Optimizations
-- Single-canister efficiency
-- Fast data retrieval
-- Memory management
-- Query optimization
-
----
-
-## Conclusion
-Cosmicrafts represents a new paradigm in blockchain gaming maintaining the highest standards of quality, security and performance.
+### 3단계: 고도화 (2025년+)
+- 게임플레이 내 AI/ML
+- DAO 통합
+- 커뮤니티 도구
+- 규모 최적화

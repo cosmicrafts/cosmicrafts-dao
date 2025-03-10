@@ -1,161 +1,173 @@
-# Core Features
+# الميزات الأساسية
 
-![Core Features](corebanner.webp)
+[[toc:2-2]]
 
+## نظرة عامة
 
-## Overview
+تقدم Cosmicrafts مجموعة شاملة من الميزات المصممة لتوفير تجربة لعب غامرة وآمنة. تم بناء كل ميزة مع التركيز على الأداء والأمان وقابلية التطوير.
 
-At its core, **Cosmicrafts DAO** implements a unified canister that handles all core game functionality through several integrated systems. Our architecture ensures seamless interaction between different components while maintaining the security and transparency of blockchain technology.
+## نظام اللاعبين
 
----
+### الملفات الشخصية
 
-## Player System
+| العنصر | الوصف | التخصيص |
+|---------|-------------|--------------|
+| الهوية | معرف فريد على البلوكتشين | ثابت |
+| الأفاتار | تمثيل رقمي | قابل للتخصيص |
+| الإحصائيات | سجل الأداء | تحديث تلقائي |
+| الإنجازات | العلامات المكتسبة | قابل للعرض |
 
-The Player System forms the backbone of user interaction within Cosmicrafts, managing everything from basic profiles to complex social interactions.
+### التقدم
 
-### Profile Management
+| المستوى | المتطلبات | المكافآت |
+|----------|--------------|----------|
+| مبتدئ | 0-100 نقطة | وصول أساسي |
+| متوسط | 101-500 نقطة | ميزات إضافية |
+| متقدم | 501-1000 نقطة | محتوى حصري |
+| خبير | 1000+ نقطة | مكافآت خاصة |
 
-<div class="table-scroll">
+## نظام الأصول
 
-| Feature | Description | Player Benefit |
-|---------|-------------|----------------|
-| Profile Creation | Unique IDs with customizable usernames and avatars | Personal identity in the metaverse |
-| Level System | Experience-based progression with rewards | Clear progression path |
-| Stats Tracking | Comprehensive performance metrics | Performance insights |
-| Title System | Unlockable titles showing achievements | Status recognition |
+### NFTs
 
-</div>
+| النوع | الخصائص | القدرات |
+|--------|------------|------------|
+| الشخصيات | قابلة للتطوير | قابلة للتخصيص |
+| الأسلحة | قابلة للترقية | قابلة للتداول |
+| المركبات | قابلة للتعديل | قابلة للاستخدام |
+| العناصر | متنوعة | قابلة للدمج |
 
-### Social Features
+### التطور
 
-Players can build their network through:
-- Friend requests and management
-- Privacy settings control
-- Real-time notifications
-- Blocked user management
-- Social activity tracking
+1. **اكتساب الخبرة**
+   - من خلال الاستخدام
+   - من خلال المعارك
+   - من خلال المهام
 
-## Asset System
+2. **الترقيات**
+   - تحسين القدرات
+   - إضافة ميزات
+   - تعزيز القوة
 
-Our asset system leverages the ICRC-7 standard to provide true ownership and interoperability.
+3. **التخصيص**
+   - تغيير المظهر
+   - تعديل الخصائص
+   - إضافة العناصر
 
-### NFT Categories
+## النظام الاقتصادي
 
-```mermaid
-graph LR
-    A[NFT Types] --> B[Soul NFTs]
-    A --> C[Game Units]
-    A --> D[Cosmetics]
-    A --> E[Rewards]
-    
-    B --> B1[Progress Tracking]
-    B --> B2[Achievement Display]
-    
-    C --> C1[Spaceships]
-    C --> C2[Characters]
-    C --> C3[Combat Units]
-    
-    D --> D1[Avatars]
-    D --> D2[Skins]
-    
-    E --> E1[Trophies]
-    E --> E2[Special Items]
-```
+### العملات
 
-## Economy System
+| العملة | الاستخدام | الحصول عليها |
+|---------|-----------|--------------|
+| SPIRAL | عملة الحوكمة | التداول، المكافآت |
+| الائتمانات | عملة اللعبة | اللعب، المهام |
+| الجواهر | عناصر نادرة | الأحداث، الإنجازات |
 
-Our dual-token economy creates a balanced ecosystem for both free-to-play and premium players.
+### التداول
 
-### Token Structure
+| النوع | الرسوم | القيود |
+|--------|--------|----------|
+| P2P | 1% | لا يوجد |
+| السوق | 2% | حد أدنى |
+| المزادات | 3% | وقت محدد |
 
-<div class="table-scroll">
+## نظام المطابقة
 
-| Token | Purpose | Acquisition | Usage |
-|-------|---------|-------------|--------|
-| Spiral | Governance & Premium | Purchase/Staking | Voting, Premium Features |
-| Stardust | In-game Currency | Gameplay Rewards | Basic Features, Crafting |
+### خوارزميات المطابقة
 
-</div>
+| النوع | المعايير | الوقت |
+|--------|-----------|--------|
+| عادي | مستوى المهارة | >30 ثانية |
+| تنافسي | التصنيف | >60 ثانية |
+| مخصص | محددة | فوري |
 
-## Matchmaking System
+### التصنيف
 
-Our matchmaking system ensures fair and engaging gameplay through sophisticated player matching.
+| المستوى | النقاط | المكافآت |
+|----------|--------|----------|
+| برونزي | 0-1000 | أساسية |
+| فضي | 1001-2000 | محسنة |
+| ذهبي | 2001-3000 | متقدمة |
+| نخبة | 3000+ | حصرية |
 
-### Key Features
+## نظام المهام والإنجازات
 
-```mermaid
-graph TD
-    A[Matchmaking] --> B[Player Pool]
-    B --> C[ELO Matching]
-    C --> D[Match Creation]
-    D --> E[Status Tracking]
-    
-    E --> F[In Progress]
-    E --> G[Completed]
-    E --> H[Cancelled]
-```
+### المهام
 
-- Dynamic skill-based matching
-- Real-time status updates
-- Automatic match validation
-- Performance-based rating adjustments
+| النوع | المكافآت | المدة |
+|--------|----------|--------|
+| يومية | صغيرة | 24 ساعة |
+| أسبوعية | متوسطة | 7 أيام |
+| موسمية | كبيرة | 90 يوم |
 
-## Mission & Achievement System
+### الإنجازات
 
-A comprehensive progression system that rewards players for their accomplishments.
+| المستوى | المتطلبات | المكافآت |
+|----------|--------------|----------|
+| عادي | سهلة | رمزية |
+| نادر | متوسطة | قيمة |
+| أسطوري | صعبة | حصرية |
+| سري | خاصة | فريدة |
 
-### Mission Types
+## نظام التسجيل
 
-<div class="table-scroll">
+### تسجيل الأحداث
 
-| Type | Frequency | Rewards | Purpose |
-|------|-----------|---------|----------|
-| Daily | 24 hours | Small rewards | Regular engagement |
-| Weekly | 7 days | Medium rewards | Sustained activity |
-| Special | Event-based | Unique rewards | Community events |
+| الحدث | البيانات | الاحتفاظ |
+|--------|----------|----------|
+| المعاملات | كاملة | دائم |
+| المباريات | ملخص | 90 يوم |
+| الدردشة | محدودة | 30 يوم |
 
-</div>
+### التحليلات
 
-### Achievement Categories
-- Combat Mastery
-- Economic Achievement
-- Social Engagement
-- Collection Completion
-- Special Events
+| النوع | الغرض | التحديث |
+|--------|---------|----------|
+| اللاعب | الأداء | فوري |
+| النظام | الصحة | مستمر |
+| الاقتصاد | التوازن | يومي |
 
-## Logging System
+## الأمان والأداء
 
-Our transparent logging system tracks all important events and transactions.
+### تدابير الأمان
 
-### Tracked Activities
+1. **حماية الحساب**
+   - مصادقة متعددة العوامل
+   - مراقبة النشاط
+   - استعادة الحساب
 
-<div class="table-scroll">
+2. **أمان المعاملات**
+   - توقيع رقمي
+   - تشفير البيانات
+   - تأكيد متعدد
 
-| Category | Events Tracked | Purpose |
-|----------|---------------|----------|
-| Gameplay | Matches, Stats | Performance Analysis |
-| Economy | Transactions, Trades | Economic Monitoring |
-| Social | Interactions, Friends | Community Health |
-| Progress | Levels, Achievements | Player Development |
+3. **حماية النظام**
+   - مراقبة مستمرة
+   - تحديثات أمنية
+   - نسخ احتياطي
 
-</div>
+### تحسينات الأداء
 
-## Security & Performance
+| المجال | الهدف | التنفيذ |
+|---------|--------|-------------|
+| التأخير | <100ms | تحسين الشبكة |
+| الإطارات | 60fps | تحسين الرسومات |
+| التحميل | <3s | تخزين مؤقت |
 
-### Security Measures
-- Administrative controls
-- Upgrade safety protocols
-- Input validation
-- Rate limiting
-- Transaction verification
+## خارطة طريق الميزات
 
-### Optimizations
-- Single-canister efficiency
-- Fast data retrieval
-- Memory management
-- Query optimization
+### المرحلة 1: الأساسيات (الأشهر 1-3)
+- نظام اللاعبين الأساسي
+- التداول البسيط
+- المطابقة الأساسية
 
----
+### المرحلة 2: التوسع (الأشهر 4-6)
+- نظام NFT متقدم
+- مطابقة تنافسية
+- نظام إنجازات شامل
 
-## Conclusion
-Cosmicrafts represents a new paradigm in blockchain gaming maintaining the highest standards of quality, security and performance.
+### المرحلة 3: التحسين (الأشهر 7+)
+- اقتصاد متقدم
+- أحداث خاصة
+- ميزات اجتماعية

@@ -1,95 +1,92 @@
-# Introduction
+# はじめに
 
-![Executive Summary](executivesummary.webp)
+![エグゼクティブサマリー](executivesummary.webp)
 
 [[toc:2-2]]
 
-**Cosmicrafts DAO** is pioneering the gaming industry through Web3 technology, creating the first fully on-chain gaming franchise with real ownership economics. In development since 2016 and built entirely on the [Internet Computer](https://internetcomputer.org) since 2021, we've consistently advanced our vision of blockchain gaming without the limitations that have held back previous Web3 ventures.
+**Cosmicrafts DAO**は、Web3技術を通じてゲーム業界の先駆者となり、真の所有権経済を備えた初の完全オンチェーンゲームフランチャイズを創造しています。2016年から開発を開始し、2021年からは[Internet Computer](https://internetcomputer.org)上で完全に構築され、これまでのWeb3プロジェクトを制限してきた障壁を克服したブロックチェーンゲームのビジョンを一貫して推進しています。
 
-> This isn't all about funding development anymore; it's about driving adoption and scaling up. The game is already built, the infrastructure is solid, and the framework is in place.
+> もはや開発資金調達だけの話ではありません。今は採用と拡大が焦点です。ゲームは既に構築され、インフラは安定し、フレームワークは整っています。
 
-## The Opportunity
+## 機会
 
-While traditional gaming extracts value from players, Cosmicrafts:
+従来のゲームがプレイヤーから価値を抽出する一方で、Cosmicraftsは以下を提供します：
 
-- **Creates true digital ownership** for in-game assets
-- **Transforms players into stakeholders** with governance rights and economic benefits
-- **Delivers quality gameplay** that appeals to mainstream and crypto-native audiences alike
+- ゲーム内資産に対する**真のデジタル所有権**
+- **プレイヤーをステークホルダーに変換**し、ガバナンス権限と経済的利益を提供
+- 一般ユーザーと暗号資産ユーザーの両方を引きつける**高品質なゲームプレイ体験**
 
-### Challenges We're Solving
+### 私たちが解決する課題
 
-1. **Traditional Gaming Limitations**
-   - Value flows one-way from players to publishers
-   - Players have no ownership of their digital assets
-   - No say in franchise direction despite massive investment of time and money
+1. **従来のゲームの限界**
+   - プレイヤーからパブリッシャーへの一方的な価値の流れ
+   - プレイヤーは自身のデジタル資産に対する所有権を持たない
+   - 多大な時間と資金を投資しても、ブランドの方向性に発言権がない
 
-2. **Web3 Gaming Failures**
-   - Focus on speculative trading over enjoyable gameplay
-   - Technical barriers that alienate mainstream players
-   - Poor-quality products that fail to deliver on promises
+2. **Web3ゲームの失敗**
+   - 楽しいゲームプレイよりも投機的取引に重点
+   - 技術的障壁による一般プレイヤーの疎外
+   - 約束を果たせない低品質な製品
 
-## Our Traction
+## 私たちの牽引力
 
-Cosmicrafts has built a solid foundation with measurable achievements since inception:
+Cosmicraftsは設立以来、測定可能な成果を通じて堅固な基盤を構築してきました：
 
-### Proven Track Record
-- **Enduring Presence**: [8+ years of continuous development](https://drive.google.com/drive/folders/0B88rGI6X8bgYTFdTblVGcG81bmc?resourcekey=0-CB6fdqNSdQAnHCgAzEV7vg&usp=sharing), surviving 2 major market cycles
-- **DFINITY Grant Recipient**: [Official grant project](https://dfinity.org/grants/) from 2021-2024
-- **Supernova Hackathon Winner**: Voted as the top ICP [Community Choice Award!](https://medium.com/dfinity/cosmicrafts-wins-the-supernova-hackathon-community-choice-award-c9ed27e3bd80)
-- **NFT Success**: [Genesis collection](https://funded.app/projects/cosmicrafts-9388300) sold out in 47 seconds, [airdropped 17,664 NFTs](https://nftanvil.com/collections) to the community.
-- **10,000+ Beta Testers**: [28-minute average session times](https://cusyh-iyaaa-aaaah-qcpba-cai.raw.ic0.app) recorded (42% higher than industry average)
-- **Community Growth**: [6,000+ Discord members](https://discord.gg/cosmicrafts-884272584491941888), [18,000+ X followers](https://x.com/cosmicrafts)
-- **Multiple Platforms**: Featured on [Epic Games](https://store.epicgames.com/en-US/p/cosmicrafts-499a8f) and [itch.io](https://ohsalmeron.itch.io/cosmicrafts)
+### 実績の証明
+- **持続的な存在感**: [8年以上の継続的な開発](https://drive.google.com/drive/folders/0B88rGI6X8bgYTFdTblVGcG81bmc?resourcekey=0-CB6fdqNSdQAnHCgAzEV7vg&usp=sharing)、2つの主要な市場サイクルを乗り越える
+- **DFINITY助成金受賞**: 2021-2024年の[公式助成金プロジェクト](https://dfinity.org/grants/)
+- **Supernovaハッカソン優勝**: [最高のICPコミュニティチョイス賞](https://medium.com/dfinity/cosmicrafts-wins-the-supernova-hackathon-community-choice-award-c9ed27e3bd80)を受賞！
+- **NFTの成功**: [ジェネシスコレクション](https://funded.app/projects/cosmicrafts-9388300)が47秒で完売、[17,664 NFTをエアドロップ](https://nftanvil.com/collections)でコミュニティに配布
+- **10,000+ベータテスター**: [平均セッション時間28分](https://cusyh-iyaaa-aaaah-qcpba-cai.raw.ic0.app)を記録（業界平均より42%高い）
+- **コミュニティ成長**: [Discord 6,000+メンバー](https://discord.gg/cosmicrafts-884272584491941888)、[Xで18,000+フォロワー](https://x.com/cosmicrafts)
+- **マルチプラットフォーム**: [Epic Games](https://store.epicgames.com/en-US/p/cosmicrafts-499a8f)と[itch.io](https://ohsalmeron.itch.io/cosmicrafts)で利用可能
 
-### Strategic Positioning
-- **Ecosystem Partnerships**: [50+ collaborations](https://x.com/search?q=cosmicrafts&src=typed_querys) with Web3 projects
-- **Technical Infrastructure**: [1.2 million+ on-chain transactions](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai) with 99.97% uptime
-- **Media Recognition**: Featured in multiple publications including [Binance](https://www.binance.com/en/square/post/4810541428922), [ICP Lab 5.0](https://x.com/dfinity/status/1702618623989461307), with regular [updates on Medium](https://cosmicrafts.medium.com/)
+### 戦略的ポジショニング
+- **エコシステム協力**: Web3プロジェクトとの[50+パートナーシップ](https://x.com/search?q=cosmicrafts&src=typed_querys)
+- **技術インフラ**: [120万+オンチェーントランザクション](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai)、99.97%稼働率
+- **メディア認知**: [Binance](https://www.binance.com/en/square/post/4810541428922)、[ICP Lab 5.0](https://x.com/dfinity/status/1702618623989461307)などで紹介、[Medium](https://cosmicrafts.medium.com/)で定期的な更新
 
+## 価値提案
 
+### 1. 完成した製品 & 実証済み技術
 
+製品構築のための資金を求める多くのWeb3プロジェクトとは異なり、[Cosmicraftsは既に構築されプレイ可能](https://play.cosmicrafts.com)です。あなたの参加は開発の不確実性ではなく、成長と採用を直接的に推進します。
 
-## Value Proposition
+### 2. 複数の価値メカニズム
 
-### 1. Complete Product & Proven Technology
+SPIRALトークン保有者として、以下の恩恵を受けられます：
 
-Unlike most Web3 projects seeking funding to build a product, Cosmicrafts is [already built and playable](https://play.cosmicrafts.com). Your participation directly fuels growth and adoption, not development uncertainty.
+- **直接参加**
+  - **ステーキング**: トークンをロックして[パッシブインカム獲得](/whitepaper#tokenomics#rewards)
+  - **ガバナンス**: 投票を通じて[DAOの将来の方向性を決定](/whitepaper#governance)
+  - **財務**: [戦略的資源配分](/whitepaper#community#treasury-management)の管理
 
-### 2. Multiple Value Mechanisms
+- **エコシステム参加**
+  - **マーケットプレイス**: 他のプレイヤーと[資産取引](/whitepaper#community#marketplace)
+  - **ゲーム内経済**: [ゲーム経済に参加](/whitepaper#core-features)
+  - **資産ユーティリティ**: [複数のゲームで資産を使用](/whitepaper#architecture#core-technical-design)
 
-As a Spiral token holder, you benefit from:
+### 3. 独自の利点
 
-- **Direct Participation**
-  - **Staking**: [Earn passive income](/whitepaper#tokenomics#rewards) by locking tokens
-  - **Governance**: [Direct the DAO's future](/whitepaper#governance) through voting
-  - **Treasury**: Strategic [resource allocation](/whitepaper#community#treasury-management) management
-
-- **Ecosystem Engagement**
-  - **Marketplace**: [Trade assets](/whitepaper#community#marketplace) with other players
-  - **In-game Economy**: [Participate in the game economy](/whitepaper#core-features)
-  - **Asset Utility**: [Use assets across multiple games](/whitepaper#architecture#core-technical-design)
-
-### 3. Unique Advantages
-
-- **No Blockchain Complexity**: [Players enjoy Web3 benefits](/whitepaper#architecture#no-gas-fees) without technical barriers
-- **Evolving Assets**: [NFTs that gain experience](/whitepaper#core-features#nfts) and history through gameplay
-- **Deflationary Economics**: [Token burn mechanics](/whitepaper#tokenomics#burn-mechanisms) create sustainable value
-- **Strategic Growth Focus**: DAO resources directed to [user acquisition and expansion](/whitepaper#community)
+- **ブロックチェーンの複雑さを排除**: [技術的障壁なしでWeb3の恩恵を享受するプレイヤー](/whitepaper#architecture#no-gas-fees)
+- **進化する資産**: ゲームプレイを通じて[経験と履歴を蓄積するNFT](/whitepaper#core-features#nfts)
+- **デフレ経済**: [トークン焼却メカニズム](/whitepaper#tokenomics#burn-mechanisms)による持続可能な価値創造
+- **戦略的成長重視**: [ユーザー獲得と拡大](/whitepaper#community)に焦点を当てたDAO資源
 
 ---
 
-This whitepaper details the Cosmicrafts DAO ecosystem, from technical architecture to tokenomics. Explore how your participation can help redefine gaming through true digital ownership.
+このホワイトペーパーは、技術アーキテクチャからトークンエコノミクスまで、Cosmicrafts DAOエコシステムを詳細に説明します。あなたの参加がどのように真のデジタル所有権を通じてゲームを再定義できるかを探ってください。
 
-## Reading Path
+## 読書ガイド
 
-For stakeholders looking to understand the opportunity quickly, we recommend focusing on:
+機会を素早く理解したいステークホルダーには、以下に焦点を当てることをお勧めします：
 
-1. [**Introduction**](/introduction) - Overview and value proposition
-2. [**Tokenomics**](/tokenomics) - Token distribution, utility, and value drivers
-3. [**Governance**](/governance) - Stakeholder control and decision-making mechanisms
+1. [**はじめに**](/introduction) - 概要と価値提案
+2. [**トークンノミクス**](/tokenomics) - トークン分配、ユーティリティ、価値ドライバー
+3. [**ガバナンス**](/governance) - ステークホルダーコントロールと意思決定メカニズム
 
-For those interested in a deeper technical understanding:
+より深い技術的理解を求める方々には：
 
-4. [**Community**](/community) - Growth strategies and engagement plans
-5. [**Architecture**](/architecture) - Technical infrastructure details
-6. [**Core Features**](/core-features) - Product capabilities and gameplay mechanics
+4. [**コミュニティ**](/community) - 成長戦略と参加計画
+5. [**アーキテクチャ**](/architecture) - 技術インフラの詳細
+6. [**主要機能**](/core-features) - 製品機能とゲームプレイメカニズム

@@ -1,235 +1,235 @@
 {
   "login": {
-  "connectWith": "メタバースへようこそ",
-  "internetIdentity": "Internet Identityでログイン",
-  "google": "Googleでログイン",
-  "guestAccount": "ゲストとして続行",
-  "signInClarification": "すでにSeedをお持ちですか？",
-  "loginWith": "{method}でログイン",
-  "enterSeedPhrase": "Seedフレーズを入力",
-  "accountRecovery": "アカウントを復元",
-  "recoverAccount": "このSeedでログイン",
-  "seedValid": "Seedフレーズが有効のようです！",
-  "invalidSeedPhrase": "Seedフレーズが無効です。",
-  "invalidSeedLength": "Seedフレーズは正確に12単語で構成される必要があります。",
-  "guestLoginError": "問題が発生しました！",
-  "recoverySuccess": "アカウント復元に成功しました！",
-  "recovering": "復元中..."
-},
-"register": {
-  "usernameLabel": "ユーザー名:",
-  "usernamePlaceholder": "最大12文字",
-  "referralCodeLabel": "紹介コード:",
-  "referralCodePlaceholder": "(任意)",
-  "noReferralCode": "コードがありませんか？",
-  "getReferralCode": "ここで取得！",
-  "acceptTerms": "同意する",
-  "privacyPolicy": "プライバシーポリシー",
-  "termsOfService": "利用規約",
-  "and": "と",
-  "continueButton": "続行",
-  "successMessage": "ようこそ、{username}！",
-  "failureMessage": "登録に失敗しました。",
-  "newPlayer": "新規プレイヤー",
-  "selectedAvatarAlt": "選択されたアバター",
-  "projectedAvatarAlt": "投影されたアバター",
-  "avatarIconAlt": "アバターアイコン",
-  "avatarGridTitle": "アバターを選択",
-  "avatarAlt": "アバター {index}"
-},
-"header": {
-  "home": "ホーム",
-  "features": "特徴",
-  "play": "プレイ",
-  "games": "ゲーム",
-  "community": "コミュニティ",
-  "contact": "お問い合わせ",
-  "support": "サポート",
-  "language": "言語",
-  "marketplace": "マーケットプレイス",
-  "spiral": "スパイラル",
-  "dao": "DAO",
-  "dashboard": "ダッシュボード",
-  "connect": "接続",
-  "whitepaper": "ホワイトペーパー",
-  "login": "ログイン",
-  "myProfile": "私のプロフィール",
-  "settings": "設定",
-  "signout": "ログアウト",
-  "profile": "プロフィール",
-  "roadmap": "ロードマップ"
-},
-"error": {
-      "title": "やだ!",
-      "description": "おっと！そのページは宇宙の彼方へ消えました。",
-      "homeButton": "⏪ 戻る"
-    },
+    "connectWith": "メタバースへようこそ",
+    "internetIdentity": "Internet Identityでログイン",
+    "google": "Googleでログイン",
+    "guestAccount": "ゲストとして続ける",
+    "signInClarification": "シードをお持ちですか？",
+    "loginWith": "{method}でログイン",
+    "enterSeedPhrase": "シードフレーズを入力",
+    "accountRecovery": "アカウント復旧",
+    "recoverAccount": "このシードでログイン",
+    "seedValid": "シードフレーズが有効です！",
+    "invalidSeedPhrase": "無効なシードフレーズです。",
+    "invalidSeedLength": "シードフレーズは正確に12単語である必要があります。",
+    "guestLoginError": "申し訳ありません！エラーが発生しました。",
+    "recoverySuccess": "アカウント復旧成功！",
+    "recovering": "復旧中..."
+  },
+  "register": {
+    "usernameLabel": "ユーザー名:",
+    "usernamePlaceholder": "最大12文字",
+    "referralCodeLabel": "紹介コード:",
+    "referralCodePlaceholder": "(任意)",
+    "noReferralCode": "コードをお持ちでない方",
+    "getReferralCode": "こちらで取得！",
+    "acceptTerms": "以下に同意します",
+    "privacyPolicy": "プライバシーポリシー",
+    "termsOfService": "利用規約",
+    "and": "および",
+    "continueButton": "続ける",
+    "successMessage": "ようこそ、{username}さん！",
+    "failureMessage": "登録に失敗しました。",
+    "newPlayer": "新規プレイヤー",
+    "selectedAvatarAlt": "選択されたアバター",
+    "projectedAvatarAlt": "投影されたアバター",
+    "avatarIconAlt": "アバターアイコン",
+    "avatarGridTitle": "アバターを選択",
+    "avatarAlt": "アバター {index}"
+  },
+  "header": {
+    "home": "ホーム",
+    "features": "機能",
+    "play": "プレイ",
+    "games": "ゲーム",
+    "community": "コミュニティ",
+    "contact": "お問い合わせ",
+    "support": "サポートが必要ですか？",
+    "language": "言語",
+    "marketplace": "マーケットプレイス",
+    "spiral": "スパイラル",
+    "dao": "DAO",
+    "dashboard": "ダッシュボード",
+    "connect": "接続",
+    "whitepaper": "ホワイトペーパー",
+    "login": "ログイン",
+    "myProfile": "マイプロフィール",
+    "settings": "設定",
+    "signout": "ログアウト",
+    "profile": "プロフィール",
+    "roadmap": "ロードマップ"
+  },
+  "error": {
+    "title": "おっと！",
+    "description": "このページは消えてしまいました！",
+    "homeButton": "⏪ 戻る"
+  },
   "hero": {
     "slides": [
       {
-        "title": "ここがスタートだよ。アルファが稼働中、今すぐ参加しよう！",
+        "title": "すべてはここから始まります。アルファ版が準備完了、今すぐ参加！",
         "ctaButtons": [
           { "text": "今すぐプレイ！" },
           { "text": "Epic Gamesでウィッシュリストに追加" }
         ]
       },
       {
-        "title": "パーティーはここから！参加する？どうする？",
+        "title": "パーティーの始まりです！参加しませんか？",
         "ctaButtons": [
-          { "text": "NNSへ行く" },
-          { "text": "ホワイトペーパーを読む" }
+          { "text": "NNSへ移動" },
+          { "text": "ホワイトペーパーを見る" }
         ]
       },
       {
-        "title": "ブロックチェーンでRTS。星間ドリフト、銀河の大混乱",
+        "title": "ブロックチェーン上のRTS。星間移動、銀河の混沌",
         "ctaButtons": [
           { "text": "今すぐダウンロード！" },
-          { "text": "もっと知る！" }
+          { "text": "詳細を見る！" }
         ]
       },
       {
-        "title": "みんなで繋がろう！友達を招待して限定報酬をゲット！",
+        "title": "つながろう！友達を招待して限定報酬をゲット！",
         "ctaButtons": [
-          { "text": "ダッシュボードへ行く" },
-          { "text": "紹介コードをゲット" }
+          { "text": "ダッシュボードへ移動" },
+          { "text": "紹介コードを取得" }
         ]
       }
     ]
   },
-  "cta": "Cosmicrafts Adventuresを試してみよう",
+  "cta": "Cosmicrafts Adventuresを今すぐ体験",
   "lore": {
-    "title": "Cosmicraftsの物語",
-    "description": "一緒にCosmicraftsの壮大な物語に飛び込もう！ヒーロー、伝説のバトル、そしてまだ見ぬミステリーが君を待っている！"
+    "title": "Cosmicraftsの伝説",
+    "description": "英雄たち、伝説の戦い、そしてあなたが発見できる神秘に満ちたCosmicraftsの世界へ飛び込みましょう！"
   },
   "games": {
     "title": "私たちのゲーム",
     "battlegrounds": {
-      "title": "Cosmicrafts バトルグラウンド",
-      "description": "友達と一緒にCosmicraftsの世界でエピックなマルチプレイヤーバトルに参戦しよう！"
+      "title": "Cosmicrafts Battlegrounds",
+      "description": "Cosmicraftsの宇宙で友達と共にスリリングな戦いに参加しよう！"
     },
     "adventures": {
       "title": "Cosmicrafts Adventures",
-      "description": "ワクワクする宇宙探検に出かけて、銀河の秘密を一緒に見つけよう！"
+      "description": "わくわくする宇宙ミッションを探索し、共に銀河の謎を解き明かそう！"
     }
   },
   "carousel": {
     "slides": [
       {
         "title": "Cosmicrafts Adventures",
-        "description": "Cosmicrafts Adventuresで開発中の新しい世界を探検しよう！",
-        "buttonText": "もっと知る",
+        "description": "Cosmicrafts Adventuresと共に発展する新しい宇宙を探索しよう！",
+        "buttonText": "詳細を見る",
         "action": "adventures"
       },
       {
-        "title": "Cosmicrafts バトルグラウンド",
-        "description": "アクションに参加して、今すぐCosmicrafts バトルグラウンドをプレイしよう！",
+        "title": "Cosmicrafts Battleground",
+        "description": "アクションに参加して、今すぐCosmicrafts Battlegroundをプレイ！",
         "buttonText": "今すぐプレイ",
         "action": "battleground"
       },
       {
         "title": "最新ニュース",
-        "description": "Cosmicraftsに関する最新のニュースやアップデートをチェックしよう。",
-        "buttonText": "ニュースを読む",
+        "description": "Cosmicraftsの最新ニュースと情報をチェックしよう。",
+        "buttonText": "ニュースを見る",
         "action": "news"
       },
       {
-        "title": "ICPテクノロジー",
-        "description": "Cosmicraftsを支える革新的なICPテクノロジーについてもっと知ろう！",
-        "buttonText": "ICPを探る",
+        "title": "ICP技術",
+        "description": "Cosmicraftsを動かす革新的なICP技術について詳しく学ぼう。",
+        "buttonText": "ICPを探索",
         "action": "technology"
       }
     ]
   },
   "footer": {
-    "stayConnected": "繋がりましょう",
+    "stayConnected": "つながり続けよう",
     "explore": "探索",
     "careers": "採用情報",
-    "about": "私たちについて",
-    "support": "サポート",
+    "about": "概要",
+    "support": "サポートが必要ですか？",
     "press": "プレス",
     "creators": "クリエイター",
     "privacy": "プライバシー",
-    "legal": "法律情報",
+    "legal": "法的情報",
     "terms": "利用規約",
-    "cookiePolicy": "クッキーポリシー",
-    "cookieSettings": "クッキー設定",
+    "cookiePolicy": "Cookie方針",
+    "cookieSettings": "Cookie設定",
     "language": "言語",
-    "trademarks": "ここに記載されているすべての商標は、それぞれの所有者に帰属します。"
+    "trademarks": "ここに記載されているすべての商標は、それぞれの所有者の財産です。"
   },
   "darkRift": {
-  "title": "ダークリフト",
-  "discover": "発見する"
-},
-"loadingScreen": {
+    "title": "ダークリフト",
+    "discover": "発見"
+  },
+  "loadingScreen": {
     "messages": {
-      "initializingQuantumShenanigans": "量子マジックを起動中",
-      "chargingHyperdrive": "ハイパードライブを充電中",
-      "generatingCosmicChaos": "宇宙カオスを生成中",
-      "decodingAlienSignals": "エイリアン信号を解析中",
-      "calibratingFluxCapacitor": "フラックスコンデンサーを調整中",
-      "initiatingSelfDestruct": "自己破壊を開始中",
-      "fuelingRocket": "ロケットに燃料補給中",
-      "generatingWormholes": "ワームホールを作成中",
-      "conjuringBlackHole": "ブラックホールを召喚中",
-      "syncingHiveMind": "ハイブマインドを同期中",
-      "reticulatingSplines": "スプラインを整備中",
-      "summoningSpaceHamsters": "宇宙ハムスターを呼び出し中",
-      "defragmentingSpaceTime": "時空をデフラグ中",
-      "transmogrifyingMatter": "物質を変換中",
-      "brewingNebula": "星雲を醸造中",
-      "lubricatingGears": "ギアを潤滑中",
-      "tighteningRealityBolts": "現実ボルトを締め直し中",
-      "chargingStardustReserves": "スターダストを充電中",
-      "calibratingLaserBeams": "レーザーを調整中",
-      "summoningFriendlyAliens": "友好的なエイリアンを呼び出し中",
-      "spinningUpWormhole": "ワームホールを回転中",
-      "tamingBlackHoles": "ブラックホールを制御中",
-      "polishingStars": "星を磨き中",
-      "clearingAsteroidBelt": "小惑星帯を掃除中",
-      "rewritingGalacticCode": "銀河コードを書き直し中",
-      "encryptingCosmos": "宇宙を暗号化中",
+      "initializingQuantumShenanigans": "量子いたずら初期化中",
+      "chargingHyperdrive": "ハイパードライブ充電中",
+      "generatingCosmicChaos": "宇宙の混沌生成中",
+      "decodingAlienSignals": "エイリアン信号解読中",
+      "calibratingFluxCapacitor": "フラックスコンデンサー調整中",
+      "initiatingSelfDestruct": "自己破壊開始中",
+      "fuelingRocket": "ロケット給油中",
+      "generatingWormholes": "ワームホール生成中",
+      "conjuringBlackHole": "ブラックホール召喚中",
+      "syncingHiveMind": "ハイブマインド同期中",
+      "reticulatingSplines": "スプライン再構成中",
+      "summoningSpaceHamsters": "宇宙ハムスター召喚中",
+      "defragmentingSpaceTime": "時空間デフラグ中",
+      "transmogrifyingMatter": "物質変換中",
+      "brewingNebula": "星雲醸造中",
+      "lubricatingGears": "歯車潤滑中",
+      "tighteningRealityBolts": "現実のボルト締め付け中",
+      "chargingStardustReserves": "スターダスト予備充電中",
+      "calibratingLaserBeams": "レーザービーム調整中",
+      "summoningFriendlyAliens": "フレンドリーなエイリアン召喚中",
+      "spinningUpWormhole": "ワームホール回転中",
+      "tamingBlackHoles": "ブラックホール馴致中",
+      "polishingStars": "星磨き中",
+      "clearingAsteroidBelt": "小惑星帯整理中",
+      "rewritingGalacticCode": "銀河コード書き換え中",
+      "encryptingCosmos": "宇宙暗号化中",
       "quantumJuggling": "量子ジャグリング中",
-      "debuggingAliens": "エイリアン技術をデバッグ中",
-      "hackingGravity": "重力をハッキング中",
-      "warmingUpWarpDrive": "ワープドライブを準備中",
-      "tamingComets": "彗星を制御中",
-      "aligningPhotonBeams": "光子ビームを調整中",
-      "overclockingStellarEngine": "恒星エンジンをオーバークロック中",
-      "stirringCosmicSoup": "宇宙スープをかき混ぜ中",
-      "buffingRocketPaint": "ロケットの塗装を磨き中",
-      "resettingWormholePhysics": "ワームホール物理をリセット中",
-      "aligningNebulas": "星雲を整列中",
-      "herdingAsteroids": "小惑星を誘導中",
-      "debuggingStardust": "スターダストをデバッグ中",
-      "uploadingTheUniverse": "宇宙をアップロード中",
-      "turningOffInertia": "慣性をオフにする中",
-      "pluckingSuperstrings": "超ひもを演奏中",
-      "paintingNebulas": "星雲をペイント中",
-      "scanningForLife": "知的生命をスキャン中",
-      "reversingPolarity": "極性を反転中",
+      "debuggingAliens": "エイリアンデバッグ中",
+      "hackingGravity": "重力ハッキング中",
+      "warmingUpWarpDrive": "ワープドライブ予熱中",
+      "tamingComets": "彗星馴致中",
+      "aligningPhotonBeams": "光子ビーム位置合わせ中",
+      "overclockingStellarEngine": "恒星エンジンオーバークロック中",
+      "stirringCosmicSoup": "宇宙スープ撹拌中",
+      "buffingRocketPaint": "ロケット塗装磨き中",
+      "resettingWormholePhysics": "ワームホール物理学リセット中",
+      "aligningNebulas": "星雲位置合わせ中",
+      "herdingAsteroids": "小惑星群制御中",
+      "debuggingStardust": "スターダストデバッグ中",
+      "uploadingTheUniverse": "宇宙アップロード中",
+      "turningOffInertia": "慣性オフ中",
+      "pluckingSuperstrings": "超弦はじき中",
+      "paintingNebulas": "星雲彩色中",
+      "scanningForLife": "生命体スキャン中",
+      "reversingPolarity": "極性反転中",
       "quantumDancing": "量子ダンス中",
-      "herdingWormholes": "ワームホールを誘導中",
-      "encryptingReality": "現実を暗号化中",
-      "debuggingTheMultiverse": "マルチバースをデバッグ中"
+      "herdingWormholes": "ワームホール群制御中",
+      "encryptingReality": "現実暗号化中",
+      "debuggingTheMultiverse": "多元宇宙デバッグ中"
     }
   },
   "notifications": {
     "title": "通知",
     "noNotifications": "通知はありません",
     "viewAll": "すべて表示",
-    "friendRequests": "友達リクエスト",
-    "noFriendRequests": "友達リクエストはありません",
+    "friendRequests": "フレンドリクエスト",
+    "noFriendRequests": "フレンドリクエストはありません",
     "accept": "承認",
     "decline": "拒否",
     "accepted": "承認済み",
     "declined": "拒否済み",
-    "sentYouFriendRequest": "があなたに友達リクエストを送信しました",
-    "acceptedYourFriendRequest": "があなたの友達リクエストを承認しました",
-    "newFriendRequest": "新しい友達リクエストがあります：",
+    "sentYouFriendRequest": "さんがフレンドリクエストを送信しました",
+    "acceptedYourFriendRequest": "さんがフレンドリクエストを承認しました",
+    "newFriendRequest": "新しいフレンドリクエストがあります",
     "privacySettingsUpdated": "プライバシー設定が更新されました。",
     "tabs": {
       "all": "すべて",
-      "friendRequests": "友達リクエスト",
+      "friendRequests": "フレンドリクエスト",
       "notifications": "通知"
     },
     "timeAgo": {
@@ -243,7 +243,7 @@
     "profileError": "プロフィールエラー",
     "retry": "再試行",
     "goHome": "ホームに戻る",
-    "errorHelp": "このプロフィールは存在しないか、一時的に利用できない可能性があります。ユーザー名を入力した場合は、Principal IDでアクセスしてみてください。またはその逆も試してください。",
+    "errorHelp": "このプロフィールは存在しないか、一時的に利用できません。ユーザー名を入力した場合はPrincipal IDでアクセスを試すか、その逆を試してください。",
     "tabs": {
       "profile": "プロフィール",
       "stats": "統計",
@@ -251,22 +251,21 @@
       "social": "ソーシャル"
     },
     "unknownPlayer": "不明なプレイヤー",
-    "defaultTitle": "銀河の冒険者",
+    "defaultTitle": "銀河探検家",
     "registrationDate": "{date}からのメンバー",
-    "unknownRegistrationDate": "登録日不明",
     "friendActions": {
-      "addFriend": "友達に追加",
+      "addFriend": "フレンド追加",
       "requestSent": "リクエスト送信済み",
-      "removeFriend": "友達を削除"
+      "removeFriend": "フレンド削除"
     },
-    "noDescription": "説明はまだありません",
+    "noDescription": "説明なし",
     "edit": "編集",
     "playerStats": {
       "elo": "ELO",
       "winRate": "勝率",
-      "games": "ゲーム数"
+      "games": "ゲーム"
     },
-    "editProfile": "プロフィールを編集",
+    "editProfile": "プロフィール編集",
     "playerId": "プレイヤーID",
     "quickStats": "クイック統計",
     "statsCards": {
@@ -278,8 +277,8 @@
     "statsDetails": {
       "damageDealt": "与えたダメージ",
       "damageEvaded": "回避したダメージ",
-      "energyGenerated": "生成したエネルギー",
-      "energyUsed": "使用したエネルギー"
+      "energyGenerated": "生成エネルギー",
+      "energyUsed": "使用エネルギー"
     },
     "nftCollection": "NFTコレクション",
     "nftCategories": {
@@ -290,26 +289,26 @@
       "trophies": "トロフィー",
       "chests": "チェスト"
     },
-    "noNfts": "まだ{category}を収集していません",
+    "noNfts": "収集された{category}はありません",
     "achievements": "実績",
     "achievementStats": {
-      "completedBy": "達成率",
+      "completedBy": "達成者",
       "points": "ポイント"
     },
-    "friends": "友達",
+    "friends": "フレンド",
     "friendStatus": {
       "online": "オンライン",
       "offline": "オフライン"
     },
     "editProfileModal": {
-      "title": "プロフィールを編集",
+      "title": "プロフィール編集",
       "username": "ユーザー名",
       "title": "タイトル",
       "description": "説明",
       "cancel": "キャンセル",
       "saveChanges": "変更を保存"
     },
-    "confirmRemoveFriend": "{username}をフレンドリストから削除してもよろしいですか？"
+    "confirmRemoveFriend": "{username}さんをフレンドリストから削除しますか？"
   },
   "months": {
     "0": "1月",
@@ -324,5 +323,34 @@
     "9": "10月",
     "10": "11月",
     "11": "12月"
+  },
+  "whitepaper": {
+    "title": "ホワイトペーパー",
+    "sections": {
+      "introduction": {
+        "title": "はじめに",
+        "description": "Cosmicrafts DAOの概要とビジョン"
+      },
+      "tokenomics": {
+        "title": "トークンノミクス",
+        "description": "トークン経済と分配メカニズム"
+      },
+      "governance": {
+        "title": "ガバナンス",
+        "description": "コミュニティ主導の意思決定システム"
+      },
+      "community": {
+        "title": "コミュニティ",
+        "description": "エコシステムの成長と参加の枠組み"
+      },
+      "architecture": {
+        "title": "アーキテクチャ",
+        "description": "技術インフラストラクチャの詳細"
+      },
+      "core-features": {
+        "title": "主要機能",
+        "description": "ゲームプレイとシステムの機能"
+      }
+    }
   }
 }

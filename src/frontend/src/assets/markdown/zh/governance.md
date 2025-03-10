@@ -1,162 +1,143 @@
-# Governance
-![Governance](govbanner.webp)
+# 治理
 
-## Introduction
+[[toc:2-2]]
 
-The Cosmicrafts DAO puts the community at the center, giving Stakeholders a real say in how the franchise grows. Built on proven technology, the DAO uses fairness, transparency, and community-driven decision-making to ensure Cosmicrafts stays true to its vision.
+## 简介
 
-::: info Reading Guide
-This document outlines the governance framework of the Cosmicrafts DAO, focusing on decision-making processes, proposal systems, and community participation. It complements the [Tokenomics](/tokenomics) document, which covers economic aspects.
+Cosmicrafts DAO通过社区主导的治理实现可持续增长和利益相关者利益一致。该框架旨在确保透明度、公平性和高效的决策。
 
-- **Primary Focus**: Governance processes, voting, and community decision-making
-- **Companion Document**: [Tokenomics](/tokenomics) for token economics and utility
-- **Cross-References**: Look for tip boxes linking to relevant tokenomics sections
-:::
+## 核心原则
 
-## DAO Core Principles
+| 原则 | 说明 | 实施 |
+|------|------|------|
+| 社区主权 | 社区决定DAO方向 | 链上投票系统 |
+| 可持续增长 | 专注长期价值创造 | 阶段性开发和里程碑 |
+| 开放参与 | 包容性系统允许所有人贡献 | 低门槛参与 |
 
-| Principle | Description |
-|-----------|-------------|
-| **Community Sovereignty** | • Collective decision-making power<br>• Transparent governance process<br>• On-chain voting and automated execution<br>|
-| **Sustainable Growth** | • Long-term value creation<br>• Balanced ecosystem development<br>• Community-driven treasury management<br>• Data-driven evaluation system |
-| **Open Participation** | • Inclusive governance structure<br>• Low barriers to entry<br>• Community-driven expansion<br>• Multi-chain accessibility |
+## 投票权分配
 
+### 利益相关者群体
 
-## Voting Power Distribution
+| 群体 | 投票份额 | 目的 |
+|------|----------|------|
+| 代币持有者 | 40% | 经济利益相关者代表 |
+| 活跃玩家 | 30% | 游戏社区声音 |
+| NFT持有者 | 20% | 长期支持者利益 |
+| 开发团队 | 10% | 技术方向 |
 
-<div class="tokenomics-diagram">
-  <img src="src/assets/icons/votingpower.svg" alt="SPIRAL Token Allocation" />
-</div>
+### 性能乘数
 
-<style>
-.tokenomics-diagram {
-  text-align: center;
-  width: 100%;
-  margin: 4rem auto;
-}
+投票权通过以下因素增加：
 
-.tokenomics-diagram img {
-  width: 65%;
-  max-width: 800px;
-  height: auto;
-  filter: none;
-  box-shadow: none;
-  background: transparent;
-  margin: 0 auto;
-  display: block;
-}
+| 因素 | 乘数 | 条件 |
+|------|------|------|
+| 质押期限 | 最高2.5x | 12个月以上锁定 |
+| 参与历史 | 最高1.5x | 过往投票参与率 |
+| 社区贡献 | 最高2.0x | 已验证贡献 |
 
-@media (max-width: 768px) {
-  .tokenomics-diagram img {
-    width: 100%;
-    max-width: 100%;
-  }
+## SNS整合
 
-}
-</style>
+通过与Internet Computer的Service Nervous System（SNS）整合实现：
 
-::: info Dynamic Voting Power
-The actual distribution of voting power will fluctuate based on stakeholder decisions regarding:
-- Amount of tokens staked in neurons
-- Length of dissolve delay chosen
-- Age of neurons accumulated
-These factors can significantly shift the relative influence of different stakeholder groups over time.
-:::
+- 完全去中心化
+- 透明资金管理
+- 自动化提案执行
+- 跨链治理可能性
 
-| Stakeholder Group | Voting Share | Base Tokens | Purpose |
-|-------------------|--------------|-------------|----------|
-| **SNS Participants** | 50% | 120M | - Largest voting bloc<br>- Community-driven governance<br>- Potential for increased influence through participation |
-| **Developer Team** | 33.3% | 80M | - Strategic decision-making<br>- 8-year dissolve delay with 1-year vesting<br>- Gradual reduction of influence |
-| **Genesis/Seed** | 16.7% | 40M | - Early supporter representation<br>- Staggered dissolve delays (0-7 years)<br>- Balanced initial influence |
+## 治理参数
 
+| 参数 | 值 | 说明 |
+|------|-----|------|
+| 提案门槛 | 100,000 SPIRAL | 提交新提案所需最低代币量 |
+| 投票期 | 7天 | 标准投票窗口 |
+| 执行延迟 | 48小时 | 批准到执行的等待时间 |
+| 最低参与率 | 20% | 有效投票所需最低参与率 |
 
+## 神经元质押
 
-### Power Multipliers
+### 机制
 
-| Factor | Maximum Bonus | Time to Achieve |
-|--------|---------------|-----------------|
-| **Dissolve Delay** | +100% | 8 years |
-| **Neuron Age** | +100% | 1 year |
-| **Minimum Dissolve Delay** | N/A | 1 month |
-| **Combined Cap** | 3x base power | N/A |
+1. **锁定期**
+   - 最短: 6个月
+   - 最长: 8年
+   - 奖励增加: 随期限增长
 
-## SNS Integration
+2. **解散延迟**
+   - 阶段性投票权增加
+   - 提前解散惩罚
+   - 重新锁定激励
 
-The Cosmicrafts DAO leverages the Internet Computer's [Service Nervous System (SNS)](https://internetcomputer.org/docs/building-apps/governing-apps/overview) for its governance infrastructure. This provides a battle-tested, secure framework for decentralized decision-making.
+3. **成熟度**
+   - 随时间增加投票权
+   - 活跃参与奖励
+   - 社区贡献奖励
 
-### Key Features
+## 决策框架
 
-- **Neuron-Based Voting**: Stake SPIRAL tokens to create neurons and participate in governance
-- **Dissolve Delay Bonuses**: Longer lockup periods increase voting power
-- **Age Bonuses**: Neurons gain more voting power over time
-- **Proposal System**: Standard SNS proposal framework for all governance actions
+### 提案类型
 
-::: info SNS Configuration
-For detailed technical parameters of our SNS setup, including minimum stakes, voting periods, and reward rates, refer to the SNS initialization parameters in our documentation.
-:::
+| 类型 | 说明 | 通过要求 |
+|------|------|----------|
+| 参数变更 | 协议设置调整 | 66%赞成 |
+| 资金分配 | 金库资金使用 | 75%赞成 |
+| 紧急行动 | 重要安全更新 | 85%赞成 |
+| 一般提案 | 所有其他提案 | 51%赞成 |
 
-### Governance Parameters
+### 提案流程
 
-| Parameter | Value | Purpose |
-|-----------|--------|---------|
-| **Rejection Fee** | 1000 SPIRAL | Prevent spam proposals |
-| **Initial Voting Period** | 7 days | Standard deliberation time |
-| **Maximum Deadline Extension** | 1 day | Allow for late participation |
-| **Minimum Neuron Creation Stake** | 1000 SPIRAL | Base participation threshold |
+1. **提案创建**
+   - 质押所需代币
+   - 提交详细提案文档
+   - 社区讨论期
 
+2. **审查期**
+   - 技术可行性评估
+   - 社区反馈
+   - 修改和改进
 
-## Neuron Staking Mechanics
+3. **投票阶段**
+   - 开始投票期
+   - 实时结果追踪
+   - 投票结束和结果确认
 
-### Base Requirements
+4. **执行**
+   - 批准提案实施
+   - 进度监控
+   - 结果评估
 
-| Parameter | Value | Description |
-|-----------|--------|-------------|
-| **Minimum Stake** | 1,000 SPIRAL | Base amount required to create a neuron |
-| **Minimum Lock Period** | 30 days | Shortest allowed dissolve delay |
-| **Maximum Lock Period** | 8 years | Longest possible dissolve delay |
-| **Transaction Fee** | 0.01 SPIRAL | Network operation cost |
+## 透明度和问责制
 
-### Maturity Schedule
+### 报告要求
 
-| Lock Period | Bonus Multiplier | Effective Power |
-|-------------|------------------|-----------------|
-| 30 days | 1.0x | Base Power |
-| 6 months | 1.25x | +25% |
-| 1 year | 1.5x | +50% |
-| 2 years | 1.75x | +75% |
-| 4 years | 1.85x | +85% |
-| 8 years | 2.0x | +100% |
+- 月度财务报告
+- 季度开发更新
+- 年度战略审查
+- 实时指标追踪
 
+### 审计机制
 
-## Decision Making Framework
+- 独立技术审计
+- 社区审查
+- 链上活动追踪
+- 定期安全评估
 
-### Governance Areas
+## 治理路线图
 
-1. **Treasury Management**
-   - Marketing Campaigns
-   - Development Funding
-   - Strategic Partnerships
+### 第1阶段：建立（0-6个月）
 
-2. **Economic Policies**
-   - Tokenomics Adjustments
-   - Staking Rates
-   - Fee Structures
+- 引入基本治理框架
+- 核心团队初始决策
+- 收集社区反馈
 
-3. **Development Roadmap**
-   - Feature Prioritization
-   - Game Expansions
-   - Technical Improvements
+### 第2阶段：扩展（6-18个月）
 
-### Proposal System
+- 完全实施投票机制
+- 启动社区提案
+- 优化奖励系统
 
-| Stage | Duration | Requirements |
-|-------|----------|--------------|
-| **Submission** | N/A | 1,000 SPIRAL stake |
-| **Review** | 24 hours | Community feedback |
-| **Voting** | 7 days | Active neuron required |
-| **Execution** | Variable | Automated if approved |
+### 第3阶段：成熟（18个月以后）
 
-::: info Community Implementation
-For practical details about treasury management, community programs, and ecosystem growth initiatives, see our [Community](/community) framework.
-:::
+- 实现完全去中心化
+- 自动化执行系统
+- 探索跨链整合
 

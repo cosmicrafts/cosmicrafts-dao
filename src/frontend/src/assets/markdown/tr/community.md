@@ -1,187 +1,189 @@
-# Community
-![Community](communitybanner.webp)
+# Topluluk
 
-## Overview
+[[toc:2-2]]
 
-The Cosmicrafts community is the driving force behind our ecosystem's growth and evolution. Our community framework balances:
-- Inclusive participation and governance
-- Sustainable economic development
-- Strategic ecosystem expansion
-- Content creation and cultural growth
+## Genel Bakış
 
-## Treasury Management
+Cosmicrafts DAO topluluğu, ekosistem büyümesinin merkezindedir. Ekonomik teşvikler ve aktif katılımı birleştirerek, tüm katılımcıların faydalandığı sürdürülebilir bir ekosistem inşa ediyoruz.
 
-The DAO treasury is the foundation for sustainable growth and community initiatives. All funding allocations require community approval through the SNS proposal system.
+## Hazine Yönetimi
 
-<div class="table-scroll">
+### Fon Tahsis Gereksinimleri
 
-| Focus Area | Implementation | Requirements |
-|------------|----------------|--------------|
-| **User Acquisition** | Marketing campaigns, Strategic partnerships | - Clear ROI metrics<br>- Target audience analysis<br>- Performance tracking |
-| **Development** | Core team maintenance, Technical improvements | - Skill requirements<br>- Project roadmap alignment<br>- Milestone definitions |
-| **Community Initiatives** | Events, Content creation, Market development | - Success metrics<br>- Budget breakdown<br>- Timeline and deliverables |
+| Kategori | Oran | Odak |
+|---------|-----------|---------|
+| Ürün Geliştirme | %40 | Oyun ve platform iyileştirmeleri |
+| Topluluk Büyümesi | %30 | Pazarlama ve katılım |
+| Likidite | %20 | Piyasa istikrarı |
+| Rezerv | %10 | Acil durumlar ve fırsatlar |
 
-</div>
+### Odak Alanları
 
-::: info Proposal Requirements
-All treasury proposals must include:
-- Detailed budget allocation
-- Expected impact metrics
-- Implementation timeline
-- Risk assessment
-- Success criteria
-:::
+1. **Ürün Geliştirme**
+   - Oyun iyileştirmeleri
+   - Platform güncellemeleri
+   - Topluluk araçları
+   - Ekosistem entegrasyonu
 
-## Content Creators Program
+2. **Topluluk Büyümesi**
+   - Pazarlama kampanyaları
+   - Elçi programları
+   - Topluluk etkinlikleri
+   - Eğitim programları
 
-The Content Creators Program aims to build a sustainable ecosystem of content creators who help grow and engage the Cosmicrafts community. All program terms and compensation are subject to DAO approval.
+3. **Likidite Yönetimi**
+   - Likidite sağlayıcı teşvikleri
+   - Piyasa istikrarı
+   - Geri alım programları
+   - Acil durum fonları
 
-### Qualification Framework
+## İçerik Üretici Programı
 
-<div class="table-scroll">
+### Yeterlilik Çerçevesi
 
-| Tier | Requirements | Evaluation Criteria |
-|------|--------------|-------------------|
-| **Emerging** | - Active social media presence<br>- Consistent content schedule | - Content quality<br>- Engagement metrics<br>- Audience authenticity |
-| **Established** | - Proven track record<br>- Engagement-driven content<br>- Community participation | - Reach and impact<br>- Content performance<br>- Community feedback |
-| **Partner** | - Significant audience reach<br>- High-quality production<br>- Strategic value alignment | - Long-term impact<br>- Brand alignment<br>- Community leadership |
+| Seviye | Gereksinimler | Ödüller |
+|----------|--------------|----------|
+| Başlangıç | 100 takipçi | 100 SPIRAL/ay |
+| Orta | 1,000 takipçi | 500 SPIRAL/ay |
+| İleri | 10,000 takipçi | 2,500 SPIRAL/ay |
+| Elit | 100,000+ takipçi | 10,000 SPIRAL/ay |
 
-</div>
+### Ödeme Yapısı
 
-### Compensation Structure
+| Aktivite | Temel Ödül | Çarpanlar |
+|----------|----------------|------------|
+| Video İçerikleri | 50 SPIRAL | 3x'e kadar |
+| Canlı Yayın | 100 SPIRAL/saat | 2x'e kadar |
+| Makaleler | 75 SPIRAL | 2.5x'e kadar |
+| Sanat | 200 SPIRAL | 2x'e kadar |
 
-Content creators can submit proposals to the DAO for:
-- Performance-based compensation
-- Project-specific funding
-- Event sponsorship
-- Strategic collaboration opportunities
+### Değerlendirme Metrikleri
 
-::: info Proposal Guidelines
-Creators must include:
-- Detailed content strategy
-- Performance metrics
-- Target audience analysis
-- Expected impact assessment
-- Budget requirements
-:::
+| Metrik | Ağırlık | Hedef |
+|----------|--------|--------|
+| Görüntülenme | %30 | Aylık büyüme |
+| Etkileşim | %40 | Etkileşim oranı |
+| Kalite | %20 | Akran değerlendirmesi |
+| Tutarlılık | %10 | Düzenli yayın |
 
-### Evaluation Metrics
+## Pazar
 
-<div class="table-scroll">
+### Temel Özellikler
 
-| Category | Metrics | Impact Assessment |
-|----------|---------|-------------------|
-| **Reach** | - Unique viewers<br>- Geographic distribution<br>- Audience retention | Measured through platform analytics |
-| **Engagement** | - Comment activity<br>- Share rates<br>- Community interaction | Tracked via engagement tools |
-| **Quality** | - Production value<br>- Content originality<br>- Community feedback | Regular quality assessments |
+| Özellik | Açıklama | Geliştirme Durumu |
+|---------|-------------|-----------------|
+| P2P Ticaret | Doğrudan varlık takası | Tamamlandı |
+| Açık Artırmalar | NFT açık artırmaları | Geliştirme aşamasında |
+| Toplu Listeleme | Çoklu listeleme | Planlandı |
+| Otomatik Ticaret | Piyasa yapıcılar | Planlandı |
 
-</div>
+### Topluluk Kontrolü
 
-::: info Program Evolution
-The DAO community will:
-- Define specific compensation models
-- Establish evaluation criteria
-- Adjust program parameters
-- Review and approve creator proposals
-:::
+| İşlev | Gereksinimler | Etki |
+|----------|--------------|----------|
+| Varlık Listesi | Topluluk oylaması | Varlık kabulü |
+| Ücret Ayarlamaları | Teklif + oylama | Ücret yapısı |
+| Ticaret Kuralları | Komite konsensüsü | Pazar standartları |
+| Teşvik Programları | Hazine onayı | Ödül dağıtımı |
 
-## Marketplace
+## Likidite Yönetimi
 
-The DAO-governed marketplace serves as the central hub for digital asset trading and community commerce.
+### Operasyonlar
 
-### Core Features
+| Aktivite | Sıklık | Sorumlu |
+|----------|------------|------------|
+| Likidite İzleme | Sürekli | Sistem |
+| Teşvik Ayarlamaları | Haftalık | Likidite komitesi |
+| Risk Değerlendirmesi | Aylık | Topluluk denetçileri |
+| Performans Raporları | 3 Aylık | Analitik ekibi |
 
-<div class="table-scroll">
+### Yönetişim Gereksinimleri
 
-| Feature | Implementation | Community Control |
-|---------|----------------|------------------|
-| **Cross-Chain Trading** | - Multi-chain support<br>- Bridge integrations<br>- Universal standards | - Protocol selection<br>- Fee structures<br>- Integration priorities |
-| **Asset Standards** | - NFT compatibility<br>- Metadata standards<br>- Verification systems | - Format approval<br>- Quality guidelines<br>- Listing criteria |
-| **Revenue Model** | - Fee distribution<br>- Staking rewards<br>- Creator royalties | - Rate setting<br>- Reward allocation<br>- Treasury share |
+| Karar | Oylama Eşiği | Uygulama Süresi |
+|----------|----------------|-----------------|
+| Parametre Ayarları | %51 | 24 saat |
+| Fon Tahsisi | %66 | 48 saat |
+| Sistem Değişiklikleri | %75 | 72 saat |
+| Acil Durum Eylemleri | %90 | Anında |
 
-</div>
+## Kurumsal Yatırım
 
-::: info Marketplace Evolution
-The community drives marketplace development through:
-- Feature proposals
-- Integration voting
-- Parameter adjustment
-- Revenue model updates
-:::
+### Yatırım Türleri
 
-## Liquidity Management
+| Tür | Minimum | Kilitleme Süresi |
+|--------|------------|-------------|
+| Stratejik | 100,000 SPIRAL | 24 ay |
+| Ortaklık | 50,000 SPIRAL | 12 ay |
+| Kurumsal | 25,000 SPIRAL | 6 ay |
 
-The DAO oversees strategic liquidity operations to ensure market efficiency and token stability.
+### Gereksinimler
 
-<div class="table-scroll">
+1. **Doğrulama**
+   - Due diligence
+   - Kimlik doğrulama
+   - İtibar incelemesi
 
-| Operation | Process | Governance Requirements |
-|-----------|---------|------------------------|
-| **DEX Liquidity** | - Periodic liquidity adjustments<br>- Pool diversification<br>- Yield optimization | - Community vote required<br>- Minimum 7-day proposal period<br>- Detailed impact analysis |
-| **CEX Integration** | - Exchange selection criteria<br>- Listing requirements<br>- Liquidity allocation | - Treasury impact assessment<br>- Security verification<br>- Long-term strategy alignment |
-| **Market Making** | - Automated market making<br>- Order book depth<br>- Volatility management | - Parameter setting<br>- Performance monitoring<br>- Treasury risk assessment |
+2. **Taahhütler**
+   - Yönetişime katılım
+   - Ekosistem desteği
+   - Uzmanlık sağlama
 
-</div>
+3. **Katkılar**
+   - İş geliştirme
+   - Stratejik ortaklıklar
+   - Pazar genişletme
 
-::: info Liquidity Operations
-All liquidity operations must:
-- Undergo thorough security review
-- Include clear entry and exit strategies
-- Define risk mitigation measures
-- Establish reporting requirements
-- Align with long-term tokenomics goals
-:::
+## Stratejik Büyüme
 
-## Institutional Investment
+### Kullanıcı Edinme
 
-The DAO may approve strategic treasury allocations to institutional partners to accelerate growth and development.
+| Kanal | Bütçe | Hedef ROI |
+|----------|----------|--------------|
+| Dijital Pazarlama | %30 | 3x |
+| Ortaklıklar | %40 | 4x |
+| Referans Programları | %20 | 5x |
+| Halkla İlişkiler | %10 | 2x |
 
-<div class="table-scroll">
+### Kullanıcı Tutma
 
-| Investment Type | Framework | Requirements |
-|-----------------|-----------|--------------|
-| **Strategic Sales** | - Private token allocations<br>- Treasury diversification<br>- Partnership development | - Vesting requirements<br>- Alignment with DAO objectives<br>- Value-add beyond capital |
-| **DAO Partnerships** | - Cross-DAO collaborations<br>- Ecosystem integration<br>- Joint development | - Mutual benefit analysis<br>- Technical compatibility<br>- Value creation assessment |
-| **Ecosystem Funding** | - Grants for ecosystem projects<br>- Incubation programs<br>- Development support | - Measurable outcomes<br>- Milestone-based distribution<br>- Technology integration |
+| Strateji | Metrik | Hedef |
+|--------------|----------|--------|
+| Sadakat Programları | Tutma oranı | %80 |
+| Ürün İyileştirme | Kullanıcı memnuniyeti | %90 |
+| Topluluk Desteği | Yanıt süresi | <2 saat |
+| Ödüller | Kullanıcı katılımı | %70 aktif |
 
-</div>
+### Büyüme Girişimleri
 
-::: info Institutional Requirements
-Potential institutional partners must demonstrate:
-- Long-term commitment to the ecosystem
-- Specific value contribution beyond capital
-- Alignment with community values
-- Technical or market expertise
-- Transparent operations and reporting
-:::
+1. **Elçi Programı**
+   - İşe alım ve eğitim
+   - Ödül sistemi
+   - Genişleme hedefleri
 
-## Strategic Growth
+2. **Ekosistem Ortaklıkları**
+   - Ürün entegrasyonu
+   - Kaynak paylaşımı
+   - Ortak pazarlama
 
-Community-driven initiatives for sustainable ecosystem expansion.
+3. **Eğitim Programları**
+   - Eğitim içeriği
+   - Çalıştaylar
+   - Mentorluk programları
 
-### User Acquisition
+## Topluluk Yol Haritası
 
-<div class="table-scroll">
+### Aşama 1: Kuruluş (1-6 Ay)
+- İçerik üretici programının başlatılması
+- Elçi programının kurulması
+- Topluluk kanallarının oluşturulması
 
-| Channel | Strategy | Success Metrics |
-|---------|----------|----------------|
-| **Content Partnerships** | - Creator collaborations<br>- Strategic alliances<br>- Community ambassadors | - Audience growth<br>- Engagement rates<br>- Conversion metrics |
-| **Community Events** | - Tournaments<br>- Special events<br>- Regional meetups | - Participation rates<br>- Retention metrics<br>- Community feedback |
-| **Incentive Programs** | - Referral systems<br>- Achievement rewards<br>- Social challenges | - User acquisition cost<br>- Retention rates<br>- Network growth |
+### Aşama 2: Büyüme (7-12 Ay)
+- Ödül programlarının genişletilmesi
+- Stratejik ortaklıkların başlatılması
+- Topluluk araçlarının iyileştirilmesi
 
-</div>
-
-### Retention Framework
-
-::: info Key Elements
-- Progressive reward systems
-- Social engagement incentives
-- Community leadership opportunities
-- Regular events and competitions
-- Content creation support
-:::
-
-::: info Technical Infrastructure
-The Cosmicrafts technical architecture provides our community with a responsive, gas-free environment for seamless interaction and participation. For details on our single-canister design and technical implementation, see the [Architecture](/architecture) section.
-:::
+### Aşama 3: Genişleme (13+ Ay)
+- Kurumsal programlar
+- Global genişleme
+- Ekosistem entegrasyonu
 

@@ -1,161 +1,160 @@
-# Core Features
+# Основные функции
 
-![Core Features](corebanner.webp)
+![Основные функции](corebanner.webp)
 
+## Обзор
 
-## Overview
-
-At its core, **Cosmicrafts DAO** implements a unified canister that handles all core game functionality through several integrated systems. Our architecture ensures seamless interaction between different components while maintaining the security and transparency of blockchain technology.
+В своей основе **Cosmicrafts DAO** реализует единый канистер, который управляет всеми основными функциями игры через несколько интегрированных систем. Наша архитектура обеспечивает бесшовное взаимодействие между различными компонентами, сохраняя при этом безопасность и прозрачность технологии блокчейн.
 
 ---
 
-## Player System
+## Система игроков
 
-The Player System forms the backbone of user interaction within Cosmicrafts, managing everything from basic profiles to complex social interactions.
+Система игроков формирует основу взаимодействия пользователей в Cosmicrafts, управляя всем от базовых профилей до сложных социальных взаимодействий.
 
-### Profile Management
+### Управление профилем
 
 <div class="table-scroll">
 
-| Feature | Description | Player Benefit |
-|---------|-------------|----------------|
-| Profile Creation | Unique IDs with customizable usernames and avatars | Personal identity in the metaverse |
-| Level System | Experience-based progression with rewards | Clear progression path |
-| Stats Tracking | Comprehensive performance metrics | Performance insights |
-| Title System | Unlockable titles showing achievements | Status recognition |
+| Функция | Описание | Преимущество для игрока |
+|---------|----------|------------------------|
+| Создание профиля | Уникальные ID с настраиваемыми именами пользователей и аватарами | Личная идентичность в метавселенной |
+| Система уровней | Прогрессия на основе опыта с наградами | Четкий путь развития |
+| Отслеживание статистики | Комплексные метрики производительности | Анализ эффективности |
+| Система титулов | Разблокируемые титулы, показывающие достижения | Признание статуса |
 
 </div>
 
-### Social Features
+### Социальные функции
 
-Players can build their network through:
-- Friend requests and management
-- Privacy settings control
-- Real-time notifications
-- Blocked user management
-- Social activity tracking
+Игроки могут строить свою сеть через:
+- Запросы и управление друзьями
+- Контроль настроек приватности
+- Уведомления в реальном времени
+- Управление заблокированными пользователями
+- Отслеживание социальной активности
 
-## Asset System
+## Система активов
 
-Our asset system leverages the ICRC-7 standard to provide true ownership and interoperability.
+Наша система активов использует стандарт ICRC-7 для обеспечения реального владения и интероперабельности.
 
-### NFT Categories
+### Категории NFT
 
 ```mermaid
 graph LR
-    A[NFT Types] --> B[Soul NFTs]
-    A --> C[Game Units]
-    A --> D[Cosmetics]
-    A --> E[Rewards]
+    A[Типы NFT] --> B[NFT души]
+    A --> C[Игровые юниты]
+    A --> D[Косметика]
+    A --> E[Награды]
     
-    B --> B1[Progress Tracking]
-    B --> B2[Achievement Display]
+    B --> B1[Отслеживание прогресса]
+    B --> B2[Отображение достижений]
     
-    C --> C1[Spaceships]
-    C --> C2[Characters]
-    C --> C3[Combat Units]
+    C --> C1[Космические корабли]
+    C --> C2[Персонажи]
+    C --> C3[Боевые юниты]
     
-    D --> D1[Avatars]
-    D --> D2[Skins]
+    D --> D1[Аватары]
+    D --> D2[Скины]
     
-    E --> E1[Trophies]
-    E --> E2[Special Items]
+    E --> E1[Трофеи]
+    E --> E2[Особые предметы]
 ```
 
-## Economy System
+## Экономическая система
 
-Our dual-token economy creates a balanced ecosystem for both free-to-play and premium players.
+Наша двухтокенная экономика создает сбалансированную экосистему как для бесплатных, так и для премиум игроков.
 
-### Token Structure
+### Структура токенов
 
 <div class="table-scroll">
 
-| Token | Purpose | Acquisition | Usage |
-|-------|---------|-------------|--------|
-| Spiral | Governance & Premium | Purchase/Staking | Voting, Premium Features |
-| Stardust | In-game Currency | Gameplay Rewards | Basic Features, Crafting |
+| Токен | Назначение | Получение | Использование |
+|-------|------------|-----------|---------------|
+| Spiral | Управление & Премиум | Покупка/Стейкинг | Голосование, Премиум функции |
+| Stardust | Внутриигровая валюта | Награды за игру | Базовые функции, Крафтинг |
 
 </div>
 
-## Matchmaking System
+## Система матчмейкинга
 
-Our matchmaking system ensures fair and engaging gameplay through sophisticated player matching.
+Наша система матчмейкинга обеспечивает справедливый и увлекательный геймплей через сложный подбор игроков.
 
-### Key Features
+### Основные функции
 
 ```mermaid
 graph TD
-    A[Matchmaking] --> B[Player Pool]
-    B --> C[ELO Matching]
-    C --> D[Match Creation]
-    D --> E[Status Tracking]
+    A[Матчмейкинг] --> B[Пул игроков]
+    B --> C[ELO подбор]
+    C --> D[Создание матча]
+    D --> E[Отслеживание статуса]
     
-    E --> F[In Progress]
-    E --> G[Completed]
-    E --> H[Cancelled]
+    E --> F[В процессе]
+    E --> G[Завершен]
+    E --> H[Отменен]
 ```
 
-- Dynamic skill-based matching
-- Real-time status updates
-- Automatic match validation
-- Performance-based rating adjustments
+- Динамический подбор на основе навыков
+- Обновления статуса в реальном времени
+- Автоматическая валидация матчей
+- Корректировки рейтинга на основе производительности
 
-## Mission & Achievement System
+## Система миссий и достижений
 
-A comprehensive progression system that rewards players for their accomplishments.
+Комплексная система прогрессии, которая вознаграждает игроков за их достижения.
 
-### Mission Types
-
-<div class="table-scroll">
-
-| Type | Frequency | Rewards | Purpose |
-|------|-----------|---------|----------|
-| Daily | 24 hours | Small rewards | Regular engagement |
-| Weekly | 7 days | Medium rewards | Sustained activity |
-| Special | Event-based | Unique rewards | Community events |
-
-</div>
-
-### Achievement Categories
-- Combat Mastery
-- Economic Achievement
-- Social Engagement
-- Collection Completion
-- Special Events
-
-## Logging System
-
-Our transparent logging system tracks all important events and transactions.
-
-### Tracked Activities
+### Типы миссий
 
 <div class="table-scroll">
 
-| Category | Events Tracked | Purpose |
-|----------|---------------|----------|
-| Gameplay | Matches, Stats | Performance Analysis |
-| Economy | Transactions, Trades | Economic Monitoring |
-| Social | Interactions, Friends | Community Health |
-| Progress | Levels, Achievements | Player Development |
+| Тип | Частота | Награды | Назначение |
+|-----|---------|---------|------------|
+| Ежедневные | 24 часа | Малые награды | Регулярное участие |
+| Еженедельные | 7 дней | Средние награды | Устойчивая активность |
+| Особые | На основе событий | Уникальные награды | События сообщества |
 
 </div>
 
-## Security & Performance
+### Категории достижений
+- Мастерство боя
+- Экономические достижения
+- Социальное взаимодействие
+- Завершение коллекций
+- Особые события
 
-### Security Measures
-- Administrative controls
-- Upgrade safety protocols
-- Input validation
-- Rate limiting
-- Transaction verification
+## Система логирования
 
-### Optimizations
-- Single-canister efficiency
-- Fast data retrieval
-- Memory management
-- Query optimization
+Наша прозрачная система логирования отслеживает все важные события и транзакции.
+
+### Отслеживаемые активности
+
+<div class="table-scroll">
+
+| Категория | Отслеживаемые события | Назначение |
+|-----------|----------------------|------------|
+| Геймплей | Матчи, Статистика | Анализ производительности |
+| Экономика | Транзакции, Торги | Мониторинг экономики |
+| Социальное | Взаимодействия, Друзья | Здоровье сообщества |
+| Прогресс | Уровни, Достижения | Развитие игрока |
+
+</div>
+
+## Безопасность и производительность
+
+### Меры безопасности
+- Административный контроль
+- Протоколы безопасности обновлений
+- Валидация ввода
+- Ограничение частоты
+- Верификация транзакций
+
+### Оптимизации
+- Эффективность единого канистера
+- Быстрое извлечение данных
+- Управление памятью
+- Оптимизация запросов
 
 ---
 
-## Conclusion
-Cosmicrafts represents a new paradigm in blockchain gaming maintaining the highest standards of quality, security and performance.
+## Заключение
+Cosmicrafts представляет новую парадигму в блокчейн-играх, поддерживая высочайшие стандарты качества, безопасности и производительности.

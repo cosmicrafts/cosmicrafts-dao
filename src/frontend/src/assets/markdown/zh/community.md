@@ -1,187 +1,223 @@
-# Community
-![Community](communitybanner.webp)
+# 社区
 
-## Overview
+[[toc:2-2]]
 
-The Cosmicrafts community is the driving force behind our ecosystem's growth and evolution. Our community framework balances:
-- Inclusive participation and governance
-- Sustainable economic development
-- Strategic ecosystem expansion
-- Content creation and cultural growth
+## 概述
 
-## Treasury Management
+Cosmicrafts社区是一个由玩家、创作者和利益相关者组成的充满活力的生态系统。我们的框架旨在促进可持续增长和积极参与。
 
-The DAO treasury is the foundation for sustainable growth and community initiatives. All funding allocations require community approval through the SNS proposal system.
+## 金库管理
 
-<div class="table-scroll">
+### 资金分配要求
 
-| Focus Area | Implementation | Requirements |
-|------------|----------------|--------------|
-| **User Acquisition** | Marketing campaigns, Strategic partnerships | - Clear ROI metrics<br>- Target audience analysis<br>- Performance tracking |
-| **Development** | Core team maintenance, Technical improvements | - Skill requirements<br>- Project roadmap alignment<br>- Milestone definitions |
-| **Community Initiatives** | Events, Content creation, Market development | - Success metrics<br>- Budget breakdown<br>- Timeline and deliverables |
+| 类别 | 最低要求 | 审批流程 |
+|------|----------|----------|
+| 营销活动 | 详细ROI分析 | 社区投票 |
+| 开发资助 | 技术规范 | 技术委员会审查 |
+| 社区项目 | 影响评估 | 公开讨论 |
+| 合作伙伴关系 | 尽职调查 | 多重签名批准 |
 
-</div>
+### 重点领域
 
-::: info Proposal Requirements
-All treasury proposals must include:
-- Detailed budget allocation
-- Expected impact metrics
-- Implementation timeline
-- Risk assessment
-- Success criteria
-:::
+1. **生态系统增长**
+   - 用户获取计划
+   - 内容创作激励
+   - 社区活动资助
 
-## Content Creators Program
+2. **技术发展**
+   - 核心功能开发
+   - 安全审计
+   - 基础设施升级
 
-The Content Creators Program aims to build a sustainable ecosystem of content creators who help grow and engage the Cosmicrafts community. All program terms and compensation are subject to DAO approval.
+3. **市场扩张**
+   - 营销活动
+   - 战略合作
+   - 市场研究
 
-### Qualification Framework
+## 内容创作者计划
 
-<div class="table-scroll">
+### 资格框架
 
-| Tier | Requirements | Evaluation Criteria |
-|------|--------------|-------------------|
-| **Emerging** | - Active social media presence<br>- Consistent content schedule | - Content quality<br>- Engagement metrics<br>- Audience authenticity |
-| **Established** | - Proven track record<br>- Engagement-driven content<br>- Community participation | - Reach and impact<br>- Content performance<br>- Community feedback |
-| **Partner** | - Significant audience reach<br>- High-quality production<br>- Strategic value alignment | - Long-term impact<br>- Brand alignment<br>- Community leadership |
+| 级别 | 要求 | 权益 |
+|------|------|------|
+| 新手 | 基础作品集 | 基础工具访问 |
+| 进阶 | 3个月经验 | 高级功能 + 奖励 |
+| 专业 | 验证的成功记录 | 完整生态系统访问 |
+| 精英 | 杰出贡献 | 收益分成 + 决策权 |
 
-</div>
+### 补偿结构
 
-### Compensation Structure
+- **基础报酬**
+  - 每件作品的基本费用
+  - 质量奖金
+  - 按时交付奖励
 
-Content creators can submit proposals to the DAO for:
-- Performance-based compensation
-- Project-specific funding
-- Event sponsorship
-- Strategic collaboration opportunities
+- **收益分成**
+  - 销售分成
+  - 使用费
+  - 长期激励
 
-::: info Proposal Guidelines
-Creators must include:
-- Detailed content strategy
-- Performance metrics
-- Target audience analysis
-- Expected impact assessment
-- Budget requirements
-:::
+### 评估指标
 
-### Evaluation Metrics
+| 指标 | 权重 | 衡量标准 |
+|------|------|----------|
+| 质量 | 40% | 技术评分 |
+| 原创性 | 30% | 独特性评估 |
+| 社区反响 | 20% | 参与度指标 |
+| 及时性 | 10% | 交付时间表 |
 
-<div class="table-scroll">
+## 市场
 
-| Category | Metrics | Impact Assessment |
-|----------|---------|-------------------|
-| **Reach** | - Unique viewers<br>- Geographic distribution<br>- Audience retention | Measured through platform analytics |
-| **Engagement** | - Comment activity<br>- Share rates<br>- Community interaction | Tracked via engagement tools |
-| **Quality** | - Production value<br>- Content originality<br>- Community feedback | Regular quality assessments |
+### 核心功能
 
-</div>
+- **交易系统**
+  - 安全托管
+  - 价格发现机制
+  - 交易历史
 
-::: info Program Evolution
-The DAO community will:
-- Define specific compensation models
-- Establish evaluation criteria
-- Adjust program parameters
-- Review and approve creator proposals
-:::
+- **发现工具**
+  - 高级搜索
+  - 推荐算法
+  - 趋势追踪
 
-## Marketplace
+### 社区控制
 
-The DAO-governed marketplace serves as the central hub for digital asset trading and community commerce.
+| 功能 | 控制机制 | 实施 |
+|------|----------|------|
+| 定价 | 市场驱动 | 算法调节 |
+| 上架 | 社区审核 | 多级审查 |
+| 费用 | DAO投票 | 智能合约 |
+| 规则 | 提案系统 | 链上执行 |
 
-### Core Features
+## 流动性管理
 
-<div class="table-scroll">
+### 运营要求
 
-| Feature | Implementation | Community Control |
-|---------|----------------|------------------|
-| **Cross-Chain Trading** | - Multi-chain support<br>- Bridge integrations<br>- Universal standards | - Protocol selection<br>- Fee structures<br>- Integration priorities |
-| **Asset Standards** | - NFT compatibility<br>- Metadata standards<br>- Verification systems | - Format approval<br>- Quality guidelines<br>- Listing criteria |
-| **Revenue Model** | - Fee distribution<br>- Staking rewards<br>- Creator royalties | - Rate setting<br>- Reward allocation<br>- Treasury share |
+1. **市场效率**
+   - 最小价差
+   - 深度维护
+   - 价格稳定性
 
-</div>
+2. **风险控制**
+   - 波动监控
+   - 紧急机制
+   - 保险基金
 
-::: info Marketplace Evolution
-The community drives marketplace development through:
-- Feature proposals
-- Integration voting
-- Parameter adjustment
-- Revenue model updates
-:::
+### 治理要求
 
-## Liquidity Management
+| 参数 | 调整机制 | 更新频率 |
+|------|----------|----------|
+| 费用结构 | DAO投票 | 季度 |
+| 激励计划 | 技术委员会 | 月度 |
+| 风险参数 | 自动算法 | 实时 |
 
-The DAO oversees strategic liquidity operations to ensure market efficiency and token stability.
+## 机构投资
 
-<div class="table-scroll">
+### 投资类型
 
-| Operation | Process | Governance Requirements |
-|-----------|---------|------------------------|
-| **DEX Liquidity** | - Periodic liquidity adjustments<br>- Pool diversification<br>- Yield optimization | - Community vote required<br>- Minimum 7-day proposal period<br>- Detailed impact analysis |
-| **CEX Integration** | - Exchange selection criteria<br>- Listing requirements<br>- Liquidity allocation | - Treasury impact assessment<br>- Security verification<br>- Long-term strategy alignment |
-| **Market Making** | - Automated market making<br>- Order book depth<br>- Volatility management | - Parameter setting<br>- Performance monitoring<br>- Treasury risk assessment |
+| 类型 | 最低投资额 | 锁定期 |
+|------|------------|--------|
+| 战略投资 | $250,000 | 24个月 |
+| 生态基金 | $500,000 | 18个月 |
+| 流动性提供 | $100,000 | 12个月 |
 
-</div>
+### 要求
 
-::: info Liquidity Operations
-All liquidity operations must:
-- Undergo thorough security review
-- Include clear entry and exit strategies
-- Define risk mitigation measures
-- Establish reporting requirements
-- Align with long-term tokenomics goals
-:::
+- **资格标准**
+  - 合规审查
+  - 技术评估
+  - 战略匹配
 
-## Institutional Investment
+- **义务**
+  - 定期报告
+  - 社区参与
+  - 技术支持
 
-The DAO may approve strategic treasury allocations to institutional partners to accelerate growth and development.
+## 战略增长
 
-<div class="table-scroll">
+### 用户获取
 
-| Investment Type | Framework | Requirements |
-|-----------------|-----------|--------------|
-| **Strategic Sales** | - Private token allocations<br>- Treasury diversification<br>- Partnership development | - Vesting requirements<br>- Alignment with DAO objectives<br>- Value-add beyond capital |
-| **DAO Partnerships** | - Cross-DAO collaborations<br>- Ecosystem integration<br>- Joint development | - Mutual benefit analysis<br>- Technical compatibility<br>- Value creation assessment |
-| **Ecosystem Funding** | - Grants for ecosystem projects<br>- Incubation programs<br>- Development support | - Measurable outcomes<br>- Milestone-based distribution<br>- Technology integration |
+1. **主流玩家**
+   - 游戏体验优化
+   - 简化入门流程
+   - 教育资源
 
-</div>
+2. **加密用户**
+   - DeFi整合
+   - 跨链功能
+   - 高级工具
 
-::: info Institutional Requirements
-Potential institutional partners must demonstrate:
-- Long-term commitment to the ecosystem
-- Specific value contribution beyond capital
-- Alignment with community values
-- Technical or market expertise
-- Transparent operations and reporting
-:::
+### 留存策略
 
-## Strategic Growth
+| 策略 | 目标 | 实施方法 |
+|------|------|----------|
+| 游戏循环 | 日活跃度 | 每日任务系统 |
+| 社交功能 | 社区参与 | 公会活动 |
+| 进度系统 | 长期参与 | 成就解锁 |
 
-Community-driven initiatives for sustainable ecosystem expansion.
+## 社区治理
 
-### User Acquisition
+### 决策框架
 
-<div class="table-scroll">
+- **提案系统**
+  - 分级审查
+  - 社区讨论
+  - 执行追踪
 
-| Channel | Strategy | Success Metrics |
-|---------|----------|----------------|
-| **Content Partnerships** | - Creator collaborations<br>- Strategic alliances<br>- Community ambassadors | - Audience growth<br>- Engagement rates<br>- Conversion metrics |
-| **Community Events** | - Tournaments<br>- Special events<br>- Regional meetups | - Participation rates<br>- Retention metrics<br>- Community feedback |
-| **Incentive Programs** | - Referral systems<br>- Achievement rewards<br>- Social challenges | - User acquisition cost<br>- Retention rates<br>- Network growth |
+- **投票机制**
+  - 权重分配
+  - 时间锁定
+  - 结果执行
 
-</div>
+### 透明度
 
-### Retention Framework
+| 要素 | 报告频率 | 验证方法 |
+|------|----------|----------|
+| 财务状况 | 月度 | 审计报告 |
+| 发展进度 | 双周 | 公开演示 |
+| 社区指标 | 实时 | 链上数据 |
 
-::: info Key Elements
-- Progressive reward systems
-- Social engagement incentives
-- Community leadership opportunities
-- Regular events and competitions
-- Content creation support
-:::
+## 教育资源
 
-::: info Technical Infrastructure
-The Cosmicrafts technical architecture provides our community with a responsive, gas-free environment for seamless interaction and participation. For details on our single-canister design and technical implementation, see the [Architecture](/architecture) section.
-:::
+### 内容类型
+
+1. **新手指南**
+   - 基础概念
+   - 入门教程
+   - 常见问题
+
+2. **高级材料**
+   - 技术文档
+   - 策略指南
+   - 市场分析
+
+### 分发渠道
+
+| 渠道 | 目标受众 | 更新频率 |
+|------|----------|----------|
+| 文档中心 | 所有用户 | 持续 |
+| 视频教程 | 视觉学习者 | 每周 |
+| 社区讲座 | 深度参与者 | 月度 |
+
+## 社区活动
+
+### 活动类型
+
+- **游戏活动**
+  - 锦标赛
+  - 特别任务
+  - 社区挑战
+
+- **教育活动**
+  - 工作坊
+  - AMA会话
+  - 技术演示
+
+### 奖励结构
+
+| 活动 | 奖励类型 | 分配方法 |
+|------|----------|----------|
+| 竞技赛事 | 代币 + NFT | 排名制 |
+| 创作比赛 | 定制奖品 | 评审制 |
+| 社区贡献 | 声望积分 | 持续性 |
 

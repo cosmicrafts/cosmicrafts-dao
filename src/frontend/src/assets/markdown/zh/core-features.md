@@ -1,161 +1,191 @@
-# Core Features
+# 核心功能
 
-![Core Features](corebanner.webp)
+[[toc:2-2]]
 
+## 概述
 
-## Overview
+Cosmicrafts融合区块链技术和游戏玩法，为玩家提供真实的数字所有权和沉浸式游戏体验。以下功能构成生态系统的核心。
 
-At its core, **Cosmicrafts DAO** implements a unified canister that handles all core game functionality through several integrated systems. Our architecture ensures seamless interaction between different components while maintaining the security and transparency of blockchain technology.
+## 玩家系统
 
----
+### 账户管理
 
-## Player System
+- **Internet Identity集成**
+  - 无缝Web3认证
+  - 跨平台同步
+  - 安全账户恢复
 
-The Player System forms the backbone of user interaction within Cosmicrafts, managing everything from basic profiles to complex social interactions.
+- **个人资料定制**
+  - 可定制头像
+  - 成就徽章展示
+  - 社交整合
 
-### Profile Management
+### 进度系统
 
-<div class="table-scroll">
+| 等级 | 所需经验 | 解锁内容 |
+|------|----------|----------|
+| 1-10 | 1,000 XP | 基础功能 |
+| 11-25 | 5,000 XP | 中级内容 |
+| 26-50 | 15,000 XP | 高级功能 |
+| 51-100 | 50,000 XP | 精英内容 |
 
-| Feature | Description | Player Benefit |
-|---------|-------------|----------------|
-| Profile Creation | Unique IDs with customizable usernames and avatars | Personal identity in the metaverse |
-| Level System | Experience-based progression with rewards | Clear progression path |
-| Stats Tracking | Comprehensive performance metrics | Performance insights |
-| Title System | Unlockable titles showing achievements | Status recognition |
+## 资产系统
 
-</div>
+### NFT功能
 
-### Social Features
+- **进化型NFT**
+  - 通过游戏成长
+  - 历史记录
+  - 属性增强
 
-Players can build their network through:
-- Friend requests and management
-- Privacy settings control
-- Real-time notifications
-- Blocked user management
-- Social activity tracking
+- **互操作性**
+  - 跨游戏使用
+  - 属性继承
+  - 价值转移
 
-## Asset System
+### 市场
 
-Our asset system leverages the ICRC-7 standard to provide true ownership and interoperability.
+| 功能 | 说明 | 费用 |
+|------|------|------|
+| 直接交易 | P2P资产交易 | 1% |
+| 拍卖 | 限时竞价 | 2% |
+| 租赁 | 限时使用权 | 3% |
+| 捆绑 | 多物品包装 | 1.5% |
 
-### NFT Categories
+## 经济系统
 
-```mermaid
-graph LR
-    A[NFT Types] --> B[Soul NFTs]
-    A --> C[Game Units]
-    A --> D[Cosmetics]
-    A --> E[Rewards]
-    
-    B --> B1[Progress Tracking]
-    B --> B2[Achievement Display]
-    
-    C --> C1[Spaceships]
-    C --> C2[Characters]
-    C --> C3[Combat Units]
-    
-    D --> D1[Avatars]
-    D --> D2[Skins]
-    
-    E --> E1[Trophies]
-    E --> E2[Special Items]
-```
+### 货币机制
 
-## Economy System
+- **双代币系统**
+  - SPIRAL: 治理 & 价值储存
+  - COSMIC: 游戏内货币
 
-Our dual-token economy creates a balanced ecosystem for both free-to-play and premium players.
+- **价值创造**
+  - 游戏奖励
+  - 质押收益
+  - 交易费用
 
-### Token Structure
+### 奖励结构
 
-<div class="table-scroll">
+| 活动 | 基础奖励 | 奖励条件 |
+|------|----------|----------|
+| 每日任务 | 10 COSMIC | +50% NFT持有 |
+| PvP战斗 | 25 COSMIC | +100% 排位赛 |
+| 活动参与 | 50 COSMIC | +75% 锦标赛 |
+| 社区贡献 | 100 COSMIC | +200% 已验证 |
 
-| Token | Purpose | Acquisition | Usage |
-|-------|---------|-------------|--------|
-| Spiral | Governance & Premium | Purchase/Staking | Voting, Premium Features |
-| Stardust | In-game Currency | Gameplay Rewards | Basic Features, Crafting |
+## 匹配系统
 
-</div>
+### 玩家匹配
 
-## Matchmaking System
+- **技能基础**
+  - ELO评级
+  - 胜率调整
+  - 等级匹配
 
-Our matchmaking system ensures fair and engaging gameplay through sophisticated player matching.
+- **可定制条件**
+  - 地区选择
+  - 模式设置
+  - 奖励调整
 
-### Key Features
+### 匹配类型
 
-```mermaid
-graph TD
-    A[Matchmaking] --> B[Player Pool]
-    B --> C[ELO Matching]
-    C --> D[Match Creation]
-    D --> E[Status Tracking]
-    
-    E --> F[In Progress]
-    E --> G[Completed]
-    E --> H[Cancelled]
-```
+| 模式 | 说明 | 要求 |
+|------|------|------|
+| 休闲 | 练习赛 | 无 |
+| 排位 | 竞技模式 | 等级10+ |
+| 锦标赛 | 比赛形式 | 邀请制 |
+| 自定义 | 私人对战 | 主持权限 |
 
-- Dynamic skill-based matching
-- Real-time status updates
-- Automatic match validation
-- Performance-based rating adjustments
+## 任务 & 成就系统
 
-## Mission & Achievement System
+### 每日任务
 
-A comprehensive progression system that rewards players for their accomplishments.
+- **三级目标**
+  - 基础任务
+  - 中级挑战
+  - 精英任务
 
-### Mission Types
+- **奖励等级**
+  - 即时奖励
+  - 奖励目标
+  - 周累积
 
-<div class="table-scroll">
+### 成就追踪
 
-| Type | Frequency | Rewards | Purpose |
-|------|-----------|---------|----------|
-| Daily | 24 hours | Small rewards | Regular engagement |
-| Weekly | 7 days | Medium rewards | Sustained activity |
-| Special | Event-based | Unique rewards | Community events |
+| 类别 | 指标 | 奖励 |
+|------|------|------|
+| 战斗 | KD比、胜率 | 徽章、称号 |
+| 收集 | 物品、NFT | 特殊物品 |
+| 社交 | 好友、交易 | 社交地位 |
+| 精通 | 技能、等级 | 特殊权限 |
 
-</div>
+## 日志系统
 
-### Achievement Categories
-- Combat Mastery
-- Economic Achievement
-- Social Engagement
-- Collection Completion
-- Special Events
+### 玩家活动
 
-## Logging System
+- **详细记录**
+  - 战斗日志
+  - 交易历史
+  - 成就进度
 
-Our transparent logging system tracks all important events and transactions.
+- **分析工具**
+  - 性能追踪
+  - 统计分析
+  - 改进建议
 
-### Tracked Activities
+### 系统监控
 
-<div class="table-scroll">
+| 指标 | 追踪项目 | 目的 |
+|------|----------|------|
+| 性能 | 延迟、FPS | 优化 |
+| 安全 | 异常检测、作弊 | 保护 |
+| 经济 | 通胀率、交易量 | 平衡 |
+| 社区 | 活跃率、增长 | 参与度 |
 
-| Category | Events Tracked | Purpose |
-|----------|---------------|----------|
-| Gameplay | Matches, Stats | Performance Analysis |
-| Economy | Transactions, Trades | Economic Monitoring |
-| Social | Interactions, Friends | Community Health |
-| Progress | Levels, Achievements | Player Development |
+## 安全 & 性能
 
-</div>
+### 安全功能
 
-## Security & Performance
+- **反作弊**
+  - AI作弊检测
+  - 行为分析
+  - 实时监控
 
-### Security Measures
-- Administrative controls
-- Upgrade safety protocols
-- Input validation
-- Rate limiting
-- Transaction verification
+- **资产保护**
+  - 多重签名钱包
+  - 交易确认
+  - 恢复机制
 
-### Optimizations
-- Single-canister efficiency
-- Fast data retrieval
-- Memory management
-- Query optimization
+### 性能优化
 
----
+| 要素 | 目标值 | 实现 |
+|------|--------|------|
+| 延迟 | <50ms | 边缘服务器 |
+| FPS | 60+ | 动态调整 |
+| 并发连接 | 10,000+ | 负载均衡 |
+| 数据同步 | 实时 | P2P更新 |
 
-## Conclusion
-Cosmicrafts represents a new paradigm in blockchain gaming maintaining the highest standards of quality, security and performance.
+## 未来扩展
+
+### 计划功能
+
+1. **跨游戏整合**
+   - 资产互操作性
+   - 统一档案
+   - 共享经济
+
+2. **AI系统**
+   - 动态难度调整
+   - 个性化体验
+   - 反作弊增强
+
+3. **社交功能**
+   - 公会系统
+   - 锦标赛组织
+   - 社区活动
+
+4. **移动端部署**
+   - 跨平台
+   - 移动优化
+   - 无缝同步

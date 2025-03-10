@@ -1,187 +1,189 @@
-# Community
-![Community](communitybanner.webp)
+# Cộng Đồng
 
-## Overview
+[[toc:2-2]]
 
-The Cosmicrafts community is the driving force behind our ecosystem's growth and evolution. Our community framework balances:
-- Inclusive participation and governance
-- Sustainable economic development
-- Strategic ecosystem expansion
-- Content creation and cultural growth
+## Tổng Quan
 
-## Treasury Management
+Cộng đồng Cosmicrafts DAO là động lực thúc đẩy sự phát triển của hệ sinh thái. Bằng cách kết hợp các ưu đãi kinh tế và sự tham gia tích cực, chúng tôi xây dựng một hệ sinh thái bền vững mang lại lợi ích cho tất cả người tham gia.
 
-The DAO treasury is the foundation for sustainable growth and community initiatives. All funding allocations require community approval through the SNS proposal system.
+## Quản Lý Kho Bạc
 
-<div class="table-scroll">
+### Yêu Cầu Phân Bổ Quỹ
 
-| Focus Area | Implementation | Requirements |
-|------------|----------------|--------------|
-| **User Acquisition** | Marketing campaigns, Strategic partnerships | - Clear ROI metrics<br>- Target audience analysis<br>- Performance tracking |
-| **Development** | Core team maintenance, Technical improvements | - Skill requirements<br>- Project roadmap alignment<br>- Milestone definitions |
-| **Community Initiatives** | Events, Content creation, Market development | - Success metrics<br>- Budget breakdown<br>- Timeline and deliverables |
+| Danh Mục | Tỷ Lệ | Trọng Tâm |
+|---------|-----------|---------|
+| Phát Triển Sản Phẩm | 40% | Cải thiện game và nền tảng |
+| Phát Triển Cộng Đồng | 30% | Tiếp thị và tham gia |
+| Thanh Khoản | 20% | Ổn định thị trường |
+| Dự Trữ | 10% | Khẩn cấp và cơ hội |
 
-</div>
+### Lĩnh Vực Trọng Tâm
 
-::: info Proposal Requirements
-All treasury proposals must include:
-- Detailed budget allocation
-- Expected impact metrics
-- Implementation timeline
-- Risk assessment
-- Success criteria
-:::
+1. **Phát Triển Sản Phẩm**
+   - Cải thiện game
+   - Cập nhật nền tảng
+   - Công cụ cộng đồng
+   - Tích hợp hệ sinh thái
 
-## Content Creators Program
+2. **Phát Triển Cộng Đồng**
+   - Chiến dịch tiếp thị
+   - Chương trình đại sứ
+   - Sự kiện cộng đồng
+   - Chương trình giáo dục
 
-The Content Creators Program aims to build a sustainable ecosystem of content creators who help grow and engage the Cosmicrafts community. All program terms and compensation are subject to DAO approval.
+3. **Quản Lý Thanh Khoản**
+   - Ưu đãi nhà cung cấp thanh khoản
+   - Ổn định thị trường
+   - Chương trình mua lại
+   - Quỹ khẩn cấp
 
-### Qualification Framework
+## Chương Trình Người Sáng Tạo Nội Dung
 
-<div class="table-scroll">
+### Khung Tiêu Chuẩn
 
-| Tier | Requirements | Evaluation Criteria |
-|------|--------------|-------------------|
-| **Emerging** | - Active social media presence<br>- Consistent content schedule | - Content quality<br>- Engagement metrics<br>- Audience authenticity |
-| **Established** | - Proven track record<br>- Engagement-driven content<br>- Community participation | - Reach and impact<br>- Content performance<br>- Community feedback |
-| **Partner** | - Significant audience reach<br>- High-quality production<br>- Strategic value alignment | - Long-term impact<br>- Brand alignment<br>- Community leadership |
+| Cấp Độ | Yêu Cầu | Phần Thưởng |
+|----------|--------------|----------|
+| Mới Bắt Đầu | 100 người theo dõi | 100 SPIRAL/tháng |
+| Trung Cấp | 1,000 người theo dõi | 500 SPIRAL/tháng |
+| Cao Cấp | 10,000 người theo dõi | 2,500 SPIRAL/tháng |
+| Tinh Anh | 100,000+ người theo dõi | 10,000 SPIRAL/tháng |
 
-</div>
+### Cơ Cấu Thù Lao
 
-### Compensation Structure
+| Hoạt Động | Phần Thưởng Cơ Bản | Bội Số |
+|----------|----------------|------------|
+| Video | 50 SPIRAL | Lên đến 3x |
+| Phát Trực Tiếp | 100 SPIRAL/giờ | Lên đến 2x |
+| Bài Viết | 75 SPIRAL | Lên đến 2.5x |
+| Nghệ Thuật | 200 SPIRAL | Lên đến 2x |
 
-Content creators can submit proposals to the DAO for:
-- Performance-based compensation
-- Project-specific funding
-- Event sponsorship
-- Strategic collaboration opportunities
+### Tiêu Chí Đánh Giá
 
-::: info Proposal Guidelines
-Creators must include:
-- Detailed content strategy
-- Performance metrics
-- Target audience analysis
-- Expected impact assessment
-- Budget requirements
-:::
+| Tiêu Chí | Trọng Số | Mục Tiêu |
+|----------|--------|--------|
+| Lượt Xem | 30% | Tăng trưởng hàng tháng |
+| Tương Tác | 40% | Tỷ lệ tương tác |
+| Chất Lượng | 20% | Đánh giá đồng cấp |
+| Nhất Quán | 10% | Xuất bản thường xuyên |
 
-### Evaluation Metrics
+## Thị Trường
 
-<div class="table-scroll">
+### Tính Năng Cốt Lõi
 
-| Category | Metrics | Impact Assessment |
-|----------|---------|-------------------|
-| **Reach** | - Unique viewers<br>- Geographic distribution<br>- Audience retention | Measured through platform analytics |
-| **Engagement** | - Comment activity<br>- Share rates<br>- Community interaction | Tracked via engagement tools |
-| **Quality** | - Production value<br>- Content originality<br>- Community feedback | Regular quality assessments |
+| Tính Năng | Mô Tả | Trạng Thái Phát Triển |
+|---------|-------------|-----------------|
+| Giao Dịch P2P | Trao đổi tài sản trực tiếp | Hoàn thành |
+| Đấu Giá | Đấu giá NFT | Đang phát triển |
+| Niêm Yết Hàng Loạt | Danh sách nhiều mục | Đã lên kế hoạch |
+| Giao Dịch Tự Động | Nhà tạo lập thị trường | Đã lên kế hoạch |
 
-</div>
+### Kiểm Soát Cộng Đồng
 
-::: info Program Evolution
-The DAO community will:
-- Define specific compensation models
-- Establish evaluation criteria
-- Adjust program parameters
-- Review and approve creator proposals
-:::
+| Chức Năng | Yêu Cầu | Tác Động |
+|----------|--------------|----------|
+| Niêm Yết Tài Sản | Bỏ phiếu cộng đồng | Chấp nhận tài sản |
+| Điều Chỉnh Phí | Đề xuất + bỏ phiếu | Cấu trúc phí |
+| Quy Tắc Giao Dịch | Đồng thuận ủy ban | Tiêu chuẩn thị trường |
+| Chương Trình Ưu Đãi | Phê duyệt kho bạc | Phân phối phần thưởng |
 
-## Marketplace
+## Quản Lý Thanh Khoản
 
-The DAO-governed marketplace serves as the central hub for digital asset trading and community commerce.
+### Hoạt Động
 
-### Core Features
+| Hoạt Động | Tần Suất | Người Chịu Trách Nhiệm |
+|----------|------------|------------|
+| Giám Sát Thanh Khoản | Liên tục | Hệ thống |
+| Điều Chỉnh Ưu Đãi | Hàng tuần | Ủy ban thanh khoản |
+| Đánh Giá Rủi Ro | Hàng tháng | Kiểm toán viên cộng đồng |
+| Báo Cáo Hiệu Suất | Hàng quý | Đội phân tích |
 
-<div class="table-scroll">
+### Yêu Cầu Quản Trị
 
-| Feature | Implementation | Community Control |
-|---------|----------------|------------------|
-| **Cross-Chain Trading** | - Multi-chain support<br>- Bridge integrations<br>- Universal standards | - Protocol selection<br>- Fee structures<br>- Integration priorities |
-| **Asset Standards** | - NFT compatibility<br>- Metadata standards<br>- Verification systems | - Format approval<br>- Quality guidelines<br>- Listing criteria |
-| **Revenue Model** | - Fee distribution<br>- Staking rewards<br>- Creator royalties | - Rate setting<br>- Reward allocation<br>- Treasury share |
+| Quyết Định | Ngưỡng Bỏ Phiếu | Thời Gian Thực Hiện |
+|----------|----------------|-----------------|
+| Điều Chỉnh Thông Số | 51% | 24 giờ |
+| Phân Bổ Quỹ | 66% | 48 giờ |
+| Thay Đổi Hệ Thống | 75% | 72 giờ |
+| Hành Động Khẩn Cấp | 90% | Ngay lập tức |
 
-</div>
+## Đầu Tư Tổ Chức
 
-::: info Marketplace Evolution
-The community drives marketplace development through:
-- Feature proposals
-- Integration voting
-- Parameter adjustment
-- Revenue model updates
-:::
+### Loại Đầu Tư
 
-## Liquidity Management
+| Loại | Tối Thiểu | Thời Gian Khóa |
+|--------|------------|-------------|
+| Chiến Lược | 100,000 SPIRAL | 24 tháng |
+| Đối Tác | 50,000 SPIRAL | 12 tháng |
+| Tổ Chức | 25,000 SPIRAL | 6 tháng |
 
-The DAO oversees strategic liquidity operations to ensure market efficiency and token stability.
+### Yêu Cầu
 
-<div class="table-scroll">
+1. **Xác Minh**
+   - Thẩm định
+   - Xác minh danh tính
+   - Đánh giá uy tín
 
-| Operation | Process | Governance Requirements |
-|-----------|---------|------------------------|
-| **DEX Liquidity** | - Periodic liquidity adjustments<br>- Pool diversification<br>- Yield optimization | - Community vote required<br>- Minimum 7-day proposal period<br>- Detailed impact analysis |
-| **CEX Integration** | - Exchange selection criteria<br>- Listing requirements<br>- Liquidity allocation | - Treasury impact assessment<br>- Security verification<br>- Long-term strategy alignment |
-| **Market Making** | - Automated market making<br>- Order book depth<br>- Volatility management | - Parameter setting<br>- Performance monitoring<br>- Treasury risk assessment |
+2. **Cam Kết**
+   - Tham gia quản trị
+   - Hỗ trợ hệ sinh thái
+   - Cung cấp chuyên môn
 
-</div>
+3. **Đóng Góp**
+   - Phát triển kinh doanh
+   - Đối tác chiến lược
+   - Mở rộng thị trường
 
-::: info Liquidity Operations
-All liquidity operations must:
-- Undergo thorough security review
-- Include clear entry and exit strategies
-- Define risk mitigation measures
-- Establish reporting requirements
-- Align with long-term tokenomics goals
-:::
+## Tăng Trưởng Chiến Lược
 
-## Institutional Investment
+### Thu Hút Người Dùng
 
-The DAO may approve strategic treasury allocations to institutional partners to accelerate growth and development.
+| Kênh | Ngân Sách | ROI Mục Tiêu |
+|----------|----------|--------------|
+| Tiếp Thị Số | 30% | 3x |
+| Đối Tác | 40% | 4x |
+| Chương Trình Giới Thiệu | 20% | 5x |
+| Quan Hệ Công Chúng | 10% | 2x |
 
-<div class="table-scroll">
+### Giữ Chân Người Dùng
 
-| Investment Type | Framework | Requirements |
-|-----------------|-----------|--------------|
-| **Strategic Sales** | - Private token allocations<br>- Treasury diversification<br>- Partnership development | - Vesting requirements<br>- Alignment with DAO objectives<br>- Value-add beyond capital |
-| **DAO Partnerships** | - Cross-DAO collaborations<br>- Ecosystem integration<br>- Joint development | - Mutual benefit analysis<br>- Technical compatibility<br>- Value creation assessment |
-| **Ecosystem Funding** | - Grants for ecosystem projects<br>- Incubation programs<br>- Development support | - Measurable outcomes<br>- Milestone-based distribution<br>- Technology integration |
+| Chiến Lược | Tiêu Chí | Mục Tiêu |
+|--------------|----------|--------|
+| Chương Trình Trung Thành | Tỷ lệ giữ chân | 80% |
+| Cải Thiện Sản Phẩm | Sự hài lòng của người dùng | 90% |
+| Hỗ Trợ Cộng Đồng | Thời gian phản hồi | <2 giờ |
+| Phần Thưởng | Sự tham gia của người dùng | 70% hoạt động |
 
-</div>
+### Sáng Kiến Tăng Trưởng
 
-::: info Institutional Requirements
-Potential institutional partners must demonstrate:
-- Long-term commitment to the ecosystem
-- Specific value contribution beyond capital
-- Alignment with community values
-- Technical or market expertise
-- Transparent operations and reporting
-:::
+1. **Chương Trình Đại Sứ**
+   - Tuyển dụng và đào tạo
+   - Hệ thống phần thưởng
+   - Mục tiêu mở rộng
 
-## Strategic Growth
+2. **Đối Tác Hệ Sinh Thái**
+   - Tích hợp sản phẩm
+   - Chia sẻ tài nguyên
+   - Tiếp thị chung
 
-Community-driven initiatives for sustainable ecosystem expansion.
+3. **Chương Trình Giáo Dục**
+   - Nội dung giáo dục
+   - Hội thảo
+   - Chương trình cố vấn
 
-### User Acquisition
+## Lộ Trình Cộng Đồng
 
-<div class="table-scroll">
+### Giai Đoạn 1: Thành Lập (Tháng 1-6)
+- Ra mắt chương trình người sáng tạo nội dung
+- Thành lập chương trình đại sứ
+- Tạo kênh cộng đồng
 
-| Channel | Strategy | Success Metrics |
-|---------|----------|----------------|
-| **Content Partnerships** | - Creator collaborations<br>- Strategic alliances<br>- Community ambassadors | - Audience growth<br>- Engagement rates<br>- Conversion metrics |
-| **Community Events** | - Tournaments<br>- Special events<br>- Regional meetups | - Participation rates<br>- Retention metrics<br>- Community feedback |
-| **Incentive Programs** | - Referral systems<br>- Achievement rewards<br>- Social challenges | - User acquisition cost<br>- Retention rates<br>- Network growth |
+### Giai Đoạn 2: Tăng Trưởng (Tháng 7-12)
+- Mở rộng chương trình phần thưởng
+- Ra mắt đối tác chiến lược
+- Cải thiện công cụ cộng đồng
 
-</div>
-
-### Retention Framework
-
-::: info Key Elements
-- Progressive reward systems
-- Social engagement incentives
-- Community leadership opportunities
-- Regular events and competitions
-- Content creation support
-:::
-
-::: info Technical Infrastructure
-The Cosmicrafts technical architecture provides our community with a responsive, gas-free environment for seamless interaction and participation. For details on our single-canister design and technical implementation, see the [Architecture](/architecture) section.
-:::
+### Giai Đoạn 3: Mở Rộng (Tháng 13+)
+- Chương trình tổ chức
+- Mở rộng toàn cầu
+- Tích hợp hệ sinh thái
 

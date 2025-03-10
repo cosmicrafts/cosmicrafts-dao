@@ -1,9 +1,10 @@
-# Governance
-![Governance](govbanner.webp)
+# Quản Trị
 
-## Introduction
+[[toc:2-2]]
 
-The Cosmicrafts DAO puts the community at the center, giving Stakeholders a real say in how the franchise grows. Built on proven technology, the DAO uses fairness, transparency, and community-driven decision-making to ensure Cosmicrafts stays true to its vision.
+## Giới Thiệu
+
+Cosmicrafts DAO trao quyền cho cộng đồng thông qua hệ thống quản trị minh bạch và công bằng. Tất cả các quyết định quan trọng được thực hiện thông qua bỏ phiếu của cộng đồng, đảm bảo mỗi bên liên quan đều có tiếng nói trong tương lai của hệ sinh thái.
 
 ::: info Reading Guide
 This document outlines the governance framework of the Cosmicrafts DAO, focusing on decision-making processes, proposal systems, and community participation. It complements the [Tokenomics](/tokenomics) document, which covers economic aspects.
@@ -13,150 +14,177 @@ This document outlines the governance framework of the Cosmicrafts DAO, focusing
 - **Cross-References**: Look for tip boxes linking to relevant tokenomics sections
 :::
 
-## DAO Core Principles
+## Nguyên Tắc Cốt Lõi
 
-| Principle | Description |
-|-----------|-------------|
-| **Community Sovereignty** | • Collective decision-making power<br>• Transparent governance process<br>• On-chain voting and automated execution<br>|
-| **Sustainable Growth** | • Long-term value creation<br>• Balanced ecosystem development<br>• Community-driven treasury management<br>• Data-driven evaluation system |
-| **Open Participation** | • Inclusive governance structure<br>• Low barriers to entry<br>• Community-driven expansion<br>• Multi-chain accessibility |
+| Nguyên Tắc | Mô Tả | Thực Hiện |
+|---------|-------------|--------------|
+| Chủ Quyền Cộng Đồng | Cộng đồng kiểm soát quyết định chính | Bỏ phiếu đề xuất |
+| Tăng Trưởng Bền Vững | Tăng giá trị dài hạn | Cơ chế đốt và phần thưởng |
+| Tham Gia Mở | Khả năng tiếp cận cho mọi bên liên quan | Ngưỡng tham gia thấp |
 
+## Phân Phối Quyền Bỏ Phiếu
 
-## Voting Power Distribution
+| Nhóm | Tỷ Lệ Phiếu | Lý Do |
+|-----------|--------------|----------------|
+| Người Nắm Token | 40% | Đóng góp kinh tế |
+| Người Chơi Tích Cực | 30% | Tham gia hệ sinh thái |
+| Người Sáng Tạo Nội Dung | 20% | Làm phong phú hệ sinh thái |
+| Đội Ngũ Cốt Lõi | 10% | Chuyên môn kỹ thuật |
 
-<div class="tokenomics-diagram">
-  <img src="src/assets/icons/votingpower.svg" alt="SPIRAL Token Allocation" />
-</div>
+### Bội Số Hiệu Suất
 
-<style>
-.tokenomics-diagram {
-  text-align: center;
-  width: 100%;
-  margin: 4rem auto;
-}
+| Hoạt Động | Bội Số | Tối Đa |
+|----------|------------|------------|
+| Thời Gian Khóa | 1.5x | 2 năm |
+| Hoạt Động Bỏ Phiếu | 1.2x | 100 phiếu |
+| Đóng Góp Hệ Sinh Thái | 1.3x | 50 đóng góp |
+| Đệ Trình Đề Xuất | 1.1x | 10 đề xuất |
 
-.tokenomics-diagram img {
-  width: 65%;
-  max-width: 800px;
-  height: auto;
-  filter: none;
-  box-shadow: none;
-  background: transparent;
-  margin: 0 auto;
-  display: block;
-}
-
-@media (max-width: 768px) {
-  .tokenomics-diagram img {
-    width: 100%;
-    max-width: 100%;
-  }
-
-}
-</style>
-
-::: info Dynamic Voting Power
-The actual distribution of voting power will fluctuate based on stakeholder decisions regarding:
-- Amount of tokens staked in neurons
-- Length of dissolve delay chosen
-- Age of neurons accumulated
-These factors can significantly shift the relative influence of different stakeholder groups over time.
-:::
-
-| Stakeholder Group | Voting Share | Base Tokens | Purpose |
-|-------------------|--------------|-------------|----------|
-| **SNS Participants** | 50% | 120M | - Largest voting bloc<br>- Community-driven governance<br>- Potential for increased influence through participation |
-| **Developer Team** | 33.3% | 80M | - Strategic decision-making<br>- 8-year dissolve delay with 1-year vesting<br>- Gradual reduction of influence |
-| **Genesis/Seed** | 16.7% | 40M | - Early supporter representation<br>- Staggered dissolve delays (0-7 years)<br>- Balanced initial influence |
-
-
-
-### Power Multipliers
-
-| Factor | Maximum Bonus | Time to Achieve |
-|--------|---------------|-----------------|
-| **Dissolve Delay** | +100% | 8 years |
-| **Neuron Age** | +100% | 1 year |
-| **Minimum Dissolve Delay** | N/A | 1 month |
-| **Combined Cap** | 3x base power | N/A |
-
-## SNS Integration
+## Tích Hợp SNS
 
 The Cosmicrafts DAO leverages the Internet Computer's [Service Nervous System (SNS)](https://internetcomputer.org/docs/building-apps/governing-apps/overview) for its governance infrastructure. This provides a battle-tested, secure framework for decentralized decision-making.
 
-### Key Features
+### Thông Số Chính
 
-- **Neuron-Based Voting**: Stake SPIRAL tokens to create neurons and participate in governance
-- **Dissolve Delay Bonuses**: Longer lockup periods increase voting power
-- **Age Bonuses**: Neurons gain more voting power over time
-- **Proposal System**: Standard SNS proposal framework for all governance actions
+| Thông Số | Giá Trị | Mô Tả |
+|-----------|---------|-------------|
+| Phiếu Tối Thiểu | 100 SPIRAL | Tham gia tối thiểu |
+| Thời Gian Bỏ Phiếu | 7 ngày | Thời gian bỏ phiếu tiêu chuẩn |
+| Số Lượng Tối Thiểu | 51% | Tham gia tối thiểu |
+| Ngưỡng Chấp Thuận | 66% | Tỷ lệ chấp thuận cần thiết |
 
-::: info SNS Configuration
-For detailed technical parameters of our SNS setup, including minimum stakes, voting periods, and reward rates, refer to the SNS initialization parameters in our documentation.
-:::
+### Thông Số Quản Trị
 
-### Governance Parameters
+| Thông Số | Giá Trị | Có Thể Thay Đổi |
+|-----------|---------|---------------|
+| Thời Gian Trì Hoãn | 24 giờ | Có |
+| Giới Hạn Đề Xuất | 1,000 SPIRAL | Có |
+| Thời Gian Thực Hiện | 48 giờ | Có |
+| Ngưỡng Phủ Quyết | 33% | Không |
 
-| Parameter | Value | Purpose |
-|-----------|--------|---------|
-| **Rejection Fee** | 1000 SPIRAL | Prevent spam proposals |
-| **Initial Voting Period** | 7 days | Standard deliberation time |
-| **Maximum Deadline Extension** | 1 day | Allow for late participation |
-| **Minimum Neuron Creation Stake** | 1000 SPIRAL | Base participation threshold |
+## Cơ Chế Khóa Neuron
 
+### Cấp Độ Khóa
 
-## Neuron Staking Mechanics
+| Cấp Độ | Thời Gian | Bội Số | Yêu Cầu |
+|----------|--------|------------|--------------|
+| Đồng | 3 tháng | 1.2x | 1,000 SPIRAL |
+| Bạc | 6 tháng | 1.5x | 5,000 SPIRAL |
+| Vàng | 12 tháng | 2.0x | 10,000 SPIRAL |
+| Bạch Kim | 24 tháng | 3.0x | 25,000 SPIRAL |
 
-### Base Requirements
+### Phần Thưởng Khóa
 
-| Parameter | Value | Description |
-|-----------|--------|-------------|
-| **Minimum Stake** | 1,000 SPIRAL | Base amount required to create a neuron |
-| **Minimum Lock Period** | 30 days | Shortest allowed dissolve delay |
-| **Maximum Lock Period** | 8 years | Longest possible dissolve delay |
-| **Transaction Fee** | 0.01 SPIRAL | Network operation cost |
+| Loại | Tỷ Lệ | Chu Kỳ |
+|--------|--------|----------|
+| Cơ Bản | 12% APY | Liên tục |
+| Thưởng Tham Gia | +3% | Hàng tháng |
+| Thưởng Trung Thành | +5% | Hàng năm |
+| Thưởng Hệ Sinh Thái | +2% | Hàng quý |
 
-### Maturity Schedule
+## Khung Ra Quyết Định
 
-| Lock Period | Bonus Multiplier | Effective Power |
-|-------------|------------------|-----------------|
-| 30 days | 1.0x | Base Power |
-| 6 months | 1.25x | +25% |
-| 1 year | 1.5x | +50% |
-| 2 years | 1.75x | +75% |
-| 4 years | 1.85x | +85% |
-| 8 years | 2.0x | +100% |
+### Loại Đề Xuất
 
+| Loại | Mô Tả | Ngưỡng Chấp Thuận |
+|--------|-------------|-----------------|
+| Kỹ Thuật | Cập nhật giao thức | 75% |
+| Tài Chính | Phân bổ nguồn lực | 66% |
+| Cộng Đồng | Sáng kiến cộng đồng | 51% |
+| Khẩn Cấp | Sửa chữa khẩn cấp | 90% |
 
-## Decision Making Framework
+### Quy Trình Đề Xuất
 
-### Governance Areas
+1. **Đệ Trình**
+   - Đệ trình đề xuất
+   - 3 ngày thảo luận
+   - Cập nhật dựa trên phản hồi
 
-1. **Treasury Management**
-   - Marketing Campaigns
-   - Development Funding
-   - Strategic Partnerships
+2. **Bỏ Phiếu**
+   - 7 ngày bỏ phiếu
+   - Theo dõi tham gia
+   - Tính toán kết quả
 
-2. **Economic Policies**
-   - Tokenomics Adjustments
-   - Staking Rates
-   - Fee Structures
+3. **Thực Hiện**
+   - Lịch trình thực hiện
+   - Theo dõi tiến độ
+   - Báo cáo kết quả
 
-3. **Development Roadmap**
-   - Feature Prioritization
-   - Game Expansions
-   - Technical Improvements
+### Yêu Cầu Đề Xuất
 
-### Proposal System
+| Mục | Mô Tả | Bắt Buộc |
+|---------|-------------|------------|
+| Tóm Tắt | Tổng quan ngắn gọn | Có |
+| Chi Tiết | Giải thích đầy đủ | Có |
+| Ngân Sách | Ước tính chi phí | Khi cần |
+| Lịch Trình | Kế hoạch thực hiện | Có |
+| Rủi Ro | Phân tích rủi ro | Có |
 
-| Stage | Duration | Requirements |
-|-------|----------|--------------|
-| **Submission** | N/A | 1,000 SPIRAL stake |
-| **Review** | 24 hours | Community feedback |
-| **Voting** | 7 days | Active neuron required |
-| **Execution** | Variable | Automated if approved |
+## Hệ Thống Đề Xuất
 
-::: info Community Implementation
-For practical details about treasury management, community programs, and ecosystem growth initiatives, see our [Community](/community) framework.
-:::
+### Danh Mục Đề Xuất
+
+| Danh Mục | Ví Dụ | Thời Gian Xử Lý |
+|---------|-----------|---------------|
+| Kỹ Thuật | Cập nhật giao thức | 2-4 tuần |
+| Tài Chính | Phân bổ ngân sách | 1-2 tuần |
+| Cộng Đồng | Sự kiện, phần thưởng | 1 tuần |
+| Khẩn Cấp | Sửa lỗi bảo mật | 24-48 giờ |
+
+### Vòng Đời Đề Xuất
+
+1. **Giai Đoạn Soạn Thảo**
+   - Chuẩn bị đề xuất
+   - Đánh giá cộng đồng
+   - Sửa đổi
+
+2. **Giai Đoạn Bỏ Phiếu**
+   - Mở bỏ phiếu
+   - Thảo luận chung
+   - Ghi nhận phiếu bầu
+
+3. **Giai Đoạn Thực Hiện**
+   - Kế hoạch hành động
+   - Thực hiện
+   - Giám sát
+
+4. **Giai Đoạn Đánh Giá**
+   - Đo lường kết quả
+   - Thu thập phản hồi
+   - Đề xuất cải tiến
+
+## Minh Bạch và Trách Nhiệm
+
+### Cơ Chế Theo Dõi
+
+| Cơ Chế | Mục Đích | Tần Suất |
+|---------|---------|-----------|
+| Báo Cáo Quản Trị | Theo dõi quyết định | Hàng tháng |
+| Đánh Giá Hiệu Suất | Đánh giá kết quả | Hàng quý |
+| Kiểm Toán Cộng Đồng | Đảm bảo minh bạch | Hàng năm |
+
+### Chỉ Số Hiệu Suất
+
+| Chỉ Số | Mục Tiêu | Theo Dõi |
+|----------|--------|----------|
+| Tham Gia Bỏ Phiếu | >30% | Liên tục |
+| Thực Hiện Đề Xuất | >80% | Hàng tháng |
+| Hài Lòng Cộng Đồng | >85% | Hàng quý |
+
+## Lộ Trình Quản Trị
+
+### Giai Đoạn 1: Thành Lập (Tháng 1-6)
+- Ra mắt hệ thống bỏ phiếu cơ bản
+- Thành lập ủy ban ban đầu
+- Thiết lập khung đề xuất
+
+### Giai Đoạn 2: Mở Rộng (Tháng 7-12)
+- Thêm cơ chế bỏ phiếu nâng cao
+- Mở rộng ủy ban
+- Cải thiện quy trình đề xuất
+
+### Giai Đoạn 3: Trưởng Thành (Tháng 13+)
+- Triển khai quản trị phi tập trung hoàn toàn
+- Ra mắt công cụ phân tích nâng cao
+- Tích hợp giải pháp trọng tài
 

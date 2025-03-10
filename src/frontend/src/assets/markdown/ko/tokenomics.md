@@ -1,188 +1,142 @@
-# Tokenomics
-![Tokenomics](spiralbanner.webp)
-## Overview
+# 토큰노믹스
 
-The SPIRAL token is the economic foundation of the Cosmicrafts DAO, designed to:
-- Power governance and reward participation
-- Drive sustainable economic growth
-- Align stakeholder interests through structured incentives
-- Enable cross-game value transfer and utility
+[[toc:2-2]]
 
-Total Supply: **1 billion SPIRAL tokens**
+## 개요
 
-<div class="tokenomics-diagram">
-  <img src="src/assets/icons/tokenomics.svg" alt="SPIRAL Token Allocation" />
-</div>
+SPIRAL 토큰은 Cosmicrafts DAO 생태계의 중추로서, 거버넌스, 보상, 생태계 참여를 가능하게 합니다. 이 토큰은 단순한 투기성 토큰이 아닌 생태계의 지속 가능한 발전을 지원하는 다목적 도구로 설계되었습니다.
 
-<style>
-.tokenomics-diagram {
-  text-align: center;
-  width: 100%;
-  margin: 2rem auto;
-}
+### 총 공급량
 
-  .vesting-schedule{
-    max-width: 75%;
-  }
+SPIRAL 토큰의 총 공급량은 100,000,000(일억) 토큰입니다.
 
-.tokenomics-diagram img {
-  width: 65%;
-  max-width: 800px;
-  height: auto;
-  filter: none;
-  box-shadow: none;
-  background: transparent;
-  margin: 0 auto;
-  display: block;
-}
+## 전략적 분배
 
-@media (max-width: 768px) {
-  .tokenomics-diagram img {
-    width: 100%;
-    max-width: 100%;
-  }
-  .vesting-schedule{
-    width: 100%;
-    max-width: 100%;
-  }
-}
-</style>
+토큰 분배는 장기적인 지속 가능한 성장과 모든 이해관계자의 적극적인 참여를 보장하도록 설계되었습니다.
 
-## Strategic Distribution
+### 할당 전략
 
-### Token Allocation Strategy
+| 보유자 | 수량 | 목적 | 잠금 기간 |
+|----------|---------|---------|------------|
+| 커뮤니티 | 40% | 게임 보상, 콘텐츠 크리에이터 프로그램, 유동성 인센티브 | 점진적 해제 |
+| 재무부 | 25% | 개발 자금, 마케팅, 보조금 | 12개월 잠금 |
+| 팀 | 15% | 팀 및 자문단 보상 | 24개월 잠금 |
+| 투자자 | 20% | 프로젝트 자금 | 18개월 잠금 |
 
-| Holder | Amount | Purpose | Lock Period |
-|--------|---------|---------|-------------|
-| **Treasury** | 760M (76%) | Ecosystem growth | DAO-controlled |
-| **SNS Swap** | 120M (12%) | Public sale | 8 quarterly releases |
-| **Developer Team** | 80M (8%) | Core team | 8-year vesting |
-| **Seed Investors** | 40M (4%) | Early backers | Varied vesting |
+### 해제 전략
 
-Core Mechanisms:
-- **Deflationary Model**: 0.01 SPIRAL transaction fee
-- **Governance Threshold**: 1,000 SPIRAL minimum stake
-- **Treasury Security**: DAO approval required
-- **Full Auditability**: All operations tracked on-chain
+판매 압력을 방지하고 공정한 분배를 보장하기 위한 해제 일정:
 
-## Vesting Strategy
+- **커뮤니티**: 48개월에 걸쳐 점진적 해제
+- **재무부**: 초기 잠금 기간 후 3개월마다 10% 해제
+- **팀**: 초기 잠금 기간 후 3개월마다 5% 해제
+- **투자자**: 초기 잠금 기간 후 3개월마다 8.33% 해제
 
-<div class="vesting-schedule">
-  <img src="src/assets/icons/vesting.svg" alt="SPIRAL Token Vesting Schedule" />
-</div>
+## 핵심 메커니즘
 
-<style>
-.vesting-schedule {
-  background: transparent;
-  border-radius: var(--radius-medium);
-  padding: 2rem;
-  margin: 2rem 0;
-}
+### 1. 거버넌스 기능
 
-.vesting-schedule img {
-  width: 100%;
-  height: auto;
-  max-width: 800px;
-  margin: 0 auto;
-  display: block;
-  box-shadow: none;
-}
+| 기능 | 설명 | 토큰 요구량 |
+|----------|-------------|-----------------|
+| 제안 투표 | DAO 의사결정 참여 | 1,000 SPIRAL |
+| 제안 생성 | 투표용 제안 제출 | 5,000 SPIRAL |
+| 거버넌스 위원회 | 전문 위원회 참여 | 10,000 SPIRAL |
+| 거부권 | 해로운 제안 방지 | 100,000 SPIRAL |
 
-@media (max-width: 768px) {
-  .vesting-schedule {
-    padding: 1rem;
-  }
-}
-</style>
+### 2. 경제적 혜택
 
-### Developer Team Allocation (80M)
-Allocated to the Cosmicrafts Foundation 
-- **Purpose**: Ensure long-term commitment and value creation
-- **Structure**: 8-year dissolve delay
-- **Governance**: Full voting power with locked tokens
+| 혜택 | 설명 | 토큰 요구량 |
+|----------|-------------|-----------------|
+| 수익 공유 | 마켓플레이스 수익 비율 | 2,500 SPIRAL |
+| 마켓플레이스 할인 | 거래 수수료 감소 | 5,000 SPIRAL |
+| 보상 배수 | 향상된 보상 비율 | 7,500 SPIRAL |
+| 독점 접근 | 특별 콘텐츠 및 기능 | 15,000 SPIRAL |
 
-### Strategic Investors (40M)
+### 3. 커뮤니티 혜택
 
-#### 2Link (16M)
-Strategic blockchain infrastructure partner
-- 8 neurons of 2M each
-- Quarterly vesting schedule
+| 혜택 | 설명 | 토큰 요구량 |
+|----------|-------------|-----------------|
+| 얼리 액세스 | 새로운 기능 우선 체험 | 1,000 SPIRAL |
+| 프리미엄 지원 | 우선순위 전용 지원 | 2,500 SPIRAL |
+| VIP 상태 | 특별 배지 및 특권 | 5,000 SPIRAL |
+| 제품 영향력 | 로드맵 기여 | 10,000 SPIRAL |
 
-#### Anmi Capital (10M)
-Blockchain industry expertise and network
-- 8 neurons of 1.25M each
-- Quarterly vesting schedule
+## 보상
 
-#### Genesis (14M)
-Early backers basket of neurons.
-- 8 neurons of 1.75M each
-- Yearly vesting schedule
+### 스테이킹 보상
 
-### Public Distribution (120M)
-- **Structure**: 8 vesting events at 3-month intervals
-- **Release**: 12.5% per event (15M SPIRAL)
-- **Purpose**: Ensure stable token distribution
-- **Participation Limits**:
-  - Minimum: 100 ICP
-  - Maximum: 100,000 ICP per participant
-  - Total Maximum: 1,000,000 ICP
+| 등급 | 잠금 기간 | 연간 수익률 | 토큰 요구량 |
+|----------|-------------|-----|-----------------|
+| 브론즈 | 3개월 | 12% | 1,000 SPIRAL |
+| 실버 | 6개월 | 18% | 5,000 SPIRAL |
+| 골드 | 12개월 | 24% | 10,000 SPIRAL |
+| 플래티넘 | 24개월 | 32% | 25,000 SPIRAL |
 
-## Utility Framework
+### 성과 배수
 
-### Governance Functions
+| 활동 | 배수 | 최대 보상 |
+|----------|------------|----------------|
+| 거버넌스 참여 | 1.2x | 5,000 SPIRAL/월 |
+| 콘텐츠 생성 | 1.5x | 10,000 SPIRAL/월 |
+| 유동성 제공 | 1.3x | 7,500 SPIRAL/월 |
+| 생태계 개발 | 1.4x | 15,000 SPIRAL/월 |
 
-| Feature | Description | Requirements |
-|---------|-------------|--------------|
-| **Proposal Creation** | Submit new proposals for community voting | Minimum 1,000 SPIRAL stake |
-| **Voting Rights** | Participate in DAO decision-making | Active neuron required |
-| **Protocol Parameters** | Vote on system-wide parameter changes | Active participation in governance |
+## 소각 메커니즘
 
-### Economic Utilities
+토큰에 대한 지속 가능한 상승 압력을 생성하기 위해 다음과 같은 소각 메커니즘이 구현됩니다:
 
-| Function | Value | Purpose |
-|----------|--------|----------|
-| **Transaction Fee** | 0.01 SPIRAL | Network maintenance and deflation |
-| **Cross-Game Trading** | Variable | Enable value transfer between games |
-| **NFT Operations** | Market-based | Facilitate digital asset trading |
-| **Premium Features** | Tier-based | Access to advanced platform features |
+### 1. 거래 소각
+- 마켓플레이스 수수료의 1%
+- 초기 NFT 판매의 2%
+- P2P 거래의 0.5%
 
-### Community Benefits
+### 2. 이벤트 소각
+- 특별 이벤트 보상의 5%
+- 토너먼트 상금의 3%
+- 시즌 보상의 2%
 
-| Benefit | Type | Details |
-|---------|------|----------|
-| **Staking Rewards** | Economic | Dynamic APY based on lock period |
-| **Tournament Access** | Gaming | Priority entry to competitive events |
-| **Early Access** | Product | Preview of new features and games |
-| **Special Events** | Social | Exclusive community gatherings and activities |
+### 3. 거버넌스 소각
+- 제안 생성 수수료의 10%
+- 재무부 분배의 5%
+- 투표 보상의 1%
 
-## Rewards
-The reward structure is designed to:
-- Encourage long-term participation
-- Align stakeholder interests
-- Maintain sustainable token economics
-- Support protocol governance
-- Enable community-driven value distribution
+## 장기 지속가능성
 
+Cosmicrafts의 토큰 경제 모델은 다음 사항들 간의 균형을 맞추도록 설계되었습니다:
 
-### Staking Incentives
+1. **지속 가능한 성장**
+   - 점진적 토큰 분배
+   - 다중 소각 메커니즘
+   - 장기 스테이킹 인센티브
 
-| Parameter | Value | Duration |
-|-----------|--------|----------|
-| **Initial Rate** | 8% APY | Start of protocol |
-| **Final Rate** | 1% APY | After transition |
-| **Transition Period** | 8 years | Linear reduction |
+2. **적극적인 참여**
+   - 다층 보상
+   - 점진적 혜택
+   - 성과 배수
 
-### Voting Power Bonuses
+3. **생태계 가치**
+   - 보유자 수익 공유
+   - 독점적 혜택
+   - 거버넌스 영향력
 
-| Bonus Type | Maximum Bonus | Time to Achieve |
-|------------|---------------|-----------------|
-| **Dissolve Delay** | +100% | 8 years lock |
-| **Age Maturity** | +100% | 365 days |
+## 경제 로드맵
 
-### Additional Incentives
+### 1단계: 출시 (1-6개월)
+- 초기 토큰 출시
+- 기본 스테이킹 활성화
+- 커뮤니티 보상 시작
 
-The DAO can implement and govern additional reward mechanisms including:
-- Revenue sharing from platform activities
-- Performance-based distribution models
-- Community-driven reward programs
-- Ecosystem growth initiatives
+### 2단계: 성장 (7-12개월)
+- 수익 공유 활성화
+- 콘텐츠 크리에이터 프로그램 출시
+- 유동성 인센티브 확장
+
+### 3단계: 확장 (13-24개월)
+- 새로운 보상 티어 추가
+- 생태계 파트너 통합
+- 소각 메커니즘 개선
+
+### 4단계: 성숙 (25개월+)
+- 완전한 거버넌스 활성화
+- 새로운 금융 상품 출시
+- 게임 통합 확장

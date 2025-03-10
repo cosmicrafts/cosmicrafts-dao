@@ -1,187 +1,189 @@
-# Community
-![Community](communitybanner.webp)
+# コミュニティ
 
-## Overview
+[[toc:2-2]]
 
-The Cosmicrafts community is the driving force behind our ecosystem's growth and evolution. Our community framework balances:
-- Inclusive participation and governance
-- Sustainable economic development
-- Strategic ecosystem expansion
-- Content creation and cultural growth
+## 概要
 
-## Treasury Management
+Cosmicrafts DAOコミュニティは、エコシステムの成長を推進する原動力です。経済的インセンティブと積極的な参加を組み合わせることで、すべての参加者に利益をもたらす持続可能なエコシステムを構築しています。
 
-The DAO treasury is the foundation for sustainable growth and community initiatives. All funding allocations require community approval through the SNS proposal system.
+## 財務管理
 
-<div class="table-scroll">
+### 資金配分要件
 
-| Focus Area | Implementation | Requirements |
-|------------|----------------|--------------|
-| **User Acquisition** | Marketing campaigns, Strategic partnerships | - Clear ROI metrics<br>- Target audience analysis<br>- Performance tracking |
-| **Development** | Core team maintenance, Technical improvements | - Skill requirements<br>- Project roadmap alignment<br>- Milestone definitions |
-| **Community Initiatives** | Events, Content creation, Market development | - Success metrics<br>- Budget breakdown<br>- Timeline and deliverables |
+| カテゴリー | 割合 | 焦点 |
+|---------|-----------|---------|
+| 製品開発 | 40% | ゲームとプラットフォームの改善 |
+| コミュニティ開発 | 30% | マーケティングと参加 |
+| 流動性 | 20% | 市場安定化 |
+| 準備金 | 10% | 緊急時と機会 |
 
-</div>
+### 重点分野
 
-::: info Proposal Requirements
-All treasury proposals must include:
-- Detailed budget allocation
-- Expected impact metrics
-- Implementation timeline
-- Risk assessment
-- Success criteria
-:::
+1. **製品開発**
+   - ゲーム改善
+   - プラットフォームアップデート
+   - コミュニティツール
+   - エコシステム統合
 
-## Content Creators Program
+2. **コミュニティ開発**
+   - マーケティングキャンペーン
+   - アンバサダープログラム
+   - コミュニティイベント
+   - 教育プログラム
 
-The Content Creators Program aims to build a sustainable ecosystem of content creators who help grow and engage the Cosmicrafts community. All program terms and compensation are subject to DAO approval.
+3. **流動性管理**
+   - 流動性提供者インセンティブ
+   - 市場安定化
+   - バイバックプログラム
+   - 緊急資金
 
-### Qualification Framework
+## コンテンツクリエイタープログラム
 
-<div class="table-scroll">
+### 資格フレームワーク
 
-| Tier | Requirements | Evaluation Criteria |
-|------|--------------|-------------------|
-| **Emerging** | - Active social media presence<br>- Consistent content schedule | - Content quality<br>- Engagement metrics<br>- Audience authenticity |
-| **Established** | - Proven track record<br>- Engagement-driven content<br>- Community participation | - Reach and impact<br>- Content performance<br>- Community feedback |
-| **Partner** | - Significant audience reach<br>- High-quality production<br>- Strategic value alignment | - Long-term impact<br>- Brand alignment<br>- Community leadership |
+| レベル | 要件 | 報酬 |
+|----------|--------------|----------|
+| 初級 | 100フォロワー | 100 SPIRAL/月 |
+| 中級 | 1,000フォロワー | 500 SPIRAL/月 |
+| 上級 | 10,000フォロワー | 2,500 SPIRAL/月 |
+| エリート | 100,000+フォロワー | 10,000 SPIRAL/月 |
 
-</div>
+### 報酬構造
 
-### Compensation Structure
+| 活動 | 基本報酬 | 倍率 |
+|----------|----------------|------------|
+| 動画 | 50 SPIRAL | 最大3倍 |
+| ストリーミング | 100 SPIRAL/時間 | 最大2倍 |
+| 記事作成 | 75 SPIRAL | 最大2.5倍 |
+| アートワーク | 200 SPIRAL | 最大2倍 |
 
-Content creators can submit proposals to the DAO for:
-- Performance-based compensation
-- Project-specific funding
-- Event sponsorship
-- Strategic collaboration opportunities
+### 評価基準
 
-::: info Proposal Guidelines
-Creators must include:
-- Detailed content strategy
-- Performance metrics
-- Target audience analysis
-- Expected impact assessment
-- Budget requirements
-:::
+| 基準 | 重み | 目標 |
+|----------|--------|--------|
+| 視聴回数 | 30% | 月間成長 |
+| エンゲージメント | 40% | 参加率 |
+| 品質 | 20% | ピアレビュー |
+| 一貫性 | 10% | 定期的な発行 |
 
-### Evaluation Metrics
+## マーケットプレイス
 
-<div class="table-scroll">
+### 主要機能
 
-| Category | Metrics | Impact Assessment |
-|----------|---------|-------------------|
-| **Reach** | - Unique viewers<br>- Geographic distribution<br>- Audience retention | Measured through platform analytics |
-| **Engagement** | - Comment activity<br>- Share rates<br>- Community interaction | Tracked via engagement tools |
-| **Quality** | - Production value<br>- Content originality<br>- Community feedback | Regular quality assessments |
+| 機能 | 説明 | 開発状況 |
+|---------|-------------|-----------------|
+| P2P取引 | 直接資産交換 | 完了 |
+| オークション | NFTオークション | 開発中 |
+| 一括リスティング | 複数アイテムリスティング | 計画中 |
+| 自動取引 | マーケットメーカー | 計画中 |
 
-</div>
+### コミュニティコントロール
 
-::: info Program Evolution
-The DAO community will:
-- Define specific compensation models
-- Establish evaluation criteria
-- Adjust program parameters
-- Review and approve creator proposals
-:::
+| 機能 | 要件 | 影響 |
+|----------|--------------|----------|
+| 資産リスティング | コミュニティ投票 | 資産承認 |
+| 手数料調整 | 提案 + 投票 | 手数料構造 |
+| 取引ルール | 委員会合意 | 市場基準 |
+| インセンティブプログラム | 財務承認 | 報酬分配 |
 
-## Marketplace
+## 流動性管理
 
-The DAO-governed marketplace serves as the central hub for digital asset trading and community commerce.
+### 運営
 
-### Core Features
+| 活動 | 頻度 | 責任者 |
+|----------|------------|------------|
+| 流動性モニタリング | 継続的 | システム |
+| インセンティブ調整 | 週次 | 流動性委員会 |
+| リスク評価 | 月次 | コミュニティ監査役 |
+| パフォーマンスレポート | 四半期 | 分析チーム |
 
-<div class="table-scroll">
+### ガバナンス要件
 
-| Feature | Implementation | Community Control |
-|---------|----------------|------------------|
-| **Cross-Chain Trading** | - Multi-chain support<br>- Bridge integrations<br>- Universal standards | - Protocol selection<br>- Fee structures<br>- Integration priorities |
-| **Asset Standards** | - NFT compatibility<br>- Metadata standards<br>- Verification systems | - Format approval<br>- Quality guidelines<br>- Listing criteria |
-| **Revenue Model** | - Fee distribution<br>- Staking rewards<br>- Creator royalties | - Rate setting<br>- Reward allocation<br>- Treasury share |
+| 決定 | 投票閾値 | 実行時間 |
+|----------|----------------|-----------------|
+| パラメータ調整 | 51% | 24時間 |
+| 資金配分 | 66% | 48時間 |
+| システム変更 | 75% | 72時間 |
+| 緊急措置 | 90% | 即時 |
 
-</div>
+## 機関投資
 
-::: info Marketplace Evolution
-The community drives marketplace development through:
-- Feature proposals
-- Integration voting
-- Parameter adjustment
-- Revenue model updates
-:::
+### 投資タイプ
 
-## Liquidity Management
+| タイプ | 最小額 | ロック期間 |
+|--------|------------|-------------|
+| 戦略的 | 100,000 SPIRAL | 24ヶ月 |
+| パートナー | 50,000 SPIRAL | 12ヶ月 |
+| 機関 | 25,000 SPIRAL | 6ヶ月 |
 
-The DAO oversees strategic liquidity operations to ensure market efficiency and token stability.
+### 要件
 
-<div class="table-scroll">
+1. **検証**
+   - デューデリジェンス
+   - 本人確認
+   - 評判評価
 
-| Operation | Process | Governance Requirements |
-|-----------|---------|------------------------|
-| **DEX Liquidity** | - Periodic liquidity adjustments<br>- Pool diversification<br>- Yield optimization | - Community vote required<br>- Minimum 7-day proposal period<br>- Detailed impact analysis |
-| **CEX Integration** | - Exchange selection criteria<br>- Listing requirements<br>- Liquidity allocation | - Treasury impact assessment<br>- Security verification<br>- Long-term strategy alignment |
-| **Market Making** | - Automated market making<br>- Order book depth<br>- Volatility management | - Parameter setting<br>- Performance monitoring<br>- Treasury risk assessment |
+2. **コミットメント**
+   - ガバナンス参加
+   - エコシステムサポート
+   - 専門性提供
 
-</div>
+3. **貢献**
+   - ビジネス開発
+   - 戦略的パートナーシップ
+   - 市場拡大
 
-::: info Liquidity Operations
-All liquidity operations must:
-- Undergo thorough security review
-- Include clear entry and exit strategies
-- Define risk mitigation measures
-- Establish reporting requirements
-- Align with long-term tokenomics goals
-:::
+## 戦略的成長
 
-## Institutional Investment
+### ユーザー獲得
 
-The DAO may approve strategic treasury allocations to institutional partners to accelerate growth and development.
+| チャネル | 予算 | 目標ROI |
+|----------|----------|--------------|
+| デジタルマーケティング | 30% | 3倍 |
+| パートナーシップ | 40% | 4倍 |
+| 紹介プログラム | 20% | 5倍 |
+| PR | 10% | 2倍 |
 
-<div class="table-scroll">
+### ユーザー維持
 
-| Investment Type | Framework | Requirements |
-|-----------------|-----------|--------------|
-| **Strategic Sales** | - Private token allocations<br>- Treasury diversification<br>- Partnership development | - Vesting requirements<br>- Alignment with DAO objectives<br>- Value-add beyond capital |
-| **DAO Partnerships** | - Cross-DAO collaborations<br>- Ecosystem integration<br>- Joint development | - Mutual benefit analysis<br>- Technical compatibility<br>- Value creation assessment |
-| **Ecosystem Funding** | - Grants for ecosystem projects<br>- Incubation programs<br>- Development support | - Measurable outcomes<br>- Milestone-based distribution<br>- Technology integration |
+| 戦略 | 基準 | 目標 |
+|--------------|----------|--------|
+| ロイヤルティプログラム | 維持率 | 80% |
+| 製品改善 | ユーザー満足度 | 90% |
+| コミュニティサポート | 応答時間 | <2時間 |
+| 報酬 | ユーザー参加 | 70%アクティブ |
 
-</div>
+### 成長イニシアチブ
 
-::: info Institutional Requirements
-Potential institutional partners must demonstrate:
-- Long-term commitment to the ecosystem
-- Specific value contribution beyond capital
-- Alignment with community values
-- Technical or market expertise
-- Transparent operations and reporting
-:::
+1. **アンバサダープログラム**
+   - 採用と教育
+   - 報酬システム
+   - 拡大目標
 
-## Strategic Growth
+2. **エコシステムパートナーシップ**
+   - 製品統合
+   - リソース共有
+   - 共同マーケティング
 
-Community-driven initiatives for sustainable ecosystem expansion.
+3. **教育プログラム**
+   - 教育コンテンツ
+   - ワークショップ
+   - メンタリングプログラム
 
-### User Acquisition
+## コミュニティロードマップ
 
-<div class="table-scroll">
+### フェーズ1: 設立（1-6ヶ月）
+- コンテンツクリエイタープログラム開始
+- アンバサダープログラム設立
+- コミュニティチャネル作成
 
-| Channel | Strategy | Success Metrics |
-|---------|----------|----------------|
-| **Content Partnerships** | - Creator collaborations<br>- Strategic alliances<br>- Community ambassadors | - Audience growth<br>- Engagement rates<br>- Conversion metrics |
-| **Community Events** | - Tournaments<br>- Special events<br>- Regional meetups | - Participation rates<br>- Retention metrics<br>- Community feedback |
-| **Incentive Programs** | - Referral systems<br>- Achievement rewards<br>- Social challenges | - User acquisition cost<br>- Retention rates<br>- Network growth |
+### フェーズ2: 成長（7-12ヶ月）
+- 報酬プログラム拡大
+- 戦略的パートナーシップ開始
+- コミュニティツール改善
 
-</div>
-
-### Retention Framework
-
-::: info Key Elements
-- Progressive reward systems
-- Social engagement incentives
-- Community leadership opportunities
-- Regular events and competitions
-- Content creation support
-:::
-
-::: info Technical Infrastructure
-The Cosmicrafts technical architecture provides our community with a responsive, gas-free environment for seamless interaction and participation. For details on our single-canister design and technical implementation, see the [Architecture](/architecture) section.
-:::
+### フェーズ3: 拡大（13ヶ月+）
+- 機関プログラム
+- グローバル展開
+- エコシステム統合
 

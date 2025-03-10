@@ -1,44 +1,193 @@
-# Architecture
-![Architecture](architecturebanner.webp)
+# البنية التقنية
 
-## Overview
+[[toc:2-2]]
 
-Cosmicrafts implements a hybrid architecture that strategically integrates  blockchain and WebSockets to deliver:
+## نظرة عامة
 
-- Secure asset ownership and trading
-- Fast, responsive gameplay
-- Transparent governance
-- Scalable infrastructure
+تجمع البنية التقنية لـ Cosmicrafts بين قوة البلوكتشين وكفاءة الاتصال في الوقت الفعلي، مما يوفر:
+- ملكية آمنة للأصول الرقمية
+- تجربة لعب سريعة وسلسة
+- حوكمة شفافة وقابلة للتدقيق
+- بنية تحتية قابلة للتطوير
 
-## Core Technical Design
+## التصميم التقني الأساسي
 
-::: info Technical Implementation
-The Motoko programming language enables our single-canister design through:
-- Advanced memory management
-- Efficient state representation
-- Powerful type system
-- Optimized asynchronous operations within a single canister
+### لغة البرمجة Motoko
 
-Our smart contracts are [open source on GitHub](https://github.com/cosmicrafts/cosmicrafts-dao) and [deployed publicly](https://dashboard.internetcomputer.org/canister/opcce-byaaa-aaaak-qcgda-cai) on the Internet Computer for full transparency.
-:::
+تم تطوير Cosmicrafts باستخدام لغة Motoko، مما يوفر:
+- إدارة ذاكرة متقدمة
+- تمثيل حالة فعال
+- عمليات غير متزامنة محسنة
+- أمان النوع في وقت التجميع
 
+### تصميم الكانستر الموحد
 
-### Unified Canister Architecture
+على عكس الأنظمة متعددة الكانسترات التقليدية، يستخدم Cosmicrafts تصميماً موحداً:
 
-Cosmicrafts utilizes a single-canister architecture for core game logic, NFTs, and token operations, providing significant performance advantages:
+| الميزة | النظام التقليدي | نهج Cosmicrafts |
+|---------|------------------|------------------|
+| وقت الاستجابة | 2-5 ثوانٍ | >500 مللي ثانية |
+| تكلفة الحوسبة | عالية | منخفضة |
+| تعقيد النشر | معقد | مبسط |
+| قابلية التطوير | محدودة | عالية |
 
-<div class="table-scroll">
+### مزايا التصميم الموحد
 
-| Traditional Multi-Canister | Cosmicrafts Single-Canister | Performance Impact |
-|----------------------------|-----------------------------|--------------------|
-| Cross-canister calls require consensus rounds | Internal function calls within same memory space | 3-10x faster operations |
-| State changes across canisters need synchronization | Atomic state updates in a unified data model | Consistent data with no reconciliation |
-| Multiple network round trips for complex operations | Single-hop execution for most game activities | Dramatically reduced latency |
-| Serialization/deserialization overhead between canisters | Direct memory access to all system components | Lower computational overhead |
+1. **أداء محسن**
+   - تأخير منخفض
+   - تكلفة حوسبة أقل
+   - كفاءة الذاكرة
 
-</div>
+2. **تبسيط العمليات**
+   - نشر أسهل
+   - صيانة أبسط
+   - تحديثات أسرع
 
-This architecture enables complex game operations like trading, crafting, and battling to execute immediately without the latency typically associated with blockchain applications. Players experience performance similar to traditional gaming platforms, while still benefiting from blockchain's security and ownership features.
+3. **موثوقية محسنة**
+   - نقاط فشل أقل
+   - استعادة أسرع
+   - تناسق أفضل
+
+## طبقة الاتصال في الوقت الفعلي
+
+### بوابة WebSocket لـ IC
+
+يستخدم النظام بوابة IC WebSocket للاتصال الثنائي الاتجاه:
+
+| الميزة | التنفيذ | الفائدة |
+|---------|-------------|----------|
+| توقيع الرسائل | Ed25519 | أمان الرسائل |
+| تشفير SSL/TLS | AES-256 | حماية البيانات |
+| ضغط البيانات | GZIP | كفاءة النقل |
+
+### ميزات الأمان
+
+1. **حماية الرسائل**
+   - توقيع رقمي
+   - التحقق من التكامل
+   - منع التلاعب
+
+2. **أمان الاتصال**
+   - تشفير من طرف إلى طرف
+   - مصادقة العميل
+   - حماية من الهجمات
+
+3. **حماية البيانات**
+   - تخزين مشفر
+   - نسخ احتياطي آمن
+   - استعادة موثوقة
+
+## إدارة الموارد
+
+### بيئة خالية من الغاز
+
+يوفر Internet Computer بيئة خالية من رسوم الغاز:
+
+| الميزة | الفائدة | التنفيذ |
+|---------|----------|-------------|
+| لا رسوم معاملات | تجربة مستخدم أفضل | معالجة تلقائية |
+| حوسبة مدعومة | تكلفة تشغيل أقل | إدارة موارد ذكية |
+| معاملات فورية | أداء محسن | معالجة متزامنة |
+
+### عمليات النظام
+
+1. **إدارة الذاكرة**
+   - تخصيص ديناميكي
+   - جمع القمامة التلقائي
+   - تحسين الاستخدام
+
+2. **معالجة المعاملات**
+   - تنفيذ متوازٍ
+   - توازن الحمل
+   - استعادة الأخطاء
+
+3. **تخزين البيانات**
+   - تجزئة فعالة
+   - تخزين موزع
+   - نسخ احتياطي تلقائي
+
+## التبعيات والخدمات الخارجية
+
+### محرك اللعبة
+
+| المكون | الحالة | الخطط المستقبلية |
+|---------|--------|------------------|
+| Unity | حالي | تحديثات دورية |
+| Unreal | مخطط | تكامل 2024 |
+| Godot | مخطط | تكامل 2025 |
+
+### تبعيات الواجهة الأمامية
+
+- React.js للواجهة
+- Three.js للرسومات
+- Web3.js للتكامل
+- Socket.io للاتصال
+
+### تبعيات الخلفية
+
+- Motoko للعقود
+- Rust للأداء
+- Node.js للخدمات
+- Redis للتخزين المؤقت
+
+### خدمات البنية التحتية
+
+1. **الحوسبة**
+   - Internet Computer
+   - خوادم WebSocket
+   - معالجة موزعة
+
+2. **التخزين**
+   - IPFS للأصول
+   - تخزين IC
+   - نسخ احتياطي موزع
+
+3. **الشبكة**
+   - CDN عالمي
+   - توازن حمل تلقائي
+   - حماية DDoS
+
+## مراجعة الأمان
+
+### الحالة الحالية
+
+- التركيز على بناء قاعدة المستخدمين
+- تحسين وظائف الكانستر
+- اختبار أمان مستمر
+
+### الخطط المستقبلية
+
+1. **تدقيق شامل**
+   - مراجعة الكود
+   - اختبار الاختراق
+   - تحليل الثغرات
+
+2. **تحسينات الأمان**
+   - تشفير إضافي
+   - مصادقة معززة
+   - مراقبة متقدمة
+
+3. **توثيق الأمان**
+   - سياسات الأمان
+   - إجراءات الاستجابة
+   - إرشادات المستخدم
+
+## خارطة الطريق التقنية
+
+### المرحلة 1: الأساس (الأشهر 1-6)
+- تحسين أداء الكانستر
+- تعزيز الاتصال في الوقت الفعلي
+- تطوير أدوات المراقبة
+
+### المرحلة 2: التوسع (الأشهر 7-12)
+- إضافة محركات ألعاب جديدة
+- تحسين تجربة المستخدم
+- توسيع قدرات الشبكة
+
+### المرحلة 3: التحسين (الأشهر 13+)
+- تنفيذ ميزات متقدمة
+- تكامل تقنيات جديدة
+- تحسين الأداء العام
 
 
 ```mermaid
@@ -88,125 +237,3 @@ graph TD
     class WS,API comms
     class Canister,DAO blockchain
 ```
-## Real-Time Communication Layer
-
-A critical component of our architecture is the real-time communication system required for multiplayer gameplay. We utilize:
-
-### IC WebSocket Gateway
-- **[IC WebSocket Gateway](https://github.com/omnia-network/ic-websocket-gateway)**: Provides WebSocket capabilities with ICP's cryptographic security
-  - Enables real-time bidirectional communication
-  - Maintains blockchain security guarantees
-  - Supports multiple simultaneous connections
-
-### Security Features
-- **Message Signing**: All WebSocket messages are cryptographically signed
-- **SSL/TLS Encryption**: Secure transport layer for all communications
-- **Keep-alive Monitoring**: Automatic connection health checks
-
-
-<div class="table-scroll">
-
-| Feature | Implementation | Benefit |
-|---------|----------------|----------|
-| Real-time Updates | WebSocket Protocol | Sub-second latency for game actions |
-| Message Security | Cryptographic Signing | Tamper-proof communication |
-| Connection Management | Automatic Reconnection | Seamless gameplay experience |
-| State Synchronization | Sequence Numbers | Consistent game state across clients |
-| Transport Security | SSL/TLS | Protected data transmission |
-
-</div>
-
-
-## Resource Management & Operations
-
-### Gas-Free Environment
-
-The Internet Computer eliminates the complexity of blockchain gas fees, returning to the simplicity of normal internet usage:
-
-<div class="table-scroll">
-
-| Traditional Blockchain | Internet Computer |
-|-----------------------|-------------------|
-| Users pay gas fees for every transaction | Canister pays for its own computation with cycles |
-| Complex fee system creates friction and barriers | Users experience Web2-like simplicity with no fees |
-
-</div>
-
-Unlike other blockchains where users must manage gas fees, the Internet Computer handles computation costs behind the scenes. This allows Cosmicrafts to deliver:
-
-- **Mainstream Accessibility**: No cryptocurrency knowledge required to play
-- **Micro-Transactions**: Even small in-game actions remain economically viable
-- **Predictable Experience**: No surprising costs or failed transactions due to gas issues
-
-### Operational Monitoring & Cycles Management
-
-To maintain our gas-free environment and ensure optimal performance, Cosmicrafts employs industry-leading tools:
-
-<div class="table-scroll">
-
-| Tool | Purpose | Implementation |
-|------|---------|----------------|
-| [Cycleops](https://cycleops.dev) | - Cycles management<br>- Automated top-ups<br>- Threshold alerts | Integrated with our deployment pipeline for proactive cycles management |
-| [Canistergeek](https://github.com/usergeek/canistergeek-ic-motoko) | - Performance monitoring<br>- Memory usage tracking<br>- Log collection | Embedded in our Motoko codebase for real-time canister analytics |
-
-</div>
-
-## Dependencies & External Services
-
-### Game Engine Dependencies
-- **Current: Unity**
-  - Industry-standard game development platform
-  - WebGL export for browser-based gameplay
-  - Cross-platform deployment capabilities
-  - Integration with ICP.NET for blockchain features
-
-- **Planned Migration: Bevy**
-  - Open-source game engine written in Rust
-  - Better performance characteristics
-  - Full open-source technology stack
-  - Native WebAssembly support
-  - Aligns with our commitment to open-source development
-
-### Frontend Dependencies
-- **ICP Integration**: 
-  - [ICP.NET](https://github.com/edjCase/ICP.NET) - .NET/C#/Unity library for native Internet Computer communication
-  - Enables seamless blockchain integration in Unity games
-  - Provides client generation for canister interfaces
-  - Handles WebSocket connections and API interfaces
-
-- **Web Framework**:
-  - Vue.js with TypeScript
-  - Vite for build tooling
-  - PWA capabilities
-  - Internationalization support via vue-i18n
-  - Markdown rendering with advanced features
-
-### Backend Dependencies
-- **Motoko Package Manager**:
-  - [MOPS](https://mops.one/) - Official package manager for Motoko
-  - Manages Motoko dependencies and versioning
-
-### Infrastructure Services
-- **Internet Computer Protocol**:
-  - Core blockchain infrastructure
-  - Provides decentralized compute and storage
-  - Handles consensus and node operations
-  - Manages canister lifecycle
-
-- **IC WebSocket Gateway**:
-  - [Real-time communication infrastructure](https://github.com/omnia-network/ic-websocket-gateway)
-  - Enables multiplayer gameplay features
-  - Provides secure WebSocket connections
-  - Integrates with ICP's security model
-
-## Security Review Status
-
-While a comprehensive security audit is planned for the future, we are currently:
-
-- Building user base and maturing canister functionality
-- Planning for professional audit once sufficient scale is reached
-- Following security best practices and internal review processes
-
-
-
-> For a comprehensive understanding of how these features are implemented, continue reading our [Core Features](/core-features) documentation.

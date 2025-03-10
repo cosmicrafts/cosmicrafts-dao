@@ -1,188 +1,156 @@
-# Tokenomics
-![Tokenomics](spiralbanner.webp)
-## Overview
+# トークンノミクス
 
-The SPIRAL token is the economic foundation of the Cosmicrafts DAO, designed to:
-- Power governance and reward participation
-- Drive sustainable economic growth
-- Align stakeholder interests through structured incentives
-- Enable cross-game value transfer and utility
+[[toc:2-2]]
 
-Total Supply: **1 billion SPIRAL tokens**
+## 概要
 
-<div class="tokenomics-diagram">
-  <img src="src/assets/icons/tokenomics.svg" alt="SPIRAL Token Allocation" />
-</div>
+SPIRALトークンは、Cosmicrafts DAOエコシステムの中核的な要素です。このトークンは、ゲーム内経済の基盤として機能し、ガバナンス権限を付与し、コミュニティの参加を促進します。
 
-<style>
-.tokenomics-diagram {
-  text-align: center;
-  width: 100%;
-  margin: 2rem auto;
-}
+### 総供給量
 
-  .vesting-schedule{
-    max-width: 75%;
-  }
+- **総供給量**: 1,000,000,000 SPIRAL
+- **初期流通供給量**: 50,000,000 SPIRAL (総供給量の5%)
+- **最大希薄化率**: 年間15%（コミュニティ投票により調整可能）
 
-.tokenomics-diagram img {
-  width: 65%;
-  max-width: 800px;
-  height: auto;
-  filter: none;
-  box-shadow: none;
-  background: transparent;
-  margin: 0 auto;
-  display: block;
-}
+## 戦略的分配
 
-@media (max-width: 768px) {
-  .tokenomics-diagram img {
-    width: 100%;
-    max-width: 100%;
-  }
-  .vesting-schedule{
-    width: 100%;
-    max-width: 100%;
-  }
-}
-</style>
+トークン分配は、長期的な持続可能性と健全なエコシステムの成長を確保するように設計されています：
 
-## Strategic Distribution
+| 保有者 | 割合 | 金額 | 目的 | ロック期間 |
+|--------|------|------|------|------------|
+| コミュニティ財務 | 30% | 300M | エコシステム成長、報酬、インセンティブ | 段階的解放 |
+| チーム | 15% | 150M | 開発、運営、マーケティング | 4年間のベスティング |
+| 初期投資家 | 10% | 100M | 初期資金調達 | 2年間のベスティング |
+| アドバイザー | 5% | 50M | 戦略的ガイダンス | 2年間のベスティング |
+| パートナーシップ | 10% | 100M | 戦略的提携、統合 | 段階的解放 |
+| 流動性プール | 10% | 100M | DEX流動性、取引所上場 | 段階的解放 |
+| エアドロップ | 5% | 50M | コミュニティ報酬、早期採用者 | 即時解放 |
+| 予備 | 15% | 150M | 将来の拡張、緊急時対応 | DAO投票による |
 
-### Token Allocation Strategy
+### ベスティング戦略
 
-| Holder | Amount | Purpose | Lock Period |
-|--------|---------|---------|-------------|
-| **Treasury** | 760M (76%) | Ecosystem growth | DAO-controlled |
-| **SNS Swap** | 120M (12%) | Public sale | 8 quarterly releases |
-| **Developer Team** | 80M (8%) | Core team | 8-year vesting |
-| **Seed Investors** | 40M (4%) | Early backers | Varied vesting |
+- **チーム & アドバイザー**:
+  - 1年目のクリフ期間
+  - その後36ヶ月間で線形解放
+  - 四半期ごとの解放スケジュール
 
-Core Mechanisms:
-- **Deflationary Model**: 0.01 SPIRAL transaction fee
-- **Governance Threshold**: 1,000 SPIRAL minimum stake
-- **Treasury Security**: DAO approval required
-- **Full Auditability**: All operations tracked on-chain
+- **初期投資家**:
+  - 6ヶ月のクリフ期間
+  - その後18ヶ月間で線形解放
+  - 月次解放スケジュール
 
-## Vesting Strategy
+- **コミュニティ財務**:
+  - 初年度10%解放
+  - その後4年間で残りを段階的解放
+  - DAO投票による解放調整可能
 
-<div class="vesting-schedule">
-  <img src="src/assets/icons/vesting.svg" alt="SPIRAL Token Vesting Schedule" />
-</div>
+## コアメカニズム
 
-<style>
-.vesting-schedule {
-  background: transparent;
-  border-radius: var(--radius-medium);
-  padding: 2rem;
-  margin: 2rem 0;
-}
+### ガバナンス機能
 
-.vesting-schedule img {
-  width: 100%;
-  height: auto;
-  max-width: 800px;
-  margin: 0 auto;
-  display: block;
-  box-shadow: none;
-}
+| 機能 | 必要トークン量 | 目的 |
+|------|----------------|------|
+| 提案作成 | 100,000 SPIRAL | 新規提案の提出 |
+| 投票権 | 10,000 SPIRAL | ガバナンス参加 |
+| 検証者ノード | 500,000 SPIRAL | ネットワークセキュリティ |
+| プレミアム機能 | 50,000 SPIRAL | 高度なゲーム機能 |
 
-@media (max-width: 768px) {
-  .vesting-schedule {
-    padding: 1rem;
-  }
-}
-</style>
+### 経済的ユーティリティ
 
-### Developer Team Allocation (80M)
-Allocated to the Cosmicrafts Foundation 
-- **Purpose**: Ensure long-term commitment and value creation
-- **Structure**: 8-year dissolve delay
-- **Governance**: Full voting power with locked tokens
+| ユーティリティ | 説明 | 最小保有量 |
+|----------------|------|------------|
+| 取引手数料割引 | マーケットプレイス取引の割引 | 25,000 SPIRAL |
+| 収益シェア | プロトコル収益の分配 | 100,000 SPIRAL |
+| プレミアムアクセス | 先行アクセス、特別イベント | 75,000 SPIRAL |
+| カスタマイズ機能 | 高度なカスタマイズオプション | 50,000 SPIRAL |
 
-### Strategic Investors (40M)
+### コミュニティ特典
 
-#### 2Link (16M)
-Strategic blockchain infrastructure partner
-- 8 neurons of 2M each
-- Quarterly vesting schedule
+| 特典 | 要件 | 報酬 |
+|------|------|------|
+| ベータアクセス | 25,000 SPIRAL | 新機能の先行体験 |
+| 限定NFT | 50,000 SPIRAL | 特別なゲーム内アイテム |
+| VIPサポート | 100,000 SPIRAL | 優先カスタマーサービス |
+| イベント参加 | 75,000 SPIRAL | 限定イベントへの招待 |
 
-#### Anmi Capital (10M)
-Blockchain industry expertise and network
-- 8 neurons of 1.25M each
-- Quarterly vesting schedule
+## 報酬構造
 
-#### Genesis (14M)
-Early backers basket of neurons.
-- 8 neurons of 1.75M each
-- Yearly vesting schedule
+### ステーキング報酬
 
-### Public Distribution (120M)
-- **Structure**: 8 vesting events at 3-month intervals
-- **Release**: 12.5% per event (15M SPIRAL)
-- **Purpose**: Ensure stable token distribution
-- **Participation Limits**:
-  - Minimum: 100 ICP
-  - Maximum: 100,000 ICP per participant
-  - Total Maximum: 1,000,000 ICP
+| ロック期間 | 基本APY | ボーナス条件 |
+|------------|---------|--------------|
+| 3ヶ月 | 12% | +2% NFT保有 |
+| 6ヶ月 | 18% | +3% アクティブプレイヤー |
+| 12ヶ月 | 25% | +5% DAOへの貢献 |
 
-## Utility Framework
+### パフォーマンス乗数
 
-### Governance Functions
+| 活動 | 乗数 | 条件 |
+|------|------|------|
+| ガバナンス参加 | 1.2x | 75%以上の投票参加 |
+| コミュニティ貢献 | 1.3x | 月間5回以上の貢献 |
+| 長期保有 | 1.5x | 12ヶ月以上のステーキング |
 
-| Feature | Description | Requirements |
-|---------|-------------|--------------|
-| **Proposal Creation** | Submit new proposals for community voting | Minimum 1,000 SPIRAL stake |
-| **Voting Rights** | Participate in DAO decision-making | Active neuron required |
-| **Protocol Parameters** | Vote on system-wide parameter changes | Active participation in governance |
+### 焼却メカニズム
 
-### Economic Utilities
+- **取引手数料**: すべての取引手数料の30%を焼却
+- **プレミアム機能**: 高度な機能使用料の20%を焼却
+- **NFTミント**: 新規NFTミント費用の25%を焼却
+- **イベント参加**: イベントエントリー費用の15%を焼却
 
-| Function | Value | Purpose |
-|----------|--------|----------|
-| **Transaction Fee** | 0.01 SPIRAL | Network maintenance and deflation |
-| **Cross-Game Trading** | Variable | Enable value transfer between games |
-| **NFT Operations** | Market-based | Facilitate digital asset trading |
-| **Premium Features** | Tier-based | Access to advanced platform features |
+## 流動性管理
 
-### Community Benefits
+### DEX戦略
 
-| Benefit | Type | Details |
-|---------|------|----------|
-| **Staking Rewards** | Economic | Dynamic APY based on lock period |
-| **Tournament Access** | Gaming | Priority entry to competitive events |
-| **Early Access** | Product | Preview of new features and games |
-| **Special Events** | Social | Exclusive community gatherings and activities |
+- 複数のDEXでの流動性提供
+- 流動性プロバイダー報酬プログラム
+- 動的な流動性調整メカニズム
 
-## Rewards
-The reward structure is designed to:
-- Encourage long-term participation
-- Align stakeholder interests
-- Maintain sustainable token economics
-- Support protocol governance
-- Enable community-driven value distribution
+### 取引所統合
 
+- 主要な中央集権型取引所との提携
+- クロスチェーン流動性ブリッジ
+- OTC取引デスクの設立
 
-### Staking Incentives
+## 価値捕捉メカニズム
 
-| Parameter | Value | Duration |
-|-----------|--------|----------|
-| **Initial Rate** | 8% APY | Start of protocol |
-| **Final Rate** | 1% APY | After transition |
-| **Transition Period** | 8 years | Linear reduction |
+1. **ユーティリティ需要**
+   - ゲーム内購入
+   - プレミアム機能アクセス
+   - NFTミントと取引
 
-### Voting Power Bonuses
+2. **ガバナンス需要**
+   - 提案作成と投票
+   - プロトコルパラメータ調整
+   - 財務管理参加
 
-| Bonus Type | Maximum Bonus | Time to Achieve |
-|------------|---------------|-----------------|
-| **Dissolve Delay** | +100% | 8 years lock |
-| **Age Maturity** | +100% | 365 days |
+3. **ステーキング需要**
+   - 長期保有インセンティブ
+   - 報酬最適化機会
+   - 流通供給量の削減
 
-### Additional Incentives
+4. **焼却効果**
+   - 取引手数料の一部
+   - プレミアム機能使用料
+   - イベント参加費用
 
-The DAO can implement and govern additional reward mechanisms including:
-- Revenue sharing from platform activities
-- Performance-based distribution models
-- Community-driven reward programs
-- Ecosystem growth initiatives
+## 経済的持続可能性
+
+### インフレーション管理
+
+- 年間最大希薄化率15%
+- コミュニティによる調整可能
+- 焼却メカニズムとの均衡
+
+### リスク軽減
+
+- 多様な収益源
+- 動的な報酬調整
+- 市場ストレステスト
+
+### 成長指標
+
+- 月間アクティブステーカー
+- ガバナンス参加率
+- 総ステーキング量
+- 焼却トークン量

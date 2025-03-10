@@ -1,161 +1,173 @@
-# Core Features
+# Temel Özellikler
 
-![Core Features](corebanner.webp)
+[[toc:2-2]]
 
+## Genel Bakış
 
-## Overview
+Cosmicrafts, sürükleyici ve güvenli bir oyun deneyimi sağlamak için tasarlanmış kapsamlı bir özellik seti sunar. Her özellik performans, güvenlik ve ölçeklenebilirlik odaklı olarak inşa edilmiştir.
 
-At its core, **Cosmicrafts DAO** implements a unified canister that handles all core game functionality through several integrated systems. Our architecture ensures seamless interaction between different components while maintaining the security and transparency of blockchain technology.
+## Oyuncu Sistemi
 
----
+### Profiller
 
-## Player System
+| Öğe | Açıklama | Özelleştirme |
+|---------|-------------|--------------|
+| Kimlik | Blokzincirde benzersiz tanımlayıcı | Sabit |
+| Avatar | Dijital temsil | Özelleştirilebilir |
+| İstatistikler | Performans kaydı | Otomatik güncelleme |
+| Başarılar | Kazanılan rozetler | Görüntülenebilir |
 
-The Player System forms the backbone of user interaction within Cosmicrafts, managing everything from basic profiles to complex social interactions.
+### İlerleme
 
-### Profile Management
+| Seviye | Gereksinimler | Ödüller |
+|----------|--------------|----------|
+| Başlangıç | 0-100 puan | Temel erişim |
+| Orta | 101-500 puan | Ek özellikler |
+| İleri | 501-1000 puan | Özel içerik |
+| Uzman | 1000+ puan | Özel ödüller |
 
-<div class="table-scroll">
+## Varlık Sistemi
 
-| Feature | Description | Player Benefit |
-|---------|-------------|----------------|
-| Profile Creation | Unique IDs with customizable usernames and avatars | Personal identity in the metaverse |
-| Level System | Experience-based progression with rewards | Clear progression path |
-| Stats Tracking | Comprehensive performance metrics | Performance insights |
-| Title System | Unlockable titles showing achievements | Status recognition |
+### NFT'ler
 
-</div>
+| Tür | Özellikler | Yetenekler |
+|--------|------------|------------|
+| Karakterler | Geliştirilebilir | Özelleştirilebilir |
+| Silahlar | Yükseltilebilir | Takas edilebilir |
+| Araçlar | Modifiye edilebilir | Kullanılabilir |
+| Eşyalar | Çeşitli | Birleştirilebilir |
 
-### Social Features
+### Gelişim
 
-Players can build their network through:
-- Friend requests and management
-- Privacy settings control
-- Real-time notifications
-- Blocked user management
-- Social activity tracking
+1. **Deneyim Kazanma**
+   - Kullanım yoluyla
+   - Savaşlar yoluyla
+   - Görevler yoluyla
 
-## Asset System
+2. **Yükseltmeler**
+   - Yetenek geliştirme
+   - Özellik ekleme
+   - Güç artırma
 
-Our asset system leverages the ICRC-7 standard to provide true ownership and interoperability.
+3. **Özelleştirme**
+   - Görünüm değiştirme
+   - Özellik modifikasyonu
+   - Eşya ekleme
 
-### NFT Categories
+## Ekonomi Sistemi
 
-```mermaid
-graph LR
-    A[NFT Types] --> B[Soul NFTs]
-    A --> C[Game Units]
-    A --> D[Cosmetics]
-    A --> E[Rewards]
-    
-    B --> B1[Progress Tracking]
-    B --> B2[Achievement Display]
-    
-    C --> C1[Spaceships]
-    C --> C2[Characters]
-    C --> C3[Combat Units]
-    
-    D --> D1[Avatars]
-    D --> D2[Skins]
-    
-    E --> E1[Trophies]
-    E --> E2[Special Items]
-```
+### Para Birimleri
 
-## Economy System
+| Para Birimi | Kullanım | Elde Etme |
+|---------|-----------|--------------|
+| SPIRAL | Yönetişim tokeni | Ticaret, ödüller |
+| Krediler | Oyun içi para | Oynama, görevler |
+| Kristaller | Nadir öğeler | Etkinlikler, başarılar |
 
-Our dual-token economy creates a balanced ecosystem for both free-to-play and premium players.
+### Ticaret
 
-### Token Structure
+| Tür | Ücretler | Kısıtlamalar |
+|--------|--------|----------|
+| P2P | %1 | Yok |
+| Pazar | %2 | Minimum limit |
+| Açık Artırma | %3 | Zaman sınırı |
 
-<div class="table-scroll">
+## Eşleştirme Sistemi
 
-| Token | Purpose | Acquisition | Usage |
-|-------|---------|-------------|--------|
-| Spiral | Governance & Premium | Purchase/Staking | Voting, Premium Features |
-| Stardust | In-game Currency | Gameplay Rewards | Basic Features, Crafting |
+### Eşleştirme Algoritmaları
 
-</div>
+| Tür | Kriterler | Süre |
+|--------|-----------|--------|
+| Normal | Beceri seviyesi | >30 saniye |
+| Rekabetçi | Sıralama | >60 saniye |
+| Özel | Belirlenmiş | Anında |
 
-## Matchmaking System
+### Sıralama
 
-Our matchmaking system ensures fair and engaging gameplay through sophisticated player matching.
+| Seviye | Puanlar | Ödüller |
+|----------|--------|----------|
+| Bronz | 0-1000 | Temel |
+| Gümüş | 1001-2000 | Gelişmiş |
+| Altın | 2001-3000 | İleri |
+| Elit | 3000+ | Özel |
 
-### Key Features
+## Görev ve Başarı Sistemi
 
-```mermaid
-graph TD
-    A[Matchmaking] --> B[Player Pool]
-    B --> C[ELO Matching]
-    C --> D[Match Creation]
-    D --> E[Status Tracking]
-    
-    E --> F[In Progress]
-    E --> G[Completed]
-    E --> H[Cancelled]
-```
+### Görevler
 
-- Dynamic skill-based matching
-- Real-time status updates
-- Automatic match validation
-- Performance-based rating adjustments
+| Tür | Ödüller | Süre |
+|--------|----------|--------|
+| Günlük | Küçük | 24 saat |
+| Haftalık | Orta | 7 gün |
+| Sezonluk | Büyük | 90 gün |
 
-## Mission & Achievement System
+### Başarılar
 
-A comprehensive progression system that rewards players for their accomplishments.
+| Seviye | Gereksinimler | Ödüller |
+|----------|--------------|----------|
+| Normal | Kolay | Sembolik |
+| Nadir | Orta | Değerli |
+| Efsanevi | Zor | Özel |
+| Gizli | Özel | Benzersiz |
 
-### Mission Types
+## Kayıt Sistemi
 
-<div class="table-scroll">
+### Olay Kaydı
 
-| Type | Frequency | Rewards | Purpose |
-|------|-----------|---------|----------|
-| Daily | 24 hours | Small rewards | Regular engagement |
-| Weekly | 7 days | Medium rewards | Sustained activity |
-| Special | Event-based | Unique rewards | Community events |
+| Olay | Veri | Saklama |
+|--------|----------|----------|
+| İşlemler | Tam | Sürekli |
+| Maçlar | Özet | 90 gün |
+| Sohbet | Sınırlı | 30 gün |
 
-</div>
+### Analitik
 
-### Achievement Categories
-- Combat Mastery
-- Economic Achievement
-- Social Engagement
-- Collection Completion
-- Special Events
+| Tür | Amaç | Güncelleme |
+|--------|---------|----------|
+| Oyuncu | Performans | Anında |
+| Sistem | Sağlık | Sürekli |
+| Ekonomi | Denge | Günlük |
 
-## Logging System
+## Güvenlik ve Performans
 
-Our transparent logging system tracks all important events and transactions.
+### Güvenlik Önlemleri
 
-### Tracked Activities
+1. **Hesap Koruması**
+   - Çok faktörlü kimlik doğrulama
+   - Aktivite izleme
+   - Hesap kurtarma
 
-<div class="table-scroll">
+2. **İşlem Güvenliği**
+   - Dijital imza
+   - Veri şifreleme
+   - Çoklu onay
 
-| Category | Events Tracked | Purpose |
-|----------|---------------|----------|
-| Gameplay | Matches, Stats | Performance Analysis |
-| Economy | Transactions, Trades | Economic Monitoring |
-| Social | Interactions, Friends | Community Health |
-| Progress | Levels, Achievements | Player Development |
+3. **Sistem Koruması**
+   - Sürekli izleme
+   - Güvenlik güncellemeleri
+   - Yedekleme
 
-</div>
+### Performans İyileştirmeleri
 
-## Security & Performance
+| Alan | Hedef | Uygulama |
+|---------|--------|-------------|
+| Gecikme | <100ms | Ağ optimizasyonu |
+| Kare Hızı | 60fps | Grafik optimizasyonu |
+| Yükleme | <3s | Önbellek |
 
-### Security Measures
-- Administrative controls
-- Upgrade safety protocols
-- Input validation
-- Rate limiting
-- Transaction verification
+## Özellik Yol Haritası
 
-### Optimizations
-- Single-canister efficiency
-- Fast data retrieval
-- Memory management
-- Query optimization
+### Aşama 1: Temel (1-3 Ay)
+- Temel oyuncu sistemi
+- Basit ticaret
+- Temel eşleştirme
 
----
+### Aşama 2: Genişleme (4-6 Ay)
+- Gelişmiş NFT sistemi
+- Rekabetçi eşleştirme
+- Kapsamlı başarı sistemi
 
-## Conclusion
-Cosmicrafts represents a new paradigm in blockchain gaming maintaining the highest standards of quality, security and performance.
+### Aşama 3: İyileştirme (7+ Ay)
+- Gelişmiş ekonomi
+- Özel etkinlikler
+- Sosyal özellikler
