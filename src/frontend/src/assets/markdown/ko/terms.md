@@ -1,471 +1,470 @@
-# Terms of Service
+# 이용 약관
 
 [[toc:2-3]]
 
-## Introduction
-Welcome to Cosmicrafts. These Terms of Service ("Terms") govern your access to and use of Cosmicrafts' website, platform, applications, and any associated services (collectively, the "Services"). 
+## 서문
+Cosmicrafts에 오신 것을 환영합니다. 본 이용 약관("약관")은 Cosmicrafts의 웹사이트, 플랫폼, 애플리케이션 및 관련 서비스(이하 "서비스")에 대한 접근 및 사용을 규율합니다.
 
-By accessing or using our Services, you agree to be bound by these Terms. If you disagree with any part of the Terms, you do not have permission to access the Services.
+서비스를 이용하거나 접근함으로써 귀하는 본 약관에 동의하게 됩니다. 약관의 어느 부분에 동의하지 않을 경우, 서비스 이용이 허용되지 않습니다.
 
-## Effective Date
-These Terms are effective as of March 4, 2025.
+## 효력 발생일
+본 약관은 2025년 3월 4일부터 효력이 발생합니다.
 
-## Definitions
-- **Platform**: Refers to the Cosmicrafts universe, including all websites, games, applications, and services provided by Cosmicrafts.
-- **User**, **You**, or **Your**: Refers to individuals who access or use the Platform.
-- **Content**: Refers to any information, text, graphics, photos, videos, or other materials uploaded, downloaded, or appearing on the Platform.
-- **NFT**: Non-Fungible Token, a unique digital identifier recorded on a blockchain that certifies ownership and authenticity of a specific digital asset.
-- **Cryptocurrency**: Digital or virtual currency that uses cryptography for security and operates independently of a central authority.
-- **Blockchain**: A distributed digital ledger that records transactions across many computers in a way that cannot be altered retroactively.
-- **On-Chain Data**: Information that is stored directly on a blockchain network, which is public, transparent, and immutable.
-- **App Store**: Refers to digital distribution platforms such as Google Play Store, Apple App Store, Epic Games Store, and Crazy Games where our applications may be available.
+## 정의
+- **플랫폼**: Cosmicrafts의 모든 웹사이트, 게임, 애플리케이션 및 Cosmicrafts가 제공하는 서비스를 포함한 Cosmicrafts 유니버스를 의미합니다.
+- **사용자**, **귀하**: 플랫폼에 접근하거나 사용하는 개인을 의미합니다.
+- **콘텐츠**: 플랫폼에 업로드, 다운로드 또는 게시되는 정보, 텍스트, 그래픽, 사진, 비디오 또는 기타 자료를 의미합니다.
+- **NFT**: 블록체인에 기록된 고유한 디지털 식별자로, 특정 디지털 자산의 소유권과 진위를 증명합니다.
+- **암호화폐**: 암호화를 통해 보안이 유지되고 중앙 기관 없이 운영되는 디지털 또는 가상 화폐를 의미합니다.
+- **블록체인**: 거래 기록을 여러 컴퓨터에 분산하여 기록하는 디지털 원장으로, 이후 변경이 불가능합니다.
+- **온체인 데이터**: 블록체인 네트워크에 직접 저장된 정보로, 공개적이고 투명하며 변경 불가능합니다.
+- **앱 스토어**: Google Play 스토어, Apple App Store, Epic Games Store, Crazy Games 등 우리 애플리케이션이 제공될 수 있는 디지털 배포 플랫폼을 의미합니다.
 
-## Web3 and On-Chain Data
+## Web3 및 온체인 데이터
 
-### Public Nature of Blockchain
-Cosmicrafts is built on Web3 technology, which means:
+### 블록체인의 공개적 특성
+Cosmicrafts는 Web3 기술을 기반으로 구축되었으며, 이는 다음을 의미합니다:
 
-1. **Public Transparency**: Most of our databases are stored on public blockchains, making information inherently public and transparent.
+1. **공개적 투명성**: 대부분의 데이터베이스는 공개 블록체인에 저장되어 정보가 본질적으로 공개적이고 투명합니다.
 
-2. **User Responsibility**: You are solely responsible for any information you choose to share through our platform. By using our Services, you explicitly acknowledge that information stored on blockchain networks is:
-   - Public by default
-   - Accessible to anyone with access to the blockchain
-   - Permanent and immutable (cannot be deleted or altered)
-   - Not encrypted or hidden by us unless explicitly stated
+2. **사용자 책임**: 귀하는 플랫폼을 통해 공유하는 정보에 대해 전적인 책임을 집니다. 서비스를 이용함으로써 귀하는 블록체인 네트워크에 저장된 정보가 다음과 같음을 명시적으로 인정합니다:
+   - 기본적으로 공개적임
+   - 블록체인에 접근할 수 있는 누구나 접근 가능함
+   - 영구적이며 변경 불가능함(삭제 또는 수정 불가)
+   - 명시적으로 언급되지 않는 한 암호화되거나 숨겨져 있지 않음
 
-3. **Privacy Limitations**: Due to the nature of blockchain technology, privacy features have technical limitations. Even information marked as "private" may still be visible to blockchain validators or through blockchain explorers.
+3. **개인정보 보호의 한계**: 블록체인 기술의 특성상, 개인정보 보호 기능에는 기술적 한계가 있습니다. "비공개"로 표시된 정보라도 블록체인 검증자나 블록체인 탐색기를 통해 볼 수 있을 수 있습니다.
 
-4. **No Expectation of Privacy**: You should have no expectation of privacy regarding any on-chain data. Before providing any information through our Services, you should carefully consider whether you are comfortable with that information being public and permanent.
+4. **개인정보 보호 기대 없음**: 온체인 데이터에 대해 개인정보 보호를 기대해서는 안 됩니다. 서비스를 통해 정보를 제공하기 전에 해당 정보가 공개적이고 영구적으로 기록될 것에 대해 충분히 고려해야 합니다.
 
-5. **Data Sovereignty**: You retain ownership of your private keys and control of your digital assets, but public blockchain data cannot be deleted even if you discontinue using our Services.
+5. **데이터 주권**: 귀하는 개인 키의 소유권과 디지털 자산에 대한 통제권을 유지하지만, 공개 블록체인 데이터는 서비스 사용을 중단하더라도 삭제할 수 없습니다.
 
-## Web3 Safety and Privacy Guide
+## Web3 안전 및 개인정보 보호 가이드
 
-### Important Safety Guidelines for New Users
-If you're new to Web3 platforms like Cosmicrafts, please review these critical safety guidelines:
+### 신규 사용자를 위한 중요한 안전 지침
+Web3 플랫폼인 Cosmicrafts를 처음 사용하는 경우, 다음의 중요한 안전 지침을 검토하시기 바랍니다:
 
-1. **Protect Your Personal Information**:
-   - Never use your real full name, home address, or phone number on blockchain platforms
-   - Create pseudonymous usernames that cannot be connected to your real identity
-   - Avoid sharing personally identifiable information in public forums, chats, or profiles
-   - Be aware that anything you post on-chain could be permanently recorded
+1. **개인정보 보호**:
+   - 블록체인 플랫폼에서 실명, 집 주소, 전화번호를 사용하지 마십시오.
+   - 실체와 연결되지 않은 가명을 사용하십시오.
+   - 공개 포럼, 채팅, 프로필에 개인 식별 정보를 공유하지 마십시오.
+   - 온체인에 게시하는 모든 내용이 영구적으로 기록될 수 있음을 인지하십시오.
 
-2. **Wallet and Key Security**:
-   - Your private keys and seed phrases are your sole access to your digital assets
-   - NEVER share your private keys, seed phrases, or wallet passwords with anyone, including Cosmicrafts staff
-   - NEVER enter your seed phrase or private keys on websites, even if they appear to be legitimate
-   - Store your seed phrase offline in a secure location (preferably multiple secure locations)
-   - Unlike traditional banking, there is NO central authority that can recover your account or assets if keys are lost or stolen
-   - Use hardware wallets for significant holdings whenever possible
+2. **지갑 및 키 보안**:
+   - 개인 키와 시드 구문은 디지털 자산에 대한 유일한 접근 수단입니다.
+   - 개인 키, 시드 구문, 지갑 비밀번호를 Cosmicrafts 직원을 포함한 누구와도 공유하지 마십시오.
+   - 웹사이트에 시드 구문이나 개인 키를 입력하지 마십시오.
+   - 시드 구문을 오프라인에 안전하게 보관하십시오(가능한 여러 곳에).
+   - 전통적인 은행과 달리, 키를 분실하거나 도난당한 경우 계정이나 자산을 복구할 수 있는 중앙 기관이 없습니다.
+   - 가능한 경우 하드웨어 지갑을 사용하십시오.
 
-3. **Transaction Awareness**:
-   - ALL blockchain transactions are IRREVERSIBLE and CANNOT be refunded or reversed once confirmed
-   - Always double-check transaction details (recipient address, amount) before confirming
-   - Start with small test transactions when using new services or features
-   - Be wary of any transaction requests that create urgency or pressure you to act quickly
+3. **거래 주의사항**:
+   - 모든 블록체인 거래는 되돌릴 수 없으며, 확인 후에는 환불이나 취소가 불가능합니다.
+   - 거래를 확인하기 전에 항상 거래 세부 정보(수신자 주소, 금액)를 다시 확인하십시오.
+   - 새로운 서비스나 기능을 사용할 때는 작은 테스트 거래부터 시작하십시오.
+   - 긴급성을 조성하거나 빠르게 행동하도록 압박하는 거래 요청에 주의하십시오.
 
-4. **Scam Prevention**:
-   - Be extremely cautious of direct messages from strangers, especially those offering assistance, opportunities, or free assets
-   - Never click on unknown links sent via direct messages or from untrusted sources
-   - Always verify the source of communications - Cosmicrafts will ONLY contact you through official channels
-   - Be skeptical of "too good to be true" offers, giveaways, or investment opportunities
-   - Verify all contract addresses against official sources before interacting with them
-   - Check URLs carefully - scammers often use URLs that look similar to legitimate sites
+4. **사기 방지**:
+   - 낯선 사람의 직접 메시지에 극도로 주의하십시오.
+   - 알려지지 않은 링크를 클릭하지 마십시오.
+   - Cosmicrafts는 공식 채널을 통해서만 연락할 것입니다.
+   - "너무 좋아 보이는" 제안, 경품, 투자 기회에 회의적이어야 합니다.
+   - 모든 계약 주소를 공식 소스와 대조하여 확인하십시오.
+   - URL을 주의 깊게 확인하십시오.
 
-5. **Common Web3 Scams to Avoid**:
-   - Fake support staff offering to "help" with account issues
-   - Free NFT or token mints that request your seed phrase
-   - Urgent messages about account security requiring immediate action
-   - Impersonation of project founders, team members, or celebrities 
-   - Fraudulent airdrops requiring you to send cryptocurrency first
-   - Fake marketplace notifications about offers on your digital assets
+5. **피해야 할 일반적인 Web3 사기**:
+   - 계정 문제를 "도와주겠다"는 가짜 지원 직원
+   - 시드 구문을 요구하는 무료 NFT 또는 토큰 민팅
+   - 즉각적인 조치를 요구하는 계정 보안 관련 긴급 메시지
+   - 프로젝트 창립자, 팀원, 유명인사를 사칭하는 행위
+   - 먼저 암호화폐를 보내야 하는 사기 에어드랍
+   - 디지털 자산에 대한 가짜 마켓플레이스 알림
 
-### Safety Tools and Resources
-Cosmicrafts provides several tools to help protect your experience:
+### 안전 도구 및 리소스
+Cosmicrafts는 사용자 경험을 보호하기 위해 여러 도구를 제공합니다:
 
-1. **Reporting System**: Use our reporting features to flag suspicious users, scam attempts, or harmful content. Look for the "Report" option in user profiles, messages, and content.
+1. **신고 시스템**: 의심스러운 사용자, 사기 시도 또는 유해한 콘텐츠를 신고할 수 있습니다. 사용자 프로필, 메시지, 콘텐츠에서 "신고" 옵션을 찾으십시오.
 
-2. **Blocking Users**: You can block any user by accessing their profile and selecting the block option. Blocked users cannot contact you.
+2. **사용자 차단**: 프로필에 접근하여 차단 옵션을 선택하면 해당 사용자를 차단할 수 있습니다. 차단된 사용자는 귀하에게 연락할 수 없습니다.
 
-3. **Privacy Settings**: Configure your privacy settings in your account dashboard to control what information is visible to others and who can contact you.
+3. **개인정보 설정**: 계정 대시보드에서 개인정보 설정을 구성하여 다른 사용자에게 보이는 정보와 연락 가능한 사용자를 제어할 수 있습니다.
 
-4. **Authentication Options**: Enable two-factor authentication (2FA) for additional account security.
+4. **인증 옵션**: 추가 계정 보안을 위해 이중 인증(2FA)을 활성화하십시오.
 
-5. **Transaction Confirmation**: Our platform includes confirmation screens for all transactions with explicit warnings and details to prevent mistakes.
+5. **거래 확인**: 우리 플랫폼은 모든 거래에 대해 명시적인 경고와 세부 정보를 포함한 확인 화면을 제공합니다.
 
-### Contacting Us Securely
-For any safety or security concerns, contact us ONLY through our official channels:
+### 안전하게 문의하기
+안전 또는 보안 관련 문제가 있는 경우, 다음의 공식 채널을 통해서만 문의하십시오:
 
-- **Official Email**: contact@cosmicrafts.com
-- **In-Platform Support**: Via the help button in the account dashboard
-- **Official Social Media**: Only through accounts verified with blue checkmarks
+- **공식 이메일**: contact@cosmicrafts.com
+- **플랫폼 내 지원**: 계정 대시보드의 도움말 버튼을 통해
+- **공식 소셜 미디어**: 블루 체크마크로 검증된 계정만 신뢰하십시오.
 
-We will NEVER ask for your seed phrase, private keys, or passwords. If anyone claiming to represent Cosmicrafts requests this information, it is a scam.
+Cosmicrafts는 절대 귀하의 시드 구문, 개인 키, 비밀번호를 요구하지 않습니다. Cosmicrafts를 사칭하며 이러한 정보를 요구하는 경우, 이는 사기입니다.
 
-## Account Registration and Eligibility
+## 계정 등록 및 자격 요건
 
-### Account Creation
-To access certain features of our Services, you must create an account. When registering, you agree to provide accurate, current, and complete information. You are responsible for safeguarding your account credentials and for all activities that occur under your account.
+### 계정 생성
+서비스의 특정 기능을 이용하려면 계정을 생성해야 합니다. 등록 시, 귀하는 정확하고 최신의 완전한 정보를 제공하는 데 동의합니다. 귀하는 계정 자격 증명을 보호하고 귀하의 계정에서 발생하는 모든 활동에 대한 책임을 집니다.
 
-### Age Requirements
-You must be at least 18 years old to create an account. If you are between 13 and 18 years old, you may only use our Services with the consent and supervision of a parent or legal guardian who agrees to be bound by these Terms.
+### 연령 요건
+계정을 생성하려면 최소 18세 이상이어야 합니다. 13세에서 18세 사이인 경우, 부모 또는 법적 보호자의 동의와 감독 하에만 서비스를 이용할 수 있으며, 보호자는 본 약관에 동의해야 합니다.
 
-### Account Security
-You are responsible for maintaining the confidentiality of your account information and password. You agree to notify us immediately of any unauthorized use of your account or any other breach of security.
+### 계정 보안
+귀하는 계정 정보와 비밀번호의 기밀성을 유지할 책임이 있습니다. 귀하의 계정이 무단으로 사용되었거나 기타 보안 위반이 발생한 경우 즉시 당사에 알려야 합니다.
 
-### Account Deletion
-You may request to delete your account at any time:
-- Through the Web App settings menu
-- By emailing contact@cosmicrafts.com
+### 계정 삭제
+언제든지 계정 삭제를 요청할 수 있습니다:
+- 웹 앱 설정 메뉴를 통해
+- contact@cosmicrafts.com으로 이메일을 보내어
 
-When you request account deletion:
-- We will initiate a 30-day cooling-off period
-- During this period, your account will be deactivated but not permanently deleted
-- You can reactivate your account by simply logging in
-- After 30 days, we will permanently delete your account information from our systems
+계정 삭제를 요청하면:
+- 30일의 유예 기간이 시작됩니다.
+- 이 기간 동안 계정은 비활성화되지만 완전히 삭제되지는 않습니다.
+- 로그인하면 계정을 다시 활성화할 수 있습니다.
+- 30일 후, 계정 정보는 시스템에서 영구적으로 삭제됩니다.
 
-**Note on Internet Computer Protocol (ICP) Deletion**: Cosmicrafts operates partly on the Internet Computer Protocol (ICP) blockchain, which enables the deletion of user profiles to comply with requirements from platforms such as Google Play and Apple App Store. When you request account deletion, we can remove your user profile and personal information from ICP-based services, in accordance with applicable privacy regulations.
+**인터넷 컴퓨터 프로토콜(ICP) 삭제에 대한 참고 사항**: Cosmicrafts는 부분적으로 인터넷 컴퓨터 프로토콜(ICP) 블록체인에서 운영되며, Google Play 및 Apple App Store와 같은 플랫폼의 요구 사항을 준수하기 위해 사용자 프로필 삭제가 가능합니다. 계정 삭제를 요청하면 ICP 기반 서비스에서 귀하의 사용자 프로필과 개인 정보를 삭제할 수 있습니다.
 
-**Important Note on Blockchain Data**: While we can delete your account information from our centralized systems and your user profile from ICP, any transactions or data associated with your public key that has been recorded on public blockchains cannot be deleted or modified due to the immutable nature of blockchain technology. This includes transaction history, NFT ownership records, and any other data that has been committed to a blockchain.
+**블록체인 데이터에 대한 중요한 참고 사항**: 중앙 집중식 시스템에서 귀하의 계정 정보와 ICP에서 귀하의 사용자 프로필을 삭제할 수 있지만, 공개 블록체인에 기록된 귀하의 공개 키와 관련된 거래 내역, NFT 소유권 기록 및 기타 데이터는 블록체인 기술의 불변성으로 인해 삭제하거나 수정할 수 없습니다.
 
-## User Conduct
-When using our Services, you agree not to:
+## 사용자 행동 규칙
+서비스를 이용할 때 다음을 금지합니다:
 
-- Violate any applicable laws or regulations
-- Infringe on the rights of others, including intellectual property rights
-- Harass, abuse, or harm another person
-- Impersonate any person or entity
-- Interfere with or disrupt the Services or servers
-- Create multiple accounts for disruptive or abusive purposes
-- Use our Services for any illegal or unauthorized purpose
-- Post spam or malicious content
-- Attempt to gain unauthorized access to any portion of the Platform
-- Use any automated means or interface not provided by us to access the Services
-- Store sensitive personal information on-chain that should reasonably remain private
+- 적용 가능한 법률 또는 규정 위반
+- 타인의 권리(지적 재산권 포함) 침해
+- 타인을 괴롭히거나 학대하거나 해치는 행위
+- 어떠한 개인이나 단체를 사칭하는 행위
+- 서비스 또는 서버를 방해하거나 중단시키는 행위
+- 방해 또는 악의적인 목적으로 여러 계정을 생성하는 행위
+- 불법적이거나 허가되지 않은 목적으로 서비스를 사용하는 행위
+- 스팸 또는 악성 콘텐츠 게시
+- 플랫폼의 어떠한 부분에도 무단으로 접근하려는 시도
+- 당사가 제공하지 않은 자동화된 수단 또는 인터페이스를 사용하여 서비스에 접근하는 행위
+- 합리적으로 비공개로 유지되어야 하는 민감한 개인정보를 온체인에 저장하는 행위
 
-## Virtual Assets and Transactions
+## 가상 자산 및 거래
 
-### Decentralization and User Responsibility
-All digital assets, including but not limited to cryptocurrency tokens, NFTs, and in-game items that exist on blockchain networks are decentralized by nature. You acknowledge and agree that:
+### 탈중앙화 및 사용자 책임
+블록체인 네트워크에 존재하는 암호화폐 토큰, NFT, 게임 내 아이템을 포함한 모든 디지털 자산은 본질적으로 탈중앙화되어 있습니다. 귀하는 다음을 인정하고 동의합니다:
 
-1. **No Control**: World of Unreal, LLC do not control, maintain, or have custody of your digital assets that exist on blockchain networks.
+1. **통제 불가**: World of Unreal, LLC는 블록체인 네트워크에 존재하는 귀하의 디지털 자산을 통제, 유지 또는 보관하지 않습니다.
 
-2. **No Responsibility**: We bear no responsibility for any issues arising from blockchain transactions, including but not limited to lost private keys, phishing attacks, smart contract vulnerabilities, network failures, high gas fees, or regulatory changes.
+2. **책임 없음**: 블록체인 거래에서 발생하는 문제(분실된 개인 키, 피싱 공격, 스마트 계약 취약점, 네트워크 장애, 높은 가스 수수료, 규제 변경 등)에 대해 당사는 책임을 지지 않습니다.
 
-3. **No Recovery**: We cannot recover or restore lost digital assets, reverse transactions, or assist with forgotten passwords or private keys.
+3. **복구 불가**: 분실된 디지털 자산을 복구하거나 거래를 되돌리거나, 잊어버린 비밀번호나 개인 키를 복구할 수 없습니다.
 
-4. **Self-Custody**: You are solely responsible for securing your own wallet, private keys, seed phrases, and other credentials necessary to access your digital assets.
+4. **자기 관리**: 귀하는 디지털 자산에 접근하기 위한 지갑, 개인 키, 시드 구문 및 기타 자격 증명을 안전하게 보관할 책임이 있습니다.
 
-### Platform Moderation and DAO Appeals
+### 플랫폼 관리 및 DAO 항소
 
-While Cosmicrafts operates in a decentralized environment, we maintain certain limited administrative capabilities to protect users and the platform integrity:
+Cosmicrafts는 탈중앙화된 환경에서 운영되지만, 사용자와 플랫폼 무결성을 보호하기 위해 일부 관리 기능을 유지합니다:
 
-1. **NFT Confiscation/Burning**: In cases of clear policy violations, fraud, illegal content, or other significant infractions, Cosmicrafts administrators may exercise the right to confiscate (burn) NFTs. This is an emergency measure intended to protect our community and platform.
+1. **NFT 압수/소각**: 명백한 정책 위반, 사기, 불법 콘텐츠 또는 기타 중대한 위반 사례의 경우, Cosmicrafts 관리자는 NFT를 압수(소각)할 권리를 행사할 수 있습니다. 이는 커뮤니티와 플랫폼을 보호하기 위한 긴급 조치입니다.
 
-2. **Limitations of Real-time Protection**: The decentralized nature of blockchain means damage can occur rapidly (e.g., stolen NFTs can be resold within seconds), often before moderation can intervene. We cannot guarantee protection against all forms of malicious activity.
+2. **실시간 보호의 한계**: 블록체인의 탈중앙화 특성상, 손상이 빠르게 발생할 수 있습니다(예: 도난당한 NFT는 몇 초 내에 재판매될 수 있음). 악의적인 활동의 모든 형태에 대해 보호를 보장할 수 없습니다.
 
-3. **DAO Appeal Process**: Users who believe their NFTs were wrongfully confiscated may appeal to the Cosmicrafts DAO for review. The appeal process works as follows:
-   - Submit a formal appeal through the designated DAO governance portal
-   - Provide evidence supporting your case
-   - The DAO will review and vote on the appeal according to governance procedures
-   - If approved by the DAO, confiscated NFTs may be restored
+3. **DAO 항소 절차**: NFT가 잘못 압수되었다고 생각하는 사용자는 Cosmicrafts DAO에 항소할 수 있습니다. 항소 절차는 다음과 같습니다:
+   - 지정된 DAO 거버넌스 포털을 통해 공식 항소 제출
+   - 사례를 뒷받침하는 증거 제공
+   - DAO가 항소를 검토하고 거버넌스 절차에 따라 투표
+   - DAO가 승인하면 압수된 NFT가 복구될 수 있음
 
-4. **Final Authority**: The DAO's decision on appeals is considered final. Neither the Cosmicrafts Foundation nor World of Unreal, LLC can override DAO governance decisions because the smart contracts are under the DAO jurisdiction.
+4. **최종 권한**: DAO의 항소 결정은 최종적입니다. Cosmicrafts 재단이나 World of Unreal, LLC는 DAO 거버넌스 결정을 무시할 수 없습니다.
 
-5. **Dispute Resolution**: For disputes between users regarding digital assets (such as theft claims, fraudulent sales, etc.), the proper channel for resolution is through the DAO governance system, not through Cosmicrafts support. The DAO will judge such cases based on evidence and community standards.
+5. **분쟁 해결**: 디지털 자산에 대한 사용자 간 분쟁(도난 주장, 사기성 판매 등)의 경우, 적절한 해결 채널은 Cosmicrafts 지원이 아닌 DAO 거버넌스 시스템입니다. DAO는 증거와 커뮤니티 표준에 따라 이러한 사례를 판단할 것입니다.
 
-### Value and Exchange
-1. **Market Value**: Certain digital assets may have market value and may be tradable on decentralized exchanges (DEXes), centralized exchanges (CEXes), or other trading platforms. However, this value is highly volatile and speculative.
+### 가치 및 교환
+1. **시장 가치**: 일부 디지털 자산은 시장 가치가 있으며, 탈중앙화 거래소(DEX), 중앙화 거래소(CEX) 또는 기타 거래 플랫폼에서 거래될 수 있습니다. 그러나 이 가치는 매우 변동성이 크고 투기적입니다.
 
-2. **Cross-Chain Assets**: Our platform may support cross-chain assets from various blockchains, including but not limited to Internet Computer Protocol (ICP), Bitcoin (including Runes and Ordinals), Solana, and Ethereum. Each blockchain has its own risks, technical limitations, and regulatory considerations.
+2. **크로스체인 자산**: 우리 플랫폼은 인터넷 컴퓨터 프로토콜(ICP), 비트코인(Runes 및 Ordinals 포함), 솔라나, 이더리움 등 다양한 블록체인의 크로스체인 자산을 지원할 수 있습니다. 각 블록체인은 고유한 위험, 기술적 한계 및 규제 고려 사항이 있습니다.
 
-3. **No Guarantees**: We make no guarantees regarding the value, tradability, or liquidity of any digital assets obtained through our platform. The value of these assets can change dramatically based on market conditions, regulatory actions, or technological developments.
+3. **보장 없음**: 우리는 플랫폼을 통해 획득한 디지털 자산의 가치, 거래 가능성 또는 유동성에 대해 어떠한 보장도 하지 않습니다. 이러한 자산의 가치는 시장 상황, 규제 조치 또는 기술 발전에 따라 극적으로 변할 수 있습니다.
 
-4. **No Investment Advice**: Nothing in our platform or communications constitutes financial or investment advice. Any decisions you make regarding the purchase, sale, or holding of digital assets are made at your own risk.
+4. **투자 조언 없음**: 우리 플랫폼이나 커뮤니케이션의 어떠한 내용도 금융 또는 투자 조언으로 간주되지 않습니다. 디지털 자산의 구매, 판매 또는 보유에 대한 모든 결정은 귀하의 책임과 재량에 따릅니다.
 
-### NFTs and Digital Collectibles
-NFTs and digital collectibles obtained through our platform are stored on blockchain networks. You acknowledge that:
+### NFT 및 디지털 콜렉터블
+플랫폼을통해 획득한 NFT 및 디지털 콜렉터블은 블록체인 네트워크에 저장됩니다. 귀하는 다음을 인정합니다:
 
-1. **Token Standard**: Our NFTs may use various token standards (e.g., ERC-721, ERC-1155, BEP-721, or equivalent standards on other blockchains). The specific rights conferred by an NFT are limited to those explicitly stated in our Terms or the applicable smart contract.
+1. **토큰 표준**: 우리의 NFT는 다양한 토큰 표준(예: ERC-721, ERC-1155, BEP-721 또는 기타 블록체인의 동등한 표준)을 사용할 수 있습니다. NFT에 부여된 특정 권리는 본 약관 또는 해당 스마트 계약에 명시된 내용으로 제한됩니다.
 
-2. **License Only**: Your purchase of an NFT grants you a license to the associated digital content, but not ownership of the underlying intellectual property rights, copyright, or trademark.
+2. **라이선스만 제공**: NFT를 구매하면 관련 디지털 콘텐츠에 대한 라이선스가 부여되지만, 기본 지적 재산권, 저작권 또는 상표권을 소유하는 것은 아닙니다.
 
-3. **Permanent Transactions**: NFT transactions on blockchain networks are permanent and irreversible once confirmed. We cannot reverse, cancel, or refund any NFT transactions under any circumstances.
+3. **영구적 거래**: 블록체인 네트워크에서의 NFT 거래는 확인 후 영구적이며 되돌릴 수 없습니다. 어떠한 상황에서도 NFT 거래를 취소, 환불 또는 되돌릴 수 없습니다.
 
-   **Appeal Process for Special Cases**: While blockchain transactions are irreversible as a general rule, in exceptional circumstances, users may appeal to the Cosmicrafts DAO as a last resort for transaction disputes. To initiate this process:
-   - First post your case in the community forums for preliminary discussion
-   - You must have the minimum required amount of SPIRAL tokens staked to create a neuron and submit a formal proposal
-- Follow the governance proposal process as outlined in the [Whitepaper](/whitepaper)
-   - The DAO has final authority on all such appeals
-   - World of Unreal LLC has no responsibility or authority over these decisions
+   **특별 사례에 대한 항소 절차**: 블록체인 거래는 일반적으로 되돌릴 수 없지만, 특별한 상황에서 사용자는 Cosmicrafts DAO에 항소할 수 있습니다. 이 절차를 시작하려면:
+   - 먼저 커뮤니티 포럼에 사례를 게시하여 예비 논의를 진행합니다.
+   - 최소 SPIRAL 토큰을 스테이킹하여 뉴런을 생성하고 공식 제안을 제출해야 합니다.
+   - [백서](/whitepaper)에 명시된 거버넌스 제안 절차를 따릅니다.
+   - DAO는 모든 항소에 대한 최종 권한을 가집니다.
+   - World of Unreal LLC는 이러한 결정에 대한 책임이나 권한이 없습니다.
 
-4. **Asset Persistence**: While we strive to maintain the infrastructure supporting our digital assets, we make no guarantees regarding the continued availability or functionality of metadata, artwork, or other content associated with NFTs if our services are discontinued.
+4. **자산 지속성**: 우리는 디지털 자산을 지원하는 인프라를 유지하기 위해 노력하지만, 서비스가 중단된 경우 NFT와 관련된 메타데이터, 아트워크 또는 기타 콘텐츠의 지속적인 가용성 또는 기능에 대해 어떠한 보장도 하지 않습니다.
 
-### Transactions
-All purchases and transactions on our platform are final. We reserve the right to refuse any purchase or transaction at our discretion. For on-chain transactions:
+### 거래
+플랫폼에서의 모든 구매 및 거래는 최종적입니다. 당사는 재량에 따라 어떠한 구매나 거래를 거부할 권리가 있습니다. 온체인 거래의 경우:
 
-1. **Network Fees**: 
-   - On the Internet Computer Protocol (ICP), transactions are generally free for users, as the DAO pays for the computing power required to operate smart contracts.
-   - For transactions on other blockchains (e.g., Ethereum, Solana, Bitcoin), you are responsible for all network fees (gas fees) associated with those transactions.
-   - The cost of network fees varies depending on network congestion and complexity of the transaction.
+1. **네트워크 수수료**:
+   - 인터넷 컴퓨터 프로토콜(ICP)에서는 일반적으로 사용자에게 거래 수수료가 부과되지 않으며, DAO가 스마트 계약 운영에 필요한 컴퓨팅 파워를 지불합니다.
+   - 다른 블록체인(예: 이더리움, 솔라나, 비트코인)에서의 거래는 해당 네트워크 수수료(가스 수수료)를 사용자가 부담합니다.
+   - 네트워크 수수료는 네트워크 혼잡도와 거래 복잡성에 따라 달라질 수 있습니다.
 
-2. **Transaction Delays**: We are not responsible for any delays, failures, or errors in transaction processing that occur on blockchain networks.
+2. **거래 지연**: 블록체인 네트워크에서 발생하는 거래 처리 지연, 실패 또는 오류에 대해 당사는 책임을 지지 않습니다.
 
-3. **Tax Implications**: You are solely responsible for determining and paying any applicable taxes related to your cryptocurrency transactions or NFT trading.
+3. **세금 영향**: 귀하는 암호화폐 거래 또는 NFT 거래와 관련된 모든 적용 가능한 세금을 결정하고 납부할 책임이 있습니다.
 
-### Cryptocurrency
-We may accept cryptocurrency as payment for certain Services and offer cryptocurrency-based features. You acknowledge that:
+### 암호화폐
+당사는 특정 서비스에 대한 지불 수단으로 암호화폐를 받아들이고 암호화폐 기반 기능을 제공할 수 있습니다. 귀하는 다음을 인정합니다:
 
-1. **High Risk**: Cryptocurrency investments are highly speculative and volatile. You should never invest more than you can afford to lose.
+1. **고위험**: 암호화폐 투자는 매우 투기적이고 변동성이 큽니다. 절대 감당할 수 없는 금액을 투자해서는 안 됩니다.
 
-2. **Regulatory Uncertainty**: The regulatory landscape for cryptocurrencies and digital assets is uncertain and evolving. New regulations may impact the value, utility, or legality of digital assets at any time.
+2. **규제 불확실성**: 암호화폐 및 디지털 자산에 적용되는 법률, 규제 및 세금 처리 방식은 불확실하고 진화 중이며, 관할권에 따라 다를 수 있습니다. 이러한 규제 변경은 디지털 자산의 가치나 유용성 또는 법적 지위에 부정적인 영향을 미칠 수 있습니다.
 
-3. **Technical Vulnerabilities**: Blockchain networks and smart contracts may contain bugs, vulnerabilities, or other technical issues that could result in the loss of your assets.
+3. **기술적 취약성**: 블록체인 네트워크 및 스마트 계약에는 버그, 취약점 또는 기타 기술적 문제가 포함될 수 있으며, 이로 인해 자산 손실이 발생할 수 있습니다.
 
-4. **Market Risks**: Cryptocurrency markets may be subject to manipulation, extreme volatility, liquidity issues, and other market risks outside our control.
+4. **시장 위험**: 암호화폐 시장은 조작, 극심한 변동성, 유동성 문제 및 기타 시장 위험에 노출될 수 있으며, 이는 당사의 통제 범위를 벗어납니다.
 
-### In-App Purchases
-For purchases made through mobile applications available on app stores such as Google Play Store, Apple App Store, Epic Games Store, or Crazy Games:
+### 인앱 구매
+Google Play 스토어, Apple App Store, Epic Games Store 또는 Crazy Games와 같은 앱 스토어를 통해 모바일 애플리케이션에서 이루어진 구매의 경우:
 
-1. All in-app purchases are subject to the terms of service and payment policies of the respective app store.
-2. For refunds related to in-app purchases, you must contact the respective app store through which the purchase was made.
-3. You acknowledge that once a purchase is made, it is considered complete and non-refundable except as may be permitted by the app store's refund policies or applicable law.
-4. Parents and guardians are responsible for monitoring and approving children's purchases.
+1. 모든 인앱 구매는 해당 앱 스토어의 이용 약관 및 결제 정책을 따릅니다.
+2. 인앱 구매와 관련된 환불은 구매가 이루어진 앱 스토어를 통해 요청해야 합니다.
+3. 구매가 완료되면 해당 구매는 완료된 것으로 간주되며, 앱 스토어의 환불 정책 또는 적용 가능한 법률에 따라 허용되는 경우를 제외하고 환불이 불가능합니다.
+4. 부모 및 보호자는 자녀의 구매를 모니터링하고 승인할 책임이 있습니다.
 
-## Intellectual Property
+## 지적 재산권
 
-### Our Content
-All content on the Platform, including but not limited to text, graphics, logos, icons, images, audio clips, digital downloads, data compilations, and software, is the property of World of Unreal, LLC (doing business as "Cosmicrafts") or its content suppliers and is protected by international copyright laws. 
+### 당사의 콘텐츠
+플랫폼의 모든 콘텐츠(텍스트, 그래픽, 로고, 아이콘, 이미지, 오디오 클립, 디지털 다운로드, 데이터 컴파일레이션, 소프트웨어 등)는 World of Unreal, LLC(이하 "Cosmicrafts") 또는 콘텐츠 공급자의 소유이며, 국제 저작권법에 의해 보호됩니다.
 
-### Intellectual Property Ownership and DAO License
-World of Unreal, LLC maintains full legal ownership of all copyrights, trademarks, patents, and other intellectual property rights associated with Cosmicrafts. To facilitate decentralized development and governance, World of Unreal, LLC has granted a specific operating license to the Cosmicrafts DAO.
+### 지적 재산권 소유권 및 DAO 라이선스
+World of Unreal, LLC는 Cosmicrafts와 관련된 모든 저작권, 상표권, 특허권 및 기타 지적 재산권에 대한 완전한 법적 소유권을 보유합니다. 탈중앙화 개발 및 거버넌스를 용이하게 하기 위해, World of Unreal, LLC는 Cosmicrafts DAO에 특정 운영 라이선스를 부여했습니다.
 
-This license allows the DAO to use, develop, and distribute the Cosmicrafts brand and platform according to governance decisions, while World of Unreal, LLC retains ultimate legal ownership. This structure provides traditional legal protection for Cosmicrafts intellectual property while enabling decentralized operations.
+이 라이선스는 DAO가 거버넌스 결정에 따라 Cosmicrafts 브랜드 및 플랫폼을 사용, 개발 및 배포할 수 있도록 허용하며, World of Unreal, LLC는 최종 법적 소유권을 유지합니다. 이 구조는 Cosmicrafts 지적 재산권에 대한 전통적인 법적 보호를 제공하면서도 탈중앙화 운영을 가능하게 합니다.
 
-For full details of this licensing arrangement, please refer to the Legal Notices document.
+이 라이선스 협정에 대한 자세한 내용은 법적 공지 문서를 참조하십시오.
 
-### AI-Generated Digital Art
+### AI 생성 디지털 아트
 
-Cosmicrafts utilizes artificial intelligence tools and services to create digital art for our platform:
+Cosmicrafts는 플랫폼을 위한 디지털 아트를 생성하기 위해 인공 지능 도구 및 서비스를 활용합니다:
 
-1. **Creative Expression**: Our AI-generated art is intended as original creative expression within our unique universe, not as replications of other intellectual properties. Any similarities to existing works are coincidental or represent general artistic influences.
+1. **창의적 표현**: 우리의 AI 생성 아트는 다른 지적 재산의 복제가 아닌, 우리의 독특한 유니버스 내에서의 원본 창의적 표현으로 의도되었습니다. 기존 작품과의 유사성은 우연적이거나 일반적인 예술적 영향의 결과입니다.
 
-2. **Artistic Inspiration**: Similar to how artists throughout history have drawn inspiration from other creators, our AI prompts may contain references to various universes, styles, characters, and themes. This is done not to infringe copyrights or copy intellectual property, but to create a rich blend of artistic expression that builds upon cultural traditions.
+2. **예술적 영감**: 역사적으로 예술가들이 다른 창작자로부터 영감을 얻은 것과 마찬가지로, 우리의 AI 프롬프트는 다양한 유니버스, 스타일, 캐릭터 및 테마를 참조할 수 있습니다. 이는 저작권을 침해하거나 지적 재산을 복사하기 위한 것이 아니라, 문화적 전통을 기반으로 한 풍부한 예술적 표현을 창조하기 위함입니다.
 
-3. **Third-Party IP Acknowledgment**: We acknowledge that AI models are trained on diverse datasets that may include copyrighted works. While we make good faith efforts to ensure our usage complies with applicable laws, the AI-generated content may inadvertently contain elements that resemble existing intellectual property.
+3. **제3자 지적 재산권 인정**: AI 모델은 저작권이 있는 작품을 포함한 다양한 데이터 세트로 훈련되었음을 인정합니다. 우리는 적용 가능한 법률을 준수하기 위해 성실한 노력을 기울이지만, AI 생성 콘텐츠는 기존 지적 재산과 유사한 요소를 포함할 수 있습니다.
 
-4. **Fair Use Belief**: We believe our use constitutes fair use and/or transformative use under applicable copyright laws. We utilize these AI services under commercial licensing terms that generally include indemnifications and legal protections.
+4. **공정 사용 믿음**: 우리는 우리의 사용이 적용 가능한 저작권법에 따라 공정 사용 및/또는 변형적 사용에 해당한다고 믿습니다. 우리는 일반적으로 보상 및 법적 보호를 포함하는 상업적 라이선스 조건 하에 이러한 AI 서비스를 활용합니다.
 
-5. **IP Concerns Process**: If you believe that AI-generated content on our platform infringes your intellectual property rights, please contact us at contact@cosmicrafts.com before pursuing other legal remedies. We will promptly review your claim and, if appropriate, remove or modify the content in question.
+5. **지적 재산권 문제 처리 절차**: 플랫폼의 AI 생성 콘텐츠가 귀하의 지적 재산권을 침해한다고 생각되는 경우, 다른 법적 구제 수단을 추구하기 전에 contact@cosmicrafts.com으로 문의하십시오. 우리는 귀하의 주장을 신속히 검토하고, 적절한 경우 해당 콘텐츠를 제거하거나 수정할 것입니다.
 
-6. **Service Provider Responsibility**: In accordance with our agreements with AI services, primary legal responsibility for AI-generated content typically resides with the AI service provider as specified in their terms of service.
+6. **서비스 제공자 책임**: AI 서비스와의 계약에 따라, AI 생성 콘텐츠에 대한 주요 법적 책임은 일반적으로 해당 서비스 제공자의 이용 약관에 명시된 대로 서비스 제공자에게 있습니다.
 
-For more detailed information about our AI art policies, please refer to the AI-Generated Digital Art section in our [Legal Notices](/legal).
+AI 아트 정책에 대한 자세한 내용은 [법적 공지](/legal)의 AI 생성 디지털 아트 섹션을 참조하십시오.
 
-### Your Content
-By submitting content to our Platform, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, and display such content in any media.
+### 귀하의 콘텐츠
+플랫폼에 콘텐츠를 제출함으로써, 귀하는 당사에게 전 세계적이며, 비독점적이며, 로열티가 없는 라이선스를 부여합니다. 이 라이선스는 당사가 해당 콘텐츠를 사용, 복제, 수정, 적응, 출판, 번역, 2차적 저작물 생성, 배포 및 전시할 수 있는 권리를 포함합니다.
 
-### Copyright Infringement
-If you believe that your work has been copied in a way that constitutes copyright infringement, please provide us with the following information:
-- A physical or electronic signature of the copyright owner
-- Identification of the copyrighted work claimed to have been infringed
-- Identification of the material that you claim is infringing
-- Information reasonably sufficient to permit us to contact you
-- A statement that you have a good faith belief that the disputed use is not authorized by the copyright owner
-- A statement, made under penalty of perjury, that the above information is accurate
+### 저작권 침해
+귀하의 작품이 저작권을 침해하는 방식으로 복제되었다고 생각되는 경우, 다음 정보를 제공해 주십시오:
+- 저작권 소유자의 물리적 또는 전자 서명
+- 침해당한 저작물의 식별 정보
+- 침해당한 자료의 식별 정보
+- 당사가 귀하에게 연락할 수 있는 충분한 정보
+- 귀하가 침해당한 사용이 저작권 소유자에 의해 승인되지 않았다는 신념을 진술한 서면
+- 위의 정보가 정확하다는 서면 서약
 
-## Privacy
-Your privacy is important to us. Our **Privacy Policy** explains how we collect, use, and protect your personal information. By using our Services, you consent to the data practices described in our [Privacy Policy](/privacy).
+## 개인정보 보호
+귀하의 개인정보는 당사에게 중요합니다. 당사의 **개인정보 보호 정책**은 귀하의 개인정보를 어떻게 수집, 사용 및 보호하는지 설명합니다. 서비스를 이용함으로써, 귀하는 [개인정보 보호 정책](/privacy)에 설명된 데이터 관행에 동의합니다.
 
-## Third-Party Services and App Stores
+## 제3자 서비스 및 앱 스토어
 
-### Platform-Specific Terms
-When accessing our Services through a third-party platform or app store (including but not limited to Google Play Store, Apple App Store, Epic Games Store, and Crazy Games), you are also subject to the terms, conditions, and policies of that platform.
+### 플랫폼별 약관
+제3자 플랫폼 또는 앱 스토어(Google Play 스토어, Apple App Store, Epic Games Store, Crazy Games 등 포함)를 통해 서비스에 접근할 경우, 해당 플랫폼의 약관, 조건 및 정책도 적용됩니다.
 
-### App Store Compliance
-- **Google Play Store**: Our apps comply with Google Play Developer Distribution Agreement and Google Play Developer Program Policies.
-- **Apple App Store**: Our apps comply with Apple's App Store Review Guidelines and Developer Program License Agreement.
-- **Epic Games Store**: Our apps comply with Epic Games Store Distribution Agreement.
-- **Crazy Games**: Our apps comply with Crazy Games Publishing Agreement.
+### 앱 스토어 준수
+- **Google Play 스토어**: 우리의 앱은 Google Play 개발자 배포 계약 및 Google Play 개발자 프로그램 정책을 준수합니다.
+- **Apple App Store**: 우리의 앱은 Apple의 App Store 검토 지침 및 개발자 프로그램 라이선스 계약을 준수합니다.
+- **Epic Games Store**: 우리의 앱은 Epic Games Store 배포 계약을 준수합니다.
+- **Crazy Games**: 우리의 앱은 Crazy Games 퍼블리싱 계약을 준수합니다.
 
-### Third-Party Payment Processors
-Payments processed through app stores or third-party payment processors are subject to their respective terms of service. We are not responsible for the actions or policies of these third parties.
+### 제3자 결제 처리자
+앱 스토어 또는 제3자 결제 처리자를 통해 처리된 결제는 해당 서비스 제공자의 이용 약관이 적용됩니다. 당사는 이러한 제3자의 행위 또는 정책에 대해 책임을 지지 않습니다.
 
-## User Acknowledgment of Risks
+## 사용자 위험 인정
 
-By using Cosmicrafts, you explicitly acknowledge and accept the following:
+Cosmicrafts를 사용함으로써, 귀하는 다음을 명시적으로 인정하고 동의합니다:
 
-1. **Blockchain Risks**: All blockchain networks involve inherent risks, including but not limited to smart contract vulnerabilities, consensus attacks, governance attacks, and other technological risks that could result in the loss of your digital assets.
+1. **블록체인 위험**: 모든 블록체인 네트워크에는 스마트 계약 취약성, 합의 공격, 거버넌스 공격 및 기타 기술적 위험이 내재되어 있으며, 이로 인해 디지털 자산이 손실될 수 있습니다.
 
-2. **Financial Risks**: Digital assets, cryptocurrencies, and NFTs are subject to extreme volatility, illiquidity, and potential loss of value, up to and including total loss. You should never commit funds you cannot afford to lose.
+2. **재정적 위험**: 디지털 자산, 암호화폐 및 NFT는 극도의 변동성, 비유동성 및 가치 상실 위험에 노출되어 있으며, 최악의 경우 전액 손실이 발생할 수 있습니다. 절대 감당할 수 없는 금액을 투자해서는 안 됩니다.
 
-3. **No Recourse**: In the event of loss of access to your wallet, theft of your digital assets, or other adverse events related to digital assets and blockchain activities, you have no recourse against Cosmicrafts or World of Unreal, LLC. We cannot and will not:
-   - Recover or restore lost assets
-   - Reverse, cancel, or modify blockchain transactions
-   - Compensate you for losses due to market volatility, scams, or security breaches
-   - Assist with password recovery for non-custodial wallets
+3. **구제 수단 없음**: 지갑 접근 권한 상실, 디지털 자산 도난 또는 디지털 자산 및 블록체인 활동과 관련된 기타 불리한 사건이 발생한 경우, Cosmicrafts 또는 World of Unreal, LLC에 대한 구제 수단이 없습니다. 당사는 다음을 할 수 없으며 하지 않을 것입니다:
+   - 분실된 자산을 복구하거나 복원
+   - 블록체인 거래를 되돌리거나 취소 또는 수정
+   - 시장 변동성, 사기 또는 보안 침해로 인한 손실에 대한 보상
+   - 비수탁 지갑의 비밀번호 복구 지원
 
-4. **Regulatory Uncertainty**: You understand that the laws, regulations, and tax treatments applicable to blockchain technologies, cryptocurrencies, and digital assets are uncertain, evolving, and may vary from jurisdiction to jurisdiction. These regulatory changes may adversely affect the value or utility of your digital assets or their legal status.
+4. **규제 불확실성**: 블록체인 기술, 암호화폐 및 디지털 자산에 적용되는 법률, 규제 및 세금 처리 방식은 불확실하고 진화 중이며 관할권에 따라 다를 수 있습니다. 이러한 규제 변경은 디지털 자산의 가치나 유용성 또는 법적 지위에 부정적인 영향을 미칠 수 있습니다.
 
-5. **No Financial Advice**: Nothing in our platform, marketing materials, or communications constitutes financial, investment, legal, or tax advice. Any investment decisions you make are at your own risk and discretion.
+5. **금융 조언 없음**: 우리 플랫폼, 마케팅 자료 또는 커뮤니케이션의 어떠한 내용도 금융, 투자, 법률 또는 세금 조언으로 간주되지 않습니다. 귀하가 내리는 모든 투자 결정은 귀하의 책임과 재량에 따릅니다.
 
-6. **Mandatory Risk Acceptance**: By using any of the decentralized or blockchain-based features of our platform, you are explicitly acknowledging and accepting all risks associated with blockchain technology and digital assets. If you do not agree with or accept these risks, you must not use the blockchain-related features of our platform.
+6. **필수 위험 수용**: 우리 플랫폼의 탈중앙화 또는 블록체인 기반 기능을 사용함으로써, 귀하는 블록체인 기술 및 디지털 자산과 관련된 모든 위험을 명시적으로 인정하고 수용합니다. 이러한 위험에 동의하거나 수용하지 않는 경우, 플랫폼의 블록체인 관련 기능을 사용해서는 안 됩니다.
 
-## Market Risk and Platform Liability
+## 시장 위험 및 플랫폼 책임
 
-### Service Provider Role
-Cosmicrafts operates solely as a technology service provider that offers a platform where users can interact with blockchain networks and engage in digital asset transactions. We explicitly clarify that:
+### 서비스 제공자 역할
+Cosmicrafts는 사용자가 블록체인 네트워크와 상호 작용하고 디지털 자산 거래를 할 수 있는 플랫폼을 제공하는 기술 서비스 제공자로 운영됩니다. 당사는 다음과 같이 명확히 합니다:
 
-1. **Not a Financial Institution**: Cosmicrafts is not a bank, broker, dealer, investment advisor, financial institution, or cryptocurrency exchange. We do not provide financial, investment, legal, or tax advice.
+1. **금융 기관 아님**: Cosmicrafts는 은행, 중개인, 딜러, 투자 자문가, 금융 기관 또는 암호화폐 거래소가 아닙니다. 우리는 금융, 투자, 법률 또는 세금 조언을 제공하지 않습니다.
 
-2. **Neutral Platform**: We provide neutral technological infrastructure only. We do not control, influence, or interfere with the markets, transactions, or values of any digital assets traded, minted, or otherwise exchanged through our platform.
+2. **중립적 플랫폼**: 우리는 중립적인 기술 인프라만 제공합니다. 우리는 플랫폼을 통해 거래, 민팅 또는 교환되는 디지털 자산의 시장, 거래 또는 가치를 통제, 영향 또는 간섭하지 않습니다.
 
-3. **No Custody**: We do not take custody of user funds or digital assets, nor do we have the ability to reverse transactions, recover lost assets, or modify blockchain data.
+3. **수탁 없음**: 우리는 사용자 자금 또는 디지털 자산을 수탁하지 않으며, 거래를 되돌리거나 분실된 자산을 복구하거나 블록체인 데이터를 수정할 수 있는 능력이 없습니다.
 
-4. **No Market Control**: We have no control over the value, tradability, or liquidity of any NFTs, tokens, or digital assets offered, created, sold, or purchased through our platform.
+4. **시장 통제 없음**: 우리는 플랫폼을 통해 제공, 생성, 판매 또는 구매되는 NFT, 토큰 또는 디지털 자산의 가치, 거래 가능성 또는 유동성을 통제하지 않습니다.
 
-### Market-Based Risks and Platform Non-Liability
+### 시장 기반 위험 및 플랫폼 비책임
 
-By using our platform, you explicitly acknowledge and agree that:
+플랫폼을 사용함으로써, 귀하는 다음을 명시적으로 인정하고 동의합니다:
 
-1. **Price Volatility**: Digital asset markets are highly volatile, and the price of NFTs, tokens, and other digital assets can change dramatically in short periods of time, potentially resulting in partial or total loss of value.
+1. **가격 변동성**: 디지털 자산 시장은 매우 변동성이 크며, NFT, 토큰 및 기타 디지털 자산의 가격은 짧은 시간 내에 극적으로 변할 수 있으며, 이로 인해 부분적 또는 전액 손실이 발생할 수 있습니다.
 
-2. **No Liability for Market Events**: Cosmicrafts and World of Unreal, LLC shall not be liable, under any circumstances, for:
-   - Price fluctuations, market crashes, or loss of value in any digital assets
-   - "Rug pulls," abandoned projects, or developer team changes
-   - Changes in community interest or demand for specific NFTs or tokens
-   - Failures of third-party marketplaces, exchanges, or platforms
-   - Changes in artistic or collector sentiment toward specific digital assets
-   - Failed, delayed, or underperforming token launches or NFT mints
-   - Issues related to token economics or tokenomics design
-   - Changes in perceived value of digital collections or assets
+2. **시장 사건에 대한 책임 없음**: Cosmicrafts 및 World of Unreal, LLC는 어떠한 상황에서도 다음에 대해 책임을 지지 않습니다:
+   - 디지털 자산의 가격 변동, 시장 붕괴 또는 가치 상실
+   - "러그 풀", 포기된 프로젝트 또는 개발자 팀 변경특정 NFT 또는 토큰에 대한 커뮤니티 관심 또는 수요 변화
+   - 제3자 마켓플레이스, 거래소 또는 플랫폼의 실패
+   - 디지털 자산에 대한 예술적 또는 컬렉터 감정 변화
+   - 실패, 지연 또는 부진한 토큰 출시 또는 NFT 민팅
+   - 토큰 경제학 또는 토크노믹스 설계와 관련된 문제
+   - 디지털 컬렉션 또는 자산의 인지된 가치 변화
 
-3. **Speculation at Your Own Risk**: All digital asset purchases, including NFTs and tokens, should be considered highly speculative. You should never spend money on digital assets that you cannot afford to lose entirely.
+3. **투기적 거래 위험**: 모든 디지털 자산 구매(NFT 및 토큰 포함)는 매우 투기적입니다. 절대 감당할 수 없는 금액을 디지털 자산에 투자해서는 안 됩니다.
 
-4. **Secondary Markets**: We make no representations or warranties about the existence or availability of secondary markets for digital assets. The ability to resell or trade any digital asset is uncertain and depends on factors entirely outside our control.
+4. **2차 시장**: 우리는 디지털 자산의 2차 시장 존재 또는 가용성에 대해 어떠한 진술이나 보증도 하지 않습니다. 디지털 자산을 재판매하거나 거래할 수 있는 능력은 불확실하며 전적으로 당사의 통제 범위를 벗어난 요소에 달려 있습니다.
 
-5. **No Guaranteed Returns**: We never guarantee profits, returns, or that any NFT or token will maintain or increase in value. Any statements regarding the potential value of digital assets should never be interpreted as a promise of financial returns.
+5. **수익 보장 없음**: 우리는 수익, 수익률 또는 NFT나 토큰의 가치 유지 또는 상승을 보장하지 않습니다. 디지털 자산의 잠재적 가치에 대한 어떠한 진술도 금융적 수익을 약속하는 것으로 해석되어서는 안 됩니다.
 
-6. **No Representations About Artists or Projects**: While we may provide a platform for various artists, projects, or developers, we make no representations or warranties about their reliability, capability, or the likelihood of project success or completion.
+6. **아티스트 또는 프로젝트에 대한 진술 없음**: 우리는 다양한 아티스트, 프로젝트 또는 개발자를 위한 플랫폼을 제공할 수 있지만, 그들의 신뢰성, 능력 또는 프로젝트 성공 또는 완료 가능성에 대해 어떠한 진술이나 보증도 하지 않습니다.
 
-### User Assumption of Risk
+### 사용자 위험 부담
 
-By using our platform:
+플랫폼을 사용함으로써:
 
-1. **Full Risk Assumption**: You acknowledge that you assume full responsibility and risk for all of your decisions to purchase, hold, trade, or sell digital assets.
+1. **전적인 위험 부담**: 귀하는 디지털 자산을 구매, 보유, 거래 또는 판매하기로 한 모든 결정에 대한 전적인 책임과 위험을 부담합니다.
 
-2. **Independent Evaluation**: You confirm that you have the knowledge, experience, and financial capability to make independent purchasing and trading decisions and to evaluate the risks involved.
+2. **독립적 평가**: 귀하는 독립적인 구매 및 거래 결정을 내리고 관련 위험을 평가할 수 있는 지식, 경험 및 재정적 능력을 갖추고 있음을 확인합니다.
 
-3. **No Reliance**: You have not relied on any representations made by Cosmicrafts regarding the future value, utility, or merchantability of any digital assets.
+3. **의존 없음**: 귀하는 디지털 자산의 미래 가치, 유용성 또는 판매 가능성에 대해 Cosmicrafts가 한 어떠한 진술에도 의존하지 않았음을 확인합니다.
 
-4. **Platform Not Liable**: You agree that Cosmicrafts and World of Unreal, LLC shall not be liable for any market-based losses you may incur through your use of our Services or your participation in the digital asset marketplace.
+4. **플랫폼 책임 없음**: 귀하는 Cosmicrafts 및 World of Unreal, LLC가 서비스 사용 또는 디지털 자산 시장 참여를 통해 발생할 수 있는 시장 기반 손실에 대해 책임을 지지 않음에 동의합니다.
 
-## Disclaimers
+## 면책 조항
 
-### Service Availability
-We strive to keep our Services operational and secure; however, there may be occasions when our Services are interrupted. We do not guarantee that our Services will be available at all times.
+### 서비스 가용성
+우리는 서비스가 운영되고 안전하게 유지되도록 노력하지만, 서비스가 중단될 수 있는 경우가 있습니다. 우리는 서비스가 항상 이용 가능할 것임을 보장하지 않습니다.
 
-### 'As Is' and 'As Available'
-The Services are provided on an 'AS IS' and 'AS AVAILABLE' basis. Cosmicrafts disclaims all warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.
+### '있는 그대로' 및 '이용 가능한 상태로'
+서비스는 '있는 그대로' 및 '이용 가능한 상태로' 제공됩니다. Cosmicrafts는 상품성, 특정 목적에의 적합성 및 비침해성을 포함하되 이에 국한되지 않는 모든 명시적 또는 묵시적 보증을 부인합니다.
 
-## Limitation of Liability
+## 책임 제한
 
-To the maximum extent permitted by law, Cosmicrafts and World of Unreal, LLC shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or goodwill, resulting from your access to or use of or inability to access or use the Services.
+법률이 허용하는 최대 범위 내에서, Cosmicrafts 및 World of Unreal, LLC는 서비스에 대한 접근 또는 사용 또는 접근 또는 사용 불가능으로 인해 발생하는 간접적, 부수적, 특수적, 결과적 또는 징벌적 손해(이익 손실, 데이터 또는 평판 손실 포함)에 대해 책임을 지지 않습니다.
 
-### No Liability for Blockchain Activities
-Without limiting the generality of the foregoing, we specifically disclaim all liability for:
+### 블록체인 활동에 대한 책임 없음
+위의 일반성을 제한하지 않고, 우리는 특히 다음에 대한 모든 책임을 부인합니다:
 
-1. **Digital Assets**: Any loss, theft, disappearance, destruction, or inability to access digital assets, cryptocurrency, or NFTs, whether due to security breaches, wallet compatibility issues, blockchain network failures, protocol updates, fork events, or any other reason.
+1. **디지털 자산**: 보안 침해, 지갑 호환성 문제, 블록체인 네트워크 실패, 프로토콜 업데이트, 포크 이벤트 또는 기타 이유로 인한 디지털 자산, 암호화폐 또는 NFT의 손실, 도난, 소실, 파괴 또는 접근 불가능.
 
-2. **Smart Contract Failures**: Any issues arising from bugs, errors, or security vulnerabilities in smart contracts used on our platform or third-party platforms that interact with our services.
+2. **스마트 계약 실패**: 우리 플랫폼 또는 우리 서비스와 상호 작용하는 제3자 플랫폼에서 사용된 스마트 계약의 버그, 오류 또는 보안 취약성으로 인해 발생하는 문제.
 
-3. **Market Volatility**: Any financial losses due to the volatility, illiquidity, or market manipulation of cryptocurrencies, NFTs, or other digital assets.
+3. **시장 변동성**: 암호화폐, NFT 또는 기타 디지털 자산의 변동성, 비유동성 또는 시장 조작으로 인한 재정적 손실.
 
-4. **Regulatory Actions**: Any changes in value, utility, or legality of digital assets due to regulatory actions, restrictions, or bans affecting blockchain technology, cryptocurrencies, or NFTs.
+4. **규제 조치**: 블록체인 기술, 암호화폐 또는 NFT에 영향을 미치는 규제 조치, 제한 또는 금지로 인한 디지털 자산의 가치, 유용성 또는 합법성 변화.
 
-5. **Cross-Chain Issues**: Any problems, errors, or losses resulting from cross-chain operations, bridge failures, or incompatibilities between different blockchain networks.
+5. **크로스체인 문제**: 크로스체인 작업, 브리지 실패 또는 서로 다른 블록체인 네트워크 간의 비호환성으로 인한 문제, 오류 또는 손실.
 
-6. **Third-Party Services**: Any losses or issues arising from the use of third-party wallets, exchanges, bridges, or other blockchain-related services used in conjunction with our platform.
+6. **제3자 서비스**: 우리 플랫폼과 함께 사용된 제3자 지갑, 거래소, 브리지 또는 기타 블록체인 관련 서비스 사용으로 인한 손실 또는 문제.
 
-### Maximum Liability
-In any case, our maximum aggregate liability under these Terms shall not exceed the greater of: (a) the amount you paid to use our non-blockchain services during the six months prior to the event giving rise to the liability, or (b) $100 USD. The limitations of liability do not apply to liabilities that cannot be excluded or limited by applicable law.
+### 최대 책임
+어떠한 경우에도 본 약관에 따른 당사의 최대 총 책임은 다음 중 더 큰 금액을 초과하지 않습니다: (a) 귀하가 비블록체인 서비스를 사용하기 위해 지난 6개월 동안 지불한 금액, 또는 (b) $100 USD. 책임 제한은 적용 법률에 따라 배제되거나 제한될 수 없는 책임에는 적용되지 않습니다.
 
-## Indemnification
-You agree to indemnify, defend, and hold harmless World of Unreal LLC, Cosmicrafts Foundation, its founder, officers, directors, employees, agents, and third parties, for any losses, costs, liabilities, and expenses relating to or arising out of your use of the Services, your violation of these Terms, or your violation of any rights of another.
+## 면책
+귀하는 World of Unreal LLC, Cosmicrafts Foundation, 그 창립자, 임원, 이사, 직원, 대리인 및 제3자를 보호, 방어 및 면책할 것에 동의합니다. 이는 귀하의 서비스 사용, 본 약관 위반 또는 타인의 권리 침해와 관련된 모든 손실, 비용, 책임 및 비용에 적용됩니다.
 
-## Governing Law
-These Terms shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of law provisions.
+## 준거법
+본 약관은 캘리포니아 주 법률에 따라 규율되고 해석됩니다. 이는 충돌법 규정을 고려하지 않습니다.
 
-## Dispute Resolution
+## 분쟁 해결
 
-### Informal Resolution
-If you have a dispute with us, please contact us first. We will attempt to resolve the dispute informally by contacting you via email.
+### 비공개 해결
+당사와 분쟁이 있는 경우, 먼저 당사에 연락하십시오. 당사는 이메일을 통해 귀하에게 연락하여 분쟁을 비공개적으로 해결하려고 시도할 것입니다.
 
-### Arbitration
-If we cannot resolve a dispute informally, any controversy or claim arising out of or relating to these Terms or the Services will be settled by binding arbitration in accordance with the commercial arbitration rules of the [American Arbitration Association](https://www.adr.org/).
+### 중재
+분쟁을 비공개적으로 해결할 수 없는 경우, 본 약관 또는 서비스와 관련된 모든 분쟁 또는 청구는 [미국 중재 협회](https://www.adr.org/)의 상업 중재 규칙에 따라 중재로 해결됩니다.
 
-### Class Action Waiver
-You agree that any proceedings to resolve disputes will be conducted only on an individual basis and not in a class, consolidated, or representative action.
+### 집단 소송 포기
+귀하는 모든 소송이 개별적으로만 진행되며, 집단, 통합 또는 대표 소송으로 진행되지 않음에 동의합니다.
 
-## Amendments to Terms
-We may modify these Terms at any time. If we make changes, we will provide notice by posting the updated Terms on our Platform and updating the "Effective Date" at the top. Your continued use of our Services after the changes take effect constitutes your agreement to the revised Terms.
+## 약관 수정
+당사는 언제든지 본 약관을 수정할 수 있습니다. 변경 사항이 있는 경우, 플랫폼에 업데이트된 약관을 게시하고 상단의 "효력 발생일"을 업데이트하여 공지할 것입니다. 변경 사항이 발효된 후에도 서비스를 계속 사용하면 귀하는 수정된 약관에 동의하는 것입니다.
 
-## Termination
-We may terminate or suspend your account and access to our Services immediately, without prior notice or liability, for any reason, including if you breach these Terms.
+## 계약 종료
+당사는 귀하의 계정 및 서비스 접근을 사전 통지 없이 즉시 종료하거나 중단할 수 있습니다. 이는 귀하가 본 약관을 위반한 경우를 포함하되 이에 국한되지 않습니다.
 
-## Severability
-If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions will continue in full force and effect.
+## 분리 가능성
+본 약관의 어떠한 조항이 시행 불가능하거나 무효인 경우, 해당 조항은 최소한도로 제한되거나 제거되며, 나머지 조항은 완전한 효력을 유지합니다.
 
-## Entire Agreement
-These Terms constitute the entire agreement between you and Cosmicrafts regarding our Services and supersede any prior agreements.
+## 전체 합의
+본 약관은 귀하와 Cosmicrafts 간의 서비스에 관한 전체 합의를 구성하며, 이전의 모든 합의를 대체합니다.
 
-## Contact Information
-If you have any questions about these Terms, please contact us at:
+## 연락처 정보
+본 약관에 대한 질문이 있는 경우, 다음 연락처로 문의하십시오:
 
-**Email**: contact@cosmicrafts.com  
+**이메일**: contact@cosmicrafts.com  
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+규제 준수를 위해 물리적 주소가 필요한 경우, 먼저 이메일로 문의하십시오.
 
-## DAO Governance and Token Rights
+## DAO 거버넌스 및 토큰 권리
 
-### Governance Tokens and Utility Nature
+### 거버넌스 토큰 및 유틸리티 성격
 
-1. **Limited Utility Function**: Governance tokens are utility tokens that grant holders only two specific limited rights when staked:
-   - The right to vote on governance proposals
-   - The right to submit governance proposals (subject to minimum staking requirements)
+1. **제한된 유틸리티 기능**: 거버넌스 토큰은 스테이킹 시 두 가지 특정 제한된 권리만 부여하는 유틸리티 토큰입니다:
+   - 거버넌스 제안에 투표할 권리
+   - 거버넌스 제안을 제출할 권리(최소 스테이킹 요건 적용)
 
-2. **Tokens Must Be Staked**: Governance rights are only available to users who have staked their tokens in the governance staking contract. Unstaked tokens provide no governance rights.
+2. **토큰 스테이킹 필요**: 거버넌스 권한은 거버넌스 스테이킹 계약에 토큰을 스테이킹한 사용자에게만 제공됩니다. 스테이킹되지 않은 토큰은 거버넌스 권한을 제공하지 않습니다.
 
-3. **Utility Tokens Only**: Governance tokens are strictly utility tokens that facilitate platform governance. They:
-   - Do not represent any ownership, equity, shares, or securities in World of Unreal, LLC
-   - Do not confer any rights to dividends, profit-sharing, or financial returns
-   - Do not grant management control over World of Unreal, LLC or the Cosmicrafts Foundation
-   - Have no guaranteed market value or liquidity
-   - Are not presented or marketed as investments or speculative assets
+3. **유틸리티 토큰만 해당**: 거버넌스 토큰은 플랫폼 거버넌스를 용이하게 하는 엄격한 유틸리티 토큰입니다. 이 토큰은:
+   - World of Unreal, LLC의 소유권, 지분, 주식 또는 증권을 나타내지 않습니다.
+   - 배당금, 이익 공유 또는 금융 수익에 대한 권리를 부여하지 않습니다.
+   - World of Unreal, LLC 또는 Cosmicrafts Foundation에 대한 관리 통제권을 부여하지 않습니다.
+   - 보장된 시장 가치 또는 유동성이 없습니다.
+   - 투자 또는 투기적 자산으로 제시되거나 마케팅되지 않습니다.
 
-4. **No Commercial Rights**: Ownership of governance tokens does not grant any license, commercial rights, or intellectual property rights to Cosmicrafts assets, brand, or content.
+4. **상업적 권리 없음**: 거버넌스 토큰 소유는 Cosmicrafts 자산, 브랜드 또는 콘텐츠에 대한 라이선스, 상업적 권리 또는 지적 재산권을 부여하지 않습니다.
 
-5. **Voting Limitations**: The scope of governance voting is limited to specific platform parameters defined in the governance documentation, and does not include:
-   - Business operations of World of Unreal, LLC
-   - Legal or regulatory compliance decisions
-   - Allocation of company revenues or profits
-   - Hiring, firing, or compensation of company personnel
+5. **투표 제한**: 거버넌스 투표 범위는 거버넌스 문서에 정의된 특정 플랫폼 매개변수로 제한되며, 다음을 포함하지 않습니다:
+   - World of Unreal, LLC의 비즈니스 운영
+   - 법적 또는 규제 준수 결정
+   - 회사 수익 또는 이익의 배분
+   - 회사 직원의 채용, 해고 또는 보상
 
-### Legal Relationship and Liability
+### 법적 관계 및 책임
 
-1. **Multi-Entity Structure**: The Cosmicrafts ecosystem operates through a multi-entity structure:
-   - **World of Unreal, LLC**: A Delaware limited liability company that serves as a legal entity interfacing with traditional systems for certain business operations.
-   - **Cosmicrafts Foundation**: A non-profit organization that serves as a major contributor to the development of the Cosmicrafts platform on behalf of the DAO.
-   - **Cosmicrafts DAO**: The decentralized autonomous organization that governs certain aspects of the platform through token-based voting.
+1. **다중 엔티티 구조**: Cosmicrafts 생태계는 다중 엔티티 구조를 통해 운영됩니다:
+   - **World of Unreal, LLC**: 전통적인 시스템과 인터페이스하기 위한 법적 엔티티로 기능하는 델라웨어 주 유한 책임 회사.
+   - **Cosmicrafts Foundation**: DAO를 대신하여 Cosmicrafts 플랫폼 개발에 기여하는 비영리 조직.
+   - **Cosmicrafts DAO**: 토큰 기반 투표를 통해 플랫폼의 특정 측면을 관리하는 탈중앙화 자율 조직.
 
-2. **Limited DAO Governance Scope**: The Cosmicrafts DAO's authority is limited to smart contracts and canister management with parameters as defined in the [governance documentation](/whitepaper#governance).
+2. **제한된 DAO 거버넌스 범위**: Cosmicrafts DAO의 권한은 스마트 계약 및 캐니스터 관리로 제한되며, [거버넌스 문서](/whitepaper#governance)에 정의된 매개변수 내에서만 적용됩니다.
 
-3. **No Partnership or Joint Venture**: Participation in DAO governance does not create a partnership, joint venture, agency, or employment relationship between token holders and any of the legal entities involved in the Cosmicrafts ecosystem, or among token holders themselves.
+3. **파트너십 또는 합작 투자 없음**: DAO 거버넌스 참여는 토큰 보유자와 Cosmicrafts 생태계에 관여된 법적 엔티티 간, 또는 토큰 보유자 간에 파트너십, 합작 투자, 대리 또는 고용 관계를 생성하지 않습니다.
 
-4. **Governance Documentation**: Your participation in DAO governance is also subject to any additional governance documentation, which may be updated from time to time through proper governance procedures.
+4. **거버넌스 문서**: DAO 거버넌스 참여는 추가 거버넌스 문서에도 적용되며, 이 문서는 적절한 거버넌스 절차를 통해 수시로 업데이트될 수 있습니다.
 
-5. **No Fiduciary Relationship**: World of Unreal, LLC, the Cosmicrafts Foundation, and the DAO do not owe fiduciary duties to token holders. Token holders do not owe fiduciary duties to each other by virtue of holding governance tokens.
+5. **신탁 관계 없음**: World of Unreal, LLC, Cosmicrafts Foundation 및 DAO는 토큰 보유자에게 신탁 의무를 지지 않습니다. 토큰 보유자는 거버넌스 토큰 보유로 인해 서로에게 신탁 의무를 지지 않습니다.
 
 ---
 
-*Last updated: March 4, 2025* 
+*최종 업데이트: 2025년 3월 4일*

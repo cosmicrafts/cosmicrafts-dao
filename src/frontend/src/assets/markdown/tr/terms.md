@@ -1,471 +1,471 @@
-# Terms of Service
+# Kullanım Koşulları
 
 [[toc:2-3]]
 
-## Introduction
-Welcome to Cosmicrafts. These Terms of Service ("Terms") govern your access to and use of Cosmicrafts' website, platform, applications, and any associated services (collectively, the "Services"). 
+## Giriş
+Cosmicrafts'a hoş geldiniz. Bu Kullanım Koşulları ("Koşullar"), Cosmicrafts'ın web sitesi, platformu, uygulamaları ve ilişkili hizmetlerine (topluca "Hizmetler") erişiminizi ve kullanımınızı düzenler.
 
-By accessing or using our Services, you agree to be bound by these Terms. If you disagree with any part of the Terms, you do not have permission to access the Services.
+Hizmetlerimize erişerek veya kullanarak, bu Koşulları kabul etmiş olursunuz. Koşulların herhangi bir bölümüne katılmıyorsanız, Hizmetlere erişim izniniz yoktur.
 
-## Effective Date
-These Terms are effective as of March 4, 2025.
+## Yürürlük Tarihi
+Bu Koşullar 4 Mart 2025 tarihinden itibaren yürürlüğe girer.
 
-## Definitions
-- **Platform**: Refers to the Cosmicrafts universe, including all websites, games, applications, and services provided by Cosmicrafts.
-- **User**, **You**, or **Your**: Refers to individuals who access or use the Platform.
-- **Content**: Refers to any information, text, graphics, photos, videos, or other materials uploaded, downloaded, or appearing on the Platform.
-- **NFT**: Non-Fungible Token, a unique digital identifier recorded on a blockchain that certifies ownership and authenticity of a specific digital asset.
-- **Cryptocurrency**: Digital or virtual currency that uses cryptography for security and operates independently of a central authority.
-- **Blockchain**: A distributed digital ledger that records transactions across many computers in a way that cannot be altered retroactively.
-- **On-Chain Data**: Information that is stored directly on a blockchain network, which is public, transparent, and immutable.
-- **App Store**: Refers to digital distribution platforms such as Google Play Store, Apple App Store, Epic Games Store, and Crazy Games where our applications may be available.
+## Tanımlar
+- **Platform**: Cosmicrafts evrenini ifade eder ve tüm web siteleri, oyunlar, uygulamalar ve Cosmicrafts tarafından sağlanan hizmetleri kapsar.
+- **Kullanıcı**, **Siz**, **Sizin**: Platforma erişen veya kullanan bireyleri ifade eder.
+- **İçerik**: Platforma yüklenen, indirilen veya görünen herhangi bir bilgi, metin, grafik, fotoğraf, video veya diğer materyalleri ifade eder.
+- **NFT**: Blok zincirinde kayıtlı, belirli bir dijital varlığın sahipliğini ve orijinalliğini sertifikalandıran benzersiz bir dijital tanımlayıcıdır.
+- **Kripto Para**: Güvenlik için kriptografi kullanan ve merkezi bir otoriteden bağımsız olarak çalışan dijital veya sanal para birimidir.
+- **Blok Zinciri**: İşlemleri birçok bilgisayar arasında değiştirilemeyecek şekilde kaydeden dağıtılmış bir dijital defterdir.
+- **On-Chain Veri**: Blok zinciri ağında doğrudan saklanan, kamuya açık, şeffaf ve değiştirilemez bilgidir.
+- **Uygulama Mağazası**: Google Play Store, Apple App Store, Epic Games Store ve Crazy Games gibi uygulamalarımızın bulunabileceği dijital dağıtım platformlarını ifade eder.
 
-## Web3 and On-Chain Data
+## Web3 ve On-Chain Veri
 
-### Public Nature of Blockchain
-Cosmicrafts is built on Web3 technology, which means:
+### Blok Zincirinin Kamuya Açık Doğası
+Cosmicrafts, Web3 teknolojisi üzerine inşa edilmiştir, bu da şu anlama gelir:
 
-1. **Public Transparency**: Most of our databases are stored on public blockchains, making information inherently public and transparent.
+1. **Kamuya Açık Şeffaflık**: Veritabanlarımızın çoğu kamuya açık blok zincirlerinde saklanır, bu nedenle bilgiler doğası gereği kamuya açık ve şeffaftır.
 
-2. **User Responsibility**: You are solely responsible for any information you choose to share through our platform. By using our Services, you explicitly acknowledge that information stored on blockchain networks is:
-   - Public by default
-   - Accessible to anyone with access to the blockchain
-   - Permanent and immutable (cannot be deleted or altered)
-   - Not encrypted or hidden by us unless explicitly stated
+2. **Kullanıcı Sorumluluğu**: Platformumuz aracılığıyla paylaşmayı seçtiğiniz herhangi bir bilgiden yalnızca siz sorumlusunuz. Hizmetlerimizi kullanarak, blok zinciri ağlarında saklanan bilgilerin aşağıdakiler olduğunu açıkça kabul etmiş olursunuz:
+   - Varsayılan olarak kamuya açık
+   - Blok zincirine erişimi olan herkes tarafından erişilebilir
+   - Kalıcı ve değiştirilemez (silinemez veya değiştirilemez)
+   - Açıkça belirtilmediği sürece şifrelenmemiş veya gizlenmemiş
 
-3. **Privacy Limitations**: Due to the nature of blockchain technology, privacy features have technical limitations. Even information marked as "private" may still be visible to blockchain validators or through blockchain explorers.
+3. **Gizlilik Sınırlamaları**: Blok zinciri teknolojisinin doğası gereği, gizlilik özellikleri teknik sınırlamalara sahiptir. "Gizli" olarak işaretlenen bilgiler bile blok zinciri doğrulayıcıları veya blok zinciri tarayıcıları aracılığıyla görülebilir.
 
-4. **No Expectation of Privacy**: You should have no expectation of privacy regarding any on-chain data. Before providing any information through our Services, you should carefully consider whether you are comfortable with that information being public and permanent.
+4. **Gizlilik Beklentisi Olmaması**: On-chain verilerle ilgili herhangi bir gizlilik beklentisi olmamalıdır. Hizmetlerimiz aracılığıyla herhangi bir bilgi sağlamadan önce, bu bilgilerin kamuya açık ve kalıcı olacağı konusunda rahat olup olmadığınızı dikkatlice düşünmelisiniz.
 
-5. **Data Sovereignty**: You retain ownership of your private keys and control of your digital assets, but public blockchain data cannot be deleted even if you discontinue using our Services.
+5. **Veri Egemenliği**: Özel anahtarlarınızın sahipliğini ve dijital varlıklarınızın kontrolünü elinizde tutarsınız, ancak kamuya açık blok zinciri verileri, Hizmetleri kullanmayı bıraksanız bile silinemez.
 
-## Web3 Safety and Privacy Guide
+## Web3 Güvenliği ve Gizlilik Rehberi
 
-### Important Safety Guidelines for New Users
-If you're new to Web3 platforms like Cosmicrafts, please review these critical safety guidelines:
+### Yeni Kullanıcılar İçin Önemli Güvenlik İpuçları
+Cosmicrafts gibi Web3 platformlarına yeniyseniz, lütfen bu kritik güvenlik ipuçlarını gözden geçirin:
 
-1. **Protect Your Personal Information**:
-   - Never use your real full name, home address, or phone number on blockchain platforms
-   - Create pseudonymous usernames that cannot be connected to your real identity
-   - Avoid sharing personally identifiable information in public forums, chats, or profiles
-   - Be aware that anything you post on-chain could be permanently recorded
+1. **Kişisel Bilgilerinizi Koruyun**:
+   - Blok zinciri platformlarında gerçek tam adınızı, ev adresinizi veya telefon numaranızı asla kullanmayın.
+   - Gerçek kimliğinizle bağlantı kurulamayan takma adlar oluşturun.
+   - Kamuya açık forumlarda, sohbetlerde veya profillerde kişisel olarak tanımlanabilir bilgiler paylaşmaktan kaçının.
+   - On-chain'e gönderdiğiniz her şeyin kalıcı olarak kaydedilebileceğinin farkında olun.
 
-2. **Wallet and Key Security**:
-   - Your private keys and seed phrases are your sole access to your digital assets
-   - NEVER share your private keys, seed phrases, or wallet passwords with anyone, including Cosmicrafts staff
-   - NEVER enter your seed phrase or private keys on websites, even if they appear to be legitimate
-   - Store your seed phrase offline in a secure location (preferably multiple secure locations)
-   - Unlike traditional banking, there is NO central authority that can recover your account or assets if keys are lost or stolen
-   - Use hardware wallets for significant holdings whenever possible
+2. **Cüzdan ve Anahtar Güvenliği**:
+   - Özel anahtarlarınız ve seed ifadeleriniz, dijital varlıklarınıza erişimin tek yoludur.
+   - Özel anahtarlarınızı, seed ifadelerinizi veya cüzdan şifrelerinizi Cosmicrafts personeli de dahil olmak üzere hiç kimseyle paylaşmayın.
+   - Seed ifadenizi veya özel anahtarlarınızı web sitelerine girmeyin, meşru görünseler bile.
+   - Seed ifadenizi çevrimdışı olarak güvenli bir yerde saklayın (tercihen birden fazla güvenli yerde).
+   - Geleneksel bankacılığın aksine, anahtarlarınız kaybolursa veya çalınırsa hesabınızı veya varlıklarınızı kurtarabilecek merkezi bir otorite yoktur.
+   - Mümkün olduğunda önemli tutarlar için donanım cüzdanları kullanın.
 
-3. **Transaction Awareness**:
-   - ALL blockchain transactions are IRREVERSIBLE and CANNOT be refunded or reversed once confirmed
-   - Always double-check transaction details (recipient address, amount) before confirming
-   - Start with small test transactions when using new services or features
-   - Be wary of any transaction requests that create urgency or pressure you to act quickly
+3. **İşlem Farkındalığı**:
+   - Tüm blok zinciri işlemleri GERİ ALINAMAZ ve onaylandıktan sonra İADE veya İPTAL edilemez.
+   - Onaylamadan önce işlem detaylarını (alıcı adresi, miktar) her zaman iki kez kontrol edin.
+   - Yeni hizmetler veya özellikler kullanırken küçük test işlemleriyle başlayın.
+   - Acele etmenizi veya hızlı hareket etmenizi gerektiren işlem taleplerine karşı dikkatli olun.
 
-4. **Scam Prevention**:
-   - Be extremely cautious of direct messages from strangers, especially those offering assistance, opportunities, or free assets
-   - Never click on unknown links sent via direct messages or from untrusted sources
-   - Always verify the source of communications - Cosmicrafts will ONLY contact you through official channels
-   - Be skeptical of "too good to be true" offers, giveaways, or investment opportunities
-   - Verify all contract addresses against official sources before interacting with them
-   - Check URLs carefully - scammers often use URLs that look similar to legitimate sites
+4. **Dolandırıcılık Önleme**:
+   - Yabancılardan gelen doğrudan mesajlara karşı son derece dikkatli olun, özellikle yardım, fırsat veya ücretsiz varlık teklif edenlere.
+   - Bilinmeyen bağlantılara tıklamayın.
+   - Cosmicrafts yalnızca resmi kanallar aracılığıyla iletişim kuracaktır.
+   - "Gerçek olamayacak kadar iyi" tekliflere, hediye çekilişlerine veya yatırım fırsatlarına şüpheyle yaklaşın.
+   - Resmi kaynaklarla karşılaştırarak tüm sözleşme adreslerini doğrulayın.
+   - URL'leri dikkatlice kontrol edin.
 
-5. **Common Web3 Scams to Avoid**:
-   - Fake support staff offering to "help" with account issues
-   - Free NFT or token mints that request your seed phrase
-   - Urgent messages about account security requiring immediate action
-   - Impersonation of project founders, team members, or celebrities 
-   - Fraudulent airdrops requiring you to send cryptocurrency first
-   - Fake marketplace notifications about offers on your digital assets
+5. **Kaçınılması Gereken Yaygın Web3 Dolandırıcılıkları**:
+   - Hesap sorunlarını "çözmek" isteyen sahte destek personeli
+   - Seed ifadenizi isteyen ücretsiz NFT veya token teklifleri
+   - Hemen harekete geçmenizi gerektiren hesap güvenliğiyle ilgili acil mesajlar
+   - Proje kurucularını, ekip üyelerini veya ünlüleri taklit eden kişiler
+   - Önce kripto para göndermenizi gerektiren sahte airdrop'lar
+   - Dijital varlıklarınızla ilgili sahte pazar yeri bildirimleri
 
-### Safety Tools and Resources
-Cosmicrafts provides several tools to help protect your experience:
+### Güvenlik Araçları ve Kaynakları
+Cosmicrafts, deneyiminizi korumaya yardımcı olmak için çeşitli araçlar sunar:
 
-1. **Reporting System**: Use our reporting features to flag suspicious users, scam attempts, or harmful content. Look for the "Report" option in user profiles, messages, and content.
+1. **Raporlama Sistemi**: Şüpheli kullanıcıları, dolandırıcılık girişimlerini veya zararlı içeriği bildirmek için raporlama özelliklerimizi kullanın. Kullanıcı profillerinde, mesajlarda ve içerikte "Raporla" seçeneğini arayın.
 
-2. **Blocking Users**: You can block any user by accessing their profile and selecting the block option. Blocked users cannot contact you.
+2. **Kullanıcı Engelleme**: Herhangi bir kullanıcıyı profiline erişerek ve engelleme seçeneğini seçerek engelleyebilirsiniz. Engellenen kullanıcılar sizinle iletişim kuramaz.
 
-3. **Privacy Settings**: Configure your privacy settings in your account dashboard to control what information is visible to others and who can contact you.
+3. **Gizlilik Ayarları**: Hesap panelinizdeki gizlilik ayarlarını yapılandırarak, hangi bilgilerin diğer kullanıcılara görüneceğini ve kimlerin sizinle iletişim kurabileceğini kontrol edebilirsiniz.
 
-4. **Authentication Options**: Enable two-factor authentication (2FA) for additional account security.
+4. **Kimlik Doğrulama Seçenekleri**: Ek hesap güvenliği için iki faktörlü kimlik doğrulamayı (2FA) etkinleştirin.
 
-5. **Transaction Confirmation**: Our platform includes confirmation screens for all transactions with explicit warnings and details to prevent mistakes.
+5. **İşlem Onayı**: Platformumuz, hataları önlemek için tüm işlemler için açık uyarılar ve detaylar içeren onay ekranları içerir.
 
-### Contacting Us Securely
-For any safety or security concerns, contact us ONLY through our official channels:
+### Güvenli İletişim
+Güvenlik veya güvenlik endişeleriniz için yalnızca resmi kanallarımız aracılığıyla iletişime geçin:
 
-- **Official Email**: contact@cosmicrafts.com
-- **In-Platform Support**: Via the help button in the account dashboard
-- **Official Social Media**: Only through accounts verified with blue checkmarks
+- **Resmi E-posta**: contact@cosmicrafts.com
+- **Platform İçi Destek**: Hesap panelindeki yardım düğmesi aracılığıyla
+- **Resmi Sosyal Medya**: Yalnızca mavi tik ile doğrulanmış hesaplar aracılığıyla
 
-We will NEVER ask for your seed phrase, private keys, or passwords. If anyone claiming to represent Cosmicrafts requests this information, it is a scam.
+Cosmicrafts, asla seed ifadenizi, özel anahtarlarınızı veya şifrelerinizi sormaz. Cosmicrafts temsilcisi olduğunu iddia eden biri bu bilgileri isterse, bu bir dolandırıcılıktır.
 
-## Account Registration and Eligibility
+## Hesap Kaydı ve Uygunluk
 
-### Account Creation
-To access certain features of our Services, you must create an account. When registering, you agree to provide accurate, current, and complete information. You are responsible for safeguarding your account credentials and for all activities that occur under your account.
+### Hesap Oluşturma
+Hizmetlerimizin belirli özelliklerine erişmek için bir hesap oluşturmanız gerekir. Kayıt sırasında, doğru, güncel ve eksiksiz bilgi sağlamayı kabul edersiniz. Hesap bilgilerinizi korumak ve hesabınız altında gerçekleşen tüm faaliyetlerden sorumlusunuz.
 
-### Age Requirements
-You must be at least 18 years old to create an account. If you are between 13 and 18 years old, you may only use our Services with the consent and supervision of a parent or legal guardian who agrees to be bound by these Terms.
+### Yaş Şartları
+Hesap oluşturmak için en az 18 yaşında olmalısınız. 13 ile 18 yaş arasındaysanız, yalnızca ebeveyn veya yasal vasinizin izni ve gözetimi altında Hizmetlerimizi kullanabilirsiniz.
 
-### Account Security
-You are responsible for maintaining the confidentiality of your account information and password. You agree to notify us immediately of any unauthorized use of your account or any other breach of security.
+### Hesap Güvenliği
+Hesap bilgilerinizin ve şifrenizin gizliliğini korumaktan siz sorumlusunuz. Hesabınızın yetkisiz kullanımı veya diğer güvenlik ihlalleri durumunda derhal bizi bilgilendirmeyi kabul edersiniz.
 
-### Account Deletion
-You may request to delete your account at any time:
-- Through the Web App settings menu
-- By emailing contact@cosmicrafts.com
+### Hesap Silme
+Hesabınızı istediğiniz zaman silme talebinde bulunabilirsiniz:
+- Web Uygulaması ayarlar menüsü aracılığıyla
+- contact@cosmicrafts.com adresine e-posta göndererek
 
-When you request account deletion:
-- We will initiate a 30-day cooling-off period
-- During this period, your account will be deactivated but not permanently deleted
-- You can reactivate your account by simply logging in
-- After 30 days, we will permanently delete your account information from our systems
+Hesap silme talebinde bulunduğunuzda:
+- 30 günlük bir bekleme süresi başlatılır.
+- Bu süre boyunca hesabınız devre dışı bırakılır ancak kalıcı olarak silinmez.
+- Hesabınızı oturum açarak yeniden etkinleştirebilirsiniz.
+- 30 gün sonra hesap bilgileriniz sistemlerimizden kalıcı olarak silinir.
 
-**Note on Internet Computer Protocol (ICP) Deletion**: Cosmicrafts operates partly on the Internet Computer Protocol (ICP) blockchain, which enables the deletion of user profiles to comply with requirements from platforms such as Google Play and Apple App Store. When you request account deletion, we can remove your user profile and personal information from ICP-based services, in accordance with applicable privacy regulations.
+**Internet Computer Protokolü (ICP) Silme Notu**: Cosmicrafts, kısmen Internet Computer Protokolü (ICP) blok zincirinde çalışır ve Google Play ve Apple App Store gibi platformların gereksinimlerini karşılamak için kullanıcı profillerinin silinmesini sağlar. Hesap silme talebinde bulunduğunuzda, ICP tabanlı hizmetlerden kullanıcı profilinizi ve kişisel bilgilerinizi silebiliriz.
 
-**Important Note on Blockchain Data**: While we can delete your account information from our centralized systems and your user profile from ICP, any transactions or data associated with your public key that has been recorded on public blockchains cannot be deleted or modified due to the immutable nature of blockchain technology. This includes transaction history, NFT ownership records, and any other data that has been committed to a blockchain.
+**Blok Zinciri Verisi Hakkında Önemli Not**: Merkezi sistemlerimizden hesap bilgilerinizi ve ICP'den kullanıcı profilinizi silebiliriz, ancak blok zincirine kaydedilmiş genel anahtarınızla ilişkili işlem geçmişi, NFT sahiplik kayıtları ve diğer veriler, blok zinciri teknolojisinin değiştirilemez doğası nedeniyle silinemez veya değiştirilemez.
 
-## User Conduct
-When using our Services, you agree not to:
+## Kullanıcı Davranışı
+Hizmetlerimizi kullanırken aşağıdakileri yapmayı kabul etmezsiniz:
 
-- Violate any applicable laws or regulations
-- Infringe on the rights of others, including intellectual property rights
-- Harass, abuse, or harm another person
-- Impersonate any person or entity
-- Interfere with or disrupt the Services or servers
-- Create multiple accounts for disruptive or abusive purposes
-- Use our Services for any illegal or unauthorized purpose
-- Post spam or malicious content
-- Attempt to gain unauthorized access to any portion of the Platform
-- Use any automated means or interface not provided by us to access the Services
-- Store sensitive personal information on-chain that should reasonably remain private
+- Geçerli yasaları veya düzenlemeleri ihlal etmek
+- Başkalarının haklarını (fikri mülkiyet hakları dahil) ihlal etmek
+- Başka bir kişiyi taciz etmek, kötüye kullanmak veya zarar vermek
+- Herhangi bir kişi veya kuruluşu taklit etmek
+- Hizmetleri veya sunucuları engellemek veya kesintiye uğratmak
+- Bozucu veya kötüye kullanım amaçlı birden fazla hesap oluşturmak
+- Hizmetlerimizi yasa dışı veya yetkisiz amaçlarla kullanmak
+- Spam veya kötü amaçlı içerik göndermek
+- Platformun herhangi bir bölümüne yetkisiz erişim sağlamaya çalışmak
+- Bizim sağlamadığımız otomatik araçlar veya arayüzler kullanarak Hizmetlere erişmek
+- Gizli kalması gereken hassas kişisel bilgileri on-chain'de saklamak
 
-## Virtual Assets and Transactions
+## Sanal Varlıklar ve İşlemler
 
-### Decentralization and User Responsibility
-All digital assets, including but not limited to cryptocurrency tokens, NFTs, and in-game items that exist on blockchain networks are decentralized by nature. You acknowledge and agree that:
+### Merkeziyetsizlik ve Kullanıcı Sorumluluğu
+Blok zinciri ağlarında bulunan kripto para tokenleri, NFT'ler ve oyun içi öğeler dahil tüm dijital varlıklar doğası gereği merkeziyetsizdir. Aşağıdakileri kabul ve taahhüt edersiniz:
 
-1. **No Control**: World of Unreal, LLC do not control, maintain, or have custody of your digital assets that exist on blockchain networks.
+1. **Kontrol Yok**: World of Unreal, LLC blok zinciri ağlarında bulunan dijital varlıklarınızı kontrol etmez, korumaz veya saklamaz.
 
-2. **No Responsibility**: We bear no responsibility for any issues arising from blockchain transactions, including but not limited to lost private keys, phishing attacks, smart contract vulnerabilities, network failures, high gas fees, or regulatory changes.
+2. **Sorumluluk Yok**: Blok zinciri işlemlerinden kaynaklanan kayıp özel anahtarlar, kimlik avı saldırıları, akıllı sözleşme açıkları, ağ arızaları, yüksek gaz ücretleri veya düzenleyici değişiklikler dahil herhangi bir sorundan sorumlu değiliz.
 
-3. **No Recovery**: We cannot recover or restore lost digital assets, reverse transactions, or assist with forgotten passwords or private keys.
+3. **Kurtarma Yok**: Kayıp dijital varlıkları kurtaramayız, işlemleri geri alamayız veya unutulan şifreler veya özel anahtarlar konusunda yardımcı olamayız.
 
-4. **Self-Custody**: You are solely responsible for securing your own wallet, private keys, seed phrases, and other credentials necessary to access your digital assets.
+4. **Kendi Kendine Saklama**: Dijital varlıklarınıza erişmek için gereken cüzdanınızı, özel anahtarlarınızı, seed ifadelerinizi ve diğer kimlik bilgilerinizi güvende tutmaktan yalnızca siz sorumlusunuz.
 
-### Platform Moderation and DAO Appeals
+### Platform Moderasyonu ve DAO İtirazları
 
-While Cosmicrafts operates in a decentralized environment, we maintain certain limited administrative capabilities to protect users and the platform integrity:
+Cosmicrafts merkeziyetsiz bir ortamda çalışır ancak kullanıcıları ve platform bütünlüğünü korumak için sınırlı yönetim yeteneklerini korur:
 
-1. **NFT Confiscation/Burning**: In cases of clear policy violations, fraud, illegal content, or other significant infractions, Cosmicrafts administrators may exercise the right to confiscate (burn) NFTs. This is an emergency measure intended to protect our community and platform.
+1. **NFT El Koyma/Yakma**: Açık politika ihlalleri, dolandırıcılık, yasa dışı içerik veya diğer önemli ihlaller durumunda, Cosmicrafts yöneticileri NFT'lere el koyma (yakma) hakkını kullanabilir. Bu, topluluğumuzu ve platformumuzu korumak için acil bir önlemdir.
 
-2. **Limitations of Real-time Protection**: The decentralized nature of blockchain means damage can occur rapidly (e.g., stolen NFTs can be resold within seconds), often before moderation can intervene. We cannot guarantee protection against all forms of malicious activity.
+2. **Gerçek Zamanlı Koruma Sınırlamaları**: Blok zincirinin merkeziyetsiz doğası, hasarın hızlı bir şekilde gerçekleşebileceği anlamına gelir (örneğin, çalınan NFT'ler saniyeler içinde yeniden satılabilir). Tüm kötü niyetli faaliyet biçimlerine karşı koruma sağlayamayız.
 
-3. **DAO Appeal Process**: Users who believe their NFTs were wrongfully confiscated may appeal to the Cosmicrafts DAO for review. The appeal process works as follows:
-   - Submit a formal appeal through the designated DAO governance portal
-   - Provide evidence supporting your case
-   - The DAO will review and vote on the appeal according to governance procedures
-   - If approved by the DAO, confiscated NFTs may be restored
+3. **DAO İtiraz Süreci**: NFT'lerinin yanlışlıkla el konulduğunu düşünen kullanıcılar, Cosmicrafts DAO'ya itirazda bulunabilir. İtiraz süreci şu şekilde işler:
+   - Belirlenen DAO yönetim portalı üzerinden resmi itiraz gönderin
+   - Durumunuzu destekleyen kanıtlar sağlayın
+   - DAO itirazı inceleyecek ve yönetim prosedürlerine göre oylayacaktır
+   - DAO tarafından onaylanırsa, el konulan NFT'ler geri yüklenebilir
 
-4. **Final Authority**: The DAO's decision on appeals is considered final. Neither the Cosmicrafts Foundation nor World of Unreal, LLC can override DAO governance decisions because the smart contracts are under the DAO jurisdiction.
+4. **Nihai Yetki**: DAO'nun itiraz kararları nihai kabul edilir. Cosmicrafts Vakfı veya World of Unreal, LLC, DAO yönetim kararlarını geçersiz kılamaz.
 
-5. **Dispute Resolution**: For disputes between users regarding digital assets (such as theft claims, fraudulent sales, etc.), the proper channel for resolution is through the DAO governance system, not through Cosmicrafts support. The DAO will judge such cases based on evidence and community standards.
+5. **Uyuşmazlık Çözümü**: Dijital varlıklarla ilgili kullanıcılar arasındaki anlaşmazlıklar (hırsızlık iddiaları, sahte satışlar vb.) için uygun çözüm yolu Cosmicrafts desteği değil, DAO yönetim sistemidir. DAO, bu tür davaları kanıtlar ve topluluk standartlarına göre yargılayacaktır.
 
-### Value and Exchange
-1. **Market Value**: Certain digital assets may have market value and may be tradable on decentralized exchanges (DEXes), centralized exchanges (CEXes), or other trading platforms. However, this value is highly volatile and speculative.
+### Değer ve Değişim
+1. **Piyasa Değeri**: Bazı dijital varlıkların piyasa değeri olabilir ve merkeziyetsiz borsalarda (DEX), merkezi borsalarda (CEX) veya diğer ticaret platformlarında işlem görebilir. Ancak bu değer oldukça değişken ve spekülatiftir.
 
-2. **Cross-Chain Assets**: Our platform may support cross-chain assets from various blockchains, including but not limited to Internet Computer Protocol (ICP), Bitcoin (including Runes and Ordinals), Solana, and Ethereum. Each blockchain has its own risks, technical limitations, and regulatory considerations.
+2. **Çapraz Zincir Varlıklar**: Platformumuz, Internet Computer Protokolü (ICP), Bitcoin (Runes ve Ordinals dahil), Solana ve Ethereum gibi çeşitli blok zincirlerinden çapraz zincir varlıkları destekleyebilir. Her blok zincirinin kendi riskleri, teknik sınırlamaları ve düzenleyici hususları vardır.
 
-3. **No Guarantees**: We make no guarantees regarding the value, tradability, or liquidity of any digital assets obtained through our platform. The value of these assets can change dramatically based on market conditions, regulatory actions, or technological developments.
+3. **Garanti Yok**: Platformumuz aracılığıyla elde edilen dijital varlıkların değeri, ticareti veya likiditesi konusunda herhangi bir garanti vermiyoruz. Bu varlıkların değeri piyasa koşullarına, düzenleyici eylemlere veya teknolojik gelişmelere bağlı olarak önemli ölçüde değişebilir.
 
-4. **No Investment Advice**: Nothing in our platform or communications constitutes financial or investment advice. Any decisions you make regarding the purchase, sale, or holding of digital assets are made at your own risk.
+4. **Yatırım Tavsiyesi Yok**: Platformumuzda veya iletişimlerimizde yer alan hiçbir şey finansal veya yatırım tavsiyesi olarak kabul edilmemelidir. Dijital varlıkları satın alma, satma veya tutma konusundaki tüm kararlarınız kendi riskiniz ve takdiriniz doğrultusunda alınır.
 
-### NFTs and Digital Collectibles
-NFTs and digital collectibles obtained through our platform are stored on blockchain networks. You acknowledge that:
+### NFT'ler ve Dijital Koleksiyonlar
+Platformumuz aracılığıyla elde edilen NFT'ler ve dijital koleksiyonlar blok zinciri ağlarında saklanır. Aşağıdakileri kabul edersiniz:
 
-1. **Token Standard**: Our NFTs may use various token standards (e.g., ERC-721, ERC-1155, BEP-721, or equivalent standards on other blockchains). The specific rights conferred by an NFT are limited to those explicitly stated in our Terms or the applicable smart contract.
+1. **Token Standardı**: NFT'lerimiz çeşitli token standartlarını (ör. ERC-721, ERC-1155, BEP-721 veya diğer blok zincirlerindeki eşdeğer standartlar) kullanabilir. Bir NFT tarafından verilen belirli haklar, Koşullarımızda veya ilgili akıllı sözleşmede açıkça belirtilenlerle sınırlıdır.
 
-2. **License Only**: Your purchase of an NFT grants you a license to the associated digital content, but not ownership of the underlying intellectual property rights, copyright, or trademark.
+2. **Yalnızca Lisans**: Bir NFT satın almak, ilgili dijital içeriğe erişim lisansı sağlar, ancak temel fikri mülkiyet hakları, telif hakkı veya ticari marka üzerinde mülkiyet hakkı vermez.
 
-3. **Permanent Transactions**: NFT transactions on blockchain networks are permanent and irreversible once confirmed. We cannot reverse, cancel, or refund any NFT transactions under any circumstances.
+3. **Kalıcı İşlemler**: Blok zinciri ağlarındaki NFT işlemleri onaylandıktan sonra kalıcıdır ve geri alınamaz. Hiçbir koşul altında NFT işlemlerini geri alamayız, iptal edemeyiz veya iade edemeyiz.
 
-   **Appeal Process for Special Cases**: While blockchain transactions are irreversible as a general rule, in exceptional circumstances, users may appeal to the Cosmicrafts DAO as a last resort for transaction disputes. To initiate this process:
-   - First post your case in the community forums for preliminary discussion
-   - You must have the minimum required amount of SPIRAL tokens staked to create a neuron and submit a formal proposal
-- Follow the governance proposal process as outlined in the [Whitepaper](/whitepaper)
-   - The DAO has final authority on all such appeals
-   - World of Unreal LLC has no responsibility or authority over these decisions
+   **Özel Durumlar İçin İtiraz Süreci**: Blok zinciri işlemleri genel kural olarak geri alınamaz, ancak özel durumlarda kullanıcılar Cosmicrafts DAO'ya itirazda bulunabilir. Bu süreci başlatmak için:
+   - Önce durumunuzu topluluk forumlarında paylaşarak ön tartışma yapın.
+   - Resmi bir öneri göndermek için gereken minimum SPIRAL token miktarını stake etmelisiniz.
+   - [Beyaz Kitap](/whitepaper)'ta belirtilen yönetim öneri sürecini takip edin.
+   - DAO, tüm itirazlar üzerinde nihai yetkiye sahiptir.
+   - World of Unreal LLC bu kararlarla ilgili herhangi bir sorumluluk veya yetkiye sahip değildir.
 
-4. **Asset Persistence**: While we strive to maintain the infrastructure supporting our digital assets, we make no guarantees regarding the continued availability or functionality of metadata, artwork, or other content associated with NFTs if our services are discontinued.
+4. **Varlık Kalıcılığı**: Dijital varlıklarımızı destekleyen altyapıyı sürdürmek için çaba gösteriyoruz, ancak hizmetlerimiz durdurulursa NFT'lerle ilişkili meta verilerin, sanat eserlerinin veya diğer içeriklerin devam eden kullanılabilirliği veya işlevselliği konusunda herhangi bir garanti vermiyoruz.
 
-### Transactions
-All purchases and transactions on our platform are final. We reserve the right to refuse any purchase or transaction at our discretion. For on-chain transactions:
+### İşlemler
+Platformumuzdaki tüm satın almalar ve işlemler nihaidir. Herhangi bir satın alma veya işlemi reddetme hakkını saklı tutarız. On-chain işlemler için:
 
-1. **Network Fees**: 
-   - On the Internet Computer Protocol (ICP), transactions are generally free for users, as the DAO pays for the computing power required to operate smart contracts.
-   - For transactions on other blockchains (e.g., Ethereum, Solana, Bitcoin), you are responsible for all network fees (gas fees) associated with those transactions.
-   - The cost of network fees varies depending on network congestion and complexity of the transaction.
+1. **Ağ Ücretleri**:
+   - Internet Computer Protokolü (ICP) üzerinde işlemler genellikle kullanıcılar için ücretsizdir, çünkü DAO akıllı sözleşmeleri çalıştırmak için gereken bilgi işlem gücünü öder.
+   - Diğer blok zincirlerinde (ör. Ethereum, Solana, Bitcoin) yapılan işlemler için tüm ağ ücretlerini (gaz ücretleri) siz ödersiniz.
+   - Ağ ücretlerinin maliyeti, ağ yoğunluğuna ve işlemin karmaşıklığına bağlı olarak değişir.
 
-2. **Transaction Delays**: We are not responsible for any delays, failures, or errors in transaction processing that occur on blockchain networks.
+2. **İşlem Gecikmeleri**: Blok zinciri ağlarında meydana gelen işlem işleme gecikmeleri, başarısızlıklar veya hatalardan sorumlu değiliz.
 
-3. **Tax Implications**: You are solely responsible for determining and paying any applicable taxes related to your cryptocurrency transactions or NFT trading.
+3. **Vergi Etkileri**: Kripto para işlemleri veya NFT ticaretiyle ilgili uygulanabilir vergileri belirlemek ve ödemek tamamen sizin sorumluluğunuzdadır.
 
-### Cryptocurrency
-We may accept cryptocurrency as payment for certain Services and offer cryptocurrency-based features. You acknowledge that:
+### Kripto Para
+Bazı Hizmetler için ödeme yöntemi olarak kripto para kabul edebilir ve kripto para tabanlı özellikler sunabiliriz. Aşağıdakileri kabul edersiniz:
 
-1. **High Risk**: Cryptocurrency investments are highly speculative and volatile. You should never invest more than you can afford to lose.
+1. **Yüksek Risk**: Kripto para yatırımları oldukça spekülatif ve değişkendir. Asla kaybetmeyi göze alamayacağınız bir miktarı yatırmamalısınız.
 
-2. **Regulatory Uncertainty**: The regulatory landscape for cryptocurrencies and digital assets is uncertain and evolving. New regulations may impact the value, utility, or legality of digital assets at any time.
+2. **Düzenleyici Belirsizlik**: Kripto para ve dijital varlıklara uygulanan düzenleyici çerçeve belirsiz ve gelişmektedir. Yeni düzenlemeler, dijital varlıkların değerini, kullanılabilirliğini veya yasallığını herhangi bir zamanda etkileyebilir.
 
-3. **Technical Vulnerabilities**: Blockchain networks and smart contracts may contain bugs, vulnerabilities, or other technical issues that could result in the loss of your assets.
+3. **Teknik Açıklar**: Blok zinciri ağları ve akıllı sözleşmeler hatalar, açıklar veya diğer teknik sorunlar içerebilir ve bu da varlıklarınızın kaybına neden olabilir.
 
-4. **Market Risks**: Cryptocurrency markets may be subject to manipulation, extreme volatility, liquidity issues, and other market risks outside our control.
+4. **Piyasa Riskleri**: Kripto para piyasaları manipülasyon, aşırı oynaklık, likidite sorunları ve diğer piyasa risklerine maruz kalabilir ve bunlar bizim kontrolümüz dışındadır.
 
-### In-App Purchases
-For purchases made through mobile applications available on app stores such as Google Play Store, Apple App Store, Epic Games Store, or Crazy Games:
+### Uygulama İçi Satın Alımlar
+Google Play Store, Apple App Store, Epic Games Store veya Crazy Games gibi uygulama mağazaları aracılığıyla mobil uygulamalarda yapılan satın alımlar için:
 
-1. All in-app purchases are subject to the terms of service and payment policies of the respective app store.
-2. For refunds related to in-app purchases, you must contact the respective app store through which the purchase was made.
-3. You acknowledge that once a purchase is made, it is considered complete and non-refundable except as may be permitted by the app store's refund policies or applicable law.
-4. Parents and guardians are responsible for monitoring and approving children's purchases.
+1. Tüm uygulama içi satın alımlar ilgili uygulama mağazasının hizmet şartları ve ödeme politikalarına tabidir.
+2. Uygulama içi satın alımlarla ilgili iadeler için satın alma işleminin yapıldığı uygulama mağazasıyla iletişime geçmelisiniz.
+3. Satın alma işlemi tamamlandıktan sonra, uygulama mağazasının iade politikaları veya geçerli yasa tarafından izin verilmedikçe iade edilemez.
+4. Ebeveynler ve vasiler, çocuklarının satın alımlarını izlemek ve onaylamaktan sorumludur.
 
-## Intellectual Property
+## Fikri Mülkiyet
 
-### Our Content
-All content on the Platform, including but not limited to text, graphics, logos, icons, images, audio clips, digital downloads, data compilations, and software, is the property of World of Unreal, LLC (doing business as "Cosmicrafts") or its content suppliers and is protected by international copyright laws. 
+### Bizim İçeriğimiz
+Platformdaki tüm içerik (metin, grafikler, logolar, simgeler, görseller, ses klipleri, dijital indirmeler, veri derlemeleri ve yazılım dahil) World of Unreal, LLC ("Cosmicrafts") veya içerik tedarikçilerine aittir ve uluslararası telif hakkı yasalarıyla korunmaktadır.
 
-### Intellectual Property Ownership and DAO License
-World of Unreal, LLC maintains full legal ownership of all copyrights, trademarks, patents, and other intellectual property rights associated with Cosmicrafts. To facilitate decentralized development and governance, World of Unreal, LLC has granted a specific operating license to the Cosmicrafts DAO.
+### Fikri Mülkiyet Sahipliği ve DAO Lisansı
+World of Unreal, LLC, Cosmicrafts ile ilişkili tüm telif hakları, ticari markalar, patentler ve diğer fikri mülkiyet haklarının tam yasal sahibidir. Merkeziyetsiz geliştirme ve yönetimi kolaylaştırmak için, World of Unreal, LLC Cosmicrafts DAO'ya belirli bir işletme lisansı vermiştir.
 
-This license allows the DAO to use, develop, and distribute the Cosmicrafts brand and platform according to governance decisions, while World of Unreal, LLC retains ultimate legal ownership. This structure provides traditional legal protection for Cosmicrafts intellectual property while enabling decentralized operations.
+Bu lisans, DAO'nun yönetim kararlarına göre Cosmicrafts markasını ve platformunu kullanmasına, geliştirmesine ve dağıtmasına izin verirken, World of Unreal, LLC nihai yasal sahipliği korur. Bu yapı, Cosmicrafts fikri mülkiyetine geleneksel yasal koruma sağlarken, merkeziyetsiz operasyonları mümkün kılar.
 
-For full details of this licensing arrangement, please refer to the Legal Notices document.
+Bu lisans düzenlemesinin tam detayları için Hukuki Bildirimler belgesine bakınız.
 
-### AI-Generated Digital Art
+### AI Tarafından Oluşturulan Dijital Sanat
 
-Cosmicrafts utilizes artificial intelligence tools and services to create digital art for our platform:
+Cosmicrafts, platformumuz için dijital sanat oluşturmak üzere yapay zeka araçları ve hizmetlerini kullanır:
 
-1. **Creative Expression**: Our AI-generated art is intended as original creative expression within our unique universe, not as replications of other intellectual properties. Any similarities to existing works are coincidental or represent general artistic influences.
+1. **Yaratıcı İfade**: AI tarafından oluşturulan sanatımız, diğer fikri mülkiyetlerin kopyaları değil, kendi benzersiz evrenimizde orijinal yaratıcı ifade olarak tasarlanmıştır. Mevcut eserlerle benzerlikler tesadüfi veya genel sanatsal etkilerin sonucudur.
 
-2. **Artistic Inspiration**: Similar to how artists throughout history have drawn inspiration from other creators, our AI prompts may contain references to various universes, styles, characters, and themes. This is done not to infringe copyrights or copy intellectual property, but to create a rich blend of artistic expression that builds upon cultural traditions.
+2. **Sanatsal İlham**: Tarih boyunca sanatçıların diğer yaratıcılardan ilham aldığı gibi, AI komutlarımız çeşitli evrenler, stiller, karakterler ve temalara atıfta bulunabilir. Bu, telif haklarını ihlal etmek veya fikri mülkiyeti kopyalamak için değil, kültürel geleneklere dayalı zengin bir sanatsal ifade yaratmak içindir.
 
-3. **Third-Party IP Acknowledgment**: We acknowledge that AI models are trained on diverse datasets that may include copyrighted works. While we make good faith efforts to ensure our usage complies with applicable laws, the AI-generated content may inadvertently contain elements that resemble existing intellectual property.
+3. **Üçüncü Taraf Fikri Mülkiyet Tanıma**: AI modelleri telif hakkıyla korunan eserler de dahil olmak üzere çeşitli veri setleri üzerinde eğitilmiştir. Yasalara uygun kullanım için iyi niyetli çabalar sarf etsek de, AI tarafından oluşturulan içerik mevcut fikri mülkiyete benzeyen unsurlar içerebilir.
 
-4. **Fair Use Belief**: We believe our use constitutes fair use and/or transformative use under applicable copyright laws. We utilize these AI services under commercial licensing terms that generally include indemnifications and legal protections.
+4. **Adil Kullanım İnancı**: Kullanımımızın geçerli telif hakkı yasaları kapsamında adil kullanım ve/veya dönüştürücü kullanım olduğuna inanıyoruz. Bu AI hizmetlerini genellikle tazminat ve yasal korumalar içeren ticari lisans koşulları altında kullanıyoruz.
 
-5. **IP Concerns Process**: If you believe that AI-generated content on our platform infringes your intellectual property rights, please contact us at contact@cosmicrafts.com before pursuing other legal remedies. We will promptly review your claim and, if appropriate, remove or modify the content in question.
+5. **Fikri Mülkiyet Endişeleri Süreci**: Platformumuzdaki AI tarafından oluşturulan içeriğin fikri mülkiyet haklarınızı ihlal ettiğini düşünüyorsanız, lütfen diğer yasal yollara başvurmadan önce contact@cosmicrafts.com adresinden bizimle iletişime geçin. Talebinizi hızla inceleyecek ve uygun görürsek ilgili içeriği kaldıracağız veya değiştireceğiz.
 
-6. **Service Provider Responsibility**: In accordance with our agreements with AI services, primary legal responsibility for AI-generated content typically resides with the AI service provider as specified in their terms of service.
+6. **Hizmet Sağlayıcı Sorumluluğu**: AI hizmetleriyle yapılan anlaşmalar uyarınca, AI tarafından oluşturulan içerikle ilgili birincil yasal sorumluluk genellikle hizmet sağlayıcıya aittir.
 
-For more detailed information about our AI art policies, please refer to the AI-Generated Digital Art section in our [Legal Notices](/legal).
+AI sanat politikalarımız hakkında daha fazla bilgi için [Hukuki Bildirimler](/legal) belgesindeki AI Tarafından Oluşturulan Dijital Sanat bölümüne bakınız.
 
-### Your Content
-By submitting content to our Platform, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, and display such content in any media.
+### Sizin İçeriğiniz
+Platformumuza içerik göndererek, bize dünya çapında, münhasır olmayan, telif hakkı ücretsiz bir lisans verirsiniz. Bu lisans, içeriği kullanma, çoğaltma, değiştirme, uyarlama, yayımlama, çevirme, türetilmiş eserler oluşturma, dağıtma ve sergileme hakkını içerir.
 
-### Copyright Infringement
-If you believe that your work has been copied in a way that constitutes copyright infringement, please provide us with the following information:
-- A physical or electronic signature of the copyright owner
-- Identification of the copyrighted work claimed to have been infringed
-- Identification of the material that you claim is infringing
-- Information reasonably sufficient to permit us to contact you
-- A statement that you have a good faith belief that the disputed use is not authorized by the copyright owner
-- A statement, made under penalty of perjury, that the above information is accurate
+### Telif Hakkı İhlali
+Eserinizin telif hakkını ihlal edecek şekilde kopyalandığını düşünüyorsanız, lütfen bize aşağıdaki bilgileri sağlayın:
+- Telif hakkı sahibinin fiziksel veya elektronik imzası
+- İhlal edildiği iddia edilen eserin tanımlanması
+- İhlal edildiği iddia edilen materyalin tanımlanması
+- Bizim sizinle iletişime geçebilmemiz için yeterli bilgi
+- İhlal edilen kullanımın telif hakkı sahibi tarafından yetkilendirilmediğine dair iyi niyetle inandığınızı belirten bir beyan
+- Yukarıdaki bilgilerin doğru olduğuna dair yeminli beyan
 
-## Privacy
-Your privacy is important to us. Our **Privacy Policy** explains how we collect, use, and protect your personal information. By using our Services, you consent to the data practices described in our [Privacy Policy](/privacy).
+## Gizlilik
+Gizliliğiniz bizim için önemlidir. **Gizlilik Politikamız**, kişisel bilgilerinizi nasıl topladığımızı, kullandığımızı ve koruduğumuzu açıklar. Hizmetlerimizi kullanarak, [Gizlilik Politikamız](/privacy) ile açıklanan veri uygulamalarını kabul etmiş olursunuz.
 
-## Third-Party Services and App Stores
+## Üçüncü Taraf Hizmetleri ve Uygulama Mağazaları
 
-### Platform-Specific Terms
-When accessing our Services through a third-party platform or app store (including but not limited to Google Play Store, Apple App Store, Epic Games Store, and Crazy Games), you are also subject to the terms, conditions, and policies of that platform.
+### Platforma Özgü Şartlar
+Üçüncü taraf bir platform veya uygulama mağazası (Google Play Store, Apple App Store, Epic Games Store, Crazy Games vb. dahil) aracılığıyla Hizmetlerimize eriştiğinizde, aynı zamanda bu platformun şartlarına, koşullarına ve politikalarına tabi olursunuz.
 
-### App Store Compliance
-- **Google Play Store**: Our apps comply with Google Play Developer Distribution Agreement and Google Play Developer Program Policies.
-- **Apple App Store**: Our apps comply with Apple's App Store Review Guidelines and Developer Program License Agreement.
-- **Epic Games Store**: Our apps comply with Epic Games Store Distribution Agreement.
-- **Crazy Games**: Our apps comply with Crazy Games Publishing Agreement.
+### Uygulama Mağazası Uyumu
+- **Google Play Store**: Uygulamalarımız Google Play Geliştirici Dağıtım Anlaşması ve Google Play Geliştirici Program Politikalarına uygundur.
+- **Apple App Store**: Uygulamalarımız Apple'ın App Store İnceleme Yönergeleri ve Geliştirici Programı Lisans Sözleşmesi'ne uygundur.
+- **Epic Games Store**: Uygulamalarımız Epic Games Store Dağıtım Anlaşması'na uygundur.
+- **Crazy Games**: Uygulamalarımız Crazy Games Yayıncılık Anlaşması'na uygundur.
 
-### Third-Party Payment Processors
-Payments processed through app stores or third-party payment processors are subject to their respective terms of service. We are not responsible for the actions or policies of these third parties.
+### Üçüncü Taraf Ödeme İşlemcileri
+Uygulama mağazaları veya üçüncü taraf ödeme işlemcileri aracılığıyla işlenen ödemeler, ilgili hizmet şartlarına tabidir. Bu üçüncü tarafların eylemleri veya politikalarından sorumlu değiliz.
 
-## User Acknowledgment of Risks
+## Kullanıcı Risk Kabulü
 
-By using Cosmicrafts, you explicitly acknowledge and accept the following:
+Cosmicrafts'ı kullanarak, aşağıdakileri açıkça kabul ve taahhüt edersiniz:
 
-1. **Blockchain Risks**: All blockchain networks involve inherent risks, including but not limited to smart contract vulnerabilities, consensus attacks, governance attacks, and other technological risks that could result in the loss of your digital assets.
+1. **Blok Zinciri Riskleri**: Tüm blok zinciri ağları, akıllı sözleşme açıkları, konsensüs saldırıları, yönetim saldırıları ve dijital varlıklarınızın kaybına neden olabilecek diğer teknolojik riskler içerir.
 
-2. **Financial Risks**: Digital assets, cryptocurrencies, and NFTs are subject to extreme volatility, illiquidity, and potential loss of value, up to and including total loss. You should never commit funds you cannot afford to lose.
+2. **Finansal Riskler**: Dijital varlıklar, kripto para ve NFT'ler aşırı oynaklık, likidite eksikliği ve potansiyel değer kaybına maruz kalabilir, hatta tamamen kaybedilebilir. Asla kaybetmeyi göze alamayacağınız bir miktarı yatırmamalısınız.
 
-3. **No Recourse**: In the event of loss of access to your wallet, theft of your digital assets, or other adverse events related to digital assets and blockchain activities, you have no recourse against Cosmicrafts or World of Unreal, LLC. We cannot and will not:
-   - Recover or restore lost assets
-   - Reverse, cancel, or modify blockchain transactions
-   - Compensate you for losses due to market volatility, scams, or security breaches
-   - Assist with password recovery for non-custodial wallets
+3. **Başvuru Hakkı Yok**: Cüzdanınıza erişim kaybı, dijital varlıklarınızın çalınması veya dijital varlıklar ve blok zinciri faaliyetleriyle ilgili diğer olumsuz olaylar durumunda, Cosmicrafts veya World of Unreal, LLC'ye karşı herhangi bir başvuru hakkınız yoktur. Biz:
+   - Kayıp varlıkları kurtaramayız veya geri yükleyemeyiz
+   - Blok zinciri işlemlerini geri alamayız, iptal edemeyiz veya değiştiremeyiz
+   - Piyasa oynaklığı, dolandırıcılık veya güvenlik ihlalleri nedeniyle kayıplarınız için tazminat ödeyemeyiz
+   - Kendi kendine saklama cüzdanlarının şifre kurtarma işlemlerine yardımcı olamayız
 
-4. **Regulatory Uncertainty**: You understand that the laws, regulations, and tax treatments applicable to blockchain technologies, cryptocurrencies, and digital assets are uncertain, evolving, and may vary from jurisdiction to jurisdiction. These regulatory changes may adversely affect the value or utility of your digital assets or their legal status.
+4. **Düzenleyici Belirsizlik**: Blok zinciri teknolojileri, kripto para ve dijital varlıklara uygulanan yasalar, düzenlemeler ve vergi uygulamaları belirsizdir, gelişmektedir ve yargı bölgesine göre değişebilir. Bu düzenleyici değişiklikler dijital varlıklarınızın değerini veya yasal statüsünü olumsuz etkileyebilir.
 
-5. **No Financial Advice**: Nothing in our platform, marketing materials, or communications constitutes financial, investment, legal, or tax advice. Any investment decisions you make are at your own risk and discretion.
+5. **Finansal Tavsiye Yok**: Platformumuzda, pazarlama materyallerimizde veya iletişimlerimizde yer alan hiçbir şey finansal, yatırım, hukuki veya vergi tavsiyesi olarak kabul edilmemelidir. Herhangi bir yatırım kararı kendi riskiniz ve takdiriniz doğrultusunda alınır.
 
-6. **Mandatory Risk Acceptance**: By using any of the decentralized or blockchain-based features of our platform, you are explicitly acknowledging and accepting all risks associated with blockchain technology and digital assets. If you do not agree with or accept these risks, you must not use the blockchain-related features of our platform.
+6. **Zorunlu Risk Kabulü**: Platformumuzun merkeziyetsiz veya blok zinciri tabanlı özelliklerinden herhangi birini kullanarak, blok zinciri teknolojisi ve dijital varlıklarla ilişkili tüm riskleri açıkça kabul ve taahhüt etmiş olursunuz. Bu riskleri kabul etmiyorsanız, platformumuzun blok zinciriyle ilgili özelliklerini kullanmamalısınız.
 
-## Market Risk and Platform Liability
+## Piyasa Riski ve Platform Sorumluluğu
 
-### Service Provider Role
-Cosmicrafts operates solely as a technology service provider that offers a platform where users can interact with blockchain networks and engage in digital asset transactions. We explicitly clarify that:
+### Hizmet Sağlayıcı Rolü
+Cosmicrafts yalnızca kullanıcıların blok zinciri ağlarıyla etkileşime girebileceği ve dijital varlık işlemleri yapabileceği bir platform sunan bir teknoloji hizmet sağlayıcısıdır. Aşağıdakileri açıkça belirtiyoruz:
 
-1. **Not a Financial Institution**: Cosmicrafts is not a bank, broker, dealer, investment advisor, financial institution, or cryptocurrency exchange. We do not provide financial, investment, legal, or tax advice.
+1. **Finansal Kurum Değil**: Cosmicrafts bir banka, aracı, yatırım danışmanı, finansal kurum veya kripto para borsası değildir. Finansal, yatırım, hukuki veya vergi tavsiyesi vermiyoruz.
 
-2. **Neutral Platform**: We provide neutral technological infrastructure only. We do not control, influence, or interfere with the markets, transactions, or values of any digital assets traded, minted, or otherwise exchanged through our platform.
+2. **Tarafsız Platform**: Yalnızca tarafsız teknolojik altyapı sağlıyoruz. Platformumuz aracılığıyla işlem gören, oluşturulan veya değiştirilen dijital varlıkların piyasalarını, işlemlerini veya değerlerini kontrol etmiyor, etkilemiyor veya müdahale etmiyoruz.
 
-3. **No Custody**: We do not take custody of user funds or digital assets, nor do we have the ability to reverse transactions, recover lost assets, or modify blockchain data.
+3. **Saklama Yok**: Kullanıcı fonlarını veya dijital varlıklarını saklamıyoruz ve işlemleri geri alma, kayıp varlıkları kurtarma veya blok zinciri verilerini değiştirme yeteneğine sahip değiliz.
 
-4. **No Market Control**: We have no control over the value, tradability, or liquidity of any NFTs, tokens, or digital assets offered, created, sold, or purchased through our platform.
+4. **Piyasa Kontrolü Yok**: Platformumuz aracılığıyla sunulan, oluşturulan, satılan veya satın alınan NFT'lerin, token'ların veya dijital varlıkların değeri, ticareti veya likiditesi üzerinde herhangi bir kontrolümüz yoktur.
 
-### Market-Based Risks and Platform Non-Liability
+### Piyasa Temelli Riskler ve Platform Sorumluluğu Yok
 
-By using our platform, you explicitly acknowledge and agree that:
+Platformumuzu kullanarak, aşağıdakileri açıkça kabul ve taahhüt edersiniz:
 
-1. **Price Volatility**: Digital asset markets are highly volatile, and the price of NFTs, tokens, and other digital assets can change dramatically in short periods of time, potentially resulting in partial or total loss of value.
+1. **Fiyat Oynaklığı**: Dijital varlık piyasaları oldukça oynaktır ve NFT'lerin, token'ların ve diğer dijital varlıkların fiyatı kısa süreler içinde önemli ölçüde değişebilir, bu da kısmi veya tamamen değer kaybına neden olabilir.
 
-2. **No Liability for Market Events**: Cosmicrafts and World of Unreal, LLC shall not be liable, under any circumstances, for:
-   - Price fluctuations, market crashes, or loss of value in any digital assets
-   - "Rug pulls," abandoned projects, or developer team changes
-   - Changes in community interest or demand for specific NFTs or tokens
-   - Failures of third-party marketplaces, exchanges, or platforms
-   - Changes in artistic or collector sentiment toward specific digital assets
-   - Failed, delayed, or underperforming token launches or NFT mints
-   - Issues related to token economics or tokenomics design
-   - Changes in perceived value of digital collections or assets
+2. **Piyasa Olayları İçin Sorumluluk Yok**: Cosmicrafts ve World of Unreal, LLC hiçbir koşulda aşağıdakilerden sorumlu değildir:
+   - Dijital varlıkların fiyat dalgalanmaları, piyasa çöküşleri veya değer kaybı
+   - "Rug pull"lar, terk edilmiş projeler veya geliştirici ekip değişiklikleri
+   - Belirli NFT'ler veya token'lar için topluluk ilgisinde veya talebinde değişiklikler
+   - Üçüncü taraf borsaların, pazarların veya platformların başarısızlıkları
+   - Dijital varlıklara yönelik sanatsal veya koleksiyoner ilgisinde değişiklikler
+   - Başarısız, gecikmiş veya performansı düşük token lansmanları veya NFT mint'leri
+   - Token ekonomisi veya tokenomics tasarımıyla ilgili sorunlar
+   - Dijital koleksiyonlar veya varlıkların algılanan değerindeki değişiklikler
 
-3. **Speculation at Your Own Risk**: All digital asset purchases, including NFTs and tokens, should be considered highly speculative. You should never spend money on digital assets that you cannot afford to lose entirely.
+3. **Kendi Riskinizle Spekülasyon**: Tüm dijital varlık satın alımları (NFT'ler ve token'lar dahil) oldukça spekülatif olarak kabul edilmelidir. Asla kaybetmeyi göze alamayacağınız bir miktarı dijital varlıklara yatırmamalısınız.
 
-4. **Secondary Markets**: We make no representations or warranties about the existence or availability of secondary markets for digital assets. The ability to resell or trade any digital asset is uncertain and depends on factors entirely outside our control.
+4. **İkincil Piyasalar**: Dijital varlıklar için ikincil piyasaların varlığı veya kullanılabilirliği konusunda herhangi bir beyanda bulunmuyoruz. Herhangi bir dijital varlığı yeniden satma veya takas etme yeteneği belirsizdir ve tamamen kontrolümüz dışındaki faktörlere bağlıdır.
 
-5. **No Guaranteed Returns**: We never guarantee profits, returns, or that any NFT or token will maintain or increase in value. Any statements regarding the potential value of digital assets should never be interpreted as a promise of financial returns.
+5. **Getiri Garantisi Yok**: Hiçbir zaman kâr, getiri veya herhangi bir NFT veya token'ın değerinin korunacağı veya artacağı garantisini vermiyoruz. Dijital varlıkların potansiyel değeriyle ilgili herhangi bir ifade, finansal getiri vaadi olarak yorumlanmamalıdır.
 
-6. **No Representations About Artists or Projects**: While we may provide a platform for various artists, projects, or developers, we make no representations or warranties about their reliability, capability, or the likelihood of project success or completion.
+6. **Sanatçı veya Projeler Hakkında Beyan Yok**: Çeşitli sanatçılar, projeler veya geliştiriciler için bir platform sunabiliriz, ancak bunların güvenilirliği, yetenekleri veya proje başarısı veya tamamlanma olasılığı hakkında herhangi bir beyanda bulunmuyoruz.
 
-### User Assumption of Risk
+### Kullanıcı Risk Kabulü
 
-By using our platform:
+Platformumuzu kullanarak:
 
-1. **Full Risk Assumption**: You acknowledge that you assume full responsibility and risk for all of your decisions to purchase, hold, trade, or sell digital assets.
+1. **Tam Risk Kabulü**: Dijital varlık satın alma, tutma, takas veya satma kararlarınızla ilgili tüm sorumluluğu ve riski üstlenirsiniz.
 
-2. **Independent Evaluation**: You confirm that you have the knowledge, experience, and financial capability to make independent purchasing and trading decisions and to evaluate the risks involved.
+2. **Bağımsız Değerlendirme**: Bağımsız satın alma ve ticaret kararları verebilecek ve ilgili riskleri değerlendirebilecek bilgi, deneyim ve finansal yeteneğe sahip olduğunuzu onaylarsınız.
 
-3. **No Reliance**: You have not relied on any representations made by Cosmicrafts regarding the future value, utility, or merchantability of any digital assets.
+3. **Güven Yok**: Cosmicrafts'ın dijital varlıkların gelecekteki değeri, kullanılabilirliği veya satılabilirliği hakkında yaptığı herhangi bir beyana güvenmediğinizi onaylarsınız.
 
-4. **Platform Not Liable**: You agree that Cosmicrafts and World of Unreal, LLC shall not be liable for any market-based losses you may incur through your use of our Services or your participation in the digital asset marketplace.
+4. **Platform Sorumluluğu Yok**: Cosmicrafts ve World of Unreal, LLC'nin Hizmetlerimizi kullanmanız veya dijital varlık piyasasına katılmanız nedeniyle oluşabilecek piyasa temelli kayıplardan sorumlu olmadığını kabul edersiniz.
 
-## Disclaimers
+## Sorumluluk Reddi
 
-### Service Availability
-We strive to keep our Services operational and secure; however, there may be occasions when our Services are interrupted. We do not guarantee that our Services will be available at all times.
+### Hizmet Kullanılabilirliği
+Hizmetlerimizin çalışır ve güvenli durumda kalması için çaba gösteriyoruz; ancak Hizmetlerimizin kesintiye uğrayabileceği durumlar olabilir. Hizmetlerimizin her zaman kullanılabilir olacağını garanti etmiyoruz.
 
-### 'As Is' and 'As Available'
-The Services are provided on an 'AS IS' and 'AS AVAILABLE' basis. Cosmicrafts disclaims all warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.
+### 'OLDUĞU GİBİ' ve 'ULAŞILABİLİR OLDUĞU ŞEKİLDE'
+Hizmetler 'OLDUĞU GİBİ' ve 'ULAŞILABİLİR OLDUĞU ŞEKİLDE' sağlanmaktadır. Cosmicrafts, ticari kullanılabilirlik, belirli bir amaca uygunluk ve ihlal edilmeme dahil ancak bunlarla sınırlı olmaksızın tüm açık veya zımni garantileri reddeder.
 
-## Limitation of Liability
+## Sorumluluk Sınırlaması
 
-To the maximum extent permitted by law, Cosmicrafts and World of Unreal, LLC shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or goodwill, resulting from your access to or use of or inability to access or use the Services.
+Yasaların izin verdiği maksimum ölçüde, Cosmicrafts ve World of Unreal, LLC, Hizmetlere erişiminiz veya kullanımınız veya erişim veya kullanım eksikliğinizden kaynaklanan dolaylı, arızi, özel, sonuçsal veya cezai zararlardan (kâr kaybı, veri veya itibar kaybı dahil) sorumlu değildir.
 
-### No Liability for Blockchain Activities
-Without limiting the generality of the foregoing, we specifically disclaim all liability for:
+### Blok Zinciri Faaliyetleri İçin Sorumluluk Yok
+Yukarıdaki genelliği sınırlamaksızın, özellikle aşağıdakiler için tüm sorumluluğu reddediyoruz:
 
-1. **Digital Assets**: Any loss, theft, disappearance, destruction, or inability to access digital assets, cryptocurrency, or NFTs, whether due to security breaches, wallet compatibility issues, blockchain network failures, protocol updates, fork events, or any other reason.
+1. **Dijital Varlıklar**: Güvenlik ihlalleri, cüzdan uyumluluk sorunları, blok zinciri ağı arızaları, protokol güncellemeleri, fork olayları veya diğer herhangi bir nedenle dijital varlıkların, kripto paranın veya NFT'lerin kaybı, çalınması, kaybolması, yok edilmesi veya erişilememesi.
 
-2. **Smart Contract Failures**: Any issues arising from bugs, errors, or security vulnerabilities in smart contracts used on our platform or third-party platforms that interact with our services.
+2. **Akıllı Sözleşme Başarısızlıkları**: Platformumuzda veya Hizmetlerimizle etkileşime giren üçüncü taraf platformlarda kullanılan akıllı sözleşmelerdeki hatalar, kusurlar veya güvenlik açıklarından kaynaklanan sorunlar.
 
-3. **Market Volatility**: Any financial losses due to the volatility, illiquidity, or market manipulation of cryptocurrencies, NFTs, or other digital assets.
+3. **Piyasa Oynaklığı**: Kripto para, NFT'ler veya diğer dijital varlıkların oynaklığı, likidite eksikliği veya piyasa manipülasyonu nedeniyle oluşan finansal kayıplar.
 
-4. **Regulatory Actions**: Any changes in value, utility, or legality of digital assets due to regulatory actions, restrictions, or bans affecting blockchain technology, cryptocurrencies, or NFTs.
+4. **Düzenleyici Eylemler**: Blok zinciri teknolojisi, kripto para veya NFT'leri etkileyen düzenleyici eylemler, kısıtlamalar veya yasaklar nedeniyle dijital varlıkların değerinde, kullanılabilirliğinde veya yasallığında meydana gelen değişiklikler.
 
-5. **Cross-Chain Issues**: Any problems, errors, or losses resulting from cross-chain operations, bridge failures, or incompatibilities between different blockchain networks.
+5. **Çapraz Zincir Sorunları**: Çapraz zincir işlemleri, köprü başarısızlıkları veya farklı blok zinciri ağları arasındaki uyumsuzluklardan kaynaklanan sorunlar, hatalar veya kayıplar.
 
-6. **Third-Party Services**: Any losses or issues arising from the use of third-party wallets, exchanges, bridges, or other blockchain-related services used in conjunction with our platform.
+6. **Üçüncü Taraf Hizmetleri**: Platformumuzla birlikte kullanılan üçüncü taraf cüzdanlar, borsalar, köprüler veya diğer blok zinciriyle ilgili hizmetlerin kullanımından kaynaklanan kayıplar veya sorunlar.
 
-### Maximum Liability
-In any case, our maximum aggregate liability under these Terms shall not exceed the greater of: (a) the amount you paid to use our non-blockchain services during the six months prior to the event giving rise to the liability, or (b) $100 USD. The limitations of liability do not apply to liabilities that cannot be excluded or limited by applicable law.
+### Maksimum Sorumluluk
+Her durumda, bu Koşullar kapsamındaki toplam sorumluluğumuz aşağıdakilerden daha fazla olmayacaktır: (a) son altı ayda blok zinciri dışı hizmetlerimizi kullanmak için ödediğiniz miktar veya (b) 100 ABD Doları. Sorumluluk sınırlamaları, geçerli yasa tarafından hariç tutulamayan veya sınırlandırılamayan sorumluluklar için geçerli değildir.
 
-## Indemnification
-You agree to indemnify, defend, and hold harmless World of Unreal LLC, Cosmicrafts Foundation, its founder, officers, directors, employees, agents, and third parties, for any losses, costs, liabilities, and expenses relating to or arising out of your use of the Services, your violation of these Terms, or your violation of any rights of another.
+## Tazminat
+World of Unreal LLC, Cosmicrafts Vakfı, kurucusu, yöneticileri, çalışanları, temsilcileri ve üçüncü tarafları tazmin etmeyi, savunmayı ve sorumlu tutmamayı kabul edersiniz. Bu, Hizmetlerimizi kullanmanız, bu Koşulları ihlal etmeniz veya başka bir kişinin haklarını ihlal etmenizle ilgili tüm kayıplar, maliyetler, sorumluluklar ve masraflar için geçerlidir.
 
-## Governing Law
-These Terms shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of law provisions.
+## Geçerli Hukuk
+Bu Koşullar, Kaliforniya eyalet yasalarına tabidir ve bu yasaların çatışma hükümleri dikkate alınmaksızın yorumlanır.
 
-## Dispute Resolution
+## Uyuşmazlık Çözümü
 
-### Informal Resolution
-If you have a dispute with us, please contact us first. We will attempt to resolve the dispute informally by contacting you via email.
+### Gayri Resmi Çözüm
+Bizimle bir anlaşmazlığınız varsa, lütfen önce bizimle iletişime geçin. E-posta yoluyla size ulaşarak anlaşmazlığı gayri resmi olarak çözmeye çalışacağız.
 
-### Arbitration
-If we cannot resolve a dispute informally, any controversy or claim arising out of or relating to these Terms or the Services will be settled by binding arbitration in accordance with the commercial arbitration rules of the [American Arbitration Association](https://www.adr.org/).
+### Tahkim
+Anlaşmazlığı gayri resmi olarak çözemezsek, bu Koşullar veya Hizmetlerle ilgili herhangi bir anlaşmazlık veya iddia, [Amerikan Tahkim Derneği](https://www.adr.org/) ticari tahkim kurallarına göre tahkim yoluyla çözülecektir.
 
-### Class Action Waiver
-You agree that any proceedings to resolve disputes will be conducted only on an individual basis and not in a class, consolidated, or representative action.
+### Toplu Dava Feragatnamesi
+Herhangi bir davanın yalnızca bireysel olarak yürütüleceğini ve toplu, birleştirilmiş veya temsili bir dava olarak yürütülmeyeceğini kabul edersiniz.
 
-## Amendments to Terms
-We may modify these Terms at any time. If we make changes, we will provide notice by posting the updated Terms on our Platform and updating the "Effective Date" at the top. Your continued use of our Services after the changes take effect constitutes your agreement to the revised Terms.
+## Koşullarda Değişiklik
+Bu Koşulları istediğimiz zaman değiştirme hakkını saklı tutarız. Değişiklik yaparsak, güncellenmiş Koşulları Platformumuzda yayınlayarak ve üstteki "Yürürlük Tarihi"ni güncelleyerek bildireceğiz. Değişiklikler yürürlüğe girdikten sonra Hizmetlerimizi kullanmaya devam etmeniz, değiştirilmiş Koşulları kabul ettiğiniz anlamına gelir.
 
-## Termination
-We may terminate or suspend your account and access to our Services immediately, without prior notice or liability, for any reason, including if you breach these Terms.
+## Sözleşme Feshi
+Hesabınızı ve Hizmetlere erişiminizi önceden haber vermeden derhal sonlandırma veya askıya alma hakkını saklı tutarız. Bu, Koşulları ihlal etmeniz durumunu içerir ancak bununla sınırlı değildir.
 
-## Severability
-If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions will continue in full force and effect.
+## Ayrılabilirlik
+Bu Koşulların herhangi bir hükmü geçersiz veya uygulanamaz olarak kabul edilirse, bu hüküm en az düzeyde sınırlandırılır veya kaldırılır ve kalan hükümler tam olarak yürürlükte kalır.
 
-## Entire Agreement
-These Terms constitute the entire agreement between you and Cosmicrafts regarding our Services and supersede any prior agreements.
+## Tam Anlaşma
+Bu Koşullar, sizin ve Cosmicrafts arasındaki Hizmetlerle ilgili tam anlaşmayı oluşturur ve önceki tüm anlaşmaların yerini alır.
 
-## Contact Information
-If you have any questions about these Terms, please contact us at:
+## İletişim Bilgileri
+Bu Koşullarla ilgili herhangi bir sorunuz varsa, lütfen bizimle iletişime geçin:
 
-**Email**: contact@cosmicrafts.com  
+**E-posta**: contact@cosmicrafts.com  
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+Düzenleyici uyumluluk için fiziksel bir adres gerekiyorsa, lütfen önce e-posta yoluyla bizimle iletişime geçin.
 
-## DAO Governance and Token Rights
+## DAO Yönetimi ve Token Hakları
 
-### Governance Tokens and Utility Nature
+### Yönetim Token'ları ve Fayda Doğası
 
-1. **Limited Utility Function**: Governance tokens are utility tokens that grant holders only two specific limited rights when staked:
-   - The right to vote on governance proposals
-   - The right to submit governance proposals (subject to minimum staking requirements)
+1. **Sınırlı Fayda İşlevi**: Yönetim token'ları, stake edildiğinde yalnızca iki özel sınırlı hak veren fayda token'larıdır:
+   - Yönetim önerilerine oy verme hakkı
+   - Yönetim önerileri sunma hakkı (minimum stake gereksinimleri uygulanır)
 
-2. **Tokens Must Be Staked**: Governance rights are only available to users who have staked their tokens in the governance staking contract. Unstaked tokens provide no governance rights.
+2. **Token'lar Stake Edilmeli**: Yönetim hakları yalnızca yönetim stake sözleşmesine token'larını stake eden kullanıcılara verilir. Stake edilmemiş token'lar yönetim hakları sağlamaz.
 
-3. **Utility Tokens Only**: Governance tokens are strictly utility tokens that facilitate platform governance. They:
-   - Do not represent any ownership, equity, shares, or securities in World of Unreal, LLC
-   - Do not confer any rights to dividends, profit-sharing, or financial returns
-   - Do not grant management control over World of Unreal, LLC or the Cosmicrafts Foundation
-   - Have no guaranteed market value or liquidity
-   - Are not presented or marketed as investments or speculative assets
+3. **Yalnızca Fayda Token'ları**: Yönetim token'ları, platform yönetimini kolaylaştıran katı fayda token'larıdır. Bu token'lar:
+   - World of Unreal, LLC'deki herhangi bir mülkiyet, hisse, pay veya menkul kıymet temsil etmez.
+   - Temettü, kâr paylaşımı veya finansal getiri hakları sağlamaz.
+   - World of Unreal, LLC veya Cosmicrafts Vakfı üzerinde yönetim kontrolü sağlamaz.
+   - Garantili bir piyasa değeri veya likiditesi yoktur.
+   - Yatırım veya spekülatif varlık olarak sunulmaz veya pazarlanmaz.
 
-4. **No Commercial Rights**: Ownership of governance tokens does not grant any license, commercial rights, or intellectual property rights to Cosmicrafts assets, brand, or content.
+4. **Ticari Haklar Yok**: Yönetim token'larının sahipliği, Cosmicrafts varlıkları, markası veya içeriği üzerinde herhangi bir lisans, ticari hak veya fikri mülkiyet hakkı sağlamaz.
 
-5. **Voting Limitations**: The scope of governance voting is limited to specific platform parameters defined in the governance documentation, and does not include:
-   - Business operations of World of Unreal, LLC
-   - Legal or regulatory compliance decisions
-   - Allocation of company revenues or profits
-   - Hiring, firing, or compensation of company personnel
+5. **Oylama Sınırlamaları**: Yönetim oylamasının kapsamı, yönetim belgelerinde tanımlanan belirli platform parametreleriyle sınırlıdır ve aşağıdakileri içermez:
+   - World of Unreal, LLC'nin iş operasyonları
+   - Yasal veya düzenleyici uyum kararları
+   - Şirket gelirlerinin veya kârlarının dağıtımı
+   - Şirket personelinin işe alınması, işten çıkarılması veya tazminatı
 
-### Legal Relationship and Liability
+### Yasal İlişki ve Sorumluluk
 
-1. **Multi-Entity Structure**: The Cosmicrafts ecosystem operates through a multi-entity structure:
-   - **World of Unreal, LLC**: A Delaware limited liability company that serves as a legal entity interfacing with traditional systems for certain business operations.
-   - **Cosmicrafts Foundation**: A non-profit organization that serves as a major contributor to the development of the Cosmicrafts platform on behalf of the DAO.
-   - **Cosmicrafts DAO**: The decentralized autonomous organization that governs certain aspects of the platform through token-based voting.
+1. **Çoklu Varlık Yapısı**: Cosmicrafts ekosistemi, çoklu varlık yapısı aracılığıyla çalışır:
+   - **World of Unreal, LLC**: Geleneksel sistemlerle arayüz oluşturmak için bir yasal varlık olarak işlev gören Delaware merkezli bir limited şirket.
+   - **Cosmicrafts Vakfı**: DAO adına Cosmicrafts platformunun geliştirilmesine katkıda bulunan kâr amacı gütmeyen bir kuruluş.
+   - **Cosmicrafts DAO**: Token tabanlı oylama yoluyla platformun belirli yönlerini yöneten merkeziyetsiz bir özerk organizasyon.
 
-2. **Limited DAO Governance Scope**: The Cosmicrafts DAO's authority is limited to smart contracts and canister management with parameters as defined in the [governance documentation](/whitepaper#governance).
+2. **Sınırlı DAO Yönetim Kapsamı**: Cosmicrafts DAO'nun yetkisi, akıllı sözleşmeler ve canister yönetimiyle sınırlıdır ve [yönetim belgelerinde](/whitepaper#governance) tanımlanan parametreler dahilinde uygulanır.
 
-3. **No Partnership or Joint Venture**: Participation in DAO governance does not create a partnership, joint venture, agency, or employment relationship between token holders and any of the legal entities involved in the Cosmicrafts ecosystem, or among token holders themselves.
+3. **Ortaklık veya Müşterek Teşebbüs Yok**: DAO yönetimine katılım, token sahipleri ile Cosmicrafts ekosisteminde yer alan yasal varlıklar arasında veya token sahipleri arasında ortaklık, müşterek teşebbüs, acente veya istihdam ilişkisi yaratmaz.
 
-4. **Governance Documentation**: Your participation in DAO governance is also subject to any additional governance documentation, which may be updated from time to time through proper governance procedures.
+4. **Yönetim Belgeleri**: DAO yönetimine katılımınız, uygun yönetim prosedürleri aracılığıyla zaman zaman güncellenebilecek ek yönetim belgelerine de tabidir.
 
-5. **No Fiduciary Relationship**: World of Unreal, LLC, the Cosmicrafts Foundation, and the DAO do not owe fiduciary duties to token holders. Token holders do not owe fiduciary duties to each other by virtue of holding governance tokens.
+5. **Vekil İlişkisi Yok**: World of Unreal, LLC, Cosmicrafts Vakfı ve DAO, token sahiplerine karşı vekil yükümlülükleri taşımaz. Token sahipleri, yönetim token'larına sahip olmaları nedeniyle birbirlerine karşı vekil yükümlülükleri taşımaz.
 
 ---
 
-*Last updated: March 4, 2025* 
+*Son güncelleme: 4 Mart 2025*

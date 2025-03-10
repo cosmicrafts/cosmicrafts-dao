@@ -1,322 +1,322 @@
-# Legal Notices
+# Thông Báo Pháp Lý
 
 [[toc:2-3]]
 
-## Introduction
+## Giới Thiệu
 
-This Legal Notices page contains important legal information related to Cosmicrafts, including intellectual property notices, disclaimers, and other legal requirements. By accessing or using the Cosmicrafts platform, website, games, and services, you acknowledge and agree to the notices and terms outlined on this page.
+Trang Thông Báo Pháp Lý này chứa thông tin pháp lý quan trọng liên quan đến Cosmicrafts, bao gồm thông báo sở hữu trí tuệ, tuyên bố miễn trừ trách nhiệm và các yêu cầu pháp lý khác. Bằng cách truy cập hoặc sử dụng nền tảng, trang web, trò chơi và dịch vụ của Cosmicrafts, bạn thừa nhận và đồng ý với các thông báo và điều khoản được nêu trên trang này.
 
-## Copyright Notice
+## Thông Báo Bản Quyền
 
-© 2025 World of Unreal, LLC operating as Cosmicrafts. All rights reserved.
+© 2025 World of Unreal, LLC hoạt động dưới tên Cosmicrafts. Bảo lưu mọi quyền.
 
-All content on this website and within our games, including but not limited to text, graphics, logos, icons, images, audio clips, digital downloads, data compilations, and software, is the property of World of Unreal, LLC (doing business as "Cosmicrafts") or its content suppliers and is protected by international copyright laws.
+Tất cả nội dung trên trang web này và trong các trò chơi của chúng tôi, bao gồm nhưng không giới hạn ở văn bản, đồ họa, logo, biểu tượng, hình ảnh, clip âm thanh, tải xuống kỹ thuật số, tổng hợp dữ liệu và phần mềm, là tài sản của World of Unreal, LLC (kinh doanh dưới tên "Cosmicrafts") hoặc các nhà cung cấp nội dung của nó và được bảo vệ bởi luật bản quyền quốc tế.
 
-The compilation of all content on this site is the exclusive property of World of Unreal, LLC and is protected by international copyright laws. The reproduction, modification, distribution, transmission, republication, display, or performance of the content on this site is strictly prohibited without the express written permission of World of Unreal, LLC.
+Việc tổng hợp tất cả nội dung trên trang này là tài sản độc quyền của World of Unreal, LLC và được bảo vệ bởi luật bản quyền quốc tế. Việc sao chép, sửa đổi, phân phối, truyền tải, tái xuất bản, hiển thị hoặc trình diễn nội dung trên trang này đều bị nghiêm cấm nếu không có sự cho phép bằng văn bản rõ ràng của World of Unreal, LLC.
 
-## Trademark Information
+## Thông Tin Thương Hiệu
 
-Cosmicrafts™ and the Cosmicrafts logo are trademarks owned by World of Unreal, LLC. All related product and service names, design marks, and slogans are trademarks or registered trademarks of World of Unreal, LLC or its affiliates in various jurisdictions. All other trademarks not owned by World of Unreal, LLC that appear on this site are the property of their respective owners, who may or may not be affiliated with, connected to, or sponsored by Cosmicrafts.
+Cosmicrafts™ và logo Cosmicrafts là thương hiệu thuộc sở hữu của World of Unreal, LLC. Tất cả các tên sản phẩm và dịch vụ liên quan, dấu hiệu thiết kế và khẩu hiệu đều là thương hiệu hoặc thương hiệu đã đăng ký của World of Unreal, LLC hoặc các công ty liên kết của nó tại nhiều khu vực pháp lý khác nhau. Tất cả các thương hiệu khác không thuộc sở hữu của World of Unreal, LLC xuất hiện trên trang này đều là tài sản của chủ sở hữu tương ứng, những người có thể có hoặc không liên kết, kết nối hoặc được tài trợ bởi Cosmicrafts.
 
-## Patents
+## Bằng Sáng Chế
 
-Cosmicrafts products and services are protected by one or more patents. Relevant patent information can be provided upon written request to our legal department.
+Sản phẩm và dịch vụ của Cosmicrafts được bảo vệ bởi một hoặc nhiều bằng sáng chế. Thông tin bằng sáng chế liên quan có thể được cung cấp theo yêu cầu bằng văn bản gửi đến bộ phận pháp lý của chúng tôi.
 
-## Digital Millennium Copyright Act (DMCA) Policy
+## Chính Sách Đạo Luật Bản Quyền Thiên Niên Kỷ Kỹ Thuật Số (DMCA)
 
-### Reporting Copyright Infringement
+### Báo Cáo Vi Phạm Bản Quyền
 
-If you are a copyright owner or an agent thereof and believe that any content on our site infringes upon your copyright, you may submit a notification pursuant to the Digital Millennium Copyright Act (DMCA) by providing our Copyright Agent with the following information in writing:
+Nếu bạn là chủ sở hữu bản quyền hoặc đại diện của chủ sở hữu và tin rằng bất kỳ nội dung nào trên trang web của chúng tôi vi phạm bản quyền của bạn, bạn có thể gửi thông báo theo Đạo Luật Bản Quyền Thiên Niên Kỷ Kỹ Thuật Số (DMCA) bằng cách cung cấp cho Đại Diện Bản Quyền của chúng tôi các thông tin sau bằng văn bản:
 
-1. A physical or electronic signature of a person authorized to act on behalf of the owner of an exclusive right that is allegedly infringed;
-2. Identification of the copyrighted work claimed to have been infringed;
-3. Identification of the material that is claimed to be infringing or to be the subject of infringing activity and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit us to locate the material;
-4. Information reasonably sufficient to permit us to contact you, such as an address, telephone number, and, if available, an email address;
-5. A statement that you have a good faith belief that use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law; and
-6. A statement that the information in the notification is accurate, and under penalty of perjury, that you are authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.
+1. Chữ ký vật lý hoặc điện tử của người được ủy quyền hành động thay mặt cho chủ sở hữu của quyền độc quyền bị cáo buộc vi phạm;
+2. Xác định tác phẩm có bản quyền bị cáo buộc vi phạm;
+3. Xác định tài liệu bị cáo buộc vi phạm hoặc là đối tượng của hoạt động vi phạm và sẽ bị xóa hoặc bị vô hiệu hóa quyền truy cập, và thông tin hợp lý đủ để cho phép chúng tôi xác định vị trí tài liệu;
+4. Thông tin hợp lý đủ để cho phép chúng tôi liên hệ với bạn, chẳng hạn như địa chỉ, số điện thoại và, nếu có, địa chỉ email;
+5. Tuyên bố rằng bạn có niềm tin thiện chí rằng việc sử dụng tài liệu theo cách bị khiếu nại không được ủy quyền bởi chủ sở hữu bản quyền, đại diện của họ hoặc pháp luật; và
+6. Tuyên bố rằng thông tin trong thông báo là chính xác, và dưới hình phạt khai man, rằng bạn được ủy quyền hành động thay mặt cho chủ sở hữu của quyền độc quyền bị cáo buộc vi phạm.
 
-Our designated Copyright Agent to receive notifications of claimed infringement is:
+Đại Diện Bản Quyền được chỉ định của chúng tôi để nhận thông báo về việc vi phạm bản quyền là:
 
-Legal Department  
+Bộ Phận Pháp Lý  
 Email: contact@cosmicrafts.com
 
-For formal legal notices requiring a physical address, please contact us via email first.
+Đối với thông báo pháp lý chính thức yêu cầu địa chỉ vật lý, vui lòng liên hệ với chúng tôi qua email trước.
 
-### Counter-Notification Procedures
+### Thủ Tục Phản Thông Báo
 
-If you believe that your content was removed or disabled as a result of a mistake or misidentification, you may submit a counter-notification to our Copyright Agent containing:
+Nếu bạn tin rằng nội dung của bạn đã bị xóa hoặc vô hiệu hóa do nhầm lẫn hoặc nhận dạng sai, bạn có thể gửi phản thông báo cho Đại Diện Bản Quyền của chúng tôi bao gồm:
 
-1. Your physical or electronic signature;
-2. Identification of the material that has been removed or to which access has been disabled and the location at which the material appeared before it was removed or access to it was disabled;
-3. A statement under penalty of perjury that you have a good faith belief that the material was removed or disabled as a result of mistake or misidentification; and
-4. Your name, address, and telephone number, and a statement that you consent to the jurisdiction of the Federal District Court for the judicial district in which your address is located, or if your address is outside of the United States, for any judicial district in which Cosmicrafts may be found, and that you will accept service of process from the person who provided notification of the alleged infringement.
+1. Chữ ký vật lý hoặc điện tử của bạn;
+2. Xác định tài liệu đã bị xóa hoặc bị vô hiệu hóa quyền truy cập và vị trí mà tài liệu đã xuất hiện trước khi bị xóa hoặc bị vô hiệu hóa quyền truy cập;
+3. Tuyên bố dưới hình phạt khai man rằng bạn có niềm tin thiện chí rằng tài liệu đã bị xóa hoặc vô hiệu hóa do nhầm lẫn hoặc nhận dạng sai; và
+4. Tên, địa chỉ và số điện thoại của bạn, và tuyên bố rằng bạn đồng ý với thẩm quyền của Tòa Án Quận Liên Bang cho khu vực tư pháp nơi địa chỉ của bạn nằm, hoặc nếu địa chỉ của bạn nằm ngoài Hoa Kỳ, cho bất kỳ khu vực tư pháp nào mà Cosmicrafts có thể được tìm thấy, và rằng bạn sẽ chấp nhận việc tống đạt quy trình từ người đã cung cấp thông báo về vi phạm bản quyền bị cáo buộc.
 
-Upon receipt of a counter-notification, we may forward it to the party who submitted the original DMCA notification. After we forward the counter-notification, the party who submitted the original DMCA notification will have ten (10) business days to notify us that they have filed an action seeking a court order to restrain the allegedly infringing party from engaging in infringing activity relating to the material on our site.
+Khi nhận được phản thông báo, chúng tôi có thể chuyển tiếp nó đến bên đã gửi thông báo DMCA ban đầu. Sau khi chúng tôi chuyển tiếp phản thông báo, bên đã gửi thông báo DMCA ban đầu sẽ có mười (10) ngày làm việc để thông báo cho chúng tôi rằng họ đã nộp đơn kiện yêu cầu lệnh của tòa án để ngăn chặn bên bị cáo buộc vi phạm tham gia vào hoạt động vi phạm liên quan đến tài liệu trên trang web của chúng tôi.
 
-## Third-Party Software Notices
+## Thông Báo Phần Mềm Bên Thứ Ba
 
-Cosmicrafts uses various third-party open source software. We acknowledge and thank the developers of these valuable tools that make our platform possible.
+Cosmicrafts sử dụng nhiều phần mềm mã nguồn mở của bên thứ ba. Chúng tôi ghi nhận và cảm ơn các nhà phát triển của những công cụ quý giá này đã giúp nền tảng của chúng tôi trở nên khả thi.
 
-## Open Source Licenses
+## Giấy Phép Mã Nguồn Mở
 
-### Frontend Dependencies
+### Các Phụ Thuộc Frontend
 
-The Cosmicrafts frontend relies on the following open source libraries, each with their respective licenses:
+Frontend của Cosmicrafts dựa vào các thư viện mã nguồn mở sau đây, mỗi thư viện với giấy phép tương ứng của họ:
 
-| Package | License |
+| Gói | Giấy Phép |
 | ------- | ------- |
-| Vue 3 | MIT License |
-| Vue Router | MIT License |
-| Vue i18n | MIT License |
-| Pinia | MIT License |
-| @dfinity/agent | Apache-2.0 License |
-| @dfinity/auth-client | Apache-2.0 License |
-| @dfinity/candid | Apache-2.0 License |
-| @dfinity/identity | Apache-2.0 License |
-| @dfinity/principal | Apache-2.0 License |
-| @heroicons/vue | MIT License |
-| @solana/web3.js | MIT License |
-| bip39 | ISC License |
-| brotli-wasm | MIT License |
-| buffer | MIT License |
-| highlight.js | BSD-3-Clause License |
-| lodash-es | MIT License |
-| lottie-web | MIT License |
-| markdown-it | MIT License |
-| markdown-it-anchor | MIT License |
-| markdown-it-container | MIT License |
-| markdown-it-emoji | MIT License |
-| markdown-it-highlightjs | MIT License |
-| markdown-it-task-lists | MIT License |
-| markdown-it-toc-done-right | MIT License |
-| phaser | MIT License |
+| Vue 3 | Giấy Phép MIT |
+| Vue Router | Giấy Phép MIT |
+| Vue i18n | Giấy Phép MIT |
+| Pinia | Giấy Phép MIT |
+| @dfinity/agent | Giấy Phép Apache-2.0 |
+| @dfinity/auth-client | Giấy Phép Apache-2.0 |
+| @dfinity/candid | Giấy Phép Apache-2.0 |
+| @dfinity/identity | Giấy Phép Apache-2.0 |
+| @dfinity/principal | Giấy Phép Apache-2.0 |
+| @heroicons/vue | Giấy Phép MIT |
+| @solana/web3.js | Giấy Phép MIT |
+| bip39 | Giấy Phép ISC |
+| brotli-wasm | Giấy Phép MIT |
+| buffer | Giấy Phép MIT |
+| highlight.js | Giấy Phép BSD-3-Clause |
+| lodash-es | Giấy Phép MIT |
+| lottie-web | Giấy Phép MIT |
+| markdown-it | Giấy Phép MIT |
+| markdown-it-anchor | Giấy Phép MIT |
+| markdown-it-container | Giấy Phép MIT |
+| markdown-it-emoji | Giấy Phép MIT |
+| markdown-it-highlightjs | Giấy Phép MIT |
+| markdown-it-task-lists | Giấy Phép MIT |
+| markdown-it-toc-done-right | Giấy Phép MIT |
+| phaser | Giấy Phép MIT |
 | tweetnacl | The Unlicense |
-| unity-webgl | Unity Terms |
-| vite | MIT License |
+| unity-webgl | Điều Khoản Unity |
+| vite | Giấy Phép MIT |
 
-### Game Dependencies (Rust)
+### Các Phụ Thuộc Trò Chơi (Rust)
 
-The game components utilize the following Rust crates:
+Các thành phần trò chơi sử dụng các crate Rust sau:
 
-| Crate | License |
+| Crate | Giấy Phép |
 | ----- | ------- |
-| bevy | MIT License |
-| serde | Apache-2.0/MIT License |
-| serde_json | Apache-2.0/MIT License |
-| rand | MIT License and Apache-2.0 License |
-| wasm-bindgen | MIT License |
-| bevy_pancam | MIT License |
-| bevy_enoki | MIT License |
-| bevy_dev_tools | MIT License |
-| ron | MIT/Apache-2.0 License |
+| bevy | Giấy Phép MIT |
+| serde | Giấy Phép Apache-2.0/MIT |
+| serde_json | Giấy Phép Apache-2.0/MIT |
+| rand | Giấy Phép MIT và Apache-2.0 |
+| wasm-bindgen | Giấy Phép MIT |
+| bevy_pancam | Giấy Phép MIT |
+| bevy_enoki | Giấy Phép MIT |
+| bevy_dev_tools | Giấy Phép MIT |
+| ron | Giấy Phép MIT/Apache-2.0 |
 
-### Galaxy Dependencies (Rust)
+### Các Phụ Thuộc Galaxy (Rust)
 
-The galaxy backend utilizes the following Rust crates:
+Backend galaxy sử dụng các crate Rust sau:
 
-| Crate | License |
+| Crate | Giấy Phép |
 | ----- | ------- |
-| ic-cdk | Apache-2.0 License |
-| ic-cdk-macros | Apache-2.0 License |
-| ic-cdk-timers | Apache-2.0 License |
-| candid | Apache-2.0 License |
-| serde | Apache-2.0/MIT License |
-| getrandom | MIT/Apache-2.0 License |
-| rstar | MIT/Apache-2.0 License |
+| ic-cdk | Giấy Phép Apache-2.0 |
+| ic-cdk-macros | Giấy Phép Apache-2.0 |
+| ic-cdk-timers | Giấy Phép Apache-2.0 |
+| candid | Giấy Phép Apache-2.0 |
+| serde | Giấy Phép Apache-2.0/MIT |
+| getrandom | Giấy Phép MIT/Apache-2.0 |
+| rstar | Giấy Phép MIT/Apache-2.0 |
 
 ## Unity Engine
 
-Cosmicrafts utilizes Unity® software under a Personal License for qualifying individual developers and small companies. Unity is a trademark or registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere. Unity software is used under the terms of the [Unity Personal License Agreement](https://unity.com/legal/terms-of-service).
+Cosmicrafts sử dụng phần mềm Unity® theo Giấy Phép Cá Nhân dành cho các nhà phát triển cá nhân đủ điều kiện và các công ty nhỏ. Unity là thương hiệu hoặc thương hiệu đã đăng ký của Unity Technologies hoặc các công ty liên kết của nó tại Hoa Kỳ và các nơi khác. Phần mềm Unity được sử dụng theo các điều khoản của [Thỏa Thuận Giấy Phép Cá Nhân Unity](https://unity.com/legal/terms-of-service).
 
-## Distribution Platform Notices
+## Thông Báo Nền Tảng Phân Phối
 
 ### Apple App Store
 
-Cosmicrafts is distributed through the Apple App Store under the terms of the [Apple Developer Program License Agreement](https://developer.apple.com/support/terms/apple-developer-program-license-agreement). App Store is a service mark of Apple Inc.
+Cosmicrafts được phân phối thông qua Apple App Store theo các điều khoản của [Thỏa Thuận Giấy Phép Chương Trình Nhà Phát Triển Apple](https://developer.apple.com/support/terms/apple-developer-program-license-agreement). App Store là nhãn hiệu dịch vụ của Apple Inc.
 
-Key requirements:
-- App Store Review Guidelines compliance
-- Privacy Policy implementation
-- Content rating guidelines adherence
-- Required developer account in good standing
-- 30% standard commission to Apple on in-app purchases
-- Use of Apple's in-app purchase system for digital goods and services
+Các yêu cầu chính:
+- Tuân thủ Hướng Dẫn Đánh Giá App Store
+- Triển khai Chính Sách Quyền Riêng Tư
+- Tuân thủ hướng dẫn xếp hạng nội dung
+- Yêu cầu tài khoản nhà phát triển đang hoạt động tốt
+- Hoa hồng tiêu chuẩn 30% cho Apple trên các giao dịch mua trong ứng dụng
+- Sử dụng hệ thống mua hàng trong ứng dụng của Apple cho hàng hóa và dịch vụ kỹ thuật số
 
 ### Google Play Store
 
-Cosmicrafts is distributed through the Google Play Store under the terms of the [Google Play Developer Distribution Agreement](https://play.google.com/about/developer-distribution-agreement.html).
+Cosmicrafts được phân phối thông qua Google Play Store theo các điều khoản của [Thỏa Thuận Phân Phối Nhà Phát Triển Google Play](https://play.google.com/about/developer-distribution-agreement.html).
 
-Key requirements:
-- Google Play Developer Program Policies compliance
-- Content rating guidelines adherence
-- Required developer account in good standing
-- 15-30% commission to Google on in-app purchases
-- Use of Google Play's billing system for digital goods and services
+Các yêu cầu chính:
+- Tuân thủ Chính Sách Chương Trình Nhà Phát Triển Google Play
+- Tuân thủ hướng dẫn xếp hạng nội dung
+- Yêu cầu tài khoản nhà phát triển đang hoạt động tốt
+- Hoa hồng 15-30% cho Google trên các giao dịch mua trong ứng dụng
+- Sử dụng hệ thống thanh toán của Google Play cho hàng hóa và dịch vụ kỹ thuật số
 
 ### Epic Games Store
 
-Cosmicrafts is distributed through the Epic Games Store under the terms of the [Epic Games Store Distribution Agreement](https://dev.epicgames.com/en-US/services).
+Cosmicrafts được phân phối thông qua Epic Games Store theo các điều khoản của [Thỏa Thuận Phân Phối Epic Games Store](https://dev.epicgames.com/en-US/services).
 
-Key requirements:
-- Epic Games Store content guidelines compliance
-- Required developer account in good standing
-- 12% commission to Epic Games on game sales
-- Optional use of Epic Online Services
+Các yêu cầu chính:
+- Tuân thủ hướng dẫn nội dung Epic Games Store
+- Yêu cầu tài khoản nhà phát triển đang hoạt động tốt
+- Hoa hồng 12% cho Epic Games trên doanh số bán trò chơi
+- Sử dụng tùy chọn của Epic Online Services
 
-## Trademarks
+## Thương Hiệu
 
-All trademarks, service marks, trade names, trade dress, product names and logos appearing in Cosmicrafts are the property of their respective owners.
+Tất cả các thương hiệu, nhãn hiệu dịch vụ, tên thương mại, kiểu dáng thương mại, tên sản phẩm và logo xuất hiện trong Cosmicrafts đều là tài sản của chủ sở hữu tương ứng.
 
-## AI-Generated Digital Art
+## Nghệ Thuật Kỹ Thuật Số Tạo Bởi AI
 
-### Use of AI-Generated Content
+### Sử Dụng Nội Dung Tạo Bởi AI
 
-Cosmicrafts utilizes artificial intelligence tools, including but not limited to Midjourney and similar services, to create digital art and visual assets for our platform. This AI-generated content is created under licensing agreements with the respective AI service providers.
+Cosmicrafts sử dụng các công cụ trí tuệ nhân tạo, bao gồm nhưng không giới hạn ở Midjourney và các dịch vụ tương tự, để tạo nghệ thuật kỹ thuật số và tài sản hình ảnh cho nền tảng của chúng tôi. Nội dung tạo bởi AI này được tạo ra theo các thỏa thuận cấp phép với các nhà cung cấp dịch vụ AI tương ứng.
 
-### Creative Expression and Intent
+### Biểu Đạt Sáng Tạo và Ý Định
 
-The AI-generated art we create is intended as original creative expression and artistic interpretation within our unique universe. Our intent is to create distinctive visual aesthetics for Cosmicrafts, not to replicate or copy other franchises or intellectual property. Any similarity to existing intellectual property is coincidental or represents general artistic influences rather than deliberate copying.
+Nghệ thuật tạo bởi AI mà chúng tôi tạo ra được dự định như biểu đạt sáng tạo gốc và diễn giải nghệ thuật trong vũ trụ độc đáo của chúng tôi. Ý định của chúng tôi là tạo ra thẩm mỹ hình ảnh đặc biệt cho Cosmicrafts, không phải để sao chép hoặc nhân bản các nhượng quyền thương mại hoặc tài sản trí tuệ khác. Bất kỳ sự tương đồng nào với tài sản trí tuệ hiện có đều là trùng hợp hoặc đại diện cho ảnh hưởng nghệ thuật chung hơn là sao chép có chủ ý.
 
-### Third-Party Intellectual Property
+### Tài Sản Trí Tuệ Bên Thứ Ba
 
-We acknowledge that AI models are trained on diverse datasets that may include copyrighted works. While we make good faith efforts to ensure our usage complies with applicable laws:
+Chúng tôi thừa nhận rằng các mô hình AI được đào tạo trên các bộ dữ liệu đa dạng có thể bao gồm các tác phẩm có bản quyền. Mặc dù chúng tôi nỗ lực thiện chí để đảm bảo việc sử dụng của chúng tôi tuân thủ luật hiện hành:
 
-1. The AI-generated content may inadvertently contain elements that resemble existing trademarks, copyrighted works, or other intellectual property.
-2. We believe our use constitutes fair use and/or transformative use under applicable copyright laws.
-3. We have licenses with our AI service providers that cover commercial usage of the generated content.
+1. Nội dung tạo bởi AI có thể vô tình chứa các yếu tố giống với thương hiệu, tác phẩm có bản quyền hoặc tài sản trí tuệ khác hiện có.
+2. Chúng tôi tin rằng việc sử dụng của chúng tôi cấu thành sử dụng hợp lý và/hoặc sử dụng biến đổi theo luật bản quyền hiện hành.
+3. Chúng tôi có giấy phép với các nhà cung cấp dịch vụ AI của chúng tôi bao gồm việc sử dụng thương mại của nội dung được tạo ra.
 
-### Intellectual Property Concerns
+### Quan Ngại về Tài Sản Trí Tuệ
 
-If you believe that AI-generated content on our platform infringes your intellectual property rights:
+Nếu bạn tin rằng nội dung tạo bởi AI trên nền tảng của chúng tôi vi phạm quyền sở hữu trí tuệ của bạn:
 
-1. **Contact Us First**: Please contact us at contact@cosmicrafts.com with details of the allegedly infringing content and your intellectual property rights.
-2. We will promptly review your claim and, if appropriate, remove or modify the content in question.
-3. In most cases, we will attempt to resolve concerns directly, as we respect the rights of intellectual property owners.
+1. **Liên Hệ Với Chúng Tôi Trước**: Vui lòng liên hệ với chúng tôi tại contact@cosmicrafts.com với chi tiết về nội dung bị cáo buộc vi phạm và quyền sở hữu trí tuệ của bạn.
+2. Chúng tôi sẽ nhanh chóng xem xét khiếu nại của bạn và, nếu thích hợp, xóa hoặc sửa đổi nội dung đang được đề cập.
+3. Trong hầu hết các trường hợp, chúng tôi sẽ cố gắng giải quyết các quan ngại trực tiếp, vì chúng tôi tôn trọng quyền của chủ sở hữu tài sản trí tuệ.
 
-### Service Provider Responsibility
+### Trách Nhiệm Nhà Cung Cấp Dịch Vụ
 
-In accordance with our agreements with AI image generation services:
+Theo thỏa thuận của chúng tôi với các dịch vụ tạo hình ảnh AI:
 
-1. Primary legal responsibility for AI-generated content typically resides with the AI service provider (e.g., Midjourney, DALL-E, etc.) as specified in their terms of service.
-2. We utilize these services under their commercial licensing terms, which generally include certain indemnifications and legal protections.
-3. If an intellectual property dispute cannot be resolved directly, we may facilitate communication between the concerned party and the relevant AI service provider.
+1. Trách nhiệm pháp lý chính đối với nội dung tạo bởi AI thường thuộc về nhà cung cấp dịch vụ AI (ví dụ: Midjourney, DALL-E, v.v.) như được quy định trong điều khoản dịch vụ của họ.
+2. Chúng tôi sử dụng các dịch vụ này theo các điều khoản cấp phép thương mại của họ, thường bao gồm một số bồi thường và bảo vệ pháp lý.
+3. Nếu tranh chấp tài sản trí tuệ không thể được giải quyết trực tiếp, chúng tôi có thể tạo điều kiện giao tiếp giữa bên liên quan và nhà cung cấp dịch vụ AI liên quan.
 
-This approach allows us to create unique visual assets while respecting intellectual property rights and providing a clear path for addressing any concerns.
+Cách tiếp cận này cho phép chúng tôi tạo ra tài sản hình ảnh độc đáo trong khi tôn trọng quyền sở hữu trí tuệ và cung cấp một con đường rõ ràng để giải quyết bất kỳ quan ngại nào.
 
-## Contact For Legal Inquiries
+## Liên Hệ Cho Thắc Mắc Pháp Lý
 
-For any legal inquiries regarding third-party software, licenses, or other legal matters, please contact:
+Đối với bất kỳ thắc mắc pháp lý nào liên quan đến phần mềm bên thứ ba, giấy phép hoặc các vấn đề pháp lý khác, vui lòng liên hệ:
 
 **Email:** contact@cosmicrafts.com
 
-## Export Control Laws
+## Luật Kiểm Soát Xuất Khẩu
 
-The software, games, and technology provided by Cosmicrafts are subject to United States and local export control laws and regulations. By acquiring or using Cosmicrafts products, you represent and warrant that you will comply with all applicable export laws and regulations.
+Phần mềm, trò chơi và công nghệ được cung cấp bởi Cosmicrafts tuân theo luật và quy định kiểm soát xuất khẩu của Hoa Kỳ và địa phương. Bằng cách mua hoặc sử dụng sản phẩm của Cosmicrafts, bạn cam đoan và đảm bảo rằng bạn sẽ tuân thủ tất cả các luật và quy định xuất khẩu hiện hành.
 
-## Financial Disclosures
+## Công Bố Tài Chính
 
-### Virtual Currency and Assets
+### Tiền Tệ Ảo và Tài Sản
 
-Cosmicrafts offers virtual currencies and digital assets that may be purchased with real money. These virtual currencies and assets:
+Cosmicrafts cung cấp tiền tệ ảo và tài sản kỹ thuật số có thể được mua bằng tiền thật. Những tiền tệ ảo và tài sản này:
 
-1. Have no real-world value and cannot be exchanged for real money or real-world items from Cosmicrafts;
-2. Are non-refundable and cannot be transferred between accounts unless explicitly permitted within the platform;
-3. May be altered, modified, or removed at Cosmicrafts' discretion with reasonable notice;
-4. Are subject to the Terms of Service regarding ownership and usage rights.
+1. Không có giá trị trong thế giới thực và không thể đổi lấy tiền thật hoặc vật phẩm thế giới thực từ Cosmicrafts;
+2. Không hoàn lại và không thể chuyển giữa các tài khoản trừ khi được cho phép rõ ràng trong nền tảng;
+3. Có thể bị thay đổi, sửa đổi hoặc xóa bỏ theo quyết định của Cosmicrafts với thông báo hợp lý;
+4. Tuân theo Điều Khoản Dịch Vụ liên quan đến quyền sở hữu và sử dụng.
 
-### Cryptocurrency Risk Disclosure
+### Công Bố Rủi Ro Tiền Điện Tử
 
-Where applicable, certain features of the Cosmicrafts platform involve cryptocurrency transactions. Please be aware that:
+Khi áp dụng, một số tính năng của nền tảng Cosmicrafts liên quan đến giao dịch tiền điện tử. Vui lòng lưu ý rằng:
 
-1. Cryptocurrency values can be volatile and may fluctuate significantly;
-2. Cryptocurrency transactions are generally irreversible;
-3. You are responsible for the security of your cryptocurrency wallet and private keys;
-4. Regulatory status of cryptocurrencies may change and may affect the availability of services;
-5. Cosmicrafts is not responsible for any losses due to market volatility, user error, or technical issues outside our control.
+1. Giá trị tiền điện tử có thể biến động và có thể dao động đáng kể;
+2. Giao dịch tiền điện tử thường không thể đảo ngược;
+3. Bạn chịu trách nhiệm về bảo mật ví tiền điện tử và khóa riêng tư của mình;
+4. Tình trạng quy định của tiền điện tử có thể thay đổi và có thể ảnh hưởng đến tính khả dụng của dịch vụ;
+5. Cosmicrafts không chịu trách nhiệm cho bất kỳ tổn thất nào do biến động thị trường, lỗi người dùng hoặc vấn đề kỹ thuật ngoài tầm kiểm soát của chúng tôi.
 
-## Health and Safety Warnings
+## Cảnh Báo Sức Khỏe và An Toàn
 
-### Photosensitivity Warning
+### Cảnh Báo Nhạy Cảm Ánh Sáng
 
-A small percentage of people may experience seizures or blackouts when exposed to certain light patterns or flashing lights that may appear in our games. If you or anyone in your family has a history of seizures or epilepsy, consult a doctor before playing our games. Immediately stop playing and consult a doctor if you experience any symptoms including lightheadedness, altered vision, eye or muscle twitches, jerking or shaking of arms or legs, disorientation, confusion, or momentary loss of awareness.
+Một tỷ lệ nhỏ người có thể bị co giật hoặc ngất xỉu khi tiếp xúc với một số mẫu ánh sáng hoặc đèn nhấp nháy có thể xuất hiện trong trò chơi của chúng tôi. Nếu bạn hoặc bất kỳ ai trong gia đình bạn có tiền sử co giật hoặc động kinh, hãy tham khảo ý kiến bác sĩ trước khi chơi trò chơi của chúng tôi. Dừng chơi ngay lập tức và tham khảo ý kiến bác sĩ nếu bạn gặp bất kỳ triệu chứng nào bao gồm choáng váng, thay đổi thị lực, co giật mắt hoặc cơ, giật hoặc rung tay hoặc chân, mất phương hướng, lú lẫn hoặc mất ý thức tạm thời.
 
-### Virtual Reality Warnings
+### Cảnh Báo Thực Tế Ảo
 
-When using virtual reality features in our games, please observe the following precautions:
+Khi sử dụng các tính năng thực tế ảo trong trò chơi của chúng tôi, vui lòng tuân thủ các biện pháp phòng ngừa sau:
 
-1. Read and follow all safety and operating instructions provided with your VR system;
-2. Take at least a 10 to 15 minute break every 30 minutes, even if you don't think you need it;
-3. Do not use VR when you are tired, need sleep, are under the influence of alcohol or drugs, or have digestive problems;
-4. Immediately discontinue use if you experience any discomfort, including motion sickness, dizziness, eye strain, or nausea.
+1. Đọc và làm theo tất cả các hướng dẫn an toàn và vận hành được cung cấp kèm theo hệ thống VR của bạn;
+2. Nghỉ ngơi ít nhất 10 đến 15 phút sau mỗi 30 phút, ngay cả khi bạn không nghĩ rằng bạn cần;
+3. Không sử dụng VR khi bạn mệt mỏi, cần ngủ, đang chịu ảnh hưởng của rượu hoặc thuốc, hoặc có vấn đề về tiêu hóa;
+4. Ngừng sử dụng ngay lập tức nếu bạn cảm thấy bất kỳ sự khó chịu nào, bao gồm say tàu xe, chóng mặt, mỏi mắt hoặc buồn nôn.
 
-## Governing Law
+## Luật Điều Chỉnh
 
-These Legal Notices and any disputes arising out of or related to these notices or the Cosmicrafts platform shall be governed by the laws of the State of California, without regard to its conflict of law principles. Any legal action or proceeding relating to these Legal Notices shall be brought exclusively in the state or federal courts located in Los Angeles County, California.
+Các Thông Báo Pháp Lý này và bất kỳ tranh chấp nào phát sinh từ hoặc liên quan đến các thông báo này hoặc nền tảng Cosmicrafts sẽ được điều chỉnh bởi luật pháp của Tiểu bang California, không tính đến các nguyên tắc xung đột pháp luật của nó. Bất kỳ hành động pháp lý hoặc thủ tục tố tụng nào liên quan đến các Thông Báo Pháp Lý này sẽ được đưa ra độc quyền tại các tòa án tiểu bang hoặc liên bang nằm ở Quận Los Angeles, California.
 
-## Contact Information
+## Thông Tin Liên Hệ
 
-If you have any questions about these Legal Notices, please contact us at:
+Nếu bạn có bất kỳ câu hỏi nào về các Thông Báo Pháp Lý này, vui lòng liên hệ với chúng tôi tại:
 
 **Email**: contact@cosmicrafts.com  
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+Đối với các vấn đề yêu cầu địa chỉ vật lý để tuân thủ quy định, vui lòng liên hệ với chúng tôi qua email trước.
 
-## Organizational Structure and Governance
+## Cấu Trúc Tổ Chức và Quản Trị
 
-### Decentralized Governance Model
+### Mô Hình Quản Trị Phi Tập Trung
 
-Cosmicrafts operates under a hybrid governance model:
+Cosmicrafts hoạt động theo mô hình quản trị kết hợp:
 
-1. **Legal Entity**: World of Unreal, LLC is a Delaware limited liability company established in 2022. The LLC serves as the legal entity that interfaces with traditional legal systems, holds certain intellectual property rights, enters into contracts with third parties, and manages compliance with applicable laws and regulations.
+1. **Thực Thể Pháp Lý**: World of Unreal, LLC là một công ty trách nhiệm hữu hạn Delaware được thành lập vào năm 2022. LLC đóng vai trò là thực thể pháp lý giao tiếp với hệ thống pháp lý truyền thống, nắm giữ một số quyền sở hữu trí tuệ, ký kết hợp đồng với bên thứ ba và quản lý việc tuân thủ các luật và quy định hiện hành.
 
-2. **Cosmicrafts Foundation**: A non-profit organization that serves as a major contributor to the development of the Cosmicrafts platform and ecosystem. The Foundation supports research, development, and community initiatives.
+2. **Quỹ Cosmicrafts**: Một tổ chức phi lợi nhuận đóng vai trò là nhà đóng góp chính cho sự phát triển của nền tảng và hệ sinh thái Cosmicrafts. Quỹ hỗ trợ nghiên cứu, phát triển và các sáng kiến cộng đồng.
 
-3. **Decentralized Governance**: As of 2025, Cosmicrafts has implemented a decentralized governance structure through the Cosmicrafts DAO (Decentralized Autonomous Organization). This structure allows token holders to participate in certain decision-making processes related to the platform development, features, and ecosystem initiatives.
+3. **Quản Trị Phi Tập Trung**: Kể từ năm 2025, Cosmicrafts đã triển khai cấu trúc quản trị phi tập trung thông qua Cosmicrafts DAO (Tổ Chức Tự Trị Phi Tập Trung). Cấu trúc này cho phép người nắm giữ token tham gia vào một số quy trình ra quyết định liên quan đến phát triển nền tảng, tính năng và sáng kiến hệ sinh thái.
 
-### Intellectual Property Rights and DAO License
+### Quyền Sở Hữu Trí Tuệ và Giấy Phép DAO
 
-World of Unreal, LLC retains full legal ownership of all copyrights, trademarks, and other intellectual property rights to the Cosmicrafts brand, assets, and software. However, to enable decentralized development and governance, World of Unreal, LLC grants the following licenses:
+World of Unreal, LLC giữ quyền sở hữu pháp lý đầy đủ đối với tất cả bản quyền, thương hiệu và các quyền sở hữu trí tuệ khác đối với thương hiệu, tài sản và phần mềm Cosmicrafts. Tuy nhiên, để cho phép phát triển và quản trị phi tập trung, World of Unreal, LLC cấp các giấy phép sau:
 
-1. **DAO Operating License**: World of Unreal, LLC grants to the Cosmicrafts DAO a non-exclusive, worldwide, royalty-free license to use, develop, modify, and distribute the Cosmicrafts brand, software, and related materials in accordance with the DAO's governance processes.
+1. **Giấy Phép Hoạt Động DAO**: World of Unreal, LLC cấp cho Cosmicrafts DAO một giấy phép không độc quyền, toàn cầu, miễn phí bản quyền để sử dụng, phát triển, sửa đổi và phân phối thương hiệu, phần mềm và các tài liệu liên quan của Cosmicrafts theo quy trình quản trị của DAO.
 
-2. **License Limitations**: This license is conditional upon:
-   - Adherence to brand guidelines and quality standards
-   - Compliance with applicable laws and regulations
-   - Maintaining the integrity and security of the platform
-   - Other conditions as may be specified by World of Unreal, LLC from time to time
+2. **Giới Hạn Giấy Phép**: Giấy phép này có điều kiện dựa trên:
+   - Tuân thủ hướng dẫn thương hiệu và tiêu chuẩn chất lượng
+   - Tuân thủ luật pháp và quy định hiện hành
+   - Duy trì tính toàn vẹn và bảo mật của nền tảng
+   - Các điều kiện khác có thể được chỉ định bởi World of Unreal, LLC tùy từng thời điểm
 
-3. **Legal Protection**: World of Unreal, LLC retains the right to take legal action against third parties that infringe upon Cosmicrafts intellectual property rights, acting as the legal protector of these rights on behalf of the broader Cosmicrafts ecosystem.
+3. **Bảo Vệ Pháp Lý**: World of Unreal, LLC giữ quyền thực hiện hành động pháp lý chống lại các bên thứ ba xâm phạm quyền sở hữu trí tuệ của Cosmicrafts, đóng vai trò là người bảo vệ pháp lý của các quyền này thay mặt cho hệ sinh thái Cosmicrafts rộng lớn hơn.
 
-This licensing arrangement enables the DAO to operate and develop the Cosmicrafts ecosystem while ensuring that the intellectual property rights remain protected under traditional legal frameworks through World of Unreal, LLC.
+Thỏa thuận cấp phép này cho phép DAO vận hành và phát triển hệ sinh thái Cosmicrafts trong khi đảm bảo rằng các quyền sở hữu trí tuệ vẫn được bảo vệ theo khuôn khổ pháp lý truyền thống thông qua World of Unreal, LLC.
 
-### Relationship Between Legal Entities and DAO
+### Mối Quan Hệ Giữa Các Thực Thể Pháp Lý và DAO
 
-The relationship between World of Unreal, LLC, Cosmicrafts Foundation, and the Cosmicrafts DAO is structured as follows:
+Mối quan hệ giữa World of Unreal, LLC, Quỹ Cosmicrafts và Cosmicrafts DAO được cấu trúc như sau:
 
-1. **Legal Framework**: World of Unreal, LLC serves as a "legal wrapper" for the Cosmicrafts DAO, providing a recognized legal entity that can interface with traditional business and legal systems.
+1. **Khuôn Khổ Pháp Lý**: World of Unreal, LLC đóng vai trò như một "vỏ bọc pháp lý" cho Cosmicrafts DAO, cung cấp một thực thể pháp lý được công nhận có thể giao tiếp với hệ thống kinh doanh và pháp lý truyền thống.
 
-2. **Foundation Support**: The Cosmicrafts Foundation provides support, resources, and infrastructure for the ecosystem's growth and development. It operates as a separate legal entity with a focus on non-commercial aspects of the ecosystem.
+2. **Hỗ Trợ Quỹ**: Quỹ Cosmicrafts cung cấp hỗ trợ, tài nguyên và cơ sở hạ tầng cho sự phát triển và tăng trưởng của hệ sinh thái. Nó hoạt động như một thực thể pháp lý riêng biệt với trọng tâm vào các khía cạnh phi thương mại của hệ sinh thái.
 
-3. **Progressive Decentralization**: The governance of Cosmicrafts is subject to progressive decentralization, with decision-making authority gradually transitioning to the decentralized community, in accordance with applicable laws and regulations.
+3. **Phi Tập Trung Tiến Bộ**: Quản trị của Cosmicrafts tuân theo sự phi tập trung tiến bộ, với quyền ra quyết định dần chuyển sang cộng đồng phi tập trung, phù hợp với luật pháp và quy định hiện hành.
 
-4. **Intellectual Property**: Certain intellectual property, including but not limited to the "Cosmicrafts" trademark, is owned by World of Unreal, LLC, but licensed to the Cosmicrafts ecosystem under terms that support decentralized governance and community ownership.
+4. **Sở Hữu Trí Tuệ**: Một số tài sản trí tuệ, bao gồm nhưng không giới hạn ở thương hiệu "Cosmicrafts", thuộc sở hữu của World of Unreal, LLC, nhưng được cấp phép cho hệ sinh thái Cosmicrafts theo các điều khoản hỗ trợ quản trị phi tập trung và quyền sở hữu cộng đồng.
 
-5. **Legal Compliance**: World of Unreal, LLC retains certain powers to ensure compliance with applicable laws, regulations, and platform policies, even in areas where governance has been decentralized.
+5. **Tuân Thủ Pháp Lý**: World of Unreal, LLC giữ một số quyền hạn để đảm bảo tuân thủ luật pháp, quy định và chính sách nền tảng hiện hành, ngay cả trong các lĩnh vực đã được phi tập trung hóa quản trị.
 
-### Legal Status of DAO Participation
+### Tình Trạng Pháp Lý của Việc Tham Gia DAO
 
-Please be aware that:
+Vui lòng lưu ý rằng:
 
-1. Participation in DAO governance is subject to the Terms of Service and may involve legal uncertainties due to the evolving nature of laws regarding decentralized organizations.
+1. Việc tham gia quản trị DAO tuân theo Điều Khoản Dịch Vụ và có thể liên quan đến những không chắc chắn pháp lý do bản chất đang phát triển của luật pháp liên quan đến các tổ chức phi tập trung.
 
-2. Token ownership does not constitute ownership of World of Unreal, LLC or Cosmicrafts Foundation, nor does it create a traditional legal partnership, joint venture, or other recognized legal relationship between token holders and these entities.
+2. Sở hữu token không cấu thành quyền sở hữu của World of Unreal, LLC hoặc Quỹ Cosmicrafts, cũng không tạo ra quan hệ đối tác pháp lý truyền thống, liên doanh hoặc mối quan hệ pháp lý được công nhận khác giữa người nắm giữ token và các thực thể này.
 
-3. The rights associated with governance tokens are limited to those explicitly described in the Terms of Service and any applicable DAO governance documentation.
+3. Các quyền liên quan đến token quản trị giới hạn ở những quyền được mô tả rõ ràng trong Điều Khoản Dịch Vụ và bất kỳ tài liệu quản trị DAO hiện hành nào.
 
-4. The Cosmicrafts DAO itself is not a traditional legal entity but operates as a decentralized protocol governed by smart contracts and the collective decision-making of token holders.
+4. Bản thân Cosmicrafts DAO không phải là một thực thể pháp lý truyền thống mà hoạt động như một giao thức phi tập trung được quản trị bởi hợp đồng thông minh và quá trình ra quyết định tập thể của người nắm giữ token.
 
-5. World of Unreal, LLC and Cosmicrafts Foundation may modify their relationship with the DAO to comply with evolving regulations or legal requirements.
+5. World of Unreal, LLC và Quỹ Cosmicrafts có thể sửa đổi mối quan hệ của họ với DAO để tuân thủ các quy định đang phát triển hoặc yêu cầu pháp lý.
 
 ---
 
-*Last updated: March 4, 2025* 
+*Cập nhật lần cuối: Ngày 4 tháng 3 năm 2025* 

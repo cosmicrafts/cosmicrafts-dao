@@ -1,471 +1,422 @@
-# Terms of Service
+# Условия предоставления услуг
 
 [[toc:2-3]]
 
-## Introduction
-Welcome to Cosmicrafts. These Terms of Service ("Terms") govern your access to and use of Cosmicrafts' website, platform, applications, and any associated services (collectively, the "Services"). 
+## Введение
+Добро пожаловать в Cosmicrafts. Настоящие Условия предоставления услуг ("Условия") регулируют ваш доступ и использование веб-сайта, платформы, приложений и любых связанных услуг Cosmicrafts (совместно именуемых "Услуги").
 
-By accessing or using our Services, you agree to be bound by these Terms. If you disagree with any part of the Terms, you do not have permission to access the Services.
+Получая доступ к нашим Услугам или используя их, вы соглашаетесь соблюдать настоящие Условия. Если вы не согласны с какой-либо частью Условий, вам не разрешается доступ к Услугам.
 
-## Effective Date
-These Terms are effective as of March 4, 2025.
+## Дата вступления в силу
+Настоящие Условия вступают в силу с 4 марта 2025 года.
 
-## Definitions
-- **Platform**: Refers to the Cosmicrafts universe, including all websites, games, applications, and services provided by Cosmicrafts.
-- **User**, **You**, or **Your**: Refers to individuals who access or use the Platform.
-- **Content**: Refers to any information, text, graphics, photos, videos, or other materials uploaded, downloaded, or appearing on the Platform.
-- **NFT**: Non-Fungible Token, a unique digital identifier recorded on a blockchain that certifies ownership and authenticity of a specific digital asset.
-- **Cryptocurrency**: Digital or virtual currency that uses cryptography for security and operates independently of a central authority.
-- **Blockchain**: A distributed digital ledger that records transactions across many computers in a way that cannot be altered retroactively.
-- **On-Chain Data**: Information that is stored directly on a blockchain network, which is public, transparent, and immutable.
-- **App Store**: Refers to digital distribution platforms such as Google Play Store, Apple App Store, Epic Games Store, and Crazy Games where our applications may be available.
+## Определения
+- **Платформа**: Относится к вселенной Cosmicrafts, включая все веб-сайты, игры, приложения и услуги, предоставляемые Cosmicrafts.
+- **Пользователь**, **Вы** или **Ваш**: Относится к физическим лицам, которые получают доступ к Платформе или используют ее.
+- **Контент**: Относится к любой информации, тексту, графике, фотографиям, видео или другим материалам, загруженным, скачанным или появляющимся на Платформе.
+- **NFT**: Невзаимозаменяемый токен, уникальный цифровой идентификатор, записанный в блокчейне, который удостоверяет право собственности и подлинность конкретного цифрового актива.
+- **Криптовалюта**: Цифровая или виртуальная валюта, которая использует криптографию для обеспечения безопасности и функционирует независимо от центрального органа.
+- **Блокчейн**: Распределенный цифровой реестр, который записывает транзакции на многих компьютерах таким образом, что они не могут быть изменены задним числом.
+- **Данные в блокчейне**: Информация, которая хранится непосредственно в сети блокчейн, которая является публичной, прозрачной и неизменяемой.
+- **App Store**: Относится к платформам цифрового распространения, таким как Google Play Store, Apple App Store, Epic Games Store и Crazy Games, где могут быть доступны наши приложения.
 
-## Web3 and On-Chain Data
+## Web3 и данные в блокчейне
 
-### Public Nature of Blockchain
-Cosmicrafts is built on Web3 technology, which means:
+### Публичная природа блокчейна
+Cosmicrafts построен с использованием технологии Web3, что означает:
 
-1. **Public Transparency**: Most of our databases are stored on public blockchains, making information inherently public and transparent.
+1. **Публичная прозрачность**: Большинство наших баз данных хранится в публичных блокчейнах, что делает информацию по своей сути публичной и прозрачной.
 
-2. **User Responsibility**: You are solely responsible for any information you choose to share through our platform. By using our Services, you explicitly acknowledge that information stored on blockchain networks is:
-   - Public by default
-   - Accessible to anyone with access to the blockchain
-   - Permanent and immutable (cannot be deleted or altered)
-   - Not encrypted or hidden by us unless explicitly stated
+2. **Ответственность пользователя**: Вы несете единоличную ответственность за любую информацию, которую решите поделиться через нашу платформу. Используя наши Услуги, вы явно признаете, что информация, хранящаяся в сетях блокчейн:
+   - По умолчанию является публичной
+   - Доступна любому, кто имеет доступ к блокчейну
+   - Постоянна и неизменяема (не может быть удалена или изменена)
+   - Не шифруется и не скрывается нами, если явно не указано иное
 
-3. **Privacy Limitations**: Due to the nature of blockchain technology, privacy features have technical limitations. Even information marked as "private" may still be visible to blockchain validators or through blockchain explorers.
+3. **Ограничения конфиденциальности**: Из-за природы технологии блокчейн функции конфиденциальности имеют технические ограничения. Даже информация, помеченная как "приватная", все равно может быть видна валидаторам блокчейна или через обозреватели блокчейна.
 
-4. **No Expectation of Privacy**: You should have no expectation of privacy regarding any on-chain data. Before providing any information through our Services, you should carefully consider whether you are comfortable with that information being public and permanent.
+4. **Отсутствие ожидания конфиденциальности**: Вы не должны ожидать конфиденциальности в отношении любых данных в блокчейне. Прежде чем предоставлять какую-либо информацию через наши Услуги, вы должны тщательно рассмотреть, комфортно ли вам, что эта информация будет публичной и постоянной.
 
-5. **Data Sovereignty**: You retain ownership of your private keys and control of your digital assets, but public blockchain data cannot be deleted even if you discontinue using our Services.
+5. **Суверенитет данных**: Вы сохраняете право собственности на свои приватные ключи и контроль над своими цифровыми активами, но публичные данные блокчейна не могут быть удалены, даже если вы прекратите использование наших Услуг.
 
-## Web3 Safety and Privacy Guide
+## Руководство по безопасности и конфиденциальности Web3
 
-### Important Safety Guidelines for New Users
-If you're new to Web3 platforms like Cosmicrafts, please review these critical safety guidelines:
+### Важные рекомендации по безопасности для новых пользователей
+Если вы новичок в платформах Web3, таких как Cosmicrafts, пожалуйста, ознакомьтесь с этими критически важными рекомендациями по безопасности:
 
-1. **Protect Your Personal Information**:
-   - Never use your real full name, home address, or phone number on blockchain platforms
-   - Create pseudonymous usernames that cannot be connected to your real identity
-   - Avoid sharing personally identifiable information in public forums, chats, or profiles
-   - Be aware that anything you post on-chain could be permanently recorded
+1. **Защитите свою личную информацию**:
+   - Никогда не используйте свое настоящее полное имя, домашний адрес или номер телефона на платформах блокчейн
+   - Создавайте псевдонимные имена пользователей, которые нельзя связать с вашей реальной личностью
+   - Избегайте обмена личной идентифицирующей информацией на публичных форумах, в чатах или профилях
+   - Помните, что все, что вы публикуете в блокчейне, может быть записано навсегда
 
-2. **Wallet and Key Security**:
-   - Your private keys and seed phrases are your sole access to your digital assets
-   - NEVER share your private keys, seed phrases, or wallet passwords with anyone, including Cosmicrafts staff
-   - NEVER enter your seed phrase or private keys on websites, even if they appear to be legitimate
-   - Store your seed phrase offline in a secure location (preferably multiple secure locations)
-   - Unlike traditional banking, there is NO central authority that can recover your account or assets if keys are lost or stolen
-   - Use hardware wallets for significant holdings whenever possible
+2. **Безопасность кошелька и ключей**:
+   - Ваши приватные ключи и сид-фразы - это ваш единственный доступ к вашим цифровым активам
+   - НИКОГДА не делитесь своими приватными ключами, сид-фразами или паролями от кошелька ни с кем, включая команду Cosmicrafts
+   - НИКОГДА не вводите свою сид-фразу или приватные ключи на веб-сайтах, даже если они выглядят легитимно
+   - Храните свою сид-фразу офлайн в безопасном месте (предпочтительно в нескольких безопасных местах)
+   - В отличие от традиционных банков, НЕ существует центрального органа, который может восстановить вашу учетную запись или активы, если ключи утеряны или украдены
+   - Используйте аппаратные кошельки для значительных сумм, когда это возможно
 
-3. **Transaction Awareness**:
-   - ALL blockchain transactions are IRREVERSIBLE and CANNOT be refunded or reversed once confirmed
-   - Always double-check transaction details (recipient address, amount) before confirming
-   - Start with small test transactions when using new services or features
-   - Be wary of any transaction requests that create urgency or pressure you to act quickly
+3. **Осведомленность о транзакциях**:
+   - ВСЕ транзакции в блокчейне являются НЕОБРАТИМЫМИ и НЕ могут быть возмещены или отменены после подтверждения
+   - Всегда проверяйте детали транзакции (адрес получателя, сумму) перед подтверждением
+   - Начинайте с небольших тестовых транзакций при использовании новых сервисов или функций
+   - Будьте осторожны с любыми запросами на транзакции, которые создают срочность или оказывают на вас давление, чтобы действовать быстро
 
-4. **Scam Prevention**:
-   - Be extremely cautious of direct messages from strangers, especially those offering assistance, opportunities, or free assets
-   - Never click on unknown links sent via direct messages or from untrusted sources
-   - Always verify the source of communications - Cosmicrafts will ONLY contact you through official channels
-   - Be skeptical of "too good to be true" offers, giveaways, or investment opportunities
-   - Verify all contract addresses against official sources before interacting with them
-   - Check URLs carefully - scammers often use URLs that look similar to legitimate sites
+4. **Предотвращение мошенничества**:
+   - Будьте крайне осторожны с прямыми сообщениями от незнакомцев, особенно тех, кто предлагает помощь, возможности или бесплатные активы
+   - Никогда не нажимайте на неизвестные ссылки, отправленные через прямые сообщения или из ненадежных источников
+   - Всегда проверяйте источник коммуникаций - Cosmicrafts будет связываться с вами ТОЛЬКО через официальные каналы
+   - Будьте скептичны к предложениям, которые "слишком хороши, чтобы быть правдой", подаркам или инвестиционным возможностям
+   - Проверяйте все адреса контрактов в официальных источниках перед взаимодействием с ними
+   - Тщательно проверяйте URL-адреса - мошенники часто используют URL-адреса, которые выглядят похожими на легитимные сайты
 
-5. **Common Web3 Scams to Avoid**:
-   - Fake support staff offering to "help" with account issues
-   - Free NFT or token mints that request your seed phrase
-   - Urgent messages about account security requiring immediate action
-   - Impersonation of project founders, team members, or celebrities 
-   - Fraudulent airdrops requiring you to send cryptocurrency first
-   - Fake marketplace notifications about offers on your digital assets
+5. **Распространенные мошенничества Web3, которых следует избегать**:
+   - Фальшивые сотрудники поддержки, предлагающие "помощь" с проблемами учетной записи
+   - Бесплатные создания NFT или токенов, которые запрашивают вашу сид-фразу
+   - Срочные сообщения о безопасности учетной записи, требующие немедленных действий
+   - Выдача себя за основателей проектов, членов команды или знаменитостей
+   - Мошеннические эйрдропы, требующие, чтобы вы сначала отправили криптовалюту
+   - Фальшивые уведомления с маркетплейса о предложениях на ваши цифровые активы
 
-### Safety Tools and Resources
-Cosmicrafts provides several tools to help protect your experience:
+### Инструменты и ресурсы безопасности
+Cosmicrafts предоставляет несколько инструментов для защиты вашего опыта:
 
-1. **Reporting System**: Use our reporting features to flag suspicious users, scam attempts, or harmful content. Look for the "Report" option in user profiles, messages, and content.
+1. **Система отчетности**: Используйте наши функции отчетности для обозначения подозрительных пользователей, попыток мошенничества или вредоносного контента. Ищите опцию "Пожаловаться" в профилях пользователей, сообщениях и контенте.
 
-2. **Blocking Users**: You can block any user by accessing their profile and selecting the block option. Blocked users cannot contact you.
+2. **Блокировка пользователей**: Вы можете заблокировать любого пользователя, зайдя в его профиль и выбрав опцию блокировки. Заблокированные пользователи не могут связаться с вами.
 
-3. **Privacy Settings**: Configure your privacy settings in your account dashboard to control what information is visible to others and who can contact you.
+3. **Настройки конфиденциальности**: Настройте параметры конфиденциальности в панели управления вашей учетной записи, чтобы контролировать, какая информация видна другим и кто может связаться с вами.
 
-4. **Authentication Options**: Enable two-factor authentication (2FA) for additional account security.
+4. **Варианты аутентификации**: Включите двухфакторную аутентификацию (2FA) для дополнительной безопасности учетной записи.
 
-5. **Transaction Confirmation**: Our platform includes confirmation screens for all transactions with explicit warnings and details to prevent mistakes.
+5. **Подтверждение транзакций**: Наша платформа включает экраны подтверждения для всех транзакций с явными предупреждениями и деталями для предотвращения ошибок.
 
-### Contacting Us Securely
-For any safety or security concerns, contact us ONLY through our official channels:
+### Безопасная связь с нами
+По любым вопросам безопасности связывайтесь с нами ТОЛЬКО через наши официальные каналы:
 
-- **Official Email**: contact@cosmicrafts.com
-- **In-Platform Support**: Via the help button in the account dashboard
-- **Official Social Media**: Only through accounts verified with blue checkmarks
+- **Официальная электронная почта**: contact@cosmicrafts.com
+- **Поддержка на платформе**: Через кнопку помощи в панели управления учетной записью
+- **Официальные социальные сети**: Только через учетные записи, проверенные синими галочками
 
-We will NEVER ask for your seed phrase, private keys, or passwords. If anyone claiming to represent Cosmicrafts requests this information, it is a scam.
+Мы НИКОГДА не будем запрашивать вашу сид-фразу, приватные ключи или пароли. Если кто-то, утверждающий, что представляет Cosmicrafts, запрашивает эту информацию, это мошенничество.
 
-## Account Registration and Eligibility
+## Регистрация учетной записи и правомочность
 
-### Account Creation
-To access certain features of our Services, you must create an account. When registering, you agree to provide accurate, current, and complete information. You are responsible for safeguarding your account credentials and for all activities that occur under your account.
+### Создание учетной записи
+Для доступа к определенным функциям наших Услуг вам необходимо создать учетную запись. При регистрации вы соглашаетесь предоставить точную, актуальную и полную информацию. Вы несете ответственность за защиту учетных данных вашей учетной записи и за все действия, которые происходят в вашей учетной записи.
 
-### Age Requirements
-You must be at least 18 years old to create an account. If you are between 13 and 18 years old, you may only use our Services with the consent and supervision of a parent or legal guardian who agrees to be bound by these Terms.
+### Возрастные требования
+Вам должно быть не менее 18 лет, чтобы создать учетную запись. Если вам от 13 до 18 лет, вы можете использовать наши Услуги только с согласия и под наблюдением родителя или законного опекуна, который соглашается соблюдать настоящие Условия.
 
-### Account Security
-You are responsible for maintaining the confidentiality of your account information and password. You agree to notify us immediately of any unauthorized use of your account or any other breach of security.
+### Безопасность учетной записи
+Вы несете ответственность за сохранение конфиденциальности информации и пароля вашей учетной записи. Вы соглашаетесь немедленно уведомить нас о любом несанкционированном использовании вашей учетной записи или любом другом нарушении безопасности.
 
-### Account Deletion
-You may request to delete your account at any time:
-- Through the Web App settings menu
-- By emailing contact@cosmicrafts.com
+### Удаление учетной записи
+Вы можете запросить удаление своей учетной записи в любое время:
+- Через меню настроек веб-приложения
+- Отправив электронное письмо на contact@cosmicrafts.com
 
-When you request account deletion:
-- We will initiate a 30-day cooling-off period
-- During this period, your account will be deactivated but not permanently deleted
-- You can reactivate your account by simply logging in
-- After 30 days, we will permanently delete your account information from our systems
+Когда вы запрашиваете удаление учетной записи:
+- Мы инициируем 30-дневный период ожидания
+- В течение этого периода ваша учетная запись будет деактивирована, но не удалена навсегда
+- Вы можете повторно активировать свою учетную запись, просто войдя в систему
+- По истечении 30 дней мы навсегда удалим информацию вашей учетной записи из наших систем
 
-**Note on Internet Computer Protocol (ICP) Deletion**: Cosmicrafts operates partly on the Internet Computer Protocol (ICP) blockchain, which enables the deletion of user profiles to comply with requirements from platforms such as Google Play and Apple App Store. When you request account deletion, we can remove your user profile and personal information from ICP-based services, in accordance with applicable privacy regulations.
+**Примечание об удалении в Internet Computer Protocol (ICP)**: Cosmicrafts частично работает на блокчейне Internet Computer Protocol (ICP), который позволяет удалять профили пользователей для соответствия требованиям таких платформ, как Google Play и Apple App Store. Когда вы запрашиваете удаление учетной записи, мы можем удалить ваш профиль пользователя и личную информацию из сервисов на базе ICP в соответствии с применимыми правилами конфиденциальности.
 
-**Important Note on Blockchain Data**: While we can delete your account information from our centralized systems and your user profile from ICP, any transactions or data associated with your public key that has been recorded on public blockchains cannot be deleted or modified due to the immutable nature of blockchain technology. This includes transaction history, NFT ownership records, and any other data that has been committed to a blockchain.
+**Важное примечание о данных блокчейна**: Хотя мы можем удалить информацию вашей учетной записи из наших централизованных систем и ваш профиль пользователя из ICP, любые транзакции или данные, связанные с вашим публичным ключом, которые были записаны в публичных блокчейнах, не могут быть удалены или изменены из-за неизменяемой природы технологии блокчейн. Это включает историю транзакций, записи о владении NFT и любые другие данные, которые были записаны в блокчейне.
 
-## User Conduct
-When using our Services, you agree not to:
+## Поведение пользователя
+При использовании наших Услуг вы соглашаетесь не:
 
-- Violate any applicable laws or regulations
-- Infringe on the rights of others, including intellectual property rights
-- Harass, abuse, or harm another person
-- Impersonate any person or entity
-- Interfere with or disrupt the Services or servers
-- Create multiple accounts for disruptive or abusive purposes
-- Use our Services for any illegal or unauthorized purpose
-- Post spam or malicious content
-- Attempt to gain unauthorized access to any portion of the Platform
-- Use any automated means or interface not provided by us to access the Services
-- Store sensitive personal information on-chain that should reasonably remain private
+- Нарушать любые применимые законы или правила
+- Нарушать права других, включая права интеллектуальной собственности
+- Преследовать, оскорблять или причинять вред другому лицу
+- Выдавать себя за любое лицо или организацию
+- Вмешиваться или нарушать работу Услуг или серверов
+- Создавать несколько учетных записей для подрывных или оскорбительных целей
+- Использовать наши Услуги для любых незаконных или несанкционированных целей
+- Публиковать спам или вредоносный контент
+- Пытаться получить несанкционированный доступ к любой части Платформы
+- Использовать любые автоматизированные средства или интерфейсы, не предоставленные нами, для доступа к Услугам
+- Хранить конфиденциальную личную информацию в блокчейне, которая разумно должна оставаться приватной
 
-## Virtual Assets and Transactions
+## Виртуальные активы и транзакции
 
-### Decentralization and User Responsibility
-All digital assets, including but not limited to cryptocurrency tokens, NFTs, and in-game items that exist on blockchain networks are decentralized by nature. You acknowledge and agree that:
+### Децентрализация и ответственность пользователя
+Все цифровые активы, включая, но не ограничиваясь токенами криптовалюты, NFT и игровыми предметами, которые существуют в сетях блокчейн, по своей природе децентрализованы. Вы признаете и соглашаетесь, что:
 
-1. **No Control**: World of Unreal, LLC do not control, maintain, or have custody of your digital assets that exist on blockchain networks.
+1. **Отсутствие контроля**: World of Unreal, LLC не контролирует, не поддерживает и не имеет хранения ваших цифровых активов, которые существуют в сетях блокчейн.
 
-2. **No Responsibility**: We bear no responsibility for any issues arising from blockchain transactions, including but not limited to lost private keys, phishing attacks, smart contract vulnerabilities, network failures, high gas fees, or regulatory changes.
+2. **Отсутствие ответственности**: Мы не несем ответственности за любые проблемы, возникающие в результате транзакций в блокчейне, включая, но не ограничиваясь утерянными приватными ключами, фишинговыми атаками, уязвимостями смарт-контрактов, сбоями сети, высокими комиссиями за газ или изменениями в регулировании.
 
-3. **No Recovery**: We cannot recover or restore lost digital assets, reverse transactions, or assist with forgotten passwords or private keys.
+3. **Отсутствие восстановления**: Мы не можем восстановить или вернуть утерянные цифровые активы, отменить транзакции или помочь с забытыми паролями или приватными ключами.
 
-4. **Self-Custody**: You are solely responsible for securing your own wallet, private keys, seed phrases, and other credentials necessary to access your digital assets.
+4. **Самостоятельное хранение**: Вы несете единоличную ответственность за обеспечение безопасности вашего кошелька, приватных ключей, сид-фраз и других учетных данных, необходимых для доступа к вашим цифровым активам.
 
-### Platform Moderation and DAO Appeals
+### Модерация платформы и апелляции DAO
 
-While Cosmicrafts operates in a decentralized environment, we maintain certain limited administrative capabilities to protect users and the platform integrity:
+Хотя Cosmicrafts работает в децентрализованной среде, мы сохраняем определенные ограниченные административные возможности для защиты пользователей и целостности платформы:
 
-1. **NFT Confiscation/Burning**: In cases of clear policy violations, fraud, illegal content, or other significant infractions, Cosmicrafts administrators may exercise the right to confiscate (burn) NFTs. This is an emergency measure intended to protect our community and platform.
+1. **Конфискация/сжигание NFT**: В случаях явных нарушений политики, мошенничества, незаконного контента или других серьезных нарушений, администраторы Cosmicrafts могут воспользоваться правом конфисковать (сжечь) NFT. Это экстренная мера, предназначенная для защиты нашего сообщества и платформы.
 
-2. **Limitations of Real-time Protection**: The decentralized nature of blockchain means damage can occur rapidly (e.g., stolen NFTs can be resold within seconds), often before moderation can intervene. We cannot guarantee protection against all forms of malicious activity.
+2. **Ограничения защиты в реальном времени**: Децентрализованная природа блокчейна означает, что ущерб может произойти быстро (например, украденные NFT могут быть перепроданы в течение секунд), часто до того, как модерация сможет вмешаться. Мы не можем гарантировать защиту от всех форм вредоносной деятельности.
 
-3. **DAO Appeal Process**: Users who believe their NFTs were wrongfully confiscated may appeal to the Cosmicrafts DAO for review. The appeal process works as follows:
-   - Submit a formal appeal through the designated DAO governance portal
-   - Provide evidence supporting your case
-   - The DAO will review and vote on the appeal according to governance procedures
-   - If approved by the DAO, confiscated NFTs may be restored
+3. **Процесс апелляции DAO**: Пользователи, которые считают, что их NFT были неправомерно конфискованы, могут подать апелляцию в Cosmicrafts DAO для рассмотрения. Процесс апелляции работает следующим образом:
+   - Подайте официальную апелляцию через назначенный портал управления DAO
+   - Предоставьте доказательства, подтверждающие ваше дело
+   - DAO рассмотрит и проголосует по апелляции в соответствии с процедурами управления
+   - Если апелляция будет одобрена DAO, конфискованные NFT могут быть восстановлены
 
-4. **Final Authority**: The DAO's decision on appeals is considered final. Neither the Cosmicrafts Foundation nor World of Unreal, LLC can override DAO governance decisions because the smart contracts are under the DAO jurisdiction.
+4. **Окончательное решение**: Решение DAO по апелляциям считается окончательным. Ни Cosmicrafts Foundation, ни World of Unreal, LLC не могут отменить решения управления DAO, поскольку смарт-контракты находятся под юрисдикцией DAO.
 
-5. **Dispute Resolution**: For disputes between users regarding digital assets (such as theft claims, fraudulent sales, etc.), the proper channel for resolution is through the DAO governance system, not through Cosmicrafts support. The DAO will judge such cases based on evidence and community standards.
+5. **Разрешение споров**: Для споров между пользователями относительно цифровых активов (таких как заявления о краже, мошеннические продажи и т.д.), правильным каналом для разрешения является система управления DAO, а не служба поддержки Cosmicrafts. DAO будет рассматривать такие случаи на основе доказательств и стандартов сообщества.
 
-### Value and Exchange
-1. **Market Value**: Certain digital assets may have market value and may be tradable on decentralized exchanges (DEXes), centralized exchanges (CEXes), or other trading platforms. However, this value is highly volatile and speculative.
+### Стоимость и обмен
+1. **Рыночная стоимость**: Определенные цифровые активы могут иметь рыночную стоимость и могут торговаться на децентрализованных биржах (DEX), централизованных биржах (CEX) или других торговых платформах. Однако эта стоимость является крайне волатильной и спекулятивной.
 
-2. **Cross-Chain Assets**: Our platform may support cross-chain assets from various blockchains, including but not limited to Internet Computer Protocol (ICP), Bitcoin (including Runes and Ordinals), Solana, and Ethereum. Each blockchain has its own risks, technical limitations, and regulatory considerations.
+2. **Кросс-чейн активы**: Наша платформа может поддерживать кросс-чейн активы из различных блокчейнов, включая, но не ограничиваясь Internet Computer Protocol (ICP), Bitcoin (включая Runes и Ordinals), Solana и Ethereum. Каждый блокчейн имеет свои собственные риски, технические ограничения и нормативные требования.
 
-3. **No Guarantees**: We make no guarantees regarding the value, tradability, or liquidity of any digital assets obtained through our platform. The value of these assets can change dramatically based on market conditions, regulatory actions, or technological developments.
+3. **Отсутствие гарантий**: Мы не даем никаких гарантий относительно стоимости, торгуемости или ликвидности любых цифровых активов, полученных через нашу платформу. Стоимость этих активов может существенно меняться в зависимости от рыночных условий, регулятивных действий или технологических разработок.
 
-4. **No Investment Advice**: Nothing in our platform or communications constitutes financial or investment advice. Any decisions you make regarding the purchase, sale, or holding of digital assets are made at your own risk.
+4. **Отсутствие инвестиционных советов**: Ничто на нашей платформе или в наших коммуникациях не является финансовым или инвестиционным советом. Любые решения, которые вы принимаете относительно покупки, продажи или хранения цифровых активов, принимаются на ваш собственный риск.
 
-### NFTs and Digital Collectibles
-NFTs and digital collectibles obtained through our platform are stored on blockchain networks. You acknowledge that:
+### NFT и цифровые коллекционные предметы
+NFT и цифровые коллекционные предметы, полученные через нашу платформу, хранятся в сетях блокчейн. Вы признаете, что:
 
-1. **Token Standard**: Our NFTs may use various token standards (e.g., ERC-721, ERC-1155, BEP-721, or equivalent standards on other blockchains). The specific rights conferred by an NFT are limited to those explicitly stated in our Terms or the applicable smart contract.
+1. **Стандарт токенов**: Наши NFT могут использовать различные стандарты токенов (например, ERC-721, ERC-1155, BEP-721 или эквивалентные стандарты на других блокчейнах). Конкретные права, предоставляемые NFT, ограничены теми, которые явно указаны в наших Условиях или применимом смарт-контракте.
 
-2. **License Only**: Your purchase of an NFT grants you a license to the associated digital content, but not ownership of the underlying intellectual property rights, copyright, or trademark.
+2. **Только лицензия**: Ваша покупка NFT предоставляет вам лицензию на связанный цифровой контент, но не право собственности на базовые права интеллектуальной собственности, авторские права или товарные знаки.
 
-3. **Permanent Transactions**: NFT transactions on blockchain networks are permanent and irreversible once confirmed. We cannot reverse, cancel, or refund any NFT transactions under any circumstances.
+3. **Постоянные транзакции**: Транзакции NFT в сетях блокчейн являются постоянными и необратимыми после подтверждения. Мы не можем отменить, аннулировать или возместить любые транзакции NFT ни при каких обстоятельствах.
 
-   **Appeal Process for Special Cases**: While blockchain transactions are irreversible as a general rule, in exceptional circumstances, users may appeal to the Cosmicrafts DAO as a last resort for transaction disputes. To initiate this process:
-   - First post your case in the community forums for preliminary discussion
-   - You must have the minimum required amount of SPIRAL tokens staked to create a neuron and submit a formal proposal
-- Follow the governance proposal process as outlined in the [Whitepaper](/whitepaper)
-   - The DAO has final authority on all such appeals
-   - World of Unreal LLC has no responsibility or authority over these decisions
+   **Процесс апелляции для особых случаев**: Хотя транзакции в блокчейне по общему правилу необратимы, в исключительных обстоятельствах пользователи могут обратиться в Cosmicrafts DAO как последнюю инстанцию для разрешения споров по транзакциям. Чтобы начать этот процесс:
+   - Сначала разместите свое дело на форумах сообщества для предварительного обсуждения
+   - У вас должно быть минимальное требуемое количество токенов SPIRAL, застейканных для создания нейрона и подачи официального предложения
+   - Следуйте процессу управления предложениями, как описано в [Whitepaper](/whitepaper)
+   - DAO имеет окончательное решение по всем таким апелляциям
+   - World of Unreal LLC не несет ответственности и не имеет полномочий над этими решениями
 
-4. **Asset Persistence**: While we strive to maintain the infrastructure supporting our digital assets, we make no guarantees regarding the continued availability or functionality of metadata, artwork, or other content associated with NFTs if our services are discontinued.
+4. **Сохранение активов**: Хотя мы стремимся поддерживать инфраструктуру, поддерживающую наши цифровые активы, мы не даем никаких гарантий относительно постоянной доступности или функциональности метаданных, artwork или другого контента, связанного с NFT, если наши услуги будут прекращены.
 
-### Transactions
-All purchases and transactions on our platform are final. We reserve the right to refuse any purchase or transaction at our discretion. For on-chain transactions:
+### Транзакции
+Все покупки и транзакции на нашей платформе являются окончательными. Мы оставляем за собой право отказать в любой покупке или транзакции по нашему усмотрению. Для транзакций в блокчейне:
 
-1. **Network Fees**: 
-   - On the Internet Computer Protocol (ICP), transactions are generally free for users, as the DAO pays for the computing power required to operate smart contracts.
-   - For transactions on other blockchains (e.g., Ethereum, Solana, Bitcoin), you are responsible for all network fees (gas fees) associated with those transactions.
-   - The cost of network fees varies depending on network congestion and complexity of the transaction.
+1. **Сетевые комиссии**: 
+   - В Internet Computer Protocol (ICP) транзакции обычно бесплатны для пользователей, так как DAO оплачивает вычислительную мощность, необходимую для работы смарт-контрактов.
+   - Для транзакций в других блокчейнах (например, Ethereum, Solana, Bitcoin) вы несете ответственность за все сетевые комиссии (gas fees), связанные с этими транзакциями.
+   - Стоимость сетевых комиссий варьируется в зависимости от загруженности сети и сложности транзакции.
 
-2. **Transaction Delays**: We are not responsible for any delays, failures, or errors in transaction processing that occur on blockchain networks.
+2. **Задержки транзакций**: Мы не несем ответственности за любые задержки, сбои или ошибки в обработке транзакций, которые происходят в сетях блокчейн.
 
-3. **Tax Implications**: You are solely responsible for determining and paying any applicable taxes related to your cryptocurrency transactions or NFT trading.
+3. **Налоговые последствия**: Вы несете единоличную ответственность за определение и уплату любых применимых налогов, связанных с вашими операциями с криптовалютой или торговлей NFT.
 
-### Cryptocurrency
-We may accept cryptocurrency as payment for certain Services and offer cryptocurrency-based features. You acknowledge that:
+### Криптовалюта
+Мы можем принимать криптовалюту в качестве оплаты за определенные Услуги и предлагать функции, основанные на криптовалюте. Вы признаете, что:
 
-1. **High Risk**: Cryptocurrency investments are highly speculative and volatile. You should never invest more than you can afford to lose.
+1. **Высокий риск**: Инвестиции в криптовалюту являются крайне спекулятивными и волатильными. Вы никогда не должны инвестировать больше, чем можете позволить себе потерять.
 
-2. **Regulatory Uncertainty**: The regulatory landscape for cryptocurrencies and digital assets is uncertain and evolving. New regulations may impact the value, utility, or legality of digital assets at any time.
+2. **Регуляторная неопределенность**: Регуляторный ландшафт для криптовалют и цифровых активов является неопределенным и развивающимся. Новые правила могут повлиять на стоимость, полезность или законность цифровых активов в любое время.
 
-3. **Technical Vulnerabilities**: Blockchain networks and smart contracts may contain bugs, vulnerabilities, or other technical issues that could result in the loss of your assets.
+3. **Технические уязвимости**: Сети блокчейн и смарт-контракты могут содержать ошибки, уязвимости или другие технические проблемы, которые могут привести к потере ваших активов.
 
-4. **Market Risks**: Cryptocurrency markets may be subject to manipulation, extreme volatility, liquidity issues, and other market risks outside our control.
+4. **Рыночные риски**: Рынки криптовалют могут быть подвержены манипуляциям, экстремальной волатильности, проблемам с ликвидностью и другим рыночным рискам, находящимся вне нашего контроля.
 
-### In-App Purchases
-For purchases made through mobile applications available on app stores such as Google Play Store, Apple App Store, Epic Games Store, or Crazy Games:
+### Внутриигровые покупки
+Для покупок, совершенных через мобильные приложения, доступные в магазинах приложений, таких как Google Play Store, Apple App Store, Epic Games Store или Crazy Games:
 
-1. All in-app purchases are subject to the terms of service and payment policies of the respective app store.
-2. For refunds related to in-app purchases, you must contact the respective app store through which the purchase was made.
-3. You acknowledge that once a purchase is made, it is considered complete and non-refundable except as may be permitted by the app store's refund policies or applicable law.
-4. Parents and guardians are responsible for monitoring and approving children's purchases.
+1. Все внутриигровые покупки регулируются условиями предоставления услуг и политиками оплаты соответствующего магазина приложений.
+2. Для возврата средств, связанных с внутриигровыми покупками, вы должны обратиться в соответствующий магазин приложений, через который была совершена покупка.
+3. Вы признаете, что после совершения покупки она считается завершенной и не подлежит возврату, за исключением случаев, предусмотренных политикой возврата магазина приложений или применимым законодательством.
+4. Родители и опекуны несут ответственность за мониторинг и одобрение покупок детей.
 
-## Intellectual Property
+## Интеллектуальная собственность
 
-### Our Content
-All content on the Platform, including but not limited to text, graphics, logos, icons, images, audio clips, digital downloads, data compilations, and software, is the property of World of Unreal, LLC (doing business as "Cosmicrafts") or its content suppliers and is protected by international copyright laws. 
+### Наш контент
+Весь контент на Платформе, включая, но не ограничиваясь текстом, графикой, логотипами, иконками, изображениями, аудиоклипами, цифровыми загрузками, компиляциями данных и программным обеспечением, является собственностью World of Unreal, LLC (ведущей бизнес как "Cosmicrafts") или ее поставщиков контента и защищен международными законами об авторском праве.
 
-### Intellectual Property Ownership and DAO License
-World of Unreal, LLC maintains full legal ownership of all copyrights, trademarks, patents, and other intellectual property rights associated with Cosmicrafts. To facilitate decentralized development and governance, World of Unreal, LLC has granted a specific operating license to the Cosmicrafts DAO.
+### Право собственности на интеллектуальную собственность и лицензия DAO
+World of Unreal, LLC сохраняет полное юридическое право собственности на все авторские права, товарные знаки, патенты и другие права интеллектуальной собственности, связанные с Cosmicrafts. Для обеспечения децентрализованной разработки и управления, World of Unreal, LLC предоставила специальную операционную лицензию Cosmicrafts DAO.
 
-This license allows the DAO to use, develop, and distribute the Cosmicrafts brand and platform according to governance decisions, while World of Unreal, LLC retains ultimate legal ownership. This structure provides traditional legal protection for Cosmicrafts intellectual property while enabling decentralized operations.
+Эта лицензия позволяет DAO использовать, разрабатывать и распространять бренд и платформу Cosmicrafts в соответствии с решениями управления, в то время как World of Unreal, LLC сохраняет окончательное юридическое право собственности. Эта структура обеспечивает традиционную юридическую защиту интеллектуальной собственности Cosmicrafts, одновременно позволяя осуществлять децентрализованные операции.
 
-For full details of this licensing arrangement, please refer to the Legal Notices document.
+Для получения полной информации об этом лицензионном соглашении, пожалуйста, обратитесь к документу Юридические уведомления.
 
-### AI-Generated Digital Art
+### Цифровое искусство, созданное с помощью ИИ
 
-Cosmicrafts utilizes artificial intelligence tools and services to create digital art for our platform:
+Cosmicrafts использует инструменты и сервисы искусственного интеллекта для создания цифрового искусства для нашей платформы:
 
-1. **Creative Expression**: Our AI-generated art is intended as original creative expression within our unique universe, not as replications of other intellectual properties. Any similarities to existing works are coincidental or represent general artistic influences.
+1. **Творческое выражение**: Наше искусство, созданное с помощью ИИ, предназначено как оригинальное творческое выражение в рамках нашей уникальной вселенной, а не как копии другой интеллектуальной собственности. Любые сходства с существующими работами являются случайными или представляют собой общие художественные влияния.
 
-2. **Artistic Inspiration**: Similar to how artists throughout history have drawn inspiration from other creators, our AI prompts may contain references to various universes, styles, characters, and themes. This is done not to infringe copyrights or copy intellectual property, but to create a rich blend of artistic expression that builds upon cultural traditions.
+2. **Художественное вдохновение**: Подобно тому, как художники на протяжении истории черпали вдохновение у других творцов, наши промпты для ИИ могут содержать отсылки к различным вселенным, стилям, персонажам и темам. Это делается не для нарушения авторских прав или копирования интеллектуальной собственности, а для создания богатого сочетания художественного выражения, которое основывается на культурных традициях.
 
-3. **Third-Party IP Acknowledgment**: We acknowledge that AI models are trained on diverse datasets that may include copyrighted works. While we make good faith efforts to ensure our usage complies with applicable laws, the AI-generated content may inadvertently contain elements that resemble existing intellectual property.
+3. **Признание сторонней интеллектуальной собственности**: Мы признаем, что модели ИИ обучаются на разнообразных наборах данных, которые могут включать защищенные авторским правом работы. Хотя мы добросовестно стараемся обеспечить соответствие нашего использования применимым законам, контент, созданный ИИ, может непреднамеренно содержать элементы, напоминающие существующую интеллектуальную собственность.
 
-4. **Fair Use Belief**: We believe our use constitutes fair use and/or transformative use under applicable copyright laws. We utilize these AI services under commercial licensing terms that generally include indemnifications and legal protections.
+4. **Убеждение в добросовестном использовании**: Мы считаем, что наше использование представляет собой добросовестное использование и/или трансформативное использование согласно применимым законам об авторском праве. Мы используем эти сервисы ИИ в соответствии с условиями коммерческого лицензирования, которые обычно включают возмещение убытков и правовую защиту.
 
-5. **IP Concerns Process**: If you believe that AI-generated content on our platform infringes your intellectual property rights, please contact us at contact@cosmicrafts.com before pursuing other legal remedies. We will promptly review your claim and, if appropriate, remove or modify the content in question.
+5. **Процесс рассмотрения вопросов интеллектуальной собственности**: Если вы считаете, что контент, созданный ИИ на нашей платформе, нарушает ваши права интеллектуальной собственности, пожалуйста, свяжитесь с нами по адресу contact@cosmicrafts.com прежде чем прибегать к другим правовым средствам. Мы оперативно рассмотрим вашу претензию и, если это уместно, удалим или изменим спорный контент.
 
-6. **Service Provider Responsibility**: In accordance with our agreements with AI services, primary legal responsibility for AI-generated content typically resides with the AI service provider as specified in their terms of service.
+6. **Ответственность поставщика услуг**: В соответствии с нашими соглашениями с сервисами ИИ, основная юридическая ответственность за контент, созданный ИИ, обычно лежит на поставщике услуг ИИ, как указано в их условиях предоставления услуг.
 
-For more detailed information about our AI art policies, please refer to the AI-Generated Digital Art section in our [Legal Notices](/legal).
+Для получения более подробной информации о наших политиках в отношении искусства, созданного ИИ, пожалуйста, обратитесь к разделу "Цифровое искусство, созданное с помощью ИИ" в наших [Юридических уведомлениях](/legal).
 
-### Your Content
-By submitting content to our Platform, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, and display such content in any media.
+### Ваш контент
+Размещая контент на нашей Платформе, вы предоставляете нам всемирную, неисключительную, безвозмездную лицензию на использование, воспроизведение, изменение, адаптацию, публикацию, перевод, создание производных работ, распространение и отображение такого контента в любых медиа.
 
-### Copyright Infringement
-If you believe that your work has been copied in a way that constitutes copyright infringement, please provide us with the following information:
-- A physical or electronic signature of the copyright owner
-- Identification of the copyrighted work claimed to have been infringed
-- Identification of the material that you claim is infringing
-- Information reasonably sufficient to permit us to contact you
-- A statement that you have a good faith belief that the disputed use is not authorized by the copyright owner
-- A statement, made under penalty of perjury, that the above information is accurate
+### Нарушение авторских прав
+Если вы считаете, что ваша работа была скопирована способом, который представляет собой нарушение авторских прав, пожалуйста, предоставьте нам следующую информацию:
+- Физическую или электронную подпись владельца авторских прав
+- Идентификацию работы, защищенной авторским правом, которая, как утверждается, была нарушена
+- Идентификацию материала, который, по вашему утверждению, нарушает права
+- Информацию, достаточную для того, чтобы мы могли связаться с вами
+- Заявление о том, что вы добросовестно полагаете, что оспариваемое использование не разрешено владельцем авторских прав
+- Заявление, сделанное под страхом наказания за лжесвидетельство, о том, что вышеуказанная информация является точной
 
-## Privacy
-Your privacy is important to us. Our **Privacy Policy** explains how we collect, use, and protect your personal information. By using our Services, you consent to the data practices described in our [Privacy Policy](/privacy).
+## Конфиденциальность
+Ваша конфиденциальность важна для нас. Наша **Политика конфиденциальности** объясняет, как мы собираем, используем и защищаем вашу личную информацию. Используя наши Услуги, вы соглашаетесь с практиками обработки данных, описанными в нашей [Политике конфиденциальности](/privacy).
 
-## Third-Party Services and App Stores
+## Сторонние сервисы и магазины приложений
 
-### Platform-Specific Terms
-When accessing our Services through a third-party platform or app store (including but not limited to Google Play Store, Apple App Store, Epic Games Store, and Crazy Games), you are also subject to the terms, conditions, and policies of that platform.
+### Условия для конкретных платформ
+При доступе к нашим Услугам через стороннюю платформу или магазин приложений (включая, но не ограничиваясь Google Play Store, Apple App Store, Epic Games Store и Crazy Games), вы также подчиняетесь условиям, положениям и политикам этой платформы.
 
-### App Store Compliance
-- **Google Play Store**: Our apps comply with Google Play Developer Distribution Agreement and Google Play Developer Program Policies.
-- **Apple App Store**: Our apps comply with Apple's App Store Review Guidelines and Developer Program License Agreement.
-- **Epic Games Store**: Our apps comply with Epic Games Store Distribution Agreement.
-- **Crazy Games**: Our apps comply with Crazy Games Publishing Agreement.
+### Соответствие требованиям магазинов приложений
+- **Google Play Store**: Наши приложения соответствуют Соглашению о распространении для разработчиков Google Play и Политикам программы для разработчиков Google Play.
+- **Apple App Store**: Наши приложения соответствуют Руководству по проверке App Store и Лицензионному соглашению программы для разработчиков Apple.
+- **Epic Games Store**: Наши приложения соответствуют Соглашению о распространении Epic Games Store.
+- **Crazy Games**: Наши приложения соответствуют Соглашению о публикации Crazy Games.
 
-### Third-Party Payment Processors
-Payments processed through app stores or third-party payment processors are subject to their respective terms of service. We are not responsible for the actions or policies of these third parties.
+### Сторонние платежные процессоры
+Платежи, обрабатываемые через магазины приложений или сторонние платежные процессоры, подчиняются их соответствующим условиям предоставления услуг. Мы не несем ответственности за действия или политики этих третьих сторон.
 
-## User Acknowledgment of Risks
+## Признание рисков пользователем
 
-By using Cosmicrafts, you explicitly acknowledge and accept the following:
+Используя Cosmicrafts, вы явно признаете и принимаете следующее:
 
-1. **Blockchain Risks**: All blockchain networks involve inherent risks, including but not limited to smart contract vulnerabilities, consensus attacks, governance attacks, and other technological risks that could result in the loss of your digital assets.
+1. **Риски блокчейна**: Все сети блокчейн связаны с присущими им рисками, включая, но не ограничиваясь уязвимостями смарт-контрактов, атаками на консенсус, атаками на управление и другими технологическими рисками, которые могут привести к потере ваших цифровых активов.
 
-2. **Financial Risks**: Digital assets, cryptocurrencies, and NFTs are subject to extreme volatility, illiquidity, and potential loss of value, up to and including total loss. You should never commit funds you cannot afford to lose.
+2. **Финансовые риски**: Цифровые активы, криптовалюты и NFT подвержены экстремальной волатильности, неликвидности и потенциальной потере стоимости, вплоть до полной потери. Вы никогда не должны вкладывать средства, которые не можете позволить себе потерять.
 
-3. **No Recourse**: In the event of loss of access to your wallet, theft of your digital assets, or other adverse events related to digital assets and blockchain activities, you have no recourse against Cosmicrafts or World of Unreal, LLC. We cannot and will not:
-   - Recover or restore lost assets
-   - Reverse, cancel, or modify blockchain transactions
-   - Compensate you for losses due to market volatility, scams, or security breaches
-   - Assist with password recovery for non-custodial wallets
+3. **Отсутствие возмещения**: В случае потери доступа к вашему кошельку, кражи ваших цифровых активов или других неблагоприятных событий, связанных с цифровыми активами и деятельностью в блокчейне, у вас нет права регресса против Cosmicrafts или World of Unreal, LLC. Мы не можем и не будем:
+   - Восстанавливать или возвращать утраченные активы
+   - Отменять, аннулировать или изменять транзакции в блокчейне
+   - Компенсировать ваши потери из-за волатильности рынка, мошенничества или нарушений безопасности
+   - Помогать с восстановлением пароля для некастодиальных кошельков
 
-4. **Regulatory Uncertainty**: You understand that the laws, regulations, and tax treatments applicable to blockchain technologies, cryptocurrencies, and digital assets are uncertain, evolving, and may vary from jurisdiction to jurisdiction. These regulatory changes may adversely affect the value or utility of your digital assets or their legal status.
+4. **Регуляторная неопределенность**: Вы понимаете, что законы, правила и налоговый режим, применимые к технологиям блокчейн, криптовалютам и цифровым активам, являются неопределенными, развивающимися и могут различаться в разных юрисдикциях. Эти регуляторные изменения могут негативно повлиять на стоимость или полезность ваших цифровых активов или их правовой статус.
 
-5. **No Financial Advice**: Nothing in our platform, marketing materials, or communications constitutes financial, investment, legal, or tax advice. Any investment decisions you make are at your own risk and discretion.
+5. **Отсутствие финансовых консультаций**: Ничто на нашей платформе, в маркетинговых материалах или коммуникациях не является финансовой, инвестиционной, юридической или налоговой консультацией. Любые инвестиционные решения, которые вы принимаете, осуществляются на ваш собственный риск и усмотрение.
 
-6. **Mandatory Risk Acceptance**: By using any of the decentralized or blockchain-based features of our platform, you are explicitly acknowledging and accepting all risks associated with blockchain technology and digital assets. If you do not agree with or accept these risks, you must not use the blockchain-related features of our platform.
+6. **Обязательное принятие рисков**: Используя любые децентрализованные или основанные на блокчейне функции нашей платформы, вы явно признаете и принимаете все риски, связанные с технологией блокчейн и цифровыми активами. Если вы не согласны с этими рисками или не принимаете их, вы не должны использовать функции нашей платформы, связанные с блокчейном.
 
-## Market Risk and Platform Liability
+## Отказ от ответственности
 
-### Service Provider Role
-Cosmicrafts operates solely as a technology service provider that offers a platform where users can interact with blockchain networks and engage in digital asset transactions. We explicitly clarify that:
+### Доступность сервиса
+Мы стремимся поддерживать наши Услуги в рабочем состоянии и безопасными; однако могут быть случаи, когда наши Услуги прерываются. Мы не гарантируем, что наши Услуги будут доступны в любое время.
 
-1. **Not a Financial Institution**: Cosmicrafts is not a bank, broker, dealer, investment advisor, financial institution, or cryptocurrency exchange. We do not provide financial, investment, legal, or tax advice.
+### 'Как есть' и 'По мере доступности'
+Услуги предоставляются на условиях 'КАК ЕСТЬ' и 'ПО МЕРЕ ДОСТУПНОСТИ'. Cosmicrafts отказывается от всех гарантий любого рода, явных или подразумеваемых, включая, но не ограничиваясь подразумеваемыми гарантиями товарной пригодности, пригодности для конкретной цели и ненарушения прав.
 
-2. **Neutral Platform**: We provide neutral technological infrastructure only. We do not control, influence, or interfere with the markets, transactions, or values of any digital assets traded, minted, or otherwise exchanged through our platform.
+## Ограничение ответственности
 
-3. **No Custody**: We do not take custody of user funds or digital assets, nor do we have the ability to reverse transactions, recover lost assets, or modify blockchain data.
+В максимальной степени, разрешенной законом, Cosmicrafts и World of Unreal, LLC не несут ответственности за любые косвенные, случайные, специальные, последующие или штрафные убытки, включая потерю прибыли, данных или деловой репутации, возникающие в результате вашего доступа к Услугам или их использования или невозможности доступа к ним или их использования.
 
-4. **No Market Control**: We have no control over the value, tradability, or liquidity of any NFTs, tokens, or digital assets offered, created, sold, or purchased through our platform.
+### Отсутствие ответственности за деятельность в блокчейне
+Не ограничивая общность вышесказанного, мы специально отказываемся от всей ответственности за:
 
-### Market-Based Risks and Platform Non-Liability
+1. **Цифровые активы**: Любую потерю, кражу, исчезновение, уничтожение или невозможность доступа к цифровым активам, криптовалюте или NFT, будь то из-за нарушений безопасности, проблем совместимости кошельков, сбоев сети блокчейн, обновлений протокола, событий форка или любой другой причины.
 
-By using our platform, you explicitly acknowledge and agree that:
+2. **Сбои смарт-контрактов**: Любые проблемы, возникающие из-за ошибок, сбоев или уязвимостей безопасности в смарт-контрактах, используемых на нашей платформе или сторонних платформах, которые взаимодействуют с нашими услугами.
 
-1. **Price Volatility**: Digital asset markets are highly volatile, and the price of NFTs, tokens, and other digital assets can change dramatically in short periods of time, potentially resulting in partial or total loss of value.
+3. **Волатильность рынка**: Любые финансовые потери из-за волатильности, неликвидности или манипуляций на рынке криптовалют, NFT или других цифровых активов.
 
-2. **No Liability for Market Events**: Cosmicrafts and World of Unreal, LLC shall not be liable, under any circumstances, for:
-   - Price fluctuations, market crashes, or loss of value in any digital assets
-   - "Rug pulls," abandoned projects, or developer team changes
-   - Changes in community interest or demand for specific NFTs or tokens
-   - Failures of third-party marketplaces, exchanges, or platforms
-   - Changes in artistic or collector sentiment toward specific digital assets
-   - Failed, delayed, or underperforming token launches or NFT mints
-   - Issues related to token economics or tokenomics design
-   - Changes in perceived value of digital collections or assets
+4. **Регуляторные действия**: Любые изменения в стоимости, полезности или законности цифровых активов из-за регуляторных действий, ограничений или запретов, влияющих на технологию блокчейн, криптовалюты или NFT.
 
-3. **Speculation at Your Own Risk**: All digital asset purchases, including NFTs and tokens, should be considered highly speculative. You should never spend money on digital assets that you cannot afford to lose entirely.
+5. **Проблемы кросс-чейн**: Любые проблемы, ошибки или потери, возникающие в результате операций между разными блокчейнами, сбоев мостов или несовместимости между различными сетями блокчейн.
 
-4. **Secondary Markets**: We make no representations or warranties about the existence or availability of secondary markets for digital assets. The ability to resell or trade any digital asset is uncertain and depends on factors entirely outside our control.
+6. **Сторонние сервисы**: Любые потери или проблемы, возникающие из-за использования сторонних кошельков, бирж, мостов или других связанных с блокчейном сервисов, используемых совместно с нашей платформой.
 
-5. **No Guaranteed Returns**: We never guarantee profits, returns, or that any NFT or token will maintain or increase in value. Any statements regarding the potential value of digital assets should never be interpreted as a promise of financial returns.
+### Максимальная ответственность
+В любом случае наша максимальная совокупная ответственность по настоящим Условиям не превышает большую из следующих сумм: (a) сумму, которую вы заплатили за использование наших не связанных с блокчейном услуг в течение шести месяцев до события, повлекшего ответственность, или (b) 100 долларов США. Ограничения ответственности не применяются к ответственности, которая не может быть исключена или ограничена применимым законодательством.
 
-6. **No Representations About Artists or Projects**: While we may provide a platform for various artists, projects, or developers, we make no representations or warranties about their reliability, capability, or the likelihood of project success or completion.
+## Возмещение ущерба
+Вы соглашаетесь возместить ущерб, защищать и освобождать от ответственности World of Unreal LLC, Cosmicrafts Foundation, ее основателя, должностных лиц, директоров, сотрудников, агентов и третьих лиц от любых убытков, затрат, обязательств и расходов, связанных с или возникающих из вашего использования Услуг, нарушения вами настоящих Условий или нарушения вами любых прав другого лица.
 
-### User Assumption of Risk
+## Применимое право
+Настоящие Условия регулируются и толкуются в соответствии с законодательством штата Калифорния, без учета его коллизионных норм.
 
-By using our platform:
+## Разрешение споров
 
-1. **Full Risk Assumption**: You acknowledge that you assume full responsibility and risk for all of your decisions to purchase, hold, trade, or sell digital assets.
+### Неформальное разрешение
+Если у вас есть спор с нами, пожалуйста, свяжитесь с нами сначала. Мы попытаемся разрешить спор неформально, связавшись с вами по электронной почте.
 
-2. **Independent Evaluation**: You confirm that you have the knowledge, experience, and financial capability to make independent purchasing and trading decisions and to evaluate the risks involved.
+### Арбитраж
+Если мы не можем разрешить спор неформально, любой спор или претензия, возникающие из или связанные с настоящими Условиями или Услугами, будут разрешаться путем обязательного арбитража в соответствии с коммерческими арбитражными правилами [Американской арбитражной ассоциации](https://www.adr.org/).
 
-3. **No Reliance**: You have not relied on any representations made by Cosmicrafts regarding the future value, utility, or merchantability of any digital assets.
+### Отказ от коллективных исков
+Вы соглашаетесь с тем, что любые разбирательства по разрешению споров будут проводиться только в индивидуальном порядке, а не в рамках коллективного, консолидированного или представительского иска.
 
-4. **Platform Not Liable**: You agree that Cosmicrafts and World of Unreal, LLC shall not be liable for any market-based losses you may incur through your use of our Services or your participation in the digital asset marketplace.
+## Изменения в Условиях
+Мы можем изменять настоящие Условия в любое время. Если мы внесем изменения, мы уведомим об этом, разместив обновленные Условия на нашей Платформе и обновив "Дату вступления в силу" вверху. Продолжение использования вами наших Услуг после вступления изменений в силу означает ваше согласие с пересмотренными Условиями.
 
-## Disclaimers
+## Прекращение действия
+Мы можем прекратить или приостановить действие вашей учетной записи и доступ к нашим Услугам немедленно, без предварительного уведомления или ответственности, по любой причине, включая нарушение вами настоящих Условий.
 
-### Service Availability
-We strive to keep our Services operational and secure; however, there may be occasions when our Services are interrupted. We do not guarantee that our Services will be available at all times.
+## Делимость
+Если какое-либо положение настоящих Условий будет признано неисполнимым или недействительным, такое положение будет ограничено или исключено в минимально необходимой степени, а остальные положения останутся в полной силе и действии.
 
-### 'As Is' and 'As Available'
-The Services are provided on an 'AS IS' and 'AS AVAILABLE' basis. Cosmicrafts disclaims all warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.
+## Полнота соглашения
+Настоящие Условия представляют собой полное соглашение между вами и Cosmicrafts относительно наших Услуг и заменяют собой любые предыдущие соглашения.
 
-## Limitation of Liability
+## Контактная информация
+Если у вас есть какие-либо вопросы об этих Условиях, пожалуйста, свяжитесь с нами:
 
-To the maximum extent permitted by law, Cosmicrafts and World of Unreal, LLC shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or goodwill, resulting from your access to or use of or inability to access or use the Services.
+**Email**: contact@cosmicrafts.com
 
-### No Liability for Blockchain Activities
-Without limiting the generality of the foregoing, we specifically disclaim all liability for:
+Для вопросов, требующих физического адреса для соответствия нормативным требованиям, пожалуйста, сначала свяжитесь с нами по электронной почте.
 
-1. **Digital Assets**: Any loss, theft, disappearance, destruction, or inability to access digital assets, cryptocurrency, or NFTs, whether due to security breaches, wallet compatibility issues, blockchain network failures, protocol updates, fork events, or any other reason.
+## Управление DAO и права токенов
 
-2. **Smart Contract Failures**: Any issues arising from bugs, errors, or security vulnerabilities in smart contracts used on our platform or third-party platforms that interact with our services.
+### Токены управления и их утилитарная природа
 
-3. **Market Volatility**: Any financial losses due to the volatility, illiquidity, or market manipulation of cryptocurrencies, NFTs, or other digital assets.
+1. **Ограниченная утилитарная функция**: Токены управления являются утилитарными токенами, которые предоставляют держателям только два конкретных ограниченных права при стейкинге:
+   - Право голосовать по предложениям управления
+   - Право подавать предложения по управлению (при соблюдении минимальных требований по стейкингу)
 
-4. **Regulatory Actions**: Any changes in value, utility, or legality of digital assets due to regulatory actions, restrictions, or bans affecting blockchain technology, cryptocurrencies, or NFTs.
+2. **Токены должны быть застейканы**: Права управления доступны только пользователям, которые застейкали свои токены в контракте управления стейкингом. Незастейканные токены не предоставляют прав управления.
 
-5. **Cross-Chain Issues**: Any problems, errors, or losses resulting from cross-chain operations, bridge failures, or incompatibilities between different blockchain networks.
+3. **Только утилитарные токены**: Токены управления являются строго утилитарными токенами, которые облегчают управление платформой. Они:
+   - Не представляют собой какое-либо право собственности, долю участия, акции или ценные бумаги в World of Unreal, LLC
+   - Не предоставляют прав на дивиденды, распределение прибыли или финансовую отдачу
+   - Не предоставляют управленческий контроль над World of Unreal, LLC или Cosmicrafts Foundation
+   - Не имеют гарантированной рыночной стоимости или ликвидности
+   - Не представляются и не продвигаются как инвестиции или спекулятивные активы
 
-6. **Third-Party Services**: Any losses or issues arising from the use of third-party wallets, exchanges, bridges, or other blockchain-related services used in conjunction with our platform.
+4. **Отсутствие коммерческих прав**: Владение токенами управления не предоставляет никакой лицензии, коммерческих прав или прав интеллектуальной собственности на активы, бренд или контент Cosmicrafts.
 
-### Maximum Liability
-In any case, our maximum aggregate liability under these Terms shall not exceed the greater of: (a) the amount you paid to use our non-blockchain services during the six months prior to the event giving rise to the liability, or (b) $100 USD. The limitations of liability do not apply to liabilities that cannot be excluded or limited by applicable law.
+5. **Ограничения голосования**: Объем голосования по управлению ограничен конкретными параметрами платформы, определенными в документации по управлению, и не включает:
+   - Бизнес-операции World of Unreal, LLC
+   - Решения о соответствии правовым и нормативным требованиям
+   - Распределение доходов или прибыли компании
+   - Найм, увольнение или вознаграждение персонала компании
 
-## Indemnification
-You agree to indemnify, defend, and hold harmless World of Unreal LLC, Cosmicrafts Foundation, its founder, officers, directors, employees, agents, and third parties, for any losses, costs, liabilities, and expenses relating to or arising out of your use of the Services, your violation of these Terms, or your violation of any rights of another.
+### Правовые отношения и ответственность
 
-## Governing Law
-These Terms shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of law provisions.
+1. **Многоуровневая структура**: Экосистема Cosmicrafts работает через многоуровневую структуру:
+   - **World of Unreal, LLC**: Компания с ограниченной ответственностью в штате Делавэр, которая служит юридическим лицом, взаимодействующим с традиционными системами для определенных бизнес-операций.
+   - **Cosmicrafts Foundation**: Некоммерческая организация, которая служит основным участником разработки платформы Cosmicrafts от имени DAO.
+   - **Cosmicrafts DAO**: Децентрализованная автономная организация, которая управляет определенными аспектами платформы через голосование на основе токенов.
 
-## Dispute Resolution
+2. **Ограниченный объем управления DAO**: Полномочия Cosmicrafts DAO ограничены управлением смарт-контрактами и канистерами с параметрами, определенными в [документации по управлению](/whitepaper#governance).
 
-### Informal Resolution
-If you have a dispute with us, please contact us first. We will attempt to resolve the dispute informally by contacting you via email.
+3. **Отсутствие партнерства или совместного предприятия**: Участие в управлении DAO не создает партнерства, совместного предприятия, агентских отношений или трудовых отношений между держателями токенов и любыми юридическими лицами, участвующими в экосистеме Cosmicrafts, или между самими держателями токенов.
 
-### Arbitration
-If we cannot resolve a dispute informally, any controversy or claim arising out of or relating to these Terms or the Services will be settled by binding arbitration in accordance with the commercial arbitration rules of the [American Arbitration Association](https://www.adr.org/).
+4. **Документация по управлению**: Ваше участие в управлении DAO также подчиняется любой дополнительной документации по управлению, которая может обновляться время от времени через надлежащие процедуры управления.
 
-### Class Action Waiver
-You agree that any proceedings to resolve disputes will be conducted only on an individual basis and not in a class, consolidated, or representative action.
-
-## Amendments to Terms
-We may modify these Terms at any time. If we make changes, we will provide notice by posting the updated Terms on our Platform and updating the "Effective Date" at the top. Your continued use of our Services after the changes take effect constitutes your agreement to the revised Terms.
-
-## Termination
-We may terminate or suspend your account and access to our Services immediately, without prior notice or liability, for any reason, including if you breach these Terms.
-
-## Severability
-If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions will continue in full force and effect.
-
-## Entire Agreement
-These Terms constitute the entire agreement between you and Cosmicrafts regarding our Services and supersede any prior agreements.
-
-## Contact Information
-If you have any questions about these Terms, please contact us at:
-
-**Email**: contact@cosmicrafts.com  
-
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
-
-## DAO Governance and Token Rights
-
-### Governance Tokens and Utility Nature
-
-1. **Limited Utility Function**: Governance tokens are utility tokens that grant holders only two specific limited rights when staked:
-   - The right to vote on governance proposals
-   - The right to submit governance proposals (subject to minimum staking requirements)
-
-2. **Tokens Must Be Staked**: Governance rights are only available to users who have staked their tokens in the governance staking contract. Unstaked tokens provide no governance rights.
-
-3. **Utility Tokens Only**: Governance tokens are strictly utility tokens that facilitate platform governance. They:
-   - Do not represent any ownership, equity, shares, or securities in World of Unreal, LLC
-   - Do not confer any rights to dividends, profit-sharing, or financial returns
-   - Do not grant management control over World of Unreal, LLC or the Cosmicrafts Foundation
-   - Have no guaranteed market value or liquidity
-   - Are not presented or marketed as investments or speculative assets
-
-4. **No Commercial Rights**: Ownership of governance tokens does not grant any license, commercial rights, or intellectual property rights to Cosmicrafts assets, brand, or content.
-
-5. **Voting Limitations**: The scope of governance voting is limited to specific platform parameters defined in the governance documentation, and does not include:
-   - Business operations of World of Unreal, LLC
-   - Legal or regulatory compliance decisions
-   - Allocation of company revenues or profits
-   - Hiring, firing, or compensation of company personnel
-
-### Legal Relationship and Liability
-
-1. **Multi-Entity Structure**: The Cosmicrafts ecosystem operates through a multi-entity structure:
-   - **World of Unreal, LLC**: A Delaware limited liability company that serves as a legal entity interfacing with traditional systems for certain business operations.
-   - **Cosmicrafts Foundation**: A non-profit organization that serves as a major contributor to the development of the Cosmicrafts platform on behalf of the DAO.
-   - **Cosmicrafts DAO**: The decentralized autonomous organization that governs certain aspects of the platform through token-based voting.
-
-2. **Limited DAO Governance Scope**: The Cosmicrafts DAO's authority is limited to smart contracts and canister management with parameters as defined in the [governance documentation](/whitepaper#governance).
-
-3. **No Partnership or Joint Venture**: Participation in DAO governance does not create a partnership, joint venture, agency, or employment relationship between token holders and any of the legal entities involved in the Cosmicrafts ecosystem, or among token holders themselves.
-
-4. **Governance Documentation**: Your participation in DAO governance is also subject to any additional governance documentation, which may be updated from time to time through proper governance procedures.
-
-5. **No Fiduciary Relationship**: World of Unreal, LLC, the Cosmicrafts Foundation, and the DAO do not owe fiduciary duties to token holders. Token holders do not owe fiduciary duties to each other by virtue of holding governance tokens.
+5. **Отсутствие фидуциарных отношений**: World of Unreal, LLC, Cosmicrafts Foundation и DAO не имеют фидуциарных обязанностей перед держателями токенов. Держатели токенов не имеют фидуциарных обязанностей друг перед другом в силу владения токенами управления.
 
 ---
 
-*Last updated: March 4, 2025* 
+*Последнее обновление: 4 марта 2025 г.* 

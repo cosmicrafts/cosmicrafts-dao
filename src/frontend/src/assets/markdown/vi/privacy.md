@@ -1,264 +1,264 @@
-# Privacy Policy
+# Chính Sách Bảo Mật
 
 [[toc:2-3]]
 
-## Introduction
+## Giới thiệu
 
-At Cosmicrafts, we are committed to protecting your privacy and providing a secure gaming experience. This Privacy Policy explains how we collect, use, store, and protect your personal information when you use our website, games, applications, and services (collectively referred to as "Services").
+Tại Cosmicrafts, chúng tôi cam kết bảo vệ quyền riêng tư của bạn và cung cấp trải nghiệm chơi game an toàn. Chính Sách Bảo Mật này giải thích cách chúng tôi thu thập, sử dụng, lưu trữ và bảo vệ thông tin cá nhân của bạn khi bạn sử dụng trang web, trò chơi, ứng dụng và dịch vụ của chúng tôi (gọi chung là "Dịch vụ").
 
-By accessing or using our Services, you agree to the collection and use of information in accordance with this Privacy Policy. If you do not agree with our policies and practices, please do not use our Services.
+Bằng cách truy cập hoặc sử dụng Dịch vụ của chúng tôi, bạn đồng ý với việc thu thập và sử dụng thông tin theo Chính Sách Bảo Mật này. Nếu bạn không đồng ý với các chính sách và thực tiễn của chúng tôi, vui lòng không sử dụng Dịch vụ của chúng tôi.
 
-## Effective Date
+## Ngày có hiệu lực
 
-This Privacy Policy is effective as of March 4, 2025.
+Chính Sách Bảo Mật này có hiệu lực kể từ ngày 4 tháng 3 năm 2025.
 
-## Information We Collect
+## Thông tin Chúng tôi Thu thập
 
-Cosmicrafts is committed to data minimization and user privacy. We collect only the minimal information necessary to provide our services:
+Cosmicrafts cam kết giảm thiểu dữ liệu và bảo vệ quyền riêng tư của người dùng. Chúng tôi chỉ thu thập thông tin tối thiểu cần thiết để cung cấp dịch vụ của mình:
 
-### Limited Information Collection
+### Thu thập Thông tin Giới hạn
 
-- **Regional Preferences**: We may collect information about your language and region preferences to provide localized content. This information is optional and can be managed in your settings.
+- **Tùy chọn Khu vực**: Chúng tôi có thể thu thập thông tin về ngôn ngữ và khu vực bạn ưu tiên để cung cấp nội dung bản địa hóa. Thông tin này là tùy chọn và có thể được quản lý trong cài đặt của bạn.
 
-- **Anonymous Usage Data**: We may collect anonymous, aggregated usage statistics to help us improve our service. This data cannot be used to identify you personally.
+- **Dữ liệu Sử dụng Ẩn danh**: Chúng tôi có thể thu thập số liệu thống kê sử dụng ẩn danh, tổng hợp để giúp chúng tôi cải thiện dịch vụ của mình. Dữ liệu này không thể được sử dụng để nhận dạng cá nhân bạn.
 
-- **Account Registration Information**: When you create an account, we collect:
-  - **Username**: Used to identify you in the platform (limited to 12 characters)
-  - **Avatar Selection**: Your chosen visual representation in the platform
-  - **Referral Code**: Optional information if you were referred by another user
-  - **Language Preference**: Your preferred language for the platform interface
+- **Thông tin Đăng ký Tài khoản**: Khi bạn tạo tài khoản, chúng tôi thu thập:
+  - **Tên người dùng**: Được sử dụng để nhận dạng bạn trên nền tảng (giới hạn 12 ký tự)
+  - **Lựa chọn Ảnh đại diện**: Hình ảnh đại diện trực quan bạn chọn trên nền tảng
+  - **Mã Giới thiệu**: Thông tin tùy chọn nếu bạn được người dùng khác giới thiệu
+  - **Tùy chọn Ngôn ngữ**: Ngôn ngữ bạn ưu tiên cho giao diện nền tảng
 
-No personal information such as names, addresses, or phone numbers are collected unless explicitly provided by you for specific purposes (such as 2FA).
+Chúng tôi không thu thập thông tin cá nhân như tên, địa chỉ hoặc số điện thoại trừ khi bạn cung cấp một cách rõ ràng cho các mục đích cụ thể (chẳng hạn như 2FA).
 
-### Web3 and On-Chain Data Storage
+### Web3 và Lưu trữ Dữ liệu Trên chuỗi
 
-As a Web3 platform, Cosmicrafts operates differently from traditional applications regarding data storage:
+Là một nền tảng Web3, Cosmicrafts hoạt động khác với các ứng dụng truyền thống về lưu trữ dữ liệu:
 
-- **Blockchain Databases**: All of our databases are stored on blockchain networks, which means information is typically public and transparent by design.
+- **Cơ sở dữ liệu Blockchain**: Tất cả cơ sở dữ liệu của chúng tôi được lưu trữ trên mạng blockchain, có nghĩa là thông tin thường công khai và minh bạch theo thiết kế.
 
-- **Public By Default**: Any information you choose to share or store through our platform may be visible on public blockchains. We do not encrypt or hide this data by default.
+- **Công khai theo Mặc định**: Bất kỳ thông tin nào bạn chọn chia sẻ hoặc lưu trữ thông qua nền tảng của chúng tôi có thể hiển thị trên blockchain công khai. Chúng tôi không mã hóa hoặc ẩn dữ liệu này theo mặc định.
 
-- **User Responsibility**: You are responsible for any information you choose to share through our platform. Before sharing or storing information using our Services, you should carefully consider the public nature of blockchain technology.
+- **Trách nhiệm của Người dùng**: Bạn chịu trách nhiệm cho bất kỳ thông tin nào bạn chọn chia sẻ thông qua nền tảng của chúng tôi. Trước khi chia sẻ hoặc lưu trữ thông tin bằng Dịch vụ của chúng tôi, bạn nên xem xét cẩn thận tính chất công khai của công nghệ blockchain.
 
-- **No Private Storage**: Unlike traditional web applications, we generally do not maintain private, centralized databases for user information. Most data exists on decentralized networks outside our direct control.
+- **Không Lưu trữ Riêng tư**: Không giống như các ứng dụng web truyền thống, chúng tôi thường không duy trì cơ sở dữ liệu tập trung, riêng tư cho thông tin người dùng. Hầu hết dữ liệu tồn tại trên các mạng phi tập trung nằm ngoài tầm kiểm soát trực tiếp của chúng tôi.
 
-- **Limited Privacy Controls**: While we may offer some privacy settings, these have technical limitations based on blockchain technology. Information marked as "private" may still be visible to blockchain validators or through blockchain explorers.
+- **Kiểm soát Quyền riêng tư Hạn chế**: Mặc dù chúng tôi có thể cung cấp một số cài đặt quyền riêng tư, nhưng chúng có những hạn chế về kỹ thuật dựa trên công nghệ blockchain. Thông tin được đánh dấu là "riêng tư" vẫn có thể hiển thị cho trình xác thực blockchain hoặc thông qua trình khám phá blockchain.
 
-### Blockchain Wallet Information
+### Thông tin Ví Blockchain
 
-If you choose to connect a blockchain wallet to our platform:
+Nếu bạn chọn kết nối ví blockchain với nền tảng của chúng tôi:
 
-- **We never store your private keys or seed phrases on our servers**. Your keys are stored locally on your device.
-- **Keys are stored as JSON in your browser's local storage**. These keys can be technically encrypted and decrypted automatically, though we do not currently implement password-based encryption for this data.
-- **Your keys never leave your device**. When you connect wallets like MetaMask, Phantom, Plug, or Internet Identity, we only receive and process the public wallet address to display your on-chain assets.
-- **Authentication happens through signatures**. Rather than requesting your private keys, we ask your wallet to sign a unique message that proves your ownership without exposing sensitive information.
-- **All blockchain transactions are processed on-chain** and are not stored on our servers.
-- **Future plans for encryption**: We plan to add password-based encryption for locally stored wallet information in future updates, further enhancing security of your wallet data.
+- **Chúng tôi không bao giờ lưu trữ khóa riêng tư hoặc cụm từ gốc của bạn trên máy chủ của chúng tôi**. Khóa của bạn được lưu trữ cục bộ trên thiết bị của bạn.
+- **Khóa được lưu trữ dưới dạng JSON trong bộ nhớ cục bộ của trình duyệt của bạn**. Các khóa này có thể được mã hóa và giải mã tự động về mặt kỹ thuật, mặc dù hiện tại chúng tôi không triển khai mã hóa dựa trên mật khẩu cho dữ liệu này.
+- **Khóa của bạn không bao giờ rời khỏi thiết bị của bạn**. Khi bạn kết nối ví như MetaMask, Phantom, Plug hoặc Internet Identity, chúng tôi chỉ nhận và xử lý địa chỉ ví công khai để hiển thị tài sản trên chuỗi của bạn.
+- **Xác thực diễn ra thông qua chữ ký**. Thay vì yêu cầu khóa riêng tư của bạn, chúng tôi yêu cầu ví của bạn ký một tin nhắn duy nhất để chứng minh quyền sở hữu của bạn mà không tiết lộ thông tin nhạy cảm.
+- **Tất cả các giao dịch blockchain đều được xử lý trên chuỗi** và không được lưu trữ trên máy chủ của chúng tôi.
+- **Kế hoạch mã hóa trong tương lai**: Chúng tôi dự định sẽ thêm mã hóa dựa trên mật khẩu cho thông tin ví được lưu trữ cục bộ trong các bản cập nhật trong tương lai, để tăng cường hơn nữa tính bảo mật cho dữ liệu ví của bạn.
 
-### Information Collected Automatically
+### Thông tin Được Thu thập Tự động
 
-We may collect very limited technical information through cookies and similar technologies:
-- Browser type and version (to ensure compatibility)
-- Approximate location based on IP address (for regional content delivery only)
-- Basic device information (to optimize display)
+Chúng tôi có thể thu thập thông tin kỹ thuật rất hạn chế thông qua cookie và các công nghệ tương tự:
+- Loại và phiên bản trình duyệt (để đảm bảo tính tương thích)
+- Vị trí gần đúng dựa trên địa chỉ IP (chỉ dành cho mục đích phân phối nội dung khu vực)
+- Thông tin thiết bị cơ bản (để tối ưu hóa hiển thị)
 
-You can control or disable cookies through your browser settings. We do not use tracking cookies for advertising purposes.
+Bạn có thể kiểm soát hoặc tắt cookie thông qua cài đặt trình duyệt của mình. Chúng tôi không sử dụng cookie theo dõi cho mục đích quảng cáo.
 
-## How We Use Your Information
+## Cách Chúng tôi Sử dụng Thông tin của Bạn
 
-We use the limited information we collect solely for the following purposes:
+Chúng tôi sử dụng thông tin giới hạn mà chúng tôi thu thập chỉ cho các mục đích sau:
 
-### Provide and Improve Services
-- Deliver and maintain our Services
-- Enable basic features such as language preferences
-- Improve user experience based on anonymous usage patterns
+### Cung cấp và Cải thiện Dịch vụ
+- Cung cấp và duy trì Dịch vụ của chúng tôi
+- Cho phép các tính năng cơ bản như tùy chọn ngôn ngữ
+- Cải thiện trải nghiệm người dùng dựa trên các mẫu sử dụng ẩn danh
 
-### Security and Protection
-- Protect against unauthorized access to user accounts
-- Debug to identify and repair errors
+### Bảo mật và Bảo vệ
+- Bảo vệ chống lại truy cập trái phép vào tài khoản người dùng
+- Gỡ lỗi để xác định và sửa chữa lỗi
 
-### Contact Information
+### Thông tin Liên hệ
 
-If you have any questions about these Terms, please contact us at:
-
-**Email**: contact@cosmicrafts.com  
-
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
-
-## Data Sharing and Disclosure
-
-Given our minimal data collection practices, we have very limited data to share. However, in certain circumstances, we may share the limited information we have:
-
-### Essential Service Providers
-
-We may share basic technical information with a few carefully selected service providers who help us with:
-- Website hosting and infrastructure
-- Analytics (in anonymized form)
-- Customer support systems
-
-These providers access only the minimum information needed to perform their functions and are bound by confidentiality obligations.
-
-### Legal Requirements
-
-We may disclose information if required to do so by law or if we believe in good faith that such action is necessary to:
-- Comply with legal obligations
-- Protect and defend our rights or property
-- Prevent or investigate possible wrongdoing
-- Protect the personal safety of users or the public
-
-## Your Choices and Rights
-
-### Account Information
-
-If you have created an account, you can review and update your account information by logging into your account settings.
-
-### Account Deletion
-
-You can request to delete your account at any time:
-- Through the Web App settings
-- By sending an email to contact@cosmicrafts.com
-
-When you delete your account:
-- We will initiate a 30-day delay period in case you wish to recover your account
-- During this period, your account will be deactivated but not permanently deleted
-- If you change your mind, you can reactivate your account by logging in
-- After the 30-day period, we will permanently delete your account information from our systems
-
-**Important Note about On-Chain Data**: While we can delete information we control directly, data that has been recorded on public blockchains cannot be deleted or modified due to the immutable nature of blockchain technology. This includes transaction history, NFT ownership records, and any other data that has been committed to a blockchain.
-
-### Cookie Preferences
-
-Most web browsers allow you to control cookies through their settings. You may set your browser to refuse all or some cookies or to alert you when cookies are being sent.
-
-### Communications
-
-You can opt out of receiving promotional communications from us by following the instructions in those communications.
-
-### Your Privacy Rights
-
-Depending on your location, you may have certain rights regarding your personal information, such as:
-- The right to access information we have about you
-- The right to request deletion of your information
-- The right to object to the processing of your information
-
-To exercise these rights, please contact us at contact@cosmicrafts.com.
-
-## Data Security
-
-We implement appropriate technical and organizational measures to protect the limited information we collect. However, no method of transmission over the Internet or electronic storage is 100% secure, so we cannot guarantee absolute security.
-
-## Children's Privacy
-
-Our Services are not directed to children under 13. We do not knowingly collect personal information from children under 13. If we become aware that a child under 13 has provided us with personal information, we will take steps to delete such information.
-
-### Minors and Cryptocurrency Usage
-
-While our games do not contain adult content such as nudity or graphic violence, and are generally suitable for users aged 13+, we strongly emphasize the following:
-
-- **Parental Supervision Required**: If you are under 18 or the legal age of majority in your country, you should use our Services only with the involvement and supervision of a parent or guardian, particularly when engaging with cryptocurrency features.
-
-- **Irreversible Transactions**: Cryptocurrency transactions are almost always irreversible. Once completed, these transactions typically cannot be undone or refunded. This makes parental supervision particularly important.
-
-- **Regulatory Variations**: Cryptocurrency regulations vary significantly between countries. What may be legal or allowed in one jurisdiction may be restricted or prohibited in another. Parents and guardians should familiarize themselves with local regulations before allowing minors to engage with cryptocurrency features.
-
-- **Educational Approach**: We encourage parents to use our platform as an opportunity to educate minors about digital assets, blockchain technology, and responsible financial habits in a supervised environment.
-
-If you are a parent or guardian and discover that your child has created an account without your consent, please contact us immediately at contact@cosmicrafts.com.
-
-## Changes to This Privacy Policy
-
-We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
-
-## Contact Information
-
-If you have any questions about this Privacy Policy, please contact us at:
+Nếu bạn có bất kỳ câu hỏi nào về Điều khoản này, vui lòng liên hệ với chúng tôi theo địa chỉ:
 
 **Email**: contact@cosmicrafts.com
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+Đối với các vấn đề yêu cầu địa chỉ thực tế cho mục đích tuân thủ quy định, vui lòng liên hệ với chúng tôi qua email trước.
 
-## International Data Transfers
+## Chia sẻ và Tiết lộ Dữ liệu
 
-Given our minimal data collection practices, there is very limited data that might be transferred internationally. The anonymous usage statistics we collect may be processed on servers located outside your country of residence. By using our Services, you consent to this processing.
+Với thực tiễn thu thập dữ liệu tối thiểu của chúng tôi, chúng tôi có rất ít dữ liệu để chia sẻ. Tuy nhiên, trong một số trường hợp nhất định, chúng tôi có thể chia sẻ thông tin giới hạn mà chúng tôi có:
 
-## Retention of Information
+### Nhà cung cấp Dịch vụ Thiết yếu
 
-We retain the limited information we collect only for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. Anonymous usage data may be retained indefinitely as it cannot be linked to individual users.
+Chúng tôi có thể chia sẻ thông tin kỹ thuật cơ bản với một số nhà cung cấp dịch vụ được lựa chọn cẩn thận, những người giúp chúng tôi về:
+- Lưu trữ và cơ sở hạ tầng trang web
+- Phân tích (dưới dạng ẩn danh)
+- Hệ thống hỗ trợ khách hàng
 
-## Legal Basis for Processing Personal Information (EEA and UK Users)
+Các nhà cung cấp này chỉ truy cập thông tin tối thiểu cần thiết để thực hiện chức năng của họ và bị ràng buộc bởi nghĩa vụ bảo mật.
 
-If you are located in the European Economic Area (EEA) or the United Kingdom, our legal basis for collecting and using your information depends on the specific information concerned and the context in which we collect it.
+### Yêu cầu Pháp lý
 
-Generally, we collect minimal information based on the following legal grounds:
-- To perform our contract with you (e.g., to maintain your account if you choose to create one)
-- For our legitimate interests (e.g., to provide and improve our Services)
-- With your consent (e.g., for optional browser preferences)
-- To comply with legal obligations where applicable
+Chúng tôi có thể tiết lộ thông tin nếu luật pháp yêu cầu hoặc nếu chúng tôi tin rằng hành động đó là cần thiết để:
+- Tuân thủ các nghĩa vụ pháp lý
+- Bảo vệ và bảo vệ quyền hoặc tài sản của chúng tôi
+- Ngăn chặn hoặc điều tra hành vi sai trái có thể xảy ra
+- Bảo vệ sự an toàn cá nhân của người dùng hoặc công chúng
 
-## California Privacy Rights
+## Lựa chọn và Quyền của Bạn
 
-If you are a California resident, you may have certain rights under the California Consumer Privacy Act (CCPA) and other California privacy laws.
+### Thông tin Tài khoản
 
-Given our minimal data collection practices, we typically do not "sell" or "share" personal information as those terms are defined under California law. We also do not use or disclose sensitive personal information for purposes that would require an opt-out right under California law.
+Nếu bạn đã tạo tài khoản, bạn có thể xem xét và cập nhật thông tin tài khoản của mình bằng cách đăng nhập vào cài đặt tài khoản của bạn.
 
-## Changes to This Privacy Policy
+### Xóa Tài khoản
 
-We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. We encourage you to review this Privacy Policy frequently to be informed of how we are protecting your information.
+Bạn có thể yêu cầu xóa tài khoản của mình bất kỳ lúc nào:
+- Thông qua cài đặt Ứng dụng Web
+- Bằng cách gửi email đến contact@cosmicrafts.com
 
-## Contact Information
+Khi bạn xóa tài khoản của mình:
+- Chúng tôi sẽ bắt đầu thời gian chờ 30 ngày trong trường hợp bạn muốn khôi phục tài khoản của mình
+- Trong thời gian này, tài khoản của bạn sẽ bị hủy kích hoạt nhưng không bị xóa vĩnh viễn
+- Nếu bạn thay đổi ý định, bạn có thể kích hoạt lại tài khoản của mình bằng cách đăng nhập
+- Sau thời gian 30 ngày, chúng tôi sẽ xóa vĩnh viễn thông tin tài khoản của bạn khỏi hệ thống của chúng tôi
 
-If you have any questions about this Privacy Policy, please contact us at:
+**Lưu ý Quan trọng về Dữ liệu Trên chuỗi**: Mặc dù chúng tôi có thể xóa thông tin mà chúng tôi kiểm soát trực tiếp, nhưng dữ liệu đã được ghi lại trên blockchain công khai không thể bị xóa hoặc sửa đổi do tính chất bất biến của công nghệ blockchain. Điều này bao gồm lịch sử giao dịch, hồ sơ sở hữu NFT và bất kỳ dữ liệu nào khác đã được cam kết với blockchain.
+
+### Tùy chọn Cookie
+
+Hầu hết các trình duyệt web cho phép bạn kiểm soát cookie thông qua cài đặt của chúng. Bạn có thể đặt trình duyệt của mình từ chối tất cả hoặc một số cookie hoặc cảnh báo bạn khi cookie đang được gửi.
+
+### Truyền thông
+
+Bạn có thể chọn không nhận thông tin liên lạc quảng cáo từ chúng tôi bằng cách làm theo hướng dẫn trong các thông tin liên lạc đó.
+
+### Quyền Riêng tư của Bạn
+
+Tùy thuộc vào vị trí của bạn, bạn có thể có một số quyền nhất định liên quan đến thông tin cá nhân của mình, chẳng hạn như:
+- Quyền truy cập thông tin chúng tôi có về bạn
+- Quyền yêu cầu xóa thông tin của bạn
+- Quyền phản đối việc xử lý thông tin của bạn
+
+Để thực hiện các quyền này, vui lòng liên hệ với chúng tôi tại contact@cosmicrafts.com.
+
+## Bảo mật Dữ liệu
+
+Chúng tôi thực hiện các biện pháp kỹ thuật và tổ chức phù hợp để bảo vệ thông tin giới hạn mà chúng tôi thu thập. Tuy nhiên, không có phương pháp truyền tải qua Internet hoặc lưu trữ điện tử nào là an toàn 100%, vì vậy chúng tôi không thể đảm bảo an ninh tuyệt đối.
+
+## Quyền Riêng tư của Trẻ em
+
+Dịch vụ của chúng tôi không dành cho trẻ em dưới 13 tuổi. Chúng tôi không cố ý thu thập thông tin cá nhân từ trẻ em dưới 13 tuổi. Nếu chúng tôi biết rằng một đứa trẻ dưới 13 tuổi đã cung cấp cho chúng tôi thông tin cá nhân, chúng tôi sẽ thực hiện các bước để xóa thông tin đó.
+
+### Trẻ vị thành niên và Việc Sử dụng Tiền điện tử
+
+Mặc dù trò chơi của chúng tôi không chứa nội dung người lớn như hình ảnh khoả thân hoặc bạo lực đồ họa, và thường phù hợp với người dùng từ 13 tuổi trở lên, nhưng chúng tôi đặc biệt nhấn mạnh những điều sau:
+
+- **Yêu cầu Giám sát của Phụ huynh**: Nếu bạn dưới 18 tuổi hoặc độ tuổi trưởng thành hợp pháp ở quốc gia của bạn, bạn chỉ nên sử dụng Dịch vụ của chúng tôi khi có sự tham gia và giám sát của cha mẹ hoặc người giám hộ, đặc biệt là khi tham gia vào các tính năng tiền điện tử.
+
+- **Giao dịch Không thể Đảo ngược**: Giao dịch tiền điện tử gần như luôn không thể đảo ngược. Sau khi hoàn thành, các giao dịch này thường không thể được hoàn tác hoặc hoàn lại tiền. Điều này làm cho sự giám sát của phụ huynh trở nên đặc biệt quan trọng.
+
+- **Biến động Quy định**: Các quy định về tiền điện tử khác nhau đáng kể giữa các quốc gia. Điều gì có thể hợp pháp hoặc được phép ở một khu vực pháp lý có thể bị hạn chế hoặc bị cấm ở khu vực pháp lý khác. Cha mẹ và người giám hộ nên làm quen với các quy định của địa phương trước khi cho phép trẻ vị thành niên tham gia vào các tính năng tiền điện tử.
+
+- **Phương pháp Tiếp cận Giáo dục**: Chúng tôi khuyến khích phụ huynh sử dụng nền tảng của chúng tôi như một cơ hội để giáo dục trẻ vị thành niên về tài sản kỹ thuật số, công nghệ blockchain và thói quen tài chính có trách nhiệm trong một môi trường được giám sát.
+
+Nếu bạn là phụ huynh hoặc người giám hộ và phát hiện ra rằng con bạn đã tạo tài khoản mà không có sự đồng ý của bạn, vui lòng liên hệ với chúng tôi ngay lập tức tại contact@cosmicrafts.com.
+
+## Thay đổi đối với Chính Sách Bảo Mật này
+
+Đôi khi chúng tôi có thể cập nhật Chính Sách Bảo Mật này. Phiên bản cập nhật sẽ được ghi rõ bằng "Ngày có hiệu lực" được cập nhật và phiên bản cập nhật sẽ có hiệu lực ngay sau khi có thể truy cập được. Chúng tôi khuyến khích bạn xem xét Chính Sách Bảo Mật này thường xuyên để được thông báo về cách chúng tôi đang bảo vệ thông tin của bạn.
+
+## Thông tin Liên hệ
+
+Nếu bạn có bất kỳ câu hỏi nào về Chính Sách Bảo Mật này, vui lòng liên hệ với chúng tôi theo địa chỉ:
 
 **Email**: contact@cosmicrafts.com
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+Đối với các vấn đề yêu cầu địa chỉ thực tế cho mục đích tuân thủ quy định, vui lòng liên hệ với chúng tôi qua email trước.
 
-## Third-Party Services
+## Chuyển Dữ liệu Quốc tế
 
-Our Services may contain links to third-party websites or services. We are not responsible for the privacy practices or content of these third-party sites. We encourage you to read the privacy policies of every website you visit.
+Với thực tiễn thu thập dữ liệu tối thiểu của chúng tôi, có rất ít dữ liệu có thể được chuyển ra quốc tế. Số liệu thống kê sử dụng ẩn danh mà chúng tôi thu thập có thể được xử lý trên các máy chủ đặt bên ngoài quốc gia cư trú của bạn. Bằng cách sử dụng Dịch vụ của chúng tôi, bạn đồng ý với quá trình xử lý này.
 
-## Platform-Specific Provisions
+## Lưu giữ Thông tin
+
+Chúng tôi giữ lại thông tin giới hạn mà chúng tôi thu thập chỉ trong thời gian cần thiết để thực hiện các mục đích được nêu trong Chính Sách Bảo Mật này, trừ khi luật pháp yêu cầu hoặc cho phép thời gian lưu giữ dài hơn. Dữ liệu sử dụng ẩn danh có thể được giữ lại vô thời hạn vì nó không thể được liên kết với người dùng cá nhân.
+
+## Cơ sở Pháp lý để Xử lý Thông tin Cá nhân (Người dùng EEA và Vương quốc Anh)
+
+Nếu bạn ở Khu vực Kinh tế Châu Âu (EEA) hoặc Vương quốc Anh, cơ sở pháp lý của chúng tôi để thu thập và sử dụng thông tin của bạn phụ thuộc vào thông tin cụ thể có liên quan và bối cảnh chúng tôi thu thập thông tin đó.
+
+Nói chung, chúng tôi thu thập thông tin tối thiểu dựa trên các cơ sở pháp lý sau:
+- Để thực hiện hợp đồng của chúng tôi với bạn (ví dụ: để duy trì tài khoản của bạn nếu bạn chọn tạo tài khoản)
+- Vì lợi ích hợp pháp của chúng tôi (ví dụ: để cung cấp và cải thiện Dịch vụ của chúng tôi)
+- Với sự đồng ý của bạn (ví dụ: cho các tùy chọn trình duyệt tùy chọn)
+- Để tuân thủ các nghĩa vụ pháp lý khi có thể áp dụng
+
+## Quyền Riêng tư ở California
+
+Nếu bạn là cư dân California, bạn có thể có một số quyền nhất định theo Đạo luật về Quyền Riêng tư của Người tiêu dùng California (CCPA) và các luật về quyền riêng tư khác của California.
+
+Với thực tiễn thu thập dữ liệu tối thiểu của chúng tôi, chúng tôi thường không "bán" hoặc "chia sẻ" thông tin cá nhân như các thuật ngữ đó được định nghĩa theo luật California. Chúng tôi cũng không sử dụng hoặc tiết lộ thông tin cá nhân nhạy cảm cho các mục đích yêu cầu quyền chọn không tham gia theo luật California.
+
+## Thay đổi đối với Chính Sách Bảo Mật này
+
+Đôi khi chúng tôi có thể cập nhật Chính Sách Bảo Mật này. Phiên bản cập nhật sẽ được ghi rõ bằng "Ngày có hiệu lực" được cập nhật và phiên bản cập nhật sẽ có hiệu lực ngay sau khi có thể truy cập được. Chúng tôi khuyến khích bạn xem xét Chính Sách Bảo Mật này thường xuyên để được thông báo về cách chúng tôi đang bảo vệ thông tin của bạn.
+
+## Thông tin Liên hệ
+
+Nếu bạn có bất kỳ câu hỏi nào về Chính Sách Bảo Mật này, vui lòng liên hệ với chúng tôi theo địa chỉ:
+
+**Email**: contact@cosmicrafts.com
+
+Đối với các vấn đề yêu cầu địa chỉ thực tế cho mục đích tuân thủ quy định, vui lòng liên hệ với chúng tôi qua email trước.
+
+## Dịch vụ Bên thứ ba
+
+Dịch vụ của chúng tôi có thể chứa các liên kết đến trang web hoặc dịch vụ của bên thứ ba. Chúng tôi không chịu trách nhiệm về thực tiễn bảo mật hoặc nội dung của các trang web bên thứ ba này. Chúng tôi khuyến khích bạn đọc chính sách bảo mật của mọi trang web bạn truy cập.
+
+## Các điều khoản Cụ thể theo Nền tảng
 
 ### Apple App Store
 
-For users accessing our Services through Apple's App Store:
-- We only collect and use personal information as necessary to provide the requested features and functions of the app.
-- We do not use information obtained through the App Store for targeting users with advertising in other apps.
-- We comply with all applicable Apple guidelines regarding privacy and data handling.
+Đối với người dùng truy cập Dịch vụ của chúng tôi thông qua Apple App Store:
+- Chúng tôi chỉ thu thập và sử dụng thông tin cá nhân khi cần thiết để cung cấp các tính năng và chức năng được yêu cầu của ứng dụng.
+- Chúng tôi không sử dụng thông tin thu được thông qua App Store để nhắm mục tiêu người dùng bằng quảng cáo trong các ứng dụng khác.
+- Chúng tôi tuân thủ tất cả các nguyên tắc hiện hành của Apple về quyền riêng tư và xử lý dữ liệu.
 
 ### Google Play Store
 
-For users accessing our Services through Google Play:
-- We adhere to Google Play's User Data Policy.
-- We provide notice and obtain consent for the collection of personal information as required by Google Play policies.
-- We maintain accurate and complete privacy disclosures in our store listing and within the app.
+Đối với người dùng truy cập Dịch vụ của chúng tôi thông qua Google Play:
+- Chúng tôi tuân thủ Chính sách Dữ liệu Người dùng của Google Play.
+- Chúng tôi cung cấp thông báo và có được sự đồng ý cho việc thu thập thông tin cá nhân theo yêu cầu của chính sách Google Play.
+- Chúng tôi duy trì các tiết lộ về quyền riêng tư chính xác và đầy đủ trong danh sách cửa hàng của chúng tôi và trong ứng dụng.
 
 ### Epic Games Store
 
-For users accessing our Services through Epic Games Store:
-- We comply with Epic's distribution agreement and privacy requirements.
-- We provide clear information about data collection practices in accordance with Epic's guidelines.
+Đối với người dùng truy cập Dịch vụ của chúng tôi thông qua Epic Games Store:
+- Chúng tôi tuân thủ thỏa thuận phân phối và các yêu cầu về quyền riêng tư của Epic.
+- Chúng tôi cung cấp thông tin rõ ràng về thực tiễn thu thập dữ liệu theo hướng dẫn của Epic.
 
 ### Crazy Games
 
-For users accessing our Services through Crazy Games:
-- We adhere to Crazy Games' privacy requirements and publishing guidelines.
-- We ensure transparent communication regarding data collection and use.
+Đối với người dùng truy cập Dịch vụ của chúng tôi thông qua Crazy Games:
+- Chúng tôi tuân thủ các yêu cầu về quyền riêng tư và hướng dẫn xuất bản của Crazy Games.
+- Chúng tôi đảm bảo giao tiếp minh bạch liên quan đến việc thu thập và sử dụng dữ liệu.
 
-## Changes to This Privacy Policy
+## Thay đổi đối với Chính Sách Bảo Mật này
 
-We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Effective Date" at the top.
+Đôi khi chúng tôi có thể cập nhật Chính Sách Bảo Mật của mình. Chúng tôi sẽ thông báo cho bạn về bất kỳ thay đổi nào bằng cách đăng Chính Sách Bảo Mật mới trên trang này và cập nhật "Ngày có hiệu lực" ở trên cùng.
 
-We encourage you to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
+Chúng tôi khuyến khích bạn xem xét Chính Sách Bảo Mật này định kỳ để biết bất kỳ thay đổi nào. Các thay đổi đối với Chính Sách Bảo Mật này có hiệu lực khi chúng được đăng trên trang này.
 
-## Contact Us
+## Liên hệ với Chúng tôi
 
-If you have any questions about this Privacy Policy or our data practices, please contact us at:
+Nếu bạn có bất kỳ câu hỏi nào về Chính Sách Bảo Mật này hoặc thực tiễn dữ liệu của chúng tôi, vui lòng liên hệ với chúng tôi theo địa chỉ:
 
-**Email**: contact@cosmicrafts.com  
+**Email**: contact@cosmicrafts.com
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+Đối với các vấn đề yêu cầu địa chỉ thực tế cho mục đích tuân thủ quy định, vui lòng liên hệ với chúng tôi qua email trước.
 
 ---
 
-*Last updated: March 4, 2025* 
+*Cập nhật lần cuối: ngày 4 tháng 3 năm 2025*

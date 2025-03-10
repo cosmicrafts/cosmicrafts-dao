@@ -1,471 +1,437 @@
-# Terms of Service
+# Điều Khoản Dịch Vụ
 
 [[toc:2-3]]
 
-## Introduction
-Welcome to Cosmicrafts. These Terms of Service ("Terms") govern your access to and use of Cosmicrafts' website, platform, applications, and any associated services (collectively, the "Services"). 
+## Giới Thiệu
+Chào mừng đến với Cosmicrafts. Các Điều Khoản Dịch Vụ này ("Điều Khoản") quy định việc truy cập và sử dụng trang web, nền tảng, ứng dụng và bất kỳ dịch vụ liên quan nào của Cosmicrafts (gọi chung là "Dịch Vụ").
 
-By accessing or using our Services, you agree to be bound by these Terms. If you disagree with any part of the Terms, you do not have permission to access the Services.
+Bằng cách truy cập hoặc sử dụng Dịch Vụ của chúng tôi, bạn đồng ý bị ràng buộc bởi các Điều Khoản này. Nếu bạn không đồng ý với bất kỳ phần nào của Điều Khoản, bạn không được phép truy cập Dịch Vụ.
 
-## Effective Date
-These Terms are effective as of March 4, 2025.
+## Ngày Hiệu Lực
+Các Điều Khoản này có hiệu lực từ Ngày 4 tháng 3 năm 2025.
 
-## Definitions
-- **Platform**: Refers to the Cosmicrafts universe, including all websites, games, applications, and services provided by Cosmicrafts.
-- **User**, **You**, or **Your**: Refers to individuals who access or use the Platform.
-- **Content**: Refers to any information, text, graphics, photos, videos, or other materials uploaded, downloaded, or appearing on the Platform.
-- **NFT**: Non-Fungible Token, a unique digital identifier recorded on a blockchain that certifies ownership and authenticity of a specific digital asset.
-- **Cryptocurrency**: Digital or virtual currency that uses cryptography for security and operates independently of a central authority.
-- **Blockchain**: A distributed digital ledger that records transactions across many computers in a way that cannot be altered retroactively.
-- **On-Chain Data**: Information that is stored directly on a blockchain network, which is public, transparent, and immutable.
-- **App Store**: Refers to digital distribution platforms such as Google Play Store, Apple App Store, Epic Games Store, and Crazy Games where our applications may be available.
+## Định Nghĩa
+- **Nền Tảng**: Đề cập đến vũ trụ Cosmicrafts, bao gồm tất cả các trang web, trò chơi, ứng dụng và dịch vụ do Cosmicrafts cung cấp.
+- **Người Dùng**, **Bạn**, hoặc **Của Bạn**: Đề cập đến các cá nhân truy cập hoặc sử dụng Nền Tảng.
+- **Nội Dung**: Đề cập đến bất kỳ thông tin, văn bản, đồ họa, hình ảnh, video hoặc các tài liệu khác được tải lên, tải xuống hoặc xuất hiện trên Nền Tảng.
+- **NFT**: Token Không Thể Thay Thế, một định danh kỹ thuật số duy nhất được ghi lại trên blockchain xác nhận quyền sở hữu và tính xác thực của một tài sản kỹ thuật số cụ thể.
+- **Tiền Điện Tử**: Tiền kỹ thuật số hoặc ảo sử dụng mật mã để bảo mật và hoạt động độc lập với cơ quan trung ương.
+- **Blockchain**: Một sổ cái kỹ thuật số phân tán ghi lại các giao dịch trên nhiều máy tính theo cách không thể thay đổi hồi tố.
+- **Dữ Liệu On-Chain**: Thông tin được lưu trữ trực tiếp trên mạng blockchain, công khai, minh bạch và không thể thay đổi.
+- **Cửa Hàng Ứng Dụng**: Đề cập đến các nền tảng phân phối kỹ thuật số như Google Play Store, Apple App Store, Epic Games Store và Crazy Games nơi các ứng dụng của chúng tôi có thể được cung cấp.
 
-## Web3 and On-Chain Data
+## Web3 và Dữ Liệu On-Chain
 
-### Public Nature of Blockchain
-Cosmicrafts is built on Web3 technology, which means:
+### Bản Chất Công Khai của Blockchain
+Cosmicrafts được xây dựng trên công nghệ Web3, điều này có nghĩa:
 
-1. **Public Transparency**: Most of our databases are stored on public blockchains, making information inherently public and transparent.
+1. **Tính Minh Bạch Công Khai**: Hầu hết cơ sở dữ liệu của chúng tôi được lưu trữ trên các blockchain công khai, làm cho thông tin vốn dĩ công khai và minh bạch.
 
-2. **User Responsibility**: You are solely responsible for any information you choose to share through our platform. By using our Services, you explicitly acknowledge that information stored on blockchain networks is:
-   - Public by default
-   - Accessible to anyone with access to the blockchain
-   - Permanent and immutable (cannot be deleted or altered)
-   - Not encrypted or hidden by us unless explicitly stated
+2. **Trách Nhiệm Người Dùng**: Bạn hoàn toàn chịu trách nhiệm về bất kỳ thông tin nào bạn chọn chia sẻ thông qua nền tảng của chúng tôi. Bằng cách sử dụng Dịch Vụ của chúng tôi, bạn thừa nhận rõ ràng rằng thông tin được lưu trữ trên mạng blockchain là:
+   - Công khai theo mặc định
+   - Có thể truy cập bởi bất kỳ ai có quyền truy cập vào blockchain
+   - Vĩnh viễn và không thể thay đổi (không thể xóa hoặc sửa đổi)
+   - Không được chúng tôi mã hóa hoặc ẩn trừ khi được nêu rõ ràng
 
-3. **Privacy Limitations**: Due to the nature of blockchain technology, privacy features have technical limitations. Even information marked as "private" may still be visible to blockchain validators or through blockchain explorers.
+3. **Giới Hạn Quyền Riêng Tư**: Do bản chất của công nghệ blockchain, các tính năng bảo mật có giới hạn kỹ thuật. Ngay cả thông tin được đánh dấu là "riêng tư" vẫn có thể hiển thị với người xác thực blockchain hoặc thông qua trình duyệt blockchain.
 
-4. **No Expectation of Privacy**: You should have no expectation of privacy regarding any on-chain data. Before providing any information through our Services, you should carefully consider whether you are comfortable with that information being public and permanent.
+4. **Không Kỳ Vọng Quyền Riêng Tư**: Bạn không nên kỳ vọng quyền riêng tư đối với bất kỳ dữ liệu on-chain nào. Trước khi cung cấp bất kỳ thông tin nào thông qua Dịch Vụ của chúng tôi, bạn nên cân nhắc cẩn thận liệu bạn có thoải mái với việc thông tin đó công khai và vĩnh viễn hay không.
 
-5. **Data Sovereignty**: You retain ownership of your private keys and control of your digital assets, but public blockchain data cannot be deleted even if you discontinue using our Services.
+5. **Chủ Quyền Dữ Liệu**: Bạn giữ quyền sở hữu khóa riêng tư của mình và kiểm soát tài sản kỹ thuật số của mình, nhưng dữ liệu blockchain công khai không thể bị xóa ngay cả khi bạn ngừng sử dụng Dịch Vụ của chúng tôi.
 
-## Web3 Safety and Privacy Guide
+## Hướng Dẫn An Toàn và Quyền Riêng Tư Web3
 
-### Important Safety Guidelines for New Users
-If you're new to Web3 platforms like Cosmicrafts, please review these critical safety guidelines:
+### Hướng Dẫn An Toàn Quan Trọng cho Người Dùng Mới
+Nếu bạn mới làm quen với các nền tảng Web3 như Cosmicrafts, vui lòng xem xét các hướng dẫn an toàn quan trọng sau:
 
-1. **Protect Your Personal Information**:
-   - Never use your real full name, home address, or phone number on blockchain platforms
-   - Create pseudonymous usernames that cannot be connected to your real identity
-   - Avoid sharing personally identifiable information in public forums, chats, or profiles
-   - Be aware that anything you post on-chain could be permanently recorded
+1. **Bảo Vệ Thông Tin Cá Nhân Của Bạn**:
+   - Không bao giờ sử dụng tên đầy đủ thật, địa chỉ nhà hoặc số điện thoại của bạn trên các nền tảng blockchain
+   - Tạo tên người dùng ẩn danh không thể kết nối với danh tính thật của bạn
+   - Tránh chia sẻ thông tin nhận dạng cá nhân trong diễn đàn công khai, trò chuyện hoặc hồ sơ
+   - Lưu ý rằng bất cứ điều gì bạn đăng on-chain có thể được ghi lại vĩnh viễn
 
-2. **Wallet and Key Security**:
-   - Your private keys and seed phrases are your sole access to your digital assets
-   - NEVER share your private keys, seed phrases, or wallet passwords with anyone, including Cosmicrafts staff
-   - NEVER enter your seed phrase or private keys on websites, even if they appear to be legitimate
-   - Store your seed phrase offline in a secure location (preferably multiple secure locations)
-   - Unlike traditional banking, there is NO central authority that can recover your account or assets if keys are lost or stolen
-   - Use hardware wallets for significant holdings whenever possible
+2. **Bảo Mật Ví và Khóa**:
+   - Khóa riêng tư và cụm từ hạt giống của bạn là quyền truy cập duy nhất vào tài sản kỹ thuật số của bạn
+   - KHÔNG BAO GIỜ chia sẻ khóa riêng tư, cụm từ hạt giống hoặc mật khẩu ví của bạn với bất kỳ ai, kể cả nhân viên Cosmicrafts
+   - KHÔNG BAO GIỜ nhập cụm từ hạt giống hoặc khóa riêng tư của bạn trên các trang web, ngay cả khi chúng có vẻ hợp pháp
+   - Lưu trữ cụm từ hạt giống của bạn ngoại tuyến ở một vị trí an toàn (tốt nhất là nhiều vị trí an toàn)
+   - Không giống như ngân hàng truyền thống, KHÔNG có cơ quan trung ương nào có thể khôi phục tài khoản hoặc tài sản của bạn nếu khóa bị mất hoặc bị đánh cắp
+   - Sử dụng ví phần cứng cho các khoản tiền đáng kể bất cứ khi nào có thể
 
-3. **Transaction Awareness**:
-   - ALL blockchain transactions are IRREVERSIBLE and CANNOT be refunded or reversed once confirmed
-   - Always double-check transaction details (recipient address, amount) before confirming
-   - Start with small test transactions when using new services or features
-   - Be wary of any transaction requests that create urgency or pressure you to act quickly
+3. **Nhận Thức về Giao Dịch**:
+   - TẤT CẢ các giao dịch blockchain đều KHÔNG THỂ ĐẢO NGƯỢC và KHÔNG THỂ hoàn tiền hoặc đảo ngược sau khi xác nhận
+   - Luôn kiểm tra kỹ chi tiết giao dịch (địa chỉ người nhận, số tiền) trước khi xác nhận
+   - Bắt đầu với các giao dịch thử nghiệm nhỏ khi sử dụng dịch vụ hoặc tính năng mới
+   - Hãy cảnh giác với bất kỳ yêu cầu giao dịch nào tạo ra sự cấp bách hoặc gây áp lực buộc bạn phải hành động nhanh chóng 
 
-4. **Scam Prevention**:
-   - Be extremely cautious of direct messages from strangers, especially those offering assistance, opportunities, or free assets
-   - Never click on unknown links sent via direct messages or from untrusted sources
-   - Always verify the source of communications - Cosmicrafts will ONLY contact you through official channels
-   - Be skeptical of "too good to be true" offers, giveaways, or investment opportunities
-   - Verify all contract addresses against official sources before interacting with them
-   - Check URLs carefully - scammers often use URLs that look similar to legitimate sites
+- **Mạng Xã Hội Chính Thức**: Chỉ thông qua các tài khoản được xác minh với dấu tích xanh
 
-5. **Common Web3 Scams to Avoid**:
-   - Fake support staff offering to "help" with account issues
-   - Free NFT or token mints that request your seed phrase
-   - Urgent messages about account security requiring immediate action
-   - Impersonation of project founders, team members, or celebrities 
-   - Fraudulent airdrops requiring you to send cryptocurrency first
-   - Fake marketplace notifications about offers on your digital assets
+Chúng tôi sẽ KHÔNG BAO GIỜ yêu cầu cụm từ hạt giống, khóa riêng tư hoặc mật khẩu của bạn. Nếu bất kỳ ai tự nhận là đại diện của Cosmicrafts yêu cầu thông tin này, đó là lừa đảo.
 
-### Safety Tools and Resources
-Cosmicrafts provides several tools to help protect your experience:
+## Đăng Ký Tài Khoản và Điều Kiện
 
-1. **Reporting System**: Use our reporting features to flag suspicious users, scam attempts, or harmful content. Look for the "Report" option in user profiles, messages, and content.
+### Tạo Tài Khoản
+Để truy cập một số tính năng nhất định của Dịch Vụ của chúng tôi, bạn phải tạo một tài khoản. Khi đăng ký, bạn đồng ý cung cấp thông tin chính xác, hiện tại và đầy đủ. Bạn chịu trách nhiệm bảo vệ thông tin đăng nhập tài khoản của mình và cho tất cả các hoạt động xảy ra dưới tài khoản của bạn.
 
-2. **Blocking Users**: You can block any user by accessing their profile and selecting the block option. Blocked users cannot contact you.
+### Yêu Cầu Độ Tuổi
+Bạn phải ít nhất 18 tuổi để tạo tài khoản. Nếu bạn từ 13 đến 18 tuổi, bạn chỉ có thể sử dụng Dịch Vụ của chúng tôi với sự đồng ý và giám sát của cha mẹ hoặc người giám hộ hợp pháp, những người đồng ý bị ràng buộc bởi các Điều Khoản này.
 
-3. **Privacy Settings**: Configure your privacy settings in your account dashboard to control what information is visible to others and who can contact you.
+### Bảo Mật Tài Khoản
+Bạn chịu trách nhiệm duy trì tính bảo mật của thông tin tài khoản và mật khẩu của mình. Bạn đồng ý thông báo cho chúng tôi ngay lập tức về bất kỳ việc sử dụng trái phép tài khoản của bạn hoặc bất kỳ vi phạm bảo mật nào khác.
 
-4. **Authentication Options**: Enable two-factor authentication (2FA) for additional account security.
+### Xóa Tài Khoản
+Bạn có thể yêu cầu xóa tài khoản của mình bất cứ lúc nào:
+- Thông qua menu cài đặt Ứng Dụng Web
+- Bằng cách gửi email đến contact@cosmicrafts.com
 
-5. **Transaction Confirmation**: Our platform includes confirmation screens for all transactions with explicit warnings and details to prevent mistakes.
+Khi bạn yêu cầu xóa tài khoản:
+- Chúng tôi sẽ bắt đầu thời gian chờ 30 ngày
+- Trong thời gian này, tài khoản của bạn sẽ bị vô hiệu hóa nhưng không bị xóa vĩnh viễn
+- Bạn có thể kích hoạt lại tài khoản của mình bằng cách đơn giản là đăng nhập
+- Sau 30 ngày, chúng tôi sẽ xóa vĩnh viễn thông tin tài khoản của bạn khỏi hệ thống của chúng tôi
 
-### Contacting Us Securely
-For any safety or security concerns, contact us ONLY through our official channels:
+**Lưu ý về Giao Thức Internet Computer (ICP)**: Cosmicrafts hoạt động một phần trên blockchain Internet Computer Protocol (ICP), cho phép xóa hồ sơ người dùng để tuân thủ các yêu cầu từ các nền tảng như Google Play và Apple App Store. Khi bạn yêu cầu xóa tài khoản, chúng tôi có thể xóa hồ sơ người dùng và thông tin cá nhân của bạn khỏi các dịch vụ dựa trên ICP, phù hợp với các quy định về quyền riêng tư hiện hành.
 
-- **Official Email**: contact@cosmicrafts.com
-- **In-Platform Support**: Via the help button in the account dashboard
-- **Official Social Media**: Only through accounts verified with blue checkmarks
+**Lưu Ý Quan Trọng về Dữ Liệu Blockchain**: Mặc dù chúng tôi có thể xóa thông tin tài khoản của bạn khỏi hệ thống tập trung của chúng tôi và hồ sơ người dùng của bạn khỏi ICP, bất kỳ giao dịch hoặc dữ liệu nào liên quan đến khóa công khai của bạn đã được ghi lại trên blockchain công khai không thể bị xóa hoặc sửa đổi do tính chất bất biến của công nghệ blockchain. Điều này bao gồm lịch sử giao dịch, hồ sơ sở hữu NFT và bất kỳ dữ liệu nào khác đã được cam kết với blockchain.
 
-We will NEVER ask for your seed phrase, private keys, or passwords. If anyone claiming to represent Cosmicrafts requests this information, it is a scam.
+## Hành Vi Người Dùng
+Khi sử dụng Dịch Vụ của chúng tôi, bạn đồng ý không:
 
-## Account Registration and Eligibility
+- Vi phạm bất kỳ luật hoặc quy định hiện hành nào
+- Xâm phạm quyền của người khác, bao gồm quyền sở hữu trí tuệ
+- Quấy rối, lạm dụng hoặc gây hại cho người khác
+- Mạo danh bất kỳ người hoặc tổ chức nào
+- Can thiệp hoặc làm gián đoạn Dịch Vụ hoặc máy chủ
+- Tạo nhiều tài khoản cho mục đích gây rối hoặc lạm dụng
+- Sử dụng Dịch Vụ của chúng tôi cho bất kỳ mục đích bất hợp pháp hoặc trái phép nào
+- Đăng spam hoặc nội dung độc hại
+- Cố gắng truy cập trái phép vào bất kỳ phần nào của Nền Tảng
+- Sử dụng bất kỳ phương tiện tự động hoặc giao diện không do chúng tôi cung cấp để truy cập Dịch Vụ
+- Lưu trữ thông tin cá nhân nhạy cảm on-chain mà hợp lý nên giữ riêng tư
 
-### Account Creation
-To access certain features of our Services, you must create an account. When registering, you agree to provide accurate, current, and complete information. You are responsible for safeguarding your account credentials and for all activities that occur under your account.
+## Tài Sản Ảo và Giao Dịch
 
-### Age Requirements
-You must be at least 18 years old to create an account. If you are between 13 and 18 years old, you may only use our Services with the consent and supervision of a parent or legal guardian who agrees to be bound by these Terms.
+### Phi Tập Trung và Trách Nhiệm Người Dùng
+Tất cả tài sản kỹ thuật số, bao gồm nhưng không giới hạn ở token tiền điện tử, NFT và vật phẩm trong trò chơi tồn tại trên mạng blockchain về bản chất là phi tập trung. Bạn thừa nhận và đồng ý rằng:
 
-### Account Security
-You are responsible for maintaining the confidentiality of your account information and password. You agree to notify us immediately of any unauthorized use of your account or any other breach of security.
+1. **Không Kiểm Soát**: World of Unreal, LLC không kiểm soát, duy trì hoặc giữ hộ tài sản kỹ thuật số của bạn tồn tại trên mạng blockchain.
 
-### Account Deletion
-You may request to delete your account at any time:
-- Through the Web App settings menu
-- By emailing contact@cosmicrafts.com
+2. **Không Chịu Trách Nhiệm**: Chúng tôi không chịu trách nhiệm cho bất kỳ vấn đề nào phát sinh từ giao dịch blockchain, bao gồm nhưng không giới hạn ở việc mất khóa riêng tư, tấn công lừa đảo, lỗ hổng hợp đồng thông minh, lỗi mạng, phí gas cao hoặc thay đổi quy định.
 
-When you request account deletion:
-- We will initiate a 30-day cooling-off period
-- During this period, your account will be deactivated but not permanently deleted
-- You can reactivate your account by simply logging in
-- After 30 days, we will permanently delete your account information from our systems
+3. **Không Khôi Phục**: Chúng tôi không thể khôi phục hoặc phục hồi tài sản kỹ thuật số bị mất, đảo ngược giao dịch hoặc hỗ trợ với mật khẩu hoặc khóa riêng tư bị quên.
 
-**Note on Internet Computer Protocol (ICP) Deletion**: Cosmicrafts operates partly on the Internet Computer Protocol (ICP) blockchain, which enables the deletion of user profiles to comply with requirements from platforms such as Google Play and Apple App Store. When you request account deletion, we can remove your user profile and personal information from ICP-based services, in accordance with applicable privacy regulations.
+4. **Tự Lưu Ký**: Bạn hoàn toàn chịu trách nhiệm bảo mật ví, khóa riêng tư, cụm từ hạt giống và các thông tin xác thực khác cần thiết để truy cập tài sản kỹ thuật số của mình.
 
-**Important Note on Blockchain Data**: While we can delete your account information from our centralized systems and your user profile from ICP, any transactions or data associated with your public key that has been recorded on public blockchains cannot be deleted or modified due to the immutable nature of blockchain technology. This includes transaction history, NFT ownership records, and any other data that has been committed to a blockchain.
+### Kiểm Duyệt Nền Tảng và Kháng Cáo DAO
 
-## User Conduct
-When using our Services, you agree not to:
+Mặc dù Cosmicrafts hoạt động trong môi trường phi tập trung, chúng tôi duy trì một số khả năng quản trị hạn chế để bảo vệ người dùng và tính toàn vẹn của nền tảng:
 
-- Violate any applicable laws or regulations
-- Infringe on the rights of others, including intellectual property rights
-- Harass, abuse, or harm another person
-- Impersonate any person or entity
-- Interfere with or disrupt the Services or servers
-- Create multiple accounts for disruptive or abusive purposes
-- Use our Services for any illegal or unauthorized purpose
-- Post spam or malicious content
-- Attempt to gain unauthorized access to any portion of the Platform
-- Use any automated means or interface not provided by us to access the Services
-- Store sensitive personal information on-chain that should reasonably remain private
+1. **Tịch Thu/Đốt NFT**: Trong trường hợp vi phạm chính sách rõ ràng, gian lận, nội dung bất hợp pháp hoặc các vi phạm đáng kể khác, quản trị viên Cosmicrafts có thể thực hiện quyền tịch thu (đốt) NFT. Đây là biện pháp khẩn cấp nhằm bảo vệ cộng đồng và nền tảng của chúng tôi.
 
-## Virtual Assets and Transactions
+2. **Giới Hạn của Bảo Vệ Thời Gian Thực**: Bản chất phi tập trung của blockchain có nghĩa là thiệt hại có thể xảy ra nhanh chóng (ví dụ: NFT bị đánh cắp có thể được bán lại trong vài giây), thường trước khi kiểm duyệt có thể can thiệp. Chúng tôi không thể đảm bảo bảo vệ chống lại tất cả các hình thức hoạt động độc hại.
 
-### Decentralization and User Responsibility
-All digital assets, including but not limited to cryptocurrency tokens, NFTs, and in-game items that exist on blockchain networks are decentralized by nature. You acknowledge and agree that:
+3. **Quy Trình Kháng Cáo DAO**: Người dùng tin rằng NFT của họ bị tịch thu sai có thể kháng cáo lên Cosmicrafts DAO để xem xét. Quy trình kháng cáo hoạt động như sau:
+   - Gửi kháng cáo chính thức thông qua cổng quản trị DAO được chỉ định
+   - Cung cấp bằng chứng hỗ trợ trường hợp của bạn
+   - DAO sẽ xem xét và bỏ phiếu về kháng cáo theo thủ tục quản trị
+   - Nếu được DAO phê duyệt, NFT bị tịch thu có thể được khôi phục
 
-1. **No Control**: World of Unreal, LLC do not control, maintain, or have custody of your digital assets that exist on blockchain networks.
+4. **Thẩm Quyền Cuối Cùng**: Quyết định của DAO về kháng cáo được coi là cuối cùng. Cả Quỹ Cosmicrafts và World of Unreal, LLC đều không thể ghi đè quyết định quản trị của DAO vì các hợp đồng thông minh thuộc thẩm quyền của DAO.
 
-2. **No Responsibility**: We bear no responsibility for any issues arising from blockchain transactions, including but not limited to lost private keys, phishing attacks, smart contract vulnerabilities, network failures, high gas fees, or regulatory changes.
+5. **Giải Quyết Tranh Chấp**: Đối với tranh chấp giữa người dùng liên quan đến tài sản kỹ thuật số (như khiếu nại trộm cắp, bán hàng gian lận, v.v.), kênh thích hợp để giải quyết là thông qua hệ thống quản trị DAO, không phải thông qua hỗ trợ Cosmicrafts. DAO sẽ đánh giá các trường hợp như vậy dựa trên bằng chứng và tiêu chuẩn cộng đồng.
 
-3. **No Recovery**: We cannot recover or restore lost digital assets, reverse transactions, or assist with forgotten passwords or private keys.
+### Giá Trị và Trao Đổi
+1. **Giá Trị Thị Trường**: Một số tài sản kỹ thuật số có thể có giá trị thị trường và có thể được giao dịch trên các sàn giao dịch phi tập trung (DEXes), sàn giao dịch tập trung (CEXes) hoặc các nền tảng giao dịch khác. Tuy nhiên, giá trị này rất biến động và mang tính đầu cơ.
 
-4. **Self-Custody**: You are solely responsible for securing your own wallet, private keys, seed phrases, and other credentials necessary to access your digital assets.
+2. **Tài Sản Đa Chuỗi**: Nền tảng của chúng tôi có thể hỗ trợ tài sản đa chuỗi từ nhiều blockchain khác nhau, bao gồm nhưng không giới hạn ở Internet Computer Protocol (ICP), Bitcoin (bao gồm Runes và Ordinals), Solana và Ethereum. Mỗi blockchain có rủi ro, giới hạn kỹ thuật và cân nhắc quy định riêng.
 
-### Platform Moderation and DAO Appeals
+3. **Không Đảm Bảo**: Chúng tôi không đưa ra bất kỳ đảm bảo nào về giá trị, khả năng giao dịch hoặc tính thanh khoản của bất kỳ tài sản kỹ thuật số nào có được thông qua nền tảng của chúng tôi. Giá trị của các tài sản này có thể thay đổi đáng kể dựa trên điều kiện thị trường, hành động quy định hoặc phát triển công nghệ.
 
-While Cosmicrafts operates in a decentralized environment, we maintain certain limited administrative capabilities to protect users and the platform integrity:
+4. **Không Phải Lời Khuyên Đầu Tư**: Không có gì trong nền tảng hoặc thông tin liên lạc của chúng tôi cấu thành lời khuyên tài chính hoặc đầu tư. Bất kỳ quyết định nào bạn đưa ra liên quan đến việc mua, bán hoặc nắm giữ tài sản kỹ thuật số đều được thực hiện với rủi ro của riêng bạn.
 
-1. **NFT Confiscation/Burning**: In cases of clear policy violations, fraud, illegal content, or other significant infractions, Cosmicrafts administrators may exercise the right to confiscate (burn) NFTs. This is an emergency measure intended to protect our community and platform.
+### NFT và Bộ Sưu Tập Kỹ Thuật Số
+NFT và bộ sưu tập kỹ thuật số có được thông qua nền tảng của chúng tôi được lưu trữ trên mạng blockchain. Bạn thừa nhận rằng:
 
-2. **Limitations of Real-time Protection**: The decentralized nature of blockchain means damage can occur rapidly (e.g., stolen NFTs can be resold within seconds), often before moderation can intervene. We cannot guarantee protection against all forms of malicious activity.
+1. **Tiêu Chuẩn Token**: NFT của chúng tôi có thể sử dụng nhiều tiêu chuẩn token khác nhau (ví dụ: ERC-721, ERC-1155, BEP-721 hoặc các tiêu chuẩn tương đương trên các blockchain khác). Các quyền cụ thể được cấp bởi NFT giới hạn ở những quyền được nêu rõ ràng trong Điều Khoản của chúng tôi hoặc hợp đồng thông minh hiện hành.
 
-3. **DAO Appeal Process**: Users who believe their NFTs were wrongfully confiscated may appeal to the Cosmicrafts DAO for review. The appeal process works as follows:
-   - Submit a formal appeal through the designated DAO governance portal
-   - Provide evidence supporting your case
-   - The DAO will review and vote on the appeal according to governance procedures
-   - If approved by the DAO, confiscated NFTs may be restored
+2. **Chỉ Giấy Phép**: Việc bạn mua NFT cấp cho bạn giấy phép sử dụng nội dung kỹ thuật số liên quan, nhưng không phải quyền sở hữu các quyền sở hữu trí tuệ, bản quyền hoặc thương hiệu cơ bản.
 
-4. **Final Authority**: The DAO's decision on appeals is considered final. Neither the Cosmicrafts Foundation nor World of Unreal, LLC can override DAO governance decisions because the smart contracts are under the DAO jurisdiction.
+3. **Giao Dịch Vĩnh Viễn**: Giao dịch NFT trên mạng blockchain là vĩnh viễn và không thể đảo ngược sau khi xác nhận. Chúng tôi không thể đảo ngược, hủy bỏ hoặc hoàn tiền bất kỳ giao dịch NFT nào trong bất kỳ trường hợp nào.
 
-5. **Dispute Resolution**: For disputes between users regarding digital assets (such as theft claims, fraudulent sales, etc.), the proper channel for resolution is through the DAO governance system, not through Cosmicrafts support. The DAO will judge such cases based on evidence and community standards.
+   **Quy Trình Kháng Cáo cho Trường Hợp Đặc Biệt**: Mặc dù giao dịch blockchain về nguyên tắc chung là không thể đảo ngược, trong trường hợp ngoại lệ, người dùng có thể kháng cáo lên Cosmicrafts DAO như phương sách cuối cùng cho tranh chấp giao dịch. Để bắt đầu quy trình này:
+   - Trước tiên đăng trường hợp của bạn trong diễn đàn cộng đồng để thảo luận sơ bộ
+   - Bạn phải có số lượng token SPIRAL tối thiểu được yêu cầu để tạo neuron và gửi đề xuất chính thức
+   - Làm theo quy trình đề xuất quản trị như được nêu trong [Whitepaper](/whitepaper)
+   - DAO có thẩm quyền cuối cùng đối với tất cả các kháng cáo như vậy
+   - World of Unreal LLC không có trách nhiệm hoặc thẩm quyền đối với các quyết định này
 
-### Value and Exchange
-1. **Market Value**: Certain digital assets may have market value and may be tradable on decentralized exchanges (DEXes), centralized exchanges (CEXes), or other trading platforms. However, this value is highly volatile and speculative.
+4. **Tính Bền Vững của Tài Sản**: Mặc dù chúng tôi cố gắng duy trì cơ sở hạ tầng hỗ trợ tài sản kỹ thuật số của chúng tôi, chúng tôi không đưa ra bất kỳ đảm bảo nào về tính khả dụng hoặc chức năng liên tục của metadata, tác phẩm nghệ thuật hoặc nội dung khác liên quan đến NFT nếu dịch vụ của chúng tôi bị ngừng.
 
-2. **Cross-Chain Assets**: Our platform may support cross-chain assets from various blockchains, including but not limited to Internet Computer Protocol (ICP), Bitcoin (including Runes and Ordinals), Solana, and Ethereum. Each blockchain has its own risks, technical limitations, and regulatory considerations.
+### Giao Dịch
+Tất cả các giao dịch mua và giao dịch trên nền tảng của chúng tôi là cuối cùng. Chúng tôi bảo lưu quyền từ chối bất kỳ giao dịch mua hoặc giao dịch nào theo quyết định của chúng tôi. Đối với giao dịch on-chain:
 
-3. **No Guarantees**: We make no guarantees regarding the value, tradability, or liquidity of any digital assets obtained through our platform. The value of these assets can change dramatically based on market conditions, regulatory actions, or technological developments.
+1. **Phí Mạng**: 
+   - Trên Internet Computer Protocol (ICP), giao dịch thường miễn phí cho người dùng, vì DAO trả tiền cho sức mạnh tính toán cần thiết để vận hành hợp đồng thông minh.
+   - Đối với giao dịch trên các blockchain khác (ví dụ: Ethereum, Solana, Bitcoin), bạn chịu trách nhiệm cho tất cả các phí mạng (phí gas) liên quan đến các giao dịch đó.
+   - Chi phí phí mạng thay đổi tùy thuộc vào tắc nghẽn mạng và độ phức tạp của giao dịch.
 
-4. **No Investment Advice**: Nothing in our platform or communications constitutes financial or investment advice. Any decisions you make regarding the purchase, sale, or holding of digital assets are made at your own risk.
+2. **Độ Trễ Giao Dịch**: Chúng tôi không chịu trách nhiệm cho bất kỳ sự chậm trễ, thất bại hoặc lỗi nào trong xử lý giao dịch xảy ra trên mạng blockchain.
 
-### NFTs and Digital Collectibles
-NFTs and digital collectibles obtained through our platform are stored on blockchain networks. You acknowledge that:
+3. **Ảnh Hưởng Thuế**: Bạn hoàn toàn chịu trách nhiệm xác định và thanh toán bất kỳ khoản thuế hiện hành nào liên quan đến giao dịch tiền điện tử hoặc giao dịch NFT của bạn.
 
-1. **Token Standard**: Our NFTs may use various token standards (e.g., ERC-721, ERC-1155, BEP-721, or equivalent standards on other blockchains). The specific rights conferred by an NFT are limited to those explicitly stated in our Terms or the applicable smart contract.
+### Tiền Điện Tử
+Chúng tôi có thể chấp nhận tiền điện tử làm phương thức thanh toán cho một số Dịch Vụ nhất định và cung cấp các tính năng dựa trên tiền điện tử. Bạn thừa nhận rằng:
 
-2. **License Only**: Your purchase of an NFT grants you a license to the associated digital content, but not ownership of the underlying intellectual property rights, copyright, or trademark.
+1. **Rủi Ro Cao**: Đầu tư tiền điện tử có tính đầu cơ cao và biến động. Bạn không bao giờ nên đầu tư nhiều hơn số tiền bạn có thể chịu được khi mất.
 
-3. **Permanent Transactions**: NFT transactions on blockchain networks are permanent and irreversible once confirmed. We cannot reverse, cancel, or refund any NFT transactions under any circumstances.
+2. **Không Chắc Chắn về Quy Định**: Bối cảnh quy định cho tiền điện tử và tài sản kỹ thuật số không chắc chắn và đang phát triển. Các quy định mới có thể ảnh hưởng đến giá trị, tiện ích hoặc tính hợp pháp của tài sản kỹ thuật số bất cứ lúc nào.
 
-   **Appeal Process for Special Cases**: While blockchain transactions are irreversible as a general rule, in exceptional circumstances, users may appeal to the Cosmicrafts DAO as a last resort for transaction disputes. To initiate this process:
-   - First post your case in the community forums for preliminary discussion
-   - You must have the minimum required amount of SPIRAL tokens staked to create a neuron and submit a formal proposal
-- Follow the governance proposal process as outlined in the [Whitepaper](/whitepaper)
-   - The DAO has final authority on all such appeals
-   - World of Unreal LLC has no responsibility or authority over these decisions
+3. **Lỗ Hổng Kỹ Thuật**: Mạng blockchain và hợp đồng thông minh có thể chứa lỗi, lỗ hổng hoặc các vấn đề kỹ thuật khác có thể dẫn đến mất tài sản của bạn.
 
-4. **Asset Persistence**: While we strive to maintain the infrastructure supporting our digital assets, we make no guarantees regarding the continued availability or functionality of metadata, artwork, or other content associated with NFTs if our services are discontinued.
+4. **Rủi Ro Thị Trường**: Thị trường tiền điện tử có thể bị thao túng, biến động cực đoan, vấn đề thanh khoản và các rủi ro thị trường khác ngoài tầm kiểm soát của chúng tôi.
 
-### Transactions
-All purchases and transactions on our platform are final. We reserve the right to refuse any purchase or transaction at our discretion. For on-chain transactions:
+### Mua Hàng Trong Ứng Dụng
+Đối với các giao dịch mua được thực hiện thông qua ứng dụng di động có sẵn trên các cửa hàng ứng dụng như Google Play Store, Apple App Store, Epic Games Store hoặc Crazy Games:
 
-1. **Network Fees**: 
-   - On the Internet Computer Protocol (ICP), transactions are generally free for users, as the DAO pays for the computing power required to operate smart contracts.
-   - For transactions on other blockchains (e.g., Ethereum, Solana, Bitcoin), you are responsible for all network fees (gas fees) associated with those transactions.
-   - The cost of network fees varies depending on network congestion and complexity of the transaction.
+1. Tất cả các giao dịch mua trong ứng dụng đều tuân theo điều khoản dịch vụ và chính sách thanh toán của cửa hàng ứng dụng tương ứng.
+2. Đối với hoàn tiền liên quan đến giao dịch mua trong ứng dụng, bạn phải liên hệ với cửa hàng ứng dụng tương ứng nơi giao dịch mua được thực hiện.
+3. Bạn thừa nhận rằng một khi giao dịch mua được thực hiện, nó được coi là hoàn tất và không hoàn lại trừ khi được cho phép bởi chính sách hoàn tiền của cửa hàng ứng dụng hoặc luật hiện hành.
+4. Phụ huynh và người giám hộ chịu trách nhiệm giám sát và phê duyệt giao dịch mua của trẻ em.
 
-2. **Transaction Delays**: We are not responsible for any delays, failures, or errors in transaction processing that occur on blockchain networks.
+## Sở Hữu Trí Tuệ
 
-3. **Tax Implications**: You are solely responsible for determining and paying any applicable taxes related to your cryptocurrency transactions or NFT trading.
+### Nội Dung Của Chúng Tôi
+Tất cả nội dung trên Nền Tảng, bao gồm nhưng không giới hạn ở văn bản, đồ họa, logo, biểu tượng, hình ảnh, clip âm thanh, tải xuống kỹ thuật số, tổng hợp dữ liệu và phần mềm, là tài sản của World of Unreal, LLC (kinh doanh dưới tên "Cosmicrafts") hoặc các nhà cung cấp nội dung của nó và được bảo vệ bởi luật bản quyền quốc tế.
 
-### Cryptocurrency
-We may accept cryptocurrency as payment for certain Services and offer cryptocurrency-based features. You acknowledge that:
+### Quyền Sở Hữu Trí Tuệ và Giấy Phép DAO
+World of Unreal, LLC duy trì quyền sở hữu pháp lý đầy đủ đối với tất cả bản quyền, thương hiệu, bằng sáng chế và các quyền sở hữu trí tuệ khác liên quan đến Cosmicrafts. Để tạo điều kiện cho sự phát triển và quản trị phi tập trung, World of Unreal, LLC đã cấp giấy phép hoạt động cụ thể cho Cosmicrafts DAO.
 
-1. **High Risk**: Cryptocurrency investments are highly speculative and volatile. You should never invest more than you can afford to lose.
+Giấy phép này cho phép DAO sử dụng, phát triển và phân phối thương hiệu và nền tảng Cosmicrafts theo quyết định quản trị, trong khi World of Unreal, LLC giữ quyền sở hữu pháp lý cuối cùng. Cấu trúc này cung cấp bảo vệ pháp lý truyền thống cho sở hữu trí tuệ của Cosmicrafts trong khi cho phép hoạt động phi tập trung.
 
-2. **Regulatory Uncertainty**: The regulatory landscape for cryptocurrencies and digital assets is uncertain and evolving. New regulations may impact the value, utility, or legality of digital assets at any time.
+Để biết chi tiết đầy đủ về thỏa thuận cấp phép này, vui lòng tham khảo tài liệu Thông Báo Pháp Lý.
 
-3. **Technical Vulnerabilities**: Blockchain networks and smart contracts may contain bugs, vulnerabilities, or other technical issues that could result in the loss of your assets.
+### Nghệ Thuật Kỹ Thuật Số Tạo Bởi AI
 
-4. **Market Risks**: Cryptocurrency markets may be subject to manipulation, extreme volatility, liquidity issues, and other market risks outside our control.
+Cosmicrafts sử dụng các công cụ và dịch vụ trí tuệ nhân tạo để tạo nghệ thuật kỹ thuật số cho nền tảng của chúng tôi:
 
-### In-App Purchases
-For purchases made through mobile applications available on app stores such as Google Play Store, Apple App Store, Epic Games Store, or Crazy Games:
+1. **Biểu Đạt Sáng Tạo**: Nghệ thuật tạo bởi AI của chúng tôi được dự định như biểu đạt sáng tạo gốc trong vũ trụ độc đáo của chúng tôi, không phải là bản sao của các tài sản sở hữu trí tuệ khác. Bất kỳ sự tương đồng nào với các tác phẩm hiện có đều là trùng hợp hoặc đại diện cho ảnh hưởng nghệ thuật chung.
 
-1. All in-app purchases are subject to the terms of service and payment policies of the respective app store.
-2. For refunds related to in-app purchases, you must contact the respective app store through which the purchase was made.
-3. You acknowledge that once a purchase is made, it is considered complete and non-refundable except as may be permitted by the app store's refund policies or applicable law.
-4. Parents and guardians are responsible for monitoring and approving children's purchases.
+2. **Cảm Hứng Nghệ Thuật**: Tương tự như cách các nghệ sĩ trong suốt lịch sử đã lấy cảm hứng từ các nhà sáng tạo khác, các gợi ý AI của chúng tôi có thể chứa tham chiếu đến nhiều vũ trụ, phong cách, nhân vật và chủ đề khác nhau. Điều này được thực hiện không phải để vi phạm bản quyền hoặc sao chép tài sản trí tuệ, mà để tạo ra sự pha trộn phong phú của biểu đạt nghệ thuật dựa trên truyền thống văn hóa.
 
-## Intellectual Property
+3. **Thừa Nhận IP Bên Thứ Ba**: Chúng tôi thừa nhận rằng các mô hình AI được đào tạo trên các bộ dữ liệu đa dạng có thể bao gồm các tác phẩm có bản quyền. Mặc dù chúng tôi nỗ lực thiện chí để đảm bảo việc sử dụng của chúng tôi tuân thủ luật hiện hành, nội dung tạo bởi AI có thể vô tình chứa các yếu tố giống với tài sản trí tuệ hiện có.
 
-### Our Content
-All content on the Platform, including but not limited to text, graphics, logos, icons, images, audio clips, digital downloads, data compilations, and software, is the property of World of Unreal, LLC (doing business as "Cosmicrafts") or its content suppliers and is protected by international copyright laws. 
+4. **Niềm Tin Sử Dụng Hợp Lý**: Chúng tôi tin rằng việc sử dụng của chúng tôi cấu thành sử dụng hợp lý và/hoặc sử dụng biến đổi theo luật bản quyền hiện hành. Chúng tôi sử dụng các dịch vụ AI này theo các điều khoản cấp phép thương mại thường bao gồm bồi thường và bảo vệ pháp lý.
 
-### Intellectual Property Ownership and DAO License
-World of Unreal, LLC maintains full legal ownership of all copyrights, trademarks, patents, and other intellectual property rights associated with Cosmicrafts. To facilitate decentralized development and governance, World of Unreal, LLC has granted a specific operating license to the Cosmicrafts DAO.
+5. **Quy Trình Quan Ngại về IP**: Nếu bạn tin rằng nội dung tạo bởi AI trên nền tảng của chúng tôi vi phạm quyền sở hữu trí tuệ của bạn, vui lòng liên hệ với chúng tôi tại contact@cosmicrafts.com trước khi theo đuổi các biện pháp pháp lý khác. Chúng tôi sẽ nhanh chóng xem xét khiếu nại của bạn và, nếu thích hợp, xóa hoặc sửa đổi nội dung đang được đề cập.
 
-This license allows the DAO to use, develop, and distribute the Cosmicrafts brand and platform according to governance decisions, while World of Unreal, LLC retains ultimate legal ownership. This structure provides traditional legal protection for Cosmicrafts intellectual property while enabling decentralized operations.
+6. **Trách Nhiệm Nhà Cung Cấp Dịch Vụ**: Theo thỏa thuận của chúng tôi với các dịch vụ AI, trách nhiệm pháp lý chính đối với nội dung tạo bởi AI thường thuộc về nhà cung cấp dịch vụ AI như được quy định trong điều khoản dịch vụ của họ.
 
-For full details of this licensing arrangement, please refer to the Legal Notices document.
+Để biết thêm thông tin chi tiết về chính sách nghệ thuật AI của chúng tôi, vui lòng tham khảo phần Nghệ Thuật Kỹ Thuật Số Tạo Bởi AI trong [Thông Báo Pháp Lý](/legal) của chúng tôi.
 
-### AI-Generated Digital Art
+### Nội Dung Của Bạn
+Bằng cách gửi nội dung lên Nền Tảng của chúng tôi, bạn cấp cho chúng tôi giấy phép toàn cầu, không độc quyền, miễn phí bản quyền để sử dụng, sao chép, sửa đổi, điều chỉnh, xuất bản, dịch, tạo các tác phẩm phái sinh, phân phối và hiển thị nội dung đó trong bất kỳ phương tiện nào.
 
-Cosmicrafts utilizes artificial intelligence tools and services to create digital art for our platform:
+### Vi Phạm Bản Quyền
+Nếu bạn tin rằng tác phẩm của bạn đã bị sao chép theo cách cấu thành vi phạm bản quyền, vui lòng cung cấp cho chúng tôi thông tin sau:
+- Chữ ký vật lý hoặc điện tử của chủ sở hữu bản quyền
+- Xác định tác phẩm có bản quyền bị cho là bị xâm phạm
+- Xác định tài liệu mà bạn cho là đang xâm phạm
+- Thông tin đủ hợp lý để cho phép chúng tôi liên hệ với bạn
+- Tuyên bố rằng bạn có niềm tin thiện chí rằng việc sử dụng tranh chấp không được ủy quyền bởi chủ sở hữu bản quyền
+- Tuyên bố, được thực hiện dưới hình phạt khai man, rằng thông tin trên là chính xác
 
-1. **Creative Expression**: Our AI-generated art is intended as original creative expression within our unique universe, not as replications of other intellectual properties. Any similarities to existing works are coincidental or represent general artistic influences.
+## Quyền Riêng Tư
+Quyền riêng tư của bạn rất quan trọng đối với chúng tôi. **Chính Sách Bảo Mật** của chúng tôi giải thích cách chúng tôi thu thập, sử dụng và bảo vệ thông tin cá nhân của bạn. Bằng cách sử dụng Dịch Vụ của chúng tôi, bạn đồng ý với các thực tiễn dữ liệu được mô tả trong [Chính Sách Bảo Mật](/privacy) của chúng tôi.
 
-2. **Artistic Inspiration**: Similar to how artists throughout history have drawn inspiration from other creators, our AI prompts may contain references to various universes, styles, characters, and themes. This is done not to infringe copyrights or copy intellectual property, but to create a rich blend of artistic expression that builds upon cultural traditions.
+## Dịch Vụ Bên Thứ Ba và Cửa Hàng Ứng Dụng
 
-3. **Third-Party IP Acknowledgment**: We acknowledge that AI models are trained on diverse datasets that may include copyrighted works. While we make good faith efforts to ensure our usage complies with applicable laws, the AI-generated content may inadvertently contain elements that resemble existing intellectual property.
+### Điều Khoản Cụ Thể Cho Nền Tảng
+Khi truy cập Dịch Vụ của chúng tôi thông qua nền tảng bên thứ ba hoặc cửa hàng ứng dụng (bao gồm nhưng không giới hạn ở Google Play Store, Apple App Store, Epic Games Store và Crazy Games), bạn cũng phải tuân theo các điều khoản, điều kiện và chính sách của nền tảng đó.
 
-4. **Fair Use Belief**: We believe our use constitutes fair use and/or transformative use under applicable copyright laws. We utilize these AI services under commercial licensing terms that generally include indemnifications and legal protections.
+### Tuân Thủ Cửa Hàng Ứng Dụng
+- **Google Play Store**: Ứng dụng của chúng tôi tuân thủ Thỏa Thuận Phân Phối Nhà Phát Triển Google Play và Chính Sách Chương Trình Nhà Phát Triển Google Play.
+- **Apple App Store**: Ứng dụng của chúng tôi tuân thủ Hướng Dẫn Đánh Giá App Store của Apple và Thỏa Thuận Giấy Phép Chương Trình Nhà Phát Triển.
+- **Epic Games Store**: Ứng dụng của chúng tôi tuân thủ Thỏa Thuận Phân Phối Epic Games Store.
+- **Crazy Games**: Ứng dụng của chúng tôi tuân thủ Thỏa Thuận Xuất Bản Crazy Games.
 
-5. **IP Concerns Process**: If you believe that AI-generated content on our platform infringes your intellectual property rights, please contact us at contact@cosmicrafts.com before pursuing other legal remedies. We will promptly review your claim and, if appropriate, remove or modify the content in question.
+### Bộ Xử Lý Thanh Toán Bên Thứ Ba
+Các khoản thanh toán được xử lý thông qua cửa hàng ứng dụng hoặc bộ xử lý thanh toán bên thứ ba tuân theo các điều khoản dịch vụ tương ứng của họ. Chúng tôi không chịu trách nhiệm về hành động hoặc chính sách của các bên thứ ba này.
 
-6. **Service Provider Responsibility**: In accordance with our agreements with AI services, primary legal responsibility for AI-generated content typically resides with the AI service provider as specified in their terms of service.
+## Thừa Nhận Rủi Ro Của Người Dùng
 
-For more detailed information about our AI art policies, please refer to the AI-Generated Digital Art section in our [Legal Notices](/legal).
+Bằng cách sử dụng Cosmicrafts, bạn thừa nhận và chấp nhận rõ ràng những điều sau:
 
-### Your Content
-By submitting content to our Platform, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, and display such content in any media.
+1. **Rủi Ro Blockchain**: Tất cả các mạng blockchain đều có rủi ro vốn có, bao gồm nhưng không giới hạn ở lỗ hổng hợp đồng thông minh, tấn công đồng thuận, tấn công quản trị và các rủi ro công nghệ khác có thể dẫn đến mất tài sản kỹ thuật số của bạn.
 
-### Copyright Infringement
-If you believe that your work has been copied in a way that constitutes copyright infringement, please provide us with the following information:
-- A physical or electronic signature of the copyright owner
-- Identification of the copyrighted work claimed to have been infringed
-- Identification of the material that you claim is infringing
-- Information reasonably sufficient to permit us to contact you
-- A statement that you have a good faith belief that the disputed use is not authorized by the copyright owner
-- A statement, made under penalty of perjury, that the above information is accurate
+2. **Rủi Ro Tài Chính**: Tài sản kỹ thuật số, tiền điện tử và NFT có thể bị biến động cực đoan, thiếu thanh khoản và có khả năng mất giá trị, lên đến và bao gồm mất toàn bộ. Bạn không bao giờ nên cam kết số tiền mà bạn không thể chịu được khi mất.
 
-## Privacy
-Your privacy is important to us. Our **Privacy Policy** explains how we collect, use, and protect your personal information. By using our Services, you consent to the data practices described in our [Privacy Policy](/privacy).
+3. **Không Có Biện Pháp Khắc Phục**: Trong trường hợp mất quyền truy cập vào ví của bạn, trộm cắp tài sản kỹ thuật số của bạn hoặc các sự kiện bất lợi khác liên quan đến tài sản kỹ thuật số và hoạt động blockchain, bạn không có biện pháp khắc phục nào đối với Cosmicrafts hoặc World of Unreal, LLC. Chúng tôi không thể và sẽ không:
+   - Khôi phục hoặc phục hồi tài sản bị mất
+   - Đảo ngược, hủy bỏ hoặc sửa đổi giao dịch blockchain
+   - Bồi thường cho bạn về những tổn thất do biến động thị trường, lừa đảo hoặc vi phạm bảo mật
+   - Hỗ trợ khôi phục mật khẩu cho ví không lưu ký
 
-## Third-Party Services and App Stores
+4. **Không Chắc Chắn về Quy Định**: Bạn hiểu rằng luật pháp, quy định và cách xử lý thuế áp dụng cho công nghệ blockchain, tiền điện tử và tài sản kỹ thuật số không chắc chắn, đang phát triển và có thể khác nhau tùy theo khu vực pháp lý. Những thay đổi quy định này có thể ảnh hưởng bất lợi đến giá trị hoặc tiện ích của tài sản kỹ thuật số của bạn hoặc tình trạng pháp lý của chúng.
 
-### Platform-Specific Terms
-When accessing our Services through a third-party platform or app store (including but not limited to Google Play Store, Apple App Store, Epic Games Store, and Crazy Games), you are also subject to the terms, conditions, and policies of that platform.
+5. **Không Phải Lời Khuyên Tài Chính**: Không có gì trong nền tảng, tài liệu tiếp thị hoặc thông tin liên lạc của chúng tôi cấu thành lời khuyên về tài chính, đầu tư, pháp lý hoặc thuế. Bất kỳ quyết định đầu tư nào bạn đưa ra đều do rủi ro và quyết định của riêng bạn.
 
-### App Store Compliance
-- **Google Play Store**: Our apps comply with Google Play Developer Distribution Agreement and Google Play Developer Program Policies.
-- **Apple App Store**: Our apps comply with Apple's App Store Review Guidelines and Developer Program License Agreement.
-- **Epic Games Store**: Our apps comply with Epic Games Store Distribution Agreement.
-- **Crazy Games**: Our apps comply with Crazy Games Publishing Agreement.
+6. **Chấp Nhận Rủi Ro Bắt Buộc**: Bằng cách sử dụng bất kỳ tính năng phi tập trung hoặc dựa trên blockchain nào của nền tảng của chúng tôi, bạn đang thừa nhận và chấp nhận rõ ràng tất cả các rủi ro liên quan đến công nghệ blockchain và tài sản kỹ thuật số. Nếu bạn không đồng ý hoặc chấp nhận những rủi ro này, bạn không được sử dụng các tính năng liên quan đến blockchain của nền tảng của chúng tôi.
 
-### Third-Party Payment Processors
-Payments processed through app stores or third-party payment processors are subject to their respective terms of service. We are not responsible for the actions or policies of these third parties.
+## Rủi Ro Thị Trường và Trách Nhiệm Nền Tảng
 
-## User Acknowledgment of Risks
+### Vai Trò Nhà Cung Cấp Dịch Vụ
+Cosmicrafts hoạt động chỉ như một nhà cung cấp dịch vụ công nghệ cung cấp nền tảng nơi người dùng có thể tương tác với mạng blockchain và tham gia vào giao dịch tài sản kỹ thuật số. Chúng tôi làm rõ rõ ràng rằng:
 
-By using Cosmicrafts, you explicitly acknowledge and accept the following:
+1. **Không Phải Tổ Chức Tài Chính**: Cosmicrafts không phải là ngân hàng, môi giới, đại lý, cố vấn đầu tư, tổ chức tài chính hoặc sàn giao dịch tiền điện tử. Chúng tôi không cung cấp lời khuyên về tài chính, đầu tư, pháp lý hoặc thuế.
 
-1. **Blockchain Risks**: All blockchain networks involve inherent risks, including but not limited to smart contract vulnerabilities, consensus attacks, governance attacks, and other technological risks that could result in the loss of your digital assets.
+2. **Nền Tảng Trung Lập**: Chúng tôi chỉ cung cấp cơ sở hạ tầng công nghệ trung lập. Chúng tôi không kiểm soát, ảnh hưởng hoặc can thiệp vào thị trường, giao dịch hoặc giá trị của bất kỳ tài sản kỹ thuật số nào được giao dịch, đúc hoặc trao đổi thông qua nền tảng của chúng tôi.
 
-2. **Financial Risks**: Digital assets, cryptocurrencies, and NFTs are subject to extreme volatility, illiquidity, and potential loss of value, up to and including total loss. You should never commit funds you cannot afford to lose.
+3. **Không Lưu Ký**: Chúng tôi không lưu ký tiền hoặc tài sản kỹ thuật số của người dùng, cũng như không có khả năng đảo ngược giao dịch, khôi phục tài sản bị mất hoặc sửa đổi dữ liệu blockchain.
 
-3. **No Recourse**: In the event of loss of access to your wallet, theft of your digital assets, or other adverse events related to digital assets and blockchain activities, you have no recourse against Cosmicrafts or World of Unreal, LLC. We cannot and will not:
-   - Recover or restore lost assets
-   - Reverse, cancel, or modify blockchain transactions
-   - Compensate you for losses due to market volatility, scams, or security breaches
-   - Assist with password recovery for non-custodial wallets
+4. **Không Kiểm Soát Thị Trường**: Chúng tôi không có quyền kiểm soát giá trị, khả năng giao dịch hoặc tính thanh khoản của bất kỳ NFT, token hoặc tài sản kỹ thuật số nào được cung cấp, tạo ra, bán hoặc mua thông qua nền tảng của chúng tôi.
 
-4. **Regulatory Uncertainty**: You understand that the laws, regulations, and tax treatments applicable to blockchain technologies, cryptocurrencies, and digital assets are uncertain, evolving, and may vary from jurisdiction to jurisdiction. These regulatory changes may adversely affect the value or utility of your digital assets or their legal status.
+### Rủi Ro Dựa Trên Thị Trường và Không Chịu Trách Nhiệm của Nền Tảng
 
-5. **No Financial Advice**: Nothing in our platform, marketing materials, or communications constitutes financial, investment, legal, or tax advice. Any investment decisions you make are at your own risk and discretion.
+Bằng cách sử dụng nền tảng của chúng tôi, bạn thừa nhận và đồng ý rõ ràng rằng:
 
-6. **Mandatory Risk Acceptance**: By using any of the decentralized or blockchain-based features of our platform, you are explicitly acknowledging and accepting all risks associated with blockchain technology and digital assets. If you do not agree with or accept these risks, you must not use the blockchain-related features of our platform.
+1. **Biến Động Giá**: Thị trường tài sản kỹ thuật số có tính biến động cao, và giá của NFT, token và các tài sản kỹ thuật số khác có thể thay đổi đáng kể trong thời gian ngắn, có khả năng dẫn đến mất giá trị một phần hoặc toàn bộ.
 
-## Market Risk and Platform Liability
+2. **Không Chịu Trách Nhiệm cho Sự Kiện Thị Trường**: Cosmicrafts và World of Unreal, LLC sẽ không chịu trách nhiệm, trong bất kỳ trường hợp nào, đối với:
+   - Biến động giá, sụp đổ thị trường hoặc mất giá trị trong bất kỳ tài sản kỹ thuật số nào
+   - "Rug pulls," dự án bị bỏ rơi hoặc thay đổi nhóm phát triển
+   - Thay đổi trong sự quan tâm của cộng đồng hoặc nhu cầu đối với NFT hoặc token cụ thể
+   - Thất bại của thị trường, sàn giao dịch hoặc nền tảng bên thứ ba
+   - Thay đổi trong tình cảm nghệ thuật hoặc nhà sưu tập đối với tài sản kỹ thuật số cụ thể
+   - Ra mắt token hoặc đúc NFT thất bại, bị trì hoãn hoặc hoạt động kém
+   - Vấn đề liên quan đến kinh tế token hoặc thiết kế tokenomics
+   - Thay đổi trong giá trị nhận thức của bộ sưu tập hoặc tài sản kỹ thuật số
 
-### Service Provider Role
-Cosmicrafts operates solely as a technology service provider that offers a platform where users can interact with blockchain networks and engage in digital asset transactions. We explicitly clarify that:
+3. **Đầu Cơ Với Rủi Ro Của Riêng Bạn**: Tất cả các giao dịch mua tài sản kỹ thuật số, bao gồm NFT và token, nên được coi là có tính đầu cơ cao. Bạn không bao giờ nên chi tiền cho tài sản kỹ thuật số mà bạn không thể chịu được khi mất hoàn toàn.
 
-1. **Not a Financial Institution**: Cosmicrafts is not a bank, broker, dealer, investment advisor, financial institution, or cryptocurrency exchange. We do not provide financial, investment, legal, or tax advice.
+4. **Thị Trường Thứ Cấp**: Chúng tôi không đưa ra bất kỳ tuyên bố hoặc bảo đảm nào về sự tồn tại hoặc khả năng có sẵn của thị trường thứ cấp cho tài sản kỹ thuật số. Khả năng bán lại hoặc giao dịch bất kỳ tài sản kỹ thuật số nào là không chắc chắn và phụ thuộc vào các yếu tố hoàn toàn nằm ngoài tầm kiểm soát của chúng tôi.
 
-2. **Neutral Platform**: We provide neutral technological infrastructure only. We do not control, influence, or interfere with the markets, transactions, or values of any digital assets traded, minted, or otherwise exchanged through our platform.
+5. **Không Đảm Bảo Lợi Nhuận**: Chúng tôi không bao giờ đảm bảo lợi nhuận, lợi tức hoặc rằng bất kỳ NFT hoặc token nào sẽ duy trì hoặc tăng giá trị. Bất kỳ tuyên bố nào liên quan đến giá trị tiềm năng của tài sản kỹ thuật số không bao giờ nên được hiểu là lời hứa về lợi nhuận tài chính.
 
-3. **No Custody**: We do not take custody of user funds or digital assets, nor do we have the ability to reverse transactions, recover lost assets, or modify blockchain data.
+6. **Không Đại Diện Về Nghệ Sĩ hoặc Dự Án**: Mặc dù chúng tôi có thể cung cấp nền tảng cho nhiều nghệ sĩ, dự án hoặc nhà phát triển khác nhau, chúng tôi không đưa ra bất kỳ tuyên bố hoặc bảo đảm nào về độ tin cậy, khả năng của họ hoặc khả năng thành công hoặc hoàn thành dự án.
 
-4. **No Market Control**: We have no control over the value, tradability, or liquidity of any NFTs, tokens, or digital assets offered, created, sold, or purchased through our platform.
+### Giả Định Rủi Ro của Người Dùng
 
-### Market-Based Risks and Platform Non-Liability
+Bằng cách sử dụng nền tảng của chúng tôi:
 
-By using our platform, you explicitly acknowledge and agree that:
+1. **Giả Định Rủi Ro Đầy Đủ**: Bạn thừa nhận rằng bạn chịu trách nhiệm và rủi ro đầy đủ cho tất cả các quyết định của mình để mua, nắm giữ, giao dịch hoặc bán tài sản kỹ thuật số.
 
-1. **Price Volatility**: Digital asset markets are highly volatile, and the price of NFTs, tokens, and other digital assets can change dramatically in short periods of time, potentially resulting in partial or total loss of value.
+2. **Đánh Giá Độc Lập**: Bạn xác nhận rằng bạn có kiến thức, kinh nghiệm và khả năng tài chính để đưa ra quyết định mua và giao dịch độc lập và để đánh giá các rủi ro liên quan.
 
-2. **No Liability for Market Events**: Cosmicrafts and World of Unreal, LLC shall not be liable, under any circumstances, for:
-   - Price fluctuations, market crashes, or loss of value in any digital assets
-   - "Rug pulls," abandoned projects, or developer team changes
-   - Changes in community interest or demand for specific NFTs or tokens
-   - Failures of third-party marketplaces, exchanges, or platforms
-   - Changes in artistic or collector sentiment toward specific digital assets
-   - Failed, delayed, or underperforming token launches or NFT mints
-   - Issues related to token economics or tokenomics design
-   - Changes in perceived value of digital collections or assets
+3. **Không Dựa Vào**: Bạn không dựa vào bất kỳ tuyên bố nào được đưa ra bởi Cosmicrafts liên quan đến giá trị, tiện ích hoặc khả năng bán trong tương lai của bất kỳ tài sản kỹ thuật số nào.
 
-3. **Speculation at Your Own Risk**: All digital asset purchases, including NFTs and tokens, should be considered highly speculative. You should never spend money on digital assets that you cannot afford to lose entirely.
+4. **Nền Tảng Không Chịu Trách Nhiệm**: Bạn đồng ý rằng Cosmicrafts và World of Unreal, LLC sẽ không chịu trách nhiệm cho bất kỳ tổn thất dựa trên thị trường nào mà bạn có thể phải chịu thông qua việc sử dụng Dịch Vụ của chúng tôi hoặc sự tham gia của bạn vào thị trường tài sản kỹ thuật số.
 
-4. **Secondary Markets**: We make no representations or warranties about the existence or availability of secondary markets for digital assets. The ability to resell or trade any digital asset is uncertain and depends on factors entirely outside our control.
+## Tuyên Bố Miễn Trừ
 
-5. **No Guaranteed Returns**: We never guarantee profits, returns, or that any NFT or token will maintain or increase in value. Any statements regarding the potential value of digital assets should never be interpreted as a promise of financial returns.
+### Khả Dụng Dịch Vụ
+Chúng tôi cố gắng giữ cho Dịch Vụ của chúng tôi hoạt động và an toàn; tuy nhiên, có thể có những lúc Dịch Vụ của chúng tôi bị gián đoạn. Chúng tôi không đảm bảo rằng Dịch Vụ của chúng tôi sẽ luôn có sẵn mọi lúc.
 
-6. **No Representations About Artists or Projects**: While we may provide a platform for various artists, projects, or developers, we make no representations or warranties about their reliability, capability, or the likelihood of project success or completion.
+### 'Nguyên Trạng' và 'Khi Có Sẵn'
+Dịch Vụ được cung cấp trên cơ sở 'NGUYÊN TRẠNG' và 'KHI CÓ SẴN'. Cosmicrafts từ chối tất cả bảo đảm dưới bất kỳ hình thức nào, dù rõ ràng hay ngụ ý, bao gồm nhưng không giới hạn ở bảo đảm ngụ ý về khả năng bán, sự phù hợp cho một mục đích cụ thể và không vi phạm.
 
-### User Assumption of Risk
+## Giới Hạn Trách Nhiệm
 
-By using our platform:
+Trong phạm vi tối đa được pháp luật cho phép, Cosmicrafts và World of Unreal, LLC sẽ không chịu trách nhiệm cho bất kỳ thiệt hại gián tiếp, ngẫu nhiên, đặc biệt, hậu quả hoặc trừng phạt nào, bao gồm mất lợi nhuận, dữ liệu hoặc uy tín, phát sinh từ việc bạn truy cập hoặc sử dụng hoặc không thể truy cập hoặc sử dụng Dịch Vụ.
 
-1. **Full Risk Assumption**: You acknowledge that you assume full responsibility and risk for all of your decisions to purchase, hold, trade, or sell digital assets.
+### Không Chịu Trách Nhiệm cho Hoạt Động Blockchain
+Không giới hạn tính tổng quát của những điều trên, chúng tôi đặc biệt từ chối tất cả trách nhiệm đối với:
 
-2. **Independent Evaluation**: You confirm that you have the knowledge, experience, and financial capability to make independent purchasing and trading decisions and to evaluate the risks involved.
+1. **Tài Sản Kỹ Thuật Số**: Bất kỳ mất mát, trộm cắp, biến mất, phá hủy hoặc không thể truy cập tài sản kỹ thuật số, tiền điện tử hoặc NFT, cho dù do vi phạm bảo mật, vấn đề tương thích ví, lỗi mạng blockchain, cập nhật giao thức, sự kiện fork hoặc bất kỳ lý do nào khác.
 
-3. **No Reliance**: You have not relied on any representations made by Cosmicrafts regarding the future value, utility, or merchantability of any digital assets.
+2. **Lỗi Hợp Đồng Thông Minh**: Bất kỳ vấn đề nào phát sinh từ lỗi, sai sót hoặc lỗ hổng bảo mật trong hợp đồng thông minh được sử dụng trên nền tảng của chúng tôi hoặc nền tảng bên thứ ba tương tác với dịch vụ của chúng tôi.
 
-4. **Platform Not Liable**: You agree that Cosmicrafts and World of Unreal, LLC shall not be liable for any market-based losses you may incur through your use of our Services or your participation in the digital asset marketplace.
+3. **Biến Động Thị Trường**: Bất kỳ tổn thất tài chính nào do tính biến động, thiếu thanh khoản hoặc thao túng thị trường của tiền điện tử, NFT hoặc tài sản kỹ thuật số khác.
 
-## Disclaimers
+4. **Hành Động Quy Định**: Bất kỳ thay đổi nào về giá trị, tiện ích hoặc tính hợp pháp của tài sản kỹ thuật số do hành động quy định, hạn chế hoặc cấm ảnh hưởng đến công nghệ blockchain, tiền điện tử hoặc NFT.
 
-### Service Availability
-We strive to keep our Services operational and secure; however, there may be occasions when our Services are interrupted. We do not guarantee that our Services will be available at all times.
+5. **Vấn Đề Đa Chuỗi**: Bất kỳ vấn đề, lỗi hoặc tổn thất nào phát sinh từ hoạt động đa chuỗi, lỗi cầu nối hoặc không tương thích giữa các mạng blockchain khác nhau.
 
-### 'As Is' and 'As Available'
-The Services are provided on an 'AS IS' and 'AS AVAILABLE' basis. Cosmicrafts disclaims all warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.
+6. **Dịch Vụ Bên Thứ Ba**: Bất kỳ tổn thất hoặc vấn đề nào phát sinh từ việc sử dụng ví, sàn giao dịch, cầu nối bên thứ ba hoặc các dịch vụ liên quan đến blockchain khác được sử dụng kết hợp với nền tảng của chúng tôi.
 
-## Limitation of Liability
+### Trách Nhiệm Tối Đa
+Trong mọi trường hợp, trách nhiệm tổng hợp tối đa của chúng tôi theo các Điều Khoản này sẽ không vượt quá giá trị lớn hơn của: (a) số tiền bạn đã trả để sử dụng dịch vụ không phải blockchain của chúng tôi trong sáu tháng trước sự kiện dẫn đến trách nhiệm, hoặc (b) 100 USD. Các giới hạn trách nhiệm không áp dụng cho các trách nhiệm không thể bị loại trừ hoặc giới hạn bởi luật hiện hành.
 
-To the maximum extent permitted by law, Cosmicrafts and World of Unreal, LLC shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or goodwill, resulting from your access to or use of or inability to access or use the Services.
+## Bồi Thường
+Bạn đồng ý bồi thường, bảo vệ và giữ cho World of Unreal LLC, Quỹ Cosmicrafts, người sáng lập, cán bộ, giám đốc, nhân viên, đại lý và bên thứ ba không bị tổn hại đối với bất kỳ tổn thất, chi phí, trách nhiệm và chi phí nào liên quan đến hoặc phát sinh từ việc bạn sử dụng Dịch Vụ, vi phạm các Điều Khoản này của bạn hoặc vi phạm bất kỳ quyền nào của người khác.
 
-### No Liability for Blockchain Activities
-Without limiting the generality of the foregoing, we specifically disclaim all liability for:
+## Luật Điều Chỉnh
+Các Điều Khoản này sẽ được điều chỉnh và giải thích theo luật pháp của Tiểu bang California, không tính đến các quy định xung đột pháp luật của nó.
 
-1. **Digital Assets**: Any loss, theft, disappearance, destruction, or inability to access digital assets, cryptocurrency, or NFTs, whether due to security breaches, wallet compatibility issues, blockchain network failures, protocol updates, fork events, or any other reason.
+## Giải Quyết Tranh Chấp
 
-2. **Smart Contract Failures**: Any issues arising from bugs, errors, or security vulnerabilities in smart contracts used on our platform or third-party platforms that interact with our services.
+### Giải Quyết Không Chính Thức
+Nếu bạn có tranh chấp với chúng tôi, vui lòng liên hệ với chúng tôi trước. Chúng tôi sẽ cố gắng giải quyết tranh chấp một cách không chính thức bằng cách liên hệ với bạn qua email.
 
-3. **Market Volatility**: Any financial losses due to the volatility, illiquidity, or market manipulation of cryptocurrencies, NFTs, or other digital assets.
+### Trọng Tài
+Nếu chúng tôi không thể giải quyết tranh chấp một cách không chính thức, bất kỳ tranh chấp hoặc khiếu nại nào phát sinh từ hoặc liên quan đến các Điều Khoản này hoặc Dịch Vụ sẽ được giải quyết bằng trọng tài ràng buộc theo quy tắc trọng tài thương mại của [Hiệp Hội Trọng Tài Hoa Kỳ](https://www.adr.org/).
 
-4. **Regulatory Actions**: Any changes in value, utility, or legality of digital assets due to regulatory actions, restrictions, or bans affecting blockchain technology, cryptocurrencies, or NFTs.
+### Từ Bỏ Kiện Tập Thể
+Bạn đồng ý rằng bất kỳ thủ tục tố tụng nào để giải quyết tranh chấp sẽ chỉ được tiến hành trên cơ sở cá nhân và không phải trong một vụ kiện tập thể, hợp nhất hoặc đại diện.
 
-5. **Cross-Chain Issues**: Any problems, errors, or losses resulting from cross-chain operations, bridge failures, or incompatibilities between different blockchain networks.
+## Sửa Đổi Điều Khoản
+Chúng tôi có thể sửa đổi các Điều Khoản này bất cứ lúc nào. Nếu chúng tôi thực hiện thay đổi, chúng tôi sẽ thông báo bằng cách đăng các Điều Khoản cập nhật trên Nền Tảng của chúng tôi và cập nhật "Ngày Hiệu Lực" ở trên cùng. Việc bạn tiếp tục sử dụng Dịch Vụ của chúng tôi sau khi các thay đổi có hiệu lực cấu thành sự đồng ý của bạn với các Điều Khoản đã sửa đổi.
 
-6. **Third-Party Services**: Any losses or issues arising from the use of third-party wallets, exchanges, bridges, or other blockchain-related services used in conjunction with our platform.
+## Chấm Dứt
+Chúng tôi có thể chấm dứt hoặc đình chỉ tài khoản và quyền truy cập vào Dịch Vụ của chúng tôi ngay lập tức, mà không cần thông báo trước hoặc trách nhiệm, vì bất kỳ lý do gì, bao gồm nếu bạn vi phạm các Điều Khoản này.
 
-### Maximum Liability
-In any case, our maximum aggregate liability under these Terms shall not exceed the greater of: (a) the amount you paid to use our non-blockchain services during the six months prior to the event giving rise to the liability, or (b) $100 USD. The limitations of liability do not apply to liabilities that cannot be excluded or limited by applicable law.
+## Tính Tách Biệt
+Nếu bất kỳ điều khoản nào của các Điều Khoản này được phát hiện là không thể thực thi hoặc không hợp lệ, điều khoản đó sẽ bị giới hạn hoặc loại bỏ ở mức tối thiểu cần thiết, và các điều khoản còn lại sẽ tiếp tục có đầy đủ hiệu lực.
 
-## Indemnification
-You agree to indemnify, defend, and hold harmless World of Unreal LLC, Cosmicrafts Foundation, its founder, officers, directors, employees, agents, and third parties, for any losses, costs, liabilities, and expenses relating to or arising out of your use of the Services, your violation of these Terms, or your violation of any rights of another.
+## Toàn Bộ Thỏa Thuận
+Các Điều Khoản này cấu thành toàn bộ thỏa thuận giữa bạn và Cosmicrafts liên quan đến Dịch Vụ của chúng tôi và thay thế bất kỳ thỏa thuận trước đó nào.
 
-## Governing Law
-These Terms shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of law provisions.
-
-## Dispute Resolution
-
-### Informal Resolution
-If you have a dispute with us, please contact us first. We will attempt to resolve the dispute informally by contacting you via email.
-
-### Arbitration
-If we cannot resolve a dispute informally, any controversy or claim arising out of or relating to these Terms or the Services will be settled by binding arbitration in accordance with the commercial arbitration rules of the [American Arbitration Association](https://www.adr.org/).
-
-### Class Action Waiver
-You agree that any proceedings to resolve disputes will be conducted only on an individual basis and not in a class, consolidated, or representative action.
-
-## Amendments to Terms
-We may modify these Terms at any time. If we make changes, we will provide notice by posting the updated Terms on our Platform and updating the "Effective Date" at the top. Your continued use of our Services after the changes take effect constitutes your agreement to the revised Terms.
-
-## Termination
-We may terminate or suspend your account and access to our Services immediately, without prior notice or liability, for any reason, including if you breach these Terms.
-
-## Severability
-If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions will continue in full force and effect.
-
-## Entire Agreement
-These Terms constitute the entire agreement between you and Cosmicrafts regarding our Services and supersede any prior agreements.
-
-## Contact Information
-If you have any questions about these Terms, please contact us at:
+## Thông Tin Liên Hệ
+Nếu bạn có bất kỳ câu hỏi nào về các Điều Khoản này, vui lòng liên hệ với chúng tôi tại:
 
 **Email**: contact@cosmicrafts.com  
 
-For matters requiring a physical address for regulatory compliance, please contact us via email first.
+Đối với các vấn đề yêu cầu địa chỉ vật lý để tuân thủ quy định, vui lòng liên hệ với chúng tôi qua email trước.
 
-## DAO Governance and Token Rights
+## Quản Trị DAO và Quyền Token
 
-### Governance Tokens and Utility Nature
+### Token Quản Trị và Bản Chất Tiện Ích
 
-1. **Limited Utility Function**: Governance tokens are utility tokens that grant holders only two specific limited rights when staked:
-   - The right to vote on governance proposals
-   - The right to submit governance proposals (subject to minimum staking requirements)
+1. **Chức Năng Tiện Ích Hạn Chế**: Token quản trị là token tiện ích chỉ cấp cho người nắm giữ hai quyền hạn chế cụ thể khi được stake:
+   - Quyền bỏ phiếu cho các đề xuất quản trị
+   - Quyền gửi đề xuất quản trị (tùy thuộc vào yêu cầu stake tối thiểu)
 
-2. **Tokens Must Be Staked**: Governance rights are only available to users who have staked their tokens in the governance staking contract. Unstaked tokens provide no governance rights.
+2. **Token Phải Được Stake**: Quyền quản trị chỉ có sẵn cho người dùng đã stake token của họ trong hợp đồng stake quản trị. Token chưa stake không cung cấp quyền quản trị.
 
-3. **Utility Tokens Only**: Governance tokens are strictly utility tokens that facilitate platform governance. They:
-   - Do not represent any ownership, equity, shares, or securities in World of Unreal, LLC
-   - Do not confer any rights to dividends, profit-sharing, or financial returns
-   - Do not grant management control over World of Unreal, LLC or the Cosmicrafts Foundation
-   - Have no guaranteed market value or liquidity
-   - Are not presented or marketed as investments or speculative assets
+3. **Chỉ Là Token Tiện Ích**: Token quản trị là token tiện ích nghiêm ngặt tạo điều kiện cho quản trị nền tảng. Chúng:
+   - Không đại diện cho bất kỳ quyền sở hữu, vốn chủ sở hữu, cổ phần hoặc chứng khoán nào trong World of Unreal, LLC
+   - Không cấp bất kỳ quyền nào đối với cổ tức, chia sẻ lợi nhuận hoặc lợi nhuận tài chính
+   - Không cấp quyền kiểm soát quản lý đối với World of Unreal, LLC hoặc Quỹ Cosmicrafts
+   - Không có giá trị thị trường hoặc tính thanh khoản được đảm bảo
+   - Không được trình bày hoặc tiếp thị như đầu tư hoặc tài sản đầu cơ
 
-4. **No Commercial Rights**: Ownership of governance tokens does not grant any license, commercial rights, or intellectual property rights to Cosmicrafts assets, brand, or content.
+4. **Không Có Quyền Thương Mại**: Sở hữu token quản trị không cấp bất kỳ giấy phép, quyền thương mại hoặc quyền sở hữu trí tuệ nào đối với tài sản, thương hiệu hoặc nội dung của Cosmicrafts.
 
-5. **Voting Limitations**: The scope of governance voting is limited to specific platform parameters defined in the governance documentation, and does not include:
-   - Business operations of World of Unreal, LLC
-   - Legal or regulatory compliance decisions
-   - Allocation of company revenues or profits
-   - Hiring, firing, or compensation of company personnel
+5. **Giới Hạn Bỏ Phiếu**: Phạm vi bỏ phiếu quản trị giới hạn ở các tham số nền tảng cụ thể được định nghĩa trong tài liệu quản trị, và không bao gồm:
+   - Hoạt động kinh doanh của World of Unreal, LLC
+   - Quyết định tuân thủ pháp lý hoặc quy định
+   - Phân bổ doanh thu hoặc lợi nhuận của công ty
+   - Thuê, sa thải hoặc bồi thường nhân sự công ty
 
-### Legal Relationship and Liability
+### Mối Quan Hệ Pháp Lý và Trách Nhiệm
 
-1. **Multi-Entity Structure**: The Cosmicrafts ecosystem operates through a multi-entity structure:
-   - **World of Unreal, LLC**: A Delaware limited liability company that serves as a legal entity interfacing with traditional systems for certain business operations.
-   - **Cosmicrafts Foundation**: A non-profit organization that serves as a major contributor to the development of the Cosmicrafts platform on behalf of the DAO.
-   - **Cosmicrafts DAO**: The decentralized autonomous organization that governs certain aspects of the platform through token-based voting.
+1. **Cấu Trúc Đa Thực Thể**: Hệ sinh thái Cosmicrafts hoạt động thông qua cấu trúc đa thực thể:
+   - **World of Unreal, LLC**: Một công ty trách nhiệm hữu hạn Delaware đóng vai trò là thực thể pháp lý giao tiếp với hệ thống truyền thống cho một số hoạt động kinh doanh nhất định.
+   - **Quỹ Cosmicrafts**: Một tổ chức phi lợi nhuận đóng vai trò là nhà đóng góp chính cho sự phát triển của nền tảng Cosmicrafts thay mặt cho DAO.
+   - **Cosmicrafts DAO**: Tổ chức tự trị phi tập trung quản lý một số khía cạnh nhất định của nền tảng thông qua bỏ phiếu dựa trên token.
 
-2. **Limited DAO Governance Scope**: The Cosmicrafts DAO's authority is limited to smart contracts and canister management with parameters as defined in the [governance documentation](/whitepaper#governance).
+2. **Phạm Vi Quản Trị DAO Hạn Chế**: Thẩm quyền của Cosmicrafts DAO giới hạn ở hợp đồng thông minh và quản lý canister với các tham số như được định nghĩa trong [tài liệu quản trị](/whitepaper#governance).
 
-3. **No Partnership or Joint Venture**: Participation in DAO governance does not create a partnership, joint venture, agency, or employment relationship between token holders and any of the legal entities involved in the Cosmicrafts ecosystem, or among token holders themselves.
+3. **Không Phải Đối Tác hoặc Liên Doanh**: Tham gia vào quản trị DAO không tạo ra mối quan hệ đối tác, liên doanh, đại lý hoặc việc làm giữa người nắm giữ token và bất kỳ thực thể pháp lý nào tham gia vào hệ sinh thái Cosmicrafts, hoặc giữa những người nắm giữ token với nhau.
 
-4. **Governance Documentation**: Your participation in DAO governance is also subject to any additional governance documentation, which may be updated from time to time through proper governance procedures.
+4. **Tài Liệu Quản Trị**: Sự tham gia của bạn vào quản trị DAO cũng tuân theo bất kỳ tài liệu quản trị bổ sung nào, có thể được cập nhật theo thời gian thông qua các thủ tục quản trị thích hợp.
 
-5. **No Fiduciary Relationship**: World of Unreal, LLC, the Cosmicrafts Foundation, and the DAO do not owe fiduciary duties to token holders. Token holders do not owe fiduciary duties to each other by virtue of holding governance tokens.
+5. **Không Có Mối Quan Hệ Ủy Thác**: World of Unreal, LLC, Quỹ Cosmicrafts và DAO không có nghĩa vụ ủy thác đối với người nắm giữ token. Người nắm giữ token không có nghĩa vụ ủy thác đối với nhau chỉ vì nắm giữ token quản trị.
 
 ---
 
-*Last updated: March 4, 2025* 
+*Cập nhật lần cuối: Ngày 4 tháng 3 năm 2025* 
