@@ -64,27 +64,26 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="language-selector" @click="toggleDropdown">
-    <img src="@/assets/icons/lang.svg" alt="Language Icon" class="lang-icon" />
-    <span class="lang-label">
+  <div class="language-selector cosmic-hover-effect" @click="toggleDropdown">
+    <img src="@/assets/icons/lang.svg" alt="Language Icon" class="lang-icon cosmic-float" />
+    <span class="lang-label cosmic-text">
       {{ currentLanguageLabel }}
     </span>
 
     <!-- Dropdown Menu -->
     <transition name="dropdown">
-      <ul v-if="isDropdownOpen" :class="['dropdown-menu', props.direction]">
+      <ul v-if="isDropdownOpen" :class="['dropdown-menu cosmic-panel', props.direction]">
         <li
           v-for="(lang, index) in languages"
           :key="lang.code"
           :style="{ '--index': index }"
-          class="u-hover"
+          class="cosmic-hover-effect"
           :class="{ active: lang.code === currentLanguage }"
           @click.stop="changeLanguage(lang.code)"
         >
           {{ lang.label }}
         </li>
       </ul>
-
     </transition>
   </div>
 </template>
@@ -98,7 +97,6 @@ onBeforeUnmount(() => {
   cursor: pointer;
   padding: 0.5rem;
   font-size: 1.25rem;
-  transition: background-color 0.1s ease;
   font-weight: 600;
   z-index: 1000000;
 }
@@ -106,20 +104,21 @@ onBeforeUnmount(() => {
 .lang-icon {
   width: 1.25rem;
   height: 1.25rem;
+  filter: drop-shadow(var(--cosmic-text-glow));
 }
 
 .lang-label {
-  display: inline; /* Default display for non-desktop instances */
+  display: inline;
 }
 
 /* Dropdown open/close animation */
 .dropdown-enter-active,
 .dropdown-leave-active {
-  transition: opacity 0.2s ease, transform 0.23s ease;
+  transition: all 0.3s var(--cosmic-bounce);
   transform-origin: top right;
 }
 
-.dropdown-enter,
+.dropdown-enter-from,
 .dropdown-leave-to {
   opacity: 0;
   transform: scaleY(0.2) scaleX(0.2);
@@ -131,15 +130,10 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: repeat(4, 2fr);
   gap: 2rem;
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.658), rgba(23, 33, 43, 0.705));
-  border: 1px solid #3a3a3a;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  list-style: none;
   margin-top: .75rem;
-  padding: 1rem;
-  border: 0.25px solid rgba(255, 255, 255, 0.086);
-  border-radius: 8px;
-  
+  padding: 1.5rem;
+  width: max-content;
+  min-width: 480px;
 }
 
 /* Positioning for up-right */
@@ -154,17 +148,32 @@ onBeforeUnmount(() => {
   right: 0;
 }
 
-/* Staggered animation for each language */
+/* Language items */
 .dropdown-menu li {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25rem;
-  color: #e2e8f0;
+  padding: 0.5rem 1rem;
+  color: var(--color-text-primary);
   font-size: 1rem;
+  border-radius: var(--radius-small);
+  animation: fadeIn 0.25s var(--cosmic-bounce) forwards;
+  animation-delay: calc(0.05s * var(--index));
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s var(--cosmic-bounce);
+}
 
-  animation: fadeIn 0.25s ease forwards;
-  animation-delay: calc(0.05s * var(--index)); /* Stagger each item */
+.dropdown-menu li:hover {
+  background: var(--cosmic-hover-bg);
+  color: var(--color-primary);
+  text-shadow: var(--cosmic-text-glow);
+}
+
+.dropdown-menu li.active {
+  background: var(--cosmic-active-bg);
+  color: var(--color-primary);
+  text-shadow: var(--cosmic-text-glow);
 }
 
 @keyframes fadeIn {
@@ -175,9 +184,17 @@ onBeforeUnmount(() => {
 }
 
 @media (min-width: 767px) {
-  /* Hide the language label on larger screens (for header) */
   .header .language-selector .lang-label {
     display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .dropdown-menu {
+    grid-template-columns: repeat(3, 1fr);
+    min-width: 320px;
+    gap: 1rem;
+    padding: 1rem;
   }
 }
 </style>

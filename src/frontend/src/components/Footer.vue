@@ -203,7 +203,6 @@ const toggleSection = (section) => {
     rgba(15, 25, 45, 0.98) 100%);
   border-top: 2px solid rgba(15, 185, 253, 0.2);
   backdrop-filter: blur(20px);
-  width: 100%;
 }
 
 .footer-cosmic-bg {
@@ -248,9 +247,8 @@ const toggleSection = (section) => {
 /* Desktop Footer Styles */
 .footer-container {
   max-width: 1200px;
-  width: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 4rem 2rem 2rem;
   position: relative;
   background: linear-gradient(180deg, 
     rgba(15, 185, 253, 0.03) 0%,
@@ -331,10 +329,15 @@ const toggleSection = (section) => {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
-  padding-bottom: 1rem;
+  padding-bottom: 0.75rem;
   text-shadow: 0 2px 10px rgba(15, 185, 253, 0.3);
   animation: gradientFlow 3s linear infinite;
   background-size: 200% auto;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
 }
 
 .footer-heading::after {
@@ -342,7 +345,7 @@ const toggleSection = (section) => {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
+  width: 50px;
   height: 2px;
   background: linear-gradient(90deg,
     var(--color-primary) 0%,
@@ -351,24 +354,11 @@ const toggleSection = (section) => {
   border-radius: 2px;
   box-shadow: 0 0 20px rgba(15, 185, 253, 0.5);
   animation: lineGlow 3s ease-in-out infinite;
-  transform-origin: left;
-  transform: scaleX(0.5);
-  transition: transform 0.3s ease;
-}
-
-.footer-heading:hover::after {
-  transform: scaleX(0.8);
 }
 
 @keyframes lineGlow {
-  0%, 100% { 
-    box-shadow: 0 0 20px rgba(15, 185, 253, 0.5);
-    opacity: 0.8;
-  }
-  50% { 
-    box-shadow: 0 0 30px rgba(15, 185, 253, 0.8);
-    opacity: 1;
-  }
+  0%, 100% { box-shadow: 0 0 20px rgba(15, 185, 253, 0.5); }
+  50% { box-shadow: 0 0 30px rgba(15, 185, 253, 0.8); }
 }
 
 .footer-links {
@@ -549,7 +539,6 @@ const toggleSection = (section) => {
   padding: 2rem 0 1rem;
   position: relative;
   z-index: 1;
-  width: 100%;
 }
 
 .mobile-social-bar {
@@ -667,11 +656,6 @@ const toggleSection = (section) => {
   padding: 2rem 1.5rem;
   position: relative;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 100%;
 }
 
 .mobile-copyright-container::before {
@@ -693,9 +677,6 @@ const toggleSection = (section) => {
   margin-bottom: 1.5rem;
   filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.4));
   animation: mobileLogoGlow 4s ease-in-out infinite;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 @keyframes mobileLogoGlow {
@@ -708,7 +689,6 @@ const toggleSection = (section) => {
   font-size: 0.7rem;
   color: var(--color-text-tertiary);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 100%;
 }
 
 .mobile-copyright p {
@@ -718,8 +698,11 @@ const toggleSection = (section) => {
 /* Responsive Styles */
 @media (max-width: 1200px) {
   .footer-container {
-    padding: 0 2rem;
-    width: 100%;
+    padding: 0 1.5rem;
+  }
+  
+  .footer-main {
+    gap: 2rem;
   }
 }
 
@@ -727,11 +710,20 @@ const toggleSection = (section) => {
   .footer-main {
     grid-template-columns: repeat(2, 1fr);
     gap: 3rem 2rem;
-    width: 100%;
   }
 
-  .footer-heading::after {
-    width: 80%;
+  .footer-brand {
+    grid-column: 1 / -1;
+    align-items: center;
+  }
+
+  .footer-social {
+    grid-column: 1 / -1;
+  }
+
+  .social-links {
+    grid-template-columns: repeat(5, 1fr);
+    justify-items: center;
   }
 }
 
@@ -742,20 +734,6 @@ const toggleSection = (section) => {
   
   .mobile-footer {
     display: block;
-    width: 100%;
-  }
-
-  .mobile-copyright-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .mobile-copyright {
-    width: 100%;
-    text-align: center;
   }
 }
 </style>
