@@ -161,7 +161,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 150px; /* Add margin to account for portal overlap */
+  margin-bottom: 2rem; /* Add margin to account for portal overlap */
 }
 
 .careers-hero::before {
@@ -199,6 +199,10 @@ export default {
   filter: blur(var(--glass-blur));
   z-index: -1;
   animation: pulseBackground 15s infinite alternate var(--animation-smooth);
+}
+
+.careers-hero.cosmic-page-bg {
+  background: none !important; /* Remove any background */
 }
 
 .hero-container {
@@ -557,11 +561,11 @@ export default {
 /* Cosmic Portal - Dramatic Section Transition */
 .cosmic-portal {
   position: absolute;
-  bottom: -150px;
+  bottom: -125px;
   left: 50%;
   transform: translateX(-50%);
-  width: 300px;
-  height: 300px;
+  width: 2rem;
+  height: 16rem;
   z-index: 10;
   perspective: 1000px;
 }

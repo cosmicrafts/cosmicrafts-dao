@@ -73,14 +73,14 @@ export default {
 
 <style scoped>
 .benefits-section {
-  background: linear-gradient(to bottom, 
-    rgba(15, 25, 35, 0.7), 
-    rgba(15, 25, 35, 0.4), 
-    rgba(15, 25, 35, 0.7)
+  background: radial-gradient(to bottom, 
+    rgba(15, 25, 35, 0), 
+    rgba(20, 137, 255, 0.1), 
+    rgba(15, 25, 35, 0)
   );
   position: relative;
   overflow: hidden;
-  padding: 8rem 0;
+  padding: 2rem 1rem;
 }
 
 .benefits-section::before {
