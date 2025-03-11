@@ -117,12 +117,7 @@ export default {
   z-index: 1;
   padding: 150px 0 100px;
   margin-top: -150px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    var(--cosmic-bg-dark) 150px,
-    var(--cosmic-bg-dark) 100%
-  );
+  background: transparent;
   overflow: visible;
   min-height: 100vh;
 }
@@ -132,100 +127,20 @@ export default {
 }
 
 .vision-starfield {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.8;
-}
-
-.vision-star {
-  position: absolute;
-  width: var(--size);
-  height: var(--size);
-  top: var(--top);
-  left: var(--left);
-  background-color: #fff;
-  border-radius: 50%;
-  box-shadow: 0 0 calc(var(--size) * 2) rgba(255, 255, 255, 0.5),
-              0 0 calc(var(--size) * 4) rgba(15, 185, 253, 0.3);
-  animation: starTwinkle 3s infinite alternate;
-  animation-delay: calc(var(--top) * 0.01s);
+  display: none; /* Hide individual background elements as they're now in parent */
 }
 
 .cosmic-nebula {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  opacity: 0.1;
-  filter: blur(60px);
-  z-index: -1;
-  pointer-events: none;
-}
-
-.left-nebula {
-  top: 10%;
-  left: -150px;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(
-    circle at center,
-    rgba(103, 58, 183, 0.7) 0%,
-    rgba(103, 58, 183, 0.3) 50%,
-    rgba(103, 58, 183, 0) 70%
-  );
-  animation: nebulaFloat 20s infinite alternate var(--animation-smooth);
-}
-
-.right-nebula {
-  bottom: 5%;
-  right: -150px;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(
-    circle at center,
-    rgba(15, 185, 253, 0.7) 0%,
-    rgba(15, 185, 253, 0.3) 50%,
-    rgba(15, 185, 253, 0) 70%
-  );
-  animation: nebulaFloat 20s infinite alternate-reverse var(--animation-smooth);
+  display: none; /* Hide individual background elements as they're now in parent */
 }
 
 .cosmic-dust-particles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
+  display: none; /* Hide individual background elements as they're now in parent */
 }
 
 .dust-particle {
-  position: absolute;
-  width: var(--size);
-  height: var(--size);
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 50%;
-  box-shadow: 0 0 calc(var(--size) * 2) rgba(255, 255, 255, 0.5),
-              0 0 calc(var(--size) * 4) rgba(15, 185, 253, 0.3);
-  animation: floatDust var(--speed) linear infinite;
-  animation-delay: var(--delay);
-  opacity: 0.3;
+  display: none; /* Hide individual background elements as they're now in parent */
 }
-
-.dust-particle:nth-child(1) { top: 20%; left: 10%; }
-.dust-particle:nth-child(2) { top: 40%; left: 20%; }
-.dust-particle:nth-child(3) { top: 70%; left: 15%; }
-.dust-particle:nth-child(4) { top: 30%; left: 80%; }
-.dust-particle:nth-child(5) { top: 60%; left: 75%; }
-.dust-particle:nth-child(6) { top: 80%; left: 90%; }
-.dust-particle:nth-child(7) { top: 10%; left: 40%; }
-.dust-particle:nth-child(8) { top: 50%; left: 60%; }
 
 .cosmic-container {
   max-width: 1200px;
