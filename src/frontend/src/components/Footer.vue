@@ -27,21 +27,21 @@ const toggleSection = (section) => {
     <!-- Social Buttons Row (Now at the top) -->
     <div class="social-top-row">
       <div class="social-top-container">
-        <h4 class="social-top-title">{{ t('footer.stayConnected') }}</h4>
+        <h4 class="social-top-title cosmic-text-glow">{{ t('footer.stayConnected') }}</h4>
         <div class="social-icons-group">
-          <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="social-top-icon">
+          <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon">
             <img src="@/assets/icons/discord.svg" alt="Discord" />
           </a>
-          <a href="https://twitter.com/CosmicraftsDAO" class="social-top-icon">
+          <a href="https://twitter.com/CosmicraftsDAO" class="cosmic-social-icon">
             <img src="@/assets/icons/x.svg" alt="Twitter" />
           </a>
-          <a href="https://facebook.com/CosmicraftsDAO" class="social-top-icon">
+          <a href="https://facebook.com/CosmicraftsDAO" class="cosmic-social-icon">
             <img src="@/assets/icons/facebook.svg" alt="Facebook" />
           </a>
-          <a href="https://dscvr.one/p/cosmicrafts" class="social-top-icon">
+          <a href="https://dscvr.one/p/cosmicrafts" class="cosmic-social-icon">
             <img src="@/assets/icons/dscvr.svg" alt="DSCVR" />
           </a>
-          <a href="https://distrikt.app/u/cosmicrafts" class="social-top-icon">
+          <a href="https://distrikt.app/u/cosmicrafts" class="cosmic-social-icon">
             <img src="@/assets/icons/distrikt.svg" alt="Distrikt" />
           </a>
         </div>
@@ -54,20 +54,20 @@ const toggleSection = (section) => {
         <!-- Navigation Sections -->
         <div class="footer-nav-sections">
           <div class="footer-nav-group">
-            <h4 class="nav-title">{{ t('footer.explore') }}</h4>
+            <h4 class="nav-title cosmic-text-glow">{{ t('footer.explore') }}</h4>
             <ul class="nav-list">
-              <li><router-link to="/careers">{{ t('footer.careers') }}</router-link></li>
-              <li><router-link to="/about">{{ t('footer.about') }}</router-link></li>
-              <li><router-link to="/contact">{{ t('footer.support') }}</router-link></li>
+              <li><router-link to="/careers" class="cosmic-nav-link">{{ t('footer.careers') }}</router-link></li>
+              <li><router-link to="/about" class="cosmic-nav-link">{{ t('footer.about') }}</router-link></li>
+              <li><router-link to="/contact" class="cosmic-nav-link">{{ t('footer.support') }}</router-link></li>
             </ul>
           </div>
 
           <div class="footer-nav-group">
-            <h4 class="nav-title">{{ t('footer.legal') }}</h4>
+            <h4 class="nav-title cosmic-text-glow">{{ t('footer.legal') }}</h4>
             <ul class="nav-list">
-              <li><router-link to="/privacy">{{ t('footer.privacy') }}</router-link></li>
-              <li><router-link to="/legal">{{ t('footer.legal') }}</router-link></li>
-              <li><router-link to="/terms">{{ t('footer.terms') }}</router-link></li>
+              <li><router-link to="/privacy" class="cosmic-nav-link">{{ t('footer.privacy') }}</router-link></li>
+              <li><router-link to="/legal" class="cosmic-nav-link">{{ t('footer.legal') }}</router-link></li>
+              <li><router-link to="/terms" class="cosmic-nav-link">{{ t('footer.terms') }}</router-link></li>
             </ul>
           </div>
         </div>
@@ -80,7 +80,7 @@ const toggleSection = (section) => {
       
       <!-- Footer Bottom -->
       <div class="footer-bottom">
-        <img src="@/assets/icons/wou.svg" alt="World of Unreal" class="wou-logo" />
+        <img src="@/assets/icons/wou.svg" alt="World of Unreal" class="wou-logo cosmic-float" />
         <p class="copyright-text">
           © {{ currentYear }} World of Unreal, LLC.<br>
           {{ t('footer.trademarks') }}
@@ -95,19 +95,19 @@ const toggleSection = (section) => {
     
     <!-- Mobile Footer Social Bar - Kept at the top -->
     <div class="mobile-social-bar">
-      <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="mobile-social-icon">
+      <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon mobile-social-icon">
         <img src="@/assets/icons/discord.svg" alt="Discord" />
       </a>
-      <a href="https://twitter.com/CosmicraftsDAO" class="mobile-social-icon">
+      <a href="https://twitter.com/CosmicraftsDAO" class="cosmic-social-icon mobile-social-icon">
         <img src="@/assets/icons/x.svg" alt="Twitter" />
       </a>
-      <a href="https://facebook.com/CosmicraftsDAO" class="mobile-social-icon">
+      <a href="https://facebook.com/CosmicraftsDAO" class="cosmic-social-icon mobile-social-icon">
         <img src="@/assets/icons/facebook.svg" alt="Facebook" />
       </a>
-      <a href="https://dscvr.one/p/cosmicrafts" class="mobile-social-icon">
+      <a href="https://dscvr.one/p/cosmicrafts" class="cosmic-social-icon mobile-social-icon">
         <img src="@/assets/icons/dscvr.svg" alt="DSCVR" />
       </a>
-      <a href="https://distrikt.app/u/cosmicrafts" class="mobile-social-icon">
+      <a href="https://distrikt.app/u/cosmicrafts" class="cosmic-social-icon mobile-social-icon">
         <img src="@/assets/icons/distrikt.svg" alt="Distrikt" />
       </a>
     </div>
@@ -115,39 +115,39 @@ const toggleSection = (section) => {
     <!-- Mobile Footer Accordions -->
     <div class="mobile-accordion-container">
       <!-- Explore Section -->
-      <div class="mobile-accordion">
+      <div class="mobile-accordion cosmic-panel">
         <div 
           class="mobile-accordion-header" 
           :class="{ 'active': expandedSection === 'explore' }"
           @click="toggleSection('explore')"
         >
-          <h4>{{ t('footer.explore') }}</h4>
+          <h4 class="cosmic-text-glow">{{ t('footer.explore') }}</h4>
           <i class="fas" :class="expandedSection === 'explore' ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
         </div>
         <div class="mobile-accordion-content" :class="{ 'expanded': expandedSection === 'explore' }">
           <ul class="mobile-link-list">
-            <li><router-link to="/careers">{{ t('footer.careers') }}</router-link></li>
-            <li><router-link to="/about">{{ t('footer.about') }}</router-link></li>
-            <li><router-link to="/contact">{{ t('footer.contact') }}</router-link></li>
+            <li><router-link to="/careers" class="cosmic-nav-link">{{ t('footer.careers') }}</router-link></li>
+            <li><router-link to="/about" class="cosmic-nav-link">{{ t('footer.about') }}</router-link></li>
+            <li><router-link to="/contact" class="cosmic-nav-link">{{ t('footer.contact') }}</router-link></li>
           </ul>
         </div>
       </div>
       
       <!-- Legal Section -->
-      <div class="mobile-accordion">
+      <div class="mobile-accordion cosmic-panel">
         <div 
           class="mobile-accordion-header" 
           :class="{ 'active': expandedSection === 'legal' }"
           @click="toggleSection('legal')"
         >
-          <h4>{{ t('footer.legal') }}</h4>
+          <h4 class="cosmic-text-glow">{{ t('footer.legal') }}</h4>
           <i class="fas" :class="expandedSection === 'legal' ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
         </div>
         <div class="mobile-accordion-content" :class="{ 'expanded': expandedSection === 'legal' }">
           <ul class="mobile-link-list">
-            <li><router-link to="/privacy">{{ t('footer.privacy') }}</router-link></li>
-            <li><router-link to="/legal">{{ t('footer.legal') }}</router-link></li>
-            <li><router-link to="/terms">{{ t('footer.terms') }}</router-link></li>
+            <li><router-link to="/privacy" class="cosmic-nav-link">{{ t('footer.privacy') }}</router-link></li>
+            <li><router-link to="/legal" class="cosmic-nav-link">{{ t('footer.legal') }}</router-link></li>
+            <li><router-link to="/terms" class="cosmic-nav-link">{{ t('footer.terms') }}</router-link></li>
           </ul>
         </div>
       </div>
@@ -160,7 +160,7 @@ const toggleSection = (section) => {
     
     <!-- Mobile Footer Copyright with Logo -->
     <div class="mobile-copyright-container">
-      <img src="@/assets/icons/wou.svg" alt="World of Unreal Logo" class="mobile-copyright-logo" />
+      <img src="@/assets/icons/wou.svg" alt="World of Unreal Logo" class="mobile-copyright-logo cosmic-float" />
       <div class="mobile-copyright">
         <p>© {{ currentYear }} World of Unreal, LLC.</p>
         <p>{{ t('footer.trademarks') }}</p>
@@ -173,13 +173,13 @@ const toggleSection = (section) => {
 /* Main Footer Styles (Shared) */
 .cosmic-footer {
   position: relative;
-  color: var(--color-text-primary);
+  color: var(--cosmic-text-primary);
   overflow: hidden;
   background: linear-gradient(180deg, 
     rgba(8, 9, 12, 0.98) 0%, 
     rgba(15, 25, 45, 0.98) 100%);
   border-top: 2px solid rgba(15, 185, 253, 0.2);
-  backdrop-filter: blur(20px);
+  backdrop-filter: var(--cosmic-glass-blur);
   text-align: center; /* Center all text */
 }
 
@@ -253,7 +253,7 @@ const toggleSection = (section) => {
 .nav-title {
   font-size: 1rem; /* MUCH larger font size */
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--cosmic-blue);
   position: relative;
   padding-bottom: 0.75rem;
   margin-bottom: 0.5rem;
@@ -271,8 +271,9 @@ const toggleSection = (section) => {
   height: 3px;
   background: linear-gradient(90deg,
     transparent 0%,
-    var(--color-primary) 50%,
+    var(--cosmic-blue) 50%,
     transparent 100%);
+  box-shadow: var(--cosmic-glow-blue-sm);
 }
 
 .nav-list {
@@ -286,22 +287,22 @@ const toggleSection = (section) => {
 }
 
 .nav-list a {
-  color: var(--color-text-secondary);
+  color: var(--cosmic-text-secondary);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all var(--cosmic-transition-fast);
   display: inline-block;
   font-size: 1rem; /* MUCH larger font size */
   padding: .5rem 8rem;
-  border-radius: 8px;
+  border-radius: var(--cosmic-radius-md);
   font-weight: 500;
 }
 
 .nav-list a:hover {
-  color: var(--color-primary);
-  transform: translateY(-3px) scale(1.05);
-  text-shadow: 0 0 10px rgba(15, 185, 253, 0.4);
+  color: var(--cosmic-blue);
+  transform: translateY(-3px);
+  text-shadow: var(--cosmic-glow-blue-sm);
   background: rgba(15, 185, 253, 0.05);
-  box-shadow: 0 5px 15px rgba(15, 185, 253, 0.1);
+  box-shadow: var(--cosmic-shadow-sm);
   font-weight: 600;
 }
 
@@ -324,9 +325,9 @@ const toggleSection = (section) => {
 .social-top-title {
   font-size: 1rem; /* Larger font size */
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--cosmic-blue);
   margin: 0;
-  text-shadow: 0 0 10px rgba(15, 185, 253, 0.3);
+  text-shadow: var(--cosmic-glow-blue-sm);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -336,39 +337,6 @@ const toggleSection = (section) => {
   justify-content: center;
   gap: 1.5rem;
   flex-wrap: wrap;
-}
-
-.social-top-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px; /* Larger icons */
-  height: 50px; /* Larger icons */
-  background: rgba(15, 185, 253, 0.05);
-  border: 1px solid rgba(15, 185, 253, 0.2);
-  border-radius: 12px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.2s ease;
-}
-
-.social-top-icon img {
-  width: 26px; /* Larger icon images */
-  height: 26px; /* Larger icon images */
-  filter: drop-shadow(0 0 5px rgba(15, 185, 253, 0.3));
-  transition: all 0.2s ease;
-}
-
-.social-top-icon:hover {
-  transform: translateY(-5px) scale(1.1);
-  background: rgba(15, 185, 253, 0.1);
-  border-color: rgba(15, 185, 253, 0.4);
-  box-shadow: 0 5px 20px rgba(15, 185, 253, 0.2);
-}
-
-.social-top-icon:hover img {
-  transform: scale(1.2);
-  filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.5));
 }
 
 /* Footer Bottom */
@@ -384,18 +352,18 @@ const toggleSection = (section) => {
 
 .wou-logo {
   width: 80px; /* Larger logo */
-  filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.3));
-  transition: all 0.2s ease;
+  filter: drop-shadow(var(--cosmic-glow-blue-sm));
+  transition: all var(--cosmic-transition-medium);
 }
 
 .wou-logo:hover {
-  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.5));
+  filter: drop-shadow(var(--cosmic-glow-blue-md));
   transform: scale(1.1);
 }
 
 .copyright-text {
   font-size: 0.9rem; /* Slightly larger */
-  color: var(--color-text-tertiary);
+  color: var(--cosmic-text-tertiary);
   text-align: center;
   line-height: 1.6;
 }
@@ -422,8 +390,6 @@ const toggleSection = (section) => {
 }
 
 @media (max-width: 992px) {
-
-  
   .nav-title {
     font-size: 1.25rem; /* Slightly smaller on medium screens */
   }
@@ -450,36 +416,9 @@ const toggleSection = (section) => {
 }
 
 .mobile-social-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  width: 100% !important;
+  height: auto !important;
   aspect-ratio: 1;
-  background: rgba(15, 185, 253, 0.05);
-  border: 1px solid rgba(15, 185, 253, 0.2);
-  border-radius: 14px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.2s ease;
-}
-
-.mobile-social-icon img {
-  width: 24px; /* Larger icons */
-  height: 24px; /* Larger icons */
-  filter: drop-shadow(0 0 5px rgba(15, 185, 253, 0.3));
-  transition: all 0.2s ease;
-}
-
-.mobile-social-icon:hover, .mobile-social-icon:active {
-  transform: translateY(-3px) scale(1.05);
-  background: rgba(15, 185, 253, 0.1);
-  border-color: rgba(15, 185, 253, 0.4);
-  box-shadow: 0 5px 15px rgba(15, 185, 253, 0.15);
-}
-
-.mobile-social-icon:hover img, .mobile-social-icon:active img {
-  transform: scale(1.2);
-  filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.4));
 }
 
 /* Media query adjustments */
@@ -501,7 +440,7 @@ const toggleSection = (section) => {
 
 .mobile-accordion {
   margin-bottom: 0.75rem;
-  border-radius: 14px;
+  border-radius: var(--cosmic-radius-lg);
   overflow: hidden;
   background: rgba(15, 185, 253, 0.05);
   border: 1px solid rgba(15, 185, 253, 0.1);
@@ -513,24 +452,20 @@ const toggleSection = (section) => {
   align-items: center;
   padding: 1.25rem; /* Increased padding */
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--cosmic-transition-fast);
 }
 
 .mobile-accordion-header h4 {
   margin: 0;
   font-size: 1.6rem; /* MUCH larger font size */
   font-weight: 700;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .mobile-accordion-header i {
-  color: var(--color-primary);
-  transition: transform 0.2s ease;
+  color: var(--cosmic-blue);
+  transition: transform var(--cosmic-transition-fast);
   font-size: 1.2rem; /* Larger icon */
 }
 
@@ -564,19 +499,19 @@ const toggleSection = (section) => {
 }
 
 .mobile-link-list a {
-  color: var(--color-text-secondary);
+  color: var(--cosmic-text-secondary);
   text-decoration: none;
   font-size: 1.4rem; /* MUCH larger font size */
   display: block;
   padding: 0.75rem 0;
-  transition: all 0.2s ease;
+  transition: all var(--cosmic-transition-fast);
   font-weight: 500;
 }
 
 .mobile-link-list a:hover, .mobile-link-list a:active {
-  color: var(--color-primary);
-  transform: translateY(-3px) scale(1.05);
-  text-shadow: 0 0 10px rgba(15, 185, 253, 0.4);
+  color: var(--cosmic-blue);
+  transform: translateY(-3px);
+  text-shadow: var(--cosmic-glow-blue-sm);
 }
 
 .mobile-language-selector {
@@ -612,13 +547,13 @@ const toggleSection = (section) => {
 .mobile-copyright-logo {
   width: 72px; /* Larger logo */
   margin-bottom: .5rem;
-  filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.3));
+  filter: drop-shadow(var(--cosmic-glow-blue-sm));
 }
 
 .mobile-copyright {
   text-align: center;
   font-size: 0.8rem; /* Slightly larger */
-  color: var(--color-text-tertiary);
+  color: var(--cosmic-text-tertiary);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -663,20 +598,20 @@ const toggleSection = (section) => {
 .mobile-copyright-logo {
   width: 72px;
   margin-bottom: 0.75rem;
-  filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.3));
-  transition: all 0.2s ease;
+  filter: drop-shadow(var(--cosmic-glow-blue-sm));
+  transition: all var(--cosmic-transition-medium);
 }
 
 .copyright-logo:hover,
 .mobile-copyright-logo:hover {
-  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.5));
+  filter: drop-shadow(var(--cosmic-glow-blue-md));
   transform: scale(1.1);
 }
 
 .copyright,
 .mobile-copyright {
   font-size: 0.8rem;
-  color: var(--color-text-tertiary);
+  color: var(--cosmic-text-tertiary);
   line-height: 1.5;
 }
 
@@ -696,11 +631,11 @@ a::before, button::before {
   bottom: 0;
   background: rgba(15, 185, 253, 0);
   border-radius: inherit;
-  transition: all 0.2s ease;
+  transition: all var(--cosmic-transition-fast);
 }
 
 a:hover::before, button:hover::before {
   background: rgba(15, 185, 253, 0.05);
-  box-shadow: 0 0 20px rgba(15, 185, 253, 0.1);
+  box-shadow: var(--cosmic-glow-blue-sm);
 }
 </style>

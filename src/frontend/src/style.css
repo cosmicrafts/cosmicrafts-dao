@@ -4,6 +4,8 @@
 @import './assets/css/universal.css';
 /* Import mermaid theme */
 @import './assets/css/mermaid-theme.css';
+/* Import cosmic theme */
+@import './assets/css/cosmic-theme.css';
 
 /* Import primary fonts and multilingual fallbacks */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap');

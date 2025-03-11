@@ -20,10 +20,10 @@
     <!-- Navigation Links (Desktop Only) -->
     <nav class="nav-links">
       <ul>
-        <li><router-link to="/game" class="u-hover">{{ t('header.games') }}</router-link></li>
-        <li><router-link to="/dao" class="u-hover">{{ t('header.dao') }}</router-link></li>
-        <li><router-link to="/whitepaper" class="u-hover">{{ t('header.whitepaper') }}</router-link></li>
-        <li><router-link to="/roadmap" class="u-hover">{{ t('header.roadmap') }}</router-link></li>
+        <li><router-link to="/game" class="cosmic-hover">{{ t('header.games') }}</router-link></li>
+        <li><router-link to="/dao" class="cosmic-hover">{{ t('header.dao') }}</router-link></li>
+        <li><router-link to="/whitepaper" class="cosmic-hover">{{ t('header.whitepaper') }}</router-link></li>
+        <li><router-link to="/roadmap" class="cosmic-hover">{{ t('header.roadmap') }}</router-link></li>
       </ul>
     </nav>
 
@@ -32,7 +32,7 @@
     <div class="connect-container">
       <!-- Multi-Language Selector -->
       <div class="desktop-language-selector header">
-        <LanguageSelector direction="down-left" />
+        <LanguageSelector context="header" />
       </div>
 
       <!-- Notifications Icon (Only show when logged in) -->
@@ -58,7 +58,7 @@
         </div>
       </div>
 
-      <button v-else class="button outline" @click="handleLogin">
+      <button v-else class="cosmic-button cosmic-button-outline" @click="handleLogin">
         {{ t('header.connect') }}
       </button>
     </div>
@@ -221,17 +221,23 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 0rem 1.75rem;
-  border: 1px solid #ffffff12;
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.65), rgba(23, 33, 43, 0.72));
+  background: var(--cosmic-glass-bg);
+  border: var(--cosmic-glass-border);
   position: fixed;
-  z-index: 12;
+  z-index: var(--cosmic-z-header);
   border-radius: 12px;
   margin: auto;
   margin-top: 1rem;
   left: 2rem;
   right: 2rem;
   height: 3.75rem;
-  backdrop-filter: blur(8px);
+  backdrop-filter: var(--cosmic-glass-blur);
+  transition: all var(--cosmic-transition-medium);
+}
+
+header:hover {
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
+  border-color: rgba(15, 185, 253, 0.2);
 }
 
 .desktop-language-selector {
@@ -247,17 +253,16 @@ header {
   background-color: rgba(30, 43, 56, 0.9);
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: 
-    transform 0.3s ease-out, 
-    background-color 0.4s ease-out, /* ⏳ Slow fade-out */
-    box-shadow 0.6s ease-out; /* ⏳ Longer glow fade */
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
+  transition: all var(--cosmic-transition-medium);
+  box-shadow: var(--cosmic-shadow-sm);
 }
 
 /* Hover effect */
 .desktop-language-selector:hover {
-  background-color: rgba(0, 195, 255, 0.862); /* Lighter blue background on hover */
-  box-shadow: 0 4px 16px rgba(0, 208, 255, 0.896);
+  background-color: rgba(0, 195, 255, 0.15);
+  border-color: rgba(15, 185, 253, 0.4);
+  box-shadow: var(--cosmic-glow-blue-sm);
+  transform: none;
 }
 
 .logo-wrapper {
@@ -272,7 +277,7 @@ header {
   margin-left: -1rem;
   width: 2.5rem;
   cursor: pointer;
-  transition: transform 0.4s ease, filter 0.25s ease;
+  transition: transform var(--cosmic-transition-medium), filter var(--cosmic-transition-fast);
 }
 
 .logo img:hover {
@@ -280,7 +285,6 @@ header {
   filter: 
   brightness(1.45)
   hue-rotate(120deg)
-
   drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.8));
 }
 
@@ -288,7 +292,7 @@ header {
 .additional-logo img {
   width: 4.25rem;
   margin-left: 0.5rem; /* Add space between the two logos */
-  transition: transform 0.55s ease, filter 0.1s ease;
+  transition: transform var(--cosmic-transition-slow), filter var(--cosmic-transition-fast);
 }
 
 .additional-logo img:hover {
@@ -309,7 +313,7 @@ header {
   list-style: none;
 }
 
-/* Apply Universal Hover Effect */
+/* Apply Cosmic Nav Link Styles */
 .nav-links a {
   padding: 0.2rem 0.5rem;
 }
@@ -322,13 +326,6 @@ header {
   right: .5rem;
   top: 50%;
   transform: translateY(-50%);
-}
-
-
-.button.outline {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 400;
-  font-size: 1rem;
 }
 
 /* Burger Menu Styling */
@@ -348,7 +345,7 @@ header {
 }
 
 .burger:hover span {
-  background-color: #00c3ff; /* Blue color on hover */
+  background-color: var(--cosmic-blue);
   box-shadow: 0px 0px 4px rgba(0, 191, 255, 0.4);
   transform: scale(115%);
 }
@@ -365,14 +362,21 @@ header {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-
 /* Player Avatar Styling */
 .player-avatar {
   margin-top: .4rem;
   width: 48px;
   height: 48px;
   border-radius: 8px;
-  border: 1px solid #00c3ffc4;
+  border: 1px solid rgba(15, 185, 253, 0.4);
+  transition: all var(--cosmic-transition-fast);
+  box-shadow: var(--cosmic-shadow-sm);
+}
+
+.player-avatar:hover {
+  transform: none;
+  border-color: rgba(15, 185, 253, 0.6);
+  box-shadow: var(--cosmic-shadow-sm), var(--cosmic-glow-blue-sm);
 }
 
 .player-placeholder {
@@ -393,12 +397,12 @@ header {
   position: absolute;
   right: 0;
   margin-top: .25rem;
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.658), rgba(23, 33, 43, 0.705));
-  border: 1px solid rgba(128, 128, 128, 0.116);
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  background: var(--cosmic-glass-bg-darker);
+  border: var(--cosmic-glass-border-blue);
+  border-radius: var(--cosmic-radius-md);
+  box-shadow: var(--cosmic-shadow-md);
   padding: 1rem 0;
-  z-index: 1000;
+  z-index: var(--cosmic-z-dropdown);
   min-width: 160px;
 }
 
@@ -411,42 +415,74 @@ header {
 .dropdown-menu li {
   font-weight: 700;
   padding: 0.5rem 1rem;
-  color: #ffffff;
+  color: var(--cosmic-text-primary);
   cursor: pointer;
-  transition: background-color 0.1s ease;
+  transition: all var(--cosmic-transition-fast);
 }
 
 .dropdown-menu li:hover {
-  background-color: #243546;
+  background-color: rgba(15, 185, 253, 0.1);
+  color: var(--cosmic-blue);
+  text-shadow: var(--cosmic-glow-blue-sm);
 }
 
+/* Connect Button Custom Styling */
+.connect-container .cosmic-button-outline {
+  padding: 0.5rem 1.5rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  margin-left: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.connect-container .cosmic-button-outline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(15, 185, 253, 0.05) 0%, rgba(15, 185, 253, 0) 100%);
+  border-radius: 8px;
+  z-index: -1;
+  transition: all var(--cosmic-transition-medium);
+  opacity: 0;
+}
+
+.connect-container .cosmic-button-outline:hover {
+  transform: none;
+  background: rgba(15, 185, 253, 0.1);
+  border-color: var(--cosmic-blue-light);
+  color: var(--cosmic-blue-light);
+  box-shadow: var(--cosmic-shadow-sm), var(--cosmic-glow-blue-sm);
+  text-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.connect-container .cosmic-button-outline:hover::before {
+  opacity: 1;
+}
 
 @media (max-width: 1080px) {
   .nav-links ul {
     left: 7.5rem;
-  gap: 1rem;
+    gap: 1rem;
+  }
+
+  .nav-links a {
+    font-size: .85rem;
+  }
 }
 
-.nav-links a {
-  font-size: .85rem;
-}
-}
 /* Responsive Design */
 @media (max-width: 768px) {
   .burger {
     display: flex; /* Visible on mobile */
   }
+  
   .connect-container {
-  right: .5rem;
-
-}
-
-
-.button.outline {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 400;
-  font-size: .7rem;
-}
+    right: .5rem;
+  }
 
   .nav-links {
     display: none; /* Hide nav-links on mobile */

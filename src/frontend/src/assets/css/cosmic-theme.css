@@ -1,0 +1,517 @@
+/* Cosmic Theme - Unified Styling System
+ * A comprehensive set of styles for a consistent 3D glassy, glowy, and elegant theme
+ * Designed to be used across the entire application, especially for Header and Footer components
+ */
+
+/* ===== Core Variables ===== */
+:root {
+  /* Primary Colors */
+  --cosmic-blue: #0FB9FD;
+  --cosmic-blue-light: #4DCFFF;
+  --cosmic-blue-dark: #0A8BC0;
+  --cosmic-orange: #FF9100;
+  --cosmic-orange-light: #FFB800;
+  --cosmic-green: #00E5A4;
+  --cosmic-red: #FF4B4B;
+  
+  /* Background Colors */
+  --cosmic-bg-dark: #19222e;
+  --cosmic-bg-darker: #0A1420;
+  --cosmic-bg-darkest: #050A10;
+  
+  /* Text Colors */
+  --cosmic-text-primary: rgba(255, 255, 255, 0.95);
+  --cosmic-text-secondary: rgba(255, 255, 255, 0.85);
+  --cosmic-text-tertiary: rgba(255, 255, 255, 0.7);
+  
+  /* Glassy Panel Styles */
+  --cosmic-glass-bg: linear-gradient(to bottom, rgba(30, 43, 56, 0.65), rgba(23, 33, 43, 0.72));
+  --cosmic-glass-bg-darker: linear-gradient(to bottom, rgba(23, 33, 43, 0.75), rgba(15, 25, 35, 0.85));
+  --cosmic-glass-bg-lighter: linear-gradient(to bottom, rgba(35, 50, 65, 0.65), rgba(28, 40, 52, 0.72));
+  --cosmic-glass-border: 1px solid rgba(255, 255, 255, 0.12);
+  --cosmic-glass-border-blue: 1px solid rgba(15, 185, 253, 0.15);
+  --cosmic-glass-blur: blur(8px);
+  
+  /* Glow Effects */
+  --cosmic-glow-blue-sm: 0 0 10px rgba(15, 185, 253, 0.3);
+  --cosmic-glow-blue-md: 0 0 15px rgba(15, 185, 253, 0.4);
+  --cosmic-glow-blue-lg: 0 0 20px rgba(15, 185, 253, 0.5);
+  --cosmic-glow-orange-sm: 0 0 10px rgba(255, 145, 0, 0.3);
+  --cosmic-glow-orange-md: 0 0 15px rgba(255, 145, 0, 0.4);
+  --cosmic-glow-orange-lg: 0 0 20px rgba(255, 145, 0, 0.5);
+  
+  /* Shadows */
+  --cosmic-shadow-sm: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --cosmic-shadow-md: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --cosmic-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.25);
+  
+  /* Gradients */
+  --cosmic-gradient-blue: linear-gradient(135deg, var(--cosmic-blue) 0%, var(--cosmic-blue-light) 100%);
+  --cosmic-gradient-orange: linear-gradient(135deg, var(--cosmic-orange) 0%, var(--cosmic-orange-light) 100%);
+  --cosmic-gradient-panel: linear-gradient(145deg, rgba(15, 185, 253, 0.03) 0%, rgba(15, 185, 253, 0.07) 100%);
+  --cosmic-gradient-panel-hover: linear-gradient(145deg, rgba(15, 185, 253, 0.08) 0%, rgba(15, 185, 253, 0.12) 100%);
+  
+  /* Transitions */
+  --cosmic-transition-fast: 0.2s ease;
+  --cosmic-transition-medium: 0.3s ease;
+  --cosmic-transition-slow: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  
+  /* Border Radius */
+  --cosmic-radius-sm: 6px;
+  --cosmic-radius-md: 8px;
+  --cosmic-radius-lg: 12px;
+  --cosmic-radius-xl: 16px;
+  
+  /* Z-index Layers */
+  --cosmic-z-background: -1;
+  --cosmic-z-default: 1;
+  --cosmic-z-header: 12;
+  --cosmic-z-dropdown: 20;
+  --cosmic-z-modal: 30;
+  --cosmic-z-tooltip: 40;
+}
+
+/* ===== Glassy Components ===== */
+
+/* Glassy Header */
+.cosmic-header {
+  background: var(--cosmic-glass-bg);
+  border: var(--cosmic-glass-border);
+  border-radius: var(--cosmic-radius-lg);
+  backdrop-filter: var(--cosmic-glass-blur);
+  box-shadow: var(--cosmic-shadow-sm);
+  padding: 0.75rem 1.75rem;
+  z-index: var(--cosmic-z-header);
+  transition: all var(--cosmic-transition-medium);
+}
+
+.cosmic-header:hover {
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
+  border-color: rgba(15, 185, 253, 0.2);
+}
+
+/* Glassy Footer */
+.cosmic-footer {
+  position: relative;
+  color: var(--cosmic-text-primary);
+  background: linear-gradient(180deg, 
+    rgba(8, 9, 12, 0.98) 0%, 
+    rgba(15, 25, 45, 0.98) 100%);
+  border-top: 2px solid rgba(15, 185, 253, 0.2);
+  backdrop-filter: var(--cosmic-glass-blur);
+  overflow: hidden;
+}
+
+/* Glassy Panel */
+.cosmic-panel {
+  background: var(--cosmic-gradient-panel);
+  border: var(--cosmic-glass-border-blue);
+  border-radius: var(--cosmic-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--cosmic-shadow-sm);
+  transition: all var(--cosmic-transition-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.cosmic-panel:hover {
+  transform: translateY(-5px);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
+  background: var(--cosmic-gradient-panel-hover);
+}
+
+/* Glassy Card */
+.cosmic-card {
+  background: var(--cosmic-gradient-panel);
+  border: var(--cosmic-glass-border-blue);
+  border-radius: var(--cosmic-radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--cosmic-shadow-sm);
+  transition: all var(--cosmic-transition-medium);
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+}
+
+.cosmic-card:hover {
+  transform: translateY(-5px) rotateX(2deg) rotateY(2deg) translateZ(10px);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
+  background: var(--cosmic-gradient-panel-hover);
+}
+
+/* Glassy Button */
+.cosmic-button {
+  background: var(--cosmic-glass-bg);
+  color: var(--cosmic-text-primary);
+  border: var(--cosmic-glass-border-blue);
+  border-radius: var(--cosmic-radius-md);
+  padding: 0.5rem 1.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--cosmic-transition-fast);
+  box-shadow: var(--cosmic-shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.cosmic-button:hover {
+  transform: translateY(-3px);
+  background: var(--cosmic-glass-bg-lighter);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
+}
+
+.cosmic-button:active {
+  transform: translateY(-1px);
+}
+
+.cosmic-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg);
+  transition: transform 0.6s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.cosmic-button:hover::after {
+  transform: rotate(45deg) translate(50%, 50%);
+}
+
+/* Primary Button Variant */
+.cosmic-button-primary {
+  background: var(--cosmic-gradient-blue);
+  border: none;
+  box-shadow: var(--cosmic-shadow-sm), 0 0 0 1px rgba(15, 185, 253, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.cosmic-button-primary:hover {
+  background: linear-gradient(135deg, var(--cosmic-blue-light) 0%, var(--cosmic-blue) 100%);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-md), 0 0 0 1px rgba(15, 185, 253, 0.5);
+}
+
+/* Outline Button Variant */
+.cosmic-button-outline {
+  background: transparent;
+  color: var(--cosmic-blue);
+  border: 2px solid var(--cosmic-blue);
+  box-shadow: var(--cosmic-shadow-sm), var(--cosmic-glow-blue-sm);
+  text-shadow: var(--cosmic-glow-blue-sm);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.cosmic-button-outline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(15, 185, 253, 0.05) 0%, rgba(15, 185, 253, 0) 100%);
+  border-radius: inherit;
+  z-index: -1;
+  transition: all var(--cosmic-transition-medium);
+  opacity: 0;
+}
+
+.cosmic-button-outline:hover {
+  transform: none;
+  background: rgba(15, 185, 253, 0.1);
+  border-color: var(--cosmic-blue-light);
+  color: var(--cosmic-blue-light);
+  box-shadow: var(--cosmic-shadow-sm), var(--cosmic-glow-blue-sm);
+  text-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.cosmic-button-outline:hover::before {
+  opacity: 1;
+}
+
+.cosmic-button-outline:active {
+  transform: none;
+  background: rgba(15, 185, 253, 0.15);
+}
+
+/* ===== Navigation Elements ===== */
+
+/* Nav Links */
+.cosmic-nav-link {
+  color: var(--cosmic-text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--cosmic-radius-sm);
+  transition: all var(--cosmic-transition-fast);
+  position: relative;
+}
+
+.cosmic-nav-link:hover {
+  color: var(--cosmic-blue);
+  text-shadow: 0 0 8px rgba(15, 185, 253, 0.4);
+}
+
+.cosmic-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--cosmic-blue);
+  transform: translateX(-50%);
+  transition: width var(--cosmic-transition-fast);
+  box-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.cosmic-nav-link:hover::after {
+  width: 80%;
+}
+
+/* Active Nav Link */
+.cosmic-nav-link.active {
+  color: var(--cosmic-blue);
+  text-shadow: 0 0 8px rgba(15, 185, 253, 0.4);
+}
+
+.cosmic-nav-link.active::after {
+  width: 80%;
+}
+
+/* ===== Text Effects ===== */
+
+/* Glowing Title */
+.cosmic-title {
+  font-weight: 800;
+  background: var(--cosmic-gradient-blue);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: var(--cosmic-glow-blue-sm);
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.cosmic-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 0;
+  width: 4rem;
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--cosmic-blue) 0%,
+    var(--cosmic-blue-light) 50%,
+    var(--cosmic-blue) 100%);
+  border-radius: 2px;
+  box-shadow: var(--cosmic-glow-blue-sm);
+}
+
+/* Glowing Text */
+.cosmic-text-glow {
+  color: var(--cosmic-blue);
+  text-shadow: var(--cosmic-glow-blue-sm);
+  transition: all var(--cosmic-transition-fast);
+}
+
+.cosmic-text-glow:hover {
+  color: var(--cosmic-blue-light);
+  text-shadow: var(--cosmic-glow-blue-md);
+}
+
+/* ===== Icons and Badges ===== */
+
+/* Glowing Icon */
+.cosmic-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgba(15, 185, 253, 0.1);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  border-radius: var(--cosmic-radius-md);
+  transition: all var(--cosmic-transition-medium);
+  color: var(--cosmic-blue);
+}
+
+.cosmic-icon:hover {
+  transform: translateY(-3px) scale(1.1);
+  background: rgba(15, 185, 253, 0.15);
+  border-color: rgba(15, 185, 253, 0.4);
+  box-shadow: var(--cosmic-shadow-sm), var(--cosmic-glow-blue-md);
+  color: var(--cosmic-blue-light);
+}
+
+.cosmic-icon i, 
+.cosmic-icon svg,
+.cosmic-icon img {
+  font-size: 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: all var(--cosmic-transition-medium);
+  filter: drop-shadow(0 0 5px rgba(15, 185, 253, 0.3));
+}
+
+.cosmic-icon:hover i,
+.cosmic-icon:hover svg,
+.cosmic-icon:hover img {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.5));
+}
+
+/* Social Icon */
+.cosmic-social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  border-radius: var(--cosmic-radius-lg);
+  transition: all var(--cosmic-transition-medium);
+  overflow: hidden;
+}
+
+.cosmic-social-icon img {
+  width: 1.5rem;
+  height: 1.5rem;
+  filter: drop-shadow(0 0 5px rgba(15, 185, 253, 0.3));
+  transition: all var(--cosmic-transition-medium);
+}
+
+.cosmic-social-icon:hover {
+  transform: translateY(-3px) scale(1.1);
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.4);
+  box-shadow: var(--cosmic-shadow-sm), var(--cosmic-glow-blue-md);
+}
+
+.cosmic-social-icon:hover img {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.5));
+}
+
+/* Badge */
+.cosmic-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.75rem;
+  background: rgba(15, 185, 253, 0.1);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--cosmic-blue);
+  transition: all var(--cosmic-transition-fast);
+}
+
+.cosmic-badge:hover {
+  background: rgba(15, 185, 253, 0.15);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-glow-blue-sm);
+  transform: translateY(-2px);
+}
+
+/* ===== Animations ===== */
+
+/* Floating Animation */
+@keyframes cosmic-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.cosmic-float {
+  animation: cosmic-float 6s ease-in-out infinite;
+}
+
+/* Pulse Animation */
+@keyframes cosmic-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+.cosmic-pulse {
+  animation: cosmic-pulse 4s ease-in-out infinite;
+}
+
+/* Glow Animation */
+@keyframes cosmic-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(15, 185, 253, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(15, 185, 253, 0.5); }
+}
+
+.cosmic-glow {
+  animation: cosmic-glow 3s ease-in-out infinite;
+}
+
+/* Text Glow Animation */
+@keyframes cosmic-text-glow {
+  0%, 100% { text-shadow: 0 0 10px rgba(15, 185, 253, 0.3); }
+  50% { text-shadow: 0 0 20px rgba(15, 185, 253, 0.5); }
+}
+
+.cosmic-text-glow-animate {
+  animation: cosmic-text-glow 3s ease-in-out infinite;
+}
+
+/* ===== Responsive Utilities ===== */
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .cosmic-panel,
+  .cosmic-card {
+    padding: 1rem;
+  }
+  
+  .cosmic-title {
+    font-size: 1.5rem;
+  }
+  
+  .cosmic-button {
+    padding: 0.4rem 1rem;
+  }
+  
+  .cosmic-icon,
+  .cosmic-social-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+  
+  .cosmic-icon i,
+  .cosmic-icon svg,
+  .cosmic-icon img,
+  .cosmic-social-icon img {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* Tablet-specific styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cosmic-panel,
+  .cosmic-card {
+    padding: 1.25rem;
+  }
+  
+  .cosmic-title {
+    font-size: 1.75rem;
+  }
+} 
