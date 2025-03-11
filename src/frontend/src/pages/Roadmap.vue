@@ -3,7 +3,20 @@
     <h1 class="title">Roadmap</h1>
     <p class="paragraph">Follow the milestones, track the progress, and watch history. — here's what's next.</p>
 
-    <div v-for="(quarter, qIndex) in quarters" :key="qIndex" class="quarter galactic-box">
+    <!-- Search and Filter Section -->
+    <div class="search-filter">
+      <input type="text" v-model="searchQuery" placeholder="Search milestones or tasks..." class="search-bar" />
+      <select v-model="selectedYear" class="filter-dropdown">
+        <option value="">All Years</option>
+        <option v-for="year in availableYears" :key="year" :value="year">{{ year }}</option>
+      </select>
+      <select v-model="selectedMilestone" class="filter-dropdown">
+        <option value="">All Milestones</option>
+        <option v-for="milestone in availableMilestones" :key="milestone" :value="milestone">{{ milestone }}</option>
+      </select>
+    </div>
+
+    <div v-for="(quarter, qIndex) in filteredQuarters" :key="qIndex" class="quarter galactic-box">
       <div class="quarter-header" @click="toggleQuarter(qIndex)" @touchstart="handleTouchStart(qIndex)">
         <div class="header-content">
           <h2>{{ quarter.period }}</h2>
@@ -92,6 +105,9 @@ export default {
   name: 'RoadmapGalactic',
   setup() {
     const quarters = ref([]);
+    const searchQuery = ref('');
+    const selectedYear = ref('');
+    const selectedMilestone = ref('');
 
     const loadRoadmap = () => {
       const data = Object.keys(roadmapData).map(key => {
@@ -168,12 +184,43 @@ export default {
       toggleTask(task);
     };
 
+    const availableYears = computed(() => {
+      return [...new Set(quarters.value.map(q => q.period.split('-')[0]))];
+    });
+
+    const availableMilestones = computed(() => {
+      const milestones = [];
+      quarters.value.forEach(q => {
+        q.milestones.forEach(m => {
+          if (!milestones.includes(m.title)) {
+            milestones.push(m.title);
+          }
+        });
+      });
+      return milestones;
+    });
+
+    const filteredQuarters = computed(() => {
+      return quarters.value.filter(q => {
+        const matchesYear = selectedYear.value ? q.period.includes(selectedYear.value) : true;
+        const matchesMilestone = selectedMilestone.value ? q.milestones.some(m => m.title.includes(selectedMilestone.value)) : true;
+        const matchesSearch = searchQuery.value ? q.milestones.some(m => m.title.toLowerCase().includes(searchQuery.value.toLowerCase()) || m.tasks.some(t => t.title.toLowerCase().includes(searchQuery.value.toLowerCase()))) : true;
+        return matchesYear && matchesMilestone && matchesSearch;
+      });
+    });
+
     onMounted(() => {
       loadRoadmap();
     });
 
     return {
       quarters,
+      searchQuery,
+      selectedYear,
+      selectedMilestone,
+      availableYears,
+      availableMilestones,
+      filteredQuarters,
       toggleQuarter,
       toggleMilestone,
       toggleTask,
@@ -212,6 +259,29 @@ export default {
   text-shadow: 3px 3px 8px rgba(0,0,0,0.5);
   margin-bottom: 3rem;
   color: #b3c9e6;
+}
+
+.search-filter {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.search-bar {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(27, 56, 85, 0.258);
+  color: #e4f1ff;
+}
+
+.filter-dropdown {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(27, 56, 85, 0.258);
+  color: #e4f1ff;
 }
 
 .galactic-box {
