@@ -6019,6 +6019,83 @@
         }
       ]
     },
+    "Q4 2029": {
+      "period": "Q4 2029",
+      "description": "Final preparations for the new franchise title and major advancements in the END GAME vision.",
+      "completed": 0,
+      "total": 3,
+      "milestones": [
+        {
+          "title": "New Title Finalization",
+          "description": "Complete final preparations for the new franchise title.",
+          "completed": 0,
+          "total": 3,
+          "tasks": [
+            {
+              "title": "Final Gameplay Tuning",
+              "description": "Refine gameplay mechanics and balance.",
+              "completed": false
+            },
+            {
+              "title": "Marketing Strategy Execution",
+              "description": "Implement marketing strategies for launch.",
+              "completed": false
+            },
+            {
+              "title": "Launch Readiness Assessment",
+              "description": "Ensure all systems are go for launch.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "END GAME Vision Advancement",
+          "description": "Achieve significant progress in the END GAME vision.",
+          "completed": 0,
+          "total": 3,
+          "tasks": [
+            {
+              "title": "Autonomous Governance Implementation",
+              "description": "Deploy autonomous governance systems.",
+              "completed": false
+            },
+            {
+              "title": "AI-Driven Development Expansion",
+              "description": "Expand AI-driven development capabilities.",
+              "completed": false
+            },
+            {
+              "title": "Community Engagement Enhancement",
+              "description": "Boost community involvement and feedback.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "Infrastructure Optimization",
+          "description": "Optimize infrastructure for scalability and efficiency.",
+          "completed": 0,
+          "total": 3,
+          "tasks": [
+            {
+              "title": "Scalability Enhancements",
+              "description": "Improve system scalability.",
+              "completed": false
+            },
+            {
+              "title": "Performance Tuning",
+              "description": "Optimize performance across platforms.",
+              "completed": false
+            },
+            {
+              "title": "Security Fortification",
+              "description": "Enhance security measures.",
+              "completed": false
+            }
+          ]
+        }
+      ]
+    },
     "Q1 2030": {
       "period": "2030-Q1",
       "description": "Develop prototype of new franchise title, enhance integrated franchise ecosystem, and implement final END GAME state preparations.",
@@ -7006,83 +7083,6 @@
                   "completed": false
                 }
               ]
-            }
-          ]
-        }
-      ]
-    },
-    "Q4 2029": {
-      "period": "Q4 2029",
-      "description": "Final preparations for the new franchise title and major advancements in the END GAME vision.",
-      "completed": 0,
-      "total": 3,
-      "milestones": [
-        {
-          "title": "New Title Finalization",
-          "description": "Complete final preparations for the new franchise title.",
-          "completed": 0,
-          "total": 3,
-          "tasks": [
-            {
-              "title": "Final Gameplay Tuning",
-              "description": "Refine gameplay mechanics and balance.",
-              "completed": false
-            },
-            {
-              "title": "Marketing Strategy Execution",
-              "description": "Implement marketing strategies for launch.",
-              "completed": false
-            },
-            {
-              "title": "Launch Readiness Assessment",
-              "description": "Ensure all systems are go for launch.",
-              "completed": false
-            }
-          ]
-        },
-        {
-          "title": "END GAME Vision Advancement",
-          "description": "Achieve significant progress in the END GAME vision.",
-          "completed": 0,
-          "total": 3,
-          "tasks": [
-            {
-              "title": "Autonomous Governance Implementation",
-              "description": "Deploy autonomous governance systems.",
-              "completed": false
-            },
-            {
-              "title": "AI-Driven Development Expansion",
-              "description": "Expand AI-driven development capabilities.",
-              "completed": false
-            },
-            {
-              "title": "Community Engagement Enhancement",
-              "description": "Boost community involvement and feedback.",
-              "completed": false
-            }
-          ]
-        },
-        {
-          "title": "Infrastructure Optimization",
-          "description": "Optimize infrastructure for scalability and efficiency.",
-          "completed": 0,
-          "total": 3,
-          "tasks": [
-            {
-              "title": "Scalability Enhancements",
-              "description": "Improve system scalability.",
-              "completed": false
-            },
-            {
-              "title": "Performance Tuning",
-              "description": "Optimize performance across platforms.",
-              "completed": false
-            },
-            {
-              "title": "Security Fortification",
-              "description": "Enhance security measures.",
-              "completed": false
             }
           ]
         }
