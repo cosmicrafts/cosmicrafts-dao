@@ -28,12 +28,17 @@ const languages = [
   { code: 'zh', label: '中文' },
 ];
 
-// Define props for dropdown direction
+// Define props for context
 const props = defineProps({
-  direction: {
+  context: {
     type: String,
-    default: 'up-right',
-  },
+    default: 'header', // 'header' or 'footer'
+  }
+});
+
+// Computed property to determine dropdown position based on context
+const getDropdownPosition = computed(() => {
+  return props.context === 'footer' ? 'dropdown-top' : 'dropdown-bottom';
 });
 
 const changeLanguage = (languageCode) => {
@@ -64,20 +69,19 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="language-selector cosmic-hover-effect" @click="toggleDropdown">
-    <img src="@/assets/icons/lang.svg" alt="Language Icon" class="lang-icon cosmic-float" />
-    <span class="lang-label cosmic-text">
+  <div class="language-selector" @click="toggleDropdown">
+    <img src="@/assets/icons/lang.svg" alt="Language Icon" class="lang-icon" />
+    <span class="lang-label">
       {{ currentLanguageLabel }}
     </span>
 
     <!-- Dropdown Menu -->
     <transition name="dropdown">
-      <ul v-if="isDropdownOpen" :class="['dropdown-menu cosmic-panel', props.direction]">
+      <ul v-if="isDropdownOpen" :class="['dropdown-menu', getDropdownPosition]">
         <li
-          v-for="(lang, index) in languages"
+          v-for="lang in languages"
           :key="lang.code"
-          :style="{ '--index': index }"
-          class="cosmic-hover-effect"
+          class="lang-item"
           :class="{ active: lang.code === currentLanguage }"
           @click.stop="changeLanguage(lang.code)"
         >
@@ -98,89 +102,81 @@ onBeforeUnmount(() => {
   padding: 0.5rem;
   font-size: 1.25rem;
   font-weight: 600;
-  z-index: 1000000;
+  z-index: 1000;
 }
 
 .lang-icon {
   width: 1.25rem;
   height: 1.25rem;
-  filter: drop-shadow(var(--cosmic-text-glow));
+  filter: drop-shadow(0 0 5px rgba(15, 185, 253, 0.3));
 }
 
 .lang-label {
   display: inline;
 }
 
-/* Dropdown open/close animation */
+/* Optimized dropdown animation */
 .dropdown-enter-active,
 .dropdown-leave-active {
-  transition: all 0.3s var(--cosmic-bounce);
-  transform-origin: top right;
+  transition: all 0.2s ease;
 }
 
 .dropdown-enter-from,
 .dropdown-leave-to {
   opacity: 0;
-  transform: scaleY(0.2) scaleX(0.2);
+  transform: scale(0.95);
 }
 
 /* Dropdown Menu Styles */
 .dropdown-menu {
   position: absolute;
   display: grid;
-  grid-template-columns: repeat(4, 2fr);
-  gap: 2rem;
-  margin-top: .75rem;
-  padding: 1.5rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(15, 25, 45, 0.95);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   width: max-content;
-  min-width: 480px;
+  min-width: 320px;
 }
 
-/* Positioning for up-right */
-.dropdown-menu.up-right {
-  bottom: 110%;
-  left: 0;
+/* Position for footer (top) */
+.dropdown-top {
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  transform-origin: bottom center;
 }
 
-/* Positioning for down-left */
-.dropdown-menu.down-left {
-  top: 110%;
+/* Position for header (bottom) */
+.dropdown-bottom {
+  top: 120%;
   right: 0;
+  transform-origin: top right;
 }
 
 /* Language items */
-.dropdown-menu li {
+.lang-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   color: var(--color-text-primary);
-  font-size: 1rem;
-  border-radius: var(--radius-small);
-  animation: fadeIn 0.25s var(--cosmic-bounce) forwards;
-  animation-delay: calc(0.05s * var(--index));
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s var(--cosmic-bounce);
+  font-size: 0.9rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
 }
 
-.dropdown-menu li:hover {
-  background: var(--cosmic-hover-bg);
+.lang-item:hover {
+  background: rgba(15, 185, 253, 0.1);
   color: var(--color-primary);
-  text-shadow: var(--cosmic-text-glow);
 }
 
-.dropdown-menu li.active {
-  background: var(--cosmic-active-bg);
+.lang-item.active {
+  background: rgba(15, 185, 253, 0.15);
   color: var(--color-primary);
-  text-shadow: var(--cosmic-text-glow);
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (min-width: 767px) {
@@ -192,9 +188,9 @@ onBeforeUnmount(() => {
 @media (max-width: 576px) {
   .dropdown-menu {
     grid-template-columns: repeat(3, 1fr);
-    min-width: 320px;
-    gap: 1rem;
-    padding: 1rem;
+    min-width: 280px;
+    gap: 0.75rem;
+    padding: 0.75rem;
   }
 }
 </style>

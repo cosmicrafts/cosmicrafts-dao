@@ -51,11 +51,6 @@ const toggleSection = (section) => {
     <div class="footer-container">
       <!-- Main Content -->
       <div class="footer-sections">
-        <!-- Logo Section -->
-        <div class="footer-logo-section">
-          <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts" class="footer-logo" />
-        </div>
-        
         <!-- Navigation Sections -->
         <div class="footer-nav-sections">
           <div class="footer-nav-group">
@@ -63,7 +58,7 @@ const toggleSection = (section) => {
             <ul class="nav-list">
               <li><router-link to="/careers">{{ t('footer.careers') }}</router-link></li>
               <li><router-link to="/about">{{ t('footer.about') }}</router-link></li>
-              <li><router-link to="/contact">{{ t('footer.contact') }}</router-link></li>
+              <li><router-link to="/contact">{{ t('footer.support') }}</router-link></li>
             </ul>
           </div>
 
@@ -76,15 +71,15 @@ const toggleSection = (section) => {
             </ul>
           </div>
         </div>
-      </div>
-      
-      <!-- Footer Bottom with Language Selector -->
-      <div class="footer-bottom">
-        <!-- Language Selector now in the bottom section -->
-        <div class="language-bottom-section">
+        
+        <!-- Language Selector below navigation -->
+        <div class="language-below-section">
           <LanguageSelector context="footer" />
         </div>
-        
+      </div>
+      
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
         <img src="@/assets/icons/wou.svg" alt="World of Unreal" class="wou-logo" />
         <p class="copyright-text">
           © {{ currentYear }} World of Unreal, LLC.<br>
@@ -98,12 +93,7 @@ const toggleSection = (section) => {
   <footer class="cosmic-footer mobile-footer">
     <div class="footer-cosmic-bg"></div>
     
-    <!-- Language Selector Row -->
-    <div class="language-row">
-      <LanguageSelector context="footer" />
-    </div>
-    
-    <!-- Mobile Footer Social Bar -->
+    <!-- Mobile Footer Social Bar - Kept at the top -->
     <div class="mobile-social-bar">
       <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="mobile-social-icon">
         <img src="@/assets/icons/discord.svg" alt="Discord" />
@@ -163,6 +153,11 @@ const toggleSection = (section) => {
       </div>
     </div>
     
+    <!-- Language Selector Row - Moved to after menus -->
+    <div class="language-row">
+      <LanguageSelector context="footer" />
+    </div>
+    
     <!-- Mobile Footer Copyright with Logo -->
     <div class="mobile-copyright-container">
       <img src="@/assets/icons/wou.svg" alt="World of Unreal Logo" class="mobile-copyright-logo" />
@@ -185,6 +180,7 @@ const toggleSection = (section) => {
     rgba(15, 25, 45, 0.98) 100%);
   border-top: 2px solid rgba(15, 185, 253, 0.2);
   backdrop-filter: blur(20px);
+  text-align: center; /* Center all text */
 }
 
 .footer-cosmic-bg {
@@ -193,18 +189,10 @@ const toggleSection = (section) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(15, 185, 253, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(15, 185, 253, 0.1) 0%, transparent 50%);
-  opacity: 0.8;
+  background: radial-gradient(circle at 50% 50%, rgba(15, 185, 253, 0.05) 0%, transparent 70%);
+  opacity: 0.5;
   z-index: 0;
   pointer-events: none;
-  animation: cosmicPulse 8s infinite ease-in-out;
-}
-
-@keyframes cosmicPulse {
-  0%, 100% { opacity: 0.8; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.05); }
 }
 
 .footer-cosmic-bg::before {
@@ -214,116 +202,114 @@ const toggleSection = (section) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    linear-gradient(90deg, transparent 0%, rgba(15, 185, 253, 0.1) 25%, transparent 50%),
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M29 28.5a2 2 0 1 1 2 2 2 2 0 0 1-2-2zm-10 10a1 1 0 1 1 1 1 1 1 0 0 1-1-1zm20-5a1.5 1.5 0 1 1 1.5 1.5 1.5 1.5 0 0 1-1.5-1.5zM35 48a1 1 0 1 1 1 1 1 1 0 0 1-1-1zm-10-30a1 1 0 1 1 1 1 1 1 0 0 1-1-1zm-8 15a1.5 1.5 0 1 1 1.5 1.5 1.5 1.5 0 0 1-1.5-1.5z" fill="%230FB9FD" fill-opacity="0.15"/></svg>');
-  opacity: 0.5;
-  animation: cosmicScan 15s linear infinite;
-}
-
-@keyframes cosmicScan {
-  0% { background-position: -100% 0; }
-  100% { background-position: 200% 0; }
+  background: rgba(15, 185, 253, 0.03);
+  opacity: 0.3;
 }
 
 /* Desktop Footer Styles */
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 2rem 1rem;
+  padding: 1.5rem 1rem 1rem; /* Reduced padding */
 }
 
-/* New Footer Layout */
+/* New Footer Layout - Centered */
 .footer-sections {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 0; /* Remove margin between sections and bottom */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
   position: relative;
 }
 
-.footer-logo-section {
-  flex: 0 0 25%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.footer-logo {
-  width: 160px;
-  height: auto;
-  filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.4));
-  transition: all 0.4s var(--cosmic-bounce);
-}
-
-.footer-logo:hover {
-  filter: drop-shadow(0 0 40px rgba(15, 185, 253, 0.8));
-  transform: translateY(-5px);
-}
-
 .footer-nav-sections {
-  flex: 0 0 50%;
+  width: 100%;
   display: flex;
-  justify-content: space-around;
-  padding: 0 2rem;
+  justify-content: center;
+  gap: 6rem; /* Increased gap between nav groups */
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+/* Language Below Section */
+.language-below-section {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(15, 185, 253, 0.1);
 }
 
 /* Navigation Groups */
 .footer-nav-group {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  align-items: center;
+  gap: 1.5rem; /* Increased gap */
 }
 
 .nav-title {
-  font-size: 1.15rem;
+  font-size: 1rem; /* MUCH larger font size */
   font-weight: 700;
   color: var(--color-primary);
   position: relative;
   padding-bottom: 0.75rem;
   margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .nav-title::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 0;
-  width: 2.5rem;
-  height: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4rem;
+  height: 3px;
   background: linear-gradient(90deg,
-    var(--color-primary) 0%,
+    transparent 0%,
+    var(--color-primary) 50%,
     transparent 100%);
 }
 
 .nav-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin-top: -1rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  align-items: center;
+  gap: .25rem; /* Increased gap */
 }
 
 .nav-list a {
   color: var(--color-text-secondary);
   text-decoration: none;
-  transition: all 0.3s var(--cosmic-bounce);
+  transition: all 0.2s ease;
   display: inline-block;
-  font-size: 1rem;
-  padding: 0.25rem 0;
+  font-size: 1rem; /* MUCH larger font size */
+  padding: .5rem 8rem;
+  border-radius: 8px;
+  font-weight: 500;
 }
 
 .nav-list a:hover {
   color: var(--color-primary);
-  transform: translateX(5px);
+  transform: translateY(-3px) scale(1.05);
   text-shadow: 0 0 10px rgba(15, 185, 253, 0.4);
+  background: rgba(15, 185, 253, 0.05);
+  box-shadow: 0 5px 15px rgba(15, 185, 253, 0.1);
+  font-weight: 600;
 }
 
 /* Social Top Row (New) */
 .social-top-row {
   display: flex;
   justify-content: center;
-  padding: 1rem;
+  padding: 1rem; /* Increased padding */
   background: rgba(15, 185, 253, 0.05);
   border-bottom: 1px solid rgba(15, 185, 253, 0.1);
 }
@@ -336,11 +322,13 @@ const toggleSection = (section) => {
 }
 
 .social-top-title {
-  font-size: 1.25rem;
+  font-size: 1rem; /* Larger font size */
   font-weight: 700;
   color: var(--color-primary);
   margin: 0;
   text-shadow: 0 0 10px rgba(15, 185, 253, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .social-icons-group {
@@ -354,42 +342,33 @@ const toggleSection = (section) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 50px; /* Larger icons */
+  height: 50px; /* Larger icons */
   background: rgba(15, 185, 253, 0.05);
   border: 1px solid rgba(15, 185, 253, 0.2);
   border-radius: 12px;
   position: relative;
   overflow: hidden;
-  transition: all 0.4s var(--cosmic-bounce);
-  transform-style: preserve-3d;
+  transition: all 0.2s ease;
 }
 
 .social-top-icon img {
-  width: 22px;
-  height: 22px;
-  filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.4));
-  transition: all 0.4s var(--cosmic-bounce);
-  transform: translateZ(20px);
+  width: 26px; /* Larger icon images */
+  height: 26px; /* Larger icon images */
+  filter: drop-shadow(0 0 5px rgba(15, 185, 253, 0.3));
+  transition: all 0.2s ease;
 }
 
 .social-top-icon:hover {
-  transform: translateY(-5px) scale(1.05) translateZ(20px);
+  transform: translateY(-5px) scale(1.1);
   background: rgba(15, 185, 253, 0.1);
   border-color: rgba(15, 185, 253, 0.4);
-  box-shadow: 
-    0 10px 30px rgba(15, 185, 253, 0.2),
-    0 0 0 1px rgba(15, 185, 253, 0.2) inset;
+  box-shadow: 0 5px 20px rgba(15, 185, 253, 0.2);
 }
 
 .social-top-icon:hover img {
-  transform: scale(1.2) translateZ(30px);
-  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.6));
-}
-
-/* Add language bottom section styles */
-.language-bottom-section {
-  margin-bottom: 1.5rem;
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.5));
 }
 
 /* Footer Bottom */
@@ -398,25 +377,24 @@ const toggleSection = (section) => {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  padding-top: 2rem;
-  margin-top: 2rem; /* Add margin to create separation */
+  padding-top: 1.5rem;
   border-top: 1px solid rgba(15, 185, 253, 0.1);
   position: relative;
 }
 
 .wou-logo {
-  width: 72px;
-  filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.4));
-  transition: all 0.3s var(--cosmic-bounce);
+  width: 80px; /* Larger logo */
+  filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.3));
+  transition: all 0.2s ease;
 }
 
 .wou-logo:hover {
-  filter: drop-shadow(0 0 30px rgba(15, 185, 253, 0.7));
+  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.5));
   transform: scale(1.1);
 }
 
 .copyright-text {
-  font-size: 0.8rem;
+  font-size: 0.9rem; /* Slightly larger */
   color: var(--color-text-tertiary);
   text-align: center;
   line-height: 1.6;
@@ -428,59 +406,37 @@ const toggleSection = (section) => {
   justify-content: center;
   padding: 0.75rem;
   background: rgba(15, 185, 253, 0.05);
-  border-bottom: 1px solid rgba(15, 185, 253, 0.1);
+  border-top: 1px solid rgba(15, 185, 253, 0.1);
+  margin-top: 0.5rem;
 }
 
 /* Responsive Breakpoints for Desktop */
 @media (max-width: 1200px) {
   .desktop-footer .footer-container {
-    padding: 2.5rem 1.5rem 2rem;
+    padding: 1.5rem 1.5rem 1rem;
   }
   
   .footer-nav-sections {
-    padding: 0 1rem;
+    gap: 4rem; /* Reduced gap on smaller screens */
   }
 }
 
 @media (max-width: 992px) {
-  .footer-sections {
-    flex-direction: column;
-    align-items: center;
-    gap: 2.5rem;
-  }
-  
-  .footer-logo-section {
-    flex: initial;
-  }
-  
-  .footer-nav-sections {
-    flex: initial;
-    width: 100%;
-    justify-content: space-around;
-  }
-  
-  .footer-social-section {
-    margin-top: 1rem;
-  }
+
   
   .nav-title {
-    text-align: center;
+    font-size: 1.25rem; /* Slightly smaller on medium screens */
   }
   
-  .nav-title::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .nav-list {
-    align-items: center;
+  .nav-list a {
+    font-size: 1.25rem; /* Slightly smaller on medium screens */
   }
 }
 
 /* Mobile Footer Styles */
 .mobile-footer {
   display: none;
-  padding: 2rem 0 1rem;
+  padding: 1.5rem 0 1rem;
   position: relative;
   z-index: 1;
 }
@@ -490,7 +446,7 @@ const toggleSection = (section) => {
   grid-template-columns: repeat(5, 1fr);
   gap: 0.75rem;
   padding: 0 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .mobile-social-icon {
@@ -504,37 +460,26 @@ const toggleSection = (section) => {
   border-radius: 14px;
   position: relative;
   overflow: hidden;
-  transition: all 0.4s var(--cosmic-bounce);
-  transform-style: preserve-3d;
+  transition: all 0.2s ease;
 }
 
 .mobile-social-icon img {
-  width: 20px;
-  height: 20px;
-  filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.4));
-  transition: all 0.4s var(--cosmic-bounce);
-  transform: translateZ(20px);
+  width: 24px; /* Larger icons */
+  height: 24px; /* Larger icons */
+  filter: drop-shadow(0 0 5px rgba(15, 185, 253, 0.3));
+  transition: all 0.2s ease;
 }
 
-.mobile-social-icon:active {
-  transform: scale(0.95);
-  background: rgba(15, 185, 253, 0.15);
-  border-color: rgba(15, 185, 253, 0.4);
-}
-
-/* Add desktop animations to mobile */
-.mobile-social-icon:hover {
-  transform: translateY(-5px) scale(1.05) translateZ(20px);
+.mobile-social-icon:hover, .mobile-social-icon:active {
+  transform: translateY(-3px) scale(1.05);
   background: rgba(15, 185, 253, 0.1);
   border-color: rgba(15, 185, 253, 0.4);
-  box-shadow: 
-    0 10px 30px rgba(15, 185, 253, 0.2),
-    0 0 0 1px rgba(15, 185, 253, 0.2) inset;
+  box-shadow: 0 5px 15px rgba(15, 185, 253, 0.15);
 }
 
-.mobile-social-icon:hover img {
-  transform: scale(1.2) translateZ(30px);
-  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.6));
+.mobile-social-icon:hover img, .mobile-social-icon:active img {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.4));
 }
 
 /* Media query adjustments */
@@ -545,17 +490,17 @@ const toggleSection = (section) => {
   }
   
   .mobile-social-icon img {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
 }
 
 .mobile-accordion-container {
-  margin: 0 1rem 1.5rem;
+  margin: 0 1rem 1rem;
 }
 
 .mobile-accordion {
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   border-radius: 14px;
   overflow: hidden;
   background: rgba(15, 185, 253, 0.05);
@@ -566,24 +511,27 @@ const toggleSection = (section) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem;
+  padding: 1.25rem; /* Increased padding */
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .mobile-accordion-header h4 {
   margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.6rem; /* MUCH larger font size */
+  font-weight: 700;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .mobile-accordion-header i {
   color: var(--color-primary);
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
+  font-size: 1.2rem; /* Larger icon */
 }
 
 .mobile-accordion-header.active {
@@ -601,26 +549,34 @@ const toggleSection = (section) => {
 }
 
 .mobile-accordion-content.expanded {
-  max-height: 200px;
+  max-height: 300px; /* Increased max height for larger text */
 }
 
 .mobile-link-list {
   list-style: none;
   padding: 0.5rem 1.25rem 1.25rem;
   margin: 0;
+  text-align: center; /* Center mobile links */
 }
 
 .mobile-link-list li {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.75rem; /* Increased margin */
 }
 
 .mobile-link-list a {
   color: var(--color-text-secondary);
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.4rem; /* MUCH larger font size */
   display: block;
-  padding: 0.5rem 0;
-  transition: all 0.3s ease;
+  padding: 0.75rem 0;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.mobile-link-list a:hover, .mobile-link-list a:active {
+  color: var(--color-primary);
+  transform: translateY(-3px) scale(1.05);
+  text-shadow: 0 0 10px rgba(15, 185, 253, 0.4);
 }
 
 .mobile-language-selector {
@@ -634,7 +590,7 @@ const toggleSection = (section) => {
   background: linear-gradient(180deg,
     rgba(15, 185, 253, 0.03) 0%,
     rgba(15, 185, 253, 0.05) 100%);
-  padding: 4rem 1.5rem;
+  padding: 2rem 1.5rem;
   position: relative;
   text-align: center;
 }
@@ -654,20 +610,14 @@ const toggleSection = (section) => {
 }
 
 .mobile-copyright-logo {
-  width: 64px;
-  margin-bottom: .25rem;
-  filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.4));
-  animation: mobileLogoGlow 4s ease-in-out infinite;
-}
-
-@keyframes mobileLogoGlow {
-  0%, 100% { filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.4)); }
-  50% { filter: drop-shadow(0 0 30px rgba(15, 185, 253, 0.7)); }
+  width: 72px; /* Larger logo */
+  margin-bottom: .5rem;
+  filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.3));
 }
 
 .mobile-copyright {
   text-align: center;
-  font-size: 0.7rem;
+  font-size: 0.8rem; /* Slightly larger */
   color: var(--color-text-tertiary);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -694,7 +644,7 @@ const toggleSection = (section) => {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 2rem 1.5rem 1rem;
+  padding: 1.5rem 1.5rem 1rem;
   background: linear-gradient(180deg,
     rgba(15, 185, 253, 0.03) 0%,
     rgba(15, 185, 253, 0.05) 100%);
@@ -706,27 +656,51 @@ const toggleSection = (section) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .copyright-logo,
 .mobile-copyright-logo {
-  width: 64px;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.4));
-  transition: all 0.3s var(--cosmic-bounce);
+  width: 72px;
+  margin-bottom: 0.75rem;
+  filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.3));
+  transition: all 0.2s ease;
 }
 
 .copyright-logo:hover,
 .mobile-copyright-logo:hover {
-  filter: drop-shadow(0 0 30px rgba(15, 185, 253, 0.7));
+  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.5));
   transform: scale(1.1);
 }
 
 .copyright,
 .mobile-copyright {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--color-text-tertiary);
   line-height: 1.5;
+}
+
+/* Additional hover effects for all interactive elements */
+a, button {
+  position: relative;
+  z-index: 1;
+}
+
+a::before, button::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 185, 253, 0);
+  border-radius: inherit;
+  transition: all 0.2s ease;
+}
+
+a:hover::before, button:hover::before {
+  background: rgba(15, 185, 253, 0.05);
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.1);
 }
 </style>
