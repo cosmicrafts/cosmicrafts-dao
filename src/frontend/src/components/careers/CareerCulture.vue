@@ -35,14 +35,11 @@
     
     <div class="cosmic-container">
       <div class="section-header vision-header">
-        <div class="cosmic-header-decoration">
-          <div class="cosmic-line"></div>
-          <div class="cosmic-orb"></div>
-          <div class="cosmic-line"></div>
+        <div class="header-accent-wrapper">
+          <div class="header-accent"></div>
         </div>
-        
         <h2 class="section-title vision-title">Our Vision & Culture</h2>
-        <p class="section-subtitle vision-subtitle">Join a team of visionaries building the next generation of gaming experiences</p>
+        <p class="section-subtitle vision-subtitle">Build with us. We're direct, focused, and relentlessly committed to creating exceptional games that matter</p>
       </div>
       
       <div class="culture-grid">
@@ -50,16 +47,17 @@
           <div class="card-shine"></div>
           <div class="card-cosmic-bg"></div>
           <div class="card-icon">
-            <i class="fas fa-handshake"></i>
+            <i class="fas fa-bullseye"></i>
             <div class="icon-rays">
               <div class="icon-ray"></div>
               <div class="icon-ray"></div>
               <div class="icon-ray"></div>
               <div class="icon-ray"></div>
             </div>
+            <div class="icon-particles"></div>
           </div>
-          <h3>Collaborative Innovation</h3>
-          <p>We believe the best ideas emerge when brilliant minds work together. Our flat hierarchy encourages open dialogue and rapid experimentation.</p>
+          <h3>Focus is Everything</h3>
+          <p>Freedom to develop is freedom to focus. In a remote-first world, your productivity is in your hands. Bring your own discipline, manage your space, deliver your best work.</p>
         </div>
         
         <div class="culture-card">
@@ -73,42 +71,34 @@
               <div class="icon-ray"></div>
               <div class="icon-ray"></div>
             </div>
+            <div class="icon-particles"></div>
           </div>
           <h3>Creative Freedom</h3>
-          <p>We hire exceptional people and give them the autonomy to create extraordinary things. Your unique perspective is our competitive advantage.</p>
+          <p>We need your unique perspective. Challenge conventions, break norms, and push boundaries. Your individual creativity is what sets our products apart.</p>
         </div>
         
         <div class="culture-card">
           <div class="card-shine"></div>
           <div class="card-cosmic-bg"></div>
           <div class="card-icon">
-            <i class="fas fa-rocket"></i>
+            <i class="fas fa-fire"></i>
             <div class="icon-rays">
               <div class="icon-ray"></div>
               <div class="icon-ray"></div>
               <div class="icon-ray"></div>
               <div class="icon-ray"></div>
             </div>
+            <div class="icon-particles"></div>
           </div>
-          <h3>Frontier Explorers</h3>
-          <p>We're charting unknown territories at the intersection of gaming, blockchain, and space exploration. Every day brings new discoveries.</p>
+          <h3>Relentless Dedication</h3>
+          <p>We're obsessed with excellence and expect the same from you. Long hours, tough challenges, and a refusal to settle for "good enough." That's how we build legendary products.</p>
         </div>
-        
-        <div class="culture-card">
-          <div class="card-shine"></div>
-          <div class="card-cosmic-bg"></div>
-          <div class="card-icon">
-            <i class="fas fa-balance-scale"></i>
-            <div class="icon-rays">
-              <div class="icon-ray"></div>
-              <div class="icon-ray"></div>
-              <div class="icon-ray"></div>
-              <div class="icon-ray"></div>
-            </div>
-          </div>
-          <h3>Work-Life Harmony</h3>
-          <p>We value sustainable creativity. We foster an environment where peak performance comes from well-rested, passionate individuals, not burnout.</p>
-        </div>
+      </div>
+
+      <div class="culture-portal">
+        <div class="portal-ring"></div>
+        <div class="portal-core"></div>
+        <div class="portal-glow"></div>
       </div>
     </div>
   </section>
@@ -125,31 +115,20 @@ export default {
 .vision-section {
   position: relative;
   z-index: 1;
-  padding-top: 100px;
-  margin-top: -80px; /* Pull up to overlap with hero portal */
+  padding: 150px 0 100px;
+  margin-top: -150px;
   background: linear-gradient(
     to bottom,
-    rgba(15, 25, 35, 0) 0%,
-    rgba(15, 25, 35, 0.5) 100px,
-    rgba(15, 25, 35, 0.3) 100%
+    transparent 0%,
+    var(--cosmic-bg-dark) 150px,
+    var(--cosmic-bg-dark) 100%
   );
-  overflow: hidden;
+  overflow: visible;
   min-height: 100vh;
 }
 
 .vision-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 200px;
-  background: radial-gradient(
-    ellipse at top center,
-    rgba(15, 185, 253, 0.2) 0%,
-    rgba(15, 185, 253, 0) 70%
-  );
-  z-index: -1;
+  display: none;
 }
 
 .vision-starfield {
@@ -160,6 +139,7 @@ export default {
   height: 100%;
   z-index: -1;
   pointer-events: none;
+  opacity: 0.8;
 }
 
 .vision-star {
@@ -170,8 +150,8 @@ export default {
   left: var(--left);
   background-color: #fff;
   border-radius: 50%;
-  box-shadow: 0 0 calc(var(--size) * 3) rgba(255, 255, 255, 0.7),
-              0 0 calc(var(--size) * 5) rgba(15, 185, 253, 0.5);
+  box-shadow: 0 0 calc(var(--size) * 2) rgba(255, 255, 255, 0.5),
+              0 0 calc(var(--size) * 4) rgba(15, 185, 253, 0.3);
   animation: starTwinkle 3s infinite alternate;
   animation-delay: calc(var(--top) * 0.01s);
 }
@@ -181,15 +161,17 @@ export default {
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  opacity: 0.15;
-  filter: blur(50px);
+  opacity: 0.1;
+  filter: blur(60px);
   z-index: -1;
   pointer-events: none;
 }
 
 .left-nebula {
-  top: 20%;
-  left: -100px;
+  top: 10%;
+  left: -150px;
+  width: 400px;
+  height: 400px;
   background: radial-gradient(
     circle at center,
     rgba(103, 58, 183, 0.7) 0%,
@@ -200,8 +182,10 @@ export default {
 }
 
 .right-nebula {
-  bottom: 10%;
-  right: -100px;
+  bottom: 5%;
+  right: -150px;
+  width: 400px;
+  height: 400px;
   background: radial-gradient(
     circle at center,
     rgba(15, 185, 253, 0.7) 0%,
@@ -255,42 +239,36 @@ export default {
   position: relative;
   margin-bottom: 5rem;
   z-index: 2;
+  text-align: center;
 }
 
-.cosmic-header-decoration {
+.header-accent-wrapper {
+  position: relative;
+  height: 60px;
+  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin-bottom: 2rem;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.8s ease-out forwards;
-  animation-delay: 0.2s;
+  align-items: center;
+  overflow: hidden;
+  margin-bottom: 1rem;
 }
 
-.cosmic-line {
-  width: 100px;
-  height: 2px;
-  background: linear-gradient(
-    to var(--direction, right),
-    rgba(15, 185, 253, 0),
-    rgba(15, 185, 253, 0.8)
-  );
-  opacity: 0.7;
-}
-
-.cosmic-line:first-child {
-  --direction: left;
-}
-
-.cosmic-orb {
-  width: 12px;
-  height: 12px;
+.header-accent {
+  position: relative;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  background: var(--cosmic-blue);
-  margin: 0 10px;
-  box-shadow: 0 0 15px rgba(15, 185, 253, 0.8);
-  animation: orbPulse 3s infinite alternate var(--animation-smooth);
+  background: radial-gradient(
+    circle at center,
+    rgba(15, 185, 253, 0.7) 0%,
+    rgba(15, 185, 253, 0.3) 50%,
+    rgba(15, 185, 253, 0) 70%
+  );
+  opacity: 0;
+  animation: accentReveal 1s var(--animation-bounce) forwards;
+  animation-delay: 0.2s;
+  transform: scale(0);
+  filter: blur(5px);
 }
 
 .vision-title {
@@ -301,6 +279,10 @@ export default {
   text-shadow: 0 0 20px rgba(15, 185, 253, 0.3);
   position: relative;
   z-index: 2;
+  color: var(--cosmic-text-primary);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
 }
 
 .vision-subtitle {
@@ -310,14 +292,19 @@ export default {
   animation-delay: 0.8s;
   position: relative;
   z-index: 2;
+  color: var(--cosmic-text-secondary);
+  font-size: clamp(1.1rem, 2vw, 1.25rem);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
 }
 
 .culture-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 2.5rem;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 4rem;
   position: relative;
   z-index: 2;
 }
@@ -339,25 +326,27 @@ export default {
   opacity: 0;
   transform: translateY(30px);
   animation: cardReveal 0.8s var(--animation-bounce) forwards;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  height: 100%;
 }
 
 .culture-card:nth-child(1) { animation-delay: 0.3s; }
 .culture-card:nth-child(2) { animation-delay: 0.5s; }
 .culture-card:nth-child(3) { animation-delay: 0.7s; }
-.culture-card:nth-child(4) { animation-delay: 0.9s; }
 
 .card-shine {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.15),
     rgba(255, 255, 255, 0.05) 20%,
     transparent 80%
   );
   z-index: 0;
   opacity: 0;
-  transition: opacity 0.3s var(--animation-smooth);
+  transition: opacity 0.5s var(--animation-smooth);
 }
 
 .card-cosmic-bg {
@@ -365,7 +354,7 @@ export default {
   inset: 0;
   background: radial-gradient(
     circle at 70% 30%,
-    rgba(15, 185, 253, 0.1) 0%,
+    rgba(15, 185, 253, 0.15) 0%,
     transparent 60%
   );
   z-index: -1;
@@ -374,9 +363,12 @@ export default {
 }
 
 .culture-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), 0 0 15px rgba(15, 185, 253, 0.3);
+  transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 0 30px rgba(15, 185, 253, 0.3);
   border-color: rgba(15, 185, 253, 0.4);
+  background: rgba(15, 25, 35, 0.75);
 }
 
 .culture-card:hover .card-shine,
@@ -397,11 +389,17 @@ export default {
   position: relative;
   box-shadow: 0 0 15px rgba(15, 185, 253, 0.3);
   transition: all 0.5s var(--animation-bounce);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  overflow: visible;
 }
 
 .culture-card:hover .card-icon {
-  transform: scale(1.1);
-  box-shadow: 0 0 25px rgba(15, 185, 253, 0.5);
+  transform: translateZ(20px) rotateY(360deg);
+  box-shadow: 
+    0 0 25px rgba(15, 185, 253, 0.5),
+    0 0 50px rgba(15, 185, 253, 0.2);
+  border-color: rgba(15, 185, 253, 0.6);
 }
 
 .card-icon i {
@@ -409,18 +407,24 @@ export default {
   color: var(--cosmic-blue);
   transition: all 0.5s var(--animation-bounce);
   filter: drop-shadow(0 0 5px rgba(15, 185, 253, 0.5));
+  position: relative;
+  z-index: 2;
 }
 
 .culture-card:hover .card-icon i {
   transform: scale(1.2);
   filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.7));
+  color: #fff;
 }
 
 .icon-rays {
   position: absolute;
-  inset: 0;
+  inset: -20px;
   opacity: 0;
   transition: opacity 0.5s var(--animation-smooth);
+  animation: rayRotate 10s linear infinite;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .culture-card:hover .icon-rays {
@@ -431,7 +435,7 @@ export default {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 40px;
+  width: 60px;
   height: 2px;
   background: linear-gradient(
     to right,
@@ -439,7 +443,6 @@ export default {
     rgba(15, 185, 253, 0)
   );
   transform-origin: left center;
-  animation: rayRotate 10s linear infinite;
 }
 
 .icon-ray:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg); }
@@ -447,16 +450,59 @@ export default {
 .icon-ray:nth-child(3) { transform: translate(-50%, -50%) rotate(180deg); }
 .icon-ray:nth-child(4) { transform: translate(-50%, -50%) rotate(270deg); }
 
+.icon-particles {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.5s var(--animation-smooth);
+  pointer-events: none;
+}
+
+.icon-particles::before,
+.icon-particles::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(15, 185, 253, 0.8);
+  box-shadow: 
+    0 0 8px rgba(15, 185, 253, 0.8),
+    0 0 15px rgba(15, 185, 253, 0.5);
+  animation: particleOrbit 3s infinite linear;
+}
+
+.icon-particles::before { 
+  top: 50%; 
+  left: 0;
+  animation-delay: 0s;
+}
+
+.icon-particles::after { 
+  top: 0; 
+  left: 50%;
+  animation-delay: 1.5s;
+}
+
+.culture-card:hover .icon-particles {
+  opacity: 1;
+}
+
 .culture-card h3 {
   font-size: 1.5rem;
   color: var(--cosmic-text-primary);
   margin-bottom: 1rem;
   transition: all 0.3s var(--animation-smooth);
   position: relative;
+  transform: translateZ(0);
 }
 
 .culture-card:hover h3 {
   color: var(--cosmic-blue);
+  transform: translateZ(10px);
+  text-shadow: 0 0 15px rgba(15, 185, 253, 0.5);
 }
 
 .culture-card h3::after {
@@ -486,6 +532,65 @@ export default {
   color: var(--cosmic-text-primary);
 }
 
+.culture-portal {
+  position: absolute;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  opacity: 0.6;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.portal-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(15, 185, 253, 0.5);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 20px rgba(15, 185, 253, 0.3),
+    0 0 40px rgba(15, 185, 253, 0.1),
+    inset 0 0 15px rgba(15, 185, 253, 0.3);
+  animation: portalRotateSlow 30s linear infinite;
+}
+
+.portal-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  height: 30%;
+  background: rgba(15, 185, 253, 0.5);
+  border-radius: 50%;
+  filter: blur(5px);
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.5);
+  animation: portalCorePulseSlow 4s infinite alternate ease-in-out;
+}
+
+.portal-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 70%;
+  background: radial-gradient(
+    circle at center,
+    rgba(15, 185, 253, 0.3) 0%,
+    rgba(15, 185, 253, 0.1) 40%,
+    rgba(15, 185, 253, 0) 70%
+  );
+  border-radius: 50%;
+  filter: blur(15px);
+  animation: portalGlowPulseSlow 5s infinite alternate ease-in-out;
+}
+
 /* Animation Keyframes */
 @keyframes titleReveal {
   from {
@@ -497,6 +602,17 @@ export default {
     opacity: 1;
     transform: translateY(0);
     filter: blur(0);
+  }
+}
+
+@keyframes accentReveal {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 0.7;
+    transform: scale(1);
   }
 }
 
@@ -514,11 +630,11 @@ export default {
 @keyframes cardReveal {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(30px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -581,10 +697,50 @@ export default {
 
 @keyframes rayRotate {
   from {
-    transform: translate(-50%, -50%) rotate(0deg);
+    transform: rotate(0deg);
   }
   to {
-    transform: translate(-50%, -50%) rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes particleOrbit {
+  from {
+    transform: rotate(0deg) translateX(40px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(40px) rotate(-360deg);
+  }
+}
+
+@keyframes portalRotateSlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes portalCorePulseSlow {
+  0% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+@keyframes portalGlowPulseSlow {
+  0% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.1);
   }
 }
 
@@ -592,22 +748,123 @@ export default {
 @media (max-width: 768px) {
   .culture-grid {
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
   
-  .cosmic-header-decoration {
-    margin-bottom: 1.5rem;
+  .header-accent {
+    width: 60px;
+    height: 60px;
   }
   
-  .cosmic-line {
-    width: 70px;
+  .header-accent-wrapper {
+    height: 50px;
+    margin-bottom: 0.5rem;
   }
   
   .vision-title {
     font-size: 2.25rem;
+    margin-bottom: 0.75rem;
   }
   
   .vision-subtitle {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .vision-section {
+    padding: 120px 0 80px;
+  }
+  
+  .culture-card {
+    padding: 2rem;
+  }
+  
+  .card-icon {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 1.25rem;
+  }
+  
+  .card-icon i {
+    font-size: 1.75rem;
+  }
+  
+  .culture-card h3 {
+    font-size: 1.25rem;
+  }
+  
+  .culture-card p {
+    font-size: 0.95rem;
+  }
+  
+  .icon-ray {
+    width: 50px;
+  }
+  
+  .culture-portal {
+    width: 150px;
+    height: 150px;
+    bottom: -75px;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .culture-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .vision-title {
+    font-size: 2.5rem;
+  }
+  
+  .culture-card {
+    padding: 1.75rem;
+  }
+  
+  .card-icon {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .culture-card h3 {
+    font-size: 1.3rem;
+  }
+  
+  .culture-card p {
+    font-size: 0.95rem;
+  }
+  
+  .culture-portal {
+    width: 180px;
+    height: 180px;
+    bottom: -90px;
+  }
+}
+
+/* Small desktop styles */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .culture-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  
+  .culture-card {
+    padding: 2rem;
+  }
+}
+
+/* Large desktop styles */
+@media (min-width: 1281px) {
+  .culture-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1200px;
+  }
+  
+  .culture-card p {
+    font-size: 1.05rem;
+    line-height: 1.7;
   }
 }
 </style> 

@@ -39,9 +39,9 @@ export default {
     CareerJoin
   },
   metaInfo: {
-    title: 'Careers | CosmicRafts DAO',
+    title: 'Careers | Cosmicrafts DAO',
     meta: [
-      { name: 'description', content: 'Join the CosmicRafts team and help shape the future of decentralized gaming and NFTs. Explore career opportunities in blockchain technology, game design, and more.' }
+      { name: 'description', content: 'Join the Cosmicrafts team and help shape the future of decentralized gaming and NFTs. Explore career opportunities in blockchain technology, game design, and more.' }
     ]
   }
 }
