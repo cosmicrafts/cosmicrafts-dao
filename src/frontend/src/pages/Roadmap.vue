@@ -1,29 +1,15 @@
 <template>
   <div class="roadmap-page">
-    <!-- Enhanced Cosmic Background Elements -->
-    <div class="cosmic-stars"></div>
-    <div class="cosmic-particles"></div>
-    <div class="cosmic-nebula"></div>
-    
-    <div class="roadmap-container cosmic-panel">
-      <!-- Header Section -->
-      <div class="roadmap-header">
-        <h1 class="cosmic-title">Cosmic Roadmap</h1>
-        <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history. — here's what's next.</p>
-      </div>
-
+    <div class="roadmap-container cosmic-page-bg">
+      <!-- Hero Section -->
+      <RoadmapHero />
+      
       <!-- Search and Filter Section -->
-      <RoadmapSearch 
-        v-model:searchQuery="searchQuery"
-        v-model:selectedYear="selectedYear"
-        v-model:selectedMilestone="selectedMilestone"
-        v-model:selectedTags="selectedTags"
+      <SearchFilters 
         :availableYears="availableYears"
         :availableMilestones="availableMilestones"
         :availableTags="availableTags"
-        :getTagColor="getTagColor"
-        @clearTagFilters="clearTagFilters"
-        @toggleTagFilter="toggleTagFilter"
+        @filter-changed="handleFilterChanges"
       />
 
       <!-- Roadmap Stats Summary -->
@@ -33,68 +19,38 @@
         :completedPercentage="completedPercentage"
       />
 
-      <!-- Quarters Section with Enhanced Vertical Timeline -->
-      <div class="timeline-container">
-        <div class="timeline-line"></div>
-        <div class="quarters-container" role="list" aria-label="Quarters timeline">
-          <RoadmapQuarter 
-            v-for="(quarter, qIndex) in filteredQuarters" 
-            :key="qIndex" 
-            :quarter="quarter" 
-            :quarterIndex="qIndex"
-            :getProgressPercentage="getProgressPercentage"
-            @toggleQuarter="toggleQuarter"
-            @toggleMilestone="toggleMilestone"
-            @toggleTask="toggleTask"
-            @toggleSubtask="toggleSubtask"
-            @copyMilestoneLink="copyMilestoneLink"
-          />
-        </div>
-      </div>
-
-      <!-- Skip to content link for keyboard users -->
-      <a href="#" class="skip-link">Skip to main content</a>
-
-      <!-- Notifications system -->
-      <RoadmapNotifications :notifications="notifications" />
+      <!-- Roadmap Display -->
+      <RoadmapDisplay 
+        :quarters="filteredQuarters"
+        @update:quarters="quarters = $event"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import roadmapData from '@/data/roadmap.json';
-import RoadmapQuarter from '@/components/roadmap/RoadmapQuarter.vue';
-import RoadmapMilestone from '@/components/roadmap/RoadmapMilestone.vue';
-import RoadmapTask from '@/components/roadmap/RoadmapTask.vue';
+import RoadmapHero from '@/components/roadmap/RoadmapHero.vue';
+import SearchFilters from '@/components/roadmap/SearchFilters.vue';
 import RoadmapStats from '@/components/roadmap/RoadmapStats.vue';
-import RoadmapSearch from '@/components/roadmap/RoadmapSearch.vue';
-import RoadmapNotifications from '@/components/roadmap/RoadmapNotifications.vue';
-import * as RoadmapUtil from '@/components/roadmap/RoadmapUtil.js';
+import RoadmapDisplay from '@/components/roadmap/RoadmapDisplay.vue';
 
 export default {
-  name: 'RoadmapGalactic',
+  name: 'RoadmapPage',
   components: {
-    RoadmapQuarter,
-    RoadmapMilestone,
-    RoadmapTask,
+    RoadmapHero,
+    SearchFilters,
     RoadmapStats,
-    RoadmapSearch,
-    RoadmapNotifications
+    RoadmapDisplay
   },
   setup() {
-    // Core state
     const quarters = ref([]);
     const searchQuery = ref('');
     const selectedYear = ref('');
     const selectedMilestone = ref('');
     const selectedTags = ref([]);
-    const isMounted = ref(false);
-    
-    // Create notification system using utility
-    const { notifications, showNotification } = RoadmapUtil.createNotificationSystem();
 
-    // Load roadmap data
     const loadRoadmap = () => {
       const data = Object.keys(roadmapData).map(key => {
         const quarter = roadmapData[key];
@@ -114,65 +70,47 @@ export default {
       quarters.value = data;
     };
 
-    // Toggle functions
-    const toggleQuarter = (index, event) => {
-      if (quarters.value[index]) {
-        RoadmapUtil.toggleElement(quarters.value[index], event, RoadmapUtil.scrollToElement);
-      }
+    const handleFilterChanges = (filters) => {
+      searchQuery.value = filters.searchQuery;
+      selectedYear.value = filters.selectedYear;
+      selectedMilestone.value = filters.selectedMilestone;
+      selectedTags.value = filters.selectedTags;
     };
 
-    const toggleMilestone = (milestone, event) => {
-      RoadmapUtil.toggleElement(milestone, event, RoadmapUtil.scrollToElement);
-    };
+    // Calculate available filter options
+    const availableYears = computed(() => {
+      return [...new Set(quarters.value.map(q => q.period.split('-')[0]))];
+    });
 
-    const toggleTask = (task, event) => {
-      RoadmapUtil.toggleElement(task, event, RoadmapUtil.scrollToElement);
-    };
+    const availableMilestones = computed(() => {
+      const milestones = [];
+      quarters.value.forEach(q => {
+        q.milestones.forEach(m => {
+          if (!milestones.includes(m.title)) {
+            milestones.push(m.title);
+          }
+        });
+      });
+      return milestones;
+    });
 
-    // Progress calculation
-    const getProgressPercentage = (completed, total) => {
-      if (!total) return 0;
-      return (completed / total) * 100;
-    };
-
-    // Toggle subtask with progress updates
-    const toggleSubtask = (quarter, milestone, task, subtask) => {
-      RoadmapUtil.toggleSubtask(quarter, milestone, task, subtask);
-    };
-
-    // Touch handling
-    const handleTouchStart = (target, event) => {
-      if (target.open !== undefined) {
-        toggleMilestone(target, event);
-      } else {
-        toggleQuarter(target, event);
-      }
-    };
-
-    const handleTouchStartTask = (task, event) => {
-      toggleTask(task, event);
-    };
-
-    // Computed properties using utility functions
-    const availableYears = computed(() => RoadmapUtil.getAvailableYears(quarters.value));
-    const availableMilestones = computed(() => RoadmapUtil.getAvailableMilestones(quarters.value));
-    const availableTags = computed(() => RoadmapUtil.getAvailableTags(quarters.value));
-    
-    // Tag handling
-    const getTagColor = RoadmapUtil.getTagColor;
-
-    // Filter handling
-    const toggleTagFilter = (tag) => {
-      if (selectedTags.value.includes(tag)) {
-        selectedTags.value = selectedTags.value.filter(t => t !== tag);
-      } else {
-        selectedTags.value.push(tag);
-      }
-    };
-
-    const clearTagFilters = () => {
-      selectedTags.value = [];
-    };
+    // Tag related functions
+    const availableTags = computed(() => {
+      const tags = new Set();
+      quarters.value.forEach(quarter => {
+        quarter.milestones.forEach(milestone => {
+          if (milestone.tags) {
+            milestone.tags.forEach(tag => tags.add(tag));
+          }
+          milestone.tasks.forEach(task => {
+            if (task.tags) {
+              task.tags.forEach(tag => tags.add(tag));
+            }
+          });
+        });
+      });
+      return Array.from(tags).sort();
+    });
 
     // Roadmap stats
     const totalMilestones = computed(() => {
@@ -200,298 +138,81 @@ export default {
       return Math.round((completedTasks.value / totalTasks.value) * 100);
     });
 
-    // Filtered quarters using utility function
+    // Filtered quarters based on search and filters
     const filteredQuarters = computed(() => {
-      return RoadmapUtil.filterQuarters(
-        quarters.value, 
-        searchQuery.value, 
-        selectedYear.value, 
-        selectedMilestone.value, 
-        selectedTags.value
-      );
-    });
-
-    // Use utility functions for animations
-    const {
-      beforeEnter,
-      enter,
-      beforeLeave,
-      leave,
-      beforeEnterFade,
-      enterFade,
-      beforeLeaveFade,
-      leaveFade
-    } = RoadmapUtil.transitionFunctions;
-
-    // Copy milestone link function
-    const copyMilestoneLink = (quarter, milestone, quarterIndex, milestoneIndex) => {
-      RoadmapUtil.copyMilestoneLink(quarter, milestone, quarterIndex, milestoneIndex, showNotification);
-    };
-
-    // URL hash handling
-    const handleUrlHash = () => {
-      if (!isMounted.value || !window.location.hash) return;
-      
-      const hash = window.location.hash.substring(1); // Remove #
-      if (hash.startsWith('milestone-')) {
-        const [_, quarterIndexStr, milestoneIndexStr] = hash.split('-');
-        const quarterIndex = parseInt(quarterIndexStr, 10);
-        const milestoneIndex = parseInt(milestoneIndexStr, 10);
+      return quarters.value.filter(q => {
+        const matchesYear = selectedYear.value ? q.period.includes(selectedYear.value) : true;
+        const matchesMilestone = selectedMilestone.value ? q.milestones.some(m => m.title.includes(selectedMilestone.value)) : true;
         
-        if (!isNaN(quarterIndex) && !isNaN(milestoneIndex) && 
-            quarters.value[quarterIndex] && 
-            quarters.value[quarterIndex].milestones[milestoneIndex]) {
-          
-          // Open the quarter if it's not already open
-          if (!quarters.value[quarterIndex].open) {
-            quarters.value[quarterIndex].open = true;
-          }
-          
-          // Wait for the quarter content to render
-          nextTick(() => {
-            const milestone = quarters.value[quarterIndex].milestones[milestoneIndex];
+        let matchesTags = true;
+        if (selectedTags.value.length > 0) {
+          matchesTags = q.milestones.some(m => {
+            // Check if milestone has any of the selected tags
+            const milestoneTags = m.tags || [];
+            const milestoneHasTags = milestoneTags.some(tag => selectedTags.value.includes(tag));
             
-            // Open the milestone if it's not already open
-            if (!milestone.open) {
-              milestone.open = true;
-            }
-            
-            // Scroll to the milestone
-            nextTick(() => {
-              const selector = `#milestone-content-${quarterIndex}-${milestoneIndex}`;
-              const element = document.querySelector(selector)?.closest('.milestone');
-              if (element) {
-                setTimeout(() => {
-                  element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  // Add a highlight effect
-                  element.classList.add('highlight-target');
-                  setTimeout(() => {
-                    element.classList.remove('highlight-target');
-                  }, 3000);
-                }, 500);
-              }
+            // Check if any tasks have the selected tags
+            const tasksHaveTags = m.tasks.some(t => {
+              const taskTags = t.tags || [];
+              return taskTags.some(tag => selectedTags.value.includes(tag));
             });
+            
+            return milestoneHasTags || tasksHaveTags;
           });
         }
-      }
-    };
-
-    // Lifecycle hooks
-    onMounted(() => {
-      isMounted.value = true;
-      loadRoadmap();
-      
-      // Handle URL hash for direct linking to milestones
-      handleUrlHash();
-      window.addEventListener('hashchange', handleUrlHash);
+        
+        const matchesSearch = searchQuery.value ? q.milestones.some(m => 
+          m.title.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
+          m.tasks.some(t => t.title.toLowerCase().includes(searchQuery.value.toLowerCase()))
+        ) : true;
+        
+        return matchesYear && matchesMilestone && matchesSearch && matchesTags;
+      });
     });
-    
-    onBeforeUnmount(() => {
-      isMounted.value = false;
-      window.removeEventListener('hashchange', handleUrlHash);
+
+    onMounted(() => {
+      loadRoadmap();
     });
 
     return {
       quarters,
-      searchQuery,
-      selectedYear,
-      selectedMilestone,
-      selectedTags,
-      availableTags,
+      filteredQuarters,
       availableYears,
       availableMilestones,
-      filteredQuarters,
+      availableTags,
       totalMilestones,
       totalTasks,
       completedPercentage,
-      toggleQuarter,
-      toggleMilestone,
-      toggleTask,
-      toggleSubtask,
-      toggleTagFilter,
-      clearTagFilters,
-      getProgressPercentage,
-      copyMilestoneLink,
-      getTagColor,
-      notifications,
-      showNotification,
-      beforeEnter,
-      enter,
-      beforeLeave,
-      leave,
-      beforeEnterFade,
-      enterFade,
-      beforeLeaveFade,
-      leaveFade,
-      handleTouchStart,
-      handleTouchStartTask
+      handleFilterChanges
     };
   }
 };
 </script>
 
 <style scoped>
-/* Base cosmic theme styles for the roadmap */
+/* Base Styling */
 .roadmap-page {
-  position: relative;
   min-height: 100vh;
-  padding: 2rem 1rem;
-  color: var(--cosmic-text);
-  overflow-x: hidden;
-}
-
-/* Enhanced cosmic background effects */
-.cosmic-stars,
-.cosmic-particles,
-.cosmic-nebula {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: -1;
-}
-
-.cosmic-stars {
-  background-image: radial-gradient(2px 2px at calc(100% * var(--rand-1)) calc(100% * var(--rand-2)), rgba(255, 255, 255, 0.5), transparent),
-                   radial-gradient(2px 2px at calc(100% * var(--rand-3)) calc(100% * var(--rand-4)), rgba(255, 255, 255, 0.5), transparent),
-                   radial-gradient(2px 2px at calc(100% * var(--rand-5)) calc(100% * var(--rand-6)), rgba(255, 255, 255, 0.5), transparent),
-                   radial-gradient(2px 2px at calc(100% * var(--rand-7)) calc(100% * var(--rand-8)), rgba(255, 255, 255, 0.5), transparent);
-  background-size: 200% 200%;
-  opacity: 0.3;
-}
-
-.cosmic-particles {
-  background-image: url('/images/cosmic-particles.png');
+  color: var(--color-text);
+  position: relative;
+  overflow: hidden;
+  padding-top: 4rem;
+  background: linear-gradient(135deg, #0c1016f0, #141b2af0, #0c1016f0), url('@/assets/webp/login.webp') no-repeat center center;
   background-size: cover;
-  opacity: 0.15;
-  animation: drift 150s linear infinite;
 }
 
-.cosmic-nebula {
-  background-image: url('/images/cosmic-nebula.png');
-  background-size: cover;
-  opacity: 0.1;
-  animation: pulse 30s ease-in-out infinite;
-}
-
-@keyframes drift {
-  0% { transform: translate(-50px, -50px) rotate(0deg); }
-  100% { transform: translate(50px, 50px) rotate(5deg); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.08; }
-  50% { opacity: 0.12; }
-}
-
+/* Main Container */
 .roadmap-container {
   max-width: 1200px;
   margin: 0 auto;
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-}
-
-.roadmap-header {
-  text-align: center;
-  margin-bottom: 2rem;
-  padding: 2rem 1rem;
-}
-
-.cosmic-title {
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(to right, var(--cosmic-primary), var(--cosmic-secondary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 0 15px rgba(var(--cosmic-primary-rgb), 0.5);
-  font-family: var(--cosmic-title-font);
-}
-
-.cosmic-subtitle {
-  font-size: 1.2rem;
-  max-width: 800px;
-  margin: 0 auto;
-  color: var(--cosmic-text-secondary);
-  line-height: 1.6;
-}
-
-/* Timeline container */
-.timeline-container {
+  padding: 2rem;
   position: relative;
-  padding: 2rem 0;
-}
-
-.timeline-line {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 40px;
-  width: 2px;
-  background: linear-gradient(to bottom, transparent, var(--cosmic-accent), transparent);
   z-index: 1;
 }
 
-.quarters-container {
-  position: relative;
-  z-index: 2;
-}
-
-/* Skip link for keyboard users */
-.skip-link {
-  position: absolute;
-  top: -100px;
-  left: 0;
-  background: var(--cosmic-panel-bg);
-  color: var(--cosmic-text);
-  padding: 10px;
-  z-index: 100;
-  transition: top 0.3s;
-}
-
-.skip-link:focus {
-  top: 0;
-}
-
-/* Highlight effect for direct links */
-@keyframes highlight-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(15, 185, 253, 0.7); }
-  70% { box-shadow: 0 0 0 15px rgba(15, 185, 253, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(15, 185, 253, 0); }
-}
-
-.highlight-target {
-  animation: highlight-pulse 1s ease-in-out 3;
-}
-
-/* Media queries for responsive design */
 @media (max-width: 768px) {
-  .roadmap-header {
-    padding: 1rem 0.5rem;
-  }
-  
-  .cosmic-title {
-    font-size: 2.2rem;
-  }
-  
-  .cosmic-subtitle {
-    font-size: 1rem;
-  }
-
-  .timeline-line {
-    left: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .roadmap-page {
-    padding: 1rem 0.5rem;
-  }
-  
-  .cosmic-title {
-    font-size: 1.8rem;
+  .roadmap-container {
+    padding: 1rem;
   }
 }
 </style>
