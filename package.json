@@ -17,5 +17,6 @@
     "src/icp-minting"
   ],
   "dependencies": {
+    "openai": "^4.86.2"
   }
 }

@@ -11,7 +11,7 @@ let canisters = {
 let currentIdentity = null;
 let initializing = false;
 
-const MANUAL_ENV = 'local'; // 'ic' for IC, 'local' for local development
+const MANUAL_ENV = 'ic'; // 'ic' for IC, 'local' for local development
 const isLocal = MANUAL_ENV === 'local';
 const host = isLocal ? 'http://127.0.0.1:8080' : 'https://ic0.app';
 
@@ -21,7 +21,7 @@ console.log(`Host: ${host}`);
 export const useCanisterStore = defineStore('canister', {
   state: () => ({
     canisterIds: {
-      cosmicrafts: backendCanisterId,
+      cosmicrafts: 'opcce-byaaa-aaaak-qcgda-cai',
       roadmap: 'be2us-64aaa-aaaaa-qaabq-cai',
     },
   }),
