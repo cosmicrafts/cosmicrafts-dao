@@ -396,8 +396,8 @@ export default {
 
 .portal-star {
   position: absolute;
-  width: 4px;
-  height: 4px;
+  width: 2px;
+  height: 2px;
   background: white;
   border-radius: 50%;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(15, 185, 253, 0.6);
@@ -415,40 +415,18 @@ export default {
 .portal-star:nth-child(7) { top: 80%; left: 10%; }
 .portal-star:nth-child(8) { top: 50%; left: 5%; }
 
-.portal-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  background: radial-gradient(
-    circle at center,
-    rgba(15, 185, 253, 0.2) 0%,
-    rgba(15, 185, 253, 0.1) 30%,
-    rgba(15, 185, 253, 0.05) 50%,
-    rgba(15, 185, 253, 0) 70%
-  );
-  border-radius: 50%;
-  filter: blur(15px);
-  opacity: 0.6;
-  animation: portalGlowPulse 5s infinite alternate var(--animation-smooth);
-}
-
 .portal-core {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 20%;
-  height: 20%;
-  background: rgba(15, 185, 253, 0.4);
-  box-shadow: 0 0 30px rgba(15, 185, 253, 0.3);
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 185, 253, .3);
+  box-shadow: 0 0 64px rgba(0, 183, 255, 0.6);
   border-radius: 50%;
-  filter: blur(5px);
-  opacity: 0.7;
+
   animation: portalCorePulse 4s infinite alternate var(--animation-smooth);
-  z-index: 2;
 }
 
 /* Logo Watermark (positioned independently) */
@@ -467,29 +445,10 @@ export default {
 
 }
 
-.logo-glow-effect {
-  position: absolute;
-  inset: -20%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(15, 185, 253, 0.2) 0%,
-    rgba(15, 185, 253, 0.1) 30%,
-    rgba(15, 185, 253, 0.05) 50%,
-    rgba(15, 185, 253, 0) 70%
-  );
-  mix-blend-mode: screen;
-  filter: blur(30px);
-  opacity: 0.6;
-  animation: logoGlowPulse 8s infinite var(--animation-smooth);
-  pointer-events: none;
-  border-radius: 50%;
-}
 
 .logo-image {
-  max-width: 90%;
-  max-height: 90%;
-  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.8)) 
-          drop-shadow(0 0 30px rgba(15, 185, 253, 0.5));
+  max-width: 36%;
+  max-height: 100%;
   animation: logoBreathing 10s infinite alternate-reverse var(--animation-smooth);
   z-index: 3;
   position: relative;
@@ -523,7 +482,8 @@ export default {
   height: 2px;
   background: linear-gradient(
     to right,
-    rgba(15, 185, 253, 0.5),
+    rgba(15, 185, 253, 0),
+    rgba(15, 185, 253, 0.25),
     rgba(15, 185, 253, 0)
   );
   transform-origin: left center;
@@ -533,74 +493,12 @@ export default {
   border-radius: 1px;
 }
 
-.energy-particles {
-  position: absolute;
-  top: -5px;
-  left: 0;
-  width: 100%;
-  height: 10px;
-  pointer-events: none;
-  transform-origin: left center;
-  animation: particleFlow 10s infinite linear;
-}
-
-.energy-particles::before,
-.energy-particles::after {
-  content: '';
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(15, 185, 253, 0.6);
-  box-shadow: 0 0 8px rgba(15, 185, 253, 0.6), 0 0 15px rgba(15, 185, 253, 0.4);
-  opacity: 0.7;
-  animation: particleOpacity 5s infinite ease-in-out;
-}
-
-.energy-particles::before {
-  top: 0;
-  animation-delay: calc(var(--angle) * 0.02s);
-}
-
-.energy-particles::after {
-  top: 5px;
-  animation-delay: calc(var(--angle) * 0.02s + 2.5s);
-}
-
-/* Energy Orbs */
-.energy-orbs {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.energy-orb {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(15, 185, 253, 0.4);
-  box-shadow: 
-    0 0 10px rgba(15, 185, 253, 0.6),
-    0 0 20px rgba(15, 185, 253, 0.3);
-  transform: translate(-50%, -50%) scale(var(--scale));
-  opacity: 0.7;
-  animation: orbFloat 12s infinite linear;
-  animation-delay: var(--delay);
-  filter: blur(1px);
-  z-index: 2;
-}
 
 /* Hexagon Grid */
 .portal-hexagons {
   position: absolute;
-  top: 10%;
-  left: 10%;
+  top: 0;
+  left: 0;
   width: 80%;
   height: 80%;
   border-radius: 50%;
