@@ -330,6 +330,7 @@
 
 <script>
 import { ref, computed, watch, onMounted, onUnmounted, nextTick, reactive } from 'vue';
+import { useIntersectionObserver } from '@vueuse/core';
 import RoadmapHarmonizer from './RoadmapHarmonizer.js';
 import gsap from 'gsap';
 import * as d3 from 'd3';
@@ -384,12 +385,13 @@ export default {
     const expandedQuarters = ref(new Set());
     const focusedElement = ref(null);
     
-    // Reactive state
+    // Reactive state for tracking independently opened elements
     const interactionState = reactive({
       hoveredQuarter: null,
       hoveredMilestone: null,
       hoveredTask: null,
-      lastInteractionTime: Date.now()
+      lastInteractionTime: Date.now(),
+      activeElements: new Set() // Track active/expanded elements by their unique ID
     });
     
     // Timeline particle system (for decoration)
@@ -464,6 +466,11 @@ export default {
       return props.tagColorMap[tag] || 'var(--cosmic-blue)';
     };
     
+    // Generate unique element ID for independent tracking
+    const getElementId = (type, index, parentIndex = null) => {
+      return `${type}-${parentIndex !== null ? parentIndex + '-' : ''}${index}`;
+    };
+    
     // =======================================
     // Interaction Methods
     // =======================================
@@ -483,20 +490,28 @@ export default {
       emit('update:quarters', updatedQuarters);
       emit('quarter-click', updatedQuarters[index]);
       
-      // Animate the expansion/collapse
+      // Animate the expansion/collapse faster
       nextTick(() => {
         animateQuarterToggle(index, updatedQuarters[index].open);
       });
     };
     
-    // Toggle milestone expansion
+    // Toggle milestone expansion with independent behavior
     const toggleMilestone = (milestone) => {
       milestone.open = !milestone.open;
+      
+      // Add to active elements set for independent tracking
+      const elementId = milestone.id || milestone.title;
+      if (milestone.open) {
+        interactionState.activeElements.add(elementId);
+      } else {
+        interactionState.activeElements.delete(elementId);
+      }
       
       emit('update:quarters', [...props.quarters]);
       emit('milestone-click', milestone);
       
-      // Animate the expansion/collapse
+      // Animate the specific milestone's expansion/collapse faster
       nextTick(() => {
         animateMilestoneToggle(milestone);
       });
@@ -506,10 +521,18 @@ export default {
     const toggleTask = (task) => {
       task.open = !task.open;
       
+      // Add to active elements set for independent tracking
+      const elementId = task.id || task.title;
+      if (task.open) {
+        interactionState.activeElements.add(elementId);
+      } else {
+        interactionState.activeElements.delete(elementId);
+      }
+      
       emit('update:quarters', [...props.quarters]);
       emit('task-click', task);
       
-      // Animate subtasks
+      // Animate subtasks faster
       if (task.open && task.subtasks) {
         nextTick(() => {
           animateSubtasksReveal(task);
@@ -550,7 +573,7 @@ export default {
         currentTimelinePosition.value++;
       }
       
-      // Animate the timeline navigation
+      // Animate the timeline navigation faster
       animateTimelineNavigation();
     };
     
@@ -564,19 +587,19 @@ export default {
     };
     
     // =======================================
-    // Animation Methods
+    // Animation Methods - Optimized for Speed
     // =======================================
     
     // Initialize animations
     const initAnimations = () => {
       if (!roadmapRef.value || !isAnimated.value) return;
       
-      // Setup GSAP timeline
+      // Setup GSAP timeline with faster defaults
       timeline.value = gsap.timeline({ 
         paused: true,
         defaults: { 
           ease: 'power2.out',
-          duration: 0.5 
+          duration: 0.3 // Reduced from 0.5 for faster animations
         }
       });
       
@@ -587,7 +610,7 @@ export default {
       animateTimelineAxis();
     };
     
-    // Animate timeline axis with energy flow
+    // Animate timeline axis with energy flow - faster
     const animateTimelineAxis = () => {
       if (!roadmapRef.value || !isAnimated.value) return;
       
@@ -600,7 +623,7 @@ export default {
           { 
             height: '100%', 
             opacity: 0.8, 
-            duration: 2.5, 
+            duration: 1.8, // Reduced from 2.5 for faster animation
             ease: 'power1.inOut',
             repeat: -1,
             yoyo: true
@@ -609,7 +632,7 @@ export default {
       }
     };
     
-    // Animate quarter toggle
+    // Animate quarter toggle - faster with immediate milestone reveal
     const animateQuarterToggle = (index, isOpen) => {
       if (!roadmapRef.value || !isAnimated.value) return;
       
@@ -618,41 +641,42 @@ export default {
       
       if (quarter && milestonesContainer) {
         if (isOpen) {
-          // Animate opening
+          // Make quarters appear faster
           gsap.fromTo(milestonesContainer, 
             { height: 0, opacity: 0 },
             { 
               height: 'auto', 
               opacity: 1, 
-              duration: 0.4, 
+              duration: 0.25, // Reduced from 0.4 for faster animation
               ease: 'power2.out',
               onComplete: () => {
+                // Immediately reveal milestones for faster appearance
                 gsap.to(milestonesContainer.querySelectorAll('.milestone'), {
                   opacity: 1,
                   y: 0,
-                  stagger: 0.05,
-                  duration: 0.3
+                  stagger: 0.03, // Reduced from 0.05 for faster staggering
+                  duration: 0.2 // Reduced from 0.3 for faster animation
                 });
               }
             }
           );
         } else {
-          // Animate closing
+          // Faster closing animation
           gsap.to(milestonesContainer, { 
             height: 0, 
             opacity: 0, 
-            duration: 0.3, 
+            duration: 0.2, // Reduced from 0.3 for faster animation
             ease: 'power2.in' 
           });
         }
       }
     };
     
-    // Animate milestone toggle
+    // Animate milestone toggle - Independent behavior
     const animateMilestoneToggle = (milestone) => {
       if (!roadmapRef.value || !isAnimated.value) return;
       
-      // Find the DOM element corresponding to this milestone
+      // Find the DOM element corresponding to this milestone by title for unique identification
       const milestoneElements = roadmapRef.value.querySelectorAll('.milestone');
       const milestoneElement = Array.from(milestoneElements).find(el => {
         return el.querySelector('.milestone-title').textContent === milestone.title;
@@ -661,42 +685,50 @@ export default {
       const tasksGrid = milestoneElement?.querySelector('.tasks-grid');
       
       if (milestoneElement && tasksGrid) {
+        // Ensure this milestone animation doesn't affect others
         if (milestone.open) {
-          // Animate opening
+          // Add specific class to identify this milestone as independently active
+          milestoneElement.classList.add('independently-active');
+          
+          // Animate opening faster
           gsap.fromTo(tasksGrid, 
             { height: 0, opacity: 0 },
             { 
               height: 'auto', 
               opacity: 1, 
-              duration: 0.4, 
+              duration: 0.25, // Reduced from 0.4 for faster animation
               ease: 'power2.out',
               onComplete: () => {
+                // Make task cards appear faster
                 gsap.to(tasksGrid.querySelectorAll('.task-card'), {
                   opacity: 1,
                   scale: 1,
-                  stagger: 0.05,
-                  duration: 0.3
+                  stagger: 0.02, // Reduced from 0.05 for faster staggering
+                  duration: 0.2 // Reduced from 0.3 for faster animation
                 });
               }
             }
           );
         } else {
-          // Animate closing
+          // Remove the independent active class
+          milestoneElement.classList.remove('independently-active');
+          
+          // Animate closing faster
           gsap.to(tasksGrid, { 
             height: 0, 
             opacity: 0, 
-            duration: 0.3, 
+            duration: 0.2, // Reduced from 0.3 for faster animation
             ease: 'power2.in' 
           });
         }
       }
     };
     
-    // Animate subtasks reveal
+    // Animate subtasks reveal - faster
     const animateSubtasksReveal = (task) => {
       if (!roadmapRef.value || !isAnimated.value) return;
       
-      // Find the DOM element corresponding to this task
+      // Find the DOM element corresponding to this task by title for unique identification
       const taskElements = roadmapRef.value.querySelectorAll('.task-card');
       const taskElement = Array.from(taskElements).find(el => {
         return el.querySelector('.task-title').textContent === task.title;
@@ -705,35 +737,37 @@ export default {
       const subtasksList = taskElement?.querySelector('.subtasks-list');
       
       if (taskElement && subtasksList) {
+        // Make subtasks appear faster
         gsap.fromTo(subtasksList.querySelectorAll('.subtask'), 
-          { opacity: 0, y: 10 },
+          { opacity: 0, y: 5 }, // Reduced from 10px for faster appearance
           { 
             opacity: 1, 
             y: 0, 
-            stagger: 0.05, 
-            duration: 0.3,
+            stagger: 0.03, // Reduced from 0.05 for faster staggering
+            duration: 0.2, // Reduced from 0.3 for faster animation
             ease: 'power2.out'
           }
         );
       }
     };
     
-    // Animate timeline navigation
+    // Animate timeline navigation - faster
     const animateTimelineNavigation = () => {
       if (!roadmapRef.value || !isAnimated.value) return;
       
       const quartersContainer = roadmapRef.value.querySelector('.quarters-container');
       
       if (quartersContainer) {
+        // Faster timeline navigation
         gsap.to(quartersContainer, {
           y: -1 * currentTimelinePosition.value * quartersContainer.offsetHeight / 3,
-          duration: 0.5,
+          duration: 0.3, // Reduced from 0.5 for faster animation
           ease: 'power2.inOut'
         });
       }
     };
     
-    // Initialize particle system for timeline
+    // Initialize particle system for timeline - optimized
     const initParticleSystem = () => {
       if (!roadmapRef.value || !isAnimated.value) return;
       
@@ -741,8 +775,8 @@ export default {
       
       if (!particlesContainer) return;
       
-      // Create particles
-      const particleCount = 30;
+      // Create fewer particles for better performance
+      const particleCount = 20; // Reduced from 30 for better performance
       const particlesArray = [];
       
       for (let i = 0; i < particleCount; i++) {
@@ -751,7 +785,7 @@ export default {
           x: Math.random() * 100,
           y: Math.random() * 100,
           size: 1 + Math.random() * 3,
-          velocity: 0.1 + Math.random() * 0.3,
+          velocity: 0.15 + Math.random() * 0.4, // Increased for faster movement
           opacity: 0.2 + Math.random() * 0.4,
           color: i % 3 === 0 ? 'var(--cosmic-blue)' : 
                  i % 3 === 1 ? 'var(--cosmic-purple)' : 
@@ -777,11 +811,11 @@ export default {
         .attr('fill', d => d.color)
         .attr('opacity', d => d.opacity);
       
-      // Animate particles
+      // Animate particles faster
       const animateParticles = () => {
         particleElements
           .transition()
-          .duration(3000)
+          .duration(2000) // Reduced from 3000 for faster animation
           .attr('cy', d => {
             d.y -= d.velocity;
             if (d.y < 0) d.y = 100;
@@ -794,7 +828,7 @@ export default {
       animateParticles();
     };
     
-    // Set up intersection observer
+    // Set up intersection observer with lower threshold for faster reveal
     const setupIntersectionObserver = () => {
       const elements = roadmapRef.value?.querySelectorAll('[data-scroll="true"]');
       
@@ -809,7 +843,7 @@ export default {
               stop();
             }
           },
-          { threshold: 0.1 }
+          { threshold: 0.05 } // Reduced from 0.1 to reveal earlier
         );
       });
     };
@@ -988,7 +1022,7 @@ export default {
   border-radius: 50%;
   filter: blur(40px);
   opacity: 0.4;
-  animation: float-orb 20s ease-in-out infinite;
+  animation: float-orb 15s ease-in-out infinite;
 }
 
 @keyframes float-orb {
@@ -1023,6 +1057,7 @@ export default {
     0 0 20px rgba(var(--cosmic-purple-rgb), 0.3);
   overflow: visible;
   z-index: 2;
+  transition: all 0.3s ease;
 }
 
 .timeline-energy-flow {
@@ -1099,7 +1134,7 @@ export default {
 }
 
 .quarter.current .quarter-node {
-  animation: pulse-node 2s ease-in-out infinite;
+  animation: pulse-node 1.5s ease-in-out infinite;
 }
 
 .quarter.future .quarter-panel {
@@ -1147,7 +1182,7 @@ export default {
   border-radius: 50%;
   background: transparent;
   border: 2px solid rgba(var(--cosmic-blue-rgb), 0.4);
-  animation: pulse-ring 3s linear infinite;
+  animation: pulse-ring 2s linear infinite;
   opacity: 0;
 }
 
@@ -1187,7 +1222,9 @@ export default {
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
   transition: all 0.3s ease;
-  overflow: hidden;
+  overflow: visible;
+  height: auto;
+  min-height: 50px;
   display: flex;
   flex-direction: column;
   max-width: var(--content-max-width);
@@ -1406,7 +1443,7 @@ export default {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--space-lg);
   padding: var(--space-lg);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .milestone {
@@ -1423,6 +1460,10 @@ export default {
   --milestone-color: hsl(var(--milestone-hue), 60%, 55%);
   opacity: 0;
   transform: translateY(20px);
+  height: auto;
+  min-height: 100px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+  align-self: flex-start !important;
 }
 
 .milestone.revealed {
@@ -1461,6 +1502,7 @@ export default {
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
+  flex: 0 0 auto;
 }
 
 .milestone-header::after {
@@ -1533,6 +1575,9 @@ export default {
   gap: var(--space-md);
   padding: var(--space-md);
   overflow: hidden;
+  position: relative;
+  z-index: 5;
+  transition: height 0.25s ease, opacity 0.25s ease;
 }
 
 .task-card {
@@ -1898,13 +1943,13 @@ input[type="checkbox"]:checked + label .subtask-title {
 
 /* Add revealed animation for scroll effects */
 .revealed {
-  animation: reveal 0.5s ease forwards;
+  animation: reveal 0.3s ease forwards !important;
 }
 
 @keyframes reveal {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -2080,5 +2125,23 @@ input[type="checkbox"]:checked + label .subtask-title {
     animation: none !important;
     transition: opacity 0.1s linear !important;
   }
+}
+
+/* Add independent milestone class styles */
+.milestone.independently-active {
+  z-index: 10;
+  position: relative;
+  transform: translateY(-5px) scale(1.02);
+  border-color: rgba(var(--cosmic-blue-rgb), 0.3);
+  box-shadow: 
+    0 8px 20px rgba(var(--bg-depth-0-rgb), 0.3),
+    0 0 8px rgba(var(--cosmic-blue-rgb), 0.2);
+}
+
+/* Ensure each milestone maintains its own height independently */
+.milestone-header + div {
+  height: auto !important;
+  transition: height 0.25s ease !important;
+  overflow: visible !important;
 }
 </style> 
