@@ -1,0 +1,440 @@
+/* COSMIC ROADMAP: QUARTERS STYLING
+ * Top-level quarters styling with sophisticated visual effects
+ * Part of the modular roadmap CSS architecture
+ */
+
+/* ==================================================
+   ROADMAP QUARTERS - Styling for the roadmap quarters
+   ================================================== */
+
+/* Quarters container - Timeline organization */
+.quarters-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxl);
+  padding: var(--spacing-xxl) var(--spacing-lg);
+  width: 100%;
+}
+
+/* Quarter - Main timeline element */
+.quarter {
+  position: relative;
+  width: 100%;
+  margin-left: calc(var(--node-offset) + var(--spacing-md)); 
+  transition: all var(--transition-slow);
+}
+
+/* Quarter node - Circle on timeline */
+.quarter-node {
+  position: absolute;
+  left: calc(var(--node-offset) * -1 - var(--spacing-md));
+  top: 30px;
+  width: var(--node-size-large);
+  height: var(--node-size-large);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* Double ring effect for quarter nodes */
+.quarter-node::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(var(--cosmic-blue-rgb), 0.6);
+  border: 2px solid rgba(var(--cosmic-blue-rgb), 0.8);
+  box-shadow: 
+    0 0 0 4px rgba(var(--cosmic-blue-rgb), 0.2),
+    var(--cosmic-glow-blue-sm);
+  animation: pulse-glow 3s infinite alternate;
+  z-index: -1;
+}
+
+.quarter-node::after {
+  content: '';
+  position: absolute;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  border-radius: 50%;
+  background: rgba(var(--cosmic-blue-rgb), 0.3);
+  z-index: -1;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 
+      0 0 0 4px rgba(var(--cosmic-blue-rgb), 0.2),
+      var(--cosmic-glow-blue-sm);
+  }
+  100% {
+    box-shadow: 
+      0 0 0 6px rgba(var(--cosmic-blue-rgb), 0.15),
+      var(--cosmic-glow-blue-md);
+  }
+}
+
+/* Quarter date badge - Quarter date display */
+.quarter-date {
+  position: absolute;
+  left: calc(var(--node-offset) * -1 - var(--node-size-large) - var(--spacing-lg));
+  top: 30px;
+  transform: translateY(-50%);
+  background: rgba(var(--cosmic-blue-rgb), 0.15);
+  color: rgba(var(--cosmic-blue-rgb), 0.9);
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(var(--cosmic-blue-rgb), 0.3);
+  box-shadow: var(--cosmic-shadow-sm), 0 0 0 1px rgba(var(--cosmic-blue-rgb), 0.1);
+  min-width: 100px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  backdrop-filter: var(--cosmic-glass-blur);
+  animation: float 5s ease-in-out infinite;
+  z-index: 5;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(calc(-50% - 5px));
+  }
+}
+
+/* Quarter active styles */
+.quarter.active .quarter-node::before {
+  background: rgba(var(--cosmic-blue-rgb), 0.8);
+  box-shadow: 
+    0 0 0 6px rgba(var(--cosmic-blue-rgb), 0.25),
+    var(--cosmic-glow-blue-md);
+  animation: pulse-glow-active 2s infinite alternate;
+}
+
+@keyframes pulse-glow-active {
+  0% {
+    box-shadow: 
+      0 0 0 6px rgba(var(--cosmic-blue-rgb), 0.25),
+      var(--cosmic-glow-blue-md);
+  }
+  100% {
+    box-shadow: 
+      0 0 0 8px rgba(var(--cosmic-blue-rgb), 0.2),
+      var(--cosmic-glow-blue-lg);
+  }
+}
+
+/* Quarter title */
+.quarter-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 var(--spacing-md);
+  color: var(--cosmic-text-primary);
+  position: relative;
+  transition: all var(--transition-medium);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  padding-bottom: var(--spacing-xs);
+  text-shadow: var(--shadow-text-medium);
+}
+
+/* Title underline accent */
+.quarter-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--cosmic-blue-rgb), 0.8) 0%, 
+    rgba(var(--cosmic-blue-rgb), 0.2) 100%
+  );
+  border-radius: 1.5px;
+  transition: width var(--transition-medium);
+}
+
+.quarter:hover .quarter-title::after {
+  width: 120px;
+}
+
+/* Quarter Panel - Contains all quarter content */
+.quarter-panel {
+  position: relative;
+  background: var(--cosmic-glass-bg);
+  border-radius: var(--cosmic-radius-lg);
+  box-shadow: var(--cosmic-shadow-md);
+  overflow: hidden;
+  transition: all var(--transition-slow);
+  backdrop-filter: var(--cosmic-glass-blur);
+  border: var(--cosmic-glass-border-blue);
+}
+
+/* Glass morphism border effect for quarters */
+.quarter-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--cosmic-radius-lg);
+  padding: 2px;
+  background: linear-gradient(
+    135deg, 
+    rgba(var(--cosmic-blue-rgb), 0.4) 0%, 
+    rgba(var(--cosmic-blue-rgb), 0) 50%,
+    rgba(var(--cosmic-blue-rgb), 0.2) 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Quarter panel content */
+.quarter-content {
+  padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+/* Quarter panel header */
+.quarter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-bottom: 1px solid rgba(var(--cosmic-blue-rgb), 0.15);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-blue-rgb), 0.1) 0%,
+    rgba(15, 25, 45, 0.5) 100%
+  );
+}
+
+/* Hover effects for quarter */
+.quarter:hover .quarter-panel {
+  box-shadow: var(--cosmic-shadow-lg), var(--cosmic-glow-blue-sm);
+  transform: translateY(-5px);
+}
+
+/* Hover effect for quarter date */
+.quarter:hover .quarter-date {
+  background: rgba(var(--cosmic-blue-rgb), 0.2);
+  box-shadow: var(--cosmic-shadow-sm), var(--cosmic-glow-blue-sm);
+}
+
+/* Active quarter */
+.quarter.active .quarter-panel {
+  background: var(--cosmic-glass-bg-lighter);
+  box-shadow: var(--cosmic-shadow-lg), var(--cosmic-glow-blue-md);
+  border-color: rgba(var(--cosmic-blue-rgb), 0.25);
+}
+
+.quarter.active .quarter-title {
+  color: rgba(var(--cosmic-blue-rgb), 0.95);
+}
+
+/* Progress section styling */
+.quarter-progress-section {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(var(--cosmic-blue-rgb), 0.15);
+}
+
+/* Quarter toggle button positioning */
+.quarter-toggle {
+  position: absolute;
+  right: var(--spacing-md);
+  top: var(--spacing-md);
+}
+
+/* Quarter description */
+.quarter-description {
+  color: rgba(var(--text-secondary), 0.9);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.6;
+  position: relative;
+}
+
+/* Milestones container within quarter */
+.milestones-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+}
+
+/* COMPLETION STATES */
+
+/* Quarter completion styling with prominent checkmark */
+.quarter[data-progress="100"] .quarter-panel {
+  border-color: rgba(var(--cosmic-green), 0.3);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--bg-panel), 0.7),
+    rgba(var(--cosmic-green), 0.05)
+  );
+}
+
+.quarter[data-progress="100"] .quarter-panel::before {
+  background: linear-gradient(
+    135deg, 
+    rgba(var(--cosmic-green), 0.4) 0%, 
+    rgba(var(--cosmic-green), 0) 50%,
+    rgba(var(--cosmic-green), 0.2) 100%
+  );
+}
+
+.quarter[data-progress="100"] .quarter-header {
+  background: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-green), 0.1) 0%,
+    rgba(var(--bg-panel), 0.5) 100%
+  );
+  border-bottom-color: rgba(var(--cosmic-green), 0.15);
+}
+
+.quarter[data-progress="100"] .quarter-node::before {
+  background: rgba(var(--cosmic-green), 0.6);
+  border-color: rgba(var(--cosmic-green), 0.8);
+  box-shadow: 
+    0 0 0 4px rgba(var(--cosmic-green), 0.2),
+    0 0 25px rgba(var(--cosmic-green), 0.5);
+  animation: pulse-glow-complete 3s infinite alternate;
+}
+
+@keyframes pulse-glow-complete {
+  0% {
+    box-shadow: 
+      0 0 0 4px rgba(var(--cosmic-green), 0.2),
+      0 0 25px rgba(var(--cosmic-green), 0.5);
+  }
+  100% {
+    box-shadow: 
+      0 0 0 6px rgba(var(--cosmic-green), 0.15),
+      0 0 35px rgba(var(--cosmic-green), 0.6);
+  }
+}
+
+.quarter[data-progress="100"] .quarter-node::after {
+  background: rgba(var(--cosmic-green), 0.3);
+}
+
+.quarter[data-progress="100"] .quarter-date {
+  background: rgba(var(--cosmic-green), 0.15);
+  color: rgba(var(--cosmic-green), 0.9);
+  border-color: rgba(var(--cosmic-green), 0.3);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(var(--cosmic-green), 0.1);
+}
+
+.quarter[data-progress="100"] .quarter-title {
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--cosmic-green), 0.95),
+    rgba(var(--cosmic-green), 0.7)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+}
+
+.quarter[data-progress="100"] .quarter-title::after {
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--cosmic-green), 0.8) 0%, 
+    rgba(var(--cosmic-green), 0.2) 100%
+  );
+}
+
+/* Prominent checkmark for completed quarters */
+.quarter[data-progress="100"] .quarter-header::after {
+  content: '✓';
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-xl);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(var(--cosmic-green), 0.9);
+  background: rgba(var(--bg-dark), 0.3);
+  border-radius: 50%;
+  border: 2px solid rgba(var(--cosmic-green), 0.6);
+  box-shadow: 
+    0 5px 15px rgba(var(--cosmic-green), 0.4),
+    0 0 0 3px rgba(var(--cosmic-green), 0.1);
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.quarter[data-progress="100"]:hover .quarter-header::after {
+  transform: scale(1.1) rotate(10deg);
+  box-shadow: 
+    0 8px 20px rgba(var(--cosmic-green), 0.5),
+    0 0 0 4px rgba(var(--cosmic-green), 0.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .quarters-container {
+    padding: var(--spacing-xl) var(--spacing-xs);
+  }
+  
+  .quarter {
+    margin-left: var(--spacing-xl);
+  }
+  
+  .quarter-node {
+    left: calc(var(--spacing-xl) * -1);
+    width: var(--node-size-medium);
+    height: var(--node-size-medium);
+  }
+  
+  .quarter-date {
+    left: calc(var(--spacing-xl) * -1 - var(--node-size-medium) - var(--spacing-md));
+    font-size: 0.9rem;
+    min-width: 90px;
+  }
+  
+  .quarter-title {
+    font-size: 1.5rem;
+  }
+  
+  .quarter-header, 
+  .quarter-content {
+    padding: var(--spacing-md);
+  }
+  
+  .quarter[data-progress="100"] .quarter-header::after {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    right: var(--spacing-md);
+  }
+}
+
+/* Focus styles for accessibility */
+.quarter:focus-within .quarter-panel {
+  outline: 2px solid rgba(var(--cosmic-blue-rgb), 0.7);
+  outline-offset: 3px;
+}
+
+.quarter[data-progress="100"]:focus-within .quarter-panel {
+  outline: 2px solid rgba(var(--cosmic-green), 0.7);
+  outline-offset: 3px;
+} 

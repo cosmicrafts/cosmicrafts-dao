@@ -1,22 +1,28 @@
 <template>
-  <div class="roadmap-page">
-    <div class="roadmap-container cosmic-page-bg">
-      <!-- Hero Section -->
-      <RoadmapHero />
-      
-      <!-- Search and Filter Section -->
-      <SearchFilters 
-        :availableYears="availableYears"
-        :availableMilestones="availableMilestones"
-        :availableTags="availableTags"
-        @filter-changed="handleFilterChanges"
-      />
+  <div class="roadmap-page cosmic-page-bg with-glow">
+    <!-- Hero Section -->
+    <RoadmapHero />
+    
+    <!-- Search and Filter Section - Container for full width -->
+    <div class="roadmap-search-container">
+      <div class="cosmic-container">
+        <SearchFilters 
+          :availableYears="availableYears"
+          :availableMilestones="availableMilestones"
+          :availableTags="availableTags"
+          @filter-changed="handleFilterChanges"
+        />
+      </div>
+    </div>
 
-      <!-- Roadmap Display -->
-      <RoadmapDisplay 
-        :quarters="filteredQuarters"
-        @update:quarters="quarters = $event"
-      />
+    <!-- Roadmap Display - Container for full width -->
+    <div class="roadmap-display-container">
+      <div class="cosmic-container">
+        <RoadmapDisplay 
+          :quarters="filteredQuarters"
+          @update:quarters="quarters = $event"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -155,7 +161,7 @@ export default {
 /* Base Styling */
 .roadmap-page {
   min-height: 100vh;
-  color: var(--color-text);
+  color: var(--cosmic-text-primary);
   position: relative;
   overflow: hidden;
   padding-top: 4rem;
@@ -163,23 +169,27 @@ export default {
   background-size: cover;
 }
 
-/* Main Container */
-.roadmap-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  box-sizing: border-box;
+/* Section Containers */
+.roadmap-search-container,
+.roadmap-display-container {
+  width: 100%;
+  padding: var(--space-lg) 0;
 }
 
+/* First container needs less padding at the bottom since display container follows */
+.roadmap-search-container {
+  padding-bottom: 0;
+}
+
+/* Media Queries for Responsive Design */
 @media (max-width: 768px) {
-  .roadmap-container {
-    padding: 1rem;
-    gap: 1.5rem;
+  .roadmap-page {
+    padding-top: 2rem;
+  }
+  
+  .roadmap-search-container,
+  .roadmap-display-container {
+    padding: var(--space-md) 0;
   }
 }
 </style>

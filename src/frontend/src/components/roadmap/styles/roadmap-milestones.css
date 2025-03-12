@@ -1,0 +1,302 @@
+/* COSMIC ROADMAP: MILESTONES STYLING
+ * Second-level milestones with distinct styling
+ * Part of the modular roadmap CSS architecture
+ */
+
+/* MILESTONE CONTAINER */
+.milestones-container {
+  overflow: hidden;
+  transition: all var(--transition-slow);
+  padding: var(--spacing-sm);
+  
+  /* Initial fade-in animation */
+  animation: fade-in-slide-down 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fade-in-slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* MILESTONE STYLING - Second level of hierarchy */
+.milestone {
+  position: relative;
+  margin: var(--spacing-md) 0;
+  padding: 0;
+  border-radius: 16px;
+  transition: all var(--transition-medium);
+  background: rgba(var(--bg-panel), 0.4);
+  border: 1px solid rgba(var(--cosmic-purple), 0.15);
+  overflow: hidden;
+  box-shadow: var(--elevation-1);
+  z-index: 5;
+  
+  /* Stagger animation for children */
+  animation: slide-in 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation-delay: calc(var(--animation-order, 0) * 0.1s);
+}
+
+.milestone:nth-child(1) { --animation-order: 1; }
+.milestone:nth-child(2) { --animation-order: 2; }
+.milestone:nth-child(3) { --animation-order: 3; }
+.milestone:nth-child(4) { --animation-order: 4; }
+.milestone:nth-child(5) { --animation-order: 5; }
+
+@keyframes slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Active and hover states */
+.milestone.active {
+  background: rgba(var(--bg-panel), 0.5);
+  border-color: rgba(var(--cosmic-purple), 0.35);
+  box-shadow: var(--elevation-2), 
+    0 0 15px rgba(var(--cosmic-purple), 0.15);
+  margin: var(--spacing-lg) 0;
+  z-index: 6;
+}
+
+.milestone:hover {
+  transform: translateX(5px);
+  box-shadow: var(--elevation-2), 
+    0 0 15px rgba(var(--cosmic-purple), 0.2);
+  border-color: rgba(var(--cosmic-purple), 0.25);
+}
+
+/* Timeline connection for milestones */
+.milestone::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--container-padding) + 12px);
+  top: 2.5rem;
+  width: var(--node-size-medium);
+  height: var(--node-size-medium);
+  border-radius: 50%;
+  background: rgba(var(--cosmic-purple), 0.2);
+  border: 2px solid rgba(var(--cosmic-purple), 0.5);
+  box-shadow: 0 0 0 4px rgba(var(--cosmic-purple), 0.1), 
+    0 0 15px rgba(var(--cosmic-purple), 0.3);
+  z-index: 2;
+  transition: all var(--transition-medium);
+}
+
+.milestone.active::before {
+  background: rgba(var(--cosmic-purple), 0.7);
+  transform: scale(1.1);
+  box-shadow: 0 0 0 4px rgba(var(--cosmic-purple), 0.2), 
+    0 0 20px rgba(var(--cosmic-purple), 0.5);
+  border-color: rgba(var(--text-primary), 0.6);
+}
+
+/* Connecting line to main timeline */
+.milestone::after {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--container-padding) + 23px);
+  top: 2.6rem;
+  width: calc(var(--container-padding) - 60px);
+  height: 2px;
+  background: rgba(var(--cosmic-purple), 0.4);
+  z-index: 1;
+  transition: all var(--transition-medium);
+}
+
+.milestone.active::after {
+  background: rgba(var(--cosmic-purple), 0.7);
+  height: 3px;
+  box-shadow: 0 0 8px rgba(var(--cosmic-purple), 0.3);
+}
+
+.milestone:hover::after {
+  background: rgba(var(--cosmic-purple), 0.6);
+  width: calc(var(--container-padding) - 55px);
+}
+
+/* MILESTONE HEADER */
+.milestone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  cursor: pointer;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-bottom: 1px dashed rgba(var(--cosmic-purple), 0.2);
+  transition: all var(--transition-medium);
+  background: linear-gradient(to right, 
+    rgba(var(--cosmic-purple), 0.05), 
+    rgba(var(--bg-panel), 0.2));
+  position: relative;
+}
+
+.milestone-header:hover {
+  background: linear-gradient(to right, 
+    rgba(var(--cosmic-purple), 0.1), 
+    rgba(var(--bg-panel), 0.3));
+}
+
+.milestone.active .milestone-header {
+  background: linear-gradient(to right, 
+    rgba(var(--cosmic-purple), 0.15), 
+    rgba(var(--bg-panel), 0.4));
+  border-bottom: 1px solid rgba(var(--cosmic-purple), 0.3);
+}
+
+/* Content area in milestone header */
+.milestone-header-content {
+  flex: 1;
+  padding-left: var(--spacing-xs);
+}
+
+/* Milestone title */
+.milestone-title {
+  font-size: 1.6rem;
+  color: rgba(var(--text-primary), 0.95);
+  margin: 0 0 var(--spacing-xs) 0;
+  font-weight: 700;
+  transition: all var(--transition-medium);
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: inline-block;
+}
+
+/* Hover effect */
+.milestone:hover .milestone-title {
+  color: rgba(var(--cosmic-purple), 0.95);
+  text-shadow: 0 0 10px rgba(var(--cosmic-purple), 0.3);
+}
+
+/* Active state */
+.milestone.active .milestone-title {
+  color: rgba(var(--cosmic-purple), 0.95);
+  font-size: 1.7rem;
+  text-shadow: 0 0 15px rgba(var(--cosmic-purple), 0.4);
+}
+
+/* Title indicator line */
+.milestone-title::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 50%;
+  background: rgba(var(--cosmic-purple), 0.6);
+  border-radius: 2px;
+  transition: all var(--transition-medium);
+  opacity: 0.7;
+}
+
+.milestone.active .milestone-title::before {
+  height: 70%;
+  background: rgba(var(--cosmic-purple), 0.8);
+  width: 5px;
+  box-shadow: 0 0 8px rgba(var(--cosmic-purple), 0.5);
+  opacity: 1;
+}
+
+/* Milestone description */
+.milestone-description {
+  font-size: 1rem;
+  color: rgba(var(--text-secondary), 0.85);
+  margin: 0;
+  line-height: 1.5;
+  max-width: 85%;
+  transition: all var(--transition-medium);
+}
+
+.milestone.active .milestone-description {
+  color: rgba(var(--text-primary), 0.85);
+}
+
+/* Meta information wrapper */
+.milestone-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: 0.2rem;
+}
+
+/* Metadata badges */
+.milestone-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+  color: rgba(var(--text-primary), 0.9);
+  background: rgba(var(--cosmic-purple), 0.1);
+  border: 1px solid rgba(var(--cosmic-purple), 0.3);
+  border-radius: 30px;
+  margin-top: var(--spacing-xs);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.milestone-badge.time {
+  background: rgba(var(--cosmic-orange), 0.1);
+  border-color: rgba(var(--cosmic-orange), 0.3);
+}
+
+.milestone-badge i {
+  margin-right: 5px;
+  font-size: 0.85rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .milestone-title {
+    font-size: 1.4rem;
+  }
+  
+  .milestone.active .milestone-title {
+    font-size: 1.5rem;
+  }
+  
+  .milestone-description {
+    max-width: 100%;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .milestone-header {
+    padding: var(--spacing-md);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .milestone-meta {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: var(--spacing-sm);
+  }
+  
+  .milestone-title {
+    font-size: 1.3rem;
+  }
+  
+  .milestone.active .milestone-title {
+    font-size: 1.4rem;
+  }
+  
+  .milestone::after {
+    width: calc(var(--container-padding) - 70px);
+  }
+  
+  .milestone-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+  }
+} 

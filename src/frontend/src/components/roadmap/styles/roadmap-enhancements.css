@@ -1,0 +1,598 @@
+/* COSMIC ROADMAP: VISUAL ENHANCEMENTS
+ * Advanced visual hierarchy, completion states, and cutting-edge CSS techniques
+ * Applied as a final layer to enhance the roadmap components
+ */
+
+/* ====================================================
+   HIERARCHY ENHANCEMENT - Dramatic visual differences
+   ==================================================== */
+
+/* Quarter scaling for stronger hierarchy */
+.quarter {
+  transform-origin: left center;
+  transition: transform var(--transition-slow), opacity var(--transition-slow), margin var(--transition-slow);
+}
+
+.quarters-container:hover .quarter:not(:hover) {
+  opacity: 0.85;
+  transform: scale(0.98);
+}
+
+/* Quarter panels - 3D perspective enhancement */
+.quarter-panel {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.quarter:hover .quarter-panel {
+  transform: translateX(var(--spacing-xs)) translateZ(5px) rotateY(1deg);
+}
+
+/* Advanced milestone styling - Much more distinct from tasks */
+.milestone {
+  position: relative;
+  border-width: 2px;
+  /* Conic gradient border effect for milestone */
+  border-image: conic-gradient(
+    rgba(var(--cosmic-purple), 0.1), 
+    rgba(var(--cosmic-purple), 0.4),
+    rgba(var(--cosmic-purple), 0.7),
+    rgba(var(--cosmic-purple), 0.4),
+    rgba(var(--cosmic-purple), 0.1)
+  ) 1;
+  transition: all var(--transition-slow);
+  z-index: 6;
+}
+
+.milestone:hover {
+  transform: translateX(10px) scale(1.01);
+}
+
+.milestone.active {
+  transform: scale(1.02);
+  border-image: conic-gradient(
+    rgba(var(--cosmic-purple), 0.3), 
+    rgba(var(--cosmic-purple), 0.6),
+    rgba(var(--cosmic-purple), 0.9),
+    rgba(var(--cosmic-purple), 0.6),
+    rgba(var(--cosmic-purple), 0.3)
+  ) 1;
+}
+
+/* Milestone header with significant visual enhancements */
+.milestone-header {
+  background: linear-gradient(145deg, 
+    rgba(var(--cosmic-purple), 0.15) 0%,
+    rgba(var(--bg-panel), 0.3) 50%,
+    rgba(var(--cosmic-purple), 0.05) 100%);
+  border-radius: 14px 14px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated background effect */
+.milestone-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(var(--cosmic-purple), 0) 0%,
+    rgba(var(--cosmic-purple), 0.15) 50%,
+    rgba(var(--cosmic-purple), 0) 100%);
+  z-index: 0;
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: transform 0.7s ease-in-out, opacity 0.3s ease;
+}
+
+.milestone:hover .milestone-header::before {
+  animation: shine 2.5s infinite;
+  opacity: 1;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Decorative corner accent */
+.milestone-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, transparent 50%, rgba(var(--cosmic-purple), 0.2) 50%);
+  z-index: 1;
+}
+
+/* Task cards - Distinct from milestones with material depth */
+.task-card {
+  position: relative;
+  border-radius: 12px;
+  box-shadow: 
+    0 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0 6px 10px 0 rgba(0, 0, 0, 0.14),
+    0 1px 18px 0 rgba(0, 0, 0, 0.12);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  background: rgba(var(--bg-card), 0.5);
+  overflow: hidden;
+}
+
+.task-card:hover {
+  box-shadow: 
+    0 12px 17px 2px rgba(0, 0, 0, 0.14),
+    0 5px 22px 4px rgba(0, 0, 0, 0.12),
+    0 7px 8px -4px rgba(0, 0, 0, 0.2);
+  transform: translateY(-12px) scale(1.03);
+}
+
+/* Advanced task header styling */
+.task-header {
+  background: linear-gradient(135deg, 
+    rgba(var(--cosmic-magenta), 0.15) 0%,
+    rgba(var(--bg-card), 0.5) 100%);
+  border-bottom: 1px solid rgba(var(--cosmic-magenta), 0.2);
+  position: relative;
+}
+
+.task-title {
+  position: relative;
+  padding-left: 1.8rem;
+  transition: all var(--transition-medium);
+}
+
+/* Enhanced task title dot indicator */
+.task-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--node-size-small);
+  height: var(--node-size-small);
+  border-radius: 50%;
+  background: rgba(var(--cosmic-magenta), 0.8);
+  box-shadow: 0 0 8px rgba(var(--cosmic-magenta), 0.5);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.task-card:hover .task-title::before {
+  transform: translateY(-50%) scale(1.6);
+  box-shadow: 0 0 15px rgba(var(--cosmic-magenta), 0.7);
+}
+
+/* ====================================================
+   COMPLETION STATE ENHANCEMENTS
+   ==================================================== */
+
+/* Milestone completion styling */
+.milestone[data-progress="100"] {
+  border-image: conic-gradient(
+    rgba(var(--cosmic-green), 0.2), 
+    rgba(var(--cosmic-green), 0.5),
+    rgba(var(--cosmic-green), 0.7),
+    rgba(var(--cosmic-green), 0.5),
+    rgba(var(--cosmic-green), 0.2)
+  ) 1;
+}
+
+.milestone[data-progress="100"] .milestone-header {
+  background: linear-gradient(145deg, 
+    rgba(var(--cosmic-green), 0.15) 0%,
+    rgba(var(--bg-panel), 0.3) 50%,
+    rgba(var(--cosmic-green), 0.05) 100%);
+}
+
+.milestone[data-progress="100"] .milestone-title {
+  color: rgba(var(--cosmic-green), 0.95);
+  text-shadow: 0 0 10px rgba(var(--cosmic-green), 0.3);
+}
+
+.milestone[data-progress="100"] .milestone-title::before {
+  background: rgba(var(--cosmic-green), 0.8);
+  box-shadow: 0 0 8px rgba(var(--cosmic-green), 0.5);
+}
+
+.milestone[data-progress="100"]::before {
+  background: rgba(var(--cosmic-green), 0.7);
+  border-color: rgba(var(--cosmic-green), 0.5);
+  box-shadow: 0 0 0 4px rgba(var(--cosmic-green), 0.2), 
+    0 0 20px rgba(var(--cosmic-green), 0.5);
+}
+
+.milestone[data-progress="100"]::after {
+  background: rgba(var(--cosmic-green), 0.6);
+}
+
+/* Enhanced checkmark for completed milestones */
+.milestone[data-progress="100"] .milestone-header::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--spacing-md) + 2px);
+  right: var(--spacing-md);
+  width: 28px;
+  height: 28px;
+  background: rgba(var(--cosmic-green), 0.2);
+  border-radius: 50%;
+  z-index: 3;
+  box-shadow: 0 0 15px rgba(var(--cosmic-green), 0.4);
+  border: 1px solid rgba(var(--cosmic-green), 0.6);
+}
+
+.milestone[data-progress="100"] .milestone-header::after {
+  content: '✓';
+  position: absolute;
+  top: calc(var(--spacing-md) + 5px);
+  right: calc(var(--spacing-md) + 8px);
+  font-size: 18px;
+  color: rgba(var(--cosmic-green), 0.9);
+  font-weight: 700;
+  z-index: 5;
+  text-shadow: 0 0 5px rgba(var(--cosmic-green), 0.5);
+}
+
+/* Task completion styling */
+.task-card[data-progress="100"] {
+  background: linear-gradient(135deg, 
+    rgba(var(--bg-card), 0.5),
+    rgba(var(--cosmic-green), 0.05));
+  border-color: rgba(var(--cosmic-green), 0.3);
+}
+
+.task-card[data-progress="100"] .task-header {
+  background: linear-gradient(135deg, 
+    rgba(var(--cosmic-green), 0.15) 0%,
+    rgba(var(--bg-card), 0.5) 100%);
+}
+
+.task-card[data-progress="100"] .task-title {
+  color: rgba(var(--cosmic-green), 0.95);
+}
+
+.task-card[data-progress="100"] .task-title::before {
+  background: rgba(var(--cosmic-green), 0.8);
+  box-shadow: 0 0 10px rgba(var(--cosmic-green), 0.5);
+}
+
+/* Apply enhanced completion checkmark for tasks */
+.task-card[data-progress="100"] .task-header::after {
+  content: '✓';
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 22px;
+  color: rgba(var(--cosmic-green), 0.9);
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(var(--cosmic-green), 0.6);
+  z-index: 10;
+  background: rgba(var(--bg-dark), 0.4);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--cosmic-green), 0.5);
+  box-shadow: 
+    0 4px 12px rgba(var(--cosmic-green), 0.4),
+    0 0 0 2px rgba(var(--cosmic-green), 0.1);
+}
+
+/* Glowing effect on hover for completed checkmarks */
+.task-card[data-progress="100"]:hover .task-header::after {
+  transform: scale(1.1);
+  box-shadow: 
+    0 6px 16px rgba(var(--cosmic-green), 0.5),
+    0 0 0 3px rgba(var(--cosmic-green), 0.15);
+}
+
+/* ====================================================
+   ADVANCED CSS TECHNIQUES
+   ==================================================== */
+
+/* CSS Grid Areas for milestone tasks - sophisticated layout */
+.tasks-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-auto-rows: minmax(min-content, max-content);
+  gap: var(--spacing-md);
+}
+
+/* Highlight important tasks with grid span */
+.task-card.important {
+  grid-column: span 2;
+  min-height: 200px;
+}
+
+/* Variable font weight for active/inactive states */
+.milestone-title {
+  font-variation-settings: 'wght' 650;
+  transition: font-variation-settings 0.3s ease;
+}
+
+.milestone.active .milestone-title {
+  font-variation-settings: 'wght' 750;
+}
+
+.task-title {
+  font-variation-settings: 'wght' 550;
+  transition: font-variation-settings 0.3s ease;
+}
+
+.task-card:hover .task-title {
+  font-variation-settings: 'wght' 650;
+}
+
+/* Glass morphism effect for milestone and task containers */
+.milestone,
+.task-card {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Advanced animations for task interactions */
+@keyframes pulse-border {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(var(--cosmic-magenta), 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(var(--cosmic-magenta), 0.2);
+  }
+}
+
+.task-card:focus-within {
+  animation: pulse-border 2s infinite;
+}
+
+/* Scroll animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-scroll="true"] {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+[data-scroll="true"].revealed {
+  animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Adaptive tag styling with advanced coloring */
+.task-tag {
+  background: linear-gradient(135deg, rgba(var(--bg-card), 0.6), rgba(var(--bg-panel), 0.8));
+  border-radius: 20px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.8rem;
+  backdrop-filter: blur(5px);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid;
+}
+
+.task-tag:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Enhanced tag dots with glow */
+.task-tag .tag-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* Progress bar enhancements */
+.progress-container {
+  overflow: visible;
+}
+
+/* Progress milestone markers */
+.progress-wrapper:hover .progress-bar::before {
+  opacity: 1;
+}
+
+/* Add completion indicator for 100% progress */
+.progress-wrapper[data-percentage="100%"]::after {
+  content: "✓";
+  position: absolute;
+  right: -20px;
+  color: rgba(var(--cosmic-green), 0.9);
+  font-weight: bold;
+}
+
+/* Harmonized status indicators */
+.task-status {
+  position: relative;
+  z-index: 5;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all var(--transition-medium);
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(var(--bg-dark), 0.1);
+}
+
+.task-status.completed,
+.subtask-status.completed {
+  background: linear-gradient(135deg,
+    rgba(var(--cosmic-green), 0.15) 0%,
+    rgba(var(--cosmic-green), 0.05) 100%);
+  border: 1px solid rgba(var(--cosmic-green), 0.4);
+  color: rgba(var(--cosmic-green), 0.9);
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.1),
+    0 0 5px rgba(var(--cosmic-green), 0.2);
+}
+
+.task-status.todo,
+.subtask-status:not(.completed) {
+  background: linear-gradient(135deg,
+    rgba(var(--cosmic-orange), 0.15) 0%,
+    rgba(var(--cosmic-orange), 0.05) 100%);
+  border: 1px solid rgba(var(--cosmic-orange), 0.4);
+  color: rgba(var(--cosmic-orange), 0.9);
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.1),
+    0 0 5px rgba(var(--cosmic-orange), 0.2);
+}
+
+.task-status.in-progress {
+  background: linear-gradient(135deg,
+    rgba(var(--cosmic-purple), 0.15) 0%,
+    rgba(var(--cosmic-purple), 0.05) 100%);
+  border: 1px solid rgba(var(--cosmic-purple), 0.4);
+  color: rgba(var(--cosmic-purple), 0.9);
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.1),
+    0 0 5px rgba(var(--cosmic-purple), 0.2);
+}
+
+.task-status:hover,
+.subtask-status:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced subtask styling */
+.subtask.completed {
+  border-color: rgba(var(--cosmic-green), 0.3);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--bg-card), 0.5) 0%,
+    rgba(var(--cosmic-green), 0.05) 100%
+  );
+}
+
+/* Customized subtask checkboxes */
+.subtask-checkbox input[type="checkbox"] {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  appearance: none;
+  border: 2px solid rgba(var(--cosmic-purple), 0.5);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  background: rgba(var(--bg-panel), 0.5);
+}
+
+.subtask-checkbox input[type="checkbox"]:checked {
+  background: rgba(var(--cosmic-green), 0.8);
+  border-color: rgba(var(--cosmic-green), 0.6);
+}
+
+.subtask-checkbox input[type="checkbox"]:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+.subtask-checkbox input[type="checkbox"]:checked:after {
+  display: block;
+  left: 7px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.subtask-checkbox input[type="checkbox"]:hover {
+  transform: scale(1.05);
+  border-color: rgba(var(--cosmic-purple), 0.7);
+  box-shadow: 0 0 0 3px rgba(var(--cosmic-purple), 0.1);
+}
+
+.subtask-checkbox input[type="checkbox"]:checked:hover {
+  border-color: rgba(var(--cosmic-green), 0.8);
+  box-shadow: 0 0 0 3px rgba(var(--cosmic-green), 0.1);
+}
+
+/* Media query enhancements for better visual hierarchy on mobile */
+@media (max-width: 768px) {
+  /* Improved stacking on mobile */
+  .milestone {
+    margin-left: calc(var(--spacing-sm) * -1);
+    margin-right: calc(var(--spacing-sm) * -1);
+    border-radius: 12px;
+  }
+  
+  .tasks-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .task-card.important {
+    grid-column: span 1;
+  }
+  
+  /* Better timeline visibility on mobile */
+  .timeline-axis {
+    box-shadow: 0 0 20px rgba(var(--cosmic-blue), 0.5);
+  }
+  
+  /* Improved touch targets */
+  .cosmic-toggle {
+    width: 36px;
+    height: 36px;
+  }
+  
+  /* Adjust completion checkmarks for smaller screens */
+  .milestone[data-progress="100"] .milestone-header::before {
+    width: 24px;
+    height: 24px;
+    top: calc(var(--spacing-sm) + 2px);
+    right: var(--spacing-sm);
+  }
+  
+  .milestone[data-progress="100"] .milestone-header::after {
+    top: calc(var(--spacing-sm) + 5px);
+    right: calc(var(--spacing-sm) + 7px);
+    font-size: 16px;
+  }
+  
+  .task-card[data-progress="100"] .task-header::after {
+    top: 8px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+  }
+}
+
+/* Accessibility enhancements */
+.cosmic-roadmap *:focus-visible {
+  outline: 2px solid rgba(var(--cosmic-blue), 0.8);
+  outline-offset: 3px;
+} 

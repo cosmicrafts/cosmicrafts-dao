@@ -1,0 +1,452 @@
+/* COSMIC ROADMAP: CORE LAYOUT & TIMELINE
+ * Core layout, main containers, and timeline axis styling
+ * Part of the modular roadmap CSS architecture
+ */
+
+:root {
+  /* Rich cosmic color palette - extending the cosmic theme with more dimension */
+  --cosmic-blue-rgb: 15, 185, 253;      /* #0FB9FD - Primary color for timeline/quarters */
+  --cosmic-purple-rgb: 88, 101, 242;    /* #5865F2 - Primary color for milestones */
+  --cosmic-magenta-rgb: 200, 42, 253;   /* #C92AFD - Primary color for important tasks */
+  --cosmic-green-rgb: 0, 229, 164;      /* #00E5A4 - Success/completed states */
+  --cosmic-orange-rgb: 255, 145, 0;     /* #FF9100 - Warning/in-progress states */
+  --cosmic-red-rgb: 255, 75, 75;        /* #FF4B4B - Error/critical status */
+  --cosmic-yellow-rgb: 255, 184, 0;     /* #FFB800 - Highlights and accents */
+  --cosmic-teal-rgb: 0, 210, 210;       /* #00D2D2 - Secondary accents */
+  
+  /* Status color variables for convenient access */
+  --status-completed-rgb: var(--cosmic-green-rgb);
+  --status-in-progress-rgb: var(--cosmic-blue-rgb);
+  --status-planned-rgb: var(--cosmic-purple-rgb);
+  --status-delayed-rgb: var(--cosmic-orange-rgb);
+  --status-cancelled-rgb: var(--cosmic-red-rgb);
+  
+  /* Visual depth levels for backgrounds - creates layering effect */
+  --bg-depth-0-rgb: 10, 20, 35;         /* Deepest background - #0A1423 */
+  --bg-depth-1-rgb: 15, 25, 45;         /* Deep panels - #0F192D */
+  --bg-depth-2-rgb: 20, 35, 60;         /* Mid panels - #14233C */
+  --bg-depth-3-rgb: 25, 45, 75;         /* Surface panels - #192D4B */
+  --bg-depth-4-rgb: 35, 55, 90;         /* Elevated panels - #23375A */
+  
+  /* Rich gradients */
+  --cosmic-gradient-blue: linear-gradient(135deg, 
+    rgba(var(--cosmic-blue-rgb), 0.9) 0%, 
+    rgba(var(--cosmic-teal-rgb), 0.7) 100%);
+  
+  --cosmic-gradient-purple: linear-gradient(135deg, 
+    rgba(var(--cosmic-purple-rgb), 0.9) 0%, 
+    rgba(var(--cosmic-magenta-rgb), 0.7) 100%);
+  
+  --cosmic-gradient-completion: linear-gradient(135deg, 
+    rgba(var(--cosmic-green-rgb), 0.9) 0%, 
+    rgba(var(--cosmic-teal-rgb), 0.7) 100%);
+  
+  /* Glass effects */
+  --cosmic-glass-blue: linear-gradient(135deg,
+    rgba(var(--cosmic-blue-rgb), 0.15) 0%,
+    rgba(var(--cosmic-blue-rgb), 0.05) 100%);
+  
+  --cosmic-glass-purple: linear-gradient(135deg,
+    rgba(var(--cosmic-purple-rgb), 0.15) 0%,
+    rgba(var(--cosmic-purple-rgb), 0.05) 100%);
+  
+  --cosmic-glass-magenta: linear-gradient(135deg,
+    rgba(var(--cosmic-magenta-rgb), 0.15) 0%,
+    rgba(var(--cosmic-magenta-rgb), 0.05) 100%);
+  
+  /* Timeline measurements */
+  --timeline-width: 6px;
+  --timeline-position: 120px;
+  --container-padding: 150px;
+  --node-size-large: 32px;
+  --node-size-medium: 22px;
+  --node-size-small: 8px;
+  
+  /* Spacing - align with cosmic theme */
+  --spacing-xs: var(--space-xs, 0.5rem);
+  --spacing-sm: var(--space-sm, 1rem);
+  --spacing-md: var(--space-md, 1.5rem);
+  --spacing-lg: var(--space-lg, 2rem);
+  --spacing-xl: var(--space-xl, 2.5rem);
+  --spacing-xxl: var(--space-xxl, 3rem);
+  
+  /* Animation timings - align with cosmic theme */
+  --transition-fast: var(--cosmic-transition-fast, 0.2s ease);
+  --transition-medium: var(--cosmic-transition-medium, 0.3s ease);
+  --transition-slow: var(--cosmic-bounce, 0.5s cubic-bezier(0.23, 1, 0.32, 1));
+  
+  /* Glow effects - for each color */
+  --glow-blue-sm: 0 0 10px rgba(var(--cosmic-blue-rgb), 0.4);
+  --glow-blue-md: 0 0 20px rgba(var(--cosmic-blue-rgb), 0.5);
+  --glow-blue-lg: 0 0 30px rgba(var(--cosmic-blue-rgb), 0.6);
+  
+  --glow-purple-sm: 0 0 10px rgba(var(--cosmic-purple-rgb), 0.4);
+  --glow-purple-md: 0 0 20px rgba(var(--cosmic-purple-rgb), 0.5);
+  --glow-purple-lg: 0 0 30px rgba(var(--cosmic-purple-rgb), 0.6);
+  
+  --glow-magenta-sm: 0 0 10px rgba(var(--cosmic-magenta-rgb), 0.4);
+  --glow-magenta-md: 0 0 20px rgba(var(--cosmic-magenta-rgb), 0.5);
+  --glow-magenta-lg: 0 0 30px rgba(var(--cosmic-magenta-rgb), 0.6);
+  
+  --glow-green-sm: 0 0 10px rgba(var(--cosmic-green-rgb), 0.4);
+  --glow-green-md: 0 0 20px rgba(var(--cosmic-green-rgb), 0.5);
+  --glow-green-lg: 0 0 30px rgba(var(--cosmic-green-rgb), 0.6);
+  
+  --glow-orange-sm: 0 0 10px rgba(var(--cosmic-orange-rgb), 0.4);
+  --glow-orange-md: 0 0 20px rgba(var(--cosmic-orange-rgb), 0.5);
+  --glow-orange-lg: 0 0 30px rgba(var(--cosmic-orange-rgb), 0.6);
+}
+
+/* Main container with timeline */
+.cosmic-roadmap {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-lg) 0 var(--spacing-xxl);
+}
+
+/* TIMELINE AXIS STYLING */
+.timeline-axis {
+  position: absolute;
+  left: var(--timeline-position);
+  top: 0;
+  bottom: 0;
+  width: var(--timeline-width);
+  background: linear-gradient(to bottom, 
+    rgba(var(--cosmic-blue-rgb), 0) 0%,
+    rgba(var(--cosmic-blue-rgb), 0.3) 5%, 
+    rgba(var(--cosmic-blue-rgb), 0.8) 50%,
+    rgba(var(--cosmic-blue-rgb), 0.3) 95%,
+    rgba(var(--cosmic-blue-rgb), 0) 100%);
+  border-radius: calc(var(--timeline-width) / 2);
+  z-index: 1;
+  box-shadow: var(--glow-blue-md);
+  
+  /* Enhanced timeline with embedded pulsing light particles */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at center, rgba(var(--cosmic-blue-rgb), 0.8) 0%, transparent 70%) 0 10%,
+      radial-gradient(circle at center, rgba(var(--cosmic-blue-rgb), 0.8) 0%, transparent 70%) 0 75%;
+    background-size: 100% 15px;
+    background-repeat: no-repeat;
+    border-radius: inherit;
+    filter: blur(3px);
+    animation: timeline-particles 8s infinite ease-in-out;
+  }
+  
+  /* Subtle pulsing animation */
+  animation: timeline-pulse 6s infinite alternate;
+}
+
+@keyframes timeline-particles {
+  0%, 100% { opacity: 0.3; background-position: 0 10%, 0 75%; }
+  25% { opacity: 0.9; background-position: 0 20%, 0 65%; }
+  50% { opacity: 0.5; background-position: 0 30%, 0 55%; }
+  75% { opacity: 0.9; background-position: 0 20%, 0 85%; }
+}
+
+@keyframes timeline-pulse {
+  0% {
+    box-shadow: var(--glow-blue-sm);
+    opacity: 0.85;
+  }
+  100% {
+    box-shadow: var(--glow-blue-lg);
+    opacity: 1;
+  }
+}
+
+/* Timeline points that appear at regular intervals */
+.timeline-axis::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 80px,
+    rgba(var(--cosmic-blue-rgb), 0.8) 80px,
+    rgba(var(--cosmic-blue-rgb), 0.8) 82px
+  );
+  transform: translateX(-50%);
+  z-index: -1;
+  opacity: 0.6;
+}
+
+/* Quarter sections container */
+.quarters-container {
+  position: relative;
+  padding-left: var(--container-padding);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* General transitions for smooth animations */
+.quarters-container * {
+  transition-property: transform, opacity, background, box-shadow, color, border-color;
+  transition-duration: var(--transition-medium);
+  transition-timing-function: var(--cosmic-smooth, cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+/* Shimmering overlay for hover effects - add to any panel */
+.cosmic-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.cosmic-shimmer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.2) 0%,
+    transparent 50%
+  );
+  transform: rotate(30deg);
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 1.5s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cosmic-shimmer:hover::before {
+  opacity: 1;
+  transform: rotate(60deg);
+}
+
+/* Status indicator mixin class for consistent styling */
+.cosmic-status {
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.cosmic-status::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.cosmic-status.completed {
+  background: rgba(var(--cosmic-green-rgb), 0.15);
+  color: rgba(var(--cosmic-green-rgb), 0.9);
+}
+
+.cosmic-status.completed::before {
+  background: rgba(var(--cosmic-green-rgb), 0.9);
+  box-shadow: 0 0 5px rgba(var(--cosmic-green-rgb), 0.7);
+}
+
+.cosmic-status.in-progress {
+  background: rgba(var(--cosmic-blue-rgb), 0.15);
+  color: rgba(var(--cosmic-blue-rgb), 0.9);
+}
+
+.cosmic-status.in-progress::before {
+  background: rgba(var(--cosmic-blue-rgb), 0.9);
+  box-shadow: 0 0 5px rgba(var(--cosmic-blue-rgb), 0.7);
+}
+
+.cosmic-status.planned {
+  background: rgba(var(--cosmic-purple-rgb), 0.15);
+  color: rgba(var(--cosmic-purple-rgb), 0.9);
+}
+
+.cosmic-status.planned::before {
+  background: rgba(var(--cosmic-purple-rgb), 0.9);
+  box-shadow: 0 0 5px rgba(var(--cosmic-purple-rgb), 0.7);
+}
+
+.cosmic-status.delayed {
+  background: rgba(var(--cosmic-orange-rgb), 0.15);
+  color: rgba(var(--cosmic-orange-rgb), 0.9);
+}
+
+.cosmic-status.delayed::before {
+  background: rgba(var(--cosmic-orange-rgb), 0.9);
+  box-shadow: 0 0 5px rgba(var(--cosmic-orange-rgb), 0.7);
+}
+
+.cosmic-status.cancelled {
+  background: rgba(var(--cosmic-red-rgb), 0.15);
+  color: rgba(var(--cosmic-red-rgb), 0.9);
+}
+
+.cosmic-status.cancelled::before {
+  background: rgba(var(--cosmic-red-rgb), 0.9);
+  box-shadow: 0 0 5px rgba(var(--cosmic-red-rgb), 0.7);
+}
+
+/* Progress bar styling - enhanced */
+.cosmic-progress {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.cosmic-progress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: progress-shine 2s infinite linear;
+  transform: translateX(-100%);
+}
+
+@keyframes progress-shine {
+  to { transform: translateX(100%); }
+}
+
+.cosmic-progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  position: relative;
+  transition: width 0.5s ease;
+}
+
+.cosmic-progress-bar.blue {
+  background: var(--cosmic-gradient-blue);
+  box-shadow: var(--glow-blue-sm);
+}
+
+.cosmic-progress-bar.purple {
+  background: var(--cosmic-gradient-purple);
+  box-shadow: var(--glow-purple-sm);
+}
+
+.cosmic-progress-bar.green {
+  background: var(--cosmic-gradient-completion);
+  box-shadow: var(--glow-green-sm);
+}
+
+/* Cosmic Toggle Button */
+.cosmic-toggle {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-medium);
+}
+
+.cosmic-toggle .toggle-line {
+  position: absolute;
+  background-color: var(--cosmic-blue);
+  border-radius: 2px;
+  transition: all var(--transition-medium);
+}
+
+.cosmic-toggle .toggle-line.horizontal {
+  width: 16px;
+  height: 2px;
+}
+
+.cosmic-toggle .toggle-line.vertical {
+  width: 2px;
+  height: 16px;
+}
+
+.cosmic-toggle .toggle-line.hidden {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.cosmic-toggle:hover .toggle-line {
+  background-color: var(--cosmic-blue-light);
+  filter: drop-shadow(0 0 5px rgba(var(--cosmic-blue-rgb), 0.5));
+}
+
+.cosmic-toggle.is-open {
+  transform: rotate(180deg);
+}
+
+/* Milestone Toggle - Purple Styling */
+.milestone .cosmic-toggle .toggle-line {
+  background-color: rgba(var(--cosmic-purple-rgb), 0.9);
+}
+
+.milestone .cosmic-toggle:hover .toggle-line {
+  background-color: rgba(var(--cosmic-purple-rgb), 1);
+  filter: drop-shadow(0 0 5px rgba(var(--cosmic-purple-rgb), 0.5));
+}
+
+/* Task Toggle - Magenta Styling */
+.task-card .cosmic-toggle .toggle-line {
+  background-color: rgba(var(--cosmic-magenta-rgb), 0.9);
+}
+
+.task-card .cosmic-toggle:hover .toggle-line {
+  background-color: rgba(var(--cosmic-magenta-rgb), 1);
+  filter: drop-shadow(0 0 5px rgba(var(--cosmic-magenta-rgb), 0.5));
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 1200px) {
+  :root {
+    --timeline-position: 90px;
+    --container-padding: 120px;
+  }
+}
+
+@media (max-width: 992px) {
+  :root {
+    --timeline-position: 70px;
+    --container-padding: 100px;
+    --node-size-large: 28px;
+    --node-size-medium: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --timeline-position: 50px;
+    --container-padding: 70px;
+    --timeline-width: 4px;
+    --node-size-large: 24px;
+    --node-size-medium: 16px;
+  }
+  
+  .cosmic-roadmap {
+    padding: var(--spacing-sm) 0 var(--spacing-lg);
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    --timeline-position: 35px;
+    --container-padding: 55px;
+    --node-size-large: 20px;
+    --node-size-medium: 14px;
+  }
+} 
