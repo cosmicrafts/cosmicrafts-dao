@@ -12,13 +12,6 @@
         @filter-changed="handleFilterChanges"
       />
 
-      <!-- Roadmap Stats Summary -->
-      <RoadmapStats 
-        :totalMilestones="totalMilestones"
-        :totalTasks="totalTasks"
-        :completedPercentage="completedPercentage"
-      />
-
       <!-- Roadmap Display -->
       <RoadmapDisplay 
         :quarters="filteredQuarters"
@@ -33,7 +26,6 @@ import { ref, computed, onMounted } from 'vue';
 import roadmapData from '@/data/roadmap.json';
 import RoadmapHero from '@/components/roadmap/RoadmapHero.vue';
 import SearchFilters from '@/components/roadmap/SearchFilters.vue';
-import RoadmapStats from '@/components/roadmap/RoadmapStats.vue';
 import RoadmapDisplay from '@/components/roadmap/RoadmapDisplay.vue';
 
 export default {
@@ -41,7 +33,6 @@ export default {
   components: {
     RoadmapHero,
     SearchFilters,
-    RoadmapStats,
     RoadmapDisplay
   },
   setup() {
@@ -112,32 +103,6 @@ export default {
       return Array.from(tags).sort();
     });
 
-    // Roadmap stats
-    const totalMilestones = computed(() => {
-      return quarters.value.reduce((sum, quarter) => sum + quarter.milestones.length, 0);
-    });
-
-    const totalTasks = computed(() => {
-      return quarters.value.reduce((sum, quarter) => {
-        return sum + quarter.milestones.reduce((mSum, milestone) => {
-          return mSum + milestone.tasks.length;
-        }, 0);
-      }, 0);
-    });
-
-    const completedTasks = computed(() => {
-      return quarters.value.reduce((sum, quarter) => {
-        return sum + quarter.milestones.reduce((mSum, milestone) => {
-          return mSum + milestone.tasks.filter(task => task.status === 'Completed').length;
-        }, 0);
-      }, 0);
-    });
-
-    const completedPercentage = computed(() => {
-      if (totalTasks.value === 0) return 0;
-      return Math.round((completedTasks.value / totalTasks.value) * 100);
-    });
-
     // Filtered quarters based on search and filters
     const filteredQuarters = computed(() => {
       return quarters.value.filter(q => {
@@ -180,9 +145,6 @@ export default {
       availableYears,
       availableMilestones,
       availableTags,
-      totalMilestones,
-      totalTasks,
-      completedPercentage,
       handleFilterChanges
     };
   }
@@ -208,11 +170,15 @@ export default {
   padding: 2rem;
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
 }
 
 @media (max-width: 768px) {
   .roadmap-container {
     padding: 1rem;
+    gap: 2rem;
   }
 }
 </style>

@@ -130,24 +130,11 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 4rem;
-  padding: 3rem;
+  margin-bottom: 2rem;
+  padding: 2rem 0;
   position: relative;
   overflow: hidden;
-  min-height: 500px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, 
-    rgba(15, 25, 45, 0.8), 
-    rgba(30, 40, 80, 0.8));
-  border: 1px solid rgba(15, 185, 253, 0.3);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.roadmap-hero:hover {
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(15, 185, 253, 0.15);
-  border-color: rgba(15, 185, 253, 0.5);
+  min-height: 400px;
 }
 
 .cosmic-stars {
@@ -170,31 +157,32 @@ export default {
 
 .hero-content {
   flex: 1;
-  padding: 2rem;
   z-index: 1;
-  max-width: 55%;
+  max-width: 600px;
   position: relative;
 }
 
 .hero-title {
-  font-size: 4rem;
+  font-size: 4.5rem;
   margin-bottom: 1rem;
   background: linear-gradient(135deg, #fff 0%, #0FB9FD 70%, #C92AFD 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  text-shadow: 0 0 20px rgba(15, 185, 253, 0.5);
-  line-height: 1.2;
+  text-shadow: 0 0 30px rgba(15, 185, 253, 0.3);
+  line-height: 1.1;
   letter-spacing: -0.02em;
   font-weight: 800;
+  transform: translateZ(0);
 }
 
 .hero-subtitle {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 1.8rem;
+  margin-bottom: 2rem;
   letter-spacing: 0.02em;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  line-height: 1.4;
 }
 
 .hero-description {
@@ -211,13 +199,18 @@ export default {
   margin-top: 1rem;
   border-left: 3px solid rgba(15, 185, 253, 0.6);
   padding-left: 1rem;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+}
+
+.highlight-text:hover {
+  transform: translateX(10px);
 }
 
 .hero-actions {
   display: flex;
   gap: 1.2rem;
-  flex-wrap: wrap;
-  margin-bottom: 2.5rem;
+  margin-top: 2rem;
 }
 
 .cosmic-button {
@@ -241,7 +234,7 @@ export default {
   left: 50%;
   width: 150%;
   height: 150%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
   transform: translate(-50%, -50%) scale(0);
   transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
   z-index: 1;
@@ -256,11 +249,11 @@ export default {
 .cosmic-button.primary {
   background: linear-gradient(135deg, #0FB9FD, #5865F2);
   color: white;
-  box-shadow: 0 5px 15px rgba(15, 185, 253, 0.4);
+  box-shadow: 0 5px 20px rgba(15, 185, 253, 0.3);
 }
 
 .cosmic-button.secondary {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(5px);
@@ -271,19 +264,22 @@ export default {
 }
 
 .cosmic-button.primary:hover {
-  box-shadow: 0 8px 25px rgba(15, 185, 253, 0.6);
+  box-shadow: 0 8px 25px rgba(15, 185, 253, 0.5);
 }
 
 .cosmic-button.secondary:hover {
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
 }
 
 .hero-visual {
   position: relative;
-  width: 450px;
-  height: 450px;
-  margin-right: -2rem;
+  width: 500px;
+  height: 500px;
+  margin-right: -4rem;
+  perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
 .cosmic-planet {
@@ -291,13 +287,19 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   background: radial-gradient(circle at 30% 30%, #0FB9FD, #1a1f3d);
   border-radius: 50%;
   box-shadow: 
     0 0 60px rgba(15, 185, 253, 0.4),
     inset 0 0 40px rgba(0, 0, 0, 0.8);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
 }
 
 .cosmic-rings {
@@ -340,6 +342,7 @@ export default {
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
+  transform-style: preserve-3d;
 }
 
 .orbit-layer {
@@ -347,6 +350,12 @@ export default {
   width: 100%;
   height: 100%;
   animation: orbit 20s linear infinite;
+  transform-style: preserve-3d;
+}
+
+.orbit-layer:nth-child(2) {
+  animation-duration: 25s;
+  animation-direction: reverse;
 }
 
 .orbit-item {
@@ -355,74 +364,51 @@ export default {
   left: 50%;
   transform-origin: 0 0;
   animation: counter-orbit 20s linear infinite;
+  transform-style: preserve-3d;
 }
 
 .tech-bubble {
   transform: translate(-50%, -50%);
-  padding: 0.6rem 1.2rem;
+  padding: 0.8rem 1.5rem;
   background: rgba(15, 185, 253, 0.1);
   border: 1px solid rgba(15, 185, 253, 0.3);
   border-radius: 20px;
   color: #fff;
-  font-size: 0.9rem;
+  font-size: 1rem;
   white-space: nowrap;
   backdrop-filter: blur(5px);
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .tech-bubble:hover {
   background: rgba(15, 185, 253, 0.2);
   border-color: rgba(15, 185, 253, 0.5);
   transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.3);
 }
 
 @keyframes orbit {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from { transform: rotateY(0deg) rotateX(-20deg); }
+  to { transform: rotateY(360deg) rotateX(-20deg); }
 }
 
 @keyframes counter-orbit {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
-}
-
-.floating-tech {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  pointer-events: none;
-}
-
-.tech-tag {
-  position: absolute;
-  padding: 0.5rem 1rem;
-  background: rgba(15, 185, 253, 0.1);
-  border: 1px solid rgba(15, 185, 253, 0.3);
-  border-radius: 15px;
-  color: #fff;
-  font-size: 0.85rem;
-  animation: float 3s ease-in-out infinite;
-  backdrop-filter: blur(5px);
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(-360deg); }
 }
 
 /* Mobile Styles */
 .mobile-view {
   flex-direction: column;
-  padding: 2rem 1.5rem;
+  padding: 1rem 0;
   min-height: auto;
+  text-align: center;
 }
 
 .mobile-view .hero-content {
   max-width: 100%;
-  padding: 1rem 0;
-  text-align: center;
+  padding: 0;
 }
 
 .mobile-view .hero-title {
@@ -430,7 +416,7 @@ export default {
 }
 
 .mobile-view .hero-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 
 .mobile-view .hero-actions {
@@ -439,7 +425,42 @@ export default {
 
 .mobile-view .floating-tech {
   height: 300px;
-  margin-top: 2rem;
+  margin-top: 3rem;
+  position: relative;
+  width: 100%;
+}
+
+.floating-tech {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  perspective: 1000px;
+}
+
+.tech-tag {
+  position: absolute;
+  padding: 0.6rem 1.2rem;
+  background: rgba(15, 185, 253, 0.1);
+  border: 1px solid rgba(15, 185, 253, 0.3);
+  border-radius: 15px;
+  color: #fff;
+  font-size: 0.9rem;
+  animation: float 3s ease-in-out infinite;
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tech-tag:hover {
+  background: rgba(15, 185, 253, 0.2);
+  border-color: rgba(15, 185, 253, 0.5);
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.3);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) translateZ(0); }
+  50% { transform: translateY(-15px) translateZ(20px); }
 }
 
 @media (max-width: 768px) {
@@ -458,6 +479,19 @@ export default {
   
   .cosmic-button {
     width: 100%;
+  }
+  
+  .hero-title {
+    font-size: 2.8rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .highlight-text {
+    font-size: 1.1rem;
+    margin-top: 0.8rem;
   }
 }
 
