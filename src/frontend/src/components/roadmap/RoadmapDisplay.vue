@@ -253,7 +253,9 @@ export default {
   position: relative;
   padding-left: 50px; /* Space for timeline */
   margin: 0 auto;
-  max-width: 900px;
+  max-width: 1000px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Main timeline line */
@@ -751,6 +753,8 @@ export default {
 @media (max-width: 768px) {
   .quarters-container {
     padding-left: 45px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .quarters-container::before {

@@ -172,13 +172,14 @@ export default {
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2rem;
+  box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
   .roadmap-container {
     padding: 1rem;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 }
 </style>
