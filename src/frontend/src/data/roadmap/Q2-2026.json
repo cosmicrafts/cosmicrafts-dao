@@ -5,84 +5,79 @@
   "total": 6,
   "milestones": [
     {
-      "title": "April 2026: Adventures Development",
-      "description": "Complete Adventures prototype development with focus on innovative gameplay and community engagement.",
+      "title": "April 2026: AI Code Implementation Pipeline",
+      "description": "Deploy AI-driven code implementation pipeline with practical governance integration.",
       "completed": 0,
       "total": 3,
       "tasks": [
         {
-          "title": "Core Gameplay Mechanics",
-          "description": "Develop foundational gameplay mechanics for Adventures prototype to create a fun and engaging experience.",
-          "completed": 0,
-          "total": 4,
-          "status": "ToDo",
-          "subtasks": [
-            {
-              "title": "Player Control System",
-              "description": "Implement responsive and intuitive player movement and interaction controls.",
-              "completed": false
-            },
-            {
-              "title": "Combat Mechanics",
-              "description": "Develop core combat mechanics with appropriate difficulty balancing for the prototype.",
-              "completed": false
-            },
-            {
-              "title": "Progression System",
-              "description": "Implement basic character progression system with meaningful upgrades and rewards.",
-              "completed": false
-            },
-            {
-              "title": "Game Loop Implementation",
-              "description": "Create a complete game loop from start to finish with clear objectives and challenges.",
-              "completed": false
-            }
-          ]
-        },
-        {
-          "title": "Asset Pipeline Setup",
-          "description": "Set up optimized asset pipeline for Adventures based on learnings from Battlegrounds for efficient content creation.",
+          "title": "Proposal-to-Code Pipeline",
+          "description": "Implement automated pipeline for converting governance proposals to code implementations.",
           "completed": 0,
           "total": 3,
           "status": "ToDo",
           "subtasks": [
             {
-              "title": "Art Asset Workflows",
-              "description": "Establish efficient workflows for creating and importing art assets into the game.",
+              "title": "Proposal Parser Integration",
+              "description": "Integrate proposal parsing system with code generation pipeline.",
               "completed": false
             },
             {
-              "title": "Animation System",
-              "description": "Implement animation system supporting character movements, combat, and environmental effects.",
+              "title": "Implementation Planning",
+              "description": "Develop AI system for creating detailed implementation plans from proposals.",
               "completed": false
             },
             {
-              "title": "Level Design Tools",
-              "description": "Create tools for rapid level design and iteration to accelerate prototype development.",
+              "title": "Code Generation Rules",
+              "description": "Implement rule system for safe and consistent code generation.",
               "completed": false
             }
           ]
         },
         {
-          "title": "Multiplayer Foundation",
-          "description": "Implement foundational multiplayer components leveraging existing WebSocket infrastructure from Battlegrounds.",
+          "title": "Automated Code Review",
+          "description": "Implement AI-driven code review and validation system.",
           "completed": 0,
           "total": 3,
           "status": "ToDo",
           "subtasks": [
             {
-              "title": "Multiplayer Session Management",
-              "description": "Implement system for creating and managing multiplayer sessions and player connections.",
+              "title": "Pattern Matching",
+              "description": "Deploy pattern matching system for code quality and security checks.",
               "completed": false
             },
             {
-              "title": "State Synchronization",
-              "description": "Develop efficient state synchronization system for multiplayer gameplay elements.",
+              "title": "Impact Analysis",
+              "description": "Implement system for analyzing code changes' impact on existing systems.",
               "completed": false
             },
             {
-              "title": "Drop-in/Drop-out Functionality",
-              "description": "Implement functionality allowing players to join and leave sessions in progress.",
+              "title": "Review Automation",
+              "description": "Automate code review process with AI-driven suggestions and fixes.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "Integration Testing",
+          "description": "Implement automated integration testing for AI-generated code.",
+          "completed": 0,
+          "total": 3,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Test Generation",
+              "description": "Deploy system for generating comprehensive integration tests.",
+              "completed": false
+            },
+            {
+              "title": "Regression Testing",
+              "description": "Implement automated regression testing for new code.",
+              "completed": false
+            },
+            {
+              "title": "Performance Validation",
+              "description": "Create automated performance validation for code changes.",
               "completed": false
             }
           ]
