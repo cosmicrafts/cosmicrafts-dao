@@ -966,7 +966,7 @@ export default {
   padding: var(--space-xl) 0;
   display: grid;
   grid-template-columns: var(--node-offset) 1fr;
-  font-family: var(--font-family);
+  font-family: 'Montserrat', 'Noto Sans Arabic', 'Roboto', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', 'Noto Sans TC', 'Be Vietnam Pro', 'Noto Sans', Helvetica, sans-serif;
   overflow: hidden;
 }
 
@@ -989,8 +989,8 @@ export default {
   width: 100%;
   height: 100%;
   background-image: 
-    linear-gradient(rgba(var(--cosmic-blue-rgb), 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--cosmic-blue-rgb), 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(15, 185, 253, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 185, 253, 0.05) 1px, transparent 1px);
   background-size: 30px 30px;
   background-position: center center;
   opacity: 0.4;
@@ -1015,8 +1015,8 @@ export default {
   height: 300px;
   background: radial-gradient(
     circle at center,
-    rgba(var(--cosmic-blue-rgb), 0.1) 0%,
-    rgba(var(--cosmic-purple-rgb), 0.05) 40%,
+    rgba(15, 185, 253, 0.1) 0%,
+    rgba(200, 42, 253, 0.05) 40%,
     transparent 70%
   );
   border-radius: 50%;
@@ -1048,13 +1048,13 @@ export default {
   width: var(--timeline-width);
   background: linear-gradient(
     to bottom,
-    rgba(var(--cosmic-blue-rgb), 0.8),
-    rgba(var(--cosmic-purple-rgb), 0.8)
+    rgba(15, 185, 253, 0.8),
+    rgba(200, 42, 253, 0.8)
   );
   border-radius: 2px;
   box-shadow: 
-    0 0 10px rgba(var(--cosmic-blue-rgb), 0.5),
-    0 0 20px rgba(var(--cosmic-purple-rgb), 0.3);
+    0 0 10px rgba(15, 185, 253, 0.5),
+    0 0 20px rgba(200, 42, 253, 0.3);
   overflow: visible;
   z-index: 2;
   transition: all 0.3s ease;
@@ -1068,12 +1068,12 @@ export default {
   width: 100%;
   background: linear-gradient(
     to bottom,
-    rgba(var(--cosmic-blue-rgb), 0.9),
-    rgba(var(--cosmic-purple-rgb), 0.1)
+    rgba(15, 185, 253, 0.9),
+    rgba(200, 42, 253, 0.1)
   );
   filter: blur(1px);
   border-radius: 2px;
-  box-shadow: 0 0 15px rgba(var(--cosmic-blue-rgb), 0.7);
+  box-shadow: 0 0 15px rgba(15, 185, 253, 0.7);
   z-index: 3;
 }
 
@@ -1093,7 +1093,7 @@ export default {
   left: 0;
   width: 8px;
   height: 2px;
-  background-color: rgba(var(--cosmic-blue-rgb), 0.8);
+  background-color: rgba(15, 185, 253, 0.8);
 }
 
 .timeline-markers::before {
@@ -1129,8 +1129,8 @@ export default {
 
 /* Quarter states */
 .quarter.completed .quarter-node::before {
-  background: rgba(var(--status-completed-rgb), 0.8);
-  border-color: rgba(var(--status-completed-rgb), 1);
+  background: rgba(0, 229, 164, 0.8);
+  border-color: rgb(0, 229, 164);
 }
 
 .quarter.current .quarter-node {
@@ -1142,10 +1142,10 @@ export default {
 }
 
 .quarter.active .quarter-panel {
-  border-color: rgba(var(--cosmic-blue-rgb), 0.4);
+  border-color: rgba(15, 185, 253, 0.4);
   box-shadow: 
-    0 5px 20px rgba(var(--bg-depth-0-rgb), 0.2),
-    0 0 15px rgba(var(--cosmic-blue-rgb), 0.2);
+    0 5px 20px rgba(10, 20, 32, 0.2),
+    0 0 15px rgba(15, 185, 253, 0.2);
 }
 
 /* Quarter node (timeline circle) */
@@ -1167,11 +1167,11 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: rgba(var(--cosmic-blue-rgb), 0.6);
-  border: 2px solid rgba(var(--cosmic-blue-rgb), 0.8);
+  background: rgba(15, 185, 253, 0.6);
+  border: 2px solid rgba(15, 185, 253, 0.8);
   box-shadow: 
-    0 0 0 4px rgba(var(--cosmic-blue-rgb), 0.1),
-    0 0 15px rgba(var(--cosmic-blue-rgb), 0.4);
+    0 0 0 4px rgba(15, 185, 253, 0.1),
+    0 0 15px rgba(15, 185, 253, 0.4);
   transition: all 0.3s ease;
 }
 
@@ -1181,7 +1181,7 @@ export default {
   height: 100%;
   border-radius: 50%;
   background: transparent;
-  border: 2px solid rgba(var(--cosmic-blue-rgb), 0.4);
+  border: 2px solid rgba(15, 185, 253, 0.4);
   animation: pulse-ring 2s linear infinite;
   opacity: 0;
 }
@@ -1195,8 +1195,8 @@ export default {
   width: 60%;
   height: 60%;
   border-radius: 50%;
-  background: rgba(var(--bg-depth-2-rgb), 0.8);
-  border: 2px solid rgba(var(--cosmic-blue-rgb), 0.6);
+  background: rgba(25, 34, 46, 0.8);
+  border: 2px solid rgba(15, 185, 253, 0.6);
   z-index: 1;
 }
 
@@ -1207,20 +1207,20 @@ export default {
   transform: translateX(-50%);
   font-size: 0.85rem;
   font-weight: 500;
-  color: rgba(var(--text-secondary-rgb), 0.9);
+  color: rgba(255, 255, 255, 0.9);
   white-space: nowrap;
   letter-spacing: 0.5px;
-  text-shadow: var(--text-shadow-sm);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Quarter panel */
 .quarter-panel {
   grid-column: 2;
-  background: rgba(var(--bg-depth-1-rgb), 0.7);
+  background: rgba(25, 34, 46, 0.7);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(var(--cosmic-blue-rgb), 0.2);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
   transition: all 0.3s ease;
   overflow: visible;
   height: auto;
@@ -1231,10 +1231,10 @@ export default {
 }
 
 .quarter-panel:hover {
-  border-color: rgba(var(--cosmic-blue-rgb), 0.3);
+  border-color: rgba(15, 185, 253, 0.3);
   box-shadow: 
-    0 5px 20px rgba(var(--bg-depth-0-rgb), 0.2),
-    0 0 10px rgba(var(--cosmic-blue-rgb), 0.15);
+    0 5px 20px rgba(10, 20, 32, 0.2),
+    0 0 10px rgba(15, 185, 253, 0.15);
   transform: translateY(-2px);
 }
 
@@ -1265,19 +1265,19 @@ export default {
   background: linear-gradient(
     to right,
     transparent,
-    rgba(var(--cosmic-blue-rgb), 0.3),
+    rgba(15, 185, 253, 0.3),
     transparent
   );
   opacity: 0.5;
 }
 
 .quarter-header:hover {
-  background: rgba(var(--bg-depth-2-rgb), 0.3);
+  background: rgba(15, 185, 253, 0.05);
 }
 
 .quarter-header:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(var(--cosmic-blue-rgb), 0.3);
+  box-shadow: 0 0 0 2px rgba(15, 185, 253, 0.3);
 }
 
 .header-content {
@@ -1287,12 +1287,12 @@ export default {
 .quarter-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: rgba(var(--text-primary-rgb), 1);
+  color: rgba(255, 255, 255, 1);
   margin-bottom: var(--space-sm);
   letter-spacing: 0.5px;
   position: relative;
   display: inline-block;
-  text-shadow: var(--text-shadow-sm);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .quarter-title::after {
@@ -1304,15 +1304,15 @@ export default {
   height: 2px;
   background: linear-gradient(
     to right,
-    rgba(var(--cosmic-blue-rgb), 0.8),
-    rgba(var(--cosmic-purple-rgb), 0.8)
+    rgba(15, 185, 253, 0.8),
+    rgba(200, 42, 253, 0.8)
   );
   border-radius: 1px;
 }
 
 .quarter-description {
   font-size: 1rem;
-  color: rgba(var(--text-secondary-rgb), 0.9);
+  color: rgba(255, 255, 255, 0.85);
   margin-bottom: var(--space-sm);
   line-height: 1.5;
   max-width: 90%;
@@ -1331,15 +1331,15 @@ export default {
   padding: 0.25rem 0.75rem;
   font-size: 0.7rem;
   font-weight: 500;
-  color: var(--tag-color, var(--cosmic-blue));
-  background: rgba(var(--bg-depth-2-rgb), 0.7);
-  border: 1px solid var(--tag-color, var(--cosmic-blue));
-  border-radius: var(--border-radius-full);
+  color: var(--tag-color, #0FB9FD);
+  background: rgba(25, 34, 46, 0.7);
+  border: 1px solid var(--tag-color, #0FB9FD);
+  border-radius: 999px;
   transition: all 0.2s ease;
 }
 
 .tag:hover {
-  background: rgba(var(--bg-depth-3-rgb), 0.7);
+  background: rgba(15, 185, 253, 0.1);
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
@@ -1366,14 +1366,14 @@ export default {
 
 .progress-ring-bg {
   fill: transparent;
-  stroke: rgba(var(--bg-depth-3-rgb), 0.7);
+  stroke: rgba(25, 34, 46, 0.7);
   stroke-width: 3;
 }
 
 .progress-ring-circle {
   fill: transparent;
   stroke-width: 3;
-  stroke: var(--cosmic-blue);
+  stroke: #0FB9FD;
   stroke-linecap: round;
   stroke-dasharray: calc(2 * 3.14159 * 15);
   transition: stroke-dashoffset 0.5s ease;
@@ -1383,7 +1383,7 @@ export default {
   position: absolute;
   font-size: 0.75rem;
   font-weight: 600;
-  color: rgba(var(--text-secondary-rgb), 0.9);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* Toggle button */
@@ -1407,7 +1407,7 @@ export default {
 .toggle-icon::after {
   content: '';
   position: absolute;
-  background-color: var(--cosmic-blue);
+  background-color: #0FB9FD;
   border-radius: 1px;
   transition: all 0.3s ease;
 }
@@ -1448,12 +1448,12 @@ export default {
 
 .milestone {
   position: relative;
-  background: rgba(var(--bg-depth-2-rgb), 0.6);
-  border: 1px solid rgba(var(--cosmic-blue-rgb), 0.15);
-  border-radius: var(--border-radius-md);
+  background: var(--cosmic-panel-bg, linear-gradient(to bottom, rgba(30, 43, 56, 0.95), rgba(23, 33, 43, 0.95)));
+  border: 1px solid rgba(15, 185, 253, 0.15);
+  border-radius: 8px;
   overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+  box-shadow: var(--cosmic-panel-shadow, 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 20px rgba(15, 185, 253, 0.1));
   display: flex;
   flex-direction: column;
   --milestone-hue: calc(210 + (var(--milestone-index, 0) * 15));
@@ -1462,7 +1462,6 @@ export default {
   transform: translateY(20px);
   height: auto;
   min-height: 100px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
   align-self: flex-start !important;
 }
 
@@ -1473,21 +1472,59 @@ export default {
 
 .milestone:hover {
   transform: translateY(-5px) scale(1.02);
-  border-color: rgba(var(--cosmic-blue-rgb), 0.3);
+  border-color: rgba(15, 185, 253, 0.3);
   box-shadow: 
-    0 8px 20px rgba(var(--bg-depth-0-rgb), 0.3),
-    0 0 8px rgba(var(--cosmic-blue-rgb), 0.2);
+    0 8px 20px rgba(0, 0, 0, 0.3),
+    0 0 8px rgba(15, 185, 253, 0.2);
 }
 
 .milestone.completed {
-  border-color: rgba(var(--status-completed-rgb), 0.3);
+  border-color: rgba(0, 229, 164, 0.3);
 }
 
-.milestone.active {
-  border-color: rgba(var(--cosmic-blue-rgb), 0.4);
+.milestone.independently-active {
+  z-index: 10;
+  position: relative;
+  transform: translateY(-5px) scale(1.02);
+  border-color: rgba(15, 185, 253, 0.3);
   box-shadow: 
-    0 5px 15px rgba(var(--bg-depth-0-rgb), 0.25),
-    0 0 10px rgba(var(--cosmic-blue-rgb), 0.2);
+    0 8px 20px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(15, 185, 253, 0.3);
+}
+
+/* Add cosmic hover effect to milestone */
+.milestone::before,
+.milestone::after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 50%;
+  background-color: var(--color-accent, #FFB800);
+  transition: transform 0.45s ease, box-shadow 0.65s ease;
+  box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.948);
+  transform: scaleX(0);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.milestone::before {
+  top: -2px;
+  left: -4%;
+  transform-origin: left;
+}
+
+.milestone::after {
+  bottom: -2px;
+  right: -4%;
+  transform-origin: right;
+}
+
+.milestone:hover::before,
+.milestone:hover::after,
+.milestone.independently-active::before,
+.milestone.independently-active::after {
+  transform: scaleX(1.25);
+  box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.936);
 }
 
 /* Milestone header */
@@ -1515,19 +1552,19 @@ export default {
   background: linear-gradient(
     to right,
     transparent,
-    rgba(var(--cosmic-blue-rgb), 0.2),
+    rgba(15, 185, 253, 0.2),
     transparent
   );
   opacity: 0.5;
 }
 
 .milestone-header:hover {
-  background: rgba(var(--bg-depth-3-rgb), 0.3);
+  background: rgba(15, 185, 253, 0.08);
 }
 
 .milestone-header:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(var(--cosmic-blue-rgb), 0.3);
+  box-shadow: 0 0 0 2px rgba(15, 185, 253, 0.3);
 }
 
 .milestone-header-content {
@@ -1537,7 +1574,7 @@ export default {
 .milestone-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: rgba(var(--text-primary-rgb), 0.95);
+  color: rgba(255, 255, 255, 0.95);
   margin-bottom: var(--space-xs);
   letter-spacing: 0.3px;
   position: relative;
@@ -1546,7 +1583,7 @@ export default {
 
 .milestone-description {
   font-size: 0.9rem;
-  color: rgba(var(--text-secondary-rgb), 0.85);
+  color: rgba(255, 255, 255, 0.85);
   margin-bottom: var(--space-xs);
   line-height: 1.5;
 }
@@ -1574,7 +1611,7 @@ export default {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: var(--space-md);
   padding: var(--space-md);
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   z-index: 5;
   transition: height 0.25s ease, opacity 0.25s ease;
@@ -1582,9 +1619,9 @@ export default {
 
 .task-card {
   position: relative;
-  background: rgba(var(--bg-depth-3-rgb), 0.6);
-  border: 1px solid rgba(var(--cosmic-blue-rgb), 0.1);
-  border-radius: var(--border-radius-sm);
+  background: rgba(25, 34, 46, 0.8);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  border-radius: 8px;
   overflow: hidden;
   transition: all 0.3s ease;
   --task-hue: calc(210 + (var(--task-index, 0) * 10));
@@ -1600,23 +1637,56 @@ export default {
 
 .task-card:hover {
   transform: translateY(-3px);
-  border-color: rgba(var(--cosmic-blue-rgb), 0.25);
+  border-color: rgba(15, 185, 253, 0.25);
   box-shadow: 
-    0 5px 15px rgba(var(--bg-depth-0-rgb), 0.2),
-    0 0 5px rgba(var(--cosmic-blue-rgb), 0.15);
+    0 5px 15px rgba(0, 0, 0, 0.2),
+    0 0 5px rgba(15, 185, 253, 0.15);
+}
+
+/* Add cosmic hover effect to tasks */
+.task-card::before,
+.task-card::after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 50%;
+  background-color: var(--color-accent, #FFB800);
+  transition: transform 0.45s ease, box-shadow 0.65s ease;
+  box-shadow: 0px 0px 4px rgba(255, 162, 0, 0.948);
+  transform: scaleX(0);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.task-card::before {
+  top: -1px;
+  left: -4%;
+  transform-origin: left;
+}
+
+.task-card::after {
+  bottom: -1px;
+  right: -4%;
+  transform-origin: right;
+}
+
+.task-card:hover::before,
+.task-card:hover::after {
+  transform: scaleX(1.25);
+  box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.936);
 }
 
 .task-card.important {
-  border-color: rgba(var(--cosmic-magenta-rgb), 0.3);
-  box-shadow: 0 0 10px rgba(var(--cosmic-magenta-rgb), 0.1);
+  border-color: rgba(255, 75, 75, 0.3);
+  box-shadow: 0 0 10px rgba(255, 75, 75, 0.1);
 }
 
 .task-card.completed {
-  border-color: rgba(var(--status-completed-rgb), 0.3);
+  border-color: rgba(0, 229, 164, 0.3);
 }
 
 .task-card.in-progress {
-  border-color: rgba(var(--status-in-progress-rgb), 0.3);
+  border-color: rgba(15, 185, 253, 0.3);
 }
 
 .task-header {
@@ -1633,25 +1703,25 @@ export default {
 }
 
 .task-header:hover {
-  background: rgba(var(--bg-depth-4-rgb), 0.3);
+  background: rgba(15, 185, 253, 0.05);
 }
 
 .task-header:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(var(--cosmic-blue-rgb), 0.25);
+  box-shadow: 0 0 0 2px rgba(15, 185, 253, 0.25);
 }
 
 .task-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: rgba(var(--text-primary-rgb), 0.9);
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: var(--space-xs);
   letter-spacing: 0.3px;
 }
 
 .task-description {
   font-size: 0.85rem;
-  color: rgba(var(--text-secondary-rgb), 0.8);
+  color: rgba(255, 255, 255, 0.8);
   margin-bottom: var(--space-sm);
   line-height: 1.5;
 }
@@ -1676,8 +1746,8 @@ export default {
 .progress-bar-container {
   position: relative;
   height: 6px;
-  background: rgba(var(--bg-depth-4-rgb), 0.8);
-  border-radius: var(--border-radius-full);
+  background: rgba(10, 20, 32, 0.8);
+  border-radius: 999px;
   overflow: hidden;
   flex: 1;
   min-width: 100px;
@@ -1687,10 +1757,10 @@ export default {
   height: 100%;
   background: linear-gradient(
     to right,
-    var(--cosmic-blue),
-    var(--cosmic-purple)
+    #0FB9FD,
+    #4DCFFF
   );
-  border-radius: var(--border-radius-full);
+  border-radius: 999px;
   transition: width 0.5s ease-out;
 }
 
@@ -1698,32 +1768,32 @@ export default {
   font-size: 0.7rem;
   font-weight: 600;
   padding: 0.25rem 0.6rem;
-  border-radius: var(--border-radius-full);
+  border-radius: 999px;
   white-space: nowrap;
 }
 
 .task-status.completed {
-  background: rgba(var(--status-completed-rgb), 0.15);
-  color: rgb(var(--status-completed-rgb));
-  border: 1px solid rgba(var(--status-completed-rgb), 0.3);
+  background: rgba(0, 229, 164, 0.15);
+  color: rgb(0, 229, 164);
+  border: 1px solid rgba(0, 229, 164, 0.3);
 }
 
 .task-status.in-progress {
-  background: rgba(var(--status-in-progress-rgb), 0.15);
-  color: rgb(var(--status-in-progress-rgb));
-  border: 1px solid rgba(var(--status-in-progress-rgb), 0.3);
+  background: rgba(15, 185, 253, 0.15);
+  color: rgb(15, 185, 253);
+  border: 1px solid rgba(15, 185, 253, 0.3);
 }
 
 .task-status.to-do, .task-status.planned {
-  background: rgba(var(--status-planned-rgb), 0.15);
-  color: rgb(var(--status-planned-rgb));
-  border: 1px solid rgba(var(--status-planned-rgb), 0.3);
+  background: rgba(255, 184, 0, 0.15);
+  color: rgb(255, 184, 0);
+  border: 1px solid rgba(255, 184, 0, 0.3);
 }
 
 .task-status.delayed {
-  background: rgba(var(--status-delayed-rgb), 0.15);
-  color: rgb(var(--status-delayed-rgb));
-  border: 1px solid rgba(var(--status-delayed-rgb), 0.3);
+  background: rgba(255, 75, 75, 0.15);
+  color: rgb(255, 75, 75);
+  border: 1px solid rgba(255, 75, 75, 0.3);
 }
 
 /* ============================================
@@ -1864,10 +1934,10 @@ input[type="checkbox"]:checked + label .subtask-title {
 }
 
 .timeline-control {
-  background: rgba(var(--bg-depth-2-rgb), 0.8);
-  border: 1px solid rgba(var(--cosmic-blue-rgb), 0.3);
-  border-radius: var(--border-radius-md);
-  color: rgba(var(--text-primary-rgb), 0.9);
+  background: rgba(25, 34, 46, 0.8);
+  border: 1px solid rgba(15, 185, 253, 0.3);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.9);
   width: 36px;
   height: 36px;
   display: flex;
@@ -1879,11 +1949,11 @@ input[type="checkbox"]:checked + label .subtask-title {
 }
 
 .timeline-control:hover:not(:disabled) {
-  background: rgba(var(--bg-depth-3-rgb), 0.8);
+  background: rgba(15, 185, 253, 0.1);
   transform: translateY(-2px);
   box-shadow: 
-    0 3px 8px rgba(var(--bg-depth-0-rgb), 0.3),
-    0 0 5px rgba(var(--cosmic-blue-rgb), 0.2);
+    0 3px 8px rgba(10, 20, 32, 0.3),
+    0 0 5px rgba(15, 185, 253, 0.2);
 }
 
 .timeline-control:disabled {
@@ -1900,18 +1970,18 @@ input[type="checkbox"]:checked + label .subtask-title {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(var(--cosmic-blue-rgb), 0.3);
+  background: rgba(15, 185, 253, 0.3);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .indicator:hover {
-  background: rgba(var(--cosmic-blue-rgb), 0.5);
+  background: rgba(15, 185, 253, 0.5);
 }
 
 .indicator.active {
-  background: var(--cosmic-blue);
-  box-shadow: 0 0 5px rgba(var(--cosmic-blue-rgb), 0.7);
+  background: #0FB9FD;
+  box-shadow: 0 0 5px rgba(15, 185, 253, 0.7);
 }
 
 /* ============================================
@@ -2125,17 +2195,6 @@ input[type="checkbox"]:checked + label .subtask-title {
     animation: none !important;
     transition: opacity 0.1s linear !important;
   }
-}
-
-/* Add independent milestone class styles */
-.milestone.independently-active {
-  z-index: 10;
-  position: relative;
-  transform: translateY(-5px) scale(1.02);
-  border-color: rgba(var(--cosmic-blue-rgb), 0.3);
-  box-shadow: 
-    0 8px 20px rgba(var(--bg-depth-0-rgb), 0.3),
-    0 0 8px rgba(var(--cosmic-blue-rgb), 0.2);
 }
 
 /* Ensure each milestone maintains its own height independently */
