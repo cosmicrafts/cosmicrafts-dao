@@ -1,0 +1,438 @@
+{
+  "period": "2026-Q1",
+  "description": "Refine Battlegrounds based on community feedback, plan for Adventures prototype development, expand AI assistant capabilities with self-improvement features, launch expanded cross-chain payment options, and begin mobile development for Battlegrounds.",
+  "completed": 0,
+  "total": 5,
+  "milestones": [
+    {
+      "title": "January 2026: Battlegrounds Enhancement",
+      "description": "Enhance Battlegrounds RTS game based on community feedback and platform data.",
+      "completed": 0,
+      "total": 3,
+      "tasks": [
+        {
+          "title": "Battlegrounds Feedback Analysis",
+          "description": "Analyze community feedback and platform data to identify areas for improvement.",
+          "completed": 0,
+          "total": 3,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Community Survey",
+              "description": "Conduct survey to gather player feedback and identify common issues.",
+              "completed": false
+            },
+            {
+              "title": "Platform Data Analysis",
+              "description": "Analyze platform data to identify trends and player preferences.",
+              "completed": false
+            },
+            {
+              "title": "Feature Prioritization",
+              "description": "Prioritize features based on community feedback and platform data.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "UI/UX Improvements",
+          "description": "Implement UI/UX improvements based on community feedback and platform data.",
+          "completed": 0,
+          "total": 3,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "User Testing",
+              "description": "Conduct user testing sessions to gather feedback on current UI/UX.",
+              "completed": false
+            },
+            {
+              "title": "UI/UX Design Changes",
+              "description": "Implement changes based on user feedback and platform data.",
+              "completed": false
+            },
+            {
+              "title": "Visual Design Update",
+              "description": "Update visual design elements based on community preferences and platform data.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "Performance Optimization",
+          "description": "Optimize Battlegrounds performance based on community feedback and platform data.",
+          "completed": 0,
+          "total": 3,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Load Testing",
+              "description": "Perform load testing to identify performance bottlenecks.",
+              "completed": false
+            },
+            {
+              "title": "Memory Usage Analysis",
+              "description": "Analyze memory usage patterns and identify optimization opportunities.",
+              "completed": false
+            },
+            {
+              "title": "Server Configuration Adjustments",
+              "description": "Adjust server configuration settings based on community feedback and platform data.",
+              "completed": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "February 2026: Adventures Prototype Planning",
+      "description": "Begin planning for Adventures prototype with focus on innovative gameplay mechanics.",
+      "completed": 0,
+      "total": 3,
+      "tasks": [
+        {
+          "title": "Adventures Concept Documentation",
+          "description": "Document core gameplay concepts and technical requirements for Adventures prototype to guide development.",
+          "completed": 0,
+          "total": 4,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Core Gameplay Definition",
+              "description": "Define core gameplay loop, mechanics, and player experience for Adventures prototype.",
+              "completed": false
+            },
+            {
+              "title": "Technical Requirements Documentation",
+              "description": "Document technical requirements and specifications based on learnings from Battlegrounds.",
+              "completed": false
+            },
+            {
+              "title": "Art Style Guide",
+              "description": "Create art style guide and visual direction documentation for the Adventures prototype.",
+              "completed": false
+            },
+            {
+              "title": "Feature Prioritization",
+              "description": "Prioritize features for the initial prototype to focus on validating core gameplay quickly.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "Resource Allocation Planning",
+          "description": "Plan development resources and timeline for Adventures prototype while maintaining Battlegrounds.",
+          "completed": 0,
+          "total": 3,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Team Structure Planning",
+              "description": "Define team structure and roles for Adventures prototype development while supporting existing game.",
+              "completed": false
+            },
+            {
+              "title": "Development Timeline",
+              "description": "Create detailed development timeline with milestones and deadlines for Adventures prototype.",
+              "completed": false
+            },
+            {
+              "title": "Budget Allocation",
+              "description": "Allocate budget for Adventures prototype development while maintaining Battlegrounds support.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "Reusable Technology Assessment",
+          "description": "Identify components from Battlegrounds that can be reused for Adventures prototype to accelerate development.",
+          "completed": 0,
+          "total": 3,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Code Architecture Review",
+              "description": "Review Battlegrounds codebase to identify reusable components, libraries, and frameworks.",
+              "completed": false
+            },
+            {
+              "title": "Asset Pipeline Evaluation",
+              "description": "Evaluate existing asset pipeline and tools for reuse in Adventures prototype development.",
+              "completed": false
+            },
+            {
+              "title": "Backend Services Assessment",
+              "description": "Assess existing backend services and infrastructure for adaptation to Adventures prototype.",
+              "completed": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "March 2026: Evolved AI Capabilities",
+      "description": "Further enhance AI assistant with self-improvement capabilities and integration across platforms.",
+      "completed": 0,
+      "total": 3,
+      "tasks": [
+        {
+          "title": "AI Assistant for Adventures Planning",
+          "description": "Adapt and enhance AI assistant technology for integration with Adventures prototype from the beginning of development.",
+          "completed": 0,
+          "total": 3,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Adventures Knowledge Base Creation",
+              "description": "Create knowledge base for Adventures game containing lore, mechanics, and gameplay guidance for the AI assistant.",
+              "completed": false
+            },
+            {
+              "title": "Design-Time AI Integration",
+              "description": "Develop AI tools to assist developers during design and development of Adventures prototype.",
+              "completed": false
+            },
+            {
+              "title": "Early AI Feature Planning",
+              "description": "Plan AI assistant integration in Adventures from initial prototype stage to ensure deep integration.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "Self-Improving AI Technology",
+          "description": "Develop self-learning capabilities for AI assistant to continuously improve from player interactions and feedback.",
+          "completed": 0,
+          "total": 4,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Automated Learning Pipeline",
+              "description": "Implement pipeline for AI to learn from player interactions and improve its knowledge and responses.",
+              "completed": false
+            },
+            {
+              "title": "Quality Control System",
+              "description": "Develop quality control system to ensure AI improvements maintain accuracy and appropriate content.",
+              "completed": false
+            },
+            {
+              "title": "Feedback Integration Mechanism",
+              "description": "Create mechanism for direct player feedback to be incorporated into AI learning process.",
+              "completed": false
+            },
+            {
+              "title": "Performance Metrics Dashboard",
+              "description": "Build dashboard to monitor AI improvement metrics and identify areas needing human intervention.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "4X Game Core Gameplay Prototype",
+          "description": "Develop core gameplay prototype for the 4X metaverse game to validate gameplay concepts and player experience.",
+          "completed": 0,
+          "total": 4,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Core Gameplay Loop Implementation",
+              "description": "Implement core gameplay loop including exploration, expansion, exploitation, and extermination mechanics.",
+              "completed": false
+            },
+            {
+              "title": "Multiplayer Interaction Prototype",
+              "description": "Develop prototype for real-time multiplayer interactions in the persistent 4X environment.",
+              "completed": false
+            },
+            {
+              "title": "Economic Systems Prototype",
+              "description": "Create prototype of economic systems including resource management, production, and player-driven economy.",
+              "completed": false
+            },
+            {
+              "title": "Governance Mechanics Prototype",
+              "description": "Implement prototype of governance mechanics allowing players to participate in world-shaping decisions.",
+              "completed": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Q1 2026: Expanded Cross-Chain Integration",
+      "description": "Launch expanded cross-chain payment options and begin DAO governance for treasury management.",
+      "completed": 0,
+      "total": 3,
+      "tasks": [
+        {
+          "title": "ckETH & ckSOL Integration",
+          "description": "Implement ckETH and ckSOL payment options in Battlegrounds to expand cryptocurrency support.",
+          "completed": 0,
+          "total": 4,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "ckETH Production Implementation",
+              "description": "Deploy ckETH payment system to production following successful prototype testing.",
+              "completed": false
+            },
+            {
+              "title": "ckSOL Integration Development",
+              "description": "Develop and implement ckSOL payment processing following established integration patterns.",
+              "completed": false
+            },
+            {
+              "title": "Unified Wallet Interface",
+              "description": "Create unified wallet interface that supports all implemented cryptocurrencies with seamless switching.",
+              "completed": false
+            },
+            {
+              "title": "Cross-Chain Analytics",
+              "description": "Implement analytics system to track usage patterns and performance across different cryptocurrencies.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "Dogecoin Special Integration",
+          "description": "Implement special Dogecoin integration with unique benefits and features as a fun alternative payment option.",
+          "completed": 0,
+          "total": 3,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Dogecoin Payment Processing",
+              "description": "Implement Dogecoin payment processing with appropriate blockchain integration and confirmation handling.",
+              "completed": false
+            },
+            {
+              "title": "Special Benefits Implementation",
+              "description": "Develop and implement special in-game benefits and rewards for Dogecoin users.",
+              "completed": false
+            },
+            {
+              "title": "Dogecoin-Themed Content",
+              "description": "Create Dogecoin-themed cosmetic items and content for players who use this payment method.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "DAO Treasury Management",
+          "description": "Implement initial DAO governance for treasury management and financial decision-making.",
+          "completed": 0,
+          "total": 4,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Treasury Canister Development",
+              "description": "Develop secure treasury canister for managing game assets and cryptocurrency holdings.",
+              "completed": false
+            },
+            {
+              "title": "Treasury Governance Mechanism",
+              "description": "Implement governance mechanism for community voting on treasury allocations and financial decisions.",
+              "completed": false
+            },
+            {
+              "title": "Financial Transparency Dashboard",
+              "description": "Create transparency dashboard showing treasury holdings, allocations, and transaction history.",
+              "completed": false
+            },
+            {
+              "title": "Financial Decision Framework",
+              "description": "Establish framework for proposing, discussing, and voting on financial decisions through the DAO.",
+              "completed": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Q1 2026: Battlegrounds Mobile Development",
+      "description": "Begin development of Battlegrounds for mobile platforms (iOS and Android) with optimized UI/UX.",
+      "completed": 0,
+      "total": 3,
+      "tasks": [
+        {
+          "title": "Mobile Development Strategy",
+          "description": "Establish comprehensive strategy for bringing Battlegrounds to mobile platforms.",
+          "completed": 0,
+          "total": 4,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Mobile Platform Analysis",
+              "description": "Analyze iOS and Android requirements, guidelines, and market differences for optimal approach.",
+              "completed": false
+            },
+            {
+              "title": "UI/UX Mobile Adaptation",
+              "description": "Design mobile-specific UI/UX optimized for touch controls and smaller screens.",
+              "completed": false
+            },
+            {
+              "title": "Performance Optimization Planning",
+              "description": "Create plan for optimizing game performance across various mobile device specifications.",
+              "completed": false
+            },
+            {
+              "title": "Mobile Monetization Strategy",
+              "description": "Develop mobile-specific monetization strategy integrating cross-chain payment options.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "Mobile Framework Implementation",
+          "description": "Implement core frameworks and systems for mobile development.",
+          "completed": 0,
+          "total": 3,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Cross-Platform Foundation",
+              "description": "Establish solid cross-platform foundation for code sharing between iOS and Android.",
+              "completed": false
+            },
+            {
+              "title": "Touch Control System",
+              "description": "Develop intuitive touch control system for RTS gameplay on mobile devices.",
+              "completed": false
+            },
+            {
+              "title": "Mobile Networking Layer",
+              "description": "Implement networking layer optimized for mobile connections and intermittent connectivity.",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "title": "Initial Mobile Prototype",
+          "description": "Develop initial prototype of Battlegrounds on mobile platforms for internal testing.",
+          "completed": 0,
+          "total": 3,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Core Gameplay Implementation",
+              "description": "Implement core gameplay features adapted for mobile experience.",
+              "completed": false
+            },
+            {
+              "title": "Device Compatibility Testing",
+              "description": "Test prototype on various device specifications to identify performance bottlenecks.",
+              "completed": false
+            },
+            {
+              "title": "Internal Feedback Process",
+              "description": "Establish process for gathering and implementing internal feedback on mobile experience.",
+              "completed": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+} 
