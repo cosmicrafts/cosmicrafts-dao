@@ -7,6 +7,20 @@
           Explore our development roadmap and follow our expedition across the digital cosmos.
           This timeline outlines our past achievements and future aspirations.
         </p>
+        <div class="roadmap-stats">
+          <div class="stat-item">
+            <div class="stat-value">10+</div>
+            <div class="stat-label">Development Quarters</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">125+</div>
+            <div class="stat-label">Total Milestones</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">35%</div>
+            <div class="stat-label">Overall Progress</div>
+          </div>
+        </div>
       </div>
     </div>
     
@@ -25,6 +39,12 @@
       </div>
       
       <div class="cosmic-pulse cosmic-sphere"></div>
+      
+      <!-- Added floating polygons -->
+      <div class="floating-poly poly-1"></div>
+      <div class="floating-poly poly-2"></div>
+      <div class="floating-poly poly-3"></div>
+      <div class="floating-poly poly-4"></div>
     </div>
   </div>
 </template>
@@ -39,7 +59,7 @@ export default {
 .roadmap-hero {
   position: relative;
   width: 100%;
-  min-height: 300px;
+  min-height: 350px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -73,6 +93,43 @@ export default {
   margin-bottom: var(--space-lg);
   max-width: 600px;
   text-shadow: var(--shadow-text-light);
+}
+
+/* Roadmap stats */
+.roadmap-stats {
+  display: flex;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+.stat-item {
+  text-align: center;
+  background: rgba(15, 185, 253, 0.05);
+  padding: var(--space-md);
+  border-radius: var(--cosmic-radius-md);
+  border: 1px solid rgba(15, 185, 253, 0.15);
+  min-width: 120px;
+  transition: all var(--cosmic-transition-medium);
+}
+
+.stat-item:hover {
+  background: rgba(15, 185, 253, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(15, 185, 253, 0.1);
+}
+
+.stat-value {
+  font-size: 2.2rem;
+  font-weight: var(--weight-bold);
+  color: var(--cosmic-blue-light);
+  margin-bottom: 0.5rem;
+  text-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--cosmic-text-secondary);
+  font-weight: var(--weight-medium);
 }
 
 /* Parallax star field */
@@ -213,7 +270,96 @@ export default {
   }
 }
 
+/* Floating polygons for additional visual interest */
+.floating-poly {
+  position: absolute;
+  border-radius: 5px;
+  background: rgba(15, 185, 253, 0.1);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  box-shadow: 0 0 15px rgba(15, 185, 253, 0.2);
+  opacity: 0.6;
+  animation: floatAnimation 8s ease-in-out infinite;
+}
+
+.poly-1 {
+  top: 15%;
+  right: 25%;
+  width: 40px;
+  height: 40px;
+  transform: rotate(45deg);
+  animation-delay: 0s;
+}
+
+.poly-2 {
+  bottom: 35%;
+  right: 30%;
+  width: 25px;
+  height: 25px;
+  transform: rotate(20deg);
+  animation-delay: 2s;
+}
+
+.poly-3 {
+  top: 35%;
+  left: 30%;
+  width: 35px;
+  height: 35px;
+  transform: rotate(30deg);
+  animation-delay: 4s;
+}
+
+.poly-4 {
+  bottom: 25%;
+  right: 45%;
+  width: 20px;
+  height: 20px;
+  transform: rotate(15deg);
+  animation-delay: 6s;
+}
+
+@keyframes floatAnimation {
+  0%, 100% {
+    transform: translateY(0) rotate(45deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-15px) rotate(35deg);
+    opacity: 0.9;
+  }
+}
+
+/* Animated gradient text */
+@keyframes cosmicTextFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
 /* Responsive styles */
+@media (max-width: 1200px) {
+  .cosmic-title {
+    font-size: 3.5rem;
+  }
+  
+  .hero-description {
+    font-size: 1.1rem;
+  }
+  
+  .orbital-path {
+    width: 120px;
+    height: 120px;
+    right: 10%;
+  }
+  
+  .cosmic-sphere {
+    width: 50px;
+    height: 50px;
+  }
+}
+
 @media (max-width: 992px) {
   .cosmic-title {
     font-size: 3rem;
@@ -224,19 +370,27 @@ export default {
   }
   
   .orbital-path {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
   }
   
-  .cosmic-sphere {
-    width: 50px;
-    height: 50px;
+  .stat-item {
+    min-width: 100px;
+    padding: var(--space-sm);
+  }
+  
+  .stat-value {
+    font-size: 1.8rem;
+  }
+  
+  .stat-label {
+    font-size: 0.75rem;
   }
 }
 
 @media (max-width: 768px) {
   .roadmap-hero {
-    min-height: 250px;
+    min-height: 320px;
     padding: var(--space-lg) 0;
   }
   
@@ -246,24 +400,31 @@ export default {
   
   .hero-description {
     font-size: 1rem;
+    margin-bottom: var(--space-md);
+  }
+  
+  .roadmap-stats {
+    gap: var(--space-md);
   }
   
   .orbital-path {
-    right: 10%;
-    width: 80px;
-    height: 80px;
+    opacity: 0.6;
+    right: 5%;
   }
   
   .cosmic-sphere {
-    left: 10%;
-    width: 40px;
-    height: 40px;
+    opacity: 0.6;
+    left: 5%;
+  }
+  
+  .floating-poly {
+    opacity: 0.3;
   }
 }
 
 @media (max-width: 576px) {
   .roadmap-hero {
-    min-height: 200px;
+    min-height: 300px;
     padding: var(--space-md) 0;
   }
   
@@ -273,6 +434,39 @@ export default {
   
   .hero-description {
     font-size: 0.9rem;
+  }
+  
+  .roadmap-stats {
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    padding: var(--space-xs) var(--space-sm);
+    min-width: auto;
+    gap: var(--space-sm);
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+  }
+  
+  .stat-label {
+    font-size: 0.7rem;
+  }
+  
+  .orbital-path, .cosmic-sphere {
+    display: none;
+  }
+  
+  .floating-poly {
+    opacity: 0.2;
   }
 }
 </style> 

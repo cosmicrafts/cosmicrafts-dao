@@ -1,9 +1,18 @@
 /**
  * Roadmap Component Module
- * Exports the RoadmapDisplay component for easier imports
+ * Exports all roadmap components for easier imports
  */
 
 import RoadmapDisplay from './RoadmapDisplay.vue';
+import RoadmapHero from './RoadmapHero.vue';
+import SearchFilters from './SearchFilters.vue';
+import RoadmapHarmonizer from './RoadmapHarmonizer.js';
 
-export { RoadmapDisplay };
+export { 
+  RoadmapDisplay,
+  RoadmapHero,
+  SearchFilters,
+  RoadmapHarmonizer
+};
+
 export default RoadmapDisplay; 
