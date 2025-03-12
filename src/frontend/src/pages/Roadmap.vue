@@ -17,12 +17,10 @@
 
     <!-- Roadmap Display - Container for full width -->
     <div class="roadmap-display-container">
-      <div class="cosmic-container">
-        <RoadmapDisplay 
-          :quarters="filteredQuarters"
-          @update:quarters="quarters = $event"
-        />
-      </div>
+      <RoadmapDisplay 
+        :quarters="filteredQuarters"
+        @update:quarters="quarters = $event"
+      />
     </div>
   </div>
 </template>
@@ -158,22 +156,63 @@ export default {
 </script>
 
 <style scoped>
-/* Base Styling */
+/* Import centralized variables */
+@import '@/components/roadmap/styles/roadmap-variables.css';
+
+/* Base Styling with enhanced futuristic look */
 .roadmap-page {
   min-height: 100vh;
-  color: var(--cosmic-text-primary);
+  color: rgba(var(--text-primary-rgb), 1);
   position: relative;
   overflow: hidden;
-  padding-top: 4rem;
-  background: linear-gradient(135deg, #0c1016f0, #141b2af0, #0c1016f0), url('@/assets/webp/login.webp') no-repeat center center;
+  padding-top: 3.5rem;
+  background: linear-gradient(
+    145deg, 
+    rgba(8, 15, 30, 0.97), 
+    rgba(15, 25, 45, 0.97), 
+    rgba(10, 18, 35, 0.97)
+  ), 
+  url('@/assets/webp/login.webp') no-repeat center center;
   background-size: cover;
+  font-family: var(--font-family, 'Inter', system-ui, sans-serif);
+  backdrop-filter: brightness(0.8) contrast(1.05) saturate(1.3);
 }
 
-/* Section Containers */
-.roadmap-search-container,
-.roadmap-display-container {
+/* Add subtle animated glow to the page background */
+.roadmap-page.with-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at 50% 0%, 
+    rgba(var(--cosmic-blue-rgb), 0.08),
+    rgba(var(--cosmic-purple-rgb), 0.05),
+    transparent 60%
+  );
+  pointer-events: none;
+  animation: pulse-bg 12s infinite alternate;
+}
+
+@keyframes pulse-bg {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Section Containers - Adjusted for full-width display */
+.roadmap-search-container {
   width: 100%;
-  padding: var(--space-lg) 0;
+  padding: var(--space-xl) 0 var(--space-md);
+  position: relative;
+  z-index: 2;
 }
 
 /* First container needs less padding at the bottom since display container follows */
@@ -181,15 +220,98 @@ export default {
   padding-bottom: 0;
 }
 
+/* Roadmap display container with expanded width */
+.roadmap-display-container {
+  width: 100%;
+  padding: var(--space-md) 0 var(--space-xxl);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* Full-width container for search filters */
+.cosmic-container {
+  width: 100%;
+  max-width: 1440px; /* Limit max width for very large screens */
+  margin: 0 auto;
+  padding: 0 var(--container-padding-desktop);
+}
+
 /* Media Queries for Responsive Design */
+@media (max-width: 1599px) {
+  .cosmic-container {
+    max-width: 1280px;
+    padding: 0 var(--container-padding-desktop);
+  }
+}
+
+@media (max-width: 1199px) {
+  .cosmic-container {
+    max-width: 100%;
+    padding: 0 var(--container-padding-tablet);
+  }
+  
+  .roadmap-search-container,
+  .roadmap-display-container {
+    padding: var(--space-lg) 0 var(--space-md);
+  }
+}
+
 @media (max-width: 768px) {
   .roadmap-page {
     padding-top: 2rem;
   }
   
+  .cosmic-container {
+    padding: 0 var(--container-padding-mobile);
+  }
+  
   .roadmap-search-container,
   .roadmap-display-container {
-    padding: var(--space-md) 0;
+    padding: var(--space-md) 0 var(--space-sm);
+  }
+  
+  .roadmap-display-container {
+    overflow-x: auto;
+    padding-bottom: var(--space-xl);
+  }
+}
+
+@media (max-width: 576px) {
+  .roadmap-page {
+    padding-top: 1rem;
+  }
+  
+  .cosmic-container {
+    padding: 0 calc(var(--container-padding-mobile) * 0.75);
+  }
+  
+  .roadmap-search-container {
+    padding-bottom: 0;
+  }
+  
+  .roadmap-page.with-glow::before {
+    animation: none;
+    opacity: 0.4;
+  }
+}
+
+/* For print layout */
+@media print {
+  .roadmap-page {
+    padding: 0;
+    background: white;
+  }
+  
+  .roadmap-search-container {
+    display: none;
+  }
+  
+  .cosmic-container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
   }
 }
 </style>

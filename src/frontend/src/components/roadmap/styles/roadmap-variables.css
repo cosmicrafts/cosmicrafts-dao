@@ -1,0 +1,307 @@
+/* COSMIC ROADMAP: CENTRAL VARIABLE DEFINITIONS
+ * Single source of truth for all roadmap styling variables
+ * Used across all roadmap components for consistent styling
+ */
+
+:root {
+  /* =================
+   * COLOR VARIABLES - Enhanced Futuristic Palette
+   * ================= */
+  
+  /* Primary color palette - RGB format for flexibility */
+  --cosmic-blue-rgb: 25, 210, 255;       /* #19D2FF - Enhanced Electric Blue Primary */
+  --cosmic-purple-rgb: 130, 95, 255;     /* #825FFF - Enhanced Neo Purple Secondary */
+  --cosmic-magenta-rgb: 255, 40, 220;    /* #FF28DC - Enhanced Cyber Pink Accent */
+  --cosmic-green-rgb: 10, 255, 180;      /* #0AFFB4 - Enhanced Neon Green Success */
+  --cosmic-orange-rgb: 255, 155, 25;     /* #FF9B19 - Enhanced Amber Warning */
+  --cosmic-red-rgb: 255, 65, 105;        /* #FF4169 - Enhanced Plasma Red Error */
+  --cosmic-yellow-rgb: 255, 220, 15;     /* #FFDC0F - Enhanced Quantum Yellow */
+  --cosmic-teal-rgb: 15, 245, 235;       /* #0FF5EB - Enhanced Cyber Teal */
+  
+  /* Status colors mapped to semantic meaning */
+  --status-completed-rgb: var(--cosmic-green-rgb);
+  --status-in-progress-rgb: var(--cosmic-blue-rgb);
+  --status-planned-rgb: var(--cosmic-purple-rgb);
+  --status-delayed-rgb: var(--cosmic-orange-rgb);
+  --status-cancelled-rgb: var(--cosmic-red-rgb);
+  
+  /* Background depth levels - creates layering effect with enhanced depth */
+  --bg-depth-0-rgb: 6, 10, 20;           /* #060A14 - Deep Space background */
+  --bg-depth-1-rgb: 10, 16, 32;          /* #0A1020 - Deep panels */
+  --bg-depth-2-rgb: 16, 25, 48;          /* #101930 - Mid panels */
+  --bg-depth-3-rgb: 24, 38, 68;          /* #182644 - Surface panels */
+  --bg-depth-4-rgb: 38, 58, 95;          /* #263A5F - Elevated panels */
+  
+  /* Text colors */
+  --text-primary-rgb: 248, 252, 255;     /* #F8FCFF - Primary text */
+  --text-secondary-rgb: 195, 225, 255;   /* #C3E1FF - Secondary text */
+  --text-disabled-rgb: 140, 170, 210;    /* #8CAAD2 - Disabled text */
+  
+  /* =================
+   * SPACING SYSTEM - Enhanced for greater distinction
+   * ================= */
+  --space-xxs: 0.4rem;    /* 6.4px */
+  --space-xs: 0.7rem;     /* 11.2px */
+  --space-sm: 0.9rem;     /* 14.4px */
+  --space-md: 1.35rem;    /* 21.6px */
+  --space-lg: 1.85rem;    /* 29.6px */
+  --space-xl: 2.75rem;    /* 44px */
+  --space-xxl: 3.75rem;   /* 60px */
+  --space-xxxl: 5rem;     /* 80px */
+  
+  /* =================
+   * TYPOGRAPHY SYSTEM - Futuristic scale
+   * ================= */
+  --base-font-size: 16px;
+  --base-line-height: 1.55;
+  
+  /* Font sizes - using rem for accessibility */
+  --font-size-xs: 0.8125rem;    /* 13px */
+  --font-size-sm: 0.9375rem;    /* 15px */
+  --font-size-md: 1.0625rem;    /* 17px */
+  --font-size-lg: 1.25rem;      /* 20px */
+  --font-size-xl: 1.625rem;     /* 26px */
+  --font-size-2xl: 2rem;        /* 32px */
+  --font-size-3xl: 2.5rem;      /* 40px */
+  --font-size-4xl: 3rem;        /* 48px */
+  
+  /* Font weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* =================
+   * LAYOUT VARIABLES - Enhanced with more depth
+   * ================= */
+  --border-radius-sm: 6px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 14px;
+  --border-radius-xl: 20px;
+  --border-radius-circle: 50%;
+  --border-radius-full: 9999px;
+  
+  /* Shadow effects for depth */
+  --shadow-sm: 0 3px 12px rgba(0, 0, 0, 0.15), 0 0 3px rgba(0, 0, 0, 0.23);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.18), 0 0 6px rgba(0, 0, 0, 0.23);
+  --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.22), 0 0 10px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 18px 36px rgba(0, 0, 0, 0.23), 0 0 18px rgba(0, 0, 0, 0.12);
+  
+  /* Glow effects */
+  --glow-blue: 0 0 20px rgba(var(--cosmic-blue-rgb), 0.45);
+  --glow-purple: 0 0 20px rgba(var(--cosmic-purple-rgb), 0.45);
+  --glow-green: 0 0 20px rgba(var(--cosmic-green-rgb), 0.45);
+  
+  /* Timeline specific layout variables */
+  --timeline-width: 6px;
+  --timeline-position: 130px; /* Will be overridden by responsive values */
+  --container-padding: 160px; /* Will be overridden by responsive values */
+  
+  /* Node sizing - increased for better visibility */
+  --node-size-large: 38px;  /* Will be overridden by responsive values */
+  --node-size-medium: 30px; /* Will be overridden by responsive values */
+  --node-size-small: 20px;  /* Will be overridden by responsive values */
+  
+  /* =================
+   * ANIMATION VARIABLES
+   * ================= */
+  --cosmic-transition-fast: 0.2s;
+  --cosmic-transition-medium: 0.35s;
+  --cosmic-transition-slow: 0.6s;
+  --cosmic-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --cosmic-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* =================
+   * RESPONSIVE VARIABLES
+   * ================= */
+  /* Container sizing */
+  --container-max-width: 100%;
+  --container-padding-desktop: 3.5rem;
+  --container-padding-tablet: 2.25rem;
+  --container-padding-mobile: 1.35rem;
+  
+  /* Responsive timeline positioning */
+  --timeline-position-desktop: 130px;
+  --timeline-position-tablet: 110px;
+  --timeline-position-mobile: 70px;
+  
+  /* Responsive nodal elements */
+  --node-size-large-desktop: 38px;
+  --node-size-large-tablet: 34px;
+  --node-size-large-mobile: 30px;
+  
+  --node-size-medium-desktop: 30px;
+  --node-size-medium-tablet: 26px;
+  --node-size-medium-mobile: 22px;
+  
+  /* Fluid typography */
+  --fluid-type-min: 0.95;
+  --fluid-type-max: 1.05;
+  
+  /* Breakpoints - also saved as variables for JavaScript use */
+  --breakpoint-xs: 576px;
+  --breakpoint-sm: 768px; 
+  --breakpoint-md: 992px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1400px;
+}
+
+/* Fluid typography calculation - scales font size based on viewport width */
+@media screen and (min-width: 320px) {
+  :root {
+    --fluid-font-size: calc(var(--fluid-type-min) * 1rem + (var(--fluid-type-max) - var(--fluid-type-min)) * ((100vw - 320px) / (1920 - 320)));
+    
+    /* Font sizes for different elements using fluid scaling */
+    --quarter-title-size: calc(1.9rem * var(--fluid-font-size));
+    --milestone-title-size: calc(1.5rem * var(--fluid-font-size));
+    --task-title-size: calc(1.25rem * var(--fluid-font-size));
+    --description-size: calc(1.05rem * var(--fluid-font-size));
+    --meta-size: calc(0.925rem * var(--fluid-font-size));
+    --subtask-size: calc(0.975rem * var(--fluid-font-size));
+  }
+}
+
+/* Responsive adjustments to core variables */
+@media (max-width: 1200px) {
+  :root {
+    --timeline-position: var(--timeline-position-tablet);
+    --container-padding: calc(var(--timeline-position-tablet) + 45px);
+    --node-size-large: var(--node-size-large-tablet);
+    --node-size-medium: var(--node-size-medium-tablet);
+  }
+}
+
+@media (max-width: 992px) {
+  :root {
+    --timeline-position: 90px;
+    --container-padding: 120px;
+    --node-size-large: 32px;
+    --node-size-medium: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --timeline-position: var(--timeline-position-mobile);
+    --container-padding: calc(var(--timeline-position-mobile) + 30px);
+    --timeline-width: 5px;
+    --node-size-large: var(--node-size-large-mobile);
+    --node-size-medium: var(--node-size-medium-mobile);
+    --cosmic-transition-fast: 0.25s; /* Slower transitions on mobile for better UX */
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    --timeline-position: 50px;
+    --container-padding: 70px;
+    --node-size-large: 26px;
+    --node-size-medium: 20px;
+    --timeline-width: 4px;
+  }
+}
+
+/* Enhanced gradients definitions with futuristic glow effect */
+:root {
+  --cosmic-gradient-blue: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-blue-rgb), 0.95) 0%,
+    rgba(var(--cosmic-blue-rgb), 0.75) 100%
+  );
+  
+  --cosmic-gradient-purple: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-purple-rgb), 0.95) 0%,
+    rgba(var(--cosmic-purple-rgb), 0.75) 100%
+  );
+  
+  --cosmic-gradient-blue-purple: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-blue-rgb), 0.9) 0%,
+    rgba(var(--cosmic-purple-rgb), 0.7) 100%
+  );
+  
+  --cosmic-gradient-blue-orange: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-blue-rgb), 0.9) 0%,
+    rgba(var(--cosmic-orange-rgb), 0.7) 100%
+  );
+  
+  --cosmic-gradient-purple-orange: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-purple-rgb), 0.9) 0%,
+    rgba(var(--cosmic-orange-rgb), 0.7) 100%
+  );
+  
+  /* Futuristic glass effects */
+  --cosmic-gradient-glass: linear-gradient(
+    135deg,
+    rgba(var(--bg-depth-3-rgb), 0.7) 0%,
+    rgba(var(--bg-depth-2-rgb), 0.9) 100%
+  );
+  
+  --cosmic-gradient-glass-blue: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-blue-rgb), 0.18) 0%,
+    rgba(var(--cosmic-blue-rgb), 0.06) 100%
+  );
+  
+  --cosmic-gradient-glass-purple: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-purple-rgb), 0.18) 0%,
+    rgba(var(--cosmic-purple-rgb), 0.06) 100%
+  );
+  
+  /* New enhanced gradients for panels */
+  --cosmic-gradient-panel: linear-gradient(
+    135deg,
+    rgba(var(--bg-depth-2-rgb), 0.85) 0%,
+    rgba(var(--bg-depth-3-rgb), 0.9) 50%,
+    rgba(var(--bg-depth-2-rgb), 0.95) 100%
+  );
+  
+  --cosmic-gradient-panel-blue: linear-gradient(
+    135deg,
+    rgba(var(--bg-depth-2-rgb), 0.85) 0%,
+    rgba(var(--bg-depth-3-rgb), 0.9) 50%,
+    rgba(var(--cosmic-blue-rgb), 0.15) 100%
+  );
+  
+  --cosmic-gradient-panel-purple: linear-gradient(
+    135deg,
+    rgba(var(--bg-depth-2-rgb), 0.85) 0%,
+    rgba(var(--bg-depth-3-rgb), 0.9) 50%,
+    rgba(var(--cosmic-purple-rgb), 0.15) 100%
+  );
+  
+  /* Status gradients */
+  --cosmic-gradient-completed: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-green-rgb), 0.2) 0%,
+    rgba(var(--cosmic-green-rgb), 0.05) 100%
+  );
+  
+  --cosmic-gradient-in-progress: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-blue-rgb), 0.2) 0%,
+    rgba(var(--cosmic-blue-rgb), 0.05) 100%
+  );
+  
+  --cosmic-gradient-planned: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-purple-rgb), 0.2) 0%,
+    rgba(var(--cosmic-purple-rgb), 0.05) 100%
+  );
+  
+  --cosmic-gradient-delayed: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-orange-rgb), 0.2) 0%,
+    rgba(var(--cosmic-orange-rgb), 0.05) 100%
+  );
+  
+  --cosmic-gradient-cancelled: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-red-rgb), 0.2) 0%,
+    rgba(var(--cosmic-red-rgb), 0.05) 100%
+  );
+} 

@@ -1,0 +1,487 @@
+/* COSMIC ROADMAP: RESPONSIVE ENHANCEMENTS
+ * Comprehensive responsive styles for roadmap components
+ * Ensures proper display across devices from mobile to desktop
+ */
+
+/* Overrides for roadmap variables are now in roadmap-variables.css */
+
+/* Common responsive styles for all device sizes */
+.cosmic-roadmap {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+}
+
+/* Laptop/Desktop (≥1200px) */
+@media (min-width: 1200px) {
+  .cosmic-roadmap {
+    padding: var(--space-xxxl) var(--space-xl);
+  }
+  
+  .quarters-container {
+    margin-left: var(--container-padding);
+  }
+  
+  .quarter-panel {
+    max-width: calc(100% - var(--timeline-position) - 2rem);
+  }
+  
+  .tasks-container {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--space-md);
+  }
+  
+  /* Enhanced interactions for desktop */
+  .milestone:hover {
+    transform: translateY(-3px) translateX(3px);
+  }
+  
+  .task-card:hover {
+    transform: translateY(-2px) translateX(2px);
+  }
+  
+  /* Quarter title in desktop */
+  .quarter-title {
+    font-size: calc(var(--font-size-xl) * 1.2);
+  }
+  
+  /* Improved desktop progress visualization */
+  .progress-container {
+    height: 4px;
+  }
+  
+  .progress-bar {
+    transition: width 0.6s var(--cosmic-easing);
+  }
+  
+  /* Enhanced toggle size */
+  .toggle-line.horizontal {
+    width: 18px;
+  }
+  
+  .toggle-line.vertical {
+    height: 18px;
+  }
+  
+  /* Enhanced desktop spacing */
+  .quarter {
+    margin-bottom: var(--space-xxl);
+  }
+  
+  .milestone {
+    padding: var(--space-lg) var(--space-xl);
+    margin: var(--space-lg) 0 var(--space-xl);
+  }
+  
+  .milestone-title {
+    font-size: calc(var(--font-size-lg) * 1.1);
+  }
+  
+  .task-card {
+    padding: var(--space-md) var(--space-lg);
+  }
+  
+  /* Enhanced hover effects only for desktop */
+  .quarter:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+      var(--shadow-lg),
+      0 0 60px rgba(var(--cosmic-blue-rgb), 0.1);
+  }
+  
+  /* Timeline positioning */
+  .timeline-axis {
+    width: calc(var(--timeline-width) * 1.2);
+  }
+  
+  /* Enhanced node visualization for desktop */
+  .quarter-node {
+    width: calc(var(--node-size-large) * 1.2);
+    height: calc(var(--node-size-large) * 1.2);
+    font-size: calc(var(--font-size-md) * 1.2);
+  }
+  
+  .milestone-node {
+    width: calc(var(--node-size-medium) * 1.2);
+    height: calc(var(--node-size-medium) * 1.2);
+  }
+  
+  .task-node {
+    width: calc(var(--node-size-small) * 1.2);
+    height: calc(var(--node-size-small) * 1.2);
+  }
+}
+
+/* Tablet (≥768px) and smaller desktops */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .cosmic-roadmap {
+    padding: var(--space-xl) var(--space-lg);
+  }
+  
+  .quarters-container {
+    margin-left: var(--container-padding);
+  }
+  
+  .tasks-container {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-sm);
+  }
+  
+  .quarter-title {
+    font-size: calc(var(--font-size-lg) * 1.1);
+  }
+  
+  .milestone-title {
+    font-size: calc(var(--font-size-md) * 1.1);
+  }
+  
+  .task-title {
+    font-size: calc(var(--font-size-sm) * 1.1);
+  }
+  
+  /* Simplified animations for tablet */
+  .milestone:hover {
+    transform: translateY(-3px);
+  }
+  
+  /* Adjust spacing for better tablet experience */
+  .quarter-header, 
+  .milestone-header,
+  .task-header {
+    padding: var(--space-md);
+  }
+  
+  .subtask-checkbox input[type="checkbox"] {
+    transform: scale(1.1);
+  }
+  
+  /* Timeline axis adjustment */
+  .timeline-axis {
+    width: var(--timeline-width);
+  }
+  
+  /* Container adjustments */
+  .quarter {
+    margin-bottom: var(--space-lg);
+  }
+  
+  .milestone {
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-md) 0;
+  }
+  
+  /* Node Adjustments */
+  .quarter-node {
+    width: var(--node-size-large);
+    height: var(--node-size-large);
+  }
+}
+
+/* Mobile (≤767px) */
+@media (max-width: 767px) {
+  .cosmic-roadmap {
+    padding: var(--space-lg) var(--space-md);
+    overflow-x: hidden;
+  }
+  
+  .quarters-container {
+    margin-left: var(--container-padding);
+    width: calc(100% - var(--container-padding) + var(--space-sm));
+  }
+  
+  .quarter-panel {
+    max-width: calc(100% - var(--timeline-position) + var(--space-xs));
+  }
+  
+  .quarter-title {
+    font-size: var(--font-size-lg);
+    line-height: 1.4;
+  }
+  
+  .quarter-description {
+    font-size: var(--description-size);
+    line-height: 1.5;
+  }
+  
+  .milestone-title {
+    font-size: var(--milestone-title-size);
+  }
+  
+  .milestone-description {
+    font-size: var(--description-size);
+  }
+  
+  /* Single column task layout for mobile */
+  .tasks-container {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+    padding: var(--space-xs);
+  }
+  
+  .task-title {
+    font-size: var(--task-title-size);
+  }
+  
+  .task-description {
+    font-size: var(--description-size);
+  }
+  
+  /* Adjust spacing for smaller screens */
+  .quarter-header, 
+  .milestone-header,
+  .task-header {
+    padding: var(--space-sm);
+  }
+  
+  .milestone {
+    margin-bottom: var(--space-sm);
+  }
+  
+  .task-card {
+    margin-bottom: var(--space-xs);
+  }
+  
+  /* Stack metadata elements for better mobile display */
+  .task-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+  
+  .task-status {
+    margin-top: var(--space-xs);
+  }
+  
+  .progress-wrapper {
+    width: 100%;
+  }
+  
+  /* Mobile-specific touch feedback */
+  .mobile-tap-highlight {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .mobile-tap-highlight::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(var(--cosmic-blue-rgb), 0);
+    pointer-events: none;
+    transition: background-color var(--cosmic-transition-fast);
+  }
+  
+  .mobile-touch-active::after {
+    background: rgba(var(--cosmic-blue-rgb), 0.1);
+  }
+  
+  .mobile-touch-highlight::after {
+    background: rgba(var(--cosmic-blue-rgb), 0.1);
+    animation: touch-ripple var(--cosmic-transition-medium) var(--cosmic-easing) forwards;
+  }
+  
+  @keyframes touch-ripple {
+    0% {
+      background: rgba(var(--cosmic-blue-rgb), 0.1);
+      transform: scale(1);
+    }
+    100% {
+      background: rgba(var(--cosmic-blue-rgb), 0);
+      transform: scale(1.05);
+    }
+  }
+  
+  /* Optimize scrolling for touch devices */
+  .quarters-container,
+  .milestones-container,
+  .tasks-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  /* Make checkboxes larger for touch targets */
+  input[type="checkbox"] {
+    min-width: 24px;
+    min-height: 24px;
+  }
+  
+  /* Add padding to small touch targets */
+  .task-tag,
+  .task-status {
+    padding: 0.4rem 0.7rem;
+  }
+  
+  /* Fix for iOS Safari overscroll behavior */
+  .cosmic-roadmap {
+    position: relative;
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  
+  /* Fix for potential Safari rendering issues */
+  .quarter-panel,
+  .milestone,
+  .task-card {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  
+  /* Optimize subtask display for mobile */
+  .subtask-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+  
+  .subtask-status {
+    margin-left: 32px;
+    margin-top: var(--space-xs);
+    font-size: var(--meta-size);
+  }
+  
+  .subtask-description {
+    font-size: var(--meta-size);
+  }
+  
+  /* Quarter date positioning for mobile */
+  .quarter-date {
+    font-size: var(--meta-size);
+    min-width: 70px;
+    left: calc(var(--node-size-large) * -1.5 - var(--space-md));
+  }
+  
+  /* Hide optional elements or simplify for mobile */
+  .timeline-axis::before,
+  .timeline-axis::after {
+    opacity: 0.5;
+    width: 2px;
+  }
+  
+  /* Transition speed adjustments for mobile */
+  .cosmic-toggle .toggle-line,
+  .task-card,
+  .milestone,
+  .quarter-panel {
+    transition-duration: var(--transition-speed-mobile, 0.2s);
+  }
+  
+  /* Touch target size improvements */
+  .cosmic-toggle {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .toggle-line.horizontal {
+    width: 18px;
+  }
+  
+  .toggle-line.vertical {
+    height: 18px;
+  }
+}
+
+/* Small Mobile (≤576px) */
+@media (max-width: 576px) {
+  .quarter-title {
+    font-size: calc(1.1rem * var(--fluid-font-size));
+  }
+  
+  .milestone-title {
+    font-size: calc(1rem * var(--fluid-font-size));
+  }
+  
+  .task-title {
+    font-size: calc(0.95rem * var(--fluid-font-size));
+  }
+  
+  /* Stack headers completely on tiny screens */
+  .quarter-meta,
+  .milestone-meta {
+    margin-top: var(--space-xs);
+  }
+  
+  .quarter-header,
+  .milestone-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .quarter-node {
+    width: var(--node-size-large);
+    height: var(--node-size-large);
+  }
+  
+  /* Optimize for very small screens */
+  .task-tags {
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+  
+  .task-tag {
+    font-size: calc(0.7rem * var(--fluid-font-size));
+    padding: 0.1rem 0.4rem;
+  }
+  
+  /* Reduce spacing even further */
+  .quarter-header, 
+  .milestone-header,
+  .task-header {
+    padding: var(--space-xs) var(--space-sm);
+  }
+  
+  /* Enhance tap target sizes */
+  .cosmic-toggle {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Print styles for roadmap */
+@media print {
+  .cosmic-roadmap {
+    padding: 0;
+    background: white !important;
+    color: black !important;
+  }
+  
+  .quarter-panel,
+  .milestone,
+  .task-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+  }
+  
+  /* Force all sections to be visible when printing */
+  .quarter,
+  .milestone,
+  .task-card {
+    display: block !important;
+  }
+  
+  .quarter-meta,
+  .milestone-meta,
+  .task-footer {
+    display: flex !important;
+  }
+  
+  .quarter.active .quarter-panel,
+  .milestone.active {
+    box-shadow: none !important;
+  }
+  
+  /* Hide interactive elements from print */
+  .cosmic-toggle,
+  .timeline-axis::before,
+  .timeline-axis::after,
+  .quarter-node::after,
+  .quarter-node::before {
+    display: none !important;
+  }
+} 

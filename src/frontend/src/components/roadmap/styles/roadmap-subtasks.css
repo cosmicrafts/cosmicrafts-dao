@@ -1,0 +1,215 @@
+/* COSMIC ROADMAP: SUBTASKS COMPONENT
+ * Styling for the subtasks component in the cosmic roadmap
+ * Enhanced with futuristic styling and interactivity
+ */
+
+/* Subtasks container */
+.subtasks-container {
+  margin-top: var(--space-md);
+  border-radius: var(--border-radius-md);
+  background: rgba(var(--bg-depth-4-rgb), 0.5);
+  padding: var(--space-sm);
+  border: 1px solid rgba(var(--bg-depth-4-rgb), 0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle gradient background for subtasks container */
+.subtasks-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-teal-rgb), 0.02) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Individual subtask */
+.subtask {
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: var(--space-xs);
+  background: rgba(var(--bg-depth-3-rgb), 0.6);
+  position: relative;
+  transition: all var(--cosmic-transition-medium);
+  border-left: 2px solid rgba(var(--cosmic-teal-rgb), 0.5);
+  overflow: hidden;
+}
+
+/* Subtask hover effects */
+.subtask:hover {
+  background: rgba(var(--bg-depth-3-rgb), 0.8);
+  border-left-color: rgba(var(--cosmic-teal-rgb), 0.8);
+  transform: translateX(2px);
+}
+
+/* Subtask header with checkbox and status */
+.subtask-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xs);
+}
+
+/* Subtask checkbox container */
+.subtask-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex: 1;
+}
+
+/* Custom checkbox styling */
+.subtask-checkbox input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--border-radius-sm);
+  background: rgba(var(--bg-depth-2-rgb), 0.6);
+  border: 1px solid rgba(var(--cosmic-teal-rgb), 0.4);
+  position: relative;
+  cursor: pointer;
+  transition: all var(--cosmic-transition-medium);
+}
+
+/* Checkbox hover state */
+.subtask-checkbox input[type="checkbox"]:hover {
+  background: rgba(var(--cosmic-teal-rgb), 0.1);
+  border-color: rgba(var(--cosmic-teal-rgb), 0.6);
+  box-shadow: 0 0 8px rgba(var(--cosmic-teal-rgb), 0.3);
+}
+
+/* Checkbox checked state */
+.subtask-checkbox input[type="checkbox"]:checked {
+  background: rgba(var(--cosmic-teal-rgb), 0.8);
+  border-color: rgba(var(--cosmic-teal-rgb), 0.6);
+  box-shadow: 0 0 5px rgba(var(--cosmic-teal-rgb), 0.4);
+}
+
+/* Checkbox checkmark */
+.subtask-checkbox input[type="checkbox"]:checked::after {
+  content: '\2713';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(var(--bg-depth-0-rgb), 0.95);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Subtask label */
+.subtask-checkbox label {
+  font-size: var(--font-size-sm);
+  color: rgba(var(--text-primary-rgb), 0.9);
+  cursor: pointer;
+  transition: color var(--cosmic-transition-medium);
+}
+
+/* Checkbox hover label effect */
+.subtask-checkbox input[type="checkbox"]:hover + label {
+  color: rgba(var(--cosmic-teal-rgb), 0.9);
+}
+
+/* Label for completed subtask */
+.subtask.completed .subtask-checkbox label {
+  text-decoration: line-through;
+  color: rgba(var(--text-secondary-rgb), 0.7);
+}
+
+/* Subtask status indicator */
+.subtask-status {
+  font-size: var(--font-size-xs);
+  padding: 2px 8px;
+  border-radius: var(--border-radius-full);
+  background: rgba(var(--bg-depth-2-rgb), 0.6);
+  color: rgba(var(--text-secondary-rgb), 0.9);
+  border: 1px solid rgba(var(--bg-depth-4-rgb), 0.5);
+  white-space: nowrap;
+}
+
+/* Completed status indicator */
+.subtask-status.completed {
+  background: rgba(var(--cosmic-green-rgb), 0.1);
+  color: rgba(var(--cosmic-green-rgb), 0.95);
+  border-color: rgba(var(--cosmic-green-rgb), 0.3);
+}
+
+/* Subtask description */
+.subtask-description {
+  font-size: var(--font-size-xs);
+  color: rgba(var(--text-secondary-rgb), 0.8);
+  margin-left: calc(18px + var(--space-xs));
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+/* Completed subtask styling */
+.subtask.completed {
+  border-left-color: rgba(var(--cosmic-green-rgb), 0.5);
+  opacity: 0.8;
+}
+
+.subtask.completed:hover {
+  border-left-color: rgba(var(--cosmic-green-rgb), 0.8);
+  opacity: 1;
+}
+
+/* Subtask actions */
+.subtask-actions {
+  margin-top: var(--space-xs);
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: flex-end;
+}
+
+.subtask-action-btn {
+  font-size: var(--font-size-xs);
+  padding: 2px 8px;
+  background: rgba(var(--bg-depth-2-rgb), 0.7);
+  border: 1px solid rgba(var(--bg-depth-4-rgb), 0.5);
+  border-radius: var(--border-radius-sm);
+  color: rgba(var(--text-secondary-rgb), 0.8);
+  cursor: pointer;
+  transition: all var(--cosmic-transition-medium);
+}
+
+.subtask-action-btn:hover {
+  background: rgba(var(--cosmic-teal-rgb), 0.15);
+  color: rgba(var(--cosmic-teal-rgb), 0.95);
+  border-color: rgba(var(--cosmic-teal-rgb), 0.3);
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 767px) {
+  .subtask {
+    padding: var(--space-xs);
+  }
+  
+  .subtask-header {
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+  
+  .subtask-checkbox {
+    flex: 1 0 100%;
+  }
+  
+  .subtask-status {
+    margin-left: calc(18px + var(--space-xs));
+    margin-top: var(--space-xs);
+  }
+  
+  .subtask-description {
+    margin-top: var(--space-xs);
+  }
+} 
