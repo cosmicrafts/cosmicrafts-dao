@@ -28,6 +28,55 @@
   --bg-depth-3-rgb: 25, 45, 75;         /* Surface panels - #192D4B */
   --bg-depth-4-rgb: 35, 55, 90;         /* Elevated panels - #23375A */
   
+  /* Enhanced gradients with orange focus */
+  --cosmic-gradient-blue-orange: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-blue-rgb), 0.9) 0%,
+    rgba(var(--cosmic-orange-rgb), 0.7) 100%
+  );
+  
+  --cosmic-gradient-purple-orange: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-purple-rgb), 0.9) 0%,
+    rgba(var(--cosmic-orange-rgb), 0.7) 100%
+  );
+  
+  --cosmic-gradient-orange-glow: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-orange-rgb), 0.15) 0%,
+    rgba(var(--cosmic-orange-rgb), 0.05) 100%
+  );
+  
+  --cosmic-gradient-glass-orange: linear-gradient(
+    145deg,
+    rgba(var(--cosmic-orange-rgb), 0.08) 0%,
+    rgba(var(--cosmic-orange-rgb), 0.03) 100%
+  );
+  
+  --cosmic-gradient-glass-purple-orange: linear-gradient(
+    145deg,
+    rgba(var(--cosmic-purple-rgb), 0.12) 0%,
+    rgba(var(--cosmic-orange-rgb), 0.07) 100%
+  );
+  
+  /* Enhanced glow effects */
+  --glow-orange-sm: 0 0 10px rgba(var(--cosmic-orange-rgb), 0.4);
+  --glow-orange-md: 0 0 20px rgba(var(--cosmic-orange-rgb), 0.5);
+  --glow-orange-lg: 0 0 30px rgba(var(--cosmic-orange-rgb), 0.6);
+  
+  --glow-purple-orange: 0 0 15px rgba(var(--cosmic-purple-rgb), 0.4),
+                      0 0 25px rgba(var(--cosmic-orange-rgb), 0.3);
+  
+  /* 3D and depth effects */
+  --cosmic-depth-shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.2);
+  --cosmic-depth-shadow-md: 0 8px 20px rgba(0, 0, 0, 0.25);
+  --cosmic-depth-shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.3);
+  
+  /* Text effects */
+  --cosmic-text-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --cosmic-text-shadow-md: 0 2px 6px rgba(0, 0, 0, 0.4);
+  --cosmic-text-shadow-lg: 0 3px 8px rgba(0, 0, 0, 0.5);
+  
   /* Rich gradients */
   --cosmic-gradient-blue: linear-gradient(135deg, 
     rgba(var(--cosmic-blue-rgb), 0.9) 0%, 
@@ -91,10 +140,6 @@
   --glow-green-sm: 0 0 10px rgba(var(--cosmic-green-rgb), 0.4);
   --glow-green-md: 0 0 20px rgba(var(--cosmic-green-rgb), 0.5);
   --glow-green-lg: 0 0 30px rgba(var(--cosmic-green-rgb), 0.6);
-  
-  --glow-orange-sm: 0 0 10px rgba(var(--cosmic-orange-rgb), 0.4);
-  --glow-orange-md: 0 0 20px rgba(var(--cosmic-orange-rgb), 0.5);
-  --glow-orange-lg: 0 0 30px rgba(var(--cosmic-orange-rgb), 0.6);
 }
 
 /* Main container with timeline */

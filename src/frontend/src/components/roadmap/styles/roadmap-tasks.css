@@ -3,6 +3,669 @@
  * Part of the modular roadmap CSS architecture
  */
 
+/* ==================================================
+   ROADMAP TASKS - Individual work items styling
+   ================================================== */
+
+/* Task container */
+.task {
+  position: relative;
+  margin-left: calc(var(--timeline-position) - var(--node-size-small)/2);
+  transition: all var(--transition-medium);
+}
+
+/* Task node - The circle on the timeline */
+.task-node {
+  position: absolute;
+  left: calc(-1 * var(--node-size-small)/2);
+  width: var(--node-size-small);
+  height: var(--node-size-small);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+/* Unique diamond node shape for tasks */
+.task-node::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--cosmic-gradient-purple);
+  border-radius: 2px;
+  transform: rotate(45deg);
+  box-shadow: var(--glow-purple-sm);
+  animation: pulse-subtle 3s infinite alternate;
+  z-index: -1;
+}
+
+@keyframes pulse-subtle {
+  0% {
+    box-shadow: var(--glow-purple-sm);
+    transform: rotate(45deg) scale(1);
+  }
+  100% {
+    box-shadow: var(--glow-purple-md);
+    transform: rotate(45deg) scale(1.08);
+  }
+}
+
+.task-node::after {
+  content: '';
+  position: absolute;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  background: rgba(var(--bg-depth-1-rgb), 0.8);
+  border-radius: 1px;
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+/* Horizontal line to connect task to panel */
+.task::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--node-size-small) / 2);
+  left: 0;
+  width: var(--spacing-sm);
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(var(--cosmic-purple-rgb), 0.6) 30%,
+    rgba(var(--cosmic-purple-rgb), 0.6) 100%
+  );
+}
+
+/* Task panel - contains all task content */
+.task-panel {
+  position: relative;
+  background: var(--cosmic-glass-purple);
+  border-radius: var(--cosmic-radius-md);
+  margin-left: var(--spacing-sm);
+  box-shadow: var(--cosmic-shadow-sm);
+  overflow: hidden;
+  border: var(--cosmic-glass-border-purple);
+  transition: all var(--transition-medium);
+  backdrop-filter: var(--cosmic-glass-blur);
+}
+
+/* Glass morphism accent for task panels */
+.task-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--cosmic-radius-md);
+  padding: 1px;
+  background: linear-gradient(
+    135deg, 
+    rgba(var(--cosmic-purple-rgb), 0.4) 0%, 
+    rgba(var(--cosmic-purple-rgb), 0) 50%,
+    rgba(var(--cosmic-purple-rgb), 0.2) 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Task header - contains title and actions */
+.task-header {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-purple-rgb), 0.1) 0%,
+    rgba(var(--bg-depth-1-rgb), 0.5) 100%
+  );
+  border-bottom: 1px solid rgba(var(--cosmic-purple-rgb), 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* Header accent line */
+.task-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--cosmic-purple-rgb), 0.8) 0%,
+    rgba(var(--cosmic-purple-rgb), 0.3) 50%,
+    rgba(var(--cosmic-purple-rgb), 0.8) 100%
+  );
+  box-shadow: var(--glow-purple-sm);
+  z-index: 2;
+}
+
+/* Task title */
+.task-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cosmic-text-primary);
+  text-shadow: var(--shadow-text-subtle);
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--cosmic-purple-rgb), 1), 
+    rgba(var(--cosmic-purple-rgb), 0.8)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.task-title i {
+  font-size: 0.9rem;
+  color: rgba(var(--cosmic-purple-rgb), 0.8);
+}
+
+/* Task toggle button */
+.task-toggle {
+  background: none;
+  border: none;
+  color: rgba(var(--cosmic-purple-rgb), 0.7);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  transition: all var(--transition-medium);
+}
+
+.task-toggle:hover {
+  color: rgba(var(--cosmic-purple-rgb), 0.9);
+  background: rgba(var(--cosmic-purple-rgb), 0.1);
+}
+
+/* Task content container */
+.task-content {
+  padding: var(--spacing-sm) var(--spacing-md);
+  overflow: hidden;
+}
+
+/* Task metadata */
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs) var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  align-items: center;
+}
+
+/* Status tag */
+.task-status {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Status colors */
+.status-completed {
+  background: rgba(var(--cosmic-green-rgb), 0.15);
+  color: rgba(var(--cosmic-green-rgb), 0.9);
+  border: 1px solid rgba(var(--cosmic-green-rgb), 0.3);
+}
+
+.status-in-progress {
+  background: rgba(var(--cosmic-blue-rgb), 0.15);
+  color: rgba(var(--cosmic-blue-rgb), 0.9);
+  border: 1px solid rgba(var(--cosmic-blue-rgb), 0.3);
+}
+
+.status-planned {
+  background: rgba(var(--cosmic-purple-rgb), 0.15);
+  color: rgba(var(--cosmic-purple-rgb), 0.9);
+  border: 1px solid rgba(var(--cosmic-purple-rgb), 0.3);
+}
+
+.status-delayed {
+  background: rgba(var(--cosmic-orange-rgb), 0.15);
+  color: rgba(var(--cosmic-orange-rgb), 0.9);
+  border: 1px solid rgba(var(--cosmic-orange-rgb), 0.3);
+}
+
+.status-cancelled {
+  background: rgba(var(--cosmic-red-rgb), 0.15);
+  color: rgba(var(--cosmic-red-rgb), 0.9);
+  border: 1px solid rgba(var(--cosmic-red-rgb), 0.3);
+}
+
+/* Task date */
+.task-date {
+  font-size: 0.8rem;
+  color: var(--cosmic-text-tertiary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.task-date i {
+  font-size: 0.8rem;
+  color: rgba(var(--cosmic-purple-rgb), 0.7);
+}
+
+/* Task description */
+.task-description {
+  color: var(--cosmic-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Task priority indicator */
+.task-priority {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--cosmic-text-tertiary);
+}
+
+/* Priority levels */
+.priority-high {
+  color: rgba(var(--cosmic-red-rgb), 0.9);
+}
+
+.priority-medium {
+  color: rgba(var(--cosmic-orange-rgb), 0.9);
+}
+
+.priority-low {
+  color: rgba(var(--cosmic-blue-rgb), 0.9);
+}
+
+/* Task checklist */
+.task-checklist {
+  margin: var(--spacing-sm) 0 0;
+  padding: var(--spacing-xs) 0 0;
+  border-top: 1px solid rgba(var(--cosmic-purple-rgb), 0.1);
+}
+
+.checklist-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--cosmic-text-secondary);
+  margin-bottom: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.checklist-title i {
+  color: rgba(var(--cosmic-purple-rgb), 0.7);
+  font-size: 0.9rem;
+}
+
+/* Checklist items */
+.checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--cosmic-text-secondary);
+  padding: 2px 0;
+}
+
+.checklist-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(var(--cosmic-purple-rgb), 0.4);
+  background-color: rgba(var(--bg-depth-2-rgb), 0.4);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checklist-checkbox:checked {
+  background-color: rgba(var(--cosmic-green-rgb), 0.2);
+  border-color: rgba(var(--cosmic-green-rgb), 0.6);
+}
+
+.checklist-checkbox:checked::after {
+  content: '✓';
+  font-size: 12px;
+  position: absolute;
+  color: rgba(var(--cosmic-green-rgb), 0.9);
+  top: 0px;
+  left: 3px;
+}
+
+.checklist-checkbox:hover {
+  border-color: rgba(var(--cosmic-purple-rgb), 0.7);
+  box-shadow: var(--glow-purple-xs);
+}
+
+.checklist-checkbox:checked:hover {
+  border-color: rgba(var(--cosmic-green-rgb), 0.8);
+  box-shadow: var(--glow-green-xs);
+}
+
+.checklist-label {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.checklist-item.completed .checklist-label {
+  text-decoration: line-through;
+  color: var(--cosmic-text-disabled);
+}
+
+/* Progress bar for task */
+.task-progress {
+  margin-top: var(--spacing-sm);
+}
+
+.progress-container {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--cosmic-gradient-purple);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--glow-purple-xs);
+}
+
+/* Shimmer effect on progress bar */
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-100%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.progress-text {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.75rem;
+  color: var(--cosmic-text-tertiary);
+  margin-top: 3px;
+}
+
+/* Hover effect for tasks */
+.task:hover .task-panel {
+  box-shadow: var(--cosmic-shadow-md), var(--glow-purple-sm);
+  transform: translateY(-2px);
+}
+
+/* Active task styling */
+.task.active .task-panel {
+  box-shadow: var(--cosmic-shadow-md), var(--glow-purple-sm);
+}
+
+.task.active .task-node::before {
+  animation: pulse-active 2s infinite alternate;
+}
+
+@keyframes pulse-active {
+  0% {
+    box-shadow: var(--glow-purple-sm);
+  }
+  100% {
+    box-shadow: var(--glow-purple-md);
+  }
+}
+
+/* COMPLETION STATES */
+
+/* Completed task styling */
+.task[data-progress="100"] .task-panel {
+  border-color: rgba(var(--cosmic-green-rgb), 0.3);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--bg-depth-1-rgb), 0.7),
+    rgba(var(--cosmic-green-rgb), 0.05)
+  );
+}
+
+.task[data-progress="100"] .task-panel::before {
+  background: linear-gradient(
+    135deg, 
+    rgba(var(--cosmic-green-rgb), 0.4) 0%, 
+    rgba(var(--cosmic-green-rgb), 0) 50%,
+    rgba(var(--cosmic-green-rgb), 0.2) 100%
+  );
+}
+
+.task[data-progress="100"] .task-header {
+  background: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-green-rgb), 0.1) 0%,
+    rgba(var(--bg-depth-1-rgb), 0.5) 100%
+  );
+  border-bottom-color: rgba(var(--cosmic-green-rgb), 0.15);
+}
+
+.task[data-progress="100"] .task-header::before {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--cosmic-green-rgb), 0.8) 0%,
+    rgba(var(--cosmic-green-rgb), 0.3) 50%,
+    rgba(var(--cosmic-green-rgb), 0.8) 100%
+  );
+  box-shadow: var(--glow-green-sm);
+}
+
+.task[data-progress="100"] .task-node::before {
+  background: var(--cosmic-gradient-completion);
+  box-shadow: var(--glow-green-sm);
+  animation: none;
+}
+
+.task[data-progress="100"] .task-title {
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--cosmic-green-rgb), 0.95), 
+    rgba(var(--cosmic-green-rgb), 0.7)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.task[data-progress="100"] .task-toggle {
+  color: rgba(var(--cosmic-green-rgb), 0.7);
+}
+
+.task[data-progress="100"] .task-toggle:hover {
+  color: rgba(var(--cosmic-green-rgb), 0.9);
+  background: rgba(var(--cosmic-green-rgb), 0.1);
+}
+
+.task[data-progress="100"] .progress-bar {
+  background: var(--cosmic-gradient-completion);
+  box-shadow: var(--glow-green-xs);
+}
+
+/* In-progress task styling (30-99%) */
+.task[data-progress^="3"] .progress-bar,
+.task[data-progress^="4"] .progress-bar,
+.task[data-progress^="5"] .progress-bar,
+.task[data-progress^="6"] .progress-bar,
+.task[data-progress^="7"] .progress-bar,
+.task[data-progress^="8"] .progress-bar,
+.task[data-progress^="9"] .progress-bar {
+  background: var(--cosmic-gradient-blue);
+  box-shadow: var(--glow-blue-xs);
+}
+
+/* Early stage task styling (1-29%) */
+.task[data-progress^="1"] .progress-bar,
+.task[data-progress^="2"] .progress-bar {
+  background: var(--cosmic-gradient-purple);
+  box-shadow: var(--glow-purple-xs);
+}
+
+/* Empty task styling (0%) */
+.task[data-progress="0"] .progress-bar {
+  background: var(--cosmic-gradient-magenta);
+  width: 5% !important;
+  opacity: 0.5;
+}
+
+/* Critical tasks */
+.task.critical .task-node::before {
+  background: var(--cosmic-gradient-red);
+  box-shadow: var(--glow-red-sm);
+  animation: pulse-critical 1.5s infinite alternate;
+}
+
+@keyframes pulse-critical {
+  0% {
+    box-shadow: var(--glow-red-sm);
+    transform: rotate(45deg) scale(1);
+  }
+  100% {
+    box-shadow: var(--glow-red-md);
+    transform: rotate(45deg) scale(1.15);
+  }
+}
+
+.task.critical .task-panel {
+  border-color: rgba(var(--cosmic-red-rgb), 0.3);
+}
+
+.task.critical .task-panel::before {
+  background: linear-gradient(
+    135deg, 
+    rgba(var(--cosmic-red-rgb), 0.4) 0%, 
+    rgba(var(--cosmic-red-rgb), 0) 50%,
+    rgba(var(--cosmic-red-rgb), 0.2) 100%
+  );
+}
+
+.task.critical .task-header {
+  background: linear-gradient(
+    135deg,
+    rgba(var(--cosmic-red-rgb), 0.1) 0%,
+    rgba(var(--bg-depth-1-rgb), 0.5) 100%
+  );
+}
+
+.task.critical .task-header::before {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--cosmic-red-rgb), 0.8) 0%,
+    rgba(var(--cosmic-red-rgb), 0.3) 50%,
+    rgba(var(--cosmic-red-rgb), 0.8) 100%
+  );
+  box-shadow: var(--glow-red-sm);
+}
+
+.task.critical .task-title {
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--cosmic-red-rgb), 1), 
+    rgba(var(--cosmic-red-rgb), 0.8)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Critical task badge */
+.task.critical .task-header::after {
+  content: 'CRITICAL';
+  position: absolute;
+  top: -3px;
+  right: var(--spacing-md);
+  background: rgba(var(--cosmic-red-rgb), 0.2);
+  color: rgba(var(--cosmic-red-rgb), 0.9);
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 0 0 6px 6px;
+  letter-spacing: 0.05em;
+  z-index: 10;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .task-header {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .task-content {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .task-title {
+    font-size: 1rem;
+  }
+  
+  .task-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+  
+  .task.critical .task-header::after {
+    font-size: 0.55rem;
+    padding: 1px 5px;
+  }
+}
+
+/* Focus styles for accessibility */
+.task:focus-within .task-panel {
+  outline: 2px solid rgba(var(--cosmic-purple-rgb), 0.7);
+  outline-offset: 3px;
+}
+
+.task[data-progress="100"]:focus-within .task-panel {
+  outline: 2px solid rgba(var(--cosmic-green-rgb), 0.7);
+  outline-offset: 3px;
+}
+
 /* TASKS CONTAINER - GRID LAYOUT */
 .tasks-container {
   display: grid;

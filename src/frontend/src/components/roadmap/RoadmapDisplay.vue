@@ -225,6 +225,11 @@ export default {
   mounted() {
     // Initialize intersection observer for scroll animations
     this.initScrollObserver();
+    
+    // Add animation enhancements
+    this.$nextTick(() => {
+      this.initHoverEffects();
+    });
   },
   methods: {
     getProgressPercentage(completed, total) {
@@ -232,15 +237,56 @@ export default {
       return Math.round((completed / total) * 100);
     },
     toggleQuarter(index) {
+      // Get the quarter element
+      const quarterEl = event.currentTarget.closest('.quarter');
+      
       const updatedQuarters = [...this.quarters];
+      const isOpening = !updatedQuarters[index].open;
+      
+      if (isOpening && quarterEl) {
+        // Add a class when opening
+        quarterEl.classList.add('quarter-opening');
+        setTimeout(() => {
+          quarterEl.classList.remove('quarter-opening');
+        }, 600);
+      }
+      
       updatedQuarters[index].open = !updatedQuarters[index].open;
       this.$emit('update:quarters', updatedQuarters);
     },
     toggleMilestone(milestone) {
+      // Get the milestone element
+      const milestoneEl = event.currentTarget.closest('.milestone');
+      
+      if (!milestone.open) {
+        // Add a class when opening
+        if (milestoneEl) {
+          milestoneEl.classList.add('opening');
+          setTimeout(() => {
+            milestoneEl.classList.remove('opening');
+          }, 600);
+        }
+      }
+      
+      // Toggle milestone open state
       milestone.open = !milestone.open;
       this.$emit('update:quarters', [...this.quarters]);
     },
     toggleTask(task) {
+      // Get the task element
+      const taskEl = event.currentTarget.closest('.task-card');
+      
+      if (!task.open) {
+        // Add a class when opening
+        if (taskEl) {
+          taskEl.classList.add('task-opening');
+          setTimeout(() => {
+            taskEl.classList.remove('task-opening');
+          }, 600);
+        }
+      }
+      
+      // Toggle task open state
       task.open = !task.open;
       this.$emit('update:quarters', [...this.quarters]);
     },
@@ -313,6 +359,45 @@ export default {
           el.classList.add('revealed');
         });
       }
+    },
+    initHoverEffects() {
+      // Add subtle parallax effect to milestones on mouse move
+      const milestones = document.querySelectorAll('.milestone');
+      
+      if (window.innerWidth > 768) { // Only on desktop/tablet
+        milestones.forEach(milestone => {
+          milestone.addEventListener('mousemove', (e) => {
+            const rect = milestone.getBoundingClientRect();
+            const x = e.clientX - rect.left; // x position within the element
+            const y = e.clientY - rect.top; // y position within the element
+            
+            // Calculate rotation based on mouse position
+            const tiltX = (y / rect.height - 0.5) * 2; // -1 to 1
+            const tiltY = (x / rect.width - 0.5) * -2; // -1 to 1
+            
+            // Apply subtle transform
+            milestone.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+          });
+          
+          milestone.addEventListener('mouseleave', () => {
+            milestone.style.transform = '';
+          });
+        });
+      }
+      
+      // Add shimmer effect to progress bars on hover
+      const progressBars = document.querySelectorAll('.progress-bar');
+      progressBars.forEach(bar => {
+        const parent = bar.closest('.milestone, .task-card');
+        if (parent) {
+          parent.addEventListener('mouseenter', () => {
+            bar.classList.add('cosmic-shimmer-active');
+          });
+          parent.addEventListener('mouseleave', () => {
+            bar.classList.remove('cosmic-shimmer-active');
+          });
+        }
+      });
     }
   }
 };
@@ -326,6 +411,7 @@ export default {
 @import './styles/roadmap-tasks.css';
 @import './styles/roadmap-utilities.css';
 @import './styles/roadmap-enhancements.css';
+@import './styles/roadmap-enhanced-styles.css';
 
 /* Additional component-specific styles */
 .cosmic-roadmap {

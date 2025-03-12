@@ -1,0 +1,677 @@
+/* COSMIC ROADMAP ENHANCED STYLING
+ * Enhanced visual styles for milestones and tasks
+ * Adds more depth, dimension, and cosmic theme elements
+ */
+
+/* ================= QUARTER ENHANCEMENTS ================= */
+
+/* Enhanced quarter styling */
+.quarter {
+  margin-bottom: var(--spacing-xl);
+  position: relative;
+}
+
+.quarter::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 100%;
+  height: calc(100% - 2rem);
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 185, 253, 0.7),
+    rgba(15, 185, 253, 0.4),
+    rgba(15, 185, 253, 0.1)
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.quarter-panel {
+  background: linear-gradient(145deg, 
+    rgba(10, 20, 35, 0.85) 0%, 
+    rgba(15, 25, 45, 0.9) 100%);
+  border: 1px solid;
+  border-image: linear-gradient(
+    to right,
+    rgba(15, 185, 253, 0.5),
+    rgba(15, 185, 253, 0.2)
+  ) 1;
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.2),
+    0 0 25px rgba(15, 185, 253, 0.1);
+  border-radius: var(--cosmic-radius-lg);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transform: translateZ(0);
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.quarter:hover .quarter-panel {
+  box-shadow: 
+    0 12px 24px rgba(0, 0, 0, 0.25),
+    0 0 30px rgba(15, 185, 253, 0.15);
+  border-image: linear-gradient(
+    to right,
+    rgba(15, 185, 253, 0.6),
+    rgba(15, 185, 253, 0.3)
+  ) 1;
+}
+
+.quarter.active .quarter-panel {
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.3),
+    0 0 35px rgba(15, 185, 253, 0.2);
+}
+
+/* Animation for quarter opening */
+.quarter.quarter-opening .quarter-panel {
+  animation: quarter-open 0.6s cubic-bezier(0.2, 0.9, 0.1, 1.3);
+}
+
+@keyframes quarter-open {
+  0% {
+    transform: translateZ(0) scale(1);
+  }
+  50% {
+    transform: translateZ(0) scale(1.02);
+  }
+  100% {
+    transform: translateZ(0) scale(1);
+  }
+}
+
+.quarter-header {
+  background: linear-gradient(135deg, 
+    rgba(15, 185, 253, 0.1) 0%, 
+    rgba(10, 15, 25, 0.7) 100%);
+  border-bottom: 1px solid rgba(15, 185, 253, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.quarter-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(15, 185, 253, 0.8),
+    rgba(77, 207, 255, 0.6),
+    rgba(15, 185, 253, 0.8)
+  );
+  box-shadow: 0 0 10px rgba(15, 185, 253, 0.5);
+  z-index: 2;
+}
+
+.quarter-title {
+  background: linear-gradient(
+    90deg,
+    rgba(15, 185, 253, 1), 
+    rgba(77, 207, 255, 0.9)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  font-size: 1.8rem;
+}
+
+.quarter-description {
+  color: var(--cosmic-text-secondary);
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  max-width: 80%;
+}
+
+.quarter-node {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  left: -12px;
+  margin-bottom: -12px;
+  z-index: 2;
+}
+
+.quarter-node::before {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: rgba(15, 185, 253, 0.9);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 0 4px rgba(15, 185, 253, 0.2),
+    0 0 15px rgba(15, 185, 253, 0.5);
+  z-index: 2;
+}
+
+.quarter-node::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  top: 6px;
+  left: 6px;
+  background: rgba(10, 20, 35, 0.9);
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.quarter-date {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(15, 185, 253, 0.9);
+  background: rgba(10, 20, 35, 0.7);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--cosmic-radius-sm);
+  border: 1px solid rgba(15, 185, 253, 0.3);
+  box-shadow: 0 0 10px rgba(15, 185, 253, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+/* ================= MILESTONE ENHANCEMENTS ================= */
+
+/* Milestone panel enhancement with more depth and color */
+.milestone {
+  background: linear-gradient(145deg, 
+    rgba(88, 101, 242, 0.08) 0%, 
+    rgba(15, 185, 253, 0.12) 100%);
+  border: 1px solid;
+  border-image: linear-gradient(
+    to right,
+    rgba(88, 101, 242, 0.4),
+    rgba(15, 185, 253, 0.3)
+  ) 1;
+  box-shadow: 
+    0 8px 16px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(88, 101, 242, 0.1);
+  transform: perspective(800px) rotateX(2deg);
+  transform-origin: top center;
+  backdrop-filter: blur(12px);
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.milestone:hover {
+  transform: perspective(800px) rotateX(0deg) translateX(5px);
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.25),
+    0 0 25px rgba(88, 101, 242, 0.2);
+  border-image: linear-gradient(
+    to right,
+    rgba(88, 101, 242, 0.6),
+    rgba(15, 185, 253, 0.5)
+  ) 1;
+}
+
+.milestone.active {
+  background: linear-gradient(145deg, 
+    rgba(88, 101, 242, 0.15) 0%, 
+    rgba(15, 185, 253, 0.18) 100%);
+  border-image: linear-gradient(
+    to right,
+    rgba(88, 101, 242, 0.7),
+    rgba(15, 185, 253, 0.6)
+  ) 1;
+  box-shadow: 
+    0 12px 24px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(88, 101, 242, 0.25);
+  transform: perspective(800px) rotateX(0deg);
+}
+
+/* Enhanced milestone headers with better gradients */
+.milestone-header {
+  background: linear-gradient(135deg, 
+    rgba(88, 101, 242, 0.15) 0%, 
+    rgba(15, 185, 253, 0.05) 100%);
+  border-bottom: 1px solid rgba(88, 101, 242, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.milestone-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(88, 101, 242, 0.8),
+    rgba(15, 185, 253, 0.6),
+    rgba(255, 145, 0, 0.4),
+    rgba(15, 185, 253, 0.6),
+    rgba(88, 101, 242, 0.8)
+  );
+  box-shadow: 0 0 8px rgba(88, 101, 242, 0.4);
+  z-index: 2;
+}
+
+.milestone-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 30%;
+  background: linear-gradient(
+    to left,
+    rgba(15, 185, 253, 0.1),
+    transparent
+  );
+  z-index: 1;
+  opacity: 0.5;
+  transform: translateX(100%);
+  transition: transform 0.6s ease;
+}
+
+.milestone:hover .milestone-header::after {
+  transform: translateX(0);
+}
+
+/* Improved milestone title with better glow */
+.milestone-title {
+  background: linear-gradient(
+    90deg,
+    rgba(88, 101, 242, 1), 
+    rgba(15, 185, 253, 0.9)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.milestone-title::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 145, 0, 0.8),
+    rgba(88, 101, 242, 0.8)
+  );
+  box-shadow: 0 0 12px rgba(88, 101, 242, 0.6);
+}
+
+.milestone.active .milestone-title {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 145, 0, 0.9), 
+    rgba(88, 101, 242, 1)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  letter-spacing: 0.6px;
+}
+
+/* Animation for milestone opening */
+.milestone.opening {
+  animation: milestone-open 0.6s cubic-bezier(0.2, 0.9, 0.1, 1.3);
+}
+
+@keyframes milestone-open {
+  0% {
+    transform: perspective(800px) rotateX(2deg) scale(1);
+  }
+  50% {
+    transform: perspective(800px) rotateX(0deg) scale(1.03);
+  }
+  100% {
+    transform: perspective(800px) rotateX(0deg) scale(1);
+  }
+}
+
+/* ================= TASK ENHANCEMENTS ================= */
+
+/* Task cards with enhanced 3D and cosmic styling */
+.task-card {
+  background: linear-gradient(145deg, 
+    rgba(25, 34, 46, 0.9), 
+    rgba(15, 20, 32, 0.85));
+  border: 1px solid;
+  border-image: linear-gradient(
+    to right,
+    rgba(15, 185, 253, 0.3),
+    rgba(255, 145, 0, 0.2)
+  ) 1;
+  box-shadow: 
+    0 6px 12px rgba(0, 0, 0, 0.2),
+    0 0 15px rgba(15, 185, 253, 0.1);
+  transform: translateY(0);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.task-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 185, 253, 0.05),
+    transparent 30%,
+    rgba(255, 145, 0, 0.05) 70%,
+    transparent
+  );
+  opacity: 0.6;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.task-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 12px 20px rgba(0, 0, 0, 0.25),
+    0 0 25px rgba(15, 185, 253, 0.2);
+  border-image: linear-gradient(
+    to right,
+    rgba(15, 185, 253, 0.5),
+    rgba(255, 145, 0, 0.4)
+  ) 1;
+}
+
+/* Animation for task opening */
+.task-card.task-opening {
+  animation: task-open 0.6s cubic-bezier(0.2, 0.9, 0.1, 1.3);
+}
+
+@keyframes task-open {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Task header with better styling */
+.task-header {
+  background: linear-gradient(135deg, 
+    rgba(15, 185, 253, 0.12) 0%, 
+    rgba(10, 15, 25, 0.6) 100%);
+  border-bottom: 1px solid rgba(15, 185, 253, 0.2);
+  padding: var(--spacing-md) var(--spacing-lg);
+  position: relative;
+  z-index: 2;
+}
+
+.task-card:hover .task-header {
+  background: linear-gradient(135deg, 
+    rgba(15, 185, 253, 0.18) 0%, 
+    rgba(10, 15, 25, 0.7) 100%);
+}
+
+/* Task title with gradient text */
+.task-title {
+  background: linear-gradient(
+    90deg,
+    rgba(15, 185, 253, 1), 
+    rgba(77, 207, 255, 0.9)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  position: relative;
+  padding-left: 15px;
+}
+
+.task-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 70%;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 185, 253, 0.8),
+    rgba(255, 145, 0, 0.6)
+  );
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(15, 185, 253, 0.5);
+}
+
+/* Task tags with better styling */
+.task-tag {
+  background: rgba(10, 15, 25, 0.6);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  transform: translateY(0);
+}
+
+.task-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Subtasks styling improvements */
+.subtasks-container {
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 15, 25, 0.7),
+    rgba(15, 20, 30, 0.8)
+  );
+  border-top: 1px solid rgba(15, 185, 253, 0.15);
+  padding: var(--spacing-md);
+  backdrop-filter: blur(8px);
+}
+
+.subtask {
+  background: rgba(25, 34, 46, 0.5);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  border-radius: var(--cosmic-radius-md);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: all 0.3s ease;
+}
+
+.subtask:hover {
+  background: rgba(25, 34, 46, 0.7);
+  border-color: rgba(15, 185, 253, 0.2);
+  transform: translateX(3px);
+}
+
+.subtask.completed {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 229, 164, 0.08),
+    rgba(25, 34, 46, 0.5)
+  );
+  border-color: rgba(0, 229, 164, 0.2);
+}
+
+/* Checkbox styling */
+.subtask-checkbox input[type="checkbox"] {
+  border: 2px solid rgba(15, 185, 253, 0.4);
+  background: rgba(10, 15, 25, 0.5);
+}
+
+.subtask-checkbox input[type="checkbox"]:checked {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 229, 164, 0.8),
+    rgba(15, 185, 253, 0.6)
+  );
+  border-color: rgba(0, 229, 164, 0.6);
+  box-shadow: 0 0 10px rgba(0, 229, 164, 0.3);
+}
+
+/* Progress bar improvement */
+.progress-bar {
+  background: linear-gradient(
+    90deg,
+    rgba(15, 185, 253, 0.8),
+    rgba(77, 207, 255, 0.6)
+  );
+  box-shadow: 0 0 8px rgba(15, 185, 253, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+/* Enhanced shimmer for progress bars */
+.progress-bar.cosmic-shimmer-active::after {
+  animation: shimmer-fast 1.2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 200%;
+  }
+}
+
+@keyframes shimmer-fast {
+  100% {
+    left: 200%;
+  }
+}
+
+/* Task status colors */
+.task-status.in-progress {
+  background: linear-gradient(
+    135deg,
+    rgba(15, 185, 253, 0.15),
+    rgba(15, 185, 253, 0.05)
+  );
+  border: 1px solid rgba(15, 185, 253, 0.4);
+  color: rgba(15, 185, 253, 0.9);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(15, 185, 253, 0.2);
+}
+
+.task-status.completed {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 229, 164, 0.15),
+    rgba(0, 229, 164, 0.05)
+  );
+  border: 1px solid rgba(0, 229, 164, 0.4);
+  color: rgba(0, 229, 164, 0.9);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(0, 229, 164, 0.2);
+}
+
+.task-status.planned {
+  background: linear-gradient(
+    135deg,
+    rgba(88, 101, 242, 0.15),
+    rgba(88, 101, 242, 0.05)
+  );
+  border: 1px solid rgba(88, 101, 242, 0.4);
+  color: rgba(88, 101, 242, 0.9);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(88, 101, 242, 0.2);
+}
+
+.task-status.delayed {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 145, 0, 0.15),
+    rgba(255, 145, 0, 0.05)
+  );
+  border: 1px solid rgba(255, 145, 0, 0.4);
+  color: rgba(255, 145, 0, 0.9);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(255, 145, 0, 0.2);
+}
+
+/* Add orange highlight to important tasks */
+.task-card.important {
+  background: linear-gradient(145deg, 
+    rgba(255, 145, 0, 0.1), 
+    rgba(15, 20, 32, 0.9));
+  border-image: linear-gradient(
+    to right,
+    rgba(255, 145, 0, 0.5),
+    rgba(15, 185, 253, 0.2)
+  ) 1;
+  box-shadow: 
+    0 6px 12px rgba(0, 0, 0, 0.2),
+    0 0 15px rgba(255, 145, 0, 0.2);
+}
+
+.task-card.important .task-header {
+  background: linear-gradient(135deg, 
+    rgba(255, 145, 0, 0.15) 0%, 
+    rgba(10, 15, 25, 0.7) 100%);
+  border-bottom: 1px solid rgba(255, 145, 0, 0.25);
+}
+
+.task-card.important .task-title {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 145, 0, 1), 
+    rgba(255, 184, 0, 0.9)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.task-card.important .task-title::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 145, 0, 0.9),
+    rgba(255, 184, 0, 0.7)
+  );
+  box-shadow: 0 0 10px rgba(255, 145, 0, 0.6);
+}
+
+.task-card.important:hover {
+  box-shadow: 
+    0 12px 20px rgba(0, 0, 0, 0.25),
+    0 0 25px rgba(255, 145, 0, 0.3);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .milestone {
+    transform: perspective(800px) rotateX(0deg);
+  }
+  
+  .task-card {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .task-title, 
+  .milestone-title {
+    font-size: 1rem;
+  }
+} 
