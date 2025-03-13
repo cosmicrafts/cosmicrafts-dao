@@ -718,16 +718,9 @@ export default {
 </script>
 
 <style scoped>
-:root {
-  --viewport-height: 100vh;
-  --viewport-width: 100vw;
-  --animation-speed: 1;
-  --header-height: auto;
-}
-
 /* Base Styling */
 .roadmap-page {
-  height: 100vh;
+  height: 150vh;
   width: 100%; /* Changed from 100vw to prevent horizontal overflow */
   max-width: 100%; /* Ensure it never exceeds viewport */
   color: #fff;
@@ -1264,7 +1257,6 @@ export default {
 .quarters-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   width: 100%;
   box-sizing: border-box; /* Include padding and gap in width calculation */
 }
