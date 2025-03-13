@@ -1693,7 +1693,7 @@ export default {
     flex: 1;
     min-width: 0;
     margin-left: 8rem;
-    margin-right: 1rem;
+    margin-right: 2rem;
     margin-top: 4rem; /* Added top margin */
   }
 
