@@ -1619,7 +1619,7 @@ export default {
 }
 
 .milestone-header .toggle-icon.is-open .horizontal {
-  background: var(--cosmic-purple);
+  background: var(--cosmic-blue);
 }
 
 .task-header .toggle-icon.is-open .horizontal {
@@ -1731,12 +1731,13 @@ export default {
 }
 
 .progress-container {
-  width: 120px;
-  height: 8px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
+  width: 100px;
+  height: 6px;
+  background: rgba(13, 20, 33, 0.5);
+  border-radius: 3px;
   overflow: hidden;
   position: relative;
+  border: 1px solid rgba(87, 119, 235, 0.3);
 }
 
 .progress-container::before {
@@ -1748,43 +1749,38 @@ export default {
   bottom: 0;
   background: 
     linear-gradient(90deg, 
-      rgba(0, 0, 0, 0.1) 0%, 
-      rgba(255, 255, 255, 0.1) 50%,
-      rgba(0, 0, 0, 0.1) 100%
+      transparent 0%,
+      rgba(87, 119, 235, 0.1) 20%,
+      rgba(87, 119, 235, 0.2) 40%,
+      rgba(87, 119, 235, 0.1) 60%,
+      transparent 100%
     );
+  background-size: 200% 100%;
+  animation: scanline 2s linear infinite;
   z-index: 1;
   pointer-events: none;
 }
 
+@keyframes scanline {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 .progress-bar {
   height: 100%;
-  border-radius: 10px;
+  border-radius: 3px;
   position: relative;
   transition: width 0.5s cubic-bezier(0.12, 0.8, 0.32, 1);
 }
 
-.progress-bar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, 
-    rgba(255, 255, 255, 0) 0%, 
-    rgba(255, 255, 255, 0.4) 50%, 
-    rgba(255, 255, 255, 0) 100%);
-  animation: shimmer 1.5s infinite;
-  border-radius: 10px;
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
+/* Empty progress bar styling */
+.progress-bar[style*="width: 0%"] {
+  background: rgba(87, 119, 235, 0.1) !important;
+  box-shadow: none !important;
 }
 
 /* Quarter progress bar - cosmic blue theme */
@@ -1796,6 +1792,7 @@ export default {
   );
   background-size: 200% 100%;
   animation: gradientShift 3s ease infinite;
+  box-shadow: 0 0 8px rgba(0, 99, 255, 0.7);
 }
 
 /* Milestone progress bar - cosmic purple theme */
@@ -1807,6 +1804,7 @@ export default {
   );
   background-size: 200% 100%;
   animation: gradientShift 3s ease infinite;
+  box-shadow: 0 0 8px rgba(106, 17, 203, 0.7);
 }
 
 /* Task progress bar - cosmic pink theme */
@@ -1895,26 +1893,26 @@ export default {
 
 /* Toggle icon positioning */
 .toggle-icon {
-  margin-top: 0.5rem;
   position: relative;
-  width: 16px;
-  height: 16px;
+  width: .75rem;
+  height: .75rem;
   cursor: pointer;
   transition: all 0.2s var(--animation-bounce);
 }
 
-.toggle-icon.small {
-  width: 12px;
-  height: 12px;
-}
-
 .icon-line {
   position: absolute;
-  background: var(--cosmic-text-secondary);
-  transition: all 0.2s var(--animation-bounce);
+  transition: all 0.5s var(--animation-bounce);
   box-shadow: var(--cosmic-shadow-sm);
 }
 
+.quarter:hover .icon-line {
+  background-color: rgb(0, 191, 255); /* Change to your desired hover color */
+}
+
+.milestone:hover .icon-line {
+  background-color: rgb(0, 191, 255); /* Change to your desired hover color */
+}
 .horizontal {
   top: 50%;
   left: 0;
