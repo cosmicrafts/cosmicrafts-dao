@@ -23,10 +23,27 @@
     <div ref="roadmapRef" class="roadmap-container">
       <!-- Fixed Header Section -->
       <div class="fixed-header-section">
-        <!-- Header Section -->
-        <header class="roadmap-header">
-          <h1 class="cosmic-title">Cosmic Roadmap</h1>
-          <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history. — here's what's next.</p>
+        <!-- Hero Section -->
+        <header class="hero-section cosmic-panel">
+          <div class="hero-content">
+            <div class="title-area">
+              <h1 class="cosmic-title">Cosmic Roadmap</h1>
+              <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history.</p>
+            </div>
+            <button 
+              class="current-quarter-btn" 
+              @click="scrollToCurrentQuarter"
+              aria-label="View current quarter"
+            >
+              <span class="btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </span>
+              <span class="btn-text">Current Quarter</span>
+            </button>
+          </div>
         </header>
 
         <!-- Search Section -->
@@ -264,20 +281,6 @@
           <div class="notification-content">{{ notification.message }}</div>
         </div>
       </transition-group>
-
-      <!-- Floating button to scroll to current quarter -->
-      <button 
-        class="scroll-to-current-btn" 
-        @click="scrollToCurrentQuarter"
-        aria-label="Scroll to current quarter"
-        title="Scroll to current quarter"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-        <span>Current</span>
-      </button>
     </div>
   </div>
 </template>
@@ -725,14 +728,16 @@ export default {
 /* Base Styling */
 .roadmap-page {
   height: 100vh;
-  width: 100vw;
+  width: 100%; /* Changed from 100vw to prevent horizontal overflow */
+  max-width: 100%; /* Ensure it never exceeds viewport */
   color: #fff;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden; /* Prevent horizontal overflow */
   background: linear-gradient(135deg, #0c1016f0, #141b2af0, #0c1016f0);
   display: flex;
   flex-direction: column;
   padding-top: 6rem; /* Account for the header height */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 /* Enhanced Cosmic Background */
@@ -1017,6 +1022,7 @@ export default {
   flex-direction: column;
   max-width: 1200px;
   padding: 0 1.5rem; /* Consistent padding for the entire container */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 /* Fixed Header Section */
@@ -1024,16 +1030,22 @@ export default {
   width: 100%;
   flex-shrink: 0;
   padding-bottom: 1.5rem;
+  box-sizing: border-box; /* Include padding in width calculation */
+  max-width: 100%; /* Ensure it doesn't overflow */
 }
 
 /* Scrollable Content Area */
 .scrollable-content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
   padding-bottom: 1.5rem;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.2);
   overscroll-behavior: contain;
+  width: 100%;
+  max-width: 100%; /* Ensure it doesn't overflow */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .scrollable-content::-webkit-scrollbar {
@@ -1050,27 +1062,33 @@ export default {
   border-radius: 4px;
 }
 
-/* Header Styling */
+/* Header Styling - Now using hero section */
 .roadmap-header {
-  text-align: center;
-  margin-bottom: 1.5rem;
+  display: none; /* Hide the old header */
 }
 
+/* Additional styles to ensure hero section styles take precedence */
 .cosmic-title {
-  font-size: clamp(2rem, 5vw, 3rem);
-  margin-bottom: 0.75rem;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  margin: 0 0 0.5rem;
+  background: linear-gradient(90deg, #FFFFFF, rgba(15, 185, 253, 0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(15, 185, 253, 0.4);
 }
 
 .cosmic-subtitle {
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  opacity: 0.8;
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+  color: rgba(255, 255, 255, 0.8);
   margin: 0;
+  max-width: 600px;
 }
 
 /* Search Section */
 .search-container {
   width: 100%;
   margin-bottom: 1.5rem;
+  box-sizing: border-box; /* Include margin in width calculation */
 }
 
 .search-input-wrapper {
@@ -1078,6 +1096,9 @@ export default {
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
+  overflow: hidden; /* Prevent overflow */
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .search-icon {
@@ -1086,27 +1107,140 @@ export default {
   top: 50%;
   transform: translateY(-50%);
   color: rgba(255, 255, 255, 0.6);
+  z-index: 1; /* Ensure icon is above input */
 }
 
 .search-input {
   width: 100%;
   padding: 1rem 1rem 1rem 3rem;
   border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(15, 25, 40, 0.5); /* Exact match for hero section */
+  border: 1px solid rgba(88, 101, 242, 0.3); /* Match hero section border */
   color: #fff;
   font-size: 1rem;
   transition: all 0.3s ease;
+  box-sizing: border-box; /* Include padding in width */
+  max-width: 100%; /* Prevent overflow */
+  backdrop-filter: blur(10px); /* Match hero section blur */
 }
 
 .search-input:focus {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(15, 25, 40, 0.6); /* Slightly darker when focused */
   border-color: rgba(15, 185, 253, 0.6);
-  box-shadow: 0 0 0 2px rgba(15, 185, 253, 0.2);
+  box-shadow: 0 0 0 2px rgba(15, 185, 253, 0.2), inset 0 0 0 1px rgba(15, 185, 253, 0.1);
+  outline: none;
 }
 
 .search-input::placeholder {
   color: rgba(255, 255, 255, 0.5);
+  /* Ensure placeholder text doesn't overflow */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Mobile optimizations for hero */
+@media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .title-area {
+    text-align: center;
+    width: 100%;
+  }
+  
+  .current-quarter-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .quarter-header,
+  .milestone-header,
+  .task-header {
+    padding: 1.5rem;
+  }
+  
+  .toggle-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .checkbox-container input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .roadmap-page {
+    padding-top: 4rem; /* Smaller header on mobile */
+  }
+  
+  .roadmap-container {
+    padding: 0 1rem;
+  }
+  
+  .fixed-header-section {
+    padding-bottom: 1rem;
+  }
+  
+  .scrollable-content {
+    padding-bottom: 1rem;
+  }
+  
+  .quarter-header {
+    padding: 1rem;
+  }
+  
+  .search-container {
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .search-input {
+    padding: 0.875rem 1rem 0.875rem 2.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .search-icon {
+    left: 0.875rem;
+  }
+  
+  .quarter-header,
+  .milestone-header,
+  .task-header {
+    font-size: 0.875rem;
+    padding: 1rem; /* Override the 768px breakpoint for smaller screens */
+  }
+  
+  .description {
+    font-size: 0.75rem;
+  }
+  
+  .progress-container {
+    width: 50px; /* Smaller on mobile */
+    max-width: 50px;
+  }
+  
+  .header-right {
+    gap: 5px; /* Reduce gap on mobile */
+  }
+  
+  .notification {
+    max-width: calc(100vw - 2rem);
+    margin: 0 1rem;
+  }
+  
+  .progress-text {
+    font-size: 0.75rem;
+  }
+  
+  .hero-section {
+    padding: 1.25rem 1rem;
+  }
 }
 
 /* Quarters */
@@ -1114,12 +1248,16 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box; /* Include padding and gap in width calculation */
 }
 
 .quarter {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 0.5rem;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .quarter-header {
@@ -1130,6 +1268,8 @@ export default {
   align-items: center;
   transition: background-color 0.2s;
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .quarter-header:hover {
@@ -1150,6 +1290,8 @@ export default {
 .milestone-header {
   padding: 1rem;
   cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Tasks */
@@ -1166,6 +1308,8 @@ export default {
 .task-header {
   padding: 0.75rem;
   cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Progress bars */
@@ -1173,14 +1317,18 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-shrink: 1; /* Allow shrinking if needed */
+  min-width: 0; /* Allow shrinking below content width */
 }
 
 .progress-container {
   width: 100px;
+  max-width: 100px;
   height: 4px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   overflow: hidden;
+  flex-shrink: 1; /* Allow shrinking */
 }
 
 .progress-bar {
@@ -1241,123 +1389,6 @@ export default {
 .notification-fade-leave-to {
   opacity: 0;
   transform: translateX(30px);
-}
-
-/* Floating button to scroll to current quarter */
-.scroll-to-current-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(15, 185, 253, 0.9);
-  color: white;
-  border: none;
-  border-radius: 30px;
-  padding: 10px 16px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  z-index: 100;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.scroll-to-current-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-  background: rgba(15, 185, 253, 1);
-}
-
-.scroll-to-current-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.scroll-to-current-btn svg {
-  flex-shrink: 0;
-}
-
-@media (max-width: 640px) {
-  .scroll-to-current-btn {
-    bottom: 16px;
-    right: 16px;
-    padding: 8px 12px;
-    font-size: 0.8rem;
-  }
-  
-  .scroll-to-current-btn svg {
-    width: 16px;
-    height: 16px;
-  }
-}
-
-/* Mobile optimizations */
-@media (max-width: 640px) {
-  .roadmap-page {
-    padding-top: 4rem; /* Smaller header on mobile */
-  }
-  
-  .roadmap-container {
-    padding: 0 1rem;
-  }
-  
-  .fixed-header-section {
-    padding-bottom: 1rem;
-  }
-  
-  .scrollable-content {
-    padding-bottom: 1rem;
-  }
-  
-  .quarter-header {
-    padding: 1rem;
-  }
-  
-  .cosmic-title {
-    margin-bottom: 0.5rem;
-  }
-  
-  .roadmap-header {
-    margin-bottom: 1rem;
-  }
-  
-  .search-container {
-    padding: 0 0.5rem;
-  }
-  
-  .search-input {
-    padding: 0.875rem 1rem 0.875rem 2.75rem;
-    font-size: 0.875rem;
-  }
-  
-  .search-icon {
-    left: 0.875rem;
-  }
-  
-  .quarter-header,
-  .milestone-header,
-  .task-header {
-    font-size: 0.875rem;
-  }
-  
-  .description {
-    font-size: 0.75rem;
-  }
-  
-  .progress-container {
-    width: 60px;
-  }
-  
-  .progress-text {
-    font-size: 0.75rem;
-  }
-  
-  .notification {
-    max-width: calc(100vw - 2rem);
-    margin: 0 1rem;
-  }
 }
 
 /* Add particle float animation */
@@ -1704,5 +1735,154 @@ select:focus {
 
 .highlight-target {
   animation: highlight-pulse 1s ease-in-out 3;
+}
+
+/* Hero Section */
+.hero-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(15, 25, 40, 0.5);
+  border: 1px solid rgba(88, 101, 242, 0.3);
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), inset 0 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(135deg, rgba(15, 185, 253, 0.1) 0%, transparent 50%),
+    linear-gradient(225deg, rgba(88, 101, 242, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+}
+
+.title-area {
+  text-align: left;
+}
+
+.cosmic-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  margin: 0 0 0.5rem;
+  background: linear-gradient(90deg, #FFFFFF, rgba(15, 185, 253, 0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(15, 185, 253, 0.4);
+}
+
+.cosmic-subtitle {
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  max-width: 600px;
+}
+
+.current-quarter-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: rgba(15, 185, 253, 0.2);
+  border: 1px solid rgba(15, 185, 253, 0.4);
+  border-radius: 1.5rem;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.current-quarter-btn:hover {
+  background: rgba(15, 185, 253, 0.3);
+  border-color: rgba(15, 185, 253, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 185, 253, 0.3);
+}
+
+.current-quarter-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(15, 185, 253, 0.2);
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile optimizations for hero */
+@media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .title-area {
+    text-align: center;
+    width: 100%;
+  }
+  
+  .current-quarter-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-section {
+    padding: 1.25rem 1rem;
+  }
+}
+
+/* For long text content that might force width */
+.description, 
+.cosmic-subtitle, 
+.milestone-header h3, 
+.task-header h4, 
+.subtask-description {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+.header-content {
+  flex: 1;
+  min-width: 0; /* Allow flex items to shrink below content size */
+  overflow: hidden; /* Prevent text overflow */
+  margin-right: 1rem;
+}
+
+.progress-text {
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .progress-text {
+    font-size: 0.75rem;
+  }
 }
 </style>
