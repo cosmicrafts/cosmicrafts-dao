@@ -1,7 +1,22 @@
 <template>
   <div class="roadmap-page">
     <!-- Enhanced Cosmic Background Elements -->
-    <div class="cosmic-stars"></div>
+    <div class="cosmic-stars">
+      <!-- Add twinkling stars -->
+      <div class="twinkle"></div>
+      <div class="twinkle"></div>
+      <div class="twinkle"></div>
+      <div class="twinkle"></div>
+      <div class="twinkle"></div>
+      <div class="twinkle"></div>
+      <div class="twinkle"></div>
+      <div class="twinkle"></div>
+      <div class="twinkle"></div>
+      <div class="twinkle"></div>
+      <!-- Add bright stars -->
+      <div class="bright-star"></div>
+      <div class="bright-star"></div>
+    </div>
     <div class="cosmic-particles"></div>
     <div class="cosmic-nebula"></div>
     
@@ -249,6 +264,20 @@
           <div class="notification-content">{{ notification.message }}</div>
         </div>
       </transition-group>
+
+      <!-- Floating button to scroll to current quarter -->
+      <button 
+        class="scroll-to-current-btn" 
+        @click="scrollToCurrentQuarter"
+        aria-label="Scroll to current quarter"
+        title="Scroll to current quarter"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span>Current</span>
+      </button>
     </div>
   </div>
 </template>
@@ -340,7 +369,7 @@ export default {
     // Load and process roadmap data from quarter files
     const loadRoadmap = () => {
       try {
-        // Sort quarter files by date
+        // Sort quarter files by date (oldest first)
         const sortedQuarters = Object.entries(quarterFiles)
           .map(([path, module]) => {
             // Extract quarter and year from filename
@@ -358,19 +387,22 @@ export default {
             };
           })
           .sort((a, b) => {
-            // Sort by year first
-            if (a.year !== b.year) return b.year - a.year;
-            // Then by quarter (Q4 to Q1)
-            return b.quarter.localeCompare(a.quarter);
+            // Sort by year first (ascending - oldest first)
+            if (a.year !== b.year) return a.year - b.year;
+            // Then by quarter (Q1 to Q4 within the same year)
+            const quarterNum = q => parseInt(q.replace('Q', ''));
+            return quarterNum(a.quarter) - quarterNum(b.quarter);
           });
 
         // Process each quarter's data
         quarters.value = sortedQuarters
-          .map(({ data }) => {
+          .map(({ data, year, quarter }) => {
             if (!data) return null;
 
             return {
               ...data,
+              year, // Add year explicitly for easier comparison
+              quarterNum: parseInt(quarter.replace('Q', '')), // Add quarter number for easier comparison
               open: false,
               milestones: data.milestones?.map(milestone => ({
                 ...milestone,
@@ -384,10 +416,106 @@ export default {
             };
           })
           .filter(Boolean); // Remove any null values
+          
+        // After loading, find and scroll to current quarter
+        nextTick(() => {
+          scrollToCurrentQuarter();
+        });
       } catch (error) {
         console.error('Error loading roadmap data:', error);
         quarters.value = [];
       }
+    };
+
+    // Scroll helper
+    const scrollToElement = (element) => {
+      if (!element || !isMounted.value) return;
+      
+      const scrollableContent = document.querySelector('.scrollable-content');
+      if (!scrollableContent) return;
+      
+      const elementRect = element.getBoundingClientRect();
+      const containerRect = scrollableContent.getBoundingClientRect();
+      const relativeTop = elementRect.top - containerRect.top;
+      const targetScroll = scrollableContent.scrollTop + relativeTop - (containerRect.height / 4);
+      
+      scrollableContent.scrollTo({
+        top: targetScroll,
+        behavior: 'smooth'
+      });
+    };
+
+    // Find current quarter and scroll to it
+    const scrollToCurrentQuarter = () => {
+      if (!quarters.value.length || !isMounted.value) return;
+      
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth(); // 0-11
+      
+      // Calculate current quarter (1-4)
+      const currentQuarter = Math.floor(currentMonth / 3) + 1;
+      
+      // First try to find exact current quarter
+      let targetIndex = quarters.value.findIndex(q => 
+        q.year === currentYear && q.quarterNum === currentQuarter
+      );
+      
+      // If not found, find the most recent past quarter
+      if (targetIndex === -1) {
+        // Create a comparison value for sorting (higher = more recent)
+        const getQuarterValue = (year, quarter) => year * 10 + quarter;
+        const currentValue = getQuarterValue(currentYear, currentQuarter);
+        
+        // Find all past quarters (quarters that come before current date)
+        const pastQuarters = quarters.value
+          .map((q, index) => ({ 
+            index, 
+            value: getQuarterValue(q.year, q.quarterNum)
+          }))
+          .filter(q => q.value <= currentValue)
+          .sort((a, b) => b.value - a.value); // Sort by most recent first
+        
+        // Get the most recent past quarter
+        if (pastQuarters.length > 0) {
+          targetIndex = pastQuarters[0].index;
+        } else {
+          // If no past quarters, use the oldest available quarter (last in our sorted list)
+          targetIndex = quarters.value.length - 1;
+        }
+      }
+      
+      // Clear any existing 'current-quarter' classes
+      document.querySelectorAll('.quarter').forEach(el => {
+        el.classList.remove('current-quarter');
+      });
+      
+      // Get the quarter element and scroll to it
+      nextTick(() => {
+        const quarterElements = document.querySelectorAll('.quarter');
+        if (quarterElements.length > targetIndex) {
+          const targetElement = quarterElements[targetIndex];
+          if (targetElement) {
+            // Add a visual indicator class
+            targetElement.classList.add('current-quarter');
+            
+            // Set the appropriate label
+            const quarter = quarters.value[targetIndex];
+            if (quarter.year === currentYear && quarter.quarterNum === currentQuarter) {
+              targetElement.setAttribute('data-label', 'Current Quarter');
+            } else if (quarter.year > currentYear || (quarter.year === currentYear && quarter.quarterNum > currentQuarter)) {
+              targetElement.setAttribute('data-label', 'Future Quarter');
+            } else {
+              targetElement.setAttribute('data-label', 'Most Recent Quarter');
+            }
+            
+            // Scroll the element into view within the scrollable container
+            setTimeout(() => {
+              scrollToElement(targetElement);
+            }, 300); // Small delay to ensure DOM is ready
+          }
+        }
+      });
     };
 
     // Toggle handlers
@@ -507,15 +635,25 @@ export default {
         .catch(() => showNotification('Failed to copy link', 'error'));
     };
 
-    // Scroll helper
-    const scrollToElement = (element) => {
-      if (!element || !isMounted.value) return;
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    };
-
     // Check for reduced motion preference
     const checkReducedMotion = () => {
       preferReducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    };
+
+    // Handle window resize
+    const handleResize = () => {
+      // Debounce the resize handler
+      if (window.resizeTimeout) {
+        clearTimeout(window.resizeTimeout);
+      }
+      
+      window.resizeTimeout = setTimeout(() => {
+        // Re-check current quarter position after resize
+        const currentQuarterElement = document.querySelector('.current-quarter');
+        if (currentQuarterElement) {
+          currentQuarterElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 250);
     };
 
     // Lifecycle
@@ -531,12 +669,16 @@ export default {
       
       // Listen for reduced motion preference changes
       window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', checkReducedMotion);
+      
+      // Add window resize handler to maintain proper scrolling
+      window.addEventListener('resize', handleResize);
     });
     
     onBeforeUnmount(() => {
       isMounted.value = false;
       // Clean up event listeners
       window.matchMedia('(prefers-reduced-motion: reduce)').removeEventListener('change', checkReducedMotion);
+      window.removeEventListener('resize', handleResize);
     });
 
     return {
@@ -565,7 +707,8 @@ export default {
       beforeLeaveFade,
       leaveFade,
       getTagColor,
-      toggleTagFilter
+      toggleTagFilter,
+      scrollToCurrentQuarter
     };
   }
 };
@@ -589,6 +732,7 @@ export default {
   background: linear-gradient(135deg, #0c1016f0, #141b2af0, #0c1016f0);
   display: flex;
   flex-direction: column;
+  padding-top: 6rem; /* Account for the header height */
 }
 
 /* Enhanced Cosmic Background */
@@ -598,25 +742,202 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)), 
-    radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)), 
-    radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
-    radial-gradient(3px 3px at 80px 120px, #fff, rgba(0,0,0,0)),
-    radial-gradient(1px 1px at 110px 50px, #fff, rgba(0,0,0,0)),
-    radial-gradient(1px 1px at 150px 100px, #fff, rgba(0,0,0,0)),
-    radial-gradient(1px 1px at 220px 20px, #fff, rgba(0,0,0,0));
-  background-size: 400px 400px;
-  animation: cosmic-stars 100s linear infinite;
-  opacity: 0.4;
+  background-color: transparent;
   z-index: 0;
   pointer-events: none;
-  will-change: background-position;
+  overflow: hidden;
   contain: paint;
 }
 
-@keyframes cosmic-stars {
+.cosmic-stars::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(1px 1px at 25px 5px, rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)), 
+    radial-gradient(1px 1px at 50px 160px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0)),
+    radial-gradient(1.5px 1.5px at 90px 40px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0)),
+    radial-gradient(1.5px 1.5px at 160px 120px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(2.5px 2.5px at 200px 60px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0)),
+    radial-gradient(3px 3px at 260px 170px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(1px 1px at 300px 230px, rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0)),
+    radial-gradient(1.5px 1.5px at 350px 270px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 400px 200px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0)),
+    radial-gradient(2.5px 2.5px at 450px 150px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(1px 1px at 500px 100px, rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0));
+  background-size: 550px 550px;
+  animation: cosmic-stars-move 150s linear infinite;
+  opacity: 0.6;
+  will-change: background-position;
+}
+
+.cosmic-stars::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(1px 1px at 10px 10px, rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0)),
+    radial-gradient(1.5px 1.5px at 60px 30px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)), 
+    radial-gradient(1px 1px at 100px 80px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 140px 130px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(1px 1px at 180px 190px, rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0)),
+    radial-gradient(2.5px 2.5px at 220px 220px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(1.5px 1.5px at 280px 270px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 320px 310px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(1px 1px at 380px 350px, rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0)),
+    radial-gradient(3px 3px at 420px 380px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(1.5px 1.5px at 470px 420px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0));
+  background-size: 500px 500px;
+  animation: cosmic-stars-move 120s linear infinite reverse;
+  opacity: 0.5;
+  will-change: background-position;
+}
+
+/* Add twinkling stars */
+.cosmic-stars .twinkle {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: twinkle 6s infinite;
+  box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.3);
+}
+
+.cosmic-stars .twinkle:nth-child(1) {
+  top: 10%;
+  left: 20%;
+  width: 2px;
+  height: 2px;
+  animation-delay: 0s;
+}
+
+/* Add different colors to some stars */
+.cosmic-stars .twinkle:nth-child(2) {
+  top: 30%;
+  left: 40%;
+  width: 3px;
+  height: 3px;
+  animation-delay: 1s;
+  background: rgba(173, 216, 230, 0.9); /* Light blue */
+  box-shadow: 0 0 4px 1px rgba(173, 216, 230, 0.4);
+}
+
+.cosmic-stars .twinkle:nth-child(3) {
+  top: 15%;
+  left: 60%;
+  width: 2px;
+  height: 2px;
+  animation-delay: 2s;
+}
+
+.cosmic-stars .twinkle:nth-child(4) {
+  top: 45%;
+  left: 80%;
+  width: 3px;
+  height: 3px;
+  animation-delay: 3s;
+}
+
+.cosmic-stars .twinkle:nth-child(5) {
+  top: 60%;
+  left: 15%;
+  width: 2px;
+  height: 2px;
+  animation-delay: 4s;
+  background: rgba(255, 223, 186, 0.9); /* Light orange */
+  box-shadow: 0 0 4px 1px rgba(255, 223, 186, 0.4);
+}
+
+.cosmic-stars .twinkle:nth-child(6) {
+  top: 75%;
+  left: 35%;
+  width: 3px;
+  height: 3px;
+  animation-delay: 5s;
+}
+
+.cosmic-stars .twinkle:nth-child(7) {
+  top: 80%;
+  left: 70%;
+  width: 2px;
+  height: 2px;
+  animation-delay: 0.5s;
+  background: rgba(255, 182, 193, 0.9); /* Light pink */
+  box-shadow: 0 0 4px 1px rgba(255, 182, 193, 0.4);
+}
+
+.cosmic-stars .twinkle:nth-child(8) {
+  top: 25%;
+  left: 90%;
+  width: 3px;
+  height: 3px;
+  animation-delay: 1.5s;
+}
+
+.cosmic-stars .twinkle:nth-child(9) {
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  animation-delay: 2.5s;
+  background: rgba(255, 255, 255, 0.95); /* Bright white */
+  box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.5);
+}
+
+.cosmic-stars .twinkle:nth-child(10) {
+  top: 85%;
+  left: 10%;
+  width: 3px;
+  height: 3px;
+  animation-delay: 3.5s;
+}
+
+/* Add a few bright stars with different animation */
+.cosmic-stars .bright-star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: bright-star-twinkle 8s infinite;
+  box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.6);
+}
+
+.cosmic-stars .bright-star:nth-child(11) {
+  top: 20%;
+  left: 75%;
+  width: 3px;
+  height: 3px;
+  animation-delay: 1s;
+}
+
+.cosmic-stars .bright-star:nth-child(12) {
+  top: 65%;
+  left: 25%;
+  width: 4px;
+  height: 4px;
+  animation-delay: 3s;
+}
+
+@keyframes cosmic-stars-move {
   from { background-position: 0 0; }
-  to { background-position: 400px 400px; }
+  to { background-position: 550px 550px; }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes bright-star-twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 12px 4px rgba(255, 255, 255, 0.7); }
 }
 
 /* New Particles System with optimizations */
@@ -695,20 +1016,21 @@ export default {
   display: flex;
   flex-direction: column;
   max-width: 1200px;
+  padding: 0 1.5rem; /* Consistent padding for the entire container */
 }
 
 /* Fixed Header Section */
 .fixed-header-section {
-  padding: 1rem;
   width: 100%;
   flex-shrink: 0;
+  padding-bottom: 1.5rem;
 }
 
 /* Scrollable Content Area */
 .scrollable-content {
   flex: 1;
   overflow-y: auto;
-  padding: 0 1rem 1rem;
+  padding-bottom: 1.5rem;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.2);
   overscroll-behavior: contain;
@@ -742,6 +1064,7 @@ export default {
 .cosmic-subtitle {
   font-size: clamp(1rem, 3vw, 1.25rem);
   opacity: 0.8;
+  margin: 0;
 }
 
 /* Search Section */
@@ -753,7 +1076,7 @@ export default {
 .search-input-wrapper {
   position: relative;
   width: 100%;
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -800,12 +1123,13 @@ export default {
 }
 
 .quarter-header {
-  padding: 1rem;
+  padding: 1.25rem 1.5rem;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: background-color 0.2s;
+  position: relative;
 }
 
 .quarter-header:hover {
@@ -868,39 +1192,127 @@ export default {
 /* Notifications */
 .notifications-container {
   position: fixed;
-  bottom: 1rem;
-  right: 1rem;
+  top: 20px;
+  right: 20px;
+  max-width: 300px;
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 10px;
 }
 
 .notification {
-  padding: 1rem;
-  border-radius: 0.5rem;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  font-size: 0.875rem;
-  max-width: 300px;
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background: rgba(30, 40, 60, 0.9);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-size: 0.9rem;
+  border-left: 4px solid;
 }
 
 .notification.success {
-  background: rgba(0, 200, 83, 0.9);
+  border-color: #2ed573;
 }
 
 .notification.error {
-  background: rgba(244, 67, 54, 0.9);
+  border-color: #ff4757;
+}
+
+.notification.info {
+  border-color: #70a1ff;
+}
+
+.notification-icon {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.notification-fade-enter-active,
+.notification-fade-leave-active {
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.notification-fade-enter-from,
+.notification-fade-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* Floating button to scroll to current quarter */
+.scroll-to-current-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 185, 253, 0.9);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.scroll-to-current-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  background: rgba(15, 185, 253, 1);
+}
+
+.scroll-to-current-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.scroll-to-current-btn svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .scroll-to-current-btn {
+    bottom: 16px;
+    right: 16px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .scroll-to-current-btn svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 /* Mobile optimizations */
 @media (max-width: 640px) {
+  .roadmap-page {
+    padding-top: 4rem; /* Smaller header on mobile */
+  }
+  
+  .roadmap-container {
+    padding: 0 1rem;
+  }
+  
   .fixed-header-section {
-    padding: 0.75rem 0.5rem;
+    padding-bottom: 1rem;
   }
   
   .scrollable-content {
-    padding: 0 0.5rem 0.5rem;
+    padding-bottom: 1rem;
+  }
+  
+  .quarter-header {
+    padding: 1rem;
   }
   
   .cosmic-title {
@@ -1157,6 +1569,31 @@ select:focus {
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.75rem;
+}
+
+/* Current quarter highlight */
+.current-quarter {
+  position: relative;
+  border-left: 3px solid rgba(15, 185, 253, 0.8);
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.3);
+}
+
+.current-quarter::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  background: rgba(15, 185, 253, 0.8);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.current-quarter .quarter-header {
+  background: rgba(15, 185, 253, 0.1);
 }
 
 .task-tag {
