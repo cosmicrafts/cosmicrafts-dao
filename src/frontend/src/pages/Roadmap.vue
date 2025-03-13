@@ -20,8 +20,8 @@
       
       <!-- Main Content Wrapper -->
       <div class="main-content-wrapper">
-        <!-- Fixed Header Section - simplified -->
-        <div class="fixed-header-section">
+        <!-- Roadmap Header Section - contains title and search for mobile view -->
+        <div class="roadmap-header-section">
           <!-- Hero Section (Mobile) -->
           <header class="hero-section">
             <div class="hero-content">
@@ -442,9 +442,9 @@ export default {
 <style scoped>
 /* Core styles */
 .roadmap-page {
-  --cosmic-glass-bg: rgba(16, 20, 38, 0.6);
-  --cosmic-glass-bg-darker: rgba(16, 20, 38, 0.8);
-  --cosmic-glass-bg-lighter: rgba(16, 20, 38, 0.4);
+  --cosmic-glass-bg: rgba(45, 68, 84, 0.6);
+  --cosmic-glass-bg-darker: rgba(7, 20, 42, 0.498);
+  --cosmic-glass-bg-lighter: rgba(25, 57, 105, 0.308);
   --cosmic-glass-border: 1px solid rgba(255, 255, 255, 0.1);
   --cosmic-glass-border-blue: 1px solid rgba(15, 185, 253, 0.2);
   --cosmic-glow-blue-sm: 0 0 15px rgba(15, 185, 253, 0.15);
@@ -458,27 +458,19 @@ export default {
   --cosmic-purple: rgb(103, 58, 183);
   --cosmic-purple-light: rgb(149, 117, 205);
   --cosmic-pink: rgb(201, 42, 253);
-  --cosmic-text-primary: rgb(245, 245, 255);
-  --cosmic-text-secondary: rgba(245, 245, 255, 0.75);
+  --cosmic-text-primary: rgb(255, 255, 255);
+  --cosmic-text-secondary: rgba(178, 178, 178, 0.75);
   --cosmic-text-tertiary: rgba(245, 245, 255, 0.5);
   --animation-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --animation-bounce: cubic-bezier(0.2, 0.8, 0.2, 1.2);
   --animation-delay-base: 0.1s;
   --cosmic-bg-dark: rgb(10, 14, 28);
   --hero-accent-glow: rgba(15, 185, 253, 0.3);
-  --glass-blur: 60px;
+  --glass-blur: 12px;
 
-  height: 100vh;
-  width: 100%;
-  color: var(--cosmic-text-primary);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding-top: 2.5rem;
+  padding: 1rem;
   box-sizing: border-box;
   background-color: var(--cosmic-bg-dark);
-  font-family: 'Inter', sans-serif;
 }
 
 /* Enhanced Cosmic Background */
@@ -609,8 +601,6 @@ export default {
   position: relative;
 }
 
-
-
 .hero-logo {
   max-width: 8rem;
   height: auto;
@@ -669,12 +659,13 @@ export default {
 /* Enhanced Search Section */
 .search-container {
   width: 100%;
-  margin: 1rem 0;
+
   transform-style: preserve-3d;
   position: relative;
 }
 
 .search-input-wrapper {
+  
   position: relative;
   width: 100%;
   border-radius: 0.75rem;
@@ -762,19 +753,18 @@ export default {
 /* Scrollable Content Area */
 .scrollable-content {
   flex: 1;
+  margin-top: 1rem;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 1rem;
   width: 100%;
   box-sizing: border-box;
-  background: var(--cosmic-glass-bg-lighter);
   border: var(--cosmic-glass-border-blue);
-  border-radius: 0.5rem;
-  backdrop-filter: blur(8px);
+  border-radius: 0.25rem;
   scroll-behavior: smooth;
-  scrollbar-width: thin;
+
   scrollbar-color: var(--cosmic-blue) var(--cosmic-glass-bg);
-  transform-style: preserve-3d;
+
 }
 
 /* Quarters Section */
@@ -782,8 +772,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 0.75rem;
-  transform-style: preserve-3d;
+  gap: 1rem;
 }
 
 .quarter {
@@ -794,13 +783,10 @@ export default {
   border: var(--cosmic-glass-border-blue);
   box-shadow: var(--cosmic-shadow-sm);
   transition: all 0.3s var(--animation-bounce);
-  margin-bottom: 0.75rem;
-  position: relative;
-  transform-style: preserve-3d;
 }
 
 .quarter:hover {
-  transform: translateY(-2px);
+  transform: translateX(8px);
   box-shadow: var(--cosmic-glow-blue-sm);
   border-color: var(--cosmic-blue);
 }
@@ -1331,7 +1317,6 @@ export default {
   border: var(--cosmic-glass-border-blue);
   overflow: hidden;
 }
-
 
 .scrollable-content {
   flex: 1;
