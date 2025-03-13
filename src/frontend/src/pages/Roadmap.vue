@@ -49,10 +49,13 @@
         <div class="scrollable-content">
           <!-- Quarters Section -->
           <section class="quarters-container">
-            <div v-for="(quarter, qIndex) in filteredQuarters" :key="qIndex" class="quarter" :class="{ 'active': quarter.open, 'completed': quarter.completed }">
-              <div class="quarter-header" @click="toggleQuarter(qIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
+            <div v-for="(quarter, qIndex) in filteredQuarters" :key="qIndex" class="quarter" :class="{ 'active': quarter.open, 'completed': quarter.completed, 'current-quarter': isCurrent(quarter) }">
+              <div class="quarter-header" @click.stop="toggleQuarter(qIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                 <div class="header-content">
-                  <h2>{{ quarter.period }}</h2>
+                  <div class="title-with-status">
+                    <div class="status-icon" :class="getQuarterStatusClass(quarter)"></div>
+                    <h2>{{ quarter.period }}</h2>
+                  </div>
                   <p class="description">{{ quarter.description }}</p>
                 </div>
                 <div class="status-indicators">
@@ -69,12 +72,15 @@
                 </div>
               </div>
               
-              <!-- Simplified transition -->
+              <!-- Milestones Section -->
               <div v-if="quarter.open" class="milestones">
-                <div v-for="(milestone, mIndex) in quarter.milestones" :key="mIndex" class="milestone" :class="{ 'completed': milestone.completed }">
-                  <div class="milestone-header" @click="toggleMilestone(quarter, milestone, mIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
+                <div v-for="(milestone, mIndex) in quarter.milestones" :key="mIndex" class="milestone" :class="{ 'completed': milestone.completed === milestone.total && milestone.total > 0 }">
+                  <div class="milestone-header" @click.stop="toggleMilestone(quarter, milestone, mIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                     <div class="header-content">
-                      <h3>{{ milestone.title }}</h3>
+                      <div class="title-with-status">
+                        <div class="status-icon" :class="{ 'completed': milestone.completed, 'pending': !milestone.completed }"></div>
+                        <h3>{{ milestone.title }}</h3>
+                      </div>
                       <p class="description">{{ milestone.description }}</p>
                     </div>
                     <div class="status-indicators">
@@ -91,12 +97,15 @@
                     </div>
                   </div>
                   
-                  <!-- Simplified transition -->
+                  <!-- Tasks Section -->
                   <div v-if="milestone.open" class="tasks">
-                    <div v-for="(task, tIndex) in milestone.tasks" :key="tIndex" class="task" :class="{ 'completed': task.completed }">
-                      <div class="task-header" @click="toggleTask(quarter, milestone, task, tIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
+                    <div v-for="(task, tIndex) in milestone.tasks" :key="tIndex" class="task" :class="{ 'completed': task.completed === task.total && task.total > 0 }">
+                      <div class="task-header" @click.stop="toggleTask(quarter, milestone, task, tIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                         <div class="header-content">
-                          <h4>{{ task.title }}</h4>
+                          <div class="title-with-status">
+                            <div class="status-icon" :class="{ 'completed': task.completed, 'pending': !task.completed }"></div>
+                            <h4>{{ task.title }}</h4>
+                          </div>
                           <p class="description">{{ task.description }}</p>
                           
                           <!-- Task tags simplified -->
@@ -123,12 +132,13 @@
                         </div>
                       </div>
                       
-                      <!-- Subtasks simplified -->
+                      <!-- Subtasks Section -->
                       <div v-if="task.open && task.subtasks" class="subtasks">
                         <div v-for="(subtask, stIndex) in task.subtasks" :key="stIndex" class="subtask" :class="{ completed: subtask.completed }">
                           <div class="subtask-header">
                             <div class="checkbox-container">
-                              <input type="checkbox" :id="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex" :checked="subtask.completed" @change="toggleSubtask(quarter, milestone, task, subtask)">
+                              <div class="status-icon subtask-status-icon" :class="{ 'completed': subtask.completed, 'pending': !subtask.completed }"></div>
+                              <input type="checkbox" :id="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex" :checked="subtask.completed" @change="toggleSubtask(quarter, milestone, task, subtask, $event)">
                               <label :for="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex">{{ subtask.title }}</label>
                             </div>
                             <div class="subtask-status" :class="{ completed: subtask.completed }">
@@ -247,17 +257,20 @@ export default {
       }
     };
 
-    // Simplified scroll helper
+    // Simplified scroll helper - Update this to be more accurate
     const scrollToElement = (element) => {
       if (!element || !isMounted.value) return;
       
       const scrollableContent = document.querySelector('.scrollable-content');
       if (!scrollableContent) return;
       
-      scrollableContent.scrollTo({
-        top: element.offsetTop - 100,
-        behavior: 'smooth'
-      });
+      // Add a small delay to ensure DOM has updated
+      setTimeout(() => {
+        scrollableContent.scrollTo({
+          top: element.offsetTop - 80,
+          behavior: 'smooth'
+        });
+      }, 50);
     };
 
     // Find current quarter and scroll to it - simplified
@@ -300,7 +313,7 @@ export default {
       });
     };
 
-    // Toggle handlers - simplified
+    // Update toggle functions to properly handle clicked elements
     const toggleQuarter = (index, event) => {
       quarters.value[index].open = !quarters.value[index].open;
       
@@ -317,9 +330,15 @@ export default {
       
       if (milestone.open) {
         nextTick(() => {
+          // Important: Make sure we're getting the specific milestone element that was clicked
           const element = event?.target.closest('.milestone');
           if (element) scrollToElement(element);
         });
+      }
+      
+      // Stop event propagation to prevent parent quarter handler from triggering
+      if (event) {
+        event.stopPropagation();
       }
     };
 
@@ -328,9 +347,15 @@ export default {
       
       if (task.open) {
         nextTick(() => {
+          // Important: Make sure we're getting the specific task element that was clicked
           const element = event?.target.closest('.task');
           if (element) scrollToElement(element);
         });
+      }
+      
+      // Stop event propagation to prevent parent milestone/quarter handlers from triggering
+      if (event) {
+        event.stopPropagation();
       }
     };
 
@@ -364,11 +389,16 @@ export default {
       quarter.total = quarter.milestones.reduce((sum, milestone) => sum + milestone.total, 0);
     };
 
-    const toggleSubtask = (quarter, milestone, task, subtask) => {
+    const toggleSubtask = (quarter, milestone, task, subtask, event) => {
       subtask.completed = !subtask.completed;
       updateTaskProgress(task);
       updateMilestoneProgress(milestone);
       updateQuarterProgress(quarter);
+      
+      // Stop event propagation
+      if (event) {
+        event.stopPropagation();
+      }
     };
 
     // Tag filter toggle
@@ -415,6 +445,23 @@ export default {
       window.matchMedia('(prefers-reduced-motion: reduce)').removeEventListener('change', checkReducedMotion);
     });
 
+    // Add a new method to determine if a quarter is the current quarter
+    const isCurrent = (quarter) => {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth();
+      const currentQuarter = Math.floor(currentMonth / 3) + 1;
+      
+      return quarter.year === currentYear && quarter.quarterNum === currentQuarter;
+    };
+    
+    // Add a method to get the appropriate status class for a quarter
+    const getQuarterStatusClass = (quarter) => {
+      if (quarter.completed) return 'completed';
+      if (isCurrent(quarter)) return 'current';
+      return 'future';
+    };
+
     return {
       roadmapRef,
       quarters,
@@ -433,7 +480,9 @@ export default {
       handleCardMouseLeave,
       getTagColor,
       toggleTagFilter,
-      scrollToCurrentQuarter
+      scrollToCurrentQuarter,
+      isCurrent,
+      getQuarterStatusClass
     };
   }
 };
@@ -539,7 +588,8 @@ export default {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 50% 30%, var(--hero-accent-glow) 0%, transparent 60%),
+    radial-gradient(circle at 50% 30%, var(--hero-accent-glow) 0%,
+    transparent 60%),
     radial-gradient(circle at 80% 40%, rgba(201, 42, 253, 0.2) 0%, transparent 50%);
   z-index: 1;
   pointer-events: none;
@@ -1720,5 +1770,216 @@ export default {
 .task.completed {
   position: relative;
   animation: completedPulse 3s infinite alternate var(--animation-smooth);
+}
+
+/* Title with status icon styling */
+.title-with-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Status icon styling */
+.status-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Quarter status icons */
+.status-icon.completed {
+  background-color: var(--status-completed);
+  box-shadow: 0 0 8px rgba(42, 187, 155, 0.4);
+}
+
+.status-icon.completed::after {
+  content: '✓';
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.status-icon.current {
+  background-color: var(--status-in-progress);
+  box-shadow: 0 0 8px rgba(56, 128, 255, 0.4);
+}
+
+.status-icon.current::after {
+  content: '▶';
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+}
+
+.status-icon.future {
+  background-color: var(--status-to-do);
+  box-shadow: 0 0 8px rgba(255, 153, 0, 0.4);
+}
+
+.status-icon.future::after {
+  content: '◯';
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.status-icon.pending {
+  background-color: var(--status-to-do);
+  opacity: 0.7;
+  box-shadow: 0 0 5px rgba(255, 153, 0, 0.3);
+}
+
+.status-icon.pending::after {
+  content: '◯';
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+/* Subtask status icon */
+.subtask-status-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-right: 0.25rem;
+}
+
+.subtask-status-icon.completed::after,
+.subtask-status-icon.pending::after {
+  font-size: 0.6rem;
+}
+
+/* Quarter level adjustments */
+.quarter .status-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.quarter .status-icon::after {
+  font-size: 1rem;
+}
+
+/* Milestone level adjustments */
+.milestone .status-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.milestone .status-icon::after {
+  font-size: 0.85rem;
+}
+
+/* Make header content titles align with icons */
+.header-content h2,
+.header-content h3,
+.header-content h4 {
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Remove the old completion badge */
+.quarter.completed::after,
+.milestone.completed::after,
+.task.completed::after {
+  display: none;
+}
+
+/* Adjust the checkbox container to accommodate the status icon */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Hide checkbox when using status icon */
+.checkbox-container input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Adjust spacing in mobile view */
+@media (max-width: 768px) {
+  .title-with-status {
+    gap: 0.35rem;
+  }
+  
+  .status-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .status-icon::after {
+    font-size: 0.65rem;
+  }
+  
+  .quarter .status-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  .quarter .status-icon::after {
+    font-size: 0.8rem;
+  }
+  
+  .milestone .status-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+  
+  .milestone .status-icon::after {
+    font-size: 0.7rem;
+  }
+  
+  .subtask-status-icon {
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+}
+
+/* Animation for current quarter indicator */
+@keyframes pulseCurrentIndicator {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+.status-icon.current {
+  animation: pulseCurrentIndicator 2s infinite ease-in-out;
+}
+
+/* Extra styles to ensure everything renders correctly */
+.header-content {
+  margin-right: 4rem;
+  padding-right: 0; /* Remove this padding as we don't need it now with the icon layout */
+}
+
+.description {
+  margin-left: 1.75rem; /* Indent description to align with title text */
+}
+
+.milestone .description,
+.task .description {
+  margin-left: 1.6rem;
+}
+
+.subtask-description {
+  margin-left: 2.25rem;
 }
 </style>
