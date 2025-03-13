@@ -60,8 +60,11 @@
                   <p class="description">{{ quarter.description }}</p>
                 </div>
                 <div class="status-indicators">
+                  <div class="task-status-wrapper">
+                    <span class="task-status" :class="quarter.status ? quarter.status.toLowerCase().replace(/\s+/g, '-') : ''">{{ quarter.status || 'Pending' }}</span>
+                    <span class="progress-text">{{ quarter.completed }}/{{ quarter.total }}</span>
+                  </div>
                   <div class="progress-wrapper">
-                    <div class="progress-text">{{ quarter.completed }}/{{ quarter.total }}</div>
                     <div class="progress-container">
                       <div class="progress-bar" :style="{ width: getProgressPercentage(quarter.completed, quarter.total) + '%' }"></div>
                     </div>
@@ -86,8 +89,11 @@
                       <p class="description">{{ milestone.description }}</p>
                     </div>
                     <div class="status-indicators">
+                      <div class="task-status-wrapper">
+                        <span class="task-status" :class="milestone.status ? milestone.status.toLowerCase().replace(/\s+/g, '-') : ''">{{ milestone.status || 'Pending' }}</span>
+                        <span class="progress-text">{{ milestone.completed }}/{{ milestone.total }}</span>
+                      </div>
                       <div class="progress-wrapper">
-                        <div class="progress-text">{{ milestone.completed }}/{{ milestone.total }}</div>
                         <div class="progress-container">
                           <div class="progress-bar" :style="{ width: getProgressPercentage(milestone.completed, milestone.total) + '%' }"></div>
                         </div>
@@ -120,10 +126,10 @@
                         </div>
                         <div class="status-indicators">
                           <div class="task-status-wrapper">
-                            <span class="task-status" :class="task.status.toLowerCase().replace(/\s+/g, '-')">{{ task.status }}</span>
+                            <span class="task-status" :class="task.status ? task.status.toLowerCase().replace(/\s+/g, '-') : ''">{{ task.status || 'Pending' }}</span>
+                            <span class="progress-text">{{ task.completed }}/{{ task.total }}</span>
                           </div>
                           <div class="progress-wrapper">
-                            <div class="progress-text">{{ task.completed }}/{{ task.total }}</div>
                             <div class="progress-container">
                               <div class="progress-bar" :style="{ width: getProgressPercentage(task.completed, task.total) + '%' }"></div>
                             </div>
@@ -1208,7 +1214,9 @@ export default {
 }
 
 .quarter-header {
+  position: relative;
   padding: 1rem;
+  padding-right: 4.5rem; /* Space for status indicators */
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -1283,7 +1291,9 @@ export default {
 }
 
 .milestone-header {
-  padding: 0.75rem;
+  position: relative;
+  padding: 1rem;
+  padding-right: 4.5rem; /* Space for status indicators */
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -1358,7 +1368,9 @@ export default {
 }
 
 .task-header {
-  padding: 0.75rem;
+  position: relative;
+  padding: 1rem;
+  padding-right: 4.5rem; /* Space for status indicators */
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -1454,6 +1466,14 @@ export default {
 }
 
 /* Enhanced status styles */
+.task-status-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  flex-wrap: nowrap;
+}
+
 .task-status {
   font-size: 0.6875rem;
   padding: 0.2rem 0.4rem;
@@ -1478,7 +1498,7 @@ export default {
   border: 1px solid var(--status-in-progress-border);
 }
 
-.task-status.to-do {
+.task-status.to-do, .task-status.pending {
   background: var(--status-to-do-bg);
   color: var(--status-to-do);
   border: 1px solid var(--status-to-do-border);
@@ -1494,6 +1514,12 @@ export default {
   background: var(--status-review-bg);
   color: var(--status-review);
   border: 1px solid var(--status-review-border);
+}
+
+/* Progress text styling */
+.task-status-wrapper .progress-text {
+  margin-left: 0.25rem;
+  font-size: 0.75rem;
 }
 
 /* Subtask status indicators */
@@ -1556,6 +1582,22 @@ export default {
 .checkbox-container input[type="checkbox"]:hover {
   border-color: var(--cosmic-teal);
   box-shadow: 0 0 8px var(--subtask-glow);
+}
+
+/* Mobile adjustments for status tags and progress text */
+@media (max-width: 768px) {
+  .task-status {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.3rem;
+  }
+  
+  .task-status-wrapper {
+    gap: 0.35rem;
+  }
+  
+  .task-status-wrapper .progress-text {
+    font-size: 0.65rem;
+  }
 }
 
 /* Current quarter highlight */
@@ -1644,7 +1686,6 @@ export default {
 
 /* Media queries */
 @media (max-width: 768px) {
-
   .cosmic-title {
     margin-top: -1.25rem;
     font-size: 1.75rem;
@@ -1674,6 +1715,36 @@ export default {
   .hero-section {
     display: block;
     margin-top: 1rem; /* Add margin to hero section on mobile */
+  }
+
+  .status-indicators {
+    top: 50%;
+    right: 0.5rem;
+    gap: 0.35rem;
+    transform: translateY(-50%);
+  }
+  
+  .status-bottom-row .progress-container {
+    width: 40px;
+  }
+  
+  .status-top-row {
+    gap: 0.35rem;
+  }
+  
+  .progress-text {
+    font-size: 0.65rem;
+    margin-left: 0.25rem;
+  }
+  
+  .task-status {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.3rem;
+  }
+  
+  .toggle-icon.small {
+    width: 0.55rem;
+    height: 0.55rem;
   }
 }
 
@@ -1709,19 +1780,25 @@ export default {
   transition: color 0.3s var(--animation-smooth);
 }
 
-/* Header right renamed to status-indicators */
+/* Status indicators positioning and alignment */
 .status-indicators {
   position: absolute;
-  top: 0.75rem;
+  top: 50%;
   right: 0.75rem;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 0.5rem;
+  transform: translateY(-50%);
   transform-style: preserve-3d;
 }
 
-/* Progress positioning */
+/* Task status and progress text side by side */
+.task-status-wrapper {
+  display: inline-flex;
+  margin-bottom: 0.25rem;
+}
+
 .progress-wrapper {
   display: flex;
   flex-direction: column;
@@ -1730,917 +1807,22 @@ export default {
   transform-style: preserve-3d;
 }
 
-.progress-container {
-  width: 100px;
-  height: 6px;
-  background: rgba(13, 20, 33, 0.5);
-  border-radius: 3px;
-  overflow: hidden;
-  position: relative;
-  border: 1px solid rgba(87, 119, 235, 0.3);
-}
-
-.progress-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    linear-gradient(90deg, 
-      transparent 0%,
-      rgba(87, 119, 235, 0.1) 20%,
-      rgba(87, 119, 235, 0.2) 40%,
-      rgba(87, 119, 235, 0.1) 60%,
-      transparent 100%
-    );
-  background-size: 200% 100%;
-  animation: scanline 2s linear infinite;
-  z-index: 1;
-  pointer-events: none;
-}
-
-@keyframes scanline {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-.progress-bar {
-  height: 100%;
-  border-radius: 3px;
-  position: relative;
-  transition: width 0.5s cubic-bezier(0.12, 0.8, 0.32, 1);
-}
-
-/* Empty progress bar styling */
-.progress-bar[style*="width: 0%"] {
-  background: rgba(87, 119, 235, 0.1) !important;
-  box-shadow: none !important;
-}
-
-/* Quarter progress bar - cosmic blue theme */
-.quarter .progress-bar {
-  background: linear-gradient(90deg,
-    #0062ff 0%,
-    #00c3ff 50%,
-    #0062ff 100%
-  );
-  background-size: 200% 100%;
-  animation: gradientShift 3s ease infinite;
-  box-shadow: 0 0 8px rgba(0, 99, 255, 0.7);
-}
-
-/* Milestone progress bar - cosmic purple theme */
-.milestone .progress-bar {
-  background: linear-gradient(90deg,
-    #6a11cb 0%,
-    #a15cff 50%,
-    #6a11cb 100%
-  );
-  background-size: 200% 100%;
-  animation: gradientShift 3s ease infinite;
-  box-shadow: 0 0 8px rgba(106, 17, 203, 0.7);
-}
-
-/* Task progress bar - cosmic pink theme */
-.task .progress-bar {
-  background: linear-gradient(90deg,
-    #c31432 0%,
-    #ff5e98 50%,
-    #c31432 100%
-  );
-  background-size: 200% 100%;
-  animation: gradientShift 3s ease infinite;
-}
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.progress-text {
-  font-size: 0.8rem;
-  font-weight: 600;
-  white-space: nowrap;
-  color: var(--cosmic-text-secondary);
-  transition: color 0.3s var(--animation-smooth);
-  margin-bottom: 4px;
-  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-}
-
-/* Task status positioning */
-.task-status-wrapper {
-  margin-bottom: 0.5rem;
-}
-
-.task-status {
-  font-size: 0.6875rem;
-  padding: 0.2rem 0.4rem;
-  border-radius: 1rem;
-  background: var(--cosmic-glass-bg);
-  white-space: nowrap;
-  box-shadow: var(--cosmic-shadow-sm);
-  transition: all 0.2s var(--animation-bounce);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-
-/* Update header content to take up more space */
-.header-content {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  margin-right: 4rem; /* Give space for the indicators */
-  padding-right: 1rem;
-  transform-style: preserve-3d;
-}
-
-/* Subtask status positioning */
-.subtask-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.subtask-status {
-  font-size: 0.6875rem;
-  padding: 0.2rem 0.4rem;
-  border-radius: 1rem;
-  white-space: nowrap;
-  transition: all 0.2s var(--animation-bounce);
-  font-weight: 600;
-  margin-left: auto;
-}
-
-/* Update component headers to use relative positioning */
-.quarter-header, .milestone-header, .task-header {
-  position: relative;
-  padding: 1rem;
-  padding-right: 4.5rem; /* Space for status indicators */
-}
-
-/* Toggle icon positioning */
-.toggle-icon {
-  position: relative;
-  width: .75rem;
-  height: .75rem;
-  cursor: pointer;
-  transition: all 0.2s var(--animation-bounce);
-}
-
-.icon-line {
-  position: absolute;
-  transition: all 0.5s var(--animation-bounce);
-  box-shadow: var(--cosmic-shadow-sm);
-}
-
-.quarter:hover .icon-line {
-  background-color: rgb(0, 191, 255); /* Change to your desired hover color */
-}
-
-.milestone:hover .icon-line {
-  background-color: rgb(0, 191, 255); /* Change to your desired hover color */
-}
-.horizontal {
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 2px;
-  transform: translateY(-50%);
-}
-
-.vertical {
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  transform: translateX(-50%);
-}
-
-.vertical.hidden {
-  transform: translateX(-50%) scaleY(0);
-}
-
-.toggle-icon.is-open .horizontal {
-  transform: translateY(-50%) rotate(180deg);
-}
-
-/* Update completion badge position to not overlap with status indicators */
-.quarter.completed::after,
-.milestone.completed::after,
-.task.completed::after {
-  right: 1.5rem;
-}
-
-/* Adjust padding for mobile view */
-@media (max-width: 768px) {
-  .status-indicators {
-    top: 0.5rem;
-    right: 0.5rem;
-    gap: 0.35rem;
-  }
-  
-  .progress-container {
-    width: 40px;
-    height: 3px;
-  }
-  
-  .progress-text {
-    font-size: 0.6rem;
-  }
-  
-  .task-status {
-    font-size: 0.6rem;
-    padding: 0.15rem 0.3rem;
-  }
-  
-  .quarter-header, .milestone-header, .task-header {
-    padding-right: 3.5rem;
-  }
-  
-  .header-content {
-    margin-right: 3rem;
-  }
-}
-
-/* Webkit scrollbar styling */
-.scrollable-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.scrollable-content::-webkit-scrollbar-track {
-  background: var(--cosmic-glass-bg);
-  border-radius: 4px;
-}
-
-.scrollable-content::-webkit-scrollbar-thumb {
-  background: var(--cosmic-blue);
-  border-radius: 4px;
-  opacity: 0.7;
-}
-
-.scrollable-content::-webkit-scrollbar-thumb:hover {
-  background: var(--cosmic-blue);
-  opacity: 1;
-}
-
-.roadmap-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: calc(100vh - var(--header-height) - var(--page-padding) * 2);
-  position: relative;
-  gap: 1rem;
-  margin: 0 auto;
-  max-width: 1400px;
-}
-
-@media (min-width: 1024px) {
-  .roadmap-container {
-    flex-direction: row;
-    gap: 2rem;
-    padding: 0 2rem;
-    height: calc(100vh - var(--header-height) - var(--page-padding) * 2);
-  }
-
-  .main-content-wrapper {
-    flex: 1;
-    min-width: 0;
-    margin-left: 8rem;
-    margin-right: 2rem;
-    margin-top: 4rem;
-  }
-
-  .hero-section {
-    display: none;
-  }
-}
-
-.main-content-wrapper {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  height: 95%;
-  position: relative;
-  background: var(--cosmic-glass-bg-lighter);
-  border-radius: 1rem;
-  border: var(--cosmic-glass-border-blue);
-  overflow: hidden;
-  z-index: 5;
-}
-
-.scrollable-content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 1rem;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: var(--cosmic-blue) var(--cosmic-glass-bg);
-  transform-style: preserve-3d;
-}
-
-/* Transition effects for completion */
-.quarter, .milestone, .task, .subtask {
-  transition: all 0.3s var(--animation-bounce), 
-              background 0.5s var(--animation-smooth),
-              border-color 0.5s var(--animation-smooth);
-}
-
-.quarter-header, .milestone-header, .task-header {
-  transition: all 0.3s var(--animation-smooth),
-              border-left-color 0.5s var(--animation-smooth),
-              background 0.5s var(--animation-smooth);
-}
-
-.header-content h2, .header-content h3, .header-content h4 {
-  transition: color 0.5s var(--animation-smooth),
-              text-shadow 0.5s var(--animation-smooth);
-}
-
-/* Add a completion badge for extra visual cue */
-.quarter.completed::after,
-.milestone.completed::after,
-.task.completed::after {
-  content: '✓';
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 1.25rem;
-  height: 1.25rem;
-  background: var(--status-completed);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: bold;
-  box-shadow: 0 0 8px rgba(42, 187, 155, 0.4);
-  z-index: 2;
-}
-
-.quarter.completed::after {
-  width: 1.5rem;
-  height: 1.5rem;
-  font-size: 1rem;
-}
-
-.milestone.completed::after {
-  width: 1.4rem;
-  height: 1.4rem;
-  font-size: 0.9rem;
-}
-
-/* Add a subtle completed animation */
-@keyframes completedPulse {
-  0% {
-    box-shadow: 0 0 5px rgba(42, 187, 155, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 4px rgba(13, 255, 0, 0.826);
-  }
-  100% {
-    box-shadow: 0 0 5px rgba(85, 255, 0, 0.1);
-  }
-}
-
-.quarter.completed, 
-.milestone.completed, 
-.task.completed {
-  position: relative;
-  animation: completedPulse 3s infinite alternate var(--animation-smooth);
-}
-
-/* Title with status icon styling */
-.title-with-status {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.25rem;
-}
-
-/* Status icon styling */
-.status-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-  cursor: pointer;
-  transition: transform 0.2s var(--animation-bounce);
-}
-
-/* Common icon styles */
-.status-icon::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  z-index: -1;
-  transform: scale(1);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.status-icon:hover {
-  transform: scale(1.15);
-}
-
-/* Completed icon with SVG check mark */
-.status-icon.completed {
-  background: linear-gradient(135deg, #25a18e, #00e676);
-}
-
-.status-icon.completed::before {
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
-  opacity: 0.6;
-}
-
-.status-icon.completed::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 12 10 16 18 8'%3E%3C/polyline%3E%3C/svg%3E");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 70%;
-}
-
-/* In Progress icon with animation */
-.status-icon.in-progress {
-  background: linear-gradient(135deg, #1565c0, #42a5f5);
-
-}
-
-.status-icon.in-progress::before {
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
-  opacity: 0.6;
-  animation: rotateGlow 2s linear infinite;
-}
-
-.status-icon.in-progress::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'%3E%3C/polyline%3E%3C/svg%3E");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 70%;
-}
-
-/* Current icon with pulse effect */
-.status-icon.current {
-  background: linear-gradient(135deg, #0277bd, #29b6f6);
-  box-shadow: 
-    0 0 0 2px rgba(56, 128, 255, 0.2),
-    0 0 15px rgba(56, 128, 255, 0.4);
-  animation: pulseCurrentIndicator 2s infinite ease-in-out;
-}
-
-.status-icon.current::before {
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
-  opacity: 0.6;
-}
-
-.status-icon.current::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolyline points='12 6 12 12 16 14'%3E%3C/polyline%3E%3C/svg%3E");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 70%;
-}
-
-/* Future/Todo icon */
-.status-icon.future, 
-.status-icon.pending {
-  background: linear-gradient(135deg, #6a11cb, #8c7ae6);
-  box-shadow: 
-    0 0 0 2px rgba(106, 17, 203, 0.2),
-    0 0 15px rgba(106, 17, 203, 0.4);
-}
-
-.status-icon.future::before,
-.status-icon.pending::before {
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
-  opacity: 0.4;
-}
-
-.status-icon.future::after,
-.status-icon.pending::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='6' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 70%;
-}
-
-/* Enhance the subtask status icons to match the main icons */
-.subtask-status-icon {
-  width: 0.9rem;
-  height: 0.9rem;
-  margin-right: 0.25rem;
-  border-radius: 50%;
-  position: relative;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  cursor: pointer;
-}
-
-/* Pending subtask icon */
-.subtask-status-icon.pending {
-  background: linear-gradient(135deg, #6a11cb, #8c7ae6);
-  box-shadow: 
-    0 0 0 1px rgba(106, 17, 203, 0.2),
-    0 0 8px rgba(106, 17, 203, 0.3);
-}
-
-.subtask-status-icon.pending::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
-  opacity: 0.4;
-}
-
-.subtask-status-icon.pending::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='10' height='10' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='6' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 70%;
-}
-
-/* Completed subtask icon */
-.subtask-status-icon.completed {
-  background: linear-gradient(135deg, #19725f, #00cc66);
-  box-shadow: 
-    0 0 0 1px rgba(25, 114, 95, 0.2),
-    0 0 8px rgba(25, 114, 95, 0.3);
-}
-
-.subtask-status-icon.completed::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
-  opacity: 0.7;
-}
-
-.subtask-status-icon.completed::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='10' height='10' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 12 10 16 18 8'%3E%3C/polyline%3E%3C/svg%3E");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 70%;
-}
-
-/* Remove the duplicate completed badge */
-.quarter.completed::after,
-.milestone.completed::after,
-.task.completed::after {
-  display: none;
-}
-
-/* Subtask hover and click effects */
-.checkbox-container:hover .subtask-status-icon {
-  transform: scale(1.1);
-}
-
-.checkbox-container:active .subtask-status-icon {
-  transform: scale(0.9);
-}
-
-/* Quarter level adjustments with size scaling */
-.quarter .status-icon {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
-/* Milestone level adjustments */
-.milestone .status-icon {
-  width: 1.35rem;
-  height: 1.35rem;
-}
-
-/* Make header content titles align with icons */
-.header-content h2,
-.header-content h3,
-.header-content h4 {
-  margin: 0;
-  line-height: 1.3;
-}
-
-/* Remove the old completion badge */
-.quarter.completed::after,
-.milestone.completed::after,
-.task.completed::after {
-  display: none;
-}
-
-/* Adjust the checkbox container to accommodate the status icon */
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* Hide checkbox when using status icon */
-.checkbox-container input[type="checkbox"] {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-/* Adjust spacing in mobile view */
-@media (max-width: 768px) {
-  .title-with-status {
-    gap: 0.35rem;
-  }
-  
-  .status-icon {
-    width: 1rem;
-    height: 1rem;
-  }
-  
-  .status-icon::after {
-    font-size: 0.65rem;
-  }
-  
-  .quarter .status-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-  
-  .quarter .status-icon::after {
-    font-size: 0.8rem;
-  }
-  
-  .milestone .status-icon {
-    width: 1.1rem;
-    height: 1.1rem;
-  }
-  
-  .milestone .status-icon::after {
-    font-size: 0.7rem;
-  }
-  
-  .subtask-status-icon {
-    width: 0.8rem;
-    height: 0.8rem;
-  }
-}
-
-/* Animation for current quarter indicator */
-@keyframes pulseCurrentIndicator {
-  0% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-}
-
-.status-icon.current {
-  animation: pulseCurrentIndicator 2s infinite ease-in-out;
-}
-
-/* Extra styles to ensure everything renders correctly */
-.header-content {
-  margin-right: 4rem;
-  padding-right: 0; /* Remove this padding as we don't need it now with the icon layout */
-}
-
-.description {
-  margin-left: 1.75rem; /* Indent description to align with title text */
-}
-
-.milestone .description,
-.task .description {
-  margin-left: 1.6rem;
-}
-
-.subtask-description {
-  margin-left: 2.25rem;
-}
-
-/* Add CSS for in-progress status: */
-/* Status icon styling */
-.status-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-}
-
-/* Quarter status icons */
-.status-icon.completed {
-  background-color: var(--status-completed);
-}
-
-.status-icon.completed::after {
-  content: '✓';
-  color: white;
-  font-size: 0.75rem;
-  font-weight: bold;
-}
-
-.status-icon.in-progress {
-  background-color: var(--status-in-progress);
-  animation: pulseInProgress 1.5s infinite alternate ease-in-out;
-}
-
-.status-icon.in-progress::after {
-  content: '→';
-  color: white;
-  font-size: 0.65rem;
-  font-weight: bold;
-}
-
-.status-icon.current {
-  background-color: var(--status-in-progress);
-}
-
-.status-icon.current::after {
-  content: '▶';
-  color: white;
-  font-size: 0.65rem;
-  font-weight: bold;
-}
-
-.status-icon.future {
-  background-color: var(--status-to-do);
-}
-
-.status-icon.future::after {
-  content: '◯';
-  color: white;
-  font-size: 0.75rem;
-  font-weight: bold;
-}
-
-@keyframes pulseInProgress {
-  0% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-}
-
-/* Add styles for in-progress components */
-.quarter.in-progress,
-.milestone.in-progress,
-.task.in-progress {
-  border: 1px solid var(--status-in-progress-border);
-  background: linear-gradient(135deg,
-    rgba(56, 128, 255, 0.05) 0%,
-    rgba(56, 128, 255, 0.1) 100%
-  );
-}
-
-.quarter.in-progress .quarter-header,
-.milestone.in-progress .milestone-header,
-.task.in-progress .task-header {
-  border-left-color: var(--status-in-progress);
-  background: linear-gradient(135deg,
-    rgba(56, 128, 255, 0.1) 0%,
-    rgba(7, 20, 42, 0.4) 100%
-  );
-}
-
-.quarter.in-progress .quarter-header .header-content h2,
-.milestone.in-progress .milestone-header .header-content h3,
-.task.in-progress .task-header .header-content h4 {
-  color: var(--status-in-progress);
-  text-shadow: 0 0 10px rgba(56, 128, 255, 0.3);
-}
-
-.quarter.in-progress .progress-bar,
-.milestone.in-progress .progress-bar,
-.task.in-progress .progress-bar {
-  background: linear-gradient(90deg,
-    var(--status-in-progress) 0%,
-    rgba(108, 169, 255, 0.8) 100%
-  );
-}
-
-.quarter.in-progress:hover,
-.milestone.in-progress:hover,
-.task.in-progress:hover {
-  transform: translateX(8px);
-  box-shadow: 0 0 15px rgba(56, 128, 255, 0.25);
-  border-color: var(--status-in-progress);
-}
-
-/* Override duplicate icons */
-.status-icon.completed::after,
-.status-icon.in-progress::after,
-.status-icon.current::after,
-.status-icon.future::after,
-.status-icon.pending::after {
-  content: '' !important;
-  background-image: none;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 70%;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-}
-
-/* Restore SVG icons */
-.status-icon.completed::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 12 10 16 18 8'%3E%3C/polyline%3E%3C/svg%3E") !important;
-}
-
-.status-icon.in-progress::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'%3E%3C/polyline%3E%3C/svg%3E") !important;
-}
-
-.status-icon.current::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolyline points='12 6 12 12 16 14'%3E%3C/polyline%3E%3C/svg%3E") !important;
-}
-
-.status-icon.future::after,
-.status-icon.pending::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='6' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E") !important;
-}
-
-/* Subtask icons */
-.subtask-status-icon.completed::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='10' height='10' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 12 10 16 18 8'%3E%3C/polyline%3E%3C/svg%3E") !important;
-}
-
-.subtask-status-icon.pending::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='10' height='10' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='6' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E") !important;
+/* Make progress text appear next to task status */
+.task-header .task-status-wrapper,
+.milestone-header .task-status-wrapper {
+  margin-right: 0.5rem;
+}
+
+.task-header .progress-text,
+.milestone-header .progress-text {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Progress container width adjustment */
+.task-header .progress-container,
+.milestone-header .progress-container {
+  width: 80px;
+  margin-right: 0.5rem;
 }
 </style>
