@@ -30,19 +30,6 @@
               <h1 class="cosmic-title">Cosmic Roadmap</h1>
               <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history.</p>
             </div>
-            <button 
-              class="current-quarter-btn" 
-              @click="scrollToCurrentQuarter"
-              aria-label="View current quarter"
-            >
-              <span class="btn-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-              </span>
-              <span class="btn-text">Current Quarter</span>
-            </button>
           </div>
         </header>
 
@@ -136,17 +123,6 @@
                       <p class="description">{{ milestone.description }}</p>
                     </div>
                     <div class="header-right">
-                      <button 
-                        class="share-button" 
-                        @click.stop="copyMilestoneLink(quarter, milestone, qIndex, mIndex)"
-                        aria-label="Copy link to this milestone"
-                        title="Copy link to this milestone"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                        </svg>
-                      </button>
                       <div class="progress-wrapper">
                         <div class="progress-container">
                           <div class="progress-bar" :style="{ width: getProgressPercentage(milestone.completed, milestone.total) + '%' }"></div>
@@ -628,16 +604,6 @@ export default {
       }, duration);
     };
 
-    // Copy milestone link
-    const copyMilestoneLink = (quarter, milestone, quarterIndex, milestoneIndex) => {
-      const url = new URL(window.location.href);
-      url.hash = `milestone-${quarterIndex}-${milestoneIndex}`;
-      
-      navigator.clipboard.writeText(url.toString())
-        .then(() => showNotification('Link copied to clipboard!', 'success'))
-        .catch(() => showNotification('Failed to copy link', 'error'));
-    };
-
     // Check for reduced motion preference
     const checkReducedMotion = () => {
       preferReducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -696,7 +662,6 @@ export default {
       getProgressPercentage,
       notifications,
       showNotification,
-      copyMilestoneLink,
       isMobile,
       preferReducedMotion,
       handleCardMouseMove,
@@ -720,16 +685,16 @@ export default {
 <style scoped>
 /* Base Styling */
 .roadmap-page {
-  height: 150vh;
-  width: 100%; /* Changed from 100vw to prevent horizontal overflow */
-  max-width: 100%; /* Ensure it never exceeds viewport */
+  height: 125vh;
+  width: 100%;
+  max-width: 100%;
   color: #fff;
   position: relative;
-  overflow-x: hidden; /* Prevent horizontal overflow */
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  padding-top: 6rem; /* Account for the header height */
-  box-sizing: border-box; /* Include padding in width calculation */
+  padding-top: 4rem; /* Reduced from 6rem to bring everything up */
+  box-sizing: border-box;
 }
 
 /* Enhanced Cosmic Background */
@@ -1021,9 +986,9 @@ export default {
 .fixed-header-section {
   width: 100%;
   flex-shrink: 0;
-  padding-bottom: 1.5rem;
-  box-sizing: border-box; /* Include padding in width calculation */
-  max-width: 100%; /* Ensure it doesn't overflow */
+  padding-bottom: 0.75rem; /* Reduced from 1.5rem */
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 /* Scrollable Content Area */
@@ -1060,10 +1025,6 @@ export default {
   border-radius: 4px;
 }
 
-/* Header Styling - Now using hero section */
-.roadmap-header {
-  display: none; /* Hide the old header */
-}
 
 /* Additional styles to ensure hero section styles take precedence */
 .cosmic-title {
@@ -1085,8 +1046,8 @@ export default {
 /* Search Section */
 .search-container {
   width: 100%;
-  margin-bottom: 1.5rem;
-  box-sizing: border-box; /* Include margin in width calculation */
+  margin-bottom: 0.75rem; /* Reduced from 1.5rem */
+  box-sizing: border-box;
 }
 
 .search-input-wrapper {
@@ -1101,25 +1062,25 @@ export default {
 
 .search-icon {
   position: absolute;
-  left: 1rem;
+  left: 0.875rem; /* Adjusted to match reduced padding */
   top: 50%;
   transform: translateY(-50%);
   color: rgba(255, 255, 255, 0.6);
-  z-index: 1; /* Ensure icon is above input */
+  z-index: 1;
 }
 
 .search-input {
   width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
+  padding: 0.75rem 1rem 0.75rem 2.75rem; /* Reduced padding */
   border-radius: 0.75rem;
-  background: rgba(15, 25, 40, 0.5); /* Exact match for hero section */
-  border: 1px solid rgba(88, 101, 242, 0.3); /* Match hero section border */
+  background: rgba(15, 25, 40, 0.5);
+  border: 1px solid rgba(88, 101, 242, 0.3);
   color: #fff;
   font-size: 1rem;
   transition: all 0.3s ease;
-  box-sizing: border-box; /* Include padding in width */
-  max-width: 100%; /* Prevent overflow */
-  backdrop-filter: blur(10px); /* Match hero section blur */
+  box-sizing: border-box;
+  max-width: 100%;
+  backdrop-filter: blur(10px);
 }
 
 .search-input:focus {
@@ -1138,118 +1099,51 @@ export default {
 }
 
 /* Mobile optimizations for hero */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .hero-section {
+    padding: 0.5rem 0.75rem; /* Further reduced padding on mobile */
+    margin-bottom: 0.5rem;
+  }
+  
   .hero-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    gap: 0.1rem; /* Minimal gap on mobile */
   }
   
-  .title-area {
-    text-align: center;
-    width: 100%;
+  .cosmic-title {
+    
+    font-size: 1.25rem;
   }
   
-  .current-quarter-btn {
-    width: 100%;
-    justify-content: center;
+  .cosmic-subtitle {
+    font-size: 0.75rem;
+  }
+  
+  .search-container {
+    margin-bottom: 0.5rem; /* Reduced margin on mobile */
+  }
+  
+  .search-input {
+    padding: 0.625rem 1rem 0.625rem 2.5rem; /* Smaller input on mobile */
+    font-size: 0.875rem;
   }
 }
 
 @media (max-width: 640px) {
   .roadmap-page {
-    padding-top: 4rem; /* Smaller header on mobile */
-  }
-  
-  .roadmap-container {
-    padding: 0 1rem;
+    padding-top: 2.5rem; /* Further reduced top padding on small mobile */
   }
   
   .fixed-header-section {
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem; /* Reduced padding on small mobile */
   }
   
-  .scrollable-content {
-    padding: 1rem;
-    border-radius: 0.75rem;
-  }
-  
-  .quarter {
-    border-radius: 0.5rem;
-  }
-  
-  .quarter-header {
-    padding: 1rem;
-    font-size: 0.875rem;
-  }
-  
-  .milestones {
-    padding: 1rem;
-  }
-  
-  .milestone {
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .milestone-header {
-    padding: 1rem;
-    font-size: 0.875rem;
-  }
-  
-  .tasks {
-    padding: 0.75rem 1rem;
-  }
-  
-  .task {
-    border-radius: 0.5rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .task-header {
-    padding: 0.75rem 1rem;
-    font-size: 0.875rem;
-  }
-  
-  .subtasks {
-    padding: 0.75rem;
-  }
-  
-  .subtask {
-    padding: 0.5rem 0.75rem;
-    margin-bottom: 0.5rem;
-    border-radius: 0.375rem;
-  }
-  
-  .description {
-    font-size: 0.75rem;
-  }
-  
-  .progress-container {
-    width: 50px; /* Smaller on mobile */
-    max-width: 50px;
-  }
-  
-  .header-right {
-    gap: 5px; /* Reduce gap on mobile */
+  .hero-section {
+    padding: 1rem 0.75rem;
   }
   
   .search-container {
     padding: 0;
-    margin-bottom: 1rem;
-  }
-  
-  .search-input {
-    padding: 0.875rem 1rem 0.875rem 2.75rem;
-    font-size: 0.875rem;
-  }
-  
-  .search-icon {
-    left: 0.875rem;
-  }
-  
-  .hero-section {
-    padding: 1.25rem 1rem;
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -1575,33 +1469,6 @@ export default {
   margin-right: 5px;
 }
 
-/* Share Button */
-.share-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: rgba(15, 185, 253, 0.1);
-  border: 1px solid rgba(15, 185, 253, 0.3);
-  border-radius: 50%;
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  margin-right: 0.75rem;
-}
-
-.share-button:hover {
-  background: rgba(15, 185, 253, 0.2);
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(15, 185, 253, 0.4);
-}
-
-.share-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(15, 185, 253, 0.2);
-}
-
 /* Add particle float animation */
 @keyframes particle-float {
   0% {
@@ -1671,97 +1538,52 @@ export default {
 
 /* Hero Section */
 .hero-section {
+  margin-top: 1.5rem;
   position: relative;
   display: flex;
   align-items: center;
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
-  background: rgba(15, 25, 40, 0.5);
-  border: 1px solid rgba(88, 101, 242, 0.3);
-  border-radius: 1rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), inset 0 1px rgba(255, 255, 255, 0.1);
+  margin-bottom: 0.5rem; /* Reduced from 1rem */
+  padding: 0.5rem 1.25rem; /* Reduced padding */
   overflow: hidden;
   width: 100%;
-  box-sizing: border-box; /* Include padding in width calculation */
-}
-
-.hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    linear-gradient(135deg, rgba(15, 185, 253, 0.1) 0%, transparent 50%),
-    linear-gradient(225deg, rgba(88, 101, 242, 0.1) 0%, transparent 50%);
-  pointer-events: none;
+  box-sizing: border-box;
 }
 
 .hero-content {
   position: relative;
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem; /* Reduced from 0.25rem */
   z-index: 1;
 }
 
 .title-area {
   text-align: left;
+  width: 100%;
 }
 
 .cosmic-title {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  margin: 0 0 0.5rem;
+  font-size: clamp(1.5rem, 3vw, 2rem); /* Reduced font size */
+  margin: 0; /* Removed bottom margin */
   background: linear-gradient(90deg, #FFFFFF, rgba(15, 185, 253, 0.8));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 20px rgba(15, 185, 253, 0.4);
+  line-height: 1.2; /* Tighter line height */
 }
 
 .cosmic-subtitle {
-  font-size: clamp(0.875rem, 2vw, 1.125rem);
-  color: rgba(255, 255, 255, 0.8);
+  color: #dbdbdbcc;
   margin: 0;
   max-width: 600px;
+  line-height: 1.3; /* Tighter line height */
 }
 
+/* Remove current-quarter-btn styles since we're not using it anymore */
 .current-quarter-btn {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1.25rem;
-  background: rgba(15, 185, 253, 0.2);
-  border: 1px solid rgba(15, 185, 253, 0.4);
-  border-radius: 1.5rem;
-  color: white;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.current-quarter-btn:hover {
-  background: rgba(15, 185, 253, 0.3);
-  border-color: rgba(15, 185, 253, 0.6);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(15, 185, 253, 0.3);
-}
-
-.current-quarter-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(15, 185, 253, 0.2);
-}
-
-.btn-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: none;
 }
 
 /* For long text content that might force width */
