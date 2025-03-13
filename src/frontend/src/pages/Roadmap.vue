@@ -5,226 +5,232 @@
     <div class="cosmic-particles"></div>
     <div class="cosmic-nebula"></div>
     
-    <div ref="roadmapRef" class="roadmap-container cosmic-page-bg">
-      <!-- Header Section -->
-      <header class="roadmap-header">
-        <h1 class="cosmic-title">Cosmic Roadmap</h1>
-        <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history. — here's what's next.</p>
-      </header>
+    <div ref="roadmapRef" class="roadmap-container">
+      <!-- Fixed Header Section -->
+      <div class="fixed-header-section">
+        <!-- Header Section -->
+        <header class="roadmap-header">
+          <h1 class="cosmic-title">Cosmic Roadmap</h1>
+          <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history. — here's what's next.</p>
+        </header>
 
-      <!-- Search Section -->
-      <div class="search-container" role="search" aria-label="Search roadmap">
-        <div class="search-input-wrapper">
-          <div class="search-icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+        <!-- Search Section -->
+        <div class="search-container" role="search" aria-label="Search roadmap">
+          <div class="search-input-wrapper">
+            <div class="search-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </div>
+            <input 
+              type="text" 
+              class="search-input cosmic-search" 
+              placeholder="Search milestones or tasks..." 
+              v-model="searchQuery"
+              aria-label="Search roadmap items"
+            >
           </div>
-          <input 
-            type="text" 
-            class="search-input cosmic-search" 
-            placeholder="Search milestones or tasks..." 
-            v-model="searchQuery"
-            aria-label="Search roadmap items"
-          >
         </div>
       </div>
 
-      <!-- Quarters Section with Enhanced Vertical Timeline -->
-      <section class="quarters-container" role="list" aria-label="Quarters timeline">
-        <div v-for="(quarter, qIndex) in filteredQuarters" :key="qIndex" class="quarter cosmic-panel" :class="{ 'active': quarter.open, 'animate-in': true }" role="listitem">
-          <div 
-            class="quarter-header" 
-            @click="toggleQuarter(qIndex, $event)" 
-            @mousemove="!preferReducedMotion && handleCardMouseMove"
-            @mouseleave="handleCardMouseLeave"
-            tabindex="0"
-            @keydown.enter="toggleQuarter(qIndex, $event)"
-            @keydown.space.prevent="toggleQuarter(qIndex, $event)"
-            role="button"
-            :aria-expanded="quarter.open ? 'true' : 'false'"
-            :aria-controls="`quarter-content-${qIndex}`"
-          >
-            <div class="header-content">
-              <h2 class="cosmic-text-glow">{{ quarter.period }}</h2>
-              <p class="description">{{ quarter.description }}</p>
-            </div>
-            <div class="header-right">
-              <div class="progress-wrapper" aria-hidden="true">
-                <div class="progress-container">
-                  <div class="progress-bar" :style="{ width: getProgressPercentage(quarter.completed, quarter.total) + '%' }"></div>
-                </div>
-                <div class="progress-text">{{ quarter.completed }}/{{ quarter.total }}</div>
-              </div>
-              <div 
-                class="toggle-icon" 
-                :class="{ 'is-open': quarter.open }" 
-                aria-hidden="true"
-              >
-                <div class="icon-line horizontal"></div>
-                <div class="icon-line vertical" :class="{ 'hidden': quarter.open }"></div>
-              </div>
-            </div>
-          </div>
-          <transition 
-            name="cosmic-slide" 
-            @before-enter="beforeEnter" 
-            @enter="enter"
-            @before-leave="beforeLeave"
-            @leave="leave"
-          >
+      <!-- Scrollable Content Area -->
+      <div class="scrollable-content">
+        <!-- Quarters Section with Enhanced Vertical Timeline -->
+        <section class="quarters-container" role="list" aria-label="Quarters timeline">
+          <div v-for="(quarter, qIndex) in filteredQuarters" :key="qIndex" class="quarter cosmic-panel" :class="{ 'active': quarter.open, 'animate-in': true }" role="listitem">
             <div 
-              v-if="quarter.open" 
-              class="milestones" 
-              role="list" 
-              aria-label="Milestones" 
-              :id="`quarter-content-${qIndex}`"
+              class="quarter-header" 
+              @click="toggleQuarter(qIndex, $event)" 
+              @mousemove="!preferReducedMotion && handleCardMouseMove"
+              @mouseleave="handleCardMouseLeave"
+              tabindex="0"
+              @keydown.enter="toggleQuarter(qIndex, $event)"
+              @keydown.space.prevent="toggleQuarter(qIndex, $event)"
+              role="button"
+              :aria-expanded="quarter.open ? 'true' : 'false'"
+              :aria-controls="`quarter-content-${qIndex}`"
             >
-              <div v-for="(milestone, mIndex) in quarter.milestones" :key="mIndex" class="milestone cosmic-card" :class="{ 'animate-in': true }" role="listitem">
-                <div 
-                  class="milestone-header" 
-                  @click="toggleMilestone(quarter, milestone, mIndex, $event)" 
-                  @mousemove="!preferReducedMotion && handleCardMouseMove"
-                  @mouseleave="handleCardMouseLeave"
-                  tabindex="0"
-                  @keydown.enter="toggleMilestone(quarter, milestone, mIndex, $event)"
-                  @keydown.space.prevent="toggleMilestone(quarter, milestone, mIndex, $event)"
-                  role="button"
-                  :aria-expanded="milestone.open ? 'true' : 'false'"
-                  :aria-controls="`milestone-content-${qIndex}-${mIndex}`"
-                >
-                  <div class="header-content">
-                    <h3>{{ milestone.title }}</h3>
-                    <p class="description">{{ milestone.description }}</p>
+              <div class="header-content">
+                <h2 class="cosmic-text-glow">{{ quarter.period }}</h2>
+                <p class="description">{{ quarter.description }}</p>
+              </div>
+              <div class="header-right">
+                <div class="progress-wrapper" aria-hidden="true">
+                  <div class="progress-container">
+                    <div class="progress-bar" :style="{ width: getProgressPercentage(quarter.completed, quarter.total) + '%' }"></div>
                   </div>
-                  <div class="header-right">
-                    <button 
-                      class="share-button" 
-                      @click.stop="copyMilestoneLink(quarter, milestone, qIndex, mIndex)"
-                      aria-label="Copy link to this milestone"
-                      title="Copy link to this milestone"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                      </svg>
-                    </button>
-                    <div class="progress-wrapper">
-                      <div class="progress-container">
-                        <div class="progress-bar" :style="{ width: getProgressPercentage(milestone.completed, milestone.total) + '%' }"></div>
-                      </div>
-                      <div class="progress-text">{{ milestone.completed }}/{{ milestone.total }}</div>
-                    </div>
-                    <div class="toggle-icon" :class="{ 'is-open': milestone.open }">
-                      <div class="icon-line horizontal"></div>
-                      <div class="icon-line vertical" :class="{ 'hidden': milestone.open }"></div>
-                    </div>
-                  </div>
+                  <div class="progress-text">{{ quarter.completed }}/{{ quarter.total }}</div>
                 </div>
-                <transition 
-                  name="cosmic-fade" 
-                  @before-enter="beforeEnterFade" 
-                  @enter="enterFade"
-                  @before-leave="beforeLeaveFade"
-                  @leave="leaveFade"
+                <div 
+                  class="toggle-icon" 
+                  :class="{ 'is-open': quarter.open }" 
+                  aria-hidden="true"
                 >
-                  <div 
-                    v-if="milestone.open" 
-                    class="tasks" 
-                    role="list" 
-                    aria-label="Tasks"
-                    :id="`milestone-content-${qIndex}-${mIndex}`"
-                  >
-                    <div v-for="(task, tIndex) in milestone.tasks" :key="tIndex" class="task cosmic-panel-inner" :class="{ 'animate-in': true }" role="listitem">
-                      <div 
-                        class="task-header" 
-                        @click="toggleTask(quarter, milestone, task, tIndex, $event)" 
-                        @mousemove="!preferReducedMotion && handleCardMouseMove"
-                        @mouseleave="handleCardMouseLeave"
-                        tabindex="0"
-                        @keydown.enter="toggleTask(quarter, milestone, task, tIndex, $event)"
-                        @keydown.space.prevent="toggleTask(quarter, milestone, task, tIndex, $event)"
-                        role="button"
-                        :aria-expanded="task.open ? 'true' : 'false'"
-                        :aria-controls="`task-content-${qIndex}-${mIndex}-${tIndex}`"
-                      >
-                        <div class="header-content">
-                          <h4>{{ task.title }}</h4>
-                          <p class="description">{{ task.description }}</p>
-                          
-                          <!-- Add task tags -->
-                          <div v-if="task.tags && task.tags.length" class="task-tags">
-                            <span 
-                              v-for="tag in task.tags" 
-                              :key="tag" 
-                              class="task-tag"
-                              :style="{ 'border-color': getTagColor(tag) }"
-                              @click.stop="toggleTagFilter(tag)"
-                            >
-                              <span class="tag-dot" :style="{ background: getTagColor(tag) }"></span>
-                              {{ tag }}
-                            </span>
-                          </div>
-                        </div>
-                        <div class="header-right">
-                          <div class="progress-wrapper">
-                            <div class="progress-container">
-                              <div class="progress-bar" :style="{ width: getProgressPercentage(task.completed, task.total) + '%' }"></div>
-                            </div>
-                            <div class="progress-text">{{ task.completed }}/{{ task.total }}</div>
-                          </div>
-                          <div class="task-status-wrapper">
-                            <span class="task-status" :class="task.status.toLowerCase().replace(/\s+/g, '-')">{{ task.status }}</span>
-                          </div>
-                          <div class="toggle-icon small" :class="{ 'is-open': task.open }">
-                            <div class="icon-line horizontal"></div>
-                            <div class="icon-line vertical" :class="{ 'hidden': task.open }"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <transition 
-                        name="cosmic-fade" 
-                        @before-enter="beforeEnterFade" 
-                        @enter="enterFade"
-                        @before-leave="beforeLeaveFade"
-                        @leave="leaveFade"
-                      >
-                        <div 
-                          v-if="task.open && task.subtasks" 
-                          class="subtasks"
-                          role="list"
-                          aria-label="Subtasks"
-                          :id="`task-content-${qIndex}-${mIndex}-${tIndex}`"
-                        >
-                          <div v-for="(subtask, stIndex) in task.subtasks" :key="stIndex" class="subtask" :class="{ completed: subtask.completed }" role="listitem">
-                            <div class="subtask-header">
-                              <div class="checkbox-container">
-                                <input 
-                                  type="checkbox" 
-                                  :id="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex" 
-                                  :checked="subtask.completed" 
-                                  @change="toggleSubtask(quarter, milestone, task, subtask)"
-                                  :aria-label="`Mark subtask ${subtask.title} as ${subtask.completed ? 'incomplete' : 'complete'}`"
-                                >
-                                <label :for="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex">{{ subtask.title }}</label>
-                              </div>
-                              <div class="subtask-status" :class="{ completed: subtask.completed }">
-                                {{ subtask.completed ? 'Completed' : 'To Do' }}
-                              </div>
-                            </div>
-                            <p class="subtask-description">{{ subtask.description }}</p>
-                          </div>
-                        </div>
-                      </transition>
-                    </div>
-                  </div>
-                </transition>
+                  <div class="icon-line horizontal"></div>
+                  <div class="icon-line vertical" :class="{ 'hidden': quarter.open }"></div>
+                </div>
               </div>
             </div>
-          </transition>
-        </div>
-      </section>
+            <transition 
+              name="cosmic-slide" 
+              @before-enter="beforeEnter" 
+              @enter="enter"
+              @before-leave="beforeLeave"
+              @leave="leave"
+            >
+              <div 
+                v-if="quarter.open" 
+                class="milestones" 
+                role="list" 
+                aria-label="Milestones" 
+                :id="`quarter-content-${qIndex}`"
+              >
+                <div v-for="(milestone, mIndex) in quarter.milestones" :key="mIndex" class="milestone cosmic-card" :class="{ 'animate-in': true }" role="listitem">
+                  <div 
+                    class="milestone-header" 
+                    @click="toggleMilestone(quarter, milestone, mIndex, $event)" 
+                    @mousemove="!preferReducedMotion && handleCardMouseMove"
+                    @mouseleave="handleCardMouseLeave"
+                    tabindex="0"
+                    @keydown.enter="toggleMilestone(quarter, milestone, mIndex, $event)"
+                    @keydown.space.prevent="toggleMilestone(quarter, milestone, mIndex, $event)"
+                    role="button"
+                    :aria-expanded="milestone.open ? 'true' : 'false'"
+                    :aria-controls="`milestone-content-${qIndex}-${mIndex}`"
+                  >
+                    <div class="header-content">
+                      <h3>{{ milestone.title }}</h3>
+                      <p class="description">{{ milestone.description }}</p>
+                    </div>
+                    <div class="header-right">
+                      <button 
+                        class="share-button" 
+                        @click.stop="copyMilestoneLink(quarter, milestone, qIndex, mIndex)"
+                        aria-label="Copy link to this milestone"
+                        title="Copy link to this milestone"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                        </svg>
+                      </button>
+                      <div class="progress-wrapper">
+                        <div class="progress-container">
+                          <div class="progress-bar" :style="{ width: getProgressPercentage(milestone.completed, milestone.total) + '%' }"></div>
+                        </div>
+                        <div class="progress-text">{{ milestone.completed }}/{{ milestone.total }}</div>
+                      </div>
+                      <div class="toggle-icon" :class="{ 'is-open': milestone.open }">
+                        <div class="icon-line horizontal"></div>
+                        <div class="icon-line vertical" :class="{ 'hidden': milestone.open }"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <transition 
+                    name="cosmic-fade" 
+                    @before-enter="beforeEnterFade" 
+                    @enter="enterFade"
+                    @before-leave="beforeLeaveFade"
+                    @leave="leaveFade"
+                  >
+                    <div 
+                      v-if="milestone.open" 
+                      class="tasks" 
+                      role="list" 
+                      aria-label="Tasks"
+                      :id="`milestone-content-${qIndex}-${mIndex}`"
+                    >
+                      <div v-for="(task, tIndex) in milestone.tasks" :key="tIndex" class="task cosmic-panel-inner" :class="{ 'animate-in': true }" role="listitem">
+                        <div 
+                          class="task-header" 
+                          @click="toggleTask(quarter, milestone, task, tIndex, $event)" 
+                          @mousemove="!preferReducedMotion && handleCardMouseMove"
+                          @mouseleave="handleCardMouseLeave"
+                          tabindex="0"
+                          @keydown.enter="toggleTask(quarter, milestone, task, tIndex, $event)"
+                          @keydown.space.prevent="toggleTask(quarter, milestone, task, tIndex, $event)"
+                          role="button"
+                          :aria-expanded="task.open ? 'true' : 'false'"
+                          :aria-controls="`task-content-${qIndex}-${mIndex}-${tIndex}`"
+                        >
+                          <div class="header-content">
+                            <h4>{{ task.title }}</h4>
+                            <p class="description">{{ task.description }}</p>
+                            
+                            <!-- Add task tags -->
+                            <div v-if="task.tags && task.tags.length" class="task-tags">
+                              <span 
+                                v-for="tag in task.tags" 
+                                :key="tag" 
+                                class="task-tag"
+                                :style="{ 'border-color': getTagColor(tag) }"
+                                @click.stop="toggleTagFilter(tag)"
+                              >
+                                <span class="tag-dot" :style="{ background: getTagColor(tag) }"></span>
+                                {{ tag }}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="header-right">
+                            <div class="progress-wrapper">
+                              <div class="progress-container">
+                                <div class="progress-bar" :style="{ width: getProgressPercentage(task.completed, task.total) + '%' }"></div>
+                              </div>
+                              <div class="progress-text">{{ task.completed }}/{{ task.total }}</div>
+                            </div>
+                            <div class="task-status-wrapper">
+                              <span class="task-status" :class="task.status.toLowerCase().replace(/\s+/g, '-')">{{ task.status }}</span>
+                            </div>
+                            <div class="toggle-icon small" :class="{ 'is-open': task.open }">
+                              <div class="icon-line horizontal"></div>
+                              <div class="icon-line vertical" :class="{ 'hidden': task.open }"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <transition 
+                          name="cosmic-fade" 
+                          @before-enter="beforeEnterFade" 
+                          @enter="enterFade"
+                          @before-leave="beforeLeaveFade"
+                          @leave="leaveFade"
+                        >
+                          <div 
+                            v-if="task.open && task.subtasks" 
+                            class="subtasks"
+                            role="list"
+                            aria-label="Subtasks"
+                            :id="`task-content-${qIndex}-${mIndex}-${tIndex}`"
+                          >
+                            <div v-for="(subtask, stIndex) in task.subtasks" :key="stIndex" class="subtask" :class="{ completed: subtask.completed }" role="listitem">
+                              <div class="subtask-header">
+                                <div class="checkbox-container">
+                                  <input 
+                                    type="checkbox" 
+                                    :id="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex" 
+                                    :checked="subtask.completed" 
+                                    @change="toggleSubtask(quarter, milestone, task, subtask)"
+                                    :aria-label="`Mark subtask ${subtask.title} as ${subtask.completed ? 'incomplete' : 'complete'}`"
+                                  >
+                                  <label :for="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex">{{ subtask.title }}</label>
+                                </div>
+                                <div class="subtask-status" :class="{ completed: subtask.completed }">
+                                  {{ subtask.completed ? 'Completed' : 'To Do' }}
+                                </div>
+                              </div>
+                              <p class="subtask-description">{{ subtask.description }}</p>
+                            </div>
+                          </div>
+                        </transition>
+                      </div>
+                    </div>
+                  </transition>
+                </div>
+              </div>
+            </transition>
+          </div>
+        </section>
+      </div>
 
       <!-- Notifications system -->
       <transition-group name="notification-fade" tag="div" class="notifications-container">
@@ -430,6 +436,17 @@ export default {
       return (completed / total) * 100;
     };
 
+    // Get tag color (for task tags) 
+    const getTagColor = (tag) => {
+      // Simple hash function to generate a consistent color for each tag
+      const hash = tag.split('').reduce((acc, char) => {
+        return char.charCodeAt(0) + ((acc << 5) - acc);
+      }, 0);
+      
+      // Generate HSL color with fixed saturation and lightness for readability
+      return `hsl(${Math.abs(hash) % 360}, 70%, 60%)`;
+    };
+
     const updateTaskProgress = (task) => {
       if (!task.subtasks) return;
       task.completed = task.subtasks.filter(st => st.completed).length;
@@ -451,6 +468,13 @@ export default {
       updateTaskProgress(task);
       updateMilestoneProgress(milestone);
       updateQuarterProgress(quarter);
+    };
+
+    // Tag filter toggle (stub - we removed the actual filter functionality)
+    const toggleTagFilter = (tag) => {
+      // This function is kept as a stub since we simplified the filtering
+      // but kept the tag UI elements
+      showNotification(`Filtering by tag "${tag}" is not available in this simplified view`, 'info');
     };
 
     // Filtered data
@@ -539,7 +563,9 @@ export default {
       beforeEnterFade,
       enterFade,
       beforeLeaveFade,
-      leaveFade
+      leaveFade,
+      getTagColor,
+      toggleTagFilter
     };
   }
 };
@@ -550,15 +576,19 @@ export default {
   --viewport-height: 100vh;
   --viewport-width: 100vw;
   --animation-speed: 1;
+  --header-height: auto;
 }
 
 /* Base Styling */
 .roadmap-page {
-  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
   color: #fff;
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #0c1016f0, #141b2af0, #0c1016f0);
+  display: flex;
+  flex-direction: column;
 }
 
 /* Enhanced Cosmic Background */
@@ -657,22 +687,56 @@ export default {
 
 /* Main Container */
 .roadmap-container {
-  max-width: 1200px;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
-  padding: 1rem;
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+}
+
+/* Fixed Header Section */
+.fixed-header-section {
+  padding: 1rem;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Scrollable Content Area */
+.scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 1rem 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.2);
+  overscroll-behavior: contain;
+}
+
+.scrollable-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
 }
 
 /* Header Styling */
 .roadmap-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .cosmic-title {
   font-size: clamp(2rem, 5vw, 3rem);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .cosmic-subtitle {
@@ -683,8 +747,7 @@ export default {
 /* Search Section */
 .search-container {
   width: 100%;
-  padding: 0 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .search-input-wrapper {
@@ -832,8 +895,20 @@ export default {
 
 /* Mobile optimizations */
 @media (max-width: 640px) {
-  .roadmap-page {
-    padding: 1rem 0.5rem;
+  .fixed-header-section {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .scrollable-content {
+    padding: 0 0.5rem 0.5rem;
+  }
+  
+  .cosmic-title {
+    margin-bottom: 0.5rem;
+  }
+  
+  .roadmap-header {
+    margin-bottom: 1rem;
   }
   
   .search-container {
