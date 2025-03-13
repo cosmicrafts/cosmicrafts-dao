@@ -1,12 +1,12 @@
 {
   "period": "2028-Q3",
-  "description": "Launch 4X mobile version, begin new franchise title development, and advance AI governance systems.",
+  "description": "4X Mobile Release, New Game Development, AI Governance Update",
   "completed": 0,
   "total": 4,
   "milestones": [
     {
-      "title": "July 2028: 4X Mobile Launch",
-      "description": "Launch full version of 4X mobile game.",
+      "title": "4X Mobile Release",
+      "description": "Full version release on mobile platforms",
       "completed": 0,
       "total": 3,
       "tasks": [
@@ -85,8 +85,8 @@
       ]
     },
     {
-      "title": "August 2028: New Title Development",
-      "description": "Begin development of new franchise title.",
+      "title": "New Game Development",
+      "description": "New franchise title concept and planning",
       "completed": 0,
       "total": 3,
       "tasks": [
@@ -165,8 +165,8 @@
       ]
     },
     {
-      "title": "September 2028: AI Governance",
-      "description": "Advance AI-driven governance systems.",
+      "title": "AI Governance Update",
+      "description": "Enhanced governance systems",
       "completed": 0,
       "total": 3,
       "tasks": [
@@ -245,8 +245,8 @@
       ]
     },
     {
-      "title": "Q3 2028: Autonomous Systems",
-      "description": "Advance autonomous system capabilities.",
+      "title": "System Automation",
+      "description": "Automated system improvements",
       "completed": 0,
       "total": 3,
       "tasks": [

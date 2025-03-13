@@ -5,7 +5,7 @@
   "total": 4,
   "milestones": [
     {
-      "title": "July 2030: Development Handover",
+      "title": "Development Handover",
       "description": "Complete development responsibility transfer.",
       "completed": 0,
       "total": 3,
@@ -85,7 +85,7 @@
       ]
     },
     {
-      "title": "August 2030: AI System Validation",
+      "title": "AI System Validation",
       "description": "Validate complete AI autonomy.",
       "completed": 0,
       "total": 3,
@@ -165,7 +165,7 @@
       ]
     },
     {
-      "title": "September 2030: Final Transition",
+      "title": "Final Transition",
       "description": "Complete transition to AI autonomy.",
       "completed": 0,
       "total": 3,
@@ -245,7 +245,7 @@
       ]
     },
     {
-      "title": "Q3 2030: Future Framework",
+      "title": "Future Framework",
       "description": "Establish framework for future evolution.",
       "completed": 0,
       "total": 3,

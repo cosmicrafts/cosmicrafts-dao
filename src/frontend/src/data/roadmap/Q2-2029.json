@@ -1,92 +1,12 @@
 {
   "period": "2029-Q2",
-  "description": "Expand autonomous systems capabilities and advance new title development with AI-driven features.",
+  "description": "Launch full release of new franchise title, begin mobile beta testing, and advance AI systems development.",
   "completed": 0,
-  "total": 4,
+  "total": 3,
   "milestones": [
     {
-      "title": "April 2029: Autonomous Evolution",
-      "description": "Enhance autonomous system evolution capabilities.",
-      "completed": 0,
-      "total": 3,
-      "tasks": [
-        {
-          "title": "Learning Enhancement",
-          "description": "Advance system learning capabilities.",
-          "completed": 0,
-          "total": 3,
-          "status": "ToDo",
-          "subtasks": [
-            {
-              "title": "Deep Learning",
-              "description": "Enhance deep learning systems.",
-              "completed": false
-            },
-            {
-              "title": "Pattern Recognition",
-              "description": "Advance pattern recognition.",
-              "completed": false
-            },
-            {
-              "title": "Adaptive Learning",
-              "description": "Implement adaptive learning.",
-              "completed": false
-            }
-          ]
-        },
-        {
-          "title": "Self-Optimization",
-          "description": "Enhance system optimization capabilities.",
-          "completed": 0,
-          "total": 3,
-          "status": "ToDo",
-          "subtasks": [
-            {
-              "title": "Performance Analysis",
-              "description": "Implement performance analysis.",
-              "completed": false
-            },
-            {
-              "title": "Resource Optimization",
-              "description": "Enhance resource management.",
-              "completed": false
-            },
-            {
-              "title": "System Adaptation",
-              "description": "Deploy adaptation mechanisms.",
-              "completed": false
-            }
-          ]
-        },
-        {
-          "title": "Evolution Framework",
-          "description": "Advance system evolution framework.",
-          "completed": 0,
-          "total": 3,
-          "status": "ToDo",
-          "subtasks": [
-            {
-              "title": "Capability Growth",
-              "description": "Implement capability expansion.",
-              "completed": false
-            },
-            {
-              "title": "Knowledge Evolution",
-              "description": "Enhance knowledge systems.",
-              "completed": false
-            },
-            {
-              "title": "Adaptation Mechanisms",
-              "description": "Deploy advanced adaptation.",
-              "completed": false
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "May 2029: New Title Alpha",
-      "description": "Launch alpha version of new franchise title.",
+      "title": "New Title Full Launch",
+      "description": "Launch full release of new franchise title across all major platforms.",
       "completed": 0,
       "total": 3,
       "tasks": [
@@ -165,12 +85,14 @@
       ]
     },
     {
-      "title": "June 2029: AI Governance Evolution",
-      "description": "Advance AI-driven governance capabilities.",
+      "title": "Mobile Beta Testing",
+      "description": "Launch beta testing for mobile version of new franchise title.",
       "completed": 0,
       "total": 3,
       "tasks": [
         {
+          "title": "Platform Adaptation",
+          "description": "Adapt gameplay and systems for mobile platforms.",
           "title": "Decision Systems",
           "description": "Enhance decision-making capabilities.",
           "completed": 0,
@@ -318,6 +240,38 @@
             {
               "title": "System Resilience",
               "description": "Advance system resilience.",
+              "completed": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "AI Systems Progress",
+      "description": "Advance development of AI systems and frameworks.",
+      "completed": 0,
+      "total": 3,
+      "tasks": [
+        {
+          "title": "Development Framework",
+          "description": "Develop AI-assisted development framework.",
+          "completed": 0,
+          "total": 3,
+          "status": "ToDo",
+          "subtasks": [
+            {
+              "title": "Code Generation",
+              "description": "Develop initial code generation capabilities.",
+              "completed": false
+            },
+            {
+              "title": "Content Creation",
+              "description": "Implement AI-assisted content creation tools.",
+              "completed": false
+            },
+            {
+              "title": "System Integration",
+              "description": "Begin integration of AI systems into development pipeline.",
               "completed": false
             }
           ]

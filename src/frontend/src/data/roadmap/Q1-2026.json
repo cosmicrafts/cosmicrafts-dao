@@ -1,12 +1,12 @@
 {
   "period": "2026-Q1",
-  "description": "Advance AI-driven development, implement automated governance features, and establish metaverse foundations.",
+  "description": "Ship ckBTC Integration: Basic trading features, NPC behavior engine, and automated testing pipeline",
   "completed": 0,
   "total": 5,
   "milestones": [
     {
-      "title": "January 2026: AI Development Automation",
-      "description": "Implement advanced AI-driven development automation systems.",
+      "title": "AI Code Pipeline Release",
+      "description": "Ship production-ready AI code generation and testing system",
       "completed": 0,
       "total": 3,
       "tasks": [
@@ -85,8 +85,8 @@
       ]
     },
     {
-      "title": "February 2026: Automated Governance System",
-      "description": "Implement advanced automated governance systems with AI integration.",
+      "title": "Governance System Deployment",
+      "description": "Deploy automated proposal and voting system with fraud detection",
       "completed": 0,
       "total": 3,
       "tasks": [
@@ -165,8 +165,8 @@
       ]
     },
     {
-      "title": "March 2026: Metaverse Foundation",
-      "description": "Establish foundation for metaverse development with AI integration.",
+      "title": "NPC Engine Core Build",
+      "description": "Build and test core NPC behavior and interaction engine",
       "completed": 0,
       "total": 3,
       "tasks": [
@@ -245,8 +245,8 @@
       ]
     },
     {
-      "title": "Q1 2026: Platform Integration",
-      "description": "Begin integration with major gaming platforms and marketplaces.",
+      "title": "Cross-Platform Integration",
+      "description": "Deliver core integration with major gaming platforms",
       "completed": 0,
       "total": 3,
       "tasks": [
@@ -325,8 +325,8 @@
       ]
     },
     {
-      "title": "Q1 2026: CI/CD Enhancement",
-      "description": "Enhance CI/CD pipeline with advanced automation and AI capabilities.",
+      "title": "CI/CD Pipeline Boost",
+      "description": "Enhance CI/CD pipeline with advanced automation and AI capabilities",
       "completed": 0,
       "total": 3,
       "tasks": [

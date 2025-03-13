@@ -1,39 +1,15 @@
 {
   "period": "2026-Q2",
-  "description": "Launch beta testing for Adventures, advance autonomous development systems, and establish framework for cross-chain integration.",
+  "description": "Ship ckETH Integration: Basic trading features, Adventures CrazyGames launch, and 4X pre-alpha",
   "completed": 0,
   "total": 6,
   "milestones": [
     {
-      "title": "April 2026: AI Code Implementation Pipeline",
-      "description": "Deploy AI-driven code implementation pipeline with practical governance integration.",
+      "title": "AI Code Review System Launch",
+      "description": "Ship automated code review and validation pipeline",
       "completed": 0,
       "total": 3,
       "tasks": [
-        {
-          "title": "Proposal-to-Code Pipeline",
-          "description": "Implement automated pipeline for converting governance proposals to code implementations.",
-          "completed": 0,
-          "total": 3,
-          "status": "ToDo",
-          "subtasks": [
-            {
-              "title": "Proposal Parser Integration",
-              "description": "Integrate proposal parsing system with code generation pipeline.",
-              "completed": false
-            },
-            {
-              "title": "Implementation Planning",
-              "description": "Develop AI system for creating detailed implementation plans from proposals.",
-              "completed": false
-            },
-            {
-              "title": "Code Generation Rules",
-              "description": "Implement rule system for safe and consistent code generation.",
-              "completed": false
-            }
-          ]
-        },
         {
           "title": "Automated Code Review",
           "description": "Implement AI-driven code review and validation system.",
@@ -85,8 +61,8 @@
       ]
     },
     {
-      "title": "May 2026: 4X Game Pre-Alpha Development",
-      "description": "Advance development of the 4X metaverse game towards pre-alpha milestone.",
+      "title": "4X Pre-Alpha Build",
+      "description": "Deliver first playable 4X build with core systems and AI factions",
       "completed": 0,
       "total": 3,
       "tasks": [
@@ -180,8 +156,8 @@
       ]
     },
     {
-      "title": "June 2026: Adventures CrazyGames Launch",
-      "description": "Launch Adventures prototype on CrazyGames with integrated AI capabilities and community features.",
+      "title": "Adventures CrazyGames Release",
+      "description": "Ship Adventures prototype on CrazyGames platform",
       "completed": 0,
       "total": 3,
       "tasks": [
@@ -265,8 +241,8 @@
       ]
     },
     {
-      "title": "Q2 2026: Cross-Chain Economy & DAO Expansion",
-      "description": "Expand cross-chain economy integration and enhance DAO governance capabilities.",
+      "title": "Cross-Chain Economy Expansion",
+      "description": "Expand cross-chain economy integration and enhance DAO governance capabilities",
       "completed": 0,
       "total": 3,
       "tasks": [
@@ -350,8 +326,8 @@
       ]
     },
     {
-      "title": "Q2 2026: Advanced AI Features & 4X Pre-Alpha",
-      "description": "Implement advanced AI features in the Adventures prototype and continue development of the 4X metaverse game towards pre-alpha.",
+      "title": "Advanced AI Features",
+      "description": "Implement advanced AI features in Adventures prototype and 4X pre-alpha",
       "completed": 0,
       "total": 2,
       "tasks": [
@@ -411,8 +387,8 @@
       ]
     },
     {
-      "title": "Q2 2026: Battlegrounds Mobile Beta Preparation",
-      "description": "Prepare Battlegrounds mobile version for beta testing with enhanced features and optimized performance.",
+      "title": "Battlegrounds Mobile Beta",
+      "description": "Prepare Battlegrounds mobile version for beta testing with enhanced features and optimized performance",
       "completed": 0,
       "total": 3,
       "tasks": [

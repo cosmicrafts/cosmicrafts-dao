@@ -318,13 +318,6 @@ export default {
       
       if (originalIndex !== -1) {
         quarters.value[originalIndex].open = !quarters.value[originalIndex].open;
-        
-        if (quarters.value[originalIndex].open) {
-          nextTick(() => {
-            const element = event?.target.closest('.quarter');
-            if (element) scrollToElement(element);
-          });
-        }
       }
     };
 
@@ -341,13 +334,6 @@ export default {
         const targetMilestone = quarters.value[quarterIndex].milestones[milestoneIndex];
         if (targetMilestone) {
           targetMilestone.open = !targetMilestone.open;
-          
-          if (targetMilestone.open) {
-            nextTick(() => {
-              const element = event?.target.closest('.milestone');
-              if (element) scrollToElement(element);
-            });
-          }
         }
       }
       
@@ -376,13 +362,6 @@ export default {
           const targetTask = quarters.value[quarterIndex].milestones[milestoneIndex].tasks[taskIndex];
           if (targetTask) {
             targetTask.open = !targetTask.open;
-            
-            if (targetTask.open) {
-              nextTick(() => {
-                const element = event?.target.closest('.task');
-                if (element) scrollToElement(element);
-              });
-            }
           }
         }
       }
@@ -723,6 +702,7 @@ export default {
 }
 
 .desktop-hero-section .cosmic-title {
+
   font-size: 2rem;
   margin: 0 0 1rem 0;
   background: linear-gradient(135deg,
@@ -1356,12 +1336,14 @@ export default {
 @media (max-width: 768px) {
 
   .cosmic-title {
-    font-size: 2rem;
+    margin-top: -1.25rem;
+    font-size: 1.75rem;
+    
   }
   
   .cosmic-subtitle,
   .search-input {
-    font-size: 0.75rem;
+    font-size: .75rem;
   }
   
   .progress-container {
@@ -1723,13 +1705,13 @@ export default {
 /* Add a subtle completed animation */
 @keyframes completedPulse {
   0% {
-    box-shadow: 0 0 5px rgba(42, 187, 155, 0.3);
+    box-shadow: 0 0 5px rgba(42, 187, 155, 0.1);
   }
   50% {
-    box-shadow: 0 0 15px rgba(42, 187, 155, 0.5);
+    box-shadow: 0 0 4px rgba(13, 255, 0, 0.826);
   }
   100% {
-    box-shadow: 0 0 5px rgba(42, 187, 155, 0.3);
+    box-shadow: 0 0 5px rgba(85, 255, 0, 0.1);
   }
 }
 
