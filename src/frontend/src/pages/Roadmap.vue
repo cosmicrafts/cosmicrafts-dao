@@ -55,12 +55,12 @@
                   <h2>{{ quarter.period }}</h2>
                   <p class="description">{{ quarter.description }}</p>
                 </div>
-                <div class="header-right">
+                <div class="status-indicators">
                   <div class="progress-wrapper">
+                    <div class="progress-text">{{ quarter.completed }}/{{ quarter.total }}</div>
                     <div class="progress-container">
                       <div class="progress-bar" :style="{ width: getProgressPercentage(quarter.completed, quarter.total) + '%' }"></div>
                     </div>
-                    <div class="progress-text">{{ quarter.completed }}/{{ quarter.total }}</div>
                   </div>
                   <div class="toggle-icon" :class="{ 'is-open': quarter.open }">
                     <div class="icon-line horizontal"></div>
@@ -77,12 +77,12 @@
                       <h3>{{ milestone.title }}</h3>
                       <p class="description">{{ milestone.description }}</p>
                     </div>
-                    <div class="header-right">
+                    <div class="status-indicators">
                       <div class="progress-wrapper">
+                        <div class="progress-text">{{ milestone.completed }}/{{ milestone.total }}</div>
                         <div class="progress-container">
                           <div class="progress-bar" :style="{ width: getProgressPercentage(milestone.completed, milestone.total) + '%' }"></div>
                         </div>
-                        <div class="progress-text">{{ milestone.completed }}/{{ milestone.total }}</div>
                       </div>
                       <div class="toggle-icon" :class="{ 'is-open': milestone.open }">
                         <div class="icon-line horizontal"></div>
@@ -106,15 +106,15 @@
                             </span>
                           </div>
                         </div>
-                        <div class="header-right">
+                        <div class="status-indicators">
+                          <div class="task-status-wrapper">
+                            <span class="task-status" :class="task.status.toLowerCase().replace(/\s+/g, '-')">{{ task.status }}</span>
+                          </div>
                           <div class="progress-wrapper">
+                            <div class="progress-text">{{ task.completed }}/{{ task.total }}</div>
                             <div class="progress-container">
                               <div class="progress-bar" :style="{ width: getProgressPercentage(task.completed, task.total) + '%' }"></div>
                             </div>
-                            <div class="progress-text">{{ task.completed }}/{{ task.total }}</div>
-                          </div>
-                          <div class="task-status-wrapper">
-                            <span class="task-status" :class="task.status.toLowerCase().replace(/\s+/g, '-')">{{ task.status }}</span>
                           </div>
                           <div class="toggle-icon small" :class="{ 'is-open': task.open }">
                             <div class="icon-line horizontal"></div>
@@ -1372,7 +1372,8 @@ export default {
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  margin-right: 0.75rem;
+  margin-right: 4rem; /* Give space for the indicators */
+  padding-right: 1rem;
   transform-style: preserve-3d;
 }
 
@@ -1398,20 +1399,34 @@ export default {
   transition: color 0.3s var(--animation-smooth);
 }
 
-/* Header right */
-.header-right {
+/* Header right renamed to status-indicators */
+.status-indicators {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 0.5rem;
   transform-style: preserve-3d;
 }
 
-/* Progress */
+/* Progress positioning */
 .progress-wrapper {
   display: flex;
-  align-items: center;
-  gap: 0.375rem;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
   transform-style: preserve-3d;
+}
+
+.progress-container {
+  width: 60px;
+  height: 4px;
+  background: var(--cosmic-glass-bg-lighter);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .progress-text {
@@ -1419,6 +1434,68 @@ export default {
   white-space: nowrap;
   color: var(--cosmic-text-secondary);
   transition: color 0.3s var(--animation-smooth);
+  margin-bottom: 2px;
+}
+
+/* Task status positioning */
+.task-status-wrapper {
+  margin-bottom: 0.5rem;
+}
+
+.task-status {
+  font-size: 0.6875rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 1rem;
+  background: var(--cosmic-glass-bg);
+  white-space: nowrap;
+  box-shadow: var(--cosmic-shadow-sm);
+  transition: all 0.2s var(--animation-bounce);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Update header content to take up more space */
+.header-content {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  margin-right: 4rem; /* Give space for the indicators */
+  padding-right: 1rem;
+  transform-style: preserve-3d;
+}
+
+/* Subtask status positioning */
+.subtask-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subtask-status {
+  font-size: 0.6875rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 1rem;
+  white-space: nowrap;
+  transition: all 0.2s var(--animation-bounce);
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* Update component headers to use relative positioning */
+.quarter-header, .milestone-header, .task-header {
+  position: relative;
+  padding: 1rem;
+  padding-right: 4.5rem; /* Space for status indicators */
+}
+
+/* Toggle icon positioning */
+.toggle-icon {
+  margin-top: 0.5rem;
+  position: relative;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  transition: all 0.2s var(--animation-bounce);
 }
 
 .toggle-icon.small {
@@ -1426,55 +1503,73 @@ export default {
   height: 12px;
 }
 
-/* Task tags */
-.task-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-  margin-top: 0.5rem;
-  transform-style: preserve-3d;
-}
-
-/* Checkbox styling */
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-}
-
-.checkbox-container input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 2rem;
-  height: 2rem;
-  border: 2px solid var(--cosmic-glass-border-blue);
-  border-radius: 4px;
-  outline: none;
-  cursor: pointer;
-  transition: all 0.2s var(--animation-bounce);
-  position: relative;
-  background: var(--cosmic-glass-bg);
-}
-
-.checkbox-container input[type="checkbox"]:checked {
-  background-color: var(--cosmic-blue);
-  border-color: var(--cosmic-blue);
-  box-shadow: var(--cosmic-glow-blue-sm);
-}
-
-.checkbox-container input[type="checkbox"]:checked::after {
-  content: '✓';
+.icon-line {
   position: absolute;
-  color: var(--cosmic-text-primary);
-  font-size: 12px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  background: var(--cosmic-text-secondary);
+  transition: all 0.2s var(--animation-bounce);
+  box-shadow: var(--cosmic-shadow-sm);
 }
 
-.checkbox-container input[type="checkbox"]:hover {
-  border-color: var(--cosmic-blue);
-  box-shadow: var(--cosmic-glow-blue-sm);
+.horizontal {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.vertical {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.vertical.hidden {
+  transform: translateX(-50%) scaleY(0);
+}
+
+.toggle-icon.is-open .horizontal {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* Update completion badge position to not overlap with status indicators */
+.quarter.completed::after,
+.milestone.completed::after,
+.task.completed::after {
+  right: 1.5rem;
+}
+
+/* Adjust padding for mobile view */
+@media (max-width: 768px) {
+  .status-indicators {
+    top: 0.5rem;
+    right: 0.5rem;
+    gap: 0.35rem;
+  }
+  
+  .progress-container {
+    width: 40px;
+    height: 3px;
+  }
+  
+  .progress-text {
+    font-size: 0.6rem;
+  }
+  
+  .task-status {
+    font-size: 0.6rem;
+    padding: 0.15rem 0.3rem;
+  }
+  
+  .quarter-header, .milestone-header, .task-header {
+    padding-right: 3.5rem;
+  }
+  
+  .header-content {
+    margin-right: 3rem;
+  }
 }
 
 /* Webkit scrollbar styling */
