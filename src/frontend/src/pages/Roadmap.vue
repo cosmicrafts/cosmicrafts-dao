@@ -68,10 +68,10 @@
                     <div class="progress-container">
                       <div class="progress-bar" :style="{ width: getProgressPercentage(quarter.completed, quarter.total) + '%' }"></div>
                     </div>
-                  </div>
-                  <div class="toggle-icon" :class="{ 'is-open': quarter.open }">
-                    <div class="icon-line horizontal"></div>
-                    <div class="icon-line vertical" :class="{ 'hidden': quarter.open }"></div>
+                    <div class="toggle-icon" :class="{ 'is-open': quarter.open }">
+                      <div class="icon-line horizontal"></div>
+                      <div class="icon-line vertical" :class="{ 'hidden': quarter.open }"></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -97,10 +97,10 @@
                         <div class="progress-container">
                           <div class="progress-bar" :style="{ width: getProgressPercentage(milestone.completed, milestone.total) + '%' }"></div>
                         </div>
-                      </div>
-                      <div class="toggle-icon" :class="{ 'is-open': milestone.open }">
-                        <div class="icon-line horizontal"></div>
-                        <div class="icon-line vertical" :class="{ 'hidden': milestone.open }"></div>
+                        <div class="toggle-icon" :class="{ 'is-open': milestone.open }">
+                          <div class="icon-line horizontal"></div>
+                          <div class="icon-line vertical" :class="{ 'hidden': milestone.open }"></div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -133,10 +133,10 @@
                             <div class="progress-container">
                               <div class="progress-bar" :style="{ width: getProgressPercentage(task.completed, task.total) + '%' }"></div>
                             </div>
-                          </div>
-                          <div class="toggle-icon small" :class="{ 'is-open': task.open }">
-                            <div class="icon-line horizontal"></div>
-                            <div class="icon-line vertical" :class="{ 'hidden': task.open }"></div>
+                            <div class="toggle-icon small" :class="{ 'is-open': task.open }">
+                              <div class="icon-line horizontal"></div>
+                              <div class="icon-line vertical" :class="{ 'hidden': task.open }"></div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1216,7 +1216,8 @@ export default {
 .quarter-header {
   position: relative;
   padding: 1rem;
-  padding-right: 4.5rem; /* Space for status indicators */
+  padding-right: 8rem; /* Increased space for status indicators */
+  min-height: 4rem; /* Ensure minimum height for proper alignment */
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -1231,8 +1232,8 @@ export default {
 
 .quarter-header:hover {
   background: linear-gradient(135deg,
-    var(--cosmic-glass-bg) 0%,
-    var(--cosmic-glass-bg-darker) 100%
+    var(--cosmic-glass-bg-darker) 0%,
+    var(--cosmic-glass-bg) 100%
   );
 }
 
@@ -1293,7 +1294,8 @@ export default {
 .milestone-header {
   position: relative;
   padding: 1rem;
-  padding-right: 4.5rem; /* Space for status indicators */
+  padding-right: 8rem; /* Increased space for status indicators */
+  min-height: 4rem; /* Ensure minimum height for proper alignment */
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -1370,7 +1372,8 @@ export default {
 .task-header {
   position: relative;
   padding: 1rem;
-  padding-right: 4.5rem; /* Space for status indicators */
+  padding-right: 8rem; /* Increased space for status indicators */
+  min-height: 4rem; /* Ensure minimum height for proper alignment */
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -1465,18 +1468,24 @@ export default {
   box-shadow: 0 0 10px rgba(201, 42, 253, 0.3);
 }
 
+/* Empty progress bar styling */
+.progress-bar[style*="width: 0%"] {
+  background: rgba(87, 119, 235, 0.1) !important;
+  box-shadow: none !important;
+}
+
 /* Enhanced status styles */
 .task-status-wrapper {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0;
   flex-wrap: nowrap;
 }
 
 .task-status {
   font-size: 0.6875rem;
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem 0.6rem;
   border-radius: 1rem;
   background: var(--cosmic-glass-bg);
   white-space: nowrap;
@@ -1520,6 +1529,8 @@ export default {
 .task-status-wrapper .progress-text {
   margin-left: 0.25rem;
   font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cosmic-text-secondary);
 }
 
 /* Subtask status indicators */
@@ -1651,21 +1662,77 @@ export default {
   background: rgba(35, 39, 56, 0.8);
 }
 
+/* Toggle icon styling */
+.toggle-icon {
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  transition: all 0.2s var(--animation-bounce);
+  margin-left: 0.5rem;
+  background: rgba(30, 40, 60, 0.5);
+  border-radius: 2px;
+  padding: 0.25rem;
+}
+
+.toggle-icon.small {
+  width: 0.8rem;
+  height: 0.8rem;
+  padding: 0.2rem;
+}
+
+.icon-line {
+  position: absolute;
+  background-color: var(--cosmic-text-secondary);
+  transition: all 0.3s var(--animation-bounce);
+  box-shadow: var(--cosmic-shadow-sm);
+}
+
+.horizontal {
+  top: 50%;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.vertical {
+  left: 50%;
+  top: 15%;
+  bottom: 15%;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.vertical.hidden {
+  transform: translateX(-50%) scaleY(0);
+}
+
+.toggle-icon:hover .icon-line {
+  background-color: rgb(0, 191, 255);
+}
+
+.quarter-header .toggle-icon.is-open .horizontal,
+.milestone-header .toggle-icon.is-open .horizontal,
+.task-header .toggle-icon.is-open .horizontal {
+  transform: translateY(-50%) rotate(180deg);
+}
+
 /* Toggle icon colors */
 .toggle-icon .icon-line {
-  background: var(--cosmic-text-secondary);
+  background-color: var(--cosmic-text-secondary);
 }
 
 .quarter-header .toggle-icon.is-open .horizontal {
-  background: var(--cosmic-blue);
+  background-color: var(--cosmic-blue);
 }
 
 .milestone-header .toggle-icon.is-open .horizontal {
-  background: var(--cosmic-blue);
+  background-color: var(--cosmic-purple);
 }
 
 .task-header .toggle-icon.is-open .horizontal {
-  background: var(--cosmic-pink);
+  background-color: var(--cosmic-pink);
 }
 
 /* Notifications */
@@ -1705,7 +1772,8 @@ export default {
   .quarter-header,
   .milestone-header,
   .task-header {
-    padding: 1rem;
+    padding-right: 6rem;
+    min-height: 3.5rem;
   }
   
   .description {
@@ -1718,23 +1786,26 @@ export default {
   }
 
   .status-indicators {
-    top: 50%;
-    right: 0.5rem;
-    gap: 0.35rem;
-    transform: translateY(-50%);
+    top: 0.75rem;
+    right: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .quarter:hover .icon-line {
+    background-color: rgb(0, 195, 255); /* Change to your desired hover color */
+  }
+
+  .milestone:hover .icon-line {
+    background-color: rgb(255, 166, 0); /* Change to your desired hover color */
+  }
+
+    .task:hover .icon-line {
+    background-color: rgb(0, 208, 255); /* Change to your desired hover color */
   }
   
-  .status-bottom-row .progress-container {
+  .progress-container {
     width: 40px;
-  }
-  
-  .status-top-row {
-    gap: 0.35rem;
-  }
-  
-  .progress-text {
-    font-size: 0.65rem;
-    margin-left: 0.25rem;
+    height: 4px;
   }
   
   .task-status {
@@ -1742,9 +1813,24 @@ export default {
     padding: 0.15rem 0.3rem;
   }
   
+  .toggle-icon {
+    width: 0.9rem;
+    height: 0.9rem;
+    padding: 0.2rem;
+  }
+  
   .toggle-icon.small {
-    width: 0.55rem;
-    height: 0.55rem;
+    width: 0.7rem;
+    height: 0.7rem;
+    padding: 0.15rem;
+  }
+  
+  .horizontal {
+    height: 1.5px;
+  }
+  
+  .vertical {
+    width: 1.5px;
   }
 }
 
@@ -1753,7 +1839,7 @@ export default {
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  margin-right: 4rem; /* Give space for the indicators */
+  margin-right: 8rem; /* Increased space for indicators */
   padding-right: 1rem;
   transform-style: preserve-3d;
 }
@@ -1783,46 +1869,185 @@ export default {
 /* Status indicators positioning and alignment */
 .status-indicators {
   position: absolute;
-  top: 50%;
-  right: 0.75rem;
+  top: 1rem; /* Position at exact top with padding */
+  right: 1rem;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.5rem;
-  transform: translateY(-50%);
+  gap: 0.75rem;
   transform-style: preserve-3d;
 }
 
 /* Task status and progress text side by side */
 .task-status-wrapper {
-  display: inline-flex;
-  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0;
+  flex-wrap: nowrap;
 }
 
+/* Progress wrapper with progress bar and toggle icon */
 .progress-wrapper {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.25rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
   transform-style: preserve-3d;
 }
 
-/* Make progress text appear next to task status */
-.task-header .task-status-wrapper,
-.milestone-header .task-status-wrapper {
-  margin-right: 0.5rem;
-}
-
-.task-header .progress-text,
-.milestone-header .progress-text {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-/* Progress container width adjustment */
-.task-header .progress-container,
-.milestone-header .progress-container {
+/* Progress bar styling */
+.progress-container {
   width: 80px;
-  margin-right: 0.5rem;
+  height: 6px;
+  background: rgba(13, 20, 33, 0.5);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(87, 119, 235, 0.3);
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%; /* Default width, will be overridden by inline style */
+  border-radius: 3px;
+  position: relative;
+  transition: width 0.5s cubic-bezier(0.12, 0.8, 0.32, 1);
+}
+
+/* Toggle icon styling */
+.toggle-icon {
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  transition: all 0.2s var(--animation-bounce);
+  margin-left: 0.5rem;
+  background: rgba(30, 40, 60, 0.5);
+  border-radius: 2px;
+  padding: 0.25rem;
+}
+
+.toggle-icon.small {
+  width: 0.8rem;
+  height: 0.8rem;
+  padding: 0.2rem;
+}
+
+.icon-line {
+  position: absolute;
+  background-color: var(--cosmic-text-secondary);
+  transition: all 0.3s var(--animation-bounce);
+  box-shadow: var(--cosmic-shadow-sm);
+}
+
+.horizontal {
+  top: 50%;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.vertical {
+  left: 50%;
+  top: 15%;
+  bottom: 15%;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.vertical.hidden {
+  transform: translateX(-50%) scaleY(0);
+}
+
+.toggle-icon:hover .icon-line {
+  background-color: rgb(0, 191, 255);
+}
+
+.quarter-header .toggle-icon.is-open .horizontal,
+.milestone-header .toggle-icon.is-open .horizontal,
+.task-header .toggle-icon.is-open .horizontal {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* Toggle icon colors */
+.toggle-icon .icon-line {
+  background-color: var(--cosmic-text-secondary);
+}
+
+.quarter-header .toggle-icon.is-open .horizontal {
+  background-color: var(--cosmic-blue);
+}
+
+.milestone-header .toggle-icon.is-open .horizontal {
+  background-color: var(--cosmic-purple);
+}
+
+.task-header .toggle-icon.is-open .horizontal {
+  background-color: var(--cosmic-pink);
+}
+
+/* Notifications */
+.notifications-container {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) translateZ(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
+  }
+}
+
+/* Media queries for mobile view */
+@media (max-width: 768px) {
+  .status-indicators {
+    top: 0.75rem;
+    right: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .progress-container {
+    width: 40px;
+    height: 4px;
+  }
+  
+  .task-status {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.3rem;
+  }
+  
+  .task-status-wrapper {
+    gap: 0.35rem;
+  }
+  
+  .task-status-wrapper .progress-text {
+    font-size: 0.65rem;
+  }
+  
+  .toggle-icon {
+    width: 0.9rem;
+    height: 0.9rem;
+    padding: 0.2rem;
+  }
+  
+  .toggle-icon.small {
+    width: 0.7rem;
+    height: 0.7rem;
+    padding: 0.15rem;
+  }
+  
+  .horizontal {
+    height: 1.5px;
+  }
+  
+  .vertical {
+    width: 1.5px;
+  }
 }
 </style>
