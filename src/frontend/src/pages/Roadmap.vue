@@ -49,11 +49,12 @@
         <div class="scrollable-content">
           <!-- Quarters Section -->
           <section class="quarters-container">
-            <div v-for="(quarter, qIndex) in filteredQuarters" :key="qIndex" class="quarter" :class="{ 'active': quarter.open, 'completed': quarter.completed, 'current-quarter': isCurrent(quarter) }">
+            <div v-for="(quarter, qIndex) in filteredQuarters" :key="qIndex" class="quarter" 
+              :class="{ 'active': quarter.open, 'completed': quarter.status === 'Completed', 'in-progress': quarter.status === 'In Progress', 'current-quarter': isCurrent(quarter) }">
               <div class="quarter-header" @click.stop="toggleQuarter(qIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                 <div class="header-content">
                   <div class="title-with-status">
-                    <div class="status-icon" :class="getQuarterStatusClass(quarter)"></div>
+                    <div class="status-icon" :class="getItemStatusClass(quarter)"></div>
                     <h2>{{ quarter.period }}</h2>
                   </div>
                   <p class="description">{{ quarter.description }}</p>
@@ -74,11 +75,12 @@
               
               <!-- Milestones Section -->
               <div v-if="quarter.open" class="milestones">
-                <div v-for="(milestone, mIndex) in quarter.milestones" :key="mIndex" class="milestone" :class="{ 'completed': milestone.completed === milestone.total && milestone.total > 0 }">
+                <div v-for="(milestone, mIndex) in quarter.milestones" :key="mIndex" class="milestone" 
+                  :class="{ 'completed': milestone.status === 'Completed', 'in-progress': milestone.status === 'In Progress' }">
                   <div class="milestone-header" @click.stop="toggleMilestone(quarter, milestone, mIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                     <div class="header-content">
                       <div class="title-with-status">
-                        <div class="status-icon" :class="{ 'completed': milestone.completed, 'pending': !milestone.completed }"></div>
+                        <div class="status-icon" :class="getItemStatusClass(milestone)"></div>
                         <h3>{{ milestone.title }}</h3>
                       </div>
                       <p class="description">{{ milestone.description }}</p>
@@ -99,11 +101,12 @@
                   
                   <!-- Tasks Section -->
                   <div v-if="milestone.open" class="tasks">
-                    <div v-for="(task, tIndex) in milestone.tasks" :key="tIndex" class="task" :class="{ 'completed': task.completed === task.total && task.total > 0 }">
+                    <div v-for="(task, tIndex) in milestone.tasks" :key="tIndex" class="task" 
+                      :class="{ 'completed': task.status === 'Completed', 'in-progress': task.status === 'In Progress' }">
                       <div class="task-header" @click.stop="toggleTask(quarter, milestone, task, tIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                         <div class="header-content">
                           <div class="title-with-status">
-                            <div class="status-icon" :class="{ 'completed': task.completed, 'pending': !task.completed }"></div>
+                            <div class="status-icon" :class="getItemStatusClass(task)"></div>
                             <h4>{{ task.title }}</h4>
                           </div>
                           <p class="description">{{ task.description }}</p>
@@ -238,6 +241,9 @@ export default {
           })
           .filter(Boolean);
           
+        // Initialize status values based on completion
+        initializeStatuses();
+          
         // After loading, find and scroll to current quarter
         nextTick(() => {
           scrollToCurrentQuarter();
@@ -246,6 +252,45 @@ export default {
         console.error('Error loading roadmap data:', error);
         quarters.value = [];
       }
+    };
+    
+    // Initialize status values for all items based on their completion
+    const initializeStatuses = () => {
+      quarters.value.forEach(quarter => {
+        // Initialize quarter status
+        if (quarter.completed === quarter.total && quarter.total > 0) {
+          quarter.status = 'Completed';
+        } else if (quarter.completed > 0) {
+          quarter.status = 'In Progress';
+        } else {
+          quarter.status = 'ToDo';
+        }
+        
+        // Initialize milestone statuses
+        quarter.milestones?.forEach(milestone => {
+          if (milestone.completed === milestone.total && milestone.total > 0) {
+            milestone.status = 'Completed';
+          } else if (milestone.completed > 0) {
+            milestone.status = 'In Progress';
+          } else {
+            milestone.status = 'ToDo';
+          }
+          
+          // Initialize task statuses
+          milestone.tasks?.forEach(task => {
+            // If task has a status from JSON, keep it
+            if (!task.status || task.status === '') {
+              if (task.completed === task.total && task.total > 0) {
+                task.status = 'Completed';
+              } else if (task.completed > 0) {
+                task.status = 'In Progress';
+              } else {
+                task.status = 'ToDo';
+              }
+            }
+          });
+        });
+      });
     };
 
     // Simplified scroll helper - Update this to be more accurate
@@ -386,27 +431,85 @@ export default {
       return `hsl(${Math.abs(hash) % 360}, 70%, 60%)`;
     };
 
-    const updateTaskProgress = (task) => {
-      if (!task.subtasks) return;
-      task.completed = task.subtasks.filter(st => st.completed).length;
-      task.total = task.subtasks.length;
+    const updateTaskCompletion = (task) => {
+      if (!task.subtasks || task.subtasks.length === 0) return;
+      
+      // Count completed subtasks
+      const completedSubtasks = task.subtasks.filter(st => st.completed).length;
+      
+      // Update task completion stats
+      task.completed = completedSubtasks;
+      
+      // Update task status based on completion
+      if (completedSubtasks === 0) {
+        task.status = "ToDo";
+      } else if (completedSubtasks < task.subtasks.length) {
+        task.status = "In Progress";
+      } else {
+        task.status = "Completed";
+      }
     };
 
-    const updateMilestoneProgress = (milestone) => {
-      milestone.completed = milestone.tasks.reduce((sum, task) => sum + task.completed, 0);
-      milestone.total = milestone.tasks.reduce((sum, task) => sum + task.total, 0);
+    const updateMilestoneCompletion = (milestone) => {
+      if (!milestone.tasks || milestone.tasks.length === 0) return;
+      
+      // Count completed and in-progress tasks
+      const completedTasks = milestone.tasks.filter(task => 
+        task.status === "Completed" || 
+        (task.subtasks && task.completed === task.subtasks.length) || 
+        (task.completed === task.total && task.total > 0)
+      ).length;
+      
+      const inProgressTasks = milestone.tasks.filter(task => 
+        task.status === "In Progress" || 
+        (task.completed > 0 && task.completed < (task.subtasks ? task.subtasks.length : task.total))
+      ).length;
+      
+      // Update milestone completion stats
+      milestone.completed = completedTasks;
+      
+      // Set milestone status based on task completion
+      if (completedTasks === milestone.tasks.length) {
+        milestone.status = "Completed";
+      } else if (completedTasks > 0 || inProgressTasks > 0) {
+        milestone.status = "In Progress";
+      } else {
+        milestone.status = "ToDo";
+      }
     };
 
-    const updateQuarterProgress = (quarter) => {
-      quarter.completed = quarter.milestones.reduce((sum, milestone) => sum + milestone.completed, 0);
-      quarter.total = quarter.milestones.reduce((sum, milestone) => sum + milestone.total, 0);
+    const updateQuarterCompletion = (quarter) => {
+      if (!quarter.milestones || quarter.milestones.length === 0) return;
+      
+      // Count completed and in-progress milestones
+      const completedMilestones = quarter.milestones.filter(milestone => 
+        milestone.status === "Completed" || 
+        (milestone.completed === milestone.tasks.length && milestone.tasks.length > 0)
+      ).length;
+      
+      const inProgressMilestones = quarter.milestones.filter(milestone => 
+        milestone.status === "In Progress" || 
+        (milestone.completed > 0 && milestone.completed < milestone.tasks.length)
+      ).length;
+      
+      // Update quarter completion stats
+      quarter.completed = completedMilestones;
+      
+      // Set quarter status based on milestone completion
+      if (completedMilestones === quarter.milestones.length) {
+        quarter.status = "Completed";
+      } else if (completedMilestones > 0 || inProgressMilestones > 0) {
+        quarter.status = "In Progress";
+      } else {
+        quarter.status = "ToDo";
+      }
     };
 
     const toggleSubtask = (quarter, milestone, task, subtask, event) => {
       subtask.completed = !subtask.completed;
-      updateTaskProgress(task);
-      updateMilestoneProgress(milestone);
-      updateQuarterProgress(quarter);
+      updateTaskCompletion(task);
+      updateMilestoneCompletion(milestone);
+      updateQuarterCompletion(quarter);
       
       // Stop event propagation
       if (event) {
@@ -466,6 +569,13 @@ export default {
       return 'future';
     };
 
+    const getItemStatusClass = (item) => {
+      if (item.status === 'Completed') return 'completed';
+      if (item.status === 'In Progress') return 'in-progress';
+      if (isCurrent(item)) return 'current';
+      return 'future';
+    };
+
     return {
       roadmapRef,
       quarters,
@@ -484,7 +594,8 @@ export default {
       toggleTagFilter,
       scrollToCurrentQuarter,
       isCurrent,
-      getQuarterStatusClass
+      getQuarterStatusClass,
+      getItemStatusClass
     };
   }
 };
@@ -1931,5 +2042,126 @@ export default {
 
 .subtask-description {
   margin-left: 2.25rem;
+}
+
+/* Add CSS for in-progress status: */
+/* Status icon styling */
+.status-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Quarter status icons */
+.status-icon.completed {
+  background-color: var(--status-completed);
+  box-shadow: 0 0 8px rgba(42, 187, 155, 0.4);
+}
+
+.status-icon.completed::after {
+  content: '✓';
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.status-icon.in-progress {
+  background-color: var(--status-in-progress);
+  box-shadow: 0 0 8px rgba(56, 128, 255, 0.4);
+  animation: pulseInProgress 1.5s infinite alternate ease-in-out;
+}
+
+.status-icon.in-progress::after {
+  content: '→';
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+}
+
+.status-icon.current {
+  background-color: var(--status-in-progress);
+  box-shadow: 0 0 8px rgba(56, 128, 255, 0.4);
+}
+
+.status-icon.current::after {
+  content: '▶';
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+}
+
+.status-icon.future {
+  background-color: var(--status-to-do);
+  box-shadow: 0 0 8px rgba(255, 153, 0, 0.4);
+}
+
+.status-icon.future::after {
+  content: '◯';
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+@keyframes pulseInProgress {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Add styles for in-progress components */
+.quarter.in-progress,
+.milestone.in-progress,
+.task.in-progress {
+  border: 1px solid var(--status-in-progress-border);
+  background: linear-gradient(135deg,
+    rgba(56, 128, 255, 0.05) 0%,
+    rgba(56, 128, 255, 0.1) 100%
+  );
+  box-shadow: 0 0 15px rgba(56, 128, 255, 0.15);
+}
+
+.quarter.in-progress .quarter-header,
+.milestone.in-progress .milestone-header,
+.task.in-progress .task-header {
+  border-left-color: var(--status-in-progress);
+  background: linear-gradient(135deg,
+    rgba(56, 128, 255, 0.1) 0%,
+    rgba(7, 20, 42, 0.4) 100%
+  );
+}
+
+.quarter.in-progress .quarter-header .header-content h2,
+.milestone.in-progress .milestone-header .header-content h3,
+.task.in-progress .task-header .header-content h4 {
+  color: var(--status-in-progress);
+  text-shadow: 0 0 10px rgba(56, 128, 255, 0.3);
+}
+
+.quarter.in-progress .progress-bar,
+.milestone.in-progress .progress-bar,
+.task.in-progress .progress-bar {
+  background: linear-gradient(90deg,
+    var(--status-in-progress) 0%,
+    rgba(108, 169, 255, 0.8) 100%
+  );
+  box-shadow: 0 0 10px rgba(56, 128, 255, 0.3);
+}
+
+.quarter.in-progress:hover,
+.milestone.in-progress:hover,
+.task.in-progress:hover {
+  transform: translateX(8px);
+  box-shadow: 0 0 15px rgba(56, 128, 255, 0.25);
+  border-color: var(--status-in-progress);
 }
 </style>
