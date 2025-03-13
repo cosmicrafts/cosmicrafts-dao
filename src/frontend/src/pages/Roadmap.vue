@@ -12,8 +12,8 @@
         <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history. — here's what's next.</p>
       </header>
 
-      <!-- Search and Filter Section -->
-      <div class="search-filter-container" role="search" aria-label="Search and filter roadmap">
+      <!-- Search Section -->
+      <div class="search-container" role="search" aria-label="Search roadmap">
         <div class="search-input-wrapper">
           <div class="search-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -29,70 +29,7 @@
             aria-label="Search roadmap items"
           >
         </div>
-        <div class="filter-wrapper">
-          <select 
-            class="filter-select cosmic-select" 
-            v-model="selectedYear" 
-            aria-label="Filter by year"
-          >
-            <option value="">All Years</option>
-            <option v-for="year in availableYears" :key="year" :value="year">{{ year }}</option>
-          </select>
-          <select 
-            class="filter-select cosmic-select" 
-            v-model="selectedMilestone" 
-            aria-label="Filter by milestone"
-          >
-            <option value="">All Milestones</option>
-            <option v-for="milestone in availableMilestones" :key="milestone" :value="milestone">{{ milestone }}</option>
-          </select>
-        </div>
-        
-        <!-- Tags Filter Bar -->
-        <div class="tags-filter-container">
-          <h3 class="tags-title">Filter by Tags:</h3>
-          <div class="tags-wrapper">
-            <button 
-              v-for="tag in availableTags" 
-              :key="tag" 
-              class="tag-button" 
-              :class="{ active: selectedTags.includes(tag) }"
-              @click="toggleTagFilter(tag)"
-              :aria-pressed="selectedTags.includes(tag).toString()"
-            >
-              <span class="tag-dot" :style="{ background: getTagColor(tag) }"></span>
-              {{ tag }}
-            </button>
-          </div>
-          <button 
-            v-if="selectedTags.length > 0" 
-            class="clear-tags-button"
-            @click="clearTagFilters"
-            aria-label="Clear all tag filters"
-          >
-            <span class="clear-icon">×</span> Clear All
-          </button>
-        </div>
       </div>
-
-      <!-- Roadmap Stats Summary -->
-      <section class="roadmap-stats" aria-label="Roadmap statistics">
-        <div class="stat-item">
-          <div class="stat-value">{{ totalMilestones }}</div>
-          <div class="stat-label">Milestones</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value">{{ totalTasks }}</div>
-          <div class="stat-label">Tasks</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value">{{ completedPercentage }}%</div>
-          <div class="stat-label">Complete</div>
-        </div>
-        <div class="stat-progress">
-          <div class="stat-progress-bar" :style="{ width: completedPercentage + '%' }"></div>
-        </div>
-      </section>
 
       <!-- Quarters Section with Enhanced Vertical Timeline -->
       <section class="quarters-container" role="list" aria-label="Quarters timeline">
@@ -289,9 +226,6 @@
         </div>
       </section>
 
-      <!-- Skip to content link for keyboard users -->
-      <a href="#" class="skip-link visually-hidden">Skip to main content</a>
-
       <!-- Notifications system -->
       <transition-group name="notification-fade" tag="div" class="notifications-container">
         <div 
@@ -315,8 +249,10 @@
 
 <script>
 import { ref, onMounted, computed, onBeforeUnmount, nextTick } from 'vue';
-import roadmapData from '@/data/roadmap.json';
 import { useMediaQuery, useBreakpoints } from '@vueuse/core';
+
+// Import all quarter files dynamically
+const quarterFiles = import.meta.glob('@/data/roadmap/*.json', { eager: true });
 
 export default {
   name: 'RoadmapGalactic',
@@ -326,9 +262,7 @@ export default {
     const notifications = ref([]);
     const quarters = ref([]);
     const searchQuery = ref('');
-    const selectedYear = ref('');
-    const selectedMilestone = ref('');
-    const selectedTags = ref([]);
+    const preferReducedMotion = ref(false);
     
     let notificationIdCounter = 0;
 
@@ -341,20 +275,113 @@ export default {
     
     const isMobile = useMediaQuery('(max-width: 640px)');
 
-    // Load and process roadmap data
+    // Card hover effects
+    const handleCardMouseMove = (e) => {
+      const card = e.currentTarget;
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    };
+
+    const handleCardMouseLeave = (e) => {
+      const card = e.currentTarget;
+      card.style.removeProperty('--mouse-x');
+      card.style.removeProperty('--mouse-y');
+    };
+
+    // Transition effects
+    const beforeEnter = (el) => {
+      el.style.height = '0';
+      el.style.opacity = '0';
+    };
+
+    const enter = (el) => {
+      el.style.height = el.scrollHeight + 'px';
+      el.style.opacity = '1';
+    };
+
+    const beforeLeave = (el) => {
+      el.style.height = el.scrollHeight + 'px';
+    };
+
+    const leave = (el) => {
+      el.style.height = '0';
+      el.style.opacity = '0';
+    };
+
+    const beforeEnterFade = (el) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(-20px)';
+    };
+
+    const enterFade = (el) => {
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    };
+
+    const beforeLeaveFade = (el) => {
+      el.style.opacity = '1';
+    };
+
+    const leaveFade = (el) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(-20px)';
+    };
+
+    // Load and process roadmap data from quarter files
     const loadRoadmap = () => {
-      quarters.value = Object.keys(roadmapData).map(key => ({
-        ...roadmapData[key],
-        open: false,
-        milestones: roadmapData[key].milestones.map(milestone => ({
-          ...milestone,
-          open: false,
-          tasks: milestone.tasks.map(task => ({
-            ...task,
-            open: false
-          }))
-        }))
-      }));
+      try {
+        // Sort quarter files by date
+        const sortedQuarters = Object.entries(quarterFiles)
+          .map(([path, module]) => {
+            // Extract quarter and year from filename
+            const fileName = path.split('/').pop()?.replace('.json', '') || '';
+            const [quarter, yearStr] = fileName.split('-');
+            const year = parseInt(yearStr);
+            
+            // Get the data directly since each file contains a single object
+            const data = module.default;
+            
+            return {
+              year,
+              quarter,
+              data
+            };
+          })
+          .sort((a, b) => {
+            // Sort by year first
+            if (a.year !== b.year) return b.year - a.year;
+            // Then by quarter (Q4 to Q1)
+            return b.quarter.localeCompare(a.quarter);
+          });
+
+        // Process each quarter's data
+        quarters.value = sortedQuarters
+          .map(({ data }) => {
+            if (!data) return null;
+
+            return {
+              ...data,
+              open: false,
+              milestones: data.milestones?.map(milestone => ({
+                ...milestone,
+                open: false,
+                tasks: milestone.tasks?.map(task => ({
+                  ...task,
+                  open: false,
+                  subtasks: task.subtasks || []
+                })) || []
+              })) || []
+            };
+          })
+          .filter(Boolean); // Remove any null values
+      } catch (error) {
+        console.error('Error loading roadmap data:', error);
+        quarters.value = [];
+      }
     };
 
     // Toggle handlers
@@ -426,108 +453,14 @@ export default {
       updateQuarterProgress(quarter);
     };
 
-    // Computed properties
-    const availableYears = computed(() => {
-      return [...new Set(quarters.value.map(q => q.period.split('-')[0]))];
-    });
-
-    const availableMilestones = computed(() => {
-      const milestones = new Set();
-      quarters.value.forEach(q => {
-        q.milestones.forEach(m => milestones.add(m.title));
-      });
-      return Array.from(milestones);
-    });
-
-    const availableTags = computed(() => {
-      const tags = new Set();
-      quarters.value.forEach(quarter => {
-        quarter.milestones.forEach(milestone => {
-          if (milestone.tags) milestone.tags.forEach(tag => tags.add(tag));
-          milestone.tasks.forEach(task => {
-            if (task.tags) task.tags.forEach(tag => tags.add(tag));
-          });
-        });
-      });
-      return Array.from(tags).sort();
-    });
-
-    // Tag colors
-    const tagColors = {
-      'Frontend': '#0FB9FD',
-      'Backend': '#5865F2',
-      'DevOps': '#C92AFD',
-      'Design': '#FD4D4D',
-      'Research': '#00D26A',
-      'Testing': '#F9A825',
-      'Documentation': '#9C27B0',
-      'Infrastructure': '#607D8B',
-      'Security': '#FF3D00',
-      'UX': '#009688',
-      'API': '#3F51B5',
-      'Database': '#795548',
-      'Performance': '#FF9800',
-      'Accessibility': '#8BC34A',
-      'Mobile': '#E91E63',
-    };
-
-    const getTagColor = (tag) => tagColors[tag] || '#0FB9FD';
-
-    const toggleTagFilter = (tag) => {
-      const index = selectedTags.value.indexOf(tag);
-      if (index === -1) {
-        selectedTags.value.push(tag);
-      } else {
-        selectedTags.value.splice(index, 1);
-      }
-    };
-
-    const clearTagFilters = () => {
-      selectedTags.value = [];
-    };
-
-    // Stats
-    const totalMilestones = computed(() => {
-      return quarters.value.reduce((sum, quarter) => sum + quarter.milestones.length, 0);
-    });
-
-    const totalTasks = computed(() => {
-      return quarters.value.reduce((sum, quarter) => 
-        sum + quarter.milestones.reduce((mSum, milestone) => 
-          mSum + milestone.tasks.length, 0), 0);
-    });
-
-    const completedTasks = computed(() => {
-      return quarters.value.reduce((sum, quarter) => 
-        sum + quarter.milestones.reduce((mSum, milestone) => 
-          mSum + milestone.tasks.filter(task => task.status === 'Completed').length, 0), 0);
-    });
-
-    const completedPercentage = computed(() => {
-      if (totalTasks.value === 0) return 0;
-      return Math.round((completedTasks.value / totalTasks.value) * 100);
-    });
-
     // Filtered data
     const filteredQuarters = computed(() => {
       return quarters.value.filter(q => {
-        const matchesYear = !selectedYear.value || q.period.includes(selectedYear.value);
-        const matchesMilestone = !selectedMilestone.value || q.milestones.some(m => 
-          m.title.includes(selectedMilestone.value));
-        
-        const matchesTags = selectedTags.value.length === 0 || q.milestones.some(m => {
-          const milestoneTags = m.tags || [];
-          const milestoneHasTags = milestoneTags.some(tag => selectedTags.value.includes(tag));
-          const tasksHaveTags = m.tasks.some(t => (t.tags || []).some(tag => 
-            selectedTags.value.includes(tag)));
-          return milestoneHasTags || tasksHaveTags;
-        });
-        
         const matchesSearch = !searchQuery.value || q.milestones.some(m => 
           m.title.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
           m.tasks.some(t => t.title.toLowerCase().includes(searchQuery.value.toLowerCase())));
         
-        return matchesYear && matchesMilestone && matchesSearch && matchesTags;
+        return matchesSearch;
       });
     });
 
@@ -556,47 +489,57 @@ export default {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
 
+    // Check for reduced motion preference
+    const checkReducedMotion = () => {
+      preferReducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    };
+
     // Lifecycle
     onMounted(() => {
       isMounted.value = true;
       loadRoadmap();
+      checkReducedMotion();
       
       // Add passive event listeners
-      document.addEventListener('touchstart', () => {}, { passive: true });
-      document.addEventListener('touchmove', () => {}, { passive: true });
+      const passiveOptions = { passive: true };
+      document.addEventListener('touchstart', () => {}, passiveOptions);
+      document.addEventListener('touchmove', () => {}, passiveOptions);
+      
+      // Listen for reduced motion preference changes
+      window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', checkReducedMotion);
     });
     
     onBeforeUnmount(() => {
       isMounted.value = false;
+      // Clean up event listeners
+      window.matchMedia('(prefers-reduced-motion: reduce)').removeEventListener('change', checkReducedMotion);
     });
 
     return {
       roadmapRef,
       quarters,
       searchQuery,
-      selectedYear,
-      selectedMilestone,
-      selectedTags,
-      availableYears,
-      availableMilestones,
       filteredQuarters,
       toggleQuarter,
       toggleMilestone,
       toggleTask,
       toggleSubtask,
       getProgressPercentage,
-      availableTags,
-      getTagColor,
-      toggleTagFilter,
-      clearTagFilters,
-      totalMilestones,
-      totalTasks,
-      completedTasks,
-      completedPercentage,
       notifications,
       showNotification,
       copyMilestoneLink,
-      isMobile
+      isMobile,
+      preferReducedMotion,
+      handleCardMouseMove,
+      handleCardMouseLeave,
+      beforeEnter,
+      enter,
+      beforeLeave,
+      leave,
+      beforeEnterFade,
+      enterFade,
+      beforeLeaveFade,
+      leaveFade
     };
   }
 };
@@ -615,7 +558,6 @@ export default {
   color: #fff;
   position: relative;
   overflow: hidden;
-  padding: 2rem 1rem;
   background: linear-gradient(135deg, #0c1016f0, #141b2af0, #0c1016f0);
 }
 
@@ -738,105 +680,47 @@ export default {
   opacity: 0.8;
 }
 
-/* Search & Filter Section */
-.search-filter-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+/* Search Section */
+.search-container {
+  width: 100%;
+  padding: 0 1rem;
   margin-bottom: 2rem;
 }
 
 .search-input-wrapper {
   position: relative;
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .search-input {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
-  border-radius: 0.5rem;
+  padding: 1rem 1rem 1rem 3rem;
+  border-radius: 0.75rem;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
-.filter-wrapper {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+.search-input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(15, 185, 253, 0.6);
+  box-shadow: 0 0 0 2px rgba(15, 185, 253, 0.2);
 }
 
-.filter-select {
-  flex: 1;
-  min-width: 200px;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  font-size: 1rem;
-}
-
-/* Tags Filter */
-.tags-filter-container {
-  margin-top: 1rem;
-}
-
-.tags-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.tag-button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.tag-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.tag-button.active {
-  background: rgba(15, 185, 253, 0.2);
-  border-color: #0FB9FD;
-}
-
-/* Roadmap Stats */
-.roadmap-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
-}
-
-.stat-item {
-  text-align: center;
-}
-
-.stat-value {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: bold;
-  color: #0FB9FD;
-}
-
-.stat-label {
-  font-size: 0.875rem;
-  opacity: 0.8;
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* Quarters */
@@ -952,16 +836,17 @@ export default {
     padding: 1rem 0.5rem;
   }
   
-  .search-filter-container {
-    gap: 0.5rem;
+  .search-container {
+    padding: 0 0.5rem;
   }
   
-  .filter-wrapper {
-    flex-direction: column;
+  .search-input {
+    padding: 0.875rem 1rem 0.875rem 2.75rem;
+    font-size: 0.875rem;
   }
   
-  .filter-select {
-    min-width: 100%;
+  .search-icon {
+    left: 0.875rem;
   }
   
   .quarter-header,
