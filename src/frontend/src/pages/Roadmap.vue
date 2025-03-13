@@ -54,7 +54,7 @@
               <div class="quarter-header" @click.stop="toggleQuarter(qIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                 <div class="header-content">
                   <div class="title-with-status">
-                    <div class="status-icon" :class="getItemStatusClass(quarter)"></div>
+                    <div class="status-icon" :class="getItemStatusClass(quarter)" @click.stop="toggleQuarterStatus(quarter, $event)"></div>
                     <h2>{{ quarter.period }}</h2>
                   </div>
                   <p class="description">{{ quarter.description }}</p>
@@ -80,7 +80,7 @@
                   <div class="milestone-header" @click.stop="toggleMilestone(quarter, milestone, mIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                     <div class="header-content">
                       <div class="title-with-status">
-                        <div class="status-icon" :class="getItemStatusClass(milestone)"></div>
+                        <div class="status-icon" :class="getItemStatusClass(milestone)" @click.stop="toggleMilestoneStatus(quarter, milestone, $event)"></div>
                         <h3>{{ milestone.title }}</h3>
                       </div>
                       <p class="description">{{ milestone.description }}</p>
@@ -106,7 +106,7 @@
                       <div class="task-header" @click.stop="toggleTask(quarter, milestone, task, tIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                         <div class="header-content">
                           <div class="title-with-status">
-                            <div class="status-icon" :class="getItemStatusClass(task)"></div>
+                            <div class="status-icon" :class="getItemStatusClass(task)" @click.stop="toggleTaskStatus(task)"></div>
                             <h4>{{ task.title }}</h4>
                           </div>
                           <p class="description">{{ task.description }}</p>
@@ -140,7 +140,7 @@
                         <div v-for="(subtask, stIndex) in task.subtasks" :key="stIndex" class="subtask" :class="{ completed: subtask.completed }">
                           <div class="subtask-header">
                             <div class="checkbox-container">
-                              <div class="status-icon subtask-status-icon" :class="{ 'completed': subtask.completed, 'pending': !subtask.completed }"></div>
+                              <div class="status-icon subtask-status-icon" :class="{ 'completed': subtask.completed, 'pending': !subtask.completed }" @click.stop="toggleSubtask(quarter, milestone, task, subtask, $event)"></div>
                               <input type="checkbox" :id="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex" :checked="subtask.completed" @change="toggleSubtask(quarter, milestone, task, subtask, $event)">
                               <label :for="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex">{{ subtask.title }}</label>
                             </div>
@@ -419,8 +419,15 @@ export default {
 
     // Progress and task management - keeping core functionality
     const getProgressPercentage = (completed, total) => {
-      if (!total) return 0;
-      return (completed / total) * 100;
+      // Ensure we have valid numbers
+      const completedNum = Number(completed) || 0;
+      const totalNum = Number(total) || 1; // Prevent division by zero
+      
+      // Calculate percentage and ensure it's between 0-100
+      const percentage = Math.min(100, Math.max(0, (completedNum / totalNum) * 100));
+      
+      // Round to nearest integer for cleaner display
+      return Math.round(percentage);
     };
 
     const getTagColor = (tag) => {
@@ -522,6 +529,192 @@ export default {
       // Do nothing since notifications are removed
     };
 
+    // Status toggling functions
+    const toggleQuarterStatus = (quarter) => {
+      if (quarter.status === 'Completed') {
+        quarter.status = 'ToDo';
+        quarter.completed = 0;
+        
+        // Reset all milestones to incomplete
+        if (quarter.milestones && quarter.milestones.length > 0) {
+          quarter.milestones.forEach(milestone => {
+            milestone.status = 'ToDo';
+            milestone.completed = 0;
+            
+            // Reset all tasks
+            if (milestone.tasks && milestone.tasks.length > 0) {
+              milestone.tasks.forEach(task => {
+                task.status = 'ToDo';
+                task.completed = 0;
+                
+                // Reset all subtasks
+                if (task.subtasks && task.subtasks.length > 0) {
+                  task.subtasks.forEach(subtask => {
+                    subtask.completed = false;
+                  });
+                }
+              });
+            }
+          });
+        }
+      } else {
+        quarter.status = 'Completed';
+        
+        // Mark all milestones as completed
+        if (quarter.milestones && quarter.milestones.length > 0) {
+          quarter.milestones.forEach(milestone => {
+            milestone.status = 'Completed';
+            
+            // Mark all tasks as completed
+            if (milestone.tasks && milestone.tasks.length > 0) {
+              milestone.tasks.forEach(task => {
+                task.status = 'Completed';
+                
+                // Mark all subtasks as completed
+                if (task.subtasks && task.subtasks.length > 0) {
+                  task.subtasks.forEach(subtask => {
+                    subtask.completed = true;
+                  });
+                  task.completed = task.subtasks.length;
+                  task.total = task.subtasks.length;
+                } else {
+                  task.completed = 1;
+                  task.total = 1;
+                }
+              });
+              
+              milestone.completed = milestone.tasks.length;
+              milestone.total = milestone.tasks.length;
+            }
+          });
+          
+          quarter.completed = quarter.milestones.length;
+          quarter.total = quarter.milestones.length;
+        }
+      }
+    };
+
+    const toggleMilestoneStatus = (milestone) => {
+      if (milestone.status === 'Completed') {
+        milestone.status = 'ToDo';
+        milestone.completed = 0;
+        
+        // Reset all tasks to incomplete
+        if (milestone.tasks && milestone.tasks.length > 0) {
+          milestone.tasks.forEach(task => {
+            task.status = 'ToDo';
+            task.completed = 0;
+            
+            // Reset all subtasks
+            if (task.subtasks && task.subtasks.length > 0) {
+              task.subtasks.forEach(subtask => {
+                subtask.completed = false;
+              });
+            }
+          });
+        }
+      } else {
+        milestone.status = 'Completed';
+        
+        // Mark all tasks as completed
+        if (milestone.tasks && milestone.tasks.length > 0) {
+          milestone.tasks.forEach(task => {
+            task.status = 'Completed';
+            
+            // Mark all subtasks as completed
+            if (task.subtasks && task.subtasks.length > 0) {
+              task.subtasks.forEach(subtask => {
+                subtask.completed = true;
+              });
+              task.completed = task.subtasks.length;
+              task.total = task.subtasks.length;
+            } else {
+              task.completed = 1;
+              task.total = 1;
+            }
+          });
+          
+          milestone.completed = milestone.tasks.length;
+          milestone.total = milestone.tasks.length;
+        }
+      }
+      
+      // Update parent quarter's progress
+      const quarter = roadmapData.value.quarters
+        .find(q => q.milestones && q.milestones.includes(milestone));
+        
+      if (quarter) {
+        updateQuarterProgress(quarter);
+      }
+    };
+
+    const toggleTaskStatus = (task) => {
+      if (task.status === 'Completed') {
+        task.status = 'ToDo';
+        task.completed = 0;
+        
+        // Reset all subtasks to incomplete
+        if (task.subtasks && task.subtasks.length > 0) {
+          task.subtasks.forEach(subtask => {
+            subtask.completed = false;
+          });
+        }
+      } else {
+        task.status = 'Completed';
+        
+        // Mark all subtasks as completed
+        if (task.subtasks && task.subtasks.length > 0) {
+          task.subtasks.forEach(subtask => {
+            subtask.completed = true;
+          });
+          task.completed = task.subtasks.length;
+          task.total = task.subtasks.length;
+        } else {
+          // If no subtasks, set completed to 1 and total to 1
+          task.completed = 1;
+          task.total = 1;
+        }
+      }
+      
+      // Update parent milestone's progress
+      const milestone = roadmapData.value.quarters
+        .flatMap(q => q.milestones)
+        .find(m => m.tasks && m.tasks.includes(task));
+        
+      if (milestone) {
+        updateMilestoneProgress(milestone);
+      }
+    };
+
+    // Helper function to update milestone progress
+    const updateMilestoneProgress = (milestone) => {
+      if (!milestone.tasks) return;
+      
+      const completedTasks = milestone.tasks.filter(t => t.status === 'Completed').length;
+      milestone.completed = completedTasks;
+      milestone.total = milestone.tasks.length;
+      
+      // Update parent quarter's progress
+      const quarter = roadmapData.value.quarters
+        .find(q => q.milestones && q.milestones.includes(milestone));
+        
+      if (quarter) {
+        updateQuarterProgress(quarter);
+      }
+    };
+
+    // Helper function to update quarter progress
+    const updateQuarterProgress = (quarter) => {
+      if (!quarter.milestones) return;
+      
+      const completedMilestones = quarter.milestones.filter(m => 
+        m.tasks && m.completed === m.tasks.length
+      ).length;
+      
+      quarter.completed = completedMilestones;
+      quarter.total = quarter.milestones.length;
+    };
+
     // Filtered data
     const filteredQuarters = computed(() => {
       if (!searchQuery.value) return quarters.value;
@@ -595,7 +788,10 @@ export default {
       scrollToCurrentQuarter,
       isCurrent,
       getQuarterStatusClass,
-      getItemStatusClass
+      getItemStatusClass,
+      toggleQuarterStatus,
+      toggleMilestoneStatus,
+      toggleTaskStatus
     };
   }
 };
@@ -963,7 +1159,10 @@ export default {
 
 .quarter {
   background: var(--cosmic-glass-bg);
-  border-radius: 0.5rem;
+  border-top-left-radius: 0.0rem; /* No rounding for top-left corner */
+  border-top-right-radius: .5rem; /* 1.0rem rounding for top-right corner */
+  border-bottom-left-radius: 0rem; /* 0.5rem rounding for bottom-left corner */
+  border-bottom-right-radius: .5rem;
   overflow: hidden;
   width: 100%;
   border: 1px solid var(--quarter-border);
@@ -1532,20 +1731,115 @@ export default {
 }
 
 .progress-container {
-  width: 60px;
-  height: 4px;
-  background: var(--cosmic-glass-bg-lighter);
-  border-radius: 4px;
+  width: 120px;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.progress-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(90deg, 
+      rgba(0, 0, 0, 0.1) 0%, 
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+  transition: width 0.5s cubic-bezier(0.12, 0.8, 0.32, 1);
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.4) 50%, 
+    rgba(255, 255, 255, 0) 100%);
+  animation: shimmer 1.5s infinite;
+  border-radius: 10px;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Quarter progress bar - cosmic blue theme */
+.quarter .progress-bar {
+  background: linear-gradient(90deg,
+    #0062ff 0%,
+    #00c3ff 50%,
+    #0062ff 100%
+  );
+  background-size: 200% 100%;
+  animation: gradientShift 3s ease infinite;
+}
+
+/* Milestone progress bar - cosmic purple theme */
+.milestone .progress-bar {
+  background: linear-gradient(90deg,
+    #6a11cb 0%,
+    #a15cff 50%,
+    #6a11cb 100%
+  );
+  background-size: 200% 100%;
+  animation: gradientShift 3s ease infinite;
+}
+
+/* Task progress bar - cosmic pink theme */
+.task .progress-bar {
+  background: linear-gradient(90deg,
+    #c31432 0%,
+    #ff5e98 50%,
+    #c31432 100%
+  );
+  background-size: 200% 100%;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .progress-text {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
   white-space: nowrap;
   color: var(--cosmic-text-secondary);
   transition: color 0.3s var(--animation-smooth);
-  margin-bottom: 2px;
+  margin-bottom: 4px;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 /* Task status positioning */
@@ -1851,88 +2145,236 @@ export default {
   justify-content: center;
   flex-shrink: 0;
   position: relative;
+  overflow: visible;
+  cursor: pointer;
+  transition: transform 0.2s var(--animation-bounce);
 }
 
-/* Quarter status icons */
+/* Common icon styles */
+.status-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  z-index: -1;
+  transform: scale(1);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.status-icon:hover {
+  transform: scale(1.15);
+}
+
+/* Completed icon with SVG check mark */
 .status-icon.completed {
-  background-color: var(--status-completed);
-  box-shadow: 0 0 8px rgba(42, 187, 155, 0.4);
+  background: linear-gradient(135deg, #25a18e, #00e676);
+}
+
+.status-icon.completed::before {
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0.6;
 }
 
 .status-icon.completed::after {
-  content: '✓';
-  color: white;
-  font-size: 0.75rem;
-  font-weight: bold;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 12 10 16 18 8'%3E%3C/polyline%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70%;
 }
 
+/* In Progress icon with animation */
+.status-icon.in-progress {
+  background: linear-gradient(135deg, #1565c0, #42a5f5);
+
+}
+
+.status-icon.in-progress::before {
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0.6;
+  animation: rotateGlow 2s linear infinite;
+}
+
+.status-icon.in-progress::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'%3E%3C/polyline%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70%;
+}
+
+/* Current icon with pulse effect */
 .status-icon.current {
-  background-color: var(--status-in-progress);
-  box-shadow: 0 0 8px rgba(56, 128, 255, 0.4);
+  background: linear-gradient(135deg, #0277bd, #29b6f6);
+  box-shadow: 
+    0 0 0 2px rgba(56, 128, 255, 0.2),
+    0 0 15px rgba(56, 128, 255, 0.4);
+  animation: pulseCurrentIndicator 2s infinite ease-in-out;
+}
+
+.status-icon.current::before {
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0.6;
 }
 
 .status-icon.current::after {
-  content: '▶';
-  color: white;
-  font-size: 0.65rem;
-  font-weight: bold;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolyline points='12 6 12 12 16 14'%3E%3C/polyline%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70%;
 }
 
-.status-icon.future {
-  background-color: var(--status-to-do);
-  box-shadow: 0 0 8px rgba(255, 153, 0, 0.4);
-}
-
-.status-icon.future::after {
-  content: '◯';
-  color: white;
-  font-size: 0.75rem;
-  font-weight: bold;
-}
-
+/* Future/Todo icon */
+.status-icon.future, 
 .status-icon.pending {
-  background-color: var(--status-to-do);
-  opacity: 0.7;
-  box-shadow: 0 0 5px rgba(255, 153, 0, 0.3);
+  background: linear-gradient(135deg, #6a11cb, #8c7ae6);
+  box-shadow: 
+    0 0 0 2px rgba(106, 17, 203, 0.2),
+    0 0 15px rgba(106, 17, 203, 0.4);
 }
 
+.status-icon.future::before,
+.status-icon.pending::before {
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0.4;
+}
+
+.status-icon.future::after,
 .status-icon.pending::after {
-  content: '◯';
-  color: white;
-  font-size: 0.75rem;
-  font-weight: bold;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='6' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70%;
 }
 
-/* Subtask status icon */
+/* Enhance the subtask status icons to match the main icons */
 .subtask-status-icon {
   width: 0.9rem;
   height: 0.9rem;
   margin-right: 0.25rem;
+  border-radius: 50%;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
 }
 
-.subtask-status-icon.completed::after,
+/* Pending subtask icon */
+.subtask-status-icon.pending {
+  background: linear-gradient(135deg, #6a11cb, #8c7ae6);
+  box-shadow: 
+    0 0 0 1px rgba(106, 17, 203, 0.2),
+    0 0 8px rgba(106, 17, 203, 0.3);
+}
+
+.subtask-status-icon.pending::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0.4;
+}
+
 .subtask-status-icon.pending::after {
-  font-size: 0.6rem;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='10' height='10' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='6' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70%;
 }
 
-/* Quarter level adjustments */
+/* Completed subtask icon */
+.subtask-status-icon.completed {
+  background: linear-gradient(135deg, #19725f, #00cc66);
+  box-shadow: 
+    0 0 0 1px rgba(25, 114, 95, 0.2),
+    0 0 8px rgba(25, 114, 95, 0.3);
+}
+
+.subtask-status-icon.completed::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0.7;
+}
+
+.subtask-status-icon.completed::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='10' height='10' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 12 10 16 18 8'%3E%3C/polyline%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70%;
+}
+
+/* Remove the duplicate completed badge */
+.quarter.completed::after,
+.milestone.completed::after,
+.task.completed::after {
+  display: none;
+}
+
+/* Subtask hover and click effects */
+.checkbox-container:hover .subtask-status-icon {
+  transform: scale(1.1);
+}
+
+.checkbox-container:active .subtask-status-icon {
+  transform: scale(0.9);
+}
+
+/* Quarter level adjustments with size scaling */
 .quarter .status-icon {
   width: 1.5rem;
   height: 1.5rem;
-}
-
-.quarter .status-icon::after {
-  font-size: 1rem;
 }
 
 /* Milestone level adjustments */
 .milestone .status-icon {
   width: 1.35rem;
   height: 1.35rem;
-}
-
-.milestone .status-icon::after {
-  font-size: 0.85rem;
 }
 
 /* Make header content titles align with icons */
@@ -2060,7 +2502,6 @@ export default {
 /* Quarter status icons */
 .status-icon.completed {
   background-color: var(--status-completed);
-  box-shadow: 0 0 8px rgba(42, 187, 155, 0.4);
 }
 
 .status-icon.completed::after {
@@ -2072,7 +2513,6 @@ export default {
 
 .status-icon.in-progress {
   background-color: var(--status-in-progress);
-  box-shadow: 0 0 8px rgba(56, 128, 255, 0.4);
   animation: pulseInProgress 1.5s infinite alternate ease-in-out;
 }
 
@@ -2085,7 +2525,6 @@ export default {
 
 .status-icon.current {
   background-color: var(--status-in-progress);
-  box-shadow: 0 0 8px rgba(56, 128, 255, 0.4);
 }
 
 .status-icon.current::after {
@@ -2097,7 +2536,6 @@ export default {
 
 .status-icon.future {
   background-color: var(--status-to-do);
-  box-shadow: 0 0 8px rgba(255, 153, 0, 0.4);
 }
 
 .status-icon.future::after {
@@ -2127,7 +2565,6 @@ export default {
     rgba(56, 128, 255, 0.05) 0%,
     rgba(56, 128, 255, 0.1) 100%
   );
-  box-shadow: 0 0 15px rgba(56, 128, 255, 0.15);
 }
 
 .quarter.in-progress .quarter-header,
@@ -2154,7 +2591,6 @@ export default {
     var(--status-in-progress) 0%,
     rgba(108, 169, 255, 0.8) 100%
   );
-  box-shadow: 0 0 10px rgba(56, 128, 255, 0.3);
 }
 
 .quarter.in-progress:hover,
@@ -2163,5 +2599,50 @@ export default {
   transform: translateX(8px);
   box-shadow: 0 0 15px rgba(56, 128, 255, 0.25);
   border-color: var(--status-in-progress);
+}
+
+/* Override duplicate icons */
+.status-icon.completed::after,
+.status-icon.in-progress::after,
+.status-icon.current::after,
+.status-icon.future::after,
+.status-icon.pending::after {
+  content: '' !important;
+  background-image: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70%;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+/* Restore SVG icons */
+.status-icon.completed::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 12 10 16 18 8'%3E%3C/polyline%3E%3C/svg%3E") !important;
+}
+
+.status-icon.in-progress::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'%3E%3C/polyline%3E%3C/svg%3E") !important;
+}
+
+.status-icon.current::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolyline points='12 6 12 12 16 14'%3E%3C/polyline%3E%3C/svg%3E") !important;
+}
+
+.status-icon.future::after,
+.status-icon.pending::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='6' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E") !important;
+}
+
+/* Subtask icons */
+.subtask-status-icon.completed::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='10' height='10' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 12 10 16 18 8'%3E%3C/polyline%3E%3C/svg%3E") !important;
+}
+
+.subtask-status-icon.pending::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='10' height='10' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='6' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E") !important;
 }
 </style>
