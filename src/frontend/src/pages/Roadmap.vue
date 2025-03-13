@@ -345,11 +345,6 @@ export default {
       el.style.height = el.scrollHeight + 'px';
     };
 
-    const leave = (el) => {
-      el.style.height = '0';
-      el.style.opacity = '0';
-    };
-
     const beforeEnterFade = (el) => {
       el.style.opacity = '0';
       el.style.transform = 'translateY(-20px)';
@@ -367,6 +362,11 @@ export default {
     const leaveFade = (el) => {
       el.style.opacity = '0';
       el.style.transform = 'translateY(-20px)';
+    };
+
+    const leave = (el) => {
+      el.style.height = '0';
+      el.style.opacity = '0';
     };
 
     // Load and process roadmap data from quarter files
@@ -1046,6 +1046,12 @@ export default {
   width: 100%;
   max-width: 100%; /* Ensure it doesn't overflow */
   box-sizing: border-box; /* Include padding in width calculation */
+  background: rgba(15, 25, 40, 0.4); /* Panel background */
+  border: 1px solid rgba(88, 101, 242, 0.2);
+  border-radius: 1rem;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), inset 0 1px rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
 }
 
 .scrollable-content::-webkit-scrollbar {
@@ -1156,22 +1162,6 @@ export default {
     width: 100%;
     justify-content: center;
   }
-
-  .quarter-header,
-  .milestone-header,
-  .task-header {
-    padding: 1.5rem;
-  }
-  
-  .toggle-icon {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .checkbox-container input[type="checkbox"] {
-    width: 24px;
-    height: 24px;
-  }
 }
 
 @media (max-width: 640px) {
@@ -1188,32 +1178,55 @@ export default {
   }
   
   .scrollable-content {
-    padding-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+  
+  .quarter {
+    border-radius: 0.5rem;
   }
   
   .quarter-header {
     padding: 1rem;
+    font-size: 0.875rem;
   }
   
-  .search-container {
-    padding: 0;
+  .milestones {
+    padding: 1rem;
+  }
+  
+  .milestone {
+    border-radius: 0.5rem;
     margin-bottom: 1rem;
   }
   
-  .search-input {
-    padding: 0.875rem 1rem 0.875rem 2.75rem;
+  .milestone-header {
+    padding: 1rem;
     font-size: 0.875rem;
   }
   
-  .search-icon {
-    left: 0.875rem;
+  .tasks {
+    padding: 0.75rem 1rem;
   }
   
-  .quarter-header,
-  .milestone-header,
+  .task {
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
   .task-header {
+    padding: 0.75rem 1rem;
     font-size: 0.875rem;
-    padding: 1rem; /* Override the 768px breakpoint for smaller screens */
+  }
+  
+  .subtasks {
+    padding: 0.75rem;
+  }
+  
+  .subtask {
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.375rem;
   }
   
   .description {
@@ -1229,13 +1242,18 @@ export default {
     gap: 5px; /* Reduce gap on mobile */
   }
   
-  .notification {
-    max-width: calc(100vw - 2rem);
-    margin: 0 1rem;
+  .search-container {
+    padding: 0;
+    margin-bottom: 1rem;
   }
   
-  .progress-text {
-    font-size: 0.75rem;
+  .search-input {
+    padding: 0.875rem 1rem 0.875rem 2.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .search-icon {
+    left: 0.875rem;
   }
   
   .hero-section {
@@ -1253,11 +1271,31 @@ export default {
 }
 
 .quarter {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
+  background: rgba(15, 25, 40, 0.6);
+  border-radius: 0.75rem;
   overflow: hidden;
   width: 100%;
   box-sizing: border-box; /* Include padding in width calculation */
+  border: 1px solid rgba(88, 101, 242, 0.2);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15), inset 0 1px rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.quarter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), inset 0 1px rgba(255, 255, 255, 0.07);
+}
+
+.quarter::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(15, 185, 253, 0.05));
+  pointer-events: none;
 }
 
 .quarter-header {
@@ -1270,71 +1308,158 @@ export default {
   position: relative;
   width: 100%;
   box-sizing: border-box;
+  border-bottom: 1px solid rgba(88, 101, 242, 0.1);
+  background: rgba(15, 25, 40, 0.3);
 }
 
 .quarter-header:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(15, 25, 40, 0.5);
 }
 
 /* Milestones */
 .milestones {
-  padding: 1rem;
+  padding: 1.25rem;
+  background: rgba(15, 25, 40, 0.2);
 }
 
 .milestone {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
+  background: rgba(15, 25, 40, 0.5);
+  border-radius: 0.75rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(88, 101, 242, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.milestone:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15), inset 0 1px rgba(255, 255, 255, 0.07);
 }
 
 .milestone-header {
-  padding: 1rem;
+  padding: 1.25rem;
   cursor: pointer;
   width: 100%;
   box-sizing: border-box;
+  border-bottom: 1px solid rgba(88, 101, 242, 0.1);
+  background: rgba(15, 25, 40, 0.2);
+}
+
+.milestone-header:hover {
+  background: rgba(15, 25, 40, 0.4);
 }
 
 /* Tasks */
 .tasks {
-  padding: 0.5rem 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(15, 25, 40, 0.1);
 }
 
 .task {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
+  background: rgba(15, 25, 40, 0.4);
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(88, 101, 242, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 1px rgba(255, 255, 255, 0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.task:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), inset 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .task-header {
-  padding: 0.75rem;
+  padding: 1rem 1.25rem;
   cursor: pointer;
   width: 100%;
   box-sizing: border-box;
+  border-bottom: 1px solid rgba(88, 101, 242, 0.1);
 }
 
-/* Progress bars */
-.progress-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 1; /* Allow shrinking if needed */
-  min-width: 0; /* Allow shrinking below content width */
+.task-header:hover {
+  background: rgba(15, 25, 40, 0.3);
 }
 
-.progress-container {
-  width: 100px;
-  max-width: 100px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
+/* Subtasks */
+.subtasks {
+  padding: 1rem;
+  background: rgba(15, 25, 40, 0.1);
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.subtask {
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  background: rgba(15, 25, 40, 0.3);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(88, 101, 242, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.subtask:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Improved animation for opening/closing */
+.cosmic-slide-enter-active,
+.cosmic-slide-leave-active {
+  transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
   overflow: hidden;
-  flex-shrink: 1; /* Allow shrinking */
 }
 
-.progress-bar {
-  height: 100%;
-  background: #0FB9FD;
-  transition: width 0.3s ease;
+.cosmic-slide-enter-from,
+.cosmic-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Add glowing effects and accents */
+.cosmic-text-glow {
+  text-shadow: 0 0 10px rgba(15, 185, 253, 0.5);
+  color: white;
+  margin: 0;
+}
+
+.quarter.current-quarter {
+  border-left: 3px solid rgba(15, 185, 253, 0.8);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 20px rgba(15, 185, 253, 0.3);
+}
+
+/* Gradients for visual appeal */
+.quarter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(15, 185, 253, 0.7), rgba(88, 101, 242, 0.7));
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.milestone::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(88, 101, 242, 0.7), rgba(201, 42, 253, 0.7));
+  opacity: 0.6;
+  z-index: 1;
+}
+
+/* Fix for focused elements */
+.quarter-header:focus,
+.milestone-header:focus,
+.task-header:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px rgba(15, 185, 253, 0.6);
 }
 
 /* Notifications */
@@ -1360,6 +1485,8 @@ export default {
   color: white;
   font-size: 0.9rem;
   border-left: 4px solid;
+  max-width: calc(100vw - 2rem);
+  margin: 0 1rem;
 }
 
 .notification.success {
@@ -1391,129 +1518,6 @@ export default {
   transform: translateX(30px);
 }
 
-/* Add particle float animation */
-@keyframes particle-float {
-  0% {
-    transform: translateY(0) translateX(0) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-100px) translateX(100px) rotate(90deg);
-  }
-  50% {
-    transform: translateY(-200px) translateX(0) rotate(180deg);
-  }
-  75% {
-    transform: translateY(-100px) translateX(-100px) rotate(270deg);
-  }
-  100% {
-    transform: translateY(0) translateX(0) rotate(360deg);
-  }
-}
-
-/* Enhanced card styling */
-.quarter-header, .milestone-header {
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), border-left-color 0.3s ease;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  transform-origin: center;
-  will-change: transform;
-}
-
-.quarter-header:hover, .milestone-header:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 20px rgba(15, 185, 253, 0.2);
-  border-left-color: rgba(15, 185, 253, 0.8);
-}
-
-.quarter-header::before, .milestone-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.quarter-header:hover::before, .milestone-header:hover::before {
-  opacity: 1;
-}
-
-/* Glowing effect for nodes */
-.quarter::before {
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.8s ease;
-  animation: pulse-glow 4s infinite ease-in-out;
-}
-
-@keyframes pulse-glow {
-  0% { box-shadow: 0 0 0 4px rgba(15, 185, 253, 0.1), 0 0 15px rgba(15, 185, 253, 0.5); }
-  50% { box-shadow: 0 0 0 4px rgba(15, 185, 253, 0.2), 0 0 25px rgba(15, 185, 253, 0.7); }
-  100% { box-shadow: 0 0 0 4px rgba(15, 185, 253, 0.1), 0 0 15px rgba(15, 185, 253, 0.5); }
-}
-
-.milestone::before {
-  animation: milestone-pulse 4s infinite ease-in-out;
-}
-
-@keyframes milestone-pulse {
-  0% { box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1), 0 0 10px rgba(88, 101, 242, 0.4); }
-  50% { box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.2), 0 0 20px rgba(88, 101, 242, 0.6); }
-  100% { box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1), 0 0 10px rgba(88, 101, 242, 0.4); }
-}
-
-/* Progress bar animation */
-.progress-bar {
-  background-size: 200% 200%;
-  background: linear-gradient(90deg, 
-    rgba(15, 185, 253, 0.8), 
-    rgba(88, 101, 242, 0.8),
-    rgba(201, 42, 253, 0.8),
-    rgba(15, 185, 253, 0.8));
-  animation: progress-gradient 8s infinite linear;
-}
-
-@keyframes progress-gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Accessibility Improvements */
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: rgba(15, 185, 253, 0.9);
-  color: white;
-  padding: 8px;
-  z-index: 100;
-  transition: top 0.3s ease;
-}
-
-.skip-link:focus {
-  top: 0;
-}
-
-/* Focus styles for better keyboard navigation */
-.quarter-header:focus,
-.milestone-header:focus,
-.task-header:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(15, 185, 253, 0.6), 0 15px 40px rgba(0, 0, 0, 0.3);
-}
-
-input:focus,
-select:focus {
-  outline: none;
-  border-color: rgba(15, 185, 253, 0.8);
-  box-shadow: 0 0 0 3px rgba(15, 185, 253, 0.3), 0 0 20px rgba(15, 185, 253, 0.3);
-}
-
 /* Improved contrast for better readability */
 .description {
   color: rgba(255, 255, 255, 0.85);
@@ -1521,85 +1525,6 @@ select:focus {
 
 .subtask-description {
   color: rgba(255, 255, 255, 0.85);
-}
-
-/* Larger touch targets for mobile */
-@media (max-width: 768px) {
-  .quarter-header,
-  .milestone-header,
-  .task-header {
-    padding: 1.5rem;
-  }
-  
-  .toggle-icon {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .checkbox-container input[type="checkbox"] {
-    width: 24px;
-    height: 24px;
-  }
-}
-
-/* Performance optimizations for animations */
-@media (prefers-reduced-motion: reduce), 
-       (max-width: 480px),
-       (forced-colors: active) {
-  .cosmic-stars,
-  .cosmic-nebula,
-  .particle {
-    animation-duration: calc(var(--animation-speed) * 200s);
-  }
-  
-  .progress-bar {
-    animation-duration: calc(var(--animation-speed) * 16s);
-  }
-  
-  .quarter::before,
-  .milestone::before {
-    animation-duration: calc(var(--animation-speed) * 8s);
-  }
-  
-  .quarter-header::before,
-  .milestone-header::before {
-    transition-duration: calc(var(--animation-speed) * 0.8s);
-  }
-}
-
-/* Reduced animation class for lower-end devices */
-.reduce-motion {
-  --animation-speed: 2;
-}
-
-.reduce-motion .cosmic-particles {
-  display: none;
-}
-
-.reduce-motion .cosmic-slide-enter-active,
-.reduce-motion .cosmic-slide-leave-active,
-.reduce-motion .cosmic-fade-enter-active,
-.reduce-motion .cosmic-fade-leave-active {
-  transition-duration: 0.3s;
-}
-
-/* Hardware acceleration for smoother rendering */
-.quarter-header, 
-.milestone-header, 
-.task-header,
-.progress-bar,
-.toggle-icon,
-.particle {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-/* Task tags styling */
-.task-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
 }
 
 /* Current quarter highlight */
@@ -1627,6 +1552,14 @@ select:focus {
   background: rgba(15, 185, 253, 0.1);
 }
 
+/* Task tags styling */
+.task-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
 .task-tag {
   display: inline-flex;
   align-items: center;
@@ -1648,6 +1581,7 @@ select:focus {
 .task-tag .tag-dot {
   width: 6px;
   height: 6px;
+  margin-right: 5px;
 }
 
 /* Share Button */
@@ -1672,58 +1606,65 @@ select:focus {
   box-shadow: 0 0 15px rgba(15, 185, 253, 0.4);
 }
 
-/* Notification System */
-.notifications-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  max-width: 300px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.share-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(15, 185, 253, 0.2);
 }
 
-.notification {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  background: rgba(30, 40, 60, 0.9);
-  backdrop-filter: blur(10px);
-  color: white;
-  font-size: 0.9rem;
-  border-left: 4px solid;
+/* Add particle float animation */
+@keyframes particle-float {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-100px) translateX(100px) rotate(90deg);
+  }
+  50% {
+    transform: translateY(-200px) translateX(0) rotate(180deg);
+  }
+  75% {
+    transform: translateY(-100px) translateX(-100px) rotate(270deg);
+  }
+  100% {
+    transform: translateY(0) translateX(0) rotate(360deg);
+  }
 }
 
-.notification.success {
-  border-color: #2ed573;
-}
-
-.notification.error {
-  border-color: #ff4757;
-}
-
-.notification.info {
-  border-color: #70a1ff;
-}
-
-.notification-icon {
-  margin-right: 10px;
+/* Progress bars */
+.progress-wrapper {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 1; /* Allow shrinking if needed */
+  min-width: 0; /* Allow shrinking below content width */
 }
 
-.notification-fade-enter-active,
-.notification-fade-leave-active {
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+.progress-container {
+  width: 100px;
+  max-width: 100px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 1; /* Allow shrinking */
 }
 
-.notification-fade-enter-from,
-.notification-fade-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(15, 185, 253, 0.8), 
+    rgba(88, 101, 242, 0.8),
+    rgba(201, 42, 253, 0.8),
+    rgba(15, 185, 253, 0.8));
+  background-size: 200% 200%;
+  animation: progress-gradient 8s infinite linear;
+  transition: width 0.3s ease;
+}
+
+@keyframes progress-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Highlight effect for direct links */
@@ -1832,31 +1773,6 @@ select:focus {
   justify-content: center;
 }
 
-/* Mobile optimizations for hero */
-@media (max-width: 768px) {
-  .hero-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .title-area {
-    text-align: center;
-    width: 100%;
-  }
-  
-  .current-quarter-btn {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 640px) {
-  .hero-section {
-    padding: 1.25rem 1rem;
-  }
-}
-
 /* For long text content that might force width */
 .description, 
 .cosmic-subtitle, 
@@ -1880,9 +1796,50 @@ select:focus {
   white-space: nowrap;
 }
 
-@media (max-width: 640px) {
-  .progress-text {
-    font-size: 0.75rem;
+/* Performance optimizations for animations */
+@media (prefers-reduced-motion: reduce), 
+       (max-width: 480px),
+       (forced-colors: active) {
+  .cosmic-stars,
+  .cosmic-nebula,
+  .particle {
+    animation-duration: calc(var(--animation-speed) * 200s);
   }
+  
+  .progress-bar {
+    animation-duration: calc(var(--animation-speed) * 16s);
+  }
+  
+  .quarter::before,
+  .milestone::before {
+    animation-duration: calc(var(--animation-speed) * 8s);
+  }
+}
+
+/* Reduced animation class for lower-end devices */
+.reduce-motion {
+  --animation-speed: 2;
+}
+
+.reduce-motion .cosmic-particles {
+  display: none;
+}
+
+.reduce-motion .cosmic-slide-enter-active,
+.reduce-motion .cosmic-slide-leave-active,
+.reduce-motion .cosmic-fade-enter-active,
+.reduce-motion .cosmic-fade-leave-active {
+  transition-duration: 0.3s;
+}
+
+/* Hardware acceleration for smoother rendering */
+.quarter-header, 
+.milestone-header, 
+.task-header,
+.progress-bar,
+.toggle-icon,
+.particle {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 </style>
