@@ -308,14 +308,17 @@ export default {
       
       // Add a small delay to ensure DOM has updated
       setTimeout(() => {
+        const elementTop = element.offsetTop;
+        const scrollPosition = elementTop - 80; // Adjust for header offset
+        
         scrollableContent.scrollTo({
-          top: element.offsetTop - 80,
+          top: scrollPosition,
           behavior: 'smooth'
         });
-      }, 50);
+      }, 100);
     };
 
-    // Find current quarter and scroll to it - simplified
+    // Find current quarter and scroll to it
     const scrollToCurrentQuarter = () => {
       if (!quarters.value.length || !isMounted.value) return;
       
@@ -323,6 +326,8 @@ export default {
       const currentYear = now.getFullYear();
       const currentMonth = now.getMonth();
       const currentQuarter = Math.floor(currentMonth / 3) + 1;
+      
+      console.log(`Looking for quarter ${currentQuarter} of year ${currentYear}`);
       
       // Find current quarter index
       let targetIndex = quarters.value.findIndex(q => 
@@ -340,19 +345,62 @@ export default {
           .sort((a, b) => b.value - a.value);
         
         targetIndex = pastQuarters.length > 0 ? pastQuarters[0].index : 0;
+        console.log(`Current quarter not found, using index ${targetIndex} instead`);
+      } else {
+        console.log(`Found current quarter at index ${targetIndex}`);
       }
       
-      // Highlight current quarter
-      nextTick(() => {
-        const quarterElements = document.querySelectorAll('.quarter');
-        if (quarterElements.length > targetIndex) {
-          const targetElement = quarterElements[targetIndex];
-          if (targetElement) {
-            targetElement.classList.add('current-quarter');
-            scrollToElement(targetElement);
-          }
+      // First mark the current quarter
+      if (targetIndex >= 0 && targetIndex < quarters.value.length) {
+        // Set quarter status to In Progress if it's the current quarter and not completed
+        const currentQuarter = quarters.value[targetIndex];
+        if (currentQuarter.status !== 'Completed') {
+          currentQuarter.status = 'In Progress';
         }
-      });
+        
+        // Auto-expand current quarter
+        currentQuarter.open = true;
+      }
+      
+      // Wait for the DOM to update before scrolling
+      setTimeout(() => {
+        nextTick(() => {
+          const scrollableContent = document.querySelector('.scrollable-content');
+          const quarterElements = document.querySelectorAll('.quarter');
+          
+          if (quarterElements.length > targetIndex && scrollableContent) {
+            const targetElement = quarterElements[targetIndex];
+            if (targetElement) {
+              console.log('Scrolling to current quarter element');
+              targetElement.classList.add('current-quarter');
+              
+              // Calculate precise scroll position with additional offset for better visibility
+              const elementTop = targetElement.offsetTop;
+              const scrollPadding = 20; // Additional padding from top
+              
+              // Perform the scroll
+              scrollableContent.scrollTo({
+                top: elementTop - scrollPadding,
+                behavior: 'smooth'
+              });
+              
+              // Add a highlight flash effect to draw attention
+              setTimeout(() => {
+                targetElement.style.transition = 'background-color 0.5s ease';
+                targetElement.style.backgroundColor = 'rgba(15, 185, 253, 0.2)';
+                
+                setTimeout(() => {
+                  targetElement.style.backgroundColor = '';
+                  // After highlight, reset the transition
+                  setTimeout(() => {
+                    targetElement.style.transition = '';
+                  }, 500);
+                }, 1000);
+              }, 600);
+            }
+          }
+        });
+      }, 300); // Give more time for the DOM to update
     };
 
     // Update toggle functions to properly handle clicked elements
@@ -743,7 +791,24 @@ export default {
       loadRoadmap();
       checkReducedMotion();
       
+      // Add event listener for reduced motion preference changes
       window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', checkReducedMotion);
+      
+      // Add resize event listener to handle layout changes
+      window.addEventListener('resize', () => {
+        if (isMounted.value) {
+          // Re-scroll to current quarter when resizing
+          nextTick(() => {
+            scrollToCurrentQuarter();
+            currentQuarterStyling();
+          });
+        }
+      });
+      
+      // Call currentQuarterStyling after initial load
+      setTimeout(() => {
+        currentQuarterStyling();
+      }, 500);
     });
     
     onBeforeUnmount(() => {
@@ -753,14 +818,55 @@ export default {
 
     // Add a new method to determine if a quarter is the current quarter
     const isCurrent = (quarter) => {
+      // Skip if the item doesn't have year and quarterNum properties
+      if (!quarter || !quarter.year || !quarter.quarterNum) return false;
+      
       const now = new Date();
       const currentYear = now.getFullYear();
       const currentMonth = now.getMonth();
       const currentQuarter = Math.floor(currentMonth / 3) + 1;
       
+      // Check if the period contains the current year and quarter (for string-based period format)
+      if (quarter.period) {
+        const periodString = quarter.period.toString();
+        return periodString.includes(currentYear.toString()) && 
+               periodString.includes(`Q${currentQuarter}`);
+      }
+      
+      // For numerical properties
       return quarter.year === currentYear && quarter.quarterNum === currentQuarter;
     };
     
+    // Add additional styling for current quarter indicator
+    const currentQuarterStyling = () => {
+      nextTick(() => {
+        // Find all quarters with the current-quarter class
+        const currentQuarters = document.querySelectorAll('.quarter.current-quarter');
+        currentQuarters.forEach(element => {
+          // Add any additional visual indicators here
+          element.style.position = 'relative';
+          
+          // Add a pulsing dot indicator in the top right corner
+          const indicator = document.createElement('div');
+          indicator.classList.add('current-indicator');
+          indicator.style.position = 'absolute';
+          indicator.style.top = '0.75rem';
+          indicator.style.right = '0.75rem';
+          indicator.style.width = '0.75rem';
+          indicator.style.height = '0.75rem';
+          indicator.style.borderRadius = '50%';
+          indicator.style.backgroundColor = 'var(--cosmic-blue)';
+          indicator.style.boxShadow = '0 0 10px var(--cosmic-blue)';
+          indicator.style.animation = 'pulseIndicator 2s infinite';
+          
+          // Add the indicator to the quarter element if it doesn't already exist
+          if (!element.querySelector('.current-indicator')) {
+            element.appendChild(indicator);
+          }
+        });
+      });
+    };
+
     // Add a method to get the appropriate status class for a quarter
     const getQuarterStatusClass = (quarter) => {
       if (quarter.completed) return 'completed';
@@ -770,8 +876,10 @@ export default {
 
     const getItemStatusClass = (item) => {
       if (item.status === 'Completed') return 'completed';
-      if (item.status === 'In Progress') return 'in-progress';
-      if (isCurrent(item)) return 'current';
+      if (item.status === 'In Progress' || item.status === 'InProgress') return 'in-progress';
+      if (item.status === 'ToDo' || item.status === 'To Do' || item.status === 'todo') return 'todo';
+      // If current quarter/milestone but no status is explicitly set
+      if (isCurrent(item)) return 'in-progress';
       return 'future';
     };
 
@@ -928,14 +1036,16 @@ export default {
   height: 100%;
   width: 33.333%;
   min-width: 350px;
+  position: fixed;
+  left: 2rem;
+  top: calc(var(--header-height) + var(--page-padding));
 }
 
 @media (min-width: 1024px) {
   .desktop-hero-section {
     display: flex;
     align-items: center;
-    position: sticky;
-    top: 2rem;
+    justify-content: center;
   }
 
   .roadmap-page {
@@ -1015,7 +1125,6 @@ export default {
 }
 
 .desktop-hero-section .cosmic-title {
-
   font-size: 2rem;
   margin: 0 0 1rem 0;
   background: linear-gradient(135deg,
@@ -1060,12 +1169,76 @@ export default {
   line-height: 1.25;
 }
 
-/* Enhanced Search Section */
-.search-container {
+/* Container for the roadmap */
+.roadmap-container {
+  display: flex;
   width: 100%;
-  transform-style: preserve-3d;
+  max-width: 1400px;
+  min-height: calc(100vh - var(--header-height) - var(--page-padding) * 2);
+  margin: 0 auto;
   position: relative;
-  z-index: 10;
+  z-index: 1;
+}
+
+/* Main Content Wrapper */
+.main-content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  min-height: calc(100vh - var(--header-height) - var(--page-padding) * 2);
+  max-width: 1200px; /* Added max-width for better readability on very wide screens */
+}
+
+@media (min-width: 1024px) {
+  .main-content-wrapper {
+    margin-left: calc(33.333% + 2rem);
+    width: calc(66.667% - 2rem); /* Set explicit width for desktop */
+    max-height: calc(100vh - var(--header-height) - var(--page-padding) * 2); /* Constrain height on desktop */
+    overflow: hidden; /* Hide overflow at wrapper level */
+  }
+  
+  .hero-section {
+    display: none;
+  }
+}
+
+/* Roadmap Header Section */
+.roadmap-header-section {
+  padding-bottom: 1rem;
+}
+
+/* Mobile Hero Section */
+.hero-section {
+  margin-bottom: 1rem;
+}
+
+.hero-section .cosmic-title {
+  font-size: 1.75rem;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg,
+    var(--cosmic-text-primary) 0%,
+    var(--cosmic-blue-light) 50%,
+    var(--cosmic-purple-light) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.hero-section .cosmic-subtitle {
+  color: var(--cosmic-text-secondary);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Search Section */
+.search-container {
+  width: 99%;
+  margin-top: 5rem;
 }
 
 .search-input-wrapper {
@@ -1082,7 +1255,6 @@ export default {
   border: 1px solid rgba(15, 185, 253, 0.25);
   transition: all 0.3s var(--animation-bounce);
   overflow: hidden;
-  z-index: 10;
 }
 
 .search-input-wrapper:hover,
@@ -1100,9 +1272,8 @@ export default {
   top: 50%;
   transform: translateY(-50%);
   color: var(--cosmic-text-tertiary);
-  z-index: 12;
   transition: all 0.3s var(--animation-smooth);
-  font-size: 1.25rem;
+  font-size: 1rem;
   pointer-events: none;
 }
 
@@ -1123,9 +1294,6 @@ export default {
   box-sizing: border-box;
   transition: all 0.3s var(--animation-smooth);
   letter-spacing: 0.01em;
-  position: relative;
-  z-index: 11;
-  pointer-events: auto;
 }
 
 .search-input:focus {
@@ -1141,21 +1309,48 @@ export default {
 /* Scrollable Content Area */
 .scrollable-content {
   flex: 1;
-  margin-top: 1rem;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 1rem;
-  width: 100%;
-  box-sizing: border-box;
+  border-radius: 0.75rem;
   background: rgba(20, 24, 41, 0.316);
   border: var(--cosmic-glass-border-blue);
-  border-radius: .5rem;
   scroll-behavior: smooth;
   scrollbar-color: var(--cosmic-blue) var(--cosmic-glass-bg);
-
+  box-shadow: var(--cosmic-shadow-md);
 }
 
-/* Quarters Section - Blue Theme */
+@media (min-width: 1024px) {
+  .scrollable-content {
+    height: calc(100vh - var(--header-height) - var(--page-padding) * 2 - 100px); /* Explicit height for desktop */
+    margin-right: 0.5rem; /* Add some margin for scrollbar */
+  }
+}
+
+/* Enhanced scrollbar styling */
+.scrollable-content::-webkit-scrollbar {
+  width: 12px; /* Increased width for better usability */
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+  background: var(--cosmic-glass-bg);
+  border-radius: 6px;
+  margin: 0.5rem 0; /* Add some margin to top and bottom */
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--cosmic-blue), var(--cosmic-purple));
+  border-radius: 6px;
+  border: 2px solid rgba(20, 24, 41, 0.5); /* Border around the thumb */
+  opacity: 0.8;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, var(--cosmic-blue-light), var(--cosmic-purple-light));
+  opacity: 1;
+}
+
+/* Quarters Container */
 .quarters-container {
   display: flex;
   flex-direction: column;
@@ -1293,12 +1488,9 @@ export default {
 
 .milestone-header {
   position: relative;
-  padding: 1rem;
-  padding-right: 8rem; /* Increased space for status indicators */
-  min-height: 4rem; /* Ensure minimum height for proper alignment */
+  padding: 0.75rem;
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   background: linear-gradient(135deg,
     var(--cosmic-glass-bg) 0%,
@@ -1371,12 +1563,9 @@ export default {
 
 .task-header {
   position: relative;
-  padding: 1rem;
-  padding-right: 8rem; /* Increased space for status indicators */
-  min-height: 4rem; /* Ensure minimum height for proper alignment */
+  padding: 0.75rem;
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   background: linear-gradient(135deg,
     var(--cosmic-glass-bg) 0%,
@@ -1662,8 +1851,10 @@ export default {
     bottom: 1rem;
     left: 1rem;
     right: 1rem;
+    flex-direction: row; /* Ensure row direction on mobile too */
     justify-content: space-between;
     width: calc(100% - 2rem);
+    align-items: center;
   }
   
   .progress-container {
@@ -1737,6 +1928,19 @@ export default {
   .task:hover .icon-line {
     background-color: rgb(0, 208, 255);
   }
+
+  .roadmap-container {
+    flex-direction: column; /* Stack elements on mobile */
+  }
+
+  .main-content-wrapper {
+    width: 100%;
+    min-height: unset; /* Remove min-height constraint on mobile */
+  }
+
+  .scrollable-content {
+    height: calc(100vh - var(--header-height) - var(--page-padding) * 2 - 150px); /* Adjust height for mobile */
+  }
 }
 
 /* Header content */
@@ -1773,9 +1977,6 @@ export default {
 
 /* Status indicators positioning and alignment */
 .status-indicators {
-  position: absolute;
-  top: 1rem; /* Position at exact top with padding */
-  right: 1rem;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -1803,7 +2004,7 @@ export default {
 
 /* Progress bar styling */
 .progress-container {
-  width: 80px;
+  width: 80px; /* Reduced from 100px to make it smaller */
   height: 6px;
   background: rgba(13, 20, 33, 0.5);
   border-radius: 3px;
@@ -2046,6 +2247,281 @@ export default {
   to {
     opacity: 1;
     transform: translateY(0) translateZ(0);
+  }
+}
+
+/* Status indicators and progress styling */
+.status-indicators {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+}
+
+/* Progress wrapper with progress bar and toggle icon */
+.progress-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.progress-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cosmic-text-secondary);
+  margin-right: 0.5rem;
+}
+
+.progress-container {
+  width: 80px;
+  height: 6px;
+  background: rgba(13, 20, 33, 0.5);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(87, 119, 235, 0.3);
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 3px;
+  position: relative;
+  transition: width 0.5s cubic-bezier(0.12, 0.8, 0.32, 1);
+}
+
+/* Task status wrapper */
+.task-status-wrapper {
+  margin-bottom: 0.5rem;
+}
+
+.task-status {
+  font-size: 0.6875rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 1rem;
+  background: var(--cosmic-glass-bg);
+  white-space: nowrap;
+  box-shadow: var(--cosmic-shadow-sm);
+  transition: all 0.2s var(--animation-bounce);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Toggle icon styling */
+.toggle-icon {
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  transition: all 0.2s var(--animation-bounce);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 40, 60, 0.5);
+  border-radius: 3px;
+  padding: 0.2rem;
+  margin-left: 0.25rem;
+}
+
+.toggle-icon.small {
+  width: 0.8rem;
+  height: 0.8rem;
+  padding: 0.15rem;
+}
+
+.icon-line {
+  position: absolute;
+  background: var(--cosmic-text-secondary);
+  transition: all 0.3s var(--animation-bounce);
+}
+
+.horizontal {
+  top: 50%;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.vertical {
+  left: 50%;
+  top: 15%;
+  bottom: 15%;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.vertical.hidden {
+  transform: translateX(-50%) scaleY(0);
+}
+
+.toggle-icon:hover .icon-line {
+  background: var(--cosmic-blue);
+}
+
+.toggle-icon.is-open .horizontal {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* Quarter headers */
+.quarter-header {
+  position: relative;
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg,
+    var(--cosmic-glass-bg-darker) 0%,
+    var(--cosmic-glass-bg) 100%
+  );
+  transition: all 0.3s var(--animation-smooth);
+  border-left: 4px solid var(--cosmic-blue);
+}
+
+.quarter-header:hover {
+  background: linear-gradient(135deg,
+    var(--cosmic-glass-bg) 0%,
+    var(--cosmic-glass-bg-darker) 100%
+  );
+}
+
+/* Header content */
+.header-content {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  margin-right: 8rem; /* Space for status indicators */
+  transform-style: preserve-3d;
+}
+
+/* Title with status */
+.title-with-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Status icon */
+.status-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s var(--animation-bounce), box-shadow 0.3s var(--animation-smooth);
+}
+
+.status-icon:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+/* Completed status icon */
+.status-icon.completed {
+  background: linear-gradient(135deg, #25a18e, #00e676);
+  box-shadow: 0 0 8px rgba(37, 161, 142, 0.4);
+}
+
+.status-icon.completed::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 12 10 16 18 8'%3E%3C/polyline%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70%;
+}
+
+/* In Progress status icon with animation */
+.status-icon.in-progress {
+  background: linear-gradient(135deg, #1565c0, #42a5f5);
+  box-shadow: 0 0 8px rgba(21, 101, 192, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.status-icon.in-progress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.3) 50%, 
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
+.status-icon.in-progress::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'%3E%3C/polyline%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70%;
+}
+
+/* ToDo status icon */
+.status-icon.future,
+.status-icon.pending,
+.status-icon.todo,
+.status-icon.to-do {
+  background: linear-gradient(135deg, #ff9800, #ffb74d);
+  box-shadow: 0 0 8px rgba(255, 152, 0, 0.4);
+}
+
+.status-icon.future::after,
+.status-icon.pending::after,
+.status-icon.todo::after,
+.status-icon.to-do::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='6' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='12' x2='16' y2='12'%3E%3C/line%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70%;
+}
+
+@keyframes pulseIndicator {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
   }
 }
 </style>
