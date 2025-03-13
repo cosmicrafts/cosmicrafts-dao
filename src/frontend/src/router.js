@@ -191,26 +191,27 @@ const router = createRouter({
   routes,
 });
 
-// Force scroll to top on each navigation except for hash navigation
+// Use multiple hooks to ensure scrolling works
+router.beforeEach((to, from, next) => {
+  // Immediate scroll reset
+  window.scrollTo(0, 0);
+  next();
+});
+
 router.afterEach((to, from) => {
-  // Don't interfere with hash navigation within the whitepaper
-  if (to.path === '/whitepaper' && to.hash) {
-    return;
-  }
-  
-  // Don't interfere with hash navigation on the same page
-  if (to.path === from.path && to.hash) {
-    return;
-  }
-  
-  // For all other navigations, force scroll to top with a delay
-  // to ensure it happens after view transition completes
+  // Force scroll in multiple ways to ensure it works
   setTimeout(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  }, 100); // Small delay to ensure it happens after the view transition
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, 0);
+  
+  // And again after a small delay to ensure content is loaded
+  setTimeout(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, 100);
 });
 
 export default router;

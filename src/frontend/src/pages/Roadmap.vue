@@ -1597,220 +1597,104 @@ export default {
 
 /* Mobile adjustments for status tags and progress text */
 @media (max-width: 768px) {
-  .task-status {
-    font-size: 0.65rem;
-    padding: 0.15rem 0.3rem;
-  }
-  
-  .task-status-wrapper {
-    gap: 0.35rem;
-  }
-  
-  .task-status-wrapper .progress-text {
-    font-size: 0.65rem;
-  }
-}
-
-/* Current quarter highlight */
-.quarter.current-quarter {
-  border: 2px solid var(--cosmic-blue);
-  box-shadow: var(--cosmic-glow-blue-md);
-  background: linear-gradient(135deg,
-    rgba(15, 185, 253, 0.08) 0%,
-    rgba(15, 185, 253, 0.02) 100%
-  );
-}
-
-/* Container backgrounds */
-.milestones {
-  padding: 0.75rem;
-  background: rgba(103, 58, 183, 0.05);
-  border-top: var(--cosmic-glass-border);
-  transform-style: preserve-3d;
-}
-
-.tasks {
-  padding: 0.75rem;
-  background: rgba(201, 42, 253, 0.05);
-  border-top: var(--cosmic-glass-border);
-  transform-style: preserve-3d;
-}
-
-.subtasks {
-  padding: 0.75rem;
-  background: rgba(23, 212, 169, 0.05);
-  border-top: var(--cosmic-glass-border);
-  transform-style: preserve-3d;
-}
-
-/* Task tags with color-coded borders */
-.task-tag {
-  padding: 0.2rem 0.4rem;
-  border-radius: 1rem;
-  font-size: 0.6875rem;
-  background: rgba(25, 28, 41, 0.7);
-  border: 1px solid;
-  cursor: pointer;
-  transition: all 0.2s var(--animation-bounce);
-  box-shadow: var(--cosmic-shadow-sm);
-  backdrop-filter: blur(4px);
-}
-
-.task-tag:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
-  background: rgba(35, 39, 56, 0.8);
-}
-
-/* Toggle icon styling */
-.toggle-icon {
-  position: relative;
-  width: 1rem;
-  height: 1rem;
-  cursor: pointer;
-  transition: all 0.2s var(--animation-bounce);
-  margin-left: 0.5rem;
-  background: rgba(30, 40, 60, 0.5);
-  border-radius: 2px;
-  padding: 0.25rem;
-}
-
-.toggle-icon.small {
-  width: 0.8rem;
-  height: 0.8rem;
-  padding: 0.2rem;
-}
-
-.icon-line {
-  position: absolute;
-  background-color: var(--cosmic-text-secondary);
-  transition: all 0.3s var(--animation-bounce);
-  box-shadow: var(--cosmic-shadow-sm);
-}
-
-.horizontal {
-  top: 50%;
-  left: 15%;
-  right: 15%;
-  height: 2px;
-  transform: translateY(-50%);
-}
-
-.vertical {
-  left: 50%;
-  top: 15%;
-  bottom: 15%;
-  width: 2px;
-  transform: translateX(-50%);
-}
-
-.vertical.hidden {
-  transform: translateX(-50%) scaleY(0);
-}
-
-.toggle-icon:hover .icon-line {
-  background-color: rgb(0, 191, 255);
-}
-
-.quarter-header .toggle-icon.is-open .horizontal,
-.milestone-header .toggle-icon.is-open .horizontal,
-.task-header .toggle-icon.is-open .horizontal {
-  transform: translateY(-50%) rotate(180deg);
-}
-
-/* Toggle icon colors */
-.toggle-icon .icon-line {
-  background-color: var(--cosmic-text-secondary);
-}
-
-.quarter-header .toggle-icon.is-open .horizontal {
-  background-color: var(--cosmic-blue);
-}
-
-.milestone-header .toggle-icon.is-open .horizontal {
-  background-color: var(--cosmic-purple);
-}
-
-.task-header .toggle-icon.is-open .horizontal {
-  background-color: var(--cosmic-pink);
-}
-
-/* Notifications */
-.notifications-container {
-  display: none;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px) translateZ(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) translateZ(0);
-  }
-}
-
-/* Media queries */
-@media (max-width: 768px) {
   .cosmic-title {
     margin-top: -1.25rem;
     font-size: 1.75rem;
-    
   }
   
-  .cosmic-subtitle,
+  .cosmic-subtitle {
+    font-size: 1.24rem;
+  }
+  
   .search-input {
-    font-size: .75rem;
-  }
-  
-  .progress-container {
-    width: 3rem;
-    height: .35rem;
-  }
-  
-  .quarter-header,
-  .milestone-header,
-  .task-header {
-    padding-right: 6rem;
-    min-height: 3.5rem;
+    font-size: 1rem;
   }
   
   .description {
-    font-size: 0.55rem;
+    font-size: 1rem; /* Increased from 0.55rem for better readability */
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtask-description {
+    font-size: 0.95rem; /* Increased for better readability */
+    line-height: 1.4;
   }
 
   .hero-section {
     display: block;
     margin-top: 1rem; /* Add margin to hero section on mobile */
   }
-
+  
+  .quarter-header,
+  .milestone-header,
+  .task-header {
+    position: relative;
+    padding: 1rem;
+    padding-right: 6rem; /* Space for status tags on right */
+    padding-bottom: 3.5rem; /* Space for progress bar and toggle at bottom */
+    min-height: auto;
+  }
+  
+  .header-content {
+    width: 100%;
+    margin-right: 0;
+    padding-right: 0;
+  }
+  
+  /* Position elements for mobile */
   .status-indicators {
-    top: 0.75rem;
-    right: 0.75rem;
-    gap: 0.5rem;
+    position: static; /* Reset absolute positioning */
   }
-
-  .quarter:hover .icon-line {
-    background-color: rgb(0, 195, 255); /* Change to your desired hover color */
+  
+  /* Place tag and completion counter at top right */
+  .task-status-wrapper {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    gap: 0.4rem;
+    z-index: 10;
   }
-
-  .milestone:hover .icon-line {
-    background-color: rgb(255, 166, 0); /* Change to your desired hover color */
-  }
-
-    .task:hover .icon-line {
-    background-color: rgb(0, 208, 255); /* Change to your desired hover color */
+  
+  /* Place progress bar and toggle at bottom */
+  .progress-wrapper {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    justify-content: space-between;
+    width: calc(100% - 2rem);
   }
   
   .progress-container {
-    width: 40px;
+    width: calc(100% - 2.5rem); /* Full width minus toggle icon space */
     height: 4px;
   }
   
   .task-status {
-    font-size: 0.65rem;
-    padding: 0.15rem 0.3rem;
+    font-size: 0.85rem; /* Increased from 0.65rem */
+    padding: 0.2rem 0.45rem; /* Slightly more padding */
+  }
+  
+  .task-status-wrapper .progress-text {
+    font-size: 0.85rem; /* Increased from 0.65rem */
+    font-weight: 600;
+  }
+  
+  /* Make headers more readable on mobile */
+  .header-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.35rem;
+  }
+  
+  .header-content h3 {
+    font-size: 1.35rem;
+    margin-bottom: 0.35rem;
+  }
+  
+  .header-content h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.35rem;
   }
   
   .toggle-icon {
@@ -1831,6 +1715,27 @@ export default {
   
   .vertical {
     width: 1.5px;
+  }
+  
+  /* Adjust task tags to fit better in mobile view */
+  .task-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+  }
+  
+  /* Add hover effects for icons */
+  .quarter:hover .icon-line {
+    background-color: rgb(0, 195, 255);
+  }
+
+  .milestone:hover .icon-line {
+    background-color: rgb(255, 166, 0);
+  }
+
+  .task:hover .icon-line {
+    background-color: rgb(0, 208, 255);
   }
 }
 
@@ -2004,50 +1909,143 @@ export default {
   }
 }
 
-/* Media queries for mobile view */
-@media (max-width: 768px) {
-  .status-indicators {
-    top: 0.75rem;
-    right: 0.75rem;
-    gap: 0.5rem;
-  }
+/* Current quarter highlight */
+.quarter.current-quarter {
+  border: 2px solid var(--cosmic-blue);
+  box-shadow: var(--cosmic-glow-blue-md);
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.08) 0%,
+    rgba(15, 185, 253, 0.02) 100%
+  );
+}
 
-  .progress-container {
-    width: 40px;
-    height: 4px;
+/* Container backgrounds */
+.milestones {
+  padding: 0.75rem;
+  background: rgba(103, 58, 183, 0.05);
+  border-top: var(--cosmic-glass-border);
+  transform-style: preserve-3d;
+}
+
+.tasks {
+  padding: 0.75rem;
+  background: rgba(201, 42, 253, 0.05);
+  border-top: var(--cosmic-glass-border);
+  transform-style: preserve-3d;
+}
+
+.subtasks {
+  padding: 0.75rem;
+  background: rgba(23, 212, 169, 0.05);
+  border-top: var(--cosmic-glass-border);
+  transform-style: preserve-3d;
+}
+
+/* Task tags with color-coded borders */
+.task-tag {
+  padding: 0.2rem 0.4rem;
+  border-radius: 1rem;
+  font-size: 0.6875rem;
+  background: rgba(25, 28, 41, 0.7);
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.2s var(--animation-bounce);
+  box-shadow: var(--cosmic-shadow-sm);
+  backdrop-filter: blur(4px);
+}
+
+.task-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+  background: rgba(35, 39, 56, 0.8);
+}
+
+/* Toggle icon styling */
+.toggle-icon {
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  transition: all 0.2s var(--animation-bounce);
+  margin-left: 0.5rem;
+  background: rgba(30, 40, 60, 0.5);
+  border-radius: 2px;
+  padding: 0.25rem;
+}
+
+.toggle-icon.small {
+  width: 0.8rem;
+  height: 0.8rem;
+  padding: 0.2rem;
+}
+
+.icon-line {
+  position: absolute;
+  background-color: var(--cosmic-text-secondary);
+  transition: all 0.3s var(--animation-bounce);
+  box-shadow: var(--cosmic-shadow-sm);
+}
+
+.horizontal {
+  top: 50%;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.vertical {
+  left: 50%;
+  top: 15%;
+  bottom: 15%;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.vertical.hidden {
+  transform: translateX(-50%) scaleY(0);
+}
+
+.toggle-icon:hover .icon-line {
+  background-color: rgb(0, 191, 255);
+}
+
+.quarter-header .toggle-icon.is-open .horizontal,
+.milestone-header .toggle-icon.is-open .horizontal,
+.task-header .toggle-icon.is-open .horizontal {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* Toggle icon colors */
+.toggle-icon .icon-line {
+  background-color: var(--cosmic-text-secondary);
+}
+
+.quarter-header .toggle-icon.is-open .horizontal {
+  background-color: var(--cosmic-blue);
+}
+
+.milestone-header .toggle-icon.is-open .horizontal {
+  background-color: var(--cosmic-purple);
+}
+
+.task-header .toggle-icon.is-open .horizontal {
+  background-color: var(--cosmic-pink);
+}
+
+/* Notifications */
+.notifications-container {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) translateZ(-10px);
   }
-  
-  .task-status {
-    font-size: 0.65rem;
-    padding: 0.15rem 0.3rem;
-  }
-  
-  .task-status-wrapper {
-    gap: 0.35rem;
-  }
-  
-  .task-status-wrapper .progress-text {
-    font-size: 0.65rem;
-  }
-  
-  .toggle-icon {
-    width: 0.9rem;
-    height: 0.9rem;
-    padding: 0.2rem;
-  }
-  
-  .toggle-icon.small {
-    width: 0.7rem;
-    height: 0.7rem;
-    padding: 0.15rem;
-  }
-  
-  .horizontal {
-    height: 1.5px;
-  }
-  
-  .vertical {
-    width: 1.5px;
+  to {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
   }
 }
 </style>

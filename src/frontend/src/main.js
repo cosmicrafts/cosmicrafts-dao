@@ -5,7 +5,6 @@ import { createPinia } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import { useLanguageStore } from '@/stores/language';
 import { createI18n } from 'vue-i18n';
-import { vScrollToTop } from '@/directives/scrollToTop';
 import './style.css';
 import en from '@/locales/en.json';
 import es from '@/locales/es.json';
@@ -84,6 +83,4 @@ watch(
 
 app.use(i18n);
 app.use(router);
-// Register the directive globally
-app.directive('scroll-to-top', vScrollToTop);
 app.mount('#app');
