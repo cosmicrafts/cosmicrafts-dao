@@ -49,7 +49,7 @@
         <div class="scrollable-content">
           <!-- Quarters Section -->
           <section class="quarters-container">
-            <div v-for="(quarter, qIndex) in filteredQuarters" :key="qIndex" class="quarter" :class="{ 'active': quarter.open }">
+            <div v-for="(quarter, qIndex) in filteredQuarters" :key="qIndex" class="quarter" :class="{ 'active': quarter.open, 'completed': quarter.completed }">
               <div class="quarter-header" @click="toggleQuarter(qIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                 <div class="header-content">
                   <h2>{{ quarter.period }}</h2>
@@ -71,7 +71,7 @@
               
               <!-- Simplified transition -->
               <div v-if="quarter.open" class="milestones">
-                <div v-for="(milestone, mIndex) in quarter.milestones" :key="mIndex" class="milestone">
+                <div v-for="(milestone, mIndex) in quarter.milestones" :key="mIndex" class="milestone" :class="{ 'completed': milestone.completed }">
                   <div class="milestone-header" @click="toggleMilestone(quarter, milestone, mIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                     <div class="header-content">
                       <h3>{{ milestone.title }}</h3>
@@ -93,7 +93,7 @@
                   
                   <!-- Simplified transition -->
                   <div v-if="milestone.open" class="tasks">
-                    <div v-for="(task, tIndex) in milestone.tasks" :key="tIndex" class="task">
+                    <div v-for="(task, tIndex) in milestone.tasks" :key="tIndex" class="task" :class="{ 'completed': task.completed }">
                       <div class="task-header" @click="toggleTask(quarter, milestone, task, tIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
                         <div class="header-content">
                           <h4>{{ task.title }}</h4>
@@ -453,11 +453,44 @@ export default {
   --cosmic-shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.1);
   --cosmic-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
   --cosmic-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.2);
+  
+  /* Enhanced color palette */
   --cosmic-blue: rgb(15, 185, 253);
   --cosmic-blue-light: rgb(88, 198, 255);
   --cosmic-purple: rgb(103, 58, 183);
   --cosmic-purple-light: rgb(149, 117, 205);
   --cosmic-pink: rgb(201, 42, 253);
+  --cosmic-pink-light: rgb(232, 97, 253);
+  --cosmic-teal: rgb(23, 212, 169);
+  --cosmic-teal-light: rgb(108, 237, 204);
+  
+  /* Status colors */
+  --status-completed: rgb(42, 187, 155);
+  --status-completed-bg: rgba(42, 187, 155, 0.15);
+  --status-completed-border: rgba(42, 187, 155, 0.3);
+  --status-in-progress: rgb(56, 128, 255);
+  --status-in-progress-bg: rgba(56, 128, 255, 0.15);
+  --status-in-progress-border: rgba(56, 128, 255, 0.3);
+  --status-to-do: rgb(255, 153, 0);
+  --status-to-do-bg: rgba(255, 153, 0, 0.15);
+  --status-to-do-border: rgba(255, 153, 0, 0.3);
+  --status-blocked: rgb(235, 68, 90);
+  --status-blocked-bg: rgba(235, 68, 90, 0.15);
+  --status-blocked-border: rgba(235, 68, 90, 0.3);
+  --status-review: rgb(186, 85, 211);
+  --status-review-bg: rgba(186, 85, 211, 0.15);
+  --status-review-border: rgba(186, 85, 211, 0.3);
+  
+  /* Component colors */
+  --quarter-border: rgba(15, 185, 253, 0.3);
+  --quarter-glow: rgba(15, 185, 253, 0.15);
+  --milestone-border: rgba(103, 58, 183, 0.3);
+  --milestone-glow: rgba(103, 58, 183, 0.15);
+  --task-border: rgba(201, 42, 253, 0.3);
+  --task-glow: rgba(201, 42, 253, 0.15);
+  --subtask-border: rgba(23, 212, 169, 0.3);
+  --subtask-glow: rgba(23, 212, 169, 0.15);
+  
   --cosmic-text-primary: rgb(255, 255, 255);
   --cosmic-text-secondary: rgba(178, 178, 178, 0.75);
   --cosmic-text-tertiary: rgba(245, 245, 255, 0.5);
@@ -467,7 +500,7 @@ export default {
   --cosmic-bg-dark: rgb(10, 14, 28);
   --hero-accent-glow: rgba(15, 185, 253, 0.3);
   --glass-blur: 12px;
-  --header-height: 80px; /* Increased header height */
+  --header-height: 80px;
   --page-padding: 2rem;
 
   padding: var(--page-padding);
@@ -772,9 +805,8 @@ export default {
 
 }
 
-/* Quarters Section */
+/* Quarters Section - Blue Theme */
 .quarters-container {
-  
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -786,15 +818,46 @@ export default {
   border-radius: 0.5rem;
   overflow: hidden;
   width: 100%;
-  border: var(--cosmic-glass-border-blue);
+  border: 1px solid var(--quarter-border);
   box-shadow: var(--cosmic-shadow-sm);
   transition: all 0.3s var(--animation-bounce);
 }
 
-.quarter:hover {
+/* Completed Quarter */
+.quarter.completed {
+  border: 1px solid var(--status-completed-border);
+  background: linear-gradient(135deg,
+    rgba(42, 187, 155, 0.05) 0%,
+    rgba(42, 187, 155, 0.1) 100%
+  );
+  box-shadow: 0 0 15px rgba(42, 187, 155, 0.15);
+}
+
+.quarter.completed .quarter-header {
+  border-left: 4px solid var(--status-completed);
+  background: linear-gradient(135deg,
+    rgba(42, 187, 155, 0.1) 0%,
+    rgba(7, 20, 42, 0.4) 100%
+  );
+}
+
+.quarter.completed .quarter-header .header-content h2 {
+  color: var(--status-completed);
+  text-shadow: 0 0 10px rgba(42, 187, 155, 0.3);
+}
+
+.quarter.completed .progress-bar {
+  background: linear-gradient(90deg,
+    var(--status-completed) 0%,
+    rgba(108, 237, 204, 0.8) 100%
+  );
+  box-shadow: 0 0 10px rgba(42, 187, 155, 0.3);
+}
+
+.quarter.completed:hover {
   transform: translateX(8px);
-  box-shadow: var(--cosmic-glow-blue-sm);
-  border-color: var(--cosmic-blue);
+  box-shadow: 0 0 15px rgba(42, 187, 155, 0.25);
+  border-color: var(--status-completed);
 }
 
 .quarter-header {
@@ -808,6 +871,7 @@ export default {
     var(--cosmic-glass-bg) 100%
   );
   transition: all 0.3s var(--animation-smooth);
+  border-left: 4px solid var(--cosmic-blue);
 }
 
 .quarter-header:hover {
@@ -817,30 +881,58 @@ export default {
   );
 }
 
-/* Milestones */
-.milestones {
-  padding: 0.75rem;
-  background: var(--cosmic-glass-bg-lighter);
-  border-top: var(--cosmic-glass-border);
-  transform-style: preserve-3d;
+.quarter-header .header-content h2 {
+  color: var(--cosmic-blue-light);
+  text-shadow: 0 0 10px rgba(15, 185, 253, 0.3);
 }
 
+/* Milestones - Purple Theme */
 .milestone {
   background: var(--cosmic-glass-bg);
   border-radius: 0.5rem;
   margin-bottom: 0.75rem;
-  border: var(--cosmic-glass-border-blue);
+  border: 1px solid var(--milestone-border);
   overflow: hidden;
   transition: all 0.25s var(--animation-bounce);
   box-shadow: var(--cosmic-shadow-sm);
   transform-style: preserve-3d;
 }
 
-.milestone:hover {
-  background: var(--cosmic-glass-bg-darker);
+/* Completed Milestone */
+.milestone.completed {
+  border: 1px solid var(--status-completed-border);
+  background: linear-gradient(135deg,
+    rgba(42, 187, 155, 0.05) 0%,
+    rgba(42, 187, 155, 0.1) 100%
+  );
+  box-shadow: 0 0 15px rgba(42, 187, 155, 0.15);
+}
+
+.milestone.completed .milestone-header {
+  border-left: 3px solid var(--status-completed);
+  background: linear-gradient(135deg,
+    rgba(42, 187, 155, 0.1) 0%,
+    rgba(7, 20, 42, 0.4) 100%
+  );
+}
+
+.milestone.completed .milestone-header .header-content h3 {
+  color: var(--status-completed);
+  text-shadow: 0 0 10px rgba(42, 187, 155, 0.3);
+}
+
+.milestone.completed .progress-bar {
+  background: linear-gradient(90deg,
+    var(--status-completed) 0%,
+    rgba(108, 237, 204, 0.8) 100%
+  );
+  box-shadow: 0 0 10px rgba(42, 187, 155, 0.3);
+}
+
+.milestone.completed:hover {
   transform: translateX(4px);
-  border-color: var(--cosmic-blue);
-  box-shadow: var(--cosmic-glow-blue-sm);
+  box-shadow: 0 0 15px rgba(42, 187, 155, 0.25);
+  border-color: var(--status-completed);
 }
 
 .milestone-header {
@@ -854,6 +946,7 @@ export default {
     var(--cosmic-glass-bg-darker) 100%
   );
   transition: all 0.3s var(--animation-smooth);
+  border-left: 3px solid var(--cosmic-purple);
 }
 
 .milestone-header:hover {
@@ -863,30 +956,58 @@ export default {
   );
 }
 
-/* Tasks */
-.tasks {
-  padding: 0.75rem;
-  background: var(--cosmic-glass-bg-lighter);
-  border-top: var(--cosmic-glass-border);
-  transform-style: preserve-3d;
+.milestone-header .header-content h3 {
+  color: var(--cosmic-purple-light);
+  text-shadow: 0 0 10px rgba(103, 58, 183, 0.3);
 }
 
+/* Tasks - Pink Theme */
 .task {
   background: var(--cosmic-glass-bg);
   border-radius: 0.5rem;
   margin-bottom: 0.75rem;
-  border: var(--cosmic-glass-border-blue);
+  border: 1px solid var(--task-border);
   overflow: hidden;
   transition: all 0.2s var(--animation-bounce);
   box-shadow: var(--cosmic-shadow-sm);
   transform-style: preserve-3d;
 }
 
-.task:hover {
-  background: var(--cosmic-glass-bg-darker);
+/* Completed Task */
+.task.completed {
+  border: 1px solid var(--status-completed-border);
+  background: linear-gradient(135deg,
+    rgba(42, 187, 155, 0.05) 0%,
+    rgba(42, 187, 155, 0.1) 100%
+  );
+  box-shadow: 0 0 15px rgba(42, 187, 155, 0.15);
+}
+
+.task.completed .task-header {
+  border-left: 2px solid var(--status-completed);
+  background: linear-gradient(135deg,
+    rgba(42, 187, 155, 0.1) 0%,
+    rgba(7, 20, 42, 0.4) 100%
+  );
+}
+
+.task.completed .task-header .header-content h4 {
+  color: var(--status-completed);
+  text-shadow: 0 0 10px rgba(42, 187, 155, 0.3);
+}
+
+.task.completed .progress-bar {
+  background: linear-gradient(90deg,
+    var(--status-completed) 0%,
+    rgba(108, 237, 204, 0.8) 100%
+  );
+  box-shadow: 0 0 10px rgba(42, 187, 155, 0.3);
+}
+
+.task.completed:hover {
   transform: translateX(8px);
-  border-color: var(--cosmic-blue);
-  box-shadow: var(--cosmic-glow-blue-sm);
+  box-shadow: 0 0 15px rgba(42, 187, 155, 0.25);
+  border-color: var(--status-completed);
 }
 
 .task-header {
@@ -900,6 +1021,7 @@ export default {
     var(--cosmic-glass-bg-darker) 100%
   );
   transition: all 0.3s var(--animation-smooth);
+  border-left: 2px solid var(--cosmic-pink);
 }
 
 .task-header:hover {
@@ -909,14 +1031,12 @@ export default {
   );
 }
 
-/* Subtasks */
-.subtasks {
-  padding: 0.75rem;
-  background: var(--cosmic-glass-bg-lighter);
-  border-top: var(--cosmic-glass-border);
-  transform-style: preserve-3d;
+.task-header .header-content h4 {
+  color: var(--cosmic-pink-light);
+  text-shadow: 0 0 10px rgba(201, 42, 253, 0.3);
 }
 
+/* Subtasks - Teal Theme */
 .subtask {
   padding: 0.625rem;
   margin-bottom: 0.5rem;
@@ -926,9 +1046,10 @@ export default {
   );
   border-radius: 0.375rem;
   transition: all 0.2s var(--animation-bounce);
-  border: var(--cosmic-glass-border-blue);
+  border: 1px solid var(--subtask-border);
   box-shadow: var(--cosmic-shadow-sm);
   transform-style: preserve-3d;
+  border-left: 2px solid var(--cosmic-teal);
 }
 
 .subtask:hover {
@@ -936,58 +1057,56 @@ export default {
     var(--cosmic-glass-bg-darker) 0%,
     var(--cosmic-glass-bg) 100%
   );
-  border-color: var(--cosmic-blue);
+  border-color: var(--cosmic-teal);
   transform: translateX(12px);
-  box-shadow: var(--cosmic-glow-blue-sm);
+  box-shadow: 0 0 15px var(--subtask-glow);
 }
 
 .subtask.completed {
-  opacity: 0.75;
+  opacity: 0.85;
   background: linear-gradient(180deg,
-    rgba(42, 187, 155, 0.1) 0%,
+    var(--status-completed-bg) 0%,
     rgba(42, 187, 155, 0.2) 100%
   );
-  border-color: rgba(42, 187, 155, 0.3);
+  border-color: var(--status-completed-border);
+  border-left: 2px solid var(--status-completed);
 }
 
-/* Progress bar styling */
-.progress-container {
-  width: 60px;
-  height: 4px;
-  background: var(--cosmic-glass-bg-lighter);
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+.subtask-header label {
+  color: var(--cosmic-teal-light);
+  transition: all 0.2s var(--animation-bounce);
 }
 
-.progress-bar {
-  height: 100%;
+.subtask:hover .subtask-header label {
+  color: var(--cosmic-text-primary);
+}
+
+/* Progress bar styling with unique colors for each level */
+.quarter .progress-bar {
   background: linear-gradient(90deg,
     var(--cosmic-blue) 0%,
-    rgba(88, 101, 242, 0.9) 100%
+    var(--cosmic-blue-light) 100%
   );
-  transition: width 0.3s var(--animation-smooth);
-  box-shadow: var(--cosmic-glow-blue-sm);
+  box-shadow: 0 0 10px rgba(15, 185, 253, 0.3);
 }
 
-/* Task tags */
-.task-tag {
-  padding: 0.2rem 0.4rem;
-  border-radius: 1rem;
-  font-size: 0.6875rem;
-  background: var(--cosmic-glass-bg);
-  border: 1px solid;
-  cursor: pointer;
-  transition: all 0.2s var(--animation-bounce);
-  box-shadow: var(--cosmic-shadow-sm);
+.milestone .progress-bar {
+  background: linear-gradient(90deg,
+    var(--cosmic-purple) 0%,
+    var(--cosmic-purple-light) 100%
+  );
+  box-shadow: 0 0 10px rgba(103, 58, 183, 0.3);
 }
 
-.task-tag:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--cosmic-glow-blue-sm);
+.task .progress-bar {
+  background: linear-gradient(90deg,
+    var(--cosmic-pink) 0%,
+    var(--cosmic-pink-light) 100%
+  );
+  box-shadow: 0 0 10px rgba(201, 42, 253, 0.3);
 }
 
-/* Task status */
+/* Enhanced status styles */
 .task-status {
   font-size: 0.6875rem;
   padding: 0.2rem 0.4rem;
@@ -996,71 +1115,168 @@ export default {
   white-space: nowrap;
   box-shadow: var(--cosmic-shadow-sm);
   transition: all 0.2s var(--animation-bounce);
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .task-status.completed {
-  background: rgba(42, 187, 155, 0.15);
-  color: #42bb9b;
-  border: 1px solid rgba(42, 187, 155, 0.3);
+  background: var(--status-completed-bg);
+  color: var(--status-completed);
+  border: 1px solid var(--status-completed-border);
 }
 
 .task-status.in-progress {
-  background: rgba(56, 128, 255, 0.15);
-  color: #3880ff;
-  border: 1px solid rgba(56, 128, 255, 0.3);
+  background: var(--status-in-progress-bg);
+  color: var(--status-in-progress);
+  border: 1px solid var(--status-in-progress-border);
 }
 
 .task-status.to-do {
-  background: rgba(235, 68, 90, 0.15);
-  color: #eb445a;
-  border: 1px solid rgba(235, 68, 90, 0.3);
+  background: var(--status-to-do-bg);
+  color: var(--status-to-do);
+  border: 1px solid var(--status-to-do-border);
 }
 
-/* Toggle icon */
-.toggle-icon {
-  position: relative;
-  width: 16px;
-  height: 16px;
+.task-status.blocked {
+  background: var(--status-blocked-bg);
+  color: var(--status-blocked);
+  border: 1px solid var(--status-blocked-border);
+}
+
+.task-status.review {
+  background: var(--status-review-bg);
+  color: var(--status-review);
+  border: 1px solid var(--status-review-border);
+}
+
+/* Subtask status indicators */
+.subtask-status {
+  font-size: 0.6875rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 1rem;
+  white-space: nowrap;
+  transition: all 0.2s var(--animation-bounce);
+  font-weight: 600;
+}
+
+.subtask-status {
+  background: var(--status-to-do-bg);
+  color: var(--status-to-do);
+}
+
+.subtask-status.completed {
+  background: var(--status-completed-bg);
+  color: var(--status-completed);
+}
+
+/* Enhanced Checkbox styling */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.checkbox-container input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid var(--subtask-border);
+  border-radius: 4px;
+  outline: none;
   cursor: pointer;
   transition: all 0.2s var(--animation-bounce);
+  position: relative;
+  background: var(--cosmic-glass-bg);
 }
 
-.icon-line {
+.checkbox-container input[type="checkbox"]:checked {
+  background-color: var(--status-completed);
+  border-color: var(--status-completed);
+  box-shadow: 0 0 10px var(--status-completed-bg);
+}
+
+.checkbox-container input[type="checkbox"]:checked::after {
+  content: '✓';
   position: absolute;
-  background: var(--cosmic-text-primary);
-  transition: all 0.2s var(--animation-bounce);
-  box-shadow: var(--cosmic-shadow-sm);
-}
-
-.horizontal {
+  color: var(--cosmic-text-primary);
+  font-size: 0.75rem;
   top: 50%;
-  left: 0;
-  right: 0;
-  height: 2px;
-  transform: translateY(-50%);
-}
-
-.vertical {
   left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
 }
 
-.vertical.hidden {
-  transform: translateX(-50%) scaleY(0);
-}
-
-.toggle-icon.is-open .horizontal {
-  transform: translateY(-50%) rotate(180deg);
-  background: var(--cosmic-blue);
+.checkbox-container input[type="checkbox"]:hover {
+  border-color: var(--cosmic-teal);
+  box-shadow: 0 0 8px var(--subtask-glow);
 }
 
 /* Current quarter highlight */
 .quarter.current-quarter {
   border: 2px solid var(--cosmic-blue);
   box-shadow: var(--cosmic-glow-blue-md);
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.08) 0%,
+    rgba(15, 185, 253, 0.02) 100%
+  );
+}
+
+/* Container backgrounds */
+.milestones {
+  padding: 0.75rem;
+  background: rgba(103, 58, 183, 0.05);
+  border-top: var(--cosmic-glass-border);
+  transform-style: preserve-3d;
+}
+
+.tasks {
+  padding: 0.75rem;
+  background: rgba(201, 42, 253, 0.05);
+  border-top: var(--cosmic-glass-border);
+  transform-style: preserve-3d;
+}
+
+.subtasks {
+  padding: 0.75rem;
+  background: rgba(23, 212, 169, 0.05);
+  border-top: var(--cosmic-glass-border);
+  transform-style: preserve-3d;
+}
+
+/* Task tags with color-coded borders */
+.task-tag {
+  padding: 0.2rem 0.4rem;
+  border-radius: 1rem;
+  font-size: 0.6875rem;
+  background: rgba(25, 28, 41, 0.7);
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.2s var(--animation-bounce);
+  box-shadow: var(--cosmic-shadow-sm);
+  backdrop-filter: blur(4px);
+}
+
+.task-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+  background: rgba(35, 39, 56, 0.8);
+}
+
+/* Toggle icon colors */
+.toggle-icon .icon-line {
+  background: var(--cosmic-text-secondary);
+}
+
+.quarter-header .toggle-icon.is-open .horizontal {
+  background: var(--cosmic-blue);
+}
+
+.milestone-header .toggle-icon.is-open .horizontal {
+  background: var(--cosmic-purple);
+}
+
+.task-header .toggle-icon.is-open .horizontal {
+  background: var(--cosmic-pink);
 }
 
 /* Notifications */
@@ -1337,5 +1553,77 @@ export default {
   scrollbar-width: thin;
   scrollbar-color: var(--cosmic-blue) var(--cosmic-glass-bg);
   transform-style: preserve-3d;
+}
+
+/* Transition effects for completion */
+.quarter, .milestone, .task, .subtask {
+  transition: all 0.3s var(--animation-bounce), 
+              background 0.5s var(--animation-smooth),
+              border-color 0.5s var(--animation-smooth);
+}
+
+.quarter-header, .milestone-header, .task-header {
+  transition: all 0.3s var(--animation-smooth),
+              border-left-color 0.5s var(--animation-smooth),
+              background 0.5s var(--animation-smooth);
+}
+
+.header-content h2, .header-content h3, .header-content h4 {
+  transition: color 0.5s var(--animation-smooth),
+              text-shadow 0.5s var(--animation-smooth);
+}
+
+/* Add a completion badge for extra visual cue */
+.quarter.completed::after,
+.milestone.completed::after,
+.task.completed::after {
+  content: '✓';
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--status-completed);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  box-shadow: 0 0 8px rgba(42, 187, 155, 0.4);
+  z-index: 2;
+}
+
+.quarter.completed::after {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 1rem;
+}
+
+.milestone.completed::after {
+  width: 1.4rem;
+  height: 1.4rem;
+  font-size: 0.9rem;
+}
+
+/* Add a subtle completed animation */
+@keyframes completedPulse {
+  0% {
+    box-shadow: 0 0 5px rgba(42, 187, 155, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(42, 187, 155, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(42, 187, 155, 0.3);
+  }
+}
+
+.quarter.completed, 
+.milestone.completed, 
+.task.completed {
+  position: relative;
+  animation: completedPulse 3s infinite alternate var(--animation-smooth);
 }
 </style>
