@@ -157,12 +157,6 @@
         </div>
       </div>
 
-      <!-- Notifications container - moved outside the main-content-wrapper -->
-      <div class="notifications-container">
-        <div v-for="notification in notifications" :key="notification.id" class="notification" :class="notification.type">
-          <div class="notification-content">{{ notification.message }}</div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -180,12 +174,9 @@ export default {
     // Core state variables
     const roadmapRef = ref(null);
     const isMounted = ref(false);
-    const notifications = ref([]);
     const quarters = ref([]);
     const searchQuery = ref('');
     const preferReducedMotion = ref(false);
-    
-    let notificationIdCounter = 0;
     
     // Responsive state
     const isMobile = useMediaQuery('(max-width: 640px)');
@@ -446,7 +437,7 @@ export default {
 
     // Tag filter toggle
     const toggleTagFilter = (tag) => {
-      showNotification(`Filtering by tag "${tag}" is not available in this simplified view`, 'info');
+      // Do nothing since notifications are removed
     };
 
     // Filtered data
@@ -459,15 +450,6 @@ export default {
           m.tasks.some(t => t.title.toLowerCase().includes(searchQuery.value.toLowerCase())));
       });
     });
-
-    // Notifications - simplified
-    const showNotification = (message, type = 'info', duration = 3000) => {
-      const id = notificationIdCounter++;
-      notifications.value.push({ id, message, type });
-      setTimeout(() => {
-        notifications.value = notifications.value.filter(n => n.id !== id);
-      }, duration);
-    };
 
     // Check for reduced motion preference
     const checkReducedMotion = () => {
@@ -515,8 +497,6 @@ export default {
       toggleTask,
       toggleSubtask,
       getProgressPercentage,
-      notifications,
-      showNotification,
       isMobile,
       preferReducedMotion,
       handleCardMouseMove,
@@ -1358,46 +1338,7 @@ export default {
 
 /* Notifications */
 .notifications-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  max-width: 300px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  perspective: 1000px;
-}
-
-@media (min-width: 1024px) {
-  .notifications-container {
-    right: calc((100% - 1200px) / 2 + 20px);
-  }
-}
-
-.notification {
-  padding: 10px 12px;
-  border-radius: 4px;
-  background: var(--cosmic-glass-bg);
-  color: var(--cosmic-text-primary);
-  font-size: 0.8125rem;
-  box-shadow: var(--cosmic-shadow-md);
-  animation: fadeIn 0.3s var(--animation-bounce);
-  backdrop-filter: blur(8px);
-  border: var(--cosmic-glass-border);
-  transform-style: preserve-3d;
-}
-
-.notification.success {
-  border-left: 3px solid #2ed573;
-}
-
-.notification.error {
-  border-left: 3px solid #ff4757;
-}
-
-.notification.info {
-  border-left: 3px solid var(--cosmic-blue);
+  display: none;
 }
 
 @keyframes fadeIn {
@@ -1674,7 +1615,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100vh - var(--header-height) - var(--page-padding) * 2); /* Adjusted height calculation */
+  height: calc(100vh - var(--header-height) - var(--page-padding) * 2);
   position: relative;
   gap: 1rem;
   margin: 0 auto;
@@ -1686,7 +1627,7 @@ export default {
     flex-direction: row;
     gap: 2rem;
     padding: 0 2rem;
-    height: calc(100vh - var(--header-height) - var(--page-padding) * 2); /* Consistent height calculation */
+    height: calc(100vh - var(--header-height) - var(--page-padding) * 2);
   }
 
   .main-content-wrapper {
@@ -1694,7 +1635,7 @@ export default {
     min-width: 0;
     margin-left: 8rem;
     margin-right: 2rem;
-    margin-top: 4rem; /* Added top margin */
+    margin-top: 4rem;
   }
 
   .hero-section {
