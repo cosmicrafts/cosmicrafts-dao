@@ -486,10 +486,33 @@ export default {
   border: 1px solid rgba(88, 101, 242, 0.2);
   border-radius: 0.5rem;
   backdrop-filter: blur(8px);
+  scroll-behavior: smooth;  /* Smooth scrolling */
+  scrollbar-width: thin;  /* Firefox */
+  scrollbar-color: rgba(88, 101, 242, 0.5) rgba(15, 25, 40, 0.2);  /* Firefox */
+}
+
+/* Webkit scrollbar styling */
+.scrollable-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+  background: rgba(15, 25, 40, 0.2);
+  border-radius: 4px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+  background: rgba(88, 101, 242, 0.5);
+  border-radius: 4px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(88, 101, 242, 0.7);
 }
 
 /* Title and Subtitle */
 .hero-section {
+  margin-top: 3rem;
   margin-bottom: 0.5rem;
   padding: 0.5rem 1rem;
   width: 100%;
@@ -508,8 +531,9 @@ export default {
   margin: 0;
   background: linear-gradient(90deg, #FFFFFF, rgba(15, 185, 253, 0.8));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 .cosmic-subtitle {
@@ -566,18 +590,21 @@ export default {
 }
 
 .quarter {
-  background: rgba(15, 25, 40, 0.6);
-  border-radius: 0.5rem;
+  background: rgba(27, 37, 89, 0.7);
+  border-radius: .5rem;
   overflow: hidden;
   width: 100%;
-  border: 1px solid rgba(88, 101, 242, 0.2);
+  border: 1px solid rgba(88, 101, 242, 0.3);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: all 0.3s ease;
   margin-bottom: 0.75rem;
+  position: relative;
 }
 
 .quarter:hover {
   transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(88, 101, 242, 0.2);
+  border-color: rgba(15, 185, 253, 0.5);
 }
 
 .quarter-header {
@@ -586,25 +613,35 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(15, 25, 40, 0.3);
+  background: linear-gradient(135deg, rgba(37, 49, 77, 0.9), rgba(27, 37, 89, 0.8));
 }
 
 .quarter-header:hover {
-  background: rgba(15, 25, 40, 0.5);
+  background: linear-gradient(135deg, rgba(45, 57, 90, 0.95), rgba(37, 49, 77, 0.85));
 }
 
 /* Milestones */
 .milestones {
   padding: 0.75rem;
-  background: rgba(15, 25, 40, 0.2);
+  background: rgba(24, 32, 59, 0.5);
+  border-top: 1px solid rgba(88, 101, 242, 0.15);
 }
 
 .milestone {
-  background: rgba(15, 25, 40, 0.5);
+  background: rgba(31, 41, 73, 0.7);
   border-radius: 0.5rem;
   margin-bottom: 0.75rem;
   border: 1px solid rgba(88, 101, 242, 0.15);
   overflow: hidden;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.milestone:hover {
+  background: rgba(37, 49, 77, 0.8);
+  transform: translateX(4px);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .milestone-header {
@@ -613,25 +650,35 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(15, 25, 40, 0.2);
+  background: linear-gradient(135deg, rgba(37, 49, 77, 0.8), rgba(31, 41, 73, 0.7));
 }
 
 .milestone-header:hover {
-  background: rgba(15, 25, 40, 0.4);
+  background: linear-gradient(135deg, rgba(45, 57, 90, 0.85), rgba(37, 49, 77, 0.75));
 }
 
 /* Tasks */
 .tasks {
   padding: 0.75rem;
-  background: rgba(15, 25, 40, 0.1);
+  background: rgba(29, 38, 61, 0.4);
+  border-top: 1px solid rgba(88, 101, 242, 0.1);
 }
 
 .task {
-  background: rgba(15, 25, 40, 0.4);
+  background: rgba(35, 45, 75, 0.6);
   border-radius: 0.5rem;
   margin-bottom: 0.75rem;
   border: 1px solid rgba(88, 101, 242, 0.1);
   overflow: hidden;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.task:hover {
+  background: rgba(41, 53, 87, 0.7);
+  transform: translateX(8px);
+  border-color: rgba(15, 185, 253, 0.2);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
 }
 
 .task-header {
@@ -640,124 +687,120 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: linear-gradient(135deg, rgba(41, 53, 87, 0.7), rgba(35, 45, 75, 0.6));
 }
 
 .task-header:hover {
-  background: rgba(15, 25, 40, 0.3);
+  background: linear-gradient(135deg, rgba(49, 63, 102, 0.75), rgba(41, 53, 87, 0.65));
 }
 
 /* Subtasks */
 .subtasks {
   padding: 0.75rem;
-  background: rgba(15, 25, 40, 0.1);
+  background: rgba(34, 43, 65, 0.3);
+  border-top: 1px solid rgba(88, 101, 242, 0.05);
 }
 
 .subtask {
   padding: 0.625rem;
   margin-bottom: 0.5rem;
-  background: rgba(15, 25, 40, 0.3);
+  background: linear-gradient(135deg, rgba(39, 51, 79, 0.5), rgba(34, 43, 65, 0.4));
   border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(88, 101, 242, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.subtask:hover {
+  background: linear-gradient(135deg, rgba(45, 58, 90, 0.55), rgba(39, 51, 79, 0.45));
+  border-color: rgba(15, 185, 253, 0.15);
+  transform: translateX(12px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .subtask.completed {
-  opacity: 0.7;
+  opacity: 0.75;
+  background: linear-gradient(135deg, rgba(39, 51, 79, 0.3), rgba(34, 43, 65, 0.2));
+  border-color: rgba(88, 101, 242, 0.05);
 }
 
-.subtask-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.subtask-status {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.4rem;
-  border-radius: 0.25rem;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.subtask-status.completed {
-  background: rgba(0, 255, 0, 0.1);
-  color: #4ade80;
-}
-
-/* Header content */
-.header-content {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  margin-right: 0.75rem;
-}
-
-.header-content h2,
-.header-content h3,
-.header-content h4 {
-  margin: 0 0 0.25rem 0;
-}
-
-.description {
-  font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0;
-}
-
-.subtask-description {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0.375rem 0 0 0;
-}
-
-/* Header right */
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* Progress */
-.progress-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-}
-
+/* Progress bar styling improvement */
 .progress-container {
   width: 60px;
   height: 4px;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
+  border-radius: 4px;
   overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, rgba(15, 185, 253, 0.8), rgba(88, 101, 242, 0.8));
+  background: linear-gradient(90deg, rgba(15, 185, 253, 0.9), rgba(88, 101, 242, 0.9));
   transition: width 0.3s;
+  box-shadow: 0 0 4px rgba(15, 185, 253, 0.5);
 }
 
-.progress-text {
-  font-size: 0.75rem;
+/* Task tags enhancement */
+.task-tag {
+  padding: 0.2rem 0.4rem;
+  border-radius: 1rem;
+  font-size: 0.6875rem;
+  background: rgba(31, 41, 73, 0.6);
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.task-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+/* Task status enhancement */
+.task-status {
+  font-size: 0.6875rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 1rem;
+  background: rgba(31, 41, 73, 0.5);
   white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 }
 
-/* Toggle Icon */
+.task-status.completed {
+  background: rgba(42, 187, 155, 0.15);
+  color: #42bb9b;
+  border: 1px solid rgba(42, 187, 155, 0.3);
+}
+
+.task-status.in-progress {
+  background: rgba(56, 128, 255, 0.15);
+  color: #3880ff;
+  border: 1px solid rgba(56, 128, 255, 0.3);
+}
+
+.task-status.to-do {
+  background: rgba(235, 68, 90, 0.15);
+  color: #eb445a;
+  border: 1px solid rgba(235, 68, 90, 0.3);
+}
+
+/* Enhanced toggle icon */
 .toggle-icon {
   position: relative;
   width: 16px;
   height: 16px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .icon-line {
   position: absolute;
-  background: rgba(255, 255, 255, 0.8);
-  transition: transform 0.2s ease;
+  background: rgba(255, 255, 255, 0.9);
+  transition: transform 0.2s ease, background 0.2s ease;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
 .horizontal {
@@ -782,52 +825,13 @@ export default {
 
 .toggle-icon.is-open .horizontal {
   transform: translateY(-50%) rotate(180deg);
+  background: rgba(15, 185, 253, 0.9);
 }
 
-.toggle-icon.small {
-  width: 12px;
-  height: 12px;
-}
-
-/* Task tags */
-.task-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-  margin-top: 0.5rem;
-}
-
-.task-tag {
-  padding: 0.2rem 0.4rem;
-  border-radius: 1rem;
-  font-size: 0.6875rem;
-  background: rgba(15, 25, 45, 0.4);
-  border: 1px solid;
-  cursor: pointer;
-}
-
-/* Task status */
-.task-status {
-  font-size: 0.6875rem;
-  padding: 0.2rem 0.4rem;
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  white-space: nowrap;
-}
-
-.task-status.completed {
-  background: rgba(0, 255, 0, 0.1);
-  color: #4ade80;
-}
-
-.task-status.in-progress {
-  background: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
-}
-
-.task-status.to-do {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+/* Current quarter highlight */
+.quarter.current-quarter {
+  border: 2px solid rgba(15, 185, 253, 0.6);
+  box-shadow: 0 0 15px rgba(15, 185, 253, 0.3);
 }
 
 /* Notifications */
@@ -881,17 +885,137 @@ export default {
   }
   
   .progress-container {
-    width: 40px;
+    width: 4rem;
+    height: .5rem;
   }
   
   .quarter-header,
   .milestone-header,
   .task-header {
-    padding: 0.625rem;
+    padding: 1rem;
   }
   
   .description {
-    font-size: 0.75rem;
+    font-size: 0.55rem;
   }
+}
+
+.subtask.completed {
+
+  background: linear-gradient(180deg, rgba(10, 104, 1, 0.241), rgba(0, 134, 24, 0.465));
+  border-color: rgba(88, 101, 242, 0.05);
+}
+
+.subtask-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.checkbox-container input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid rgba(88, 101, 242, 0.4);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+  background-color: rgba(88, 101, 242, 0.8);
+  border-color: rgba(88, 101, 242, 0.8);
+}
+
+.checkbox-container input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.subtask-status {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  background: rgba(31, 41, 73, 0.5);
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.subtask-status.completed {
+  background: rgba(42, 187, 155, 0.15);
+  color: #42bb9b;
+  border: 1px solid rgba(42, 187, 155, 0.3);
+}
+
+/* Header content */
+.header-content {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  margin-right: 0.75rem;
+}
+
+.header-content h2,
+.header-content h3,
+.header-content h4 {
+  margin: 0 0 0.25rem 0;
+}
+
+.description {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.subtask-description {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0.375rem 0 0 0;
+}
+
+/* Header right */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Progress */
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.progress-text {
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.toggle-icon.small {
+  width: 12px;
+  height: 12px;
+}
+
+/* Task tags */
+.task-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
 }
 </style>
