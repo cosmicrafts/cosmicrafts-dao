@@ -733,7 +733,6 @@ export default {
   color: #fff;
   position: relative;
   overflow-x: hidden; /* Prevent horizontal overflow */
-  background: linear-gradient(135deg, #0c1016f0, #141b2af0, #0c1016f0);
   display: flex;
   flex-direction: column;
   padding-top: 6rem; /* Account for the header height */
