@@ -4,133 +4,152 @@
     <div class="cosmic-background"></div>
     
     <div ref="roadmapRef" class="roadmap-container">
-      <!-- Fixed Header Section - simplified -->
-      <div class="fixed-header-section">
-        <!-- Hero Section -->
-        <header class="hero-section">
-          <div class="hero-content">
-            <div class="title-area">
-              <h1 class="cosmic-title">Cosmic Roadmap</h1>
-              <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history.</p>
-            </div>
+      <!-- Desktop Hero Section (New) -->
+      <div class="desktop-hero-section">
+        <div class="desktop-hero-content">
+          <div class="logo-area">
+            <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts Logo" class="hero-logo" />
           </div>
-        </header>
-
-        <!-- Search Section -->
-        <div class="search-container" role="search">
-          <div class="search-input-wrapper">
-            <div class="search-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </div>
-            <input type="text" class="search-input" placeholder="Search milestones or tasks..." v-model="searchQuery">
+          <div class="title-area">
+            <h1 class="cosmic-title">Cosmic Roadmap</h1>
+            <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history unfold.</p>
+          </div>
+          <div class="description-area">
+            <p>The Cosmicrafts journey is mapped out here with clear milestones and tasks. Track our progress as we build the future of decentralized creation.</p>
           </div>
         </div>
       </div>
-
-      <!-- Scrollable Content Area -->
-      <div class="scrollable-content">
-        <!-- Quarters Section -->
-        <section class="quarters-container">
-          <div v-for="(quarter, qIndex) in filteredQuarters" :key="qIndex" class="quarter" :class="{ 'active': quarter.open }">
-            <div class="quarter-header" @click="toggleQuarter(qIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
-              <div class="header-content">
-                <h2>{{ quarter.period }}</h2>
-                <p class="description">{{ quarter.description }}</p>
-              </div>
-              <div class="header-right">
-                <div class="progress-wrapper">
-                  <div class="progress-container">
-                    <div class="progress-bar" :style="{ width: getProgressPercentage(quarter.completed, quarter.total) + '%' }"></div>
-                  </div>
-                  <div class="progress-text">{{ quarter.completed }}/{{ quarter.total }}</div>
-                </div>
-                <div class="toggle-icon" :class="{ 'is-open': quarter.open }">
-                  <div class="icon-line horizontal"></div>
-                  <div class="icon-line vertical" :class="{ 'hidden': quarter.open }"></div>
-                </div>
+      
+      <!-- Main Content Wrapper -->
+      <div class="main-content-wrapper">
+        <!-- Fixed Header Section - simplified -->
+        <div class="fixed-header-section">
+          <!-- Hero Section (Mobile) -->
+          <header class="hero-section">
+            <div class="hero-content">
+              <div class="title-area">
+                <h1 class="cosmic-title">Cosmic Roadmap</h1>
+                <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history.</p>
               </div>
             </div>
-            
-            <!-- Simplified transition -->
-            <div v-if="quarter.open" class="milestones">
-              <div v-for="(milestone, mIndex) in quarter.milestones" :key="mIndex" class="milestone">
-                <div class="milestone-header" @click="toggleMilestone(quarter, milestone, mIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
-                  <div class="header-content">
-                    <h3>{{ milestone.title }}</h3>
-                    <p class="description">{{ milestone.description }}</p>
-                  </div>
-                  <div class="header-right">
-                    <div class="progress-wrapper">
-                      <div class="progress-container">
-                        <div class="progress-bar" :style="{ width: getProgressPercentage(milestone.completed, milestone.total) + '%' }"></div>
-                      </div>
-                      <div class="progress-text">{{ milestone.completed }}/{{ milestone.total }}</div>
-                    </div>
-                    <div class="toggle-icon" :class="{ 'is-open': milestone.open }">
-                      <div class="icon-line horizontal"></div>
-                      <div class="icon-line vertical" :class="{ 'hidden': milestone.open }"></div>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Simplified transition -->
-                <div v-if="milestone.open" class="tasks">
-                  <div v-for="(task, tIndex) in milestone.tasks" :key="tIndex" class="task">
-                    <div class="task-header" @click="toggleTask(quarter, milestone, task, tIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
-                      <div class="header-content">
-                        <h4>{{ task.title }}</h4>
-                        <p class="description">{{ task.description }}</p>
-                        
-                        <!-- Task tags simplified -->
-                        <div v-if="task.tags && task.tags.length" class="task-tags">
-                          <span v-for="tag in task.tags" :key="tag" class="task-tag" :style="{ 'border-color': getTagColor(tag) }" @click.stop="toggleTagFilter(tag)">
-                            {{ tag }}
-                          </span>
-                        </div>
-                      </div>
-                      <div class="header-right">
-                        <div class="progress-wrapper">
-                          <div class="progress-container">
-                            <div class="progress-bar" :style="{ width: getProgressPercentage(task.completed, task.total) + '%' }"></div>
-                          </div>
-                          <div class="progress-text">{{ task.completed }}/{{ task.total }}</div>
-                        </div>
-                        <div class="task-status-wrapper">
-                          <span class="task-status" :class="task.status.toLowerCase().replace(/\s+/g, '-')">{{ task.status }}</span>
-                        </div>
-                        <div class="toggle-icon small" :class="{ 'is-open': task.open }">
-                          <div class="icon-line horizontal"></div>
-                          <div class="icon-line vertical" :class="{ 'hidden': task.open }"></div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <!-- Subtasks simplified -->
-                    <div v-if="task.open && task.subtasks" class="subtasks">
-                      <div v-for="(subtask, stIndex) in task.subtasks" :key="stIndex" class="subtask" :class="{ completed: subtask.completed }">
-                        <div class="subtask-header">
-                          <div class="checkbox-container">
-                            <input type="checkbox" :id="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex" :checked="subtask.completed" @change="toggleSubtask(quarter, milestone, task, subtask)">
-                            <label :for="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex">{{ subtask.title }}</label>
-                          </div>
-                          <div class="subtask-status" :class="{ completed: subtask.completed }">
-                            {{ subtask.completed ? 'Completed' : 'To Do' }}
-                          </div>
-                        </div>
-                        <p class="subtask-description">{{ subtask.description }}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          </header>
+
+          <!-- Search Section -->
+          <div class="search-container" role="search">
+            <div class="search-input-wrapper">
+              <div class="search-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
               </div>
+              <input type="text" class="search-input" placeholder="Search milestones or tasks..." v-model="searchQuery">
             </div>
           </div>
-        </section>
+        </div>
+
+        <!-- Scrollable Content Area -->
+        <div class="scrollable-content">
+          <!-- Quarters Section -->
+          <section class="quarters-container">
+            <div v-for="(quarter, qIndex) in filteredQuarters" :key="qIndex" class="quarter" :class="{ 'active': quarter.open }">
+              <div class="quarter-header" @click="toggleQuarter(qIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
+                <div class="header-content">
+                  <h2>{{ quarter.period }}</h2>
+                  <p class="description">{{ quarter.description }}</p>
+                </div>
+                <div class="header-right">
+                  <div class="progress-wrapper">
+                    <div class="progress-container">
+                      <div class="progress-bar" :style="{ width: getProgressPercentage(quarter.completed, quarter.total) + '%' }"></div>
+                    </div>
+                    <div class="progress-text">{{ quarter.completed }}/{{ quarter.total }}</div>
+                  </div>
+                  <div class="toggle-icon" :class="{ 'is-open': quarter.open }">
+                    <div class="icon-line horizontal"></div>
+                    <div class="icon-line vertical" :class="{ 'hidden': quarter.open }"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Simplified transition -->
+              <div v-if="quarter.open" class="milestones">
+                <div v-for="(milestone, mIndex) in quarter.milestones" :key="mIndex" class="milestone">
+                  <div class="milestone-header" @click="toggleMilestone(quarter, milestone, mIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
+                    <div class="header-content">
+                      <h3>{{ milestone.title }}</h3>
+                      <p class="description">{{ milestone.description }}</p>
+                    </div>
+                    <div class="header-right">
+                      <div class="progress-wrapper">
+                        <div class="progress-container">
+                          <div class="progress-bar" :style="{ width: getProgressPercentage(milestone.completed, milestone.total) + '%' }"></div>
+                        </div>
+                        <div class="progress-text">{{ milestone.completed }}/{{ milestone.total }}</div>
+                      </div>
+                      <div class="toggle-icon" :class="{ 'is-open': milestone.open }">
+                        <div class="icon-line horizontal"></div>
+                        <div class="icon-line vertical" :class="{ 'hidden': milestone.open }"></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Simplified transition -->
+                  <div v-if="milestone.open" class="tasks">
+                    <div v-for="(task, tIndex) in milestone.tasks" :key="tIndex" class="task">
+                      <div class="task-header" @click="toggleTask(quarter, milestone, task, tIndex, $event)" @mousemove="!preferReducedMotion && handleCardMouseMove" @mouseleave="handleCardMouseLeave">
+                        <div class="header-content">
+                          <h4>{{ task.title }}</h4>
+                          <p class="description">{{ task.description }}</p>
+                          
+                          <!-- Task tags simplified -->
+                          <div v-if="task.tags && task.tags.length" class="task-tags">
+                            <span v-for="tag in task.tags" :key="tag" class="task-tag" :style="{ 'border-color': getTagColor(tag) }" @click.stop="toggleTagFilter(tag)">
+                              {{ tag }}
+                            </span>
+                          </div>
+                        </div>
+                        <div class="header-right">
+                          <div class="progress-wrapper">
+                            <div class="progress-container">
+                              <div class="progress-bar" :style="{ width: getProgressPercentage(task.completed, task.total) + '%' }"></div>
+                            </div>
+                            <div class="progress-text">{{ task.completed }}/{{ task.total }}</div>
+                          </div>
+                          <div class="task-status-wrapper">
+                            <span class="task-status" :class="task.status.toLowerCase().replace(/\s+/g, '-')">{{ task.status }}</span>
+                          </div>
+                          <div class="toggle-icon small" :class="{ 'is-open': task.open }">
+                            <div class="icon-line horizontal"></div>
+                            <div class="icon-line vertical" :class="{ 'hidden': task.open }"></div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Subtasks simplified -->
+                      <div v-if="task.open && task.subtasks" class="subtasks">
+                        <div v-for="(subtask, stIndex) in task.subtasks" :key="stIndex" class="subtask" :class="{ completed: subtask.completed }">
+                          <div class="subtask-header">
+                            <div class="checkbox-container">
+                              <input type="checkbox" :id="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex" :checked="subtask.completed" @change="toggleSubtask(quarter, milestone, task, subtask)">
+                              <label :for="'subtask-' + qIndex + '-' + mIndex + '-' + tIndex + '-' + stIndex">{{ subtask.title }}</label>
+                            </div>
+                            <div class="subtask-status" :class="{ completed: subtask.completed }">
+                              {{ subtask.completed ? 'Completed' : 'To Do' }}
+                            </div>
+                          </div>
+                          <p class="subtask-description">{{ subtask.description }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
 
-      <!-- Simplified notifications -->
+      <!-- Notifications container - moved outside the main-content-wrapper -->
       <div class="notifications-container">
         <div v-for="notification in notifications" :key="notification.id" class="notification" :class="notification.type">
           <div class="notification-content">{{ notification.message }}</div>
@@ -429,11 +448,119 @@ export default {
   width: 100%;
   color: #fff;
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden; /* Changed from overflow-x to prevent scrolling */
   display: flex;
   flex-direction: column;
   padding-top: 2.5rem;
   box-sizing: border-box;
+}
+
+/* Layout restructuring for desktop view */
+.roadmap-container {
+  width: 100%;
+  height: calc(100vh - 2.5rem); /* Adjust for padding-top */
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent container scrolling */
+}
+
+@media (min-width: 1024px) {
+  .roadmap-container {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}
+
+/* Desktop Hero Section */
+.desktop-hero-section {
+  display: none; /* Hidden by default on mobile */
+  background: rgba(20, 32, 59, 0.6);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(88, 101, 242, 0.3);
+  backdrop-filter: blur(12px);
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .desktop-hero-section {
+    display: flex; /* Changed from block to flex */
+    align-items: center; /* Center content vertically */
+    width: 33.333%;
+    height: calc(100vh - 5rem);
+    position: sticky;
+    top: 3rem;
+  }
+}
+
+.desktop-hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%; /* Ensure content takes full width */
+}
+
+.logo-area {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.hero-logo {
+  max-width: 120px;
+  height: auto;
+}
+
+.desktop-hero-section .title-area {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.desktop-hero-section .cosmic-title {
+  font-size: 2rem;
+  margin: 0 0 0.75rem 0;
+  color: #FFFFFF;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.desktop-hero-section .cosmic-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.description-area {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 0 1rem;
+}
+
+/* Main Content Wrapper */
+.main-content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Important for nested scrolling */
+  overflow: hidden; /* Prevent wrapper scrolling */
+}
+
+/* Mobile Hero (original) - hide on desktop */
+@media (min-width: 1024px) {
+  .hero-section {
+    display: none; /* Hide on desktop */
+  }
 }
 
 /* Simplified background */
@@ -450,20 +577,6 @@ export default {
   filter: blur(60px);
   z-index: 0;
   pointer-events: none;
-}
-
-/* Main Container */
-.roadmap-container {
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  max-width: 1200px;
-  padding: 0 1rem;
-  box-sizing: border-box;
 }
 
 /* Fixed Header Section */
@@ -486,9 +599,15 @@ export default {
   border: 1px solid rgba(88, 101, 242, 0.2);
   border-radius: 0.5rem;
   backdrop-filter: blur(8px);
-  scroll-behavior: smooth;  /* Smooth scrolling */
-  scrollbar-width: thin;  /* Firefox */
-  scrollbar-color: rgba(88, 101, 242, 0.5) rgba(15, 25, 40, 0.2);  /* Firefox */
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(88, 101, 242, 0.5) rgba(15, 25, 40, 0.2);
+}
+
+@media (min-width: 1024px) {
+  .scrollable-content {
+    max-height: calc(100vh - 90px); /* Slightly different height adjustment for desktop */
+  }
 }
 
 /* Webkit scrollbar styling */
@@ -844,6 +963,12 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+@media (min-width: 1024px) {
+  .notifications-container {
+    right: calc((100% - 1200px) / 2 + 20px); /* Adjust for the max-width of the container */
+  }
 }
 
 .notification {
