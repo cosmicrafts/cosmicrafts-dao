@@ -467,10 +467,15 @@ export default {
   --cosmic-bg-dark: rgb(10, 14, 28);
   --hero-accent-glow: rgba(15, 185, 253, 0.3);
   --glass-blur: 12px;
+  --header-height: 80px; /* Increased header height */
+  --page-padding: 2rem;
 
-  padding: 1rem;
+  padding: var(--page-padding);
+  padding-top: calc(var(--header-height) + var(--page-padding)); /* Adjusted padding top */
   box-sizing: border-box;
   background-color: var(--cosmic-bg-dark);
+  min-height: 100vh;
+  position: relative; /* Added position relative */
 }
 
 /* Enhanced Cosmic Background */
@@ -759,16 +764,17 @@ export default {
   padding: 1rem;
   width: 100%;
   box-sizing: border-box;
+  background: rgba(20, 24, 41, 0.316);
   border: var(--cosmic-glass-border-blue);
-  border-radius: 0.25rem;
+  border-radius: .5rem;
   scroll-behavior: smooth;
-
   scrollbar-color: var(--cosmic-blue) var(--cosmic-glass-bg);
 
 }
 
 /* Quarters Section */
 .quarters-container {
+  
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -1114,8 +1120,9 @@ export default {
 
 /* Media queries */
 @media (max-width: 768px) {
+
   .cosmic-title {
-    font-size: 1.25rem;
+    font-size: 2rem;
   }
   
   .cosmic-subtitle,
@@ -1124,8 +1131,8 @@ export default {
   }
   
   .progress-container {
-    width: 4rem;
-    height: .5rem;
+    width: 3rem;
+    height: .35rem;
   }
   
   .quarter-header,
@@ -1140,12 +1147,7 @@ export default {
 
   .hero-section {
     display: block;
-  }
-
-  @media (min-width: 1024px) {
-    .hero-section {
-      display: none;
-    }
+    margin-top: 1rem; /* Add margin to hero section on mobile */
   }
 }
 
@@ -1284,9 +1286,11 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100vh - 5rem);
+  height: calc(100vh - var(--header-height) - var(--page-padding) * 2); /* Adjusted height calculation */
   position: relative;
   gap: 1rem;
+  margin: 0 auto;
+  max-width: 1400px;
 }
 
 @media (min-width: 1024px) {
@@ -1294,23 +1298,28 @@ export default {
     flex-direction: row;
     gap: 2rem;
     padding: 0 2rem;
+    height: calc(100vh - var(--header-height) - var(--page-padding) * 2); /* Consistent height calculation */
   }
 
   .main-content-wrapper {
     flex: 1;
-    min-width: 0; /* Prevents flex item from overflowing */
-    margin-left: 2rem;
+    min-width: 0;
+    margin-left: 8rem;
+    margin-right: 1rem;
+    margin-top: 4rem; /* Added top margin */
   }
 
   .hero-section {
     display: none;
   }
 }
+
 .main-content-wrapper {
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
+
+  height: 95%;
   position: relative;
   background: var(--cosmic-glass-bg-lighter);
   border-radius: 1rem;
