@@ -315,25 +315,49 @@ export default {
 
     // Update toggle functions to properly handle clicked elements
     const toggleQuarter = (index, event) => {
-      quarters.value[index].open = !quarters.value[index].open;
+      // Find the quarter in the filtered list
+      const quarter = filteredQuarters.value[index];
       
-      if (quarters.value[index].open) {
-        nextTick(() => {
-          const element = event?.target.closest('.quarter');
-          if (element) scrollToElement(element);
-        });
+      // Find the actual index in the original quarters array
+      const originalIndex = quarters.value.findIndex(q => 
+        q.period === quarter.period && 
+        q.year === quarter.year && 
+        q.quarterNum === quarter.quarterNum
+      );
+      
+      if (originalIndex !== -1) {
+        quarters.value[originalIndex].open = !quarters.value[originalIndex].open;
+        
+        if (quarters.value[originalIndex].open) {
+          nextTick(() => {
+            const element = event?.target.closest('.quarter');
+            if (element) scrollToElement(element);
+          });
+        }
       }
     };
 
     const toggleMilestone = (quarter, milestone, milestoneIndex, event) => {
-      milestone.open = !milestone.open;
+      // Find the quarter in the original array
+      const quarterIndex = quarters.value.findIndex(q => 
+        q.period === quarter.period && 
+        q.year === quarter.year && 
+        q.quarterNum === quarter.quarterNum
+      );
       
-      if (milestone.open) {
-        nextTick(() => {
-          // Important: Make sure we're getting the specific milestone element that was clicked
-          const element = event?.target.closest('.milestone');
-          if (element) scrollToElement(element);
-        });
+      if (quarterIndex !== -1) {
+        // Find the milestone in the quarter
+        const targetMilestone = quarters.value[quarterIndex].milestones[milestoneIndex];
+        if (targetMilestone) {
+          targetMilestone.open = !targetMilestone.open;
+          
+          if (targetMilestone.open) {
+            nextTick(() => {
+              const element = event?.target.closest('.milestone');
+              if (element) scrollToElement(element);
+            });
+          }
+        }
       }
       
       // Stop event propagation to prevent parent quarter handler from triggering
@@ -343,14 +367,33 @@ export default {
     };
 
     const toggleTask = (quarter, milestone, task, taskIndex, event) => {
-      task.open = !task.open;
+      // Find the quarter in the original array
+      const quarterIndex = quarters.value.findIndex(q => 
+        q.period === quarter.period && 
+        q.year === quarter.year && 
+        q.quarterNum === quarter.quarterNum
+      );
       
-      if (task.open) {
-        nextTick(() => {
-          // Important: Make sure we're getting the specific task element that was clicked
-          const element = event?.target.closest('.task');
-          if (element) scrollToElement(element);
-        });
+      if (quarterIndex !== -1) {
+        // Find the milestone in the quarter
+        const milestoneIndex = quarters.value[quarterIndex].milestones.findIndex(m => 
+          m.title === milestone.title
+        );
+        
+        if (milestoneIndex !== -1) {
+          // Find the task in the milestone
+          const targetTask = quarters.value[quarterIndex].milestones[milestoneIndex].tasks[taskIndex];
+          if (targetTask) {
+            targetTask.open = !targetTask.open;
+            
+            if (targetTask.open) {
+              nextTick(() => {
+                const element = event?.target.closest('.task');
+                if (element) scrollToElement(element);
+              });
+            }
+          }
+        }
       }
       
       // Stop event propagation to prevent parent milestone/quarter handlers from triggering
@@ -747,13 +790,12 @@ export default {
 /* Enhanced Search Section */
 .search-container {
   width: 100%;
-
   transform-style: preserve-3d;
   position: relative;
+  z-index: 10;
 }
 
 .search-input-wrapper {
-  
   position: relative;
   width: 100%;
   border-radius: 0.75rem;
@@ -767,27 +809,7 @@ export default {
   border: 1px solid rgba(15, 185, 253, 0.25);
   transition: all 0.3s var(--animation-bounce);
   overflow: hidden;
-}
-
-.search-input-wrapper::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(
-    circle at center,
-    rgba(15, 185, 253, 0.1) 0%,
-    transparent 70%
-  );
-  opacity: 0;
-  transition: opacity 0.3s var(--animation-smooth);
-}
-
-.search-input-wrapper:hover::before,
-.search-input-wrapper:focus-within::before {
-  opacity: 1;
+  z-index: 10;
 }
 
 .search-input-wrapper:hover,
@@ -805,9 +827,10 @@ export default {
   top: 50%;
   transform: translateY(-50%);
   color: var(--cosmic-text-tertiary);
-  z-index: 1;
+  z-index: 12;
   transition: all 0.3s var(--animation-smooth);
   font-size: 1.25rem;
+  pointer-events: none;
 }
 
 .search-input-wrapper:hover .search-icon,
@@ -827,15 +850,19 @@ export default {
   box-sizing: border-box;
   transition: all 0.3s var(--animation-smooth);
   letter-spacing: 0.01em;
+  position: relative;
+  z-index: 11;
+  pointer-events: auto;
+}
+
+.search-input:focus {
+  outline: none;
+  background: rgba(16, 20, 38, 0.9);
 }
 
 .search-input::placeholder {
   color: var(--cosmic-text-tertiary);
   opacity: 0.7;
-}
-
-.search-input:focus {
-  outline: none;
 }
 
 /* Scrollable Content Area */
@@ -1679,13 +1706,13 @@ export default {
   padding: 1rem;
   display: flex;
   flex-direction: column;
-
   height: 95%;
   position: relative;
   background: var(--cosmic-glass-bg-lighter);
   border-radius: 1rem;
   border: var(--cosmic-glass-border-blue);
   overflow: hidden;
+  z-index: 5;
 }
 
 .scrollable-content {
