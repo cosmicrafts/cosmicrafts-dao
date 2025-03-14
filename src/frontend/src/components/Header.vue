@@ -20,7 +20,6 @@
     <!-- Navigation Links (Desktop Only) -->
     <nav class="nav-links">
       <ul>
-        <li><router-link to="/game" class="cosmic-hover">{{ t('header.games') }}</router-link></li>
         <li><router-link to="/dao" class="cosmic-hover">{{ t('header.dao') }}</router-link></li>
         <li><router-link to="/whitepaper" class="cosmic-hover">{{ t('header.whitepaper') }}</router-link></li>
         <li><router-link to="/roadmap" class="cosmic-hover">{{ t('header.roadmap') }}</router-link></li>

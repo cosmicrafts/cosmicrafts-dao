@@ -27,76 +27,13 @@ export default {
       sectionObserver: null,
       scrollHandler: null,
       scrollTimeout: null,
-      headingIndex: 1
+      headingIndex: 1,
+      mermaidInitialized: false
     };
   },
   mounted() {
     this.loadMarkdown(this.$i18n.locale);
-
-    // Load Mermaid from CDN
-    const mermaidScript = document.createElement('script');
-    mermaidScript.src = 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js';
-    mermaidScript.onload = () => {
-      window.mermaid.initialize({ 
-        startOnLoad: false,
-        theme: 'base',
-        securityLevel: 'loose',
-        themeVariables: {
-          darkMode: true,
-          background: '#19222e',
-          mainBkg: '#19222e',
-          primaryColor: '#0FB9FD',
-          primaryBorderColor: '#0A8BC0',
-          primaryTextColor: '#ffffff',
-          secondaryColor: '#FF9100',
-          secondaryBorderColor: '#CC7400',
-          secondaryTextColor: '#ffffff',
-          tertiaryColor: '#00E5A4',
-          tertiaryBorderColor: '#00B380',
-          tertiaryTextColor: '#ffffff',
-          noteTextColor: '#ffffff',
-          noteBkgColor: 'rgba(15, 185, 253, 0.1)',
-          noteBorderColor: '#0FB9FD',
-          lineColor: 'rgba(15, 185, 253, 0.5)',
-          textColor: '#ffffff',
-          nodeBorder: '#0FB9FD',
-          clusterBkg: 'rgba(15, 185, 253, 0.05)',
-          clusterBorder: '#0FB9FD',
-          defaultLinkColor: 'rgba(15, 185, 253, 0.5)',
-          titleColor: '#0FB9FD',
-          edgeLabelBackground: 'rgba(15, 185, 253, 0.05)',
-          // Pie chart specific
-          pie1: '#0FB9FD',
-          pie2: '#00E5A4',
-          pie3: '#FF9100',
-          pie4: '#FFB800',
-          pie5: '#4DCFFF',
-          pie6: '#00B380',
-          pie7: '#CC7400',
-          pie8: '#CC9400',
-          pieStrokeWidth: '2px',
-          pieStrokeColor: '#0FB9FD',
-          pieSectionTextColor: '#ffffff',
-          pieTitleTextColor: '#ffffff',
-          pieLegendTextColor: '#ffffff',
-          pieSectionTextSize: '14px',
-          pieTitleTextSize: '20px',
-          pieLegendTextSize: '14px',
-          pieOuterStrokeWidth: '2px',
-          pieOuterStrokeColor: '#0FB9FD',
-          pieOpacity: '0.9'
-        },
-        flowchart: {
-          htmlLabels: true,
-          curve: 'basis',
-          nodeSpacing: 50,
-          rankSpacing: 50,
-          padding: 15
-        }
-      });
-      this.renderMermaidDiagrams();
-    };
-    document.head.appendChild(mermaidScript);
+    this.initializeMermaid();
 
     // Add click listener for internal links
     this.$el.addEventListener("click", (event) => {
@@ -136,6 +73,47 @@ export default {
     "$i18n.locale": "reloadMarkdown",
   },
   methods: {
+    initializeMermaid() {
+      if (this.mermaidInitialized) return;
+      
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js';
+      script.onload = () => {
+        window.mermaid.initialize({
+          startOnLoad: false,
+          theme: 'dark',
+          securityLevel: 'loose',
+          themeVariables: {
+            darkMode: true,
+            background: '#19222e',
+            mainBkg: '#19222e',
+            primaryColor: '#0FB9FD',
+            primaryBorderColor: '#0A8BC0',
+            primaryTextColor: '#ffffff',
+            secondaryColor: '#FF9100',
+            secondaryBorderColor: '#CC7400',
+            secondaryTextColor: '#ffffff',
+            tertiaryColor: '#00E5A4',
+            tertiaryBorderColor: '#00B380',
+            tertiaryTextColor: '#ffffff',
+            noteTextColor: '#ffffff',
+            noteBkgColor: 'rgba(15, 185, 253, 0.1)',
+            noteBorderColor: '#0FB9FD',
+            lineColor: 'rgba(15, 185, 253, 0.5)',
+            textColor: '#ffffff',
+            nodeBorder: '#0FB9FD',
+            clusterBkg: 'rgba(15, 185, 253, 0.05)',
+            clusterBorder: '#0FB9FD',
+            defaultLinkColor: 'rgba(15, 185, 253, 0.5)',
+            titleColor: '#0FB9FD',
+            edgeLabelBackground: 'rgba(15, 185, 253, 0.05)',
+          }
+        });
+        this.mermaidInitialized = true;
+        this.renderMermaidDiagrams();
+      };
+      document.head.appendChild(script);
+    },
     reloadMarkdown() {
       this.loadMarkdown(this.$i18n.locale);
     },
@@ -188,24 +166,58 @@ export default {
           html: true,
           typographer: true,
           linkify: true,
+          breaks: true
         });
         
-        // Add TOC plugin first
-        md.use(markdownItToc, {
-          containerClass: 'toc-container',
-          listClass: 'toc-list',
-          itemClass: 'toc-item',
-          linkClass: 'toc-link',
-          level: [1, 2, 3]
-        });
-        
-        // Add anchor links to headings
-        md.use(markdownItAnchor, {
-          permalink: markdownItAnchor.permalink.headerLink({
-            class: 'header-anchor',
-            safariReaderFix: true
-          })
-        });
+        // Add custom fence renderer for mermaid diagrams
+        const defaultFence = md.renderer.rules.fence || function(tokens, idx, options, env, self) {
+          return self.renderToken(tokens, idx, options);
+        };
+
+        md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+          const token = tokens[idx];
+          const code = token.content.trim();
+          if (token.info.trim() === 'mermaid') {
+            return `<div class="mermaid">${code}</div>`;
+          }
+          return defaultFence(tokens, idx, options, env, self);
+        };
+
+        // Custom image renderer
+        md.renderer.rules.image = (tokens, idx, options, env, self) => {
+          const token = tokens[idx];
+          const srcIndex = token.attrIndex('src');
+          const src = token.attrs[srcIndex][1];
+          const alt = token.content || '';
+
+          try {
+            let imagePath;
+            if (src.startsWith('http://') || src.startsWith('https://')) {
+              imagePath = src;
+            } else {
+              // Handle both .webp and other image formats
+              if (src.endsWith('.svg')) {
+                imagePath = new URL(`../assets/icons/${src}`, import.meta.url).href;
+              } else if (src.endsWith('.webp')) {
+                imagePath = new URL(`../assets/webp/${src}`, import.meta.url).href;
+              } else {
+                // Try .webp extension if no extension is specified
+                imagePath = new URL(`../assets/webp/${src}.webp`, import.meta.url).href;
+              }
+            }
+
+            return `<img src="${imagePath}" alt="${alt}" class="markdown-image" loading="lazy">`;
+          } catch (error) {
+            console.error(`Error loading image: ${src}`, error);
+            return `<div class="image-error">Failed to load image: ${alt}</div>`;
+          }
+        };
+
+        // Add the rest of your markdown-it plugins
+        md.use(markdownItToc)
+          .use(markdownItAnchor)
+          .use(markdownItContainer)
+          .use(markdownItHighlightjs);
         
         // Add TOC if not present and this is a legal document
         if (this.fileName === 'terms' || this.fileName === 'privacy' || this.fileName === 'legal') {
@@ -596,21 +608,27 @@ export default {
       this.renderMermaidDiagrams();
     },
     renderMermaidDiagrams() {
-      this.$nextTick(() => {
-        // Clear any existing diagrams first
-        const mermaidDivs = document.querySelectorAll('.mermaid');
-        if (mermaidDivs.length > 0 && window.mermaid) {
-          try {
-            // For Mermaid 11.4.1, we need to use run() instead of init()
-            window.mermaid.run({
-              querySelector: '.mermaid',
-              nodes: Array.from(mermaidDivs)
-            }).catch(error => {
-              console.error('Error rendering mermaid diagrams:', error);
-            });
-          } catch (error) {
-            console.error('Error initializing mermaid diagrams:', error);
-          }
+      if (!window.mermaid || !this.mermaidInitialized) {
+        console.warn('Mermaid not initialized yet');
+        return;
+      }
+
+      const mermaidDivs = document.querySelectorAll('.mermaid');
+      if (mermaidDivs.length === 0) return;
+
+      mermaidDivs.forEach((element, index) => {
+        const uniqueId = `mermaid-diagram-${this.fileName}-${index}`;
+        element.id = uniqueId;
+        
+        try {
+          window.mermaid.run({
+            nodes: [element]
+          }).catch(error => {
+            console.error(`Error rendering mermaid diagram ${uniqueId}:`, error);
+            element.innerHTML = `<div class="mermaid-error">Failed to render diagram</div>`;
+          });
+        } catch (error) {
+          console.error(`Error processing mermaid diagram ${uniqueId}:`, error);
         }
       });
     },
@@ -649,182 +667,565 @@ export default {
 </script>
 
 <style>
-/* Base styles for markdown content */
+/* Base styles for markdown content - update existing styles */
 .markdown-content {
   line-height: 1.6;
   color: var(--color-text-secondary);
+  font-size: 1.05rem;
+  font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.01em;
+  text-rendering: optimizeLegibility;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  margin: 0 auto;
 }
 
-/* Error message styles */
-.error-message {
-  background-color: var(--color-surface-primary);
-  border-radius: var(--radius-medium);
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  border-left: 4px solid var(--color-error);
-  color: var(--color-error);
-  font-weight: var(--weight-medium);
-  text-align: center;
+/* Enhanced Typography System */
+.markdown-content p {
+  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  line-height: 1.75;
 }
 
-/* Table of Contents styles */
-.toc-container {
-  background-color: var(--color-surface-primary);
-  border-radius: var(--radius-medium);
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-left: 4px solid var(--color-primary);
+.markdown-content strong {
+  color: #0FB9FD;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 3px rgba(15, 185, 253, 0.2);
 }
 
-.toc-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.markdown-content em {
+  color: #FFB800;
+  font-style: italic;
+  letter-spacing: 0.02em;
 }
 
-.toc-item {
-  margin: 0.5rem 0;
-  padding-left: 1rem;
-}
-
-.toc-link {
-  color: var(--color-text-primary);
+.markdown-content a:not(.header-anchor) {
+  color: #4DCFFF;
   text-decoration: none;
-  transition: color 0.2s ease;
-  display: block;
-  padding: 0.25rem 0;
+  border-bottom: 1px solid rgba(15, 185, 253, 0.3);
+  transition: all 0.25s ease;
+  padding: 0.1em 0.2em;
+  margin: -0.1em -0.2em;
+  border-radius: 3px;
+  position: relative;
+  z-index: 1;
 }
 
-.toc-link:hover {
-  color: var(--color-primary);
+.markdown-content a:not(.header-anchor):hover {
+  color: #F0F0F0;
+  background-color: rgba(15, 185, 253, 0.2);
+  border-bottom-color: rgba(15, 185, 253, 0.8);
+  text-shadow: 0 0 6px rgba(15, 185, 253, 0.5);
 }
 
-/* Legal document containers */
-.info-container, .warning-container {
-  background-color: var(--color-surface-primary);
-  border-radius: var(--radius-medium);
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  border-left: 4px solid;
-}
-
-.info-container {
-  border-color: var(--color-info);
-  background: linear-gradient(to right, rgba(15, 185, 253, 0.08), rgba(15, 185, 253, 0.03));
-}
-
-.warning-container {
-  border-color: var(--color-warning);
-  background: linear-gradient(to right, rgba(255, 145, 0, 0.08), rgba(255, 145, 0, 0.03));
-}
-
-.info-title, .warning-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.info-title {
-  color: var(--color-info);
-}
-
-.warning-title {
-  color: var(--color-warning);
-}
-
-/* Override any default heading styles with high specificity */
-.markdown-content h1.cosmic-heading,
-.markdown-content h2.cosmic-heading,
-.markdown-content h3.cosmic-heading,
-.markdown-content h4.cosmic-heading {
-  font-family: 'Montserrat', sans-serif !important;
-  width: 100% !important;
-  display: block !important;
-  margin: 1rem 0 !important;
-  position: relative !important;
-  color: var(--color-title-primary) !important;
-}
-
+/* Dramatic Cosmic Headings */
 .markdown-content h1.cosmic-heading {
-  font-size: 3rem !important;
-  font-weight: var(--weight-black) !important;
+  font-size: 3.5rem !important;
+  font-weight: 900 !important;
+  background: linear-gradient(135deg, 
+    #FF9100 0%,
+    #FFB800 25%,
+    #0FB9FD 50%,
+    #4DCFFF 75%,
+    #00E5A4 100%
+  ) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
   margin-bottom: 2rem !important;
   letter-spacing: -0.02em !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
-  color: var(--color-primary) !important;
+  text-shadow: 0 4px 15px rgba(15, 185, 253, 0.4) !important;
+  position: relative !important;
+  transform: perspective(1000px) translateZ(0);
+  transition: all 0.3s ease;
+}
+
+.markdown-content h1.cosmic-heading:hover {
+  transform: perspective(1000px) translateZ(20px);
 }
 
 .markdown-content h2.cosmic-heading {
-  font-size: 2.25rem !important;
-  font-weight: var(--weight-extra-bold) !important;
-  margin-top: 2.5rem !important;
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+  margin-top: 3rem !important;
   margin-bottom: 1.5rem !important;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
-  color: var(--color-primary-light) !important;
+  background: linear-gradient(90deg, 
+    #FF9100,
+    #FFB800,
+    #FF9100
+  ) !important;
+  background-size: 200% auto !important;
+  animation: shine 3s linear infinite !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 2px 10px rgba(255, 145, 0, 0.3) !important;
+  position: relative !important;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
 }
 
 .markdown-content h3.cosmic-heading {
-  font-size: 1.75rem !important;
-  font-weight: var(--weight-black) !important;
-  margin-top: 2rem !important;
-  margin-bottom: 1.25rem !important;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
-  color: var(--color-text-primary) !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(45deg, #0FB9FD, #00E5A4) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 2px 8px rgba(15, 185, 253, 0.3) !important;
+  letter-spacing: 0.02em !important;
 }
 
 .markdown-content h4.cosmic-heading {
-  font-size: 1.35rem !important;
-  font-weight: var(--weight-bold) !important;
-  margin-top: 1.75rem !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(45deg, #4DCFFF, #91E0FF) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 2px 6px rgba(15, 185, 253, 0.2) !important;
+}
+
+/* Dramatic New List Styling */
+.markdown-content ul {
+  padding-left: 0;
+  margin: 2rem 0;
+  list-style: none;
+}
+
+.markdown-content ul li {
+  position: relative;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, 
+    rgba(15, 185, 253, 0.1),
+    rgba(15, 185, 253, 0.05) 50%,
+    transparent
+  );
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.markdown-content ul li:hover {
+  transform: translateX(10px);
+  background: linear-gradient(90deg, 
+    rgba(15, 185, 253, 0.15),
+    rgba(15, 185, 253, 0.08) 50%,
+    transparent
+  );
+}
+
+.markdown-content ul li::before {
+  content: '★';
+  position: absolute;
+  left: 1rem;
+  color: #0FB9FD;
+  font-size: 1rem;
+  background: linear-gradient(45deg, #0FB9FD, #4DCFFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(15, 185, 253, 0.5);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.markdown-content ul li ul {
+  margin: 1rem 0 0.5rem 0;
+}
+
+.markdown-content ul li ul li {
+  background: linear-gradient(90deg, 
+    rgba(0, 229, 164, 0.1),
+    rgba(0, 229, 164, 0.05) 50%,
+    transparent
+  );
+}
+
+.markdown-content ul li ul li::before {
+  content: '✧';
+  background: linear-gradient(45deg, #00E5A4, #4DCFFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 8px rgba(0, 229, 164, 0.5);
+}
+
+/* New Ordered List Styling */
+.markdown-content ol {
+  padding-left: 0;
+  margin: 2rem 0;
+  list-style: none;
+  counter-reset: cosmic-counter;
+}
+
+.markdown-content ol li {
+  position: relative;
+  padding: 1rem 1rem 1rem 4rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, 
+    rgba(255, 145, 0, 0.1),
+    rgba(255, 145, 0, 0.05) 50%,
+    transparent
+  );
+  border-radius: 8px;
+  counter-increment: cosmic-counter;
+  transition: all 0.3s ease;
+}
+
+.markdown-content ol li:hover {
+  transform: translateX(10px);
+  background: linear-gradient(90deg, 
+    rgba(255, 145, 0, 0.15),
+    rgba(255, 145, 0, 0.08) 50%,
+    transparent
+  );
+}
+
+.markdown-content ol li::before {
+  content: counter(cosmic-counter);
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #FF9100, #FFB800);
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 0 0 15px rgba(255, 145, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Blockquotes with gradient border */
+.markdown-content blockquote {
+  border-left: 4px solid;
+  border-image: linear-gradient(to bottom, #0FB9FD, #4DCFFF) 1;
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  margin: 2rem 0;
+  background: linear-gradient(90deg, 
+    rgba(15, 185, 253, 0.08), 
+    rgba(0, 0, 0, 0) 80%);
+  border-radius: 0 8px 8px 0;
+}
+
+.markdown-content blockquote p {
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+  font-size: 1.1rem;
+  position: relative;
+}
+
+.markdown-content blockquote p::before {
+  content: '"';
+  position: absolute;
+  left: -0.75rem;
+  top: -0.5rem;
+  font-size: 2rem;
+  color: rgba(15, 185, 253, 0.4);
+  font-family: Georgia, serif;
+}
+
+/* Code blocks with vibrant syntax highlighting */
+.markdown-content pre {
+  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(10, 17, 25, 0.9), rgba(20, 30, 45, 0.9)) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), 
+              inset 0 0 0 1px rgba(15, 185, 253, 0.2) !important;
+  padding: 1.5rem !important;
+  margin: 2rem 0 !important;
+  overflow-x: auto !important;
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+.markdown-content pre code {
+  font-family: 'Fira Code', monospace !important;
+  font-size: 0.9rem !important;
+  line-height: 1.5 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Inline code */
+.markdown-content p code, 
+.markdown-content li code {
+  background: rgba(15, 185, 253, 0.1);
+  color: #0FB9FD;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9em;
+  white-space: nowrap;
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Tables with modern styling */
+.markdown-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 2rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: rgba(20, 30, 45, 0.4);
+}
+
+.markdown-content th {
+  background: linear-gradient(90deg, #0A8BC0, #0FB9FD);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  padding: 1rem;
+  text-align: left;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.markdown-content td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(15, 185, 253, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.markdown-content tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown-content tr:nth-child(even) {
+  background: rgba(15, 185, 253, 0.05);
+}
+
+.markdown-content td:first-child {
+  font-weight: 500;
+  color: #0FB9FD;
+}
+
+/* Animation for content entry */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
+}
+
+.markdown-content > * {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Horizontal rule with gradient */
+.markdown-content hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    rgba(0, 0, 0, 0), 
+    rgba(15, 185, 253, 0.7), 
+    rgba(0, 0, 0, 0));
+  margin: 3rem 0;
+  border-radius: 100%;
+}
+
+/* Special call-out boxes */
+.info-container, .warning-container {
+  background: rgba(20, 30, 45, 0.2) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 12px !important;
+  padding: 1.5rem !important;
+  margin: 2rem 0 !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.info-container {
+  border-color: rgba(15, 185, 253, 0.3) !important;
+}
+
+.info-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(to bottom, #0FB9FD, #4DCFFF);
+  border-radius: 3px 0 0 3px;
+}
+
+.warning-container {
+  border-color: rgba(255, 145, 0, 0.3) !important;
+}
+
+.warning-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(to bottom, #FF9100, #FFB800);
+  border-radius: 3px 0 0 3px;
+}
+
+.info-title, .warning-title {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
   margin-bottom: 1rem !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-  color: var(--color-text-secondary) !important;
+  display: flex;
+  align-items: center;
 }
 
-/* Header anchor styles */
-.header-anchor {
-  color: var(--color-primary);
-  text-decoration: none;
-  opacity: 0;
-  margin-left: -1.5rem;
-  padding-right: 0.5rem;
-  transition: opacity 0.2s ease;
+.info-title::before, .warning-title::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
-.cosmic-heading:hover .header-anchor {
-  opacity: 1;
+.info-title {
+  color: #0FB9FD !important;
+}
+
+.info-title::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230FB9FD'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E");
+}
+
+.warning-title {
+  color: #FF9100 !important;
+}
+
+.warning-title::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF9100'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E");
 }
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
-  .toc-container {
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .info-container, .warning-container {
-    padding: 1rem;
-    margin: 1rem 0;
-  }
-
-  .info-title, .warning-title {
+  .markdown-content {
     font-size: 1rem;
   }
-
+  
   .markdown-content h1.cosmic-heading {
-    font-size: 2.5rem !important;
+    font-size: 2.25rem !important;
   }
-
+  
   .markdown-content h2.cosmic-heading {
-    font-size: 2rem !important;
+    font-size: 1.8rem !important;
   }
-
+  
   .markdown-content h3.cosmic-heading {
-    font-size: 1.5rem !important;
+    font-size: 1.4rem !important;
   }
-
+  
   .markdown-content h4.cosmic-heading {
-    font-size: 1.25rem !important;
+    font-size: 1.15rem !important;
+  }
+  
+  .markdown-content blockquote {
+    padding-left: 1rem;
+  }
+  
+  .info-container, .warning-container {
+    padding: 1.25rem !important;
+    margin: 1.5rem 0 !important;
+  }
+  
+  .markdown-content table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .markdown-content td, .markdown-content th {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  /* Improved touch targets for mobile */
+  .markdown-content a:not(.header-anchor) {
+    padding: 0.2em 0.3em;
+    margin: -0.2em -0.3em;
+  }
+  
+  .markdown-content ul li, 
+  .markdown-content ol li {
+    margin-bottom: 1rem;
   }
 }
+
+/* Enhanced image styling */
+.markdown-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin: 2rem 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15), 
+              0 0 0 1px rgba(15, 185, 253, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-origin: center;
+}
+
+.markdown-image:hover {
+  transform: scale(1.01);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2), 
+              0 0 0 1px rgba(15, 185, 253, 0.2),
+              0 0 20px rgba(15, 185, 253, 0.15);
+}
+
+/* Update Mermaid diagram styling */
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: rgba(25, 34, 46, 0.4);
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+}
+
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon,
+.mermaid .node path {
+  fill: rgba(25, 34, 46, 0.8) !important;
+  stroke: #0FB9FD !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .edgePath .path {
+  stroke: rgba(15, 185, 253, 0.7) !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .arrowheadPath {
+  fill: #0FB9FD !important;
+  stroke: none !important;
+}
+
+/* Keep existing styles at the bottom */
 </style>

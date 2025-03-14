@@ -87,7 +87,7 @@ const isSectionExpanded = (section) => {
             <ul class="link-list">
               <li><router-link to="/careers" class="cosmic-nav-link">{{ t('footer.careers') }}</router-link></li>
               <li><router-link to="/about" class="cosmic-nav-link">{{ t('footer.about') }}</router-link></li>
-              <li><router-link to="/contact" class="cosmic-nav-link">{{ t('footer.contact') }}</router-link></li>
+              <li><router-link to="/contact" class="cosmic-nav-link">{{ t('footer.support') }}</router-link></li>
             </ul>
           </div>
         </div>
