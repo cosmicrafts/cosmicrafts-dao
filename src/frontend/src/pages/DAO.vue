@@ -3003,20 +3003,78 @@ export default {
 }
 
 .cosmic-button {
-  padding: 0.8rem 1.5rem;
-  border-radius: 4px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  display: inline-flex;
+  padding: 1.1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--cosmic-text-primary);
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.8) 0%,
+    rgba(15, 185, 253, 0.6) 100%
+  );
+  border: 2px solid rgba(15, 185, 253, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(15, 185, 253, 0.2);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
-  cursor: pointer;
-  text-decoration: none;
-  background: rgba(15, 185, 253, 0.1);
-  color: var(--color-text-primary);
+  gap: 0.75rem;
+  opacity: 0;
+  animation: buttonPop 0.9s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.9s forwards;
+}
+
+.cosmic-button.primary-button {
+  animation-delay: 0.9s;
+}
+
+.cosmic-button.secondary-button {
+  background: linear-gradient(135deg,
+    rgba(38, 79, 137, 0.95) 0%,
+    rgba(26, 60, 110, 0.95) 100%
+  );
+  border: 2px solid rgba(61, 136, 214, 0.7);
+  animation-delay: 1.1s;
+}
+
+.cosmic-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(15, 185, 253, 0.3);
+}
+
+.cosmic-button.secondary-button:hover {
+  background: linear-gradient(135deg,
+    rgba(49, 115, 199, 0.95) 0%,
+    rgba(30, 78, 141, 0.95) 100%
+  );
+  box-shadow: 0 6px 20px rgba(123, 187, 255, 0.4);
+}
+
+.cosmic-button i {
+  font-size: 1.25rem;
+}
+
+.button-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%);
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform 0.6s ease;
+  z-index: -1;
+}
+
+.cosmic-button:hover .button-glow {
+  transform: translateX(100%) rotate(45deg);
 }
 
 .cosmic-button.primary {
@@ -5419,6 +5477,10 @@ img.hero-logo, img.dao-image {
   width: 100%;
   max-width: 1200px;
   padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
 .hero-content {
@@ -5427,12 +5489,15 @@ img.hero-logo, img.dao-image {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 2rem 0;
+  position: relative;
 }
 
 .hero-image-wrapper {
-  margin-bottom: -2rem;
+  margin-bottom: -6rem; /* Increased overlap */
   position: relative;
-  z-index: 2;
+  z-index: 3;
+  transform: translateY(2rem); /* Move down slightly */
 }
 
 .hero-emblem {
@@ -5441,14 +5506,15 @@ img.hero-logo, img.dao-image {
   opacity: 0;
   filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.35)) 
           drop-shadow(0 0 30px rgba(15, 185, 253, 0.2));
-  animation: scaleIn 0.7s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.1s forwards,
-           glowPulse 3s ease-in-out 1.4s infinite;
+  animation: scaleIn 0.7s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.1s forwards;
+  transition: filter 0.3s ease;
 }
 
 .dao-image-wrapper {
-  margin-bottom: -6rem;
+  margin-bottom: -2rem; /* Reduced to bring text closer */
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  transform: translateY(-2rem); /* Move up to overlap */
 }
 
 .dao-image {
@@ -5461,14 +5527,9 @@ img.hero-logo, img.dao-image {
   transition: filter 0.5s ease;
 }
 
-.dao-image:hover {
-  filter: drop-shadow(0 0 25px rgba(15, 185, 253, 0.5))
-          drop-shadow(0 0 50px rgba(15, 185, 253, 0.3));
-}
-
 .hero-title {
   font-size: 4rem;
-  margin-bottom: 1.5rem;
+  margin: 0.5rem 0;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -5490,201 +5551,30 @@ img.hero-logo, img.dao-image {
   text-shadow: 
     0 0 30px rgba(15, 185, 253, 0.3),
     0 0 60px rgba(15, 185, 253, 0.1);
-  transform-style: preserve-3d;
-  transform: translateZ(10px);
-  will-change: transform;
-  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-  animation: 
-    titleReveal 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.5s forwards,
-    titleGradientFlow 8s linear infinite,
-    titleCosmicPulse 4s ease-in-out infinite;
-  opacity: 0;
+  animation: textGradientShift 8s ease infinite;
+  transform: translateY(-1rem); /* Move up slightly */
 }
 
 .hero-subtitle {
-  font-size: 1.5rem;
-  color: rgba(209, 217, 230, 0.9);
-  font-style: italic;
-  margin-top: 1rem;
-  margin-bottom: 2.5rem;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  transform-style: preserve-3d;
-  transform: translateZ(20px);
-  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  will-change: transform;
-  letter-spacing: 0.02em;
+  font-size: 1.75rem;
+  margin: 0.5rem 0 2rem;
+  font-weight: 500;
+  color: var(--cosmic-text-secondary);
   opacity: 0;
-  animation: fadeInUp 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.7s forwards;
+  animation: fadeInUp 0.6s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.6s forwards;
+  transform: translateY(-0.5rem); /* Move up slightly */
 }
 
 .hero-actions {
   display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 2rem;
-  transform-style: preserve-3d;
-  transform: translateZ(25px);
-  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  will-change: transform;
-  width: 100%;
-  max-width: 600px;
-}
-
-.cosmic-button {
-  padding: 1.1rem 2rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: var(--cosmic-text-primary);
-  background: linear-gradient(135deg,
-    rgba(15, 185, 253, 0.8) 0%,
-    rgba(15, 185, 253, 0.6) 100%
-  );
-  border: 2px solid rgba(15, 185, 253, 0.3);
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(15, 185, 253, 0.2);
-  transition: all 0.3s ease;
-  text-decoration: none;
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  display: flex;
+  gap: 1.5rem;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  opacity: 0;
-  animation: buttonPop 0.9s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.9s forwards;
+  margin-top: 1rem;
+  transform: translateY(-0.5rem); /* Move up slightly */
 }
 
-.cosmic-button.primary-button {
-  animation-delay: 0.9s;
-}
-
-.cosmic-button.secondary-button {
-  background: linear-gradient(135deg,
-    rgba(38, 79, 137, 0.95) 0%,
-    rgba(26, 60, 110, 0.95) 100%
-  );
-  border: 2px solid rgba(61, 136, 214, 0.7);
-  animation-delay: 1.1s;
-}
-
-.cosmic-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(15, 185, 253, 0.3);
-}
-
-.cosmic-button.secondary-button:hover {
-  background: linear-gradient(135deg,
-    rgba(49, 115, 199, 0.95) 0%,
-    rgba(30, 78, 141, 0.95) 100%
-  );
-  box-shadow: 0 6px 20px rgba(123, 187, 255, 0.4);
-}
-
-.cosmic-button i {
-  font-size: 1.25rem;
-}
-
-.button-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0) 100%);
-  transform: translateX(-100%) rotate(45deg);
-  transition: transform 0.6s ease;
-  z-index: -1;
-}
-
-.cosmic-button:hover .button-glow {
-  transform: translateX(100%) rotate(45deg);
-}
-
-/* Mobile Responsive Styles for Hero */
-@media (max-width: 768px) {
-  .dao-hero {
-    padding: 0;
-    height: 100vh;
-  }
-
-  .content-container {
-    padding: 0 1rem;
-  }
-
-  .hero-emblem {
-    max-width: 10rem;
-  }
-
-  .dao-image {
-    max-width: 10rem;
-    margin-bottom: -2rem;
-  }
-
-  .hero-title {
-    font-size: calc(1.75rem + 2vw);
-    letter-spacing: 0.05em;
-    margin-bottom: 1rem;
-  }
-
-  .hero-subtitle {
-    font-size: calc(1rem + 1vw);
-    margin-bottom: 2rem;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    gap: 1rem;
-    max-width: 280px;
-  }
-
-  .cosmic-button {
-    width: 100%;
-    padding: 0.9rem 1.5rem;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .dao-hero {
-    padding: 0;
-  }
-
-  .content-container {
-    padding: 0 0.5rem;
-  }
-
-  .hero-emblem {
-    max-width: 8rem;
-  }
-
-  .dao-image {
-    max-width: 8rem;
-    margin-bottom: -1.5rem;
-  }
-
-  .hero-floating-elements .floating-shape {
-    opacity: 0.3; /* Reduce opacity for better mobile visibility */
-    transform: scale(0.7); /* Make shapes smaller on mobile */
-  }
-}
-
-.cosmic-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-  perspective: 1200px;
-}
-
+/* Fix floating elements positioning */
 .hero-floating-elements {
   position: absolute;
   top: 0;
@@ -5692,149 +5582,143 @@ img.hero-logo, img.dao-image {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
 .floating-shape {
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(15, 185, 253, 0.1) 100%);
+  background: radial-gradient(circle, 
+    rgba(15, 185, 253, 0.15) 0%, 
+    rgba(15, 185, 253, 0.05) 70%,
+    transparent 100%
+  );
+  filter: blur(20px);
   opacity: 0.5;
-  animation: floatShape 8s infinite ease-in-out;
+  animation: floatShape 15s infinite ease-in-out;
 }
 
-.floating-shape.shape-1 { 
-  top: 15%; 
-  left: 15%; 
-  width: 120px;
-  height: 120px;
+.shape-1 {
+  top: 15%;
+  right: 15%;
   animation-delay: 0s;
 }
 
-.floating-shape.shape-2 { 
-  top: 70%; 
-  left: 70%; 
-  width: 80px;
-  height: 80px;
-  animation-delay: 1s;
+.shape-2 {
+  bottom: 25%;
+  left: 10%;
+  width: 120px;
+  height: 120px;
+  animation-delay: -5s;
 }
 
-.floating-shape.shape-3 { 
-  top: 40%; 
-  left: 25%; 
-  width: 60px;
-  height: 60px;
-  animation-delay: 2s;
+.shape-3 {
+  top: 40%;
+  right: 25%;
+  width: 100px;
+  height: 100px;
+  animation-delay: -10s;
 }
 
 @keyframes floatShape {
-  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
-  50% { transform: translateY(-20px) rotate(45deg); opacity: 0.7; }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
+  0%, 100% {
+    transform: translate(0, 0);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes glowPulse {
-  0% {
-    filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.3));
+  25% {
+    transform: translate(-20px, 20px);
   }
   50% {
-    filter: drop-shadow(0 0 25px rgba(15, 185, 253, 0.7));
+    transform: translate(20px, -20px);
   }
-  100% {
-    filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.3));
-  }
-}
-
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-15px); }
-  100% { transform: translateY(0px); }
-}
-
-@keyframes buttonPop {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) scale(0.9);
-  }
-  70% {
-    opacity: 1;
-    transform: translateY(-5px) scale(1.03);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+  75% {
+    transform: translate(20px, 20px);
   }
 }
 
-@keyframes titleReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-    letter-spacing: 0.3em;
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-image-wrapper {
+    margin-bottom: -4rem;
+    transform: translateY(1rem);
   }
-  100% {
-    opacity: 1;
+
+  .hero-emblem {
+    max-width: 10rem;
+  }
+
+  .dao-image-wrapper {
+    margin-bottom: -1rem;
+    transform: translateY(-1rem);
+  }
+
+  .dao-image {
+    max-width: 10rem;
+  }
+
+  .hero-title {
+    font-size: calc(1.75rem + 2vw);
+    letter-spacing: 0.05em;
+    margin: 0.25rem 0;
+    transform: translateY(-0.5rem);
+  }
+
+  .hero-subtitle {
+    font-size: calc(1rem + 1vw);
+    margin: 0.25rem 0 1.5rem;
+    transform: translateY(-0.25rem);
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 280px;
+    width: 100%;
     transform: translateY(0);
-    letter-spacing: 0.1em;
+  }
+
+  .floating-shape {
+    opacity: 0.3;
+    filter: blur(15px);
   }
 }
 
-@keyframes titleGradientFlow {
+@media (max-width: 480px) {
+  .hero-image-wrapper {
+    margin-bottom: -3rem;
+  }
+
+  .hero-emblem {
+    max-width: 8rem;
+  }
+
+  .dao-image-wrapper {
+    margin-bottom: -0.5rem;
+  }
+
+  .dao-image {
+    max-width: 8rem;
+  }
+
+  .hero-title {
+    font-size: calc(1.5rem + 2vw);
+  }
+
+  .hero-subtitle {
+    font-size: calc(0.9rem + 1vw);
+  }
+
+  .cosmic-button {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+@keyframes textGradientShift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-@keyframes titleCosmicPulse {
-  0% { 
-    text-shadow: 
-      0 0 30px rgba(15, 185, 253, 0.3),
-      0 0 60px rgba(15, 185, 253, 0.1);
-  }
-  50% { 
-    text-shadow: 
-      0 0 40px rgba(15, 185, 253, 0.4),
-      0 0 80px rgba(15, 185, 253, 0.2);
-  }
-  100% { 
-    text-shadow: 
-      0 0 30px rgba(15, 185, 253, 0.3),
-      0 0 60px rgba(15, 185, 253, 0.1);
-  }
-}
-
-@keyframes floatShape {
-  0%, 100% { 
-    transform: translateY(0) rotate(0deg); 
-    opacity: 0.3; 
-  }
-  50% { 
-    transform: translateY(-20px) rotate(45deg); 
-    opacity: 0.7; 
-  }
-}
 </style>
-
