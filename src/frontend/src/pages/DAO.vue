@@ -41,6 +41,55 @@
       </div>
     </section>
 
+    <!-- DAO Explanation Section -->
+    <section class="dao-explainer-section">
+      <div class="explainer-container cosmic-card">
+        <h2 class="section-title text-gradient">{{ $t('dao.explainer.title', 'What is the Cosmicrafts DAO?') }}</h2>
+        <div class="explainer-content">
+          <div class="explainer-text">
+            <p>{{ $t('dao.explainer.description', 'The Cosmicrafts DAO (Decentralized Autonomous Organization) enables the community to collectively govern the future of the Cosmicrafts gaming ecosystem. Through SPIRAL token ownership, stakeholders can participate in key decisions affecting platform development, treasury management, and economic policy.') }}</p>
+          </div>
+          
+          <div class="explainer-pillars">
+            <div class="explainer-pillar cosmic-card">
+              <div class="pillar-icon">
+                <i class="fas fa-vote-yea"></i>
+              </div>
+              <h3>{{ $t('dao.explainer.pillars.governance.title', 'Community Governance') }}</h3>
+              <p>{{ $t('dao.explainer.pillars.governance.description', 'Vote on proposals and shape the future direction of the platform through democratic decision-making.') }}</p>
+            </div>
+            
+            <div class="explainer-pillar cosmic-card">
+              <div class="pillar-icon">
+                <i class="fas fa-landmark"></i>
+              </div>
+              <h3>{{ $t('dao.explainer.pillars.treasury.title', 'Shared Treasury') }}</h3>
+              <p>{{ $t('dao.explainer.pillars.treasury.description', 'Collectively manage a treasury of 760M SPIRAL tokens dedicated to ecosystem growth and development.') }}</p>
+            </div>
+            
+            <div class="explainer-pillar cosmic-card">
+              <div class="pillar-icon">
+                <i class="fas fa-coins"></i>
+              </div>
+              <h3>{{ $t('dao.explainer.pillars.rewards.title', 'Staking Rewards') }}</h3>
+              <p>{{ $t('dao.explainer.pillars.rewards.description', 'Earn rewards through active participation and long-term commitment to platform growth.') }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="explainer-links">
+          <router-link to="/roadmap" class="cta-button">
+            <i class="fas fa-map-marked-alt"></i>
+            {{ $t('dao.explainer.links.roadmap', 'View Our Roadmap') }}
+          </router-link>
+          <router-link to="/whitepaper" class="cta-button whitepaper-btn">
+            <i class="fas fa-book"></i>
+            {{ $t('dao.explainer.links.whitepaper', 'Read the Whitepaper') }}
+          </router-link>
+        </div>
+      </div>
+    </section>
+
     <!-- Distribution Section -->
     <section class="distribution-section">
       <h2 class="section-title text-gradient">{{ $t('dao.distribution.title', 'Token Distribution') }}</h2>
@@ -325,53 +374,6 @@
               <li>{{ $t('dao.rights.community.items.education', 'Educational programs') }}</li>
             </ul>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- DAO Explanation Section -->
-    <section class="dao-explainer-section">
-      <div class="explainer-container">
-        <div class="explainer-text">
-          <h2 class="section-title text-gradient">{{ $t('dao.explainer.title', 'What is the Cosmicrafts DAO?') }}</h2>
-          <p>{{ $t('dao.explainer.description', 'The Cosmicrafts DAO (Decentralized Autonomous Organization) enables the community to collectively govern the future of the Cosmicrafts gaming ecosystem. Through SPIRAL token ownership, stakeholders can participate in key decisions affecting platform development, treasury management, and economic policy.') }}</p>
-        </div>
-        
-        <div class="explainer-pillars">
-          <div class="explainer-pillar">
-            <div class="pillar-icon">
-              <i class="fas fa-vote-yea"></i>
-            </div>
-            <h3>{{ $t('dao.explainer.pillars.governance.title', 'Community Governance') }}</h3>
-            <p>{{ $t('dao.explainer.pillars.governance.description', 'Vote on proposals and shape the future direction of the platform through democratic decision-making.') }}</p>
-          </div>
-          
-          <div class="explainer-pillar">
-            <div class="pillar-icon">
-              <i class="fas fa-landmark"></i>
-            </div>
-            <h3>{{ $t('dao.explainer.pillars.treasury.title', 'Shared Treasury') }}</h3>
-            <p>{{ $t('dao.explainer.pillars.treasury.description', 'Collectively manage a treasury of 760M SPIRAL tokens dedicated to ecosystem growth and development.') }}</p>
-          </div>
-          
-          <div class="explainer-pillar">
-            <div class="pillar-icon">
-              <i class="fas fa-coins"></i>
-            </div>
-            <h3>{{ $t('dao.explainer.pillars.rewards.title', 'Staking Rewards') }}</h3>
-            <p>{{ $t('dao.explainer.pillars.rewards.description', 'Earn rewards through active participation and long-term commitment to platform growth.') }}</p>
-          </div>
-        </div>
-        
-        <div class="explainer-links">
-          <router-link to="/roadmap" class="explainer-link">
-            <i class="fas fa-map-marked-alt"></i>
-            {{ $t('dao.explainer.links.roadmap', 'View Our Roadmap') }}
-          </router-link>
-          <router-link to="/whitepaper" class="explainer-link">
-            <i class="fas fa-book"></i>
-            {{ $t('dao.explainer.links.whitepaper', 'Read the Whitepaper') }}
-          </router-link>
         </div>
       </div>
     </section>
@@ -4001,6 +4003,231 @@ img.hero-logo, img.dao-image {
   
   @keyframes sectionReveal {
     from, to { opacity: 1; transform: none; }
+  }
+}
+
+/* DAO Explainer Section Styles */
+.dao-explainer-section {
+  padding: 6rem 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.explainer-container {
+  padding: 3rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.08) 0%,
+    rgba(15, 185, 253, 0.04) 100%
+  );
+  border: 1px solid rgba(15, 185, 253, 0.15);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.08),
+    0 10px 20px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: all 0.4s ease;
+}
+
+.explainer-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 30% 30%, rgba(15, 185, 253, 0.12) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.explainer-container .section-title {
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.explainer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.explainer-text {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.explainer-text p {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.explainer-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.explainer-pillar {
+  padding: 2rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.05) 0%,
+    rgba(15, 185, 253, 0.02) 100%
+  );
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.explainer-pillar:hover {
+  transform: translateY(-5px);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: 
+    0 15px 30px rgba(15, 185, 253, 0.1),
+    0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.pillar-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 185, 253, 0.08);
+  border-radius: 50%;
+  border: 1px solid rgba(15, 185, 253, 0.15);
+  transition: all 0.3s ease;
+}
+
+.pillar-icon i {
+  font-size: 1.75rem;
+  color: var(--color-primary);
+  transition: all 0.3s ease;
+}
+
+.explainer-pillar:hover .pillar-icon {
+  transform: scale(1.1);
+  background: rgba(15, 185, 253, 0.12);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.2);
+}
+
+.explainer-pillar:hover .pillar-icon i {
+  color: var(--color-primary-light);
+  text-shadow: 0 0 10px rgba(15, 185, 253, 0.5);
+}
+
+.explainer-pillar h3 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  transition: all 0.3s ease;
+}
+
+.explainer-pillar p {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.explainer-pillar:hover h3 {
+  color: var(--color-primary);
+}
+
+.explainer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Mobile Styles for DAO Explainer Section */
+@media (max-width: 768px) {
+  .dao-explainer-section {
+    padding: 4rem 1.5rem;
+  }
+  
+  .explainer-container {
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+  }
+  
+  .explainer-container .section-title {
+    font-size: 2.25rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .explainer-text p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  
+  .explainer-pillars {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .explainer-pillar {
+    max-width: 400px;
+    margin: 0 auto;
+    /* Add smooth entrance animation */
+    opacity: 0;
+    animation: pillarSlideIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  
+  .explainer-pillar:nth-child(1) { animation-delay: 0.1s; }
+  .explainer-pillar:nth-child(2) { animation-delay: 0.2s; }
+  .explainer-pillar:nth-child(3) { animation-delay: 0.3s; }
+  
+  @keyframes pillarSlideIn {
+    from { 
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .pillar-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1.25rem;
+  }
+  
+  .pillar-icon i {
+    font-size: 1.5rem;
+  }
+  
+  .explainer-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+  
+  .explainer-links a {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
   }
 }
 </style>
