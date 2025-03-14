@@ -4,7 +4,7 @@
     <div class="cosmic-background"></div>
     
     <div ref="roadmapRef" class="roadmap-container">
-      <!-- Desktop Hero Section (New) -->
+      <!-- Desktop Hero Section -->
       <div class="desktop-hero-section">
         <div class="desktop-hero-content">
           <div class="logo-area">
@@ -14,20 +14,36 @@
             <h1 class="cosmic-title">Cosmic Roadmap</h1>
             <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history unfold.</p>
           </div>
-
+          <!-- Add Current Quarter Button -->
+          <div class="hero-actions">
+            <button class="current-quarter-btn" @click="scrollToCurrentQuarter">
+              <span class="pulse-ring"></span>
+              <span class="btn-text">Current Quarter</span>
+              <span class="btn-icon">→</span>
+            </button>
+          </div>
         </div>
       </div>
       
       <!-- Main Content Wrapper -->
       <div class="main-content-wrapper">
-        <!-- Roadmap Header Section - contains title and search for mobile view -->
+        <!-- Roadmap Header Section with new compact hero for mobile -->
         <div class="roadmap-header-section">
-          <!-- Hero Section (Mobile) -->
-          <header class="hero-section">
-            <div class="hero-content">
-              <div class="title-area">
-                <h1 class="cosmic-title">Cosmic Roadmap</h1>
-                <p class="cosmic-subtitle">Follow the milestones, track the progress, and watch history.</p>
+          <!-- New Compact Hero Section (Mobile) -->
+          <header class="compact-hero">
+            <div class="compact-hero-content">
+              <div class="compact-hero-left">
+                <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts Logo" class="compact-hero-logo" />
+              </div>
+              <div class="compact-hero-center">
+                <h1 class="compact-title">Cosmic Roadmap</h1>
+                <p class="compact-subtitle">Follow the cosmic journey</p>
+              </div>
+              <div class="compact-hero-right">
+                <button class="compact-quarter-btn" @click="scrollToCurrentQuarter">
+                  <span class="pulse-ring"></span>
+                  <span class="btn-icon">→</span>
+                </button>
               </div>
             </div>
           </header>
@@ -376,7 +392,7 @@ export default {
               
               // Calculate precise scroll position with additional offset for better visibility
               const elementTop = targetElement.offsetTop;
-              const scrollPadding = 20; // Additional padding from top
+              const scrollPadding = 200; // Additional padding from top
               
               // Perform the scroll
               scrollableContent.scrollTo({
@@ -1039,6 +1055,14 @@ export default {
   position: fixed;
   left: 2rem;
   top: calc(var(--header-height) + var(--page-padding));
+  overflow: hidden;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgba(7, 20, 42, 0.85), rgba(25, 57, 105, 0.6));
+  border: 1px solid rgba(15, 185, 253, 0.3);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(15, 185, 253, 0.1),
+    inset 0 0 40px rgba(15, 185, 253, 0.05);
 }
 
 @media (min-width: 1024px) {
@@ -1069,14 +1093,14 @@ export default {
       rgba(201, 42, 253, 0.1) 0%, 
       transparent 70%
     );
-  opacity: 0;
+  opacity: 1;
   z-index: 0;
   transition: opacity 0.5s var(--animation-smooth);
 }
 
 .desktop-hero-section::after {
   content: '';
-  position: fixed;
+  position: absolute;
   top: -50%;
   left: -50%;
   width: 200%;
@@ -1090,42 +1114,68 @@ export default {
     transparent 100%
   );
   animation: rotateGradient 30s linear infinite;
-  opacity: 0.25;
+  opacity: 0.3;
   z-index: 0;
 }
 
-@keyframes rotateGradient {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
+/* Add star field to desktop hero */
 .desktop-hero-content {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  height: 100%;
+  padding: 2rem;
   position: relative;
   z-index: 1;
   transform-style: preserve-3d;
+  perspective: 800px;
+  text-align: center;
+}
+
+/* Star animation for hero background */
+.desktop-hero-content::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  right: -100px;
+  bottom: -100px;
+  background-image: radial-gradient(2px 2px at calc(var(--x, 10) * 1%), calc(var(--y, 10) * 1%), white, transparent),
+                    radial-gradient(2px 2px at calc(var(--x, 30) * 2%), calc(var(--y, 30) * 3%), white, transparent),
+                    radial-gradient(2px 2px at calc(var(--x, 50) * 3%), calc(var(--y, 50) * 5%), white, transparent),
+                    radial-gradient(2px 2px at calc(var(--x, 70) * 4%), calc(var(--y, 70) * 7%), white, transparent),
+                    radial-gradient(2px 2px at calc(var(--x, 90) * 5%), calc(var(--y, 90) * 9%), white, transparent);
+  opacity: 0.3;
+  z-index: -1;
+  transform-style: preserve-3d;
+  transform: translateZ(-50px);
+  animation: twinkling 8s ease-in-out infinite alternate;
 }
 
 .logo-area {
   text-align: center;
   position: relative;
+  margin-bottom: 1.5rem;
 }
 
 .hero-logo {
   max-width: 8rem;
   height: auto;
+  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.6));
+  animation: pulseLogo 6s ease-in-out infinite alternate;
+
 }
 
 .desktop-hero-section .title-area {
   text-align: center;
   margin-bottom: 2rem;
+
 }
 
 .desktop-hero-section .cosmic-title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin: 0 0 1rem 0;
   background: linear-gradient(135deg,
     var(--cosmic-text-primary) 0%,
@@ -1143,30 +1193,49 @@ export default {
     0 0 60px rgba(201, 42, 253, 0.2);
   position: relative;
   transition: all 0.4s var(--animation-smooth);
-}
-
-.desktop-hero-section .cosmic-title::after {
-  content: '';
-  position: absolute;
-  bottom: -0.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50%;
-  height: 1px;
-  background: linear-gradient(90deg,
-    transparent,
-    var(--cosmic-blue),
-    var(--cosmic-purple),
-    transparent
-  );
-  opacity: 0.26;
+  animation: titleFloat 5s ease-in-out infinite alternate;
 }
 
 .desktop-hero-section .cosmic-subtitle {
   color: var(--cosmic-text-secondary);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   margin: 0;
-  line-height: 1.25;
+  line-height: 1.2;
+  max-width: 90%;
+  margin: 0 auto;
+  animation: subtitleFloat 5s ease-in-out infinite alternate;
+  animation-delay: 0.2s;
+}
+
+/* Add Current Quarter Button */
+.desktop-hero-content .hero-actions {
+  text-align: center;
+
+  animation: fadeIn 1s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.6s;
+  transform: translateZ(10px);
+}
+
+.desktop-hero-content .current-quarter-btn {
+  position: relative;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  border: none;
+  background: linear-gradient(to right, #0fb9fd, #673ab7);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--animation-bounce);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.2), 
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  letter-spacing: 0.02em;
 }
 
 /* Container for the roadmap */
@@ -1237,8 +1306,8 @@ export default {
 
 /* Search Section */
 .search-container {
-  width: 99%;
-  margin-top: 5rem;
+  width: 100%;
+  margin-top: 1rem;
 }
 
 .search-input-wrapper {
@@ -1318,18 +1387,16 @@ export default {
   scroll-behavior: smooth;
   scrollbar-color: var(--cosmic-blue) var(--cosmic-glass-bg);
   box-shadow: var(--cosmic-shadow-md);
+  
+  /* Mobile constraints */
+  max-height: calc(100vh - var(--header-height) - var(--page-padding) * 2 - 200px); /* Account for compact hero and search */
+  height: calc(100vh - var(--header-height) - var(--page-padding) * 2 - 200px);
+  margin-right: 0.25rem; /* Small margin for scrollbar */
 }
 
-@media (min-width: 1024px) {
-  .scrollable-content {
-    height: calc(100vh - var(--header-height) - var(--page-padding) * 2 - 100px); /* Explicit height for desktop */
-    margin-right: 0.5rem; /* Add some margin for scrollbar */
-  }
-}
-
-/* Enhanced scrollbar styling */
+/* Enhanced scrollbar styling for all devices */
 .scrollable-content::-webkit-scrollbar {
-  width: 12px; /* Increased width for better usability */
+  width: 8px; /* Slimmer on mobile, wider on desktop */
 }
 
 .scrollable-content::-webkit-scrollbar-track {
@@ -1348,6 +1415,19 @@ export default {
 .scrollable-content::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(to bottom, var(--cosmic-blue-light), var(--cosmic-purple-light));
   opacity: 1;
+}
+
+/* Desktop specific overrides */
+@media (min-width: 1024px) {
+  .scrollable-content {
+    height: calc(100vh - var(--header-height) - var(--page-padding) * 2 - 100px); /* Explicit height for desktop */
+    max-height: calc(100vh - var(--header-height) - var(--page-padding) * 2 - 100px);
+    margin-right: 0.5rem; /* More margin for scrollbar on desktop */
+  }
+  
+  .scrollable-content::-webkit-scrollbar {
+    width: 10px; /* Larger scrollbar on desktop */
+  }
 }
 
 /* Quarters Container */
@@ -2523,5 +2603,254 @@ export default {
     transform: scale(1);
     opacity: 0.8;
   }
+}
+
+/* Enhanced Mobile Hero Section */
+.hero-section {
+  display: none; /* Hide the old hero section */
+}
+
+/* New Compact Hero Section for Mobile */
+.compact-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, rgba(7, 20, 42, 0.8), rgba(25, 57, 105, 0.5));
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  box-shadow: var(--cosmic-shadow-md);
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+
+/* Star animation for mobile hero background */
+.compact-hero::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  right: -50px;
+  bottom: -50px;
+  background-image: radial-gradient(2px 2px at calc(var(--x, 10) * 1%), calc(var(--y, 10) * 1%), white, transparent),
+                    radial-gradient(2px 2px at calc(var(--x, 30) * 2%), calc(var(--y, 30) * 3%), white, transparent),
+                    radial-gradient(2px 2px at calc(var(--x, 50) * 3%), calc(var(--y, 50) * 5%), white, transparent);
+  opacity: 0.3;
+  z-index: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(-50px);
+  animation: twinkling 8s ease-in-out infinite alternate;
+}
+
+.compact-hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 0.75rem;
+}
+
+.compact-hero-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.compact-hero-logo {
+  width: 2.5rem;
+  height: 2.5rem;
+  filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.6));
+  animation: pulseLogo 6s ease-in-out infinite alternate;
+}
+
+.compact-hero-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.compact-title {
+  font-size: 1.25rem;
+  margin: 0 0 0.25rem 0;
+  background: linear-gradient(135deg,
+    var(--cosmic-text-primary) 0%,
+    var(--cosmic-blue-light) 50%,
+    var(--cosmic-purple-light) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  font-weight: 800;
+  animation: titleFloat 5s ease-in-out infinite alternate;
+}
+
+.compact-subtitle {
+  color: var(--cosmic-text-secondary);
+  font-size: 0.8rem;
+  margin: 0;
+  line-height: 1.2;
+  animation: subtitleFloat 5s ease-in-out infinite alternate;
+  animation-delay: 0.2s;
+}
+
+.compact-hero-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Compact quarter button */
+.compact-quarter-btn {
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(to right, #0fb9fd, #673ab7);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--animation-bounce);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.compact-quarter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.compact-quarter-btn:active {
+  transform: translateY(0);
+}
+
+.compact-quarter-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, #673ab7, #0fb9fd);
+  opacity: 0;
+  transition: opacity 0.3s var(--animation-smooth);
+}
+
+.compact-quarter-btn:hover::before {
+  opacity: 1;
+}
+
+.compact-quarter-btn .btn-icon {
+  position: relative;
+  z-index: 1;
+  font-size: 1.2rem;
+  transition: transform 0.3s var(--animation-bounce);
+}
+
+.compact-quarter-btn:hover .btn-icon {
+  transform: translateX(3px);
+}
+
+.compact-quarter-btn .pulse-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  animation: pulseCTA 2s infinite;
+}
+
+@media (min-width: 1024px) {
+  .compact-hero {
+    display: none; /* Hide in desktop view */
+  }
+}
+
+/* Search Section */
+.search-container {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+@keyframes rotateGradient {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Add hover effects for the desktop button */
+.desktop-hero-content .current-quarter-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.desktop-hero-content .current-quarter-btn:active {
+  transform: translateY(-1px);
+}
+
+.desktop-hero-content .current-quarter-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, #673ab7, #0fb9fd);
+  opacity: 0;
+  transition: opacity 0.3s var(--animation-smooth);
+  z-index: 0;
+}
+
+.desktop-hero-content .current-quarter-btn:hover::before {
+  opacity: 1;
+}
+
+.desktop-hero-content .btn-text,
+.desktop-hero-content .btn-icon {
+  position: relative;
+  z-index: 1;
+}
+
+.desktop-hero-content .btn-icon {
+  transition: transform 0.3s var(--animation-bounce);
+}
+
+.desktop-hero-content .current-quarter-btn:hover .btn-icon {
+  transform: translateX(5px);
+}
+
+.desktop-hero-content .pulse-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 4rem;
+  animation: pulseCTA 2s infinite;
+}
+
+/* Restore cosmic title line */
+.desktop-hero-section .cosmic-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--cosmic-blue),
+    var(--cosmic-purple),
+    transparent
+  );
+  opacity: 0.35;
 }
 </style>
