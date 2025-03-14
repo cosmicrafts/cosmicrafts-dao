@@ -77,7 +77,7 @@
             v-for="(button, i) in slides[currentSlide].ctaButtons"
             :key="i"
             :class="['cosmic-button', button.style === 'primary' ? 'cosmic-button-primary' : 'cosmic-button-outline', { 'initial-load': !hasLoadedOnce }]"
-            @click="handleCTA(button.link)"
+            @click="handleCTA(button.link, button.isReferral)"
           >
             <span class="button-text">{{ t(`hero.slides[${currentSlide}].ctaButtons[${i}].text`) }}</span>
             <span class="button-glow"></span>
@@ -117,6 +117,18 @@
     <div class="nav-controls" :class="{ 'initial-load': !hasLoadedOnce }">
       <button @click="prevSlide">&#10094;</button>
       <button @click="nextSlide">&#10095;</button>
+    </div>
+
+    <!-- Referral Code Notification -->
+    <div v-if="showNotification" class="referral-notification" :class="{ 'mobile': isMobile }">
+      <div class="notification-content">
+        <i class="notification-icon">✓</i>
+        <div class="notification-text">
+          <p class="notification-title">{{ t('referral.notification.title') }}</p>
+          <p class="notification-message">{{ t('referral.notification.message') }}</p>
+        </div>
+        <button class="notification-close" @click="showNotification = false">×</button>
+      </div>
     </div>
 
   </section>
@@ -194,8 +206,8 @@ const slides = ref([
     logo: logo1,
     title: "This is ground zero. Alpha's live!",
     ctaButtons: [
-      { text: 'Play Now', link: '/games/adventures', style: 'primary' },
-      { text: 'Wishlist on Steam', link: 'https://store.steampowered.com/app/CosmicraftsAdventures', style: 'secondary' },
+      { text: 'Play Now', link: '/game', style: 'primary' },
+      { text: 'Wishlist on Epic Games', link: 'https://store.epicgames.com/en-US/p/cosmicrafts-499a8f', style: 'secondary' },
     ],
   },
   {
@@ -203,8 +215,8 @@ const slides = ref([
     logo: logo2,
     title: "The Party's Here. Are You In or What?",
     ctaButtons: [
-      { text: 'Join the Beta', link: '/signup', style: 'primary' },
-      { text: 'Learn More', link: '/about', style: 'secondary' },
+      { text: 'Join the Beta', link: 'https://nns.ic0.app/', style: 'primary' },
+      { text: 'Learn More', link: '/whitepaper', style: 'secondary' },
     ],
   },
   // Slide 3
@@ -213,8 +225,8 @@ const slides = ref([
     logo: logo3,
     title: 'On-chain RTS. A Starlight Drift, Galactic Mayhem',
     ctaButtons: [
-      { text: 'Pre-Order Now', link: '/games/battlegrounds', style: 'primary' },
-      { text: 'Explore More', link: '/games', style: 'secondary' },
+      { text: 'Download Now', link: 'https://ohsalmeron.itch.io/cosmicrafts', style: 'primary' },
+      { text: 'Learn More', link: 'https://cosmicrafts.fandom.com/wiki/Cosmicrafts_Wiki', style: 'secondary' },
     ],
   },
   // Slide 4
@@ -224,7 +236,7 @@ const slides = ref([
     title: 'Lets get Social!, Invite Now and Claim Exclusive Rewards!',
     ctaButtons: [
       { text: 'Start Adventure', link: '/dashboard', style: 'primary' },
-      { text: 'Follow on Socials', link: 'https://discord.com/invite/cosmicrafts-884272584491941888', style: 'secondary' },
+      { text: 'Get Referral Code', link: '#', style: 'secondary', isReferral: true },
     ],
   }
 ]);
@@ -239,7 +251,13 @@ const socialLinks = [
 ];
 
 // **Function to handle CTA button clicks**
-const handleCTA = (link) => {
+const handleCTA = (link, isReferral) => {
+  if (isReferral) {
+    // Show referral code notification
+    showReferralNotification();
+    return;
+  }
+  
   if (link.startsWith('http')) {
     // For external links, open in a new tab
     window.open(link, '_blank');
@@ -247,6 +265,31 @@ const handleCTA = (link) => {
     // For internal links, use vue-router
     router.push(link);
   }
+};
+
+// Referral notification state
+const showNotification = ref(false);
+const notificationTimeout = ref(null);
+
+// Function to show referral notification
+const showReferralNotification = () => {
+  // Example referral code - in a real app, this would come from the user's account
+  const referralCode = "COSMIC" + Math.floor(1000 + Math.random() * 9000);
+  
+  // Copy to clipboard
+  navigator.clipboard.writeText(referralCode).then(() => {
+    showNotification.value = true;
+    
+    // Clear any existing timeout
+    if (notificationTimeout.value) {
+      clearTimeout(notificationTimeout.value);
+    }
+    
+    // Auto hide notification after 3 seconds
+    notificationTimeout.value = setTimeout(() => {
+      showNotification.value = false;
+    }, 3000);
+  });
 };
 
 function $i(id) {
@@ -382,6 +425,14 @@ function stopAutoSlide() {
   clearInterval(slideInterval);
 }
 
+// Reactive value to check if on mobile
+const isMobile = ref(false);
+
+// Update mobile status on mount and resize
+const updateMobileStatus = () => {
+  isMobile.value = window.innerWidth <= 768;
+};
+
 onMounted(() => {
   w = window.innerWidth;
   h = window.innerHeight;
@@ -395,12 +446,24 @@ onMounted(() => {
   setTimeout(() => {
     hasLoadedOnce.value = true;
   }, 2000); // Shorter timeout for faster animations
+  
+  // Set initial mobile status
+  updateMobileStatus();
+  window.addEventListener('resize', updateMobileStatus);
 });
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
   window.removeEventListener('resize', resize);
   stopAutoSlide(); // **Stop auto-sliding**
+  
+  // Clean up resize listener
+  window.removeEventListener('resize', updateMobileStatus);
+  
+  // Clear notification timeout if it exists
+  if (notificationTimeout.value) {
+    clearTimeout(notificationTimeout.value);
+  }
 });
 </script>
 
@@ -1304,5 +1367,104 @@ onUnmounted(() => {
       transform: none;
     }
   }
+}
+
+/* Referral Notification Styles */
+.referral-notification {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+.referral-notification.mobile {
+  left: 50%;
+  right: auto;
+  bottom: 80px;
+  transform: translateX(-50%);
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+.notification-content {
+  background: rgba(15, 25, 50, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 183, 255, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 195, 255, 0.3);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.notification-icon {
+  background: linear-gradient(135deg, #00c3ff, #0077ff);
+  color: white;
+  font-size: 16px;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  box-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+}
+
+.notification-text {
+  flex: 1;
+}
+
+.notification-title {
+  margin: 0 0 4px 0;
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+}
+
+.notification-message {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.notification-close:hover {
+  color: white;
 }
 </style>

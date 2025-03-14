@@ -668,5 +668,114 @@
         "description": "We're developing a decentralized support system where your tickets and their resolution will be tracked on the Internet Computer blockchain, ensuring transparency and accountability."
       }
     }
+  },
+  "dashboard": {
+    "loading": "Loading your cosmic data...",
+    "retry": "Retry",
+    "welcome": "Welcome, {username}!",
+    "subtitle": "Your cosmic journey awaits",
+    
+    "tabs": {
+      "overview": "Overview",
+      "referrals": "Referral Network",
+      "rewards": "Rewards",
+      "settings": "Settings"
+    },
+
+    "stats": {
+      "level": "Level",
+      "multiplier": "Multiplier",
+      "rank": "Rank",
+      "points": "Points"
+    },
+
+    "cards": {
+      "referralCode": {
+        "title": "Referral Code",
+        "shareToEarn": "Share to earn rewards"
+      },
+      "network": {
+        "title": "Your Network",
+        "totalReferrals": "Total referrals in your network"
+      },
+      "multiplierBonus": {
+        "title": "Multiplier Bonus",
+        "explanation": "Extra rewards from your network"
+      }
+    },
+
+    "referrals": {
+      "title": "Referral Network",
+      "yourReferralCode": "Your Referral Code",
+      "shareCodeSubtext": "Share your code with friends to earn rewards",
+      "noReferralCode": "No referral code yet",
+      "directReferrals": "Direct Referrals",
+      "indirectReferrals": "Indirect Referrals",
+      "beyondReferrals": "Extended Network",
+      "referralTree": "Referral Tree",
+      "noReferrals": "No referrals yet",
+      "shareYourCode": "Share your code to grow your network",
+      "loadingReferrals": "Loading referral data...",
+      "multiplierSubtext": "Your current reward multiplier",
+      "shareMessage": "Join me in Cosmicrafts! Use my referral code: {code}",
+      "referralTiers": "Referral Network Summary",
+      "recentReferrals": "Recent Referrals",
+      "you": "You",
+      "referralTypes": {
+        "direct": "Direct Referral",
+        "indirect": "Indirect Referral",
+        "extended": "Extended Referral"
+      },
+      "bonusLabels": {
+        "direct": {
+          "tier1": "+100% Bonus",
+          "tier2": "+50% Bonus",
+          "tier3": "+25% Bonus",
+          "tier4": "+10% Bonus"
+        },
+        "indirect": {
+          "tier1": "+25% Bonus",
+          "tier2": "+10% Bonus",
+          "tier3": "+5% Bonus"
+        },
+        "beyond": {
+          "tier1": "+10% Bonus",
+          "tier2": "+5% Bonus",
+          "tier3": "+1% Bonus"
+        }
+      }
+    },
+
+    "rewards": {
+      "comingSoon": "Rewards Coming Soon",
+      "stayTuned": "Stay tuned for exciting rewards!"
+    },
+
+    "settings": {
+      "comingSoon": "Settings Coming Soon",
+      "checkBackLater": "Check back later for account settings"
+    },
+
+    "notifications": {
+      "referralCodeCopied": "Referral code copied to clipboard!",
+      "shareSuccess": "Successfully shared your referral code!",
+      "error": {
+        "failedToLoad": "Failed to load data",
+        "failedToShare": "Failed to share referral code",
+        "failedToCopy": "Failed to copy referral code"
+      }
+    },
+
+    "actions": {
+      "copy": "Copy Code",
+      "share": "Share",
+      "viewAll": "View All",
+      "shareOn": {
+        "twitter": "Share on Twitter",
+        "facebook": "Share on Facebook",
+        "telegram": "Share on Telegram",
+        "discord": "Share on Discord"
+      }
+    }
   }
 }

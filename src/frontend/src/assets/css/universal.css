@@ -98,7 +98,7 @@
   --transition-slow: 0.3s ease;
   
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, rgba(253, 15, 15, 0.962), rgba(10, 139, 192, 0.1));
+  --gradient-primary: linear-gradient(180deg, rgba(46, 56, 86, 0.962), rgba(27, 44, 52, 0.9));
   --gradient-hero: radial-gradient(circle at center, #0A1420, #050A10);
   --gradient-accent: linear-gradient(90deg, #0FB9FD, #FF9100);
   --gradient-button: linear-gradient(to bottom, #0FB9FD, #0A8BC0);

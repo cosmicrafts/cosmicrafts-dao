@@ -49,10 +49,9 @@
         />
         <span v-else class="player-placeholder" @click="toggleDropdown"></span>
 
-        <div v-if="isDropdownVisible" class="dropdown-menu" ref="dropdownMenuRef">  <ul>
-            <li @click="goToProfile">{{ t('header.myProfile') }}</li>
-            <li @click="goToNotifications">{{ t('header.notifications') }}</li>
-            <li @click="goToSettings">{{ t('header.settings') }}</li>
+        <div v-if="isDropdownVisible" class="dropdown-menu" ref="dropdownMenuRef">
+          <ul>
+            <li @click="goToDashboard">{{ t('header.dashboard') }}</li>
             <li @click="logout">{{ t('header.signout') }}</li>
           </ul>
         </div>
@@ -138,21 +137,15 @@ const toggleDropdown = (event) => {
 
 // Logout functionality
 const logout = async () => {
+  isDropdownVisible.value = false; // Close dropdown before logout
   await authStore.logout();
-  router.push('/'); // Redirect to the home page
+  router.push('/');
 };
 
 // Navigation handlers
-const goToProfile = () => {
-  router.push('/profile'); // Adjust route as needed
-};
-
-const goToNotifications = () => {
-  router.push('/notifications'); // Navigate to notifications page
-};
-
-const goToSettings = () => {
-  router.push('/settings'); // Adjust route as needed
+const goToDashboard = () => {
+  router.push('/dashboard');
+  isDropdownVisible.value = false; // Close dropdown after navigation
 };
 
 // Open login modal
@@ -403,7 +396,7 @@ header:hover {
   box-shadow: var(--cosmic-shadow-md);
   padding: 1rem 0;
   z-index: var(--cosmic-z-dropdown);
-  min-width: 160px;
+  min-width: 140px;
 }
 
 .dropdown-menu ul {
