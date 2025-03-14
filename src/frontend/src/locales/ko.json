@@ -360,5 +360,189 @@
       "mobileTitle": "백서 섹션",
       "mobileSubtitle": "챕터 탐색"
     }
+  },
+  "dao": {
+    "headline": {
+      "title": "유산의 여명",
+      "subtitle": "지금이 DAO다, 아니면 절대 안 된다!",
+      "stakeholder_cta": "이해관계자 되기",
+      "whitepaper_cta": "백서 읽기"
+    },
+    "explainer": {
+      "title": "코스믹크래프트 DAO란 무엇인가요?",
+      "description": "코스믹크래프트 DAO(탈중앙화 자율조직)는 커뮤니티가 코스믹크래프트 게임 생태계의 미래를 집단적으로 관리할 수 있게 합니다. SPIRAL 토큰을 소유함으로써, 이해관계자들은 플랫폼 개발, 자금 관리, 경제 정책에 영향을 미치는 주요 결정에 참여할 수 있습니다.",
+      "pillars": {
+        "governance": {
+          "title": "커뮤니티 거버넌스",
+          "description": "제안에 투표하고 민주적 의사결정을 통해 플랫폼의 미래 방향을 형성하세요."
+        },
+        "treasury": {
+          "title": "공유 재정",
+          "description": "생태계 성장과 개발에 전념하는 7억6천만 SPIRAL 토큰의 자금을 공동으로 관리하세요."
+        },
+        "rewards": {
+          "title": "스테이킹 보상",
+          "description": "적극적인 참여와 플랫폼 성장에 대한 장기적인 헌신을 통해 보상을 얻으세요."
+        }
+      },
+      "links": {
+        "roadmap": "로드맵 보기",
+        "whitepaper": "백서 읽기"
+      }
+    },
+    "distribution": {
+      "title": "토큰 분배",
+      "treasury": {
+        "title": "재정",
+        "description": "생태계 성장 및 DAO 통제 자금"
+      },
+      "swap": {
+        "title": "SNS 스왑",
+        "description": "8회 분기별 출시와 함께 공개 판매"
+      },
+      "team": {
+        "title": "개발팀",
+        "description": "핵심 팀을 위한 8년 베스팅"
+      },
+      "investors": {
+        "title": "초기 투자자",
+        "description": "다양한 베스팅을 가진 초기 후원자"
+      }
+    },
+    "governance": {
+      "title": "거버넌스 모델",
+      "proposal_creation": {
+        "title": "제안 생성",
+        "requirement": "1,000 SPIRAL",
+        "description": "제안 제출에 필요한 최소 스테이크"
+      },
+      "voting_period": {
+        "title": "투표 기간",
+        "requirement": "7일",
+        "description": "제안에 대한 표준 심의 시간"
+      },
+      "voting_power": {
+        "title": "투표력",
+        "requirement": "최대 3배",
+        "description": "스테이킹과 연령을 통한 최대 승수"
+      },
+      "lock_period": {
+        "title": "잠금 기간",
+        "requirement": "30일-8년",
+        "description": "잠금 해제를 위한 유연한 옵션"
+      }
+    },
+    "metrics": {
+      "title": "토큰 메트릭스",
+      "total_supply": "총 공급량",
+      "treasury_size": "재정 규모",
+      "min_proposal": "제안용 최소 스테이크",
+      "initial_apy": "초기 APY"
+    },
+    "staking": {
+      "title": "스테이킹 혜택",
+      "subtitle": "참여를 통한 수익",
+      "description": "SPIRAL 토큰을 잠그고 보상을 얻고 거버넌스 파워를 높이세요",
+      "benefits": {
+        "initial_apy": {
+          "title": "초기 APY"
+        },
+        "transition": {
+          "title": "전환 기간"
+        },
+        "final_apy": {
+          "title": "최종 APY"
+        }
+      },
+      "multipliers": {
+        "title": "파워 승수",
+        "dissolve": {
+          "title": "해제 지연"
+        },
+        "age": {
+          "title": "뉴런 나이"
+        }
+      }
+    },
+    "rights": {
+      "title": "이해관계자 권리",
+      "treasury": {
+        "title": "재정 관리",
+        "description": "개발, 마케팅 및 커뮤니티 이니셔티브를 위한 DAO 재정 자금 할당에 투표하세요",
+        "items": {
+          "marketing": "마케팅 캠페인",
+          "development": "개발 자금",
+          "partnerships": "전략적 파트너십"
+        }
+      },
+      "economic": {
+        "title": "경제 정책",
+        "description": "집단적 의사 결정을 통해 생태계의 경제적 프레임워크를 형성하세요",
+        "items": {
+          "tokenomics": "토크노믹스 조정",
+          "staking": "스테이킹 비율 변경",
+          "fees": "수수료 구조"
+        }
+      },
+      "roadmap": {
+        "title": "개발 로드맵",
+        "description": "플랫폼의 기술 및 제품 개발 우선순위에 영향을 미치세요",
+        "items": {
+          "features": "기능 우선순위 지정",
+          "expansions": "게임 확장",
+          "improvements": "기술 개선"
+        }
+      },
+      "community": {
+        "title": "커뮤니티 프로그램",
+        "description": "생태계를 성장시키기 위한 커뮤니티 주도 이니셔티브를 설정하고 관리하세요",
+        "items": {
+          "creators": "콘텐츠 크리에이터 자금 지원",
+          "events": "이벤트 및 토너먼트",
+          "education": "교육 프로그램"
+        }
+      }
+    },
+    "join": {
+      "title": "당신의 우주적 힘을 주장하세요!",
+      "description": "DAO에 참여하고 최초의 완전한 온체인 게임 프랜차이즈 거버넌스에 참여하세요",
+      "stats": {
+        "voting": "최대 투표력",
+        "apy": "APY 범위",
+        "period": "투표 기간"
+      },
+      "stakeholder_cta": "이해관계자 되기",
+      "whitepaper_cta": "백서 읽기"
+    }
+  },
+  "proposals": {
+    "title": "활성 제안",
+    "for": "찬성",
+    "against": "반대",
+    "vote_for": "찬성 투표",
+    "vote_against": "반대 투표",
+    "status": {
+      "active": "활성",
+      "passed": "통과",
+      "rejected": "거부",
+      "executed": "실행됨",
+      "pending": "대기중"
+    },
+    "examples": {
+      "creator": {
+        "title": "커뮤니티 콘텐츠 크리에이터 프로그램",
+        "summary": "콘텐츠 크리에이터가 코스믹크래프트 생태계를 홍보하기 위한 자금을 받을 수 있는 프레임워크 구축"
+      },
+      "treasury": {
+        "title": "재정 다각화 전략",
+        "summary": "생태계와 연계된 프로토콜에 대한 전략적 투자에 자금의 5%를 할당"
+      }
+    }
+  },
+  "meta": {
+    "dao": {
+      "title": "코스믹크래프트 DAO - 게임의 미래를 위한 탈중앙화 거버넌스",
+      "description": "코스믹크래프트 DAO에 참여하고 우주 게임의 미래를 위한 탈중앙화 거버넌스에 참여하세요. SPIRAL 토큰을 스테이킹하여 보상과 투표력을 얻으세요."
+    }
   }
 }

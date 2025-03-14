@@ -360,5 +360,189 @@
       "mobileTitle": "ホワイトペーパーセクション",
       "mobileSubtitle": "チャプター間を移動"
     }
+  },
+  "dao": {
+    "headline": {
+      "title": "遺産の夜明け",
+      "subtitle": "DAOか、さもなくば決してなし！",
+      "stakeholder_cta": "ステークホルダーになる",
+      "whitepaper_cta": "ホワイトペーパーを読む"
+    },
+    "explainer": {
+      "title": "コスミッククラフトのDAOとは？",
+      "description": "コスミッククラフトのDAO（分散型自律組織）は、コミュニティがコスミッククラフトのゲームエコシステムの未来を集合的に統治することを可能にします。SPIRALトークンの所有を通じて、ステークホルダーはプラットフォーム開発、資金管理、経済政策に影響を与える重要な決定に参加できます。",
+      "pillars": {
+        "governance": {
+          "title": "コミュニティガバナンス",
+          "description": "提案に投票し、民主的な意思決定を通じてプラットフォームの将来の方向性を形作ります。"
+        },
+        "treasury": {
+          "title": "共有財源",
+          "description": "エコシステムの成長と開発に専念する7億6000万SPIRALトークンの財源を共同で管理します。"
+        },
+        "rewards": {
+          "title": "ステーキング報酬",
+          "description": "積極的な参加とプラットフォームの成長への長期的なコミットメントを通じて報酬を獲得します。"
+        }
+      },
+      "links": {
+        "roadmap": "ロードマップを見る",
+        "whitepaper": "ホワイトペーパーを読む"
+      }
+    },
+    "distribution": {
+      "title": "トークン配布",
+      "treasury": {
+        "title": "財源",
+        "description": "エコシステムの成長とDAO管理の資金"
+      },
+      "swap": {
+        "title": "SNSスワップ",
+        "description": "8回の四半期リリースによる公開販売"
+      },
+      "team": {
+        "title": "開発チーム",
+        "description": "コアチームのための8年間のベスティング"
+      },
+      "investors": {
+        "title": "初期投資家",
+        "description": "様々なベスティングを持つ初期支援者"
+      }
+    },
+    "governance": {
+      "title": "ガバナンスモデル",
+      "proposal_creation": {
+        "title": "提案作成",
+        "requirement": "1,000 SPIRAL",
+        "description": "提案を提出するために必要な最小ステーク"
+      },
+      "voting_period": {
+        "title": "投票期間",
+        "requirement": "7日間",
+        "description": "提案に対する標準的な審議時間"
+      },
+      "voting_power": {
+        "title": "投票力",
+        "requirement": "最大3倍",
+        "description": "ステーキングと年齢を通じた最大倍率"
+      },
+      "lock_period": {
+        "title": "ロック期間",
+        "requirement": "30日〜8年",
+        "description": "ロック解除のための柔軟なオプション"
+      }
+    },
+    "metrics": {
+      "title": "トークンメトリクス",
+      "total_supply": "総供給量",
+      "treasury_size": "財源規模",
+      "min_proposal": "提案用最小ステーク",
+      "initial_apy": "初期APY"
+    },
+    "staking": {
+      "title": "ステーキングの特典",
+      "subtitle": "参加を通じて獲得",
+      "description": "SPIRALトークンをロックして報酬を獲得し、ガバナンス力を高めましょう",
+      "benefits": {
+        "initial_apy": {
+          "title": "初期APY"
+        },
+        "transition": {
+          "title": "移行期間"
+        },
+        "final_apy": {
+          "title": "最終APY"
+        }
+      },
+      "multipliers": {
+        "title": "パワー倍率",
+        "dissolve": {
+          "title": "溶解遅延"
+        },
+        "age": {
+          "title": "ニューロン年齢"
+        }
+      }
+    },
+    "rights": {
+      "title": "ステークホルダーの権利",
+      "treasury": {
+        "title": "財源管理",
+        "description": "開発、マーケティング、コミュニティイニシアチブのためのDAO財源の配分に投票します",
+        "items": {
+          "marketing": "マーケティングキャンペーン",
+          "development": "開発資金",
+          "partnerships": "戦略的パートナーシップ"
+        }
+      },
+      "economic": {
+        "title": "経済政策",
+        "description": "集団的意思決定を通じてエコシステムの経済的枠組みを形成します",
+        "items": {
+          "tokenomics": "トークノミクスの調整",
+          "staking": "ステーキングレートの変更",
+          "fees": "手数料構造"
+        }
+      },
+      "roadmap": {
+        "title": "開発ロードマップ",
+        "description": "プラットフォームの技術的および製品開発の優先順位に影響を与えます",
+        "items": {
+          "features": "機能の優先順位付け",
+          "expansions": "ゲーム拡張",
+          "improvements": "技術的改善"
+        }
+      },
+      "community": {
+        "title": "コミュニティプログラム",
+        "description": "エコシステムを成長させるためのコミュニティ主導のイニシアチブを確立し統治します",
+        "items": {
+          "creators": "コンテンツクリエイター向け資金",
+          "events": "イベントやトーナメント",
+          "education": "教育プログラム"
+        }
+      }
+    },
+    "join": {
+      "title": "あなたのコズミックパワーを手に入れよう！",
+      "description": "DAOに参加し、完全にオンチェーンの最初のゲームフランチャイズのガバナンスに参加しましょう",
+      "stats": {
+        "voting": "最大投票力",
+        "apy": "APY範囲",
+        "period": "投票期間"
+      },
+      "stakeholder_cta": "ステークホルダーになる",
+      "whitepaper_cta": "ホワイトペーパーを読む"
+    }
+  },
+  "proposals": {
+    "title": "アクティブな提案",
+    "for": "賛成",
+    "against": "反対",
+    "vote_for": "賛成に投票",
+    "vote_against": "反対に投票",
+    "status": {
+      "active": "アクティブ",
+      "passed": "可決",
+      "rejected": "否決",
+      "executed": "実行済み",
+      "pending": "保留中"
+    },
+    "examples": {
+      "creator": {
+        "title": "コミュニティコンテンツクリエイタープログラム",
+        "summary": "コンテンツクリエイターがコスミッククラフトエコシステムの宣伝のための資金を受け取るための枠組みを確立する"
+      },
+      "treasury": {
+        "title": "財源多様化戦略",
+        "summary": "エコシステムと連携したプロトコルへの戦略的投資に財源の5％を割り当てる"
+      }
+    }
+  },
+  "meta": {
+    "dao": {
+      "title": "コスミッククラフトDAO - ゲームの未来のための分散型ガバナンス",
+      "description": "コスミッククラフトDAOに参加し、宇宙ゲームの未来のための分散型ガバナンスに参加しましょう。SPIRALトークンをステーキングして報酬と投票力を獲得しましょう。"
+    }
   }
 }

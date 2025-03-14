@@ -329,57 +329,58 @@
       </div>
     </section>
 
-    <!-- Active Proposals -->
-    <section v-if="activeProposals.length > 0" class="proposals-section">
-      <h2 class="section-title text-gradient">{{ $t('dao.proposals.title', 'Active Proposals') }}</h2>
-      
-      <div class="proposals-grid">
-        <div v-for="proposal in activeProposals" 
-             :key="`proposal-${proposal.id}`" 
-             class="proposal-card cosmic-card">
-          <div class="proposal-header">
-            <div class="proposal-title">
-              <h3>{{ proposal.title }}</h3>
-              <span class="proposal-id">#{{ proposal.id }}</span>
+    <!-- DAO Explanation Section -->
+    <section class="dao-explainer-section">
+      <div class="explainer-container">
+        <div class="explainer-text">
+          <h2 class="section-title text-gradient">{{ $t('dao.explainer.title', 'What is the Cosmicrafts DAO?') }}</h2>
+          <p>{{ $t('dao.explainer.description', 'The Cosmicrafts DAO (Decentralized Autonomous Organization) enables the community to collectively govern the future of the Cosmicrafts gaming ecosystem. Through SPIRAL token ownership, stakeholders can participate in key decisions affecting platform development, treasury management, and economic policy.') }}</p>
+        </div>
+        
+        <div class="explainer-pillars">
+          <div class="explainer-pillar">
+            <div class="pillar-icon">
+              <i class="fas fa-vote-yea"></i>
             </div>
-            <span class="proposal-status" :class="proposal.status">
-              {{ $t(`dao.proposals.status.${proposal.status}`, proposal.status) }}
-            </span>
+            <h3>{{ $t('dao.explainer.pillars.governance.title', 'Community Governance') }}</h3>
+            <p>{{ $t('dao.explainer.pillars.governance.description', 'Vote on proposals and shape the future direction of the platform through democratic decision-making.') }}</p>
           </div>
           
-          <p class="proposal-summary">{{ proposal.summary }}</p>
-          
-          <div class="proposal-stats">
-            <div class="vote-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" 
-                     :style="{ width: `${proposal.forPercentage}%` }"></div>
-              </div>
-              <div class="vote-counts">
-                <span class="for">{{ $t('dao.proposals.for', 'For') }}: {{ proposal.forVotes }}</span>
-                <span class="against">{{ $t('dao.proposals.against', 'Against') }}: {{ proposal.againstVotes }}</span>
-              </div>
+          <div class="explainer-pillar">
+            <div class="pillar-icon">
+              <i class="fas fa-landmark"></i>
             </div>
-            
-            <div class="time-remaining">
-              <i class="fas fa-clock"></i>
-              <span>{{ proposal.timeRemaining }}</span>
-            </div>
+            <h3>{{ $t('dao.explainer.pillars.treasury.title', 'Shared Treasury') }}</h3>
+            <p>{{ $t('dao.explainer.pillars.treasury.description', 'Collectively manage a treasury of 760M SPIRAL tokens dedicated to ecosystem growth and development.') }}</p>
           </div>
           
-          <div class="proposal-actions">
-            <a :href="daoAppUrl" target="_blank" rel="noopener noreferrer" class="cosmic-button primary">
-              <i class="fas fa-check"></i>
-              {{ $t('dao.proposals.vote_for', 'Vote For') }}
-            </a>
-            <a :href="daoAppUrl" target="_blank" rel="noopener noreferrer" class="cosmic-button secondary">
-              <i class="fas fa-times"></i>
-              {{ $t('dao.proposals.vote_against', 'Vote Against') }}
-            </a>
+          <div class="explainer-pillar">
+            <div class="pillar-icon">
+              <i class="fas fa-coins"></i>
+            </div>
+            <h3>{{ $t('dao.explainer.pillars.rewards.title', 'Staking Rewards') }}</h3>
+            <p>{{ $t('dao.explainer.pillars.rewards.description', 'Earn rewards through active participation and long-term commitment to platform growth.') }}</p>
           </div>
+        </div>
+        
+        <div class="explainer-links">
+          <router-link to="/roadmap" class="explainer-link">
+            <i class="fas fa-map-marked-alt"></i>
+            {{ $t('dao.explainer.links.roadmap', 'View Our Roadmap') }}
+          </router-link>
+          <router-link to="/whitepaper" class="explainer-link">
+            <i class="fas fa-book"></i>
+            {{ $t('dao.explainer.links.whitepaper', 'Read the Whitepaper') }}
+          </router-link>
         </div>
       </div>
     </section>
+
+    <!-- Proposals Component -->
+    <Proposals 
+      :initialProposals="activeProposals"
+      :daoUrl="daoAppUrl"
+    />
 
     <!-- Join CTA Section -->
     <section class="join-section cosmic-card">
@@ -425,8 +426,6 @@
 <script>
 import { ref, computed, onMounted, onUnmounted, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
-
-// Import multi-language logos and DAO image
 import logo2 from '@/assets/icons/DAO-1.svg';
 import heroImage2Default from '@/assets/icons/logo.svg';
 import heroImage2CN from '@/assets/icons/logo-cn.svg';
@@ -434,9 +433,13 @@ import heroImage2KR from '@/assets/icons/logo-kr.svg';
 import heroImage2JP from '@/assets/icons/logo-jp.svg';
 import heroImage2RU from '@/assets/icons/logo-ru.svg';
 import heroImage2AR from '@/assets/icons/logo-ar.svg';
+import Proposals from '@/components/Proposals.vue';
 
 export default {
   name: "DAOPage",
+  components: {
+    Proposals
+  },
   setup() {
     const { t, locale } = useI18n();
     

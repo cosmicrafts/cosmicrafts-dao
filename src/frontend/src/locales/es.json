@@ -397,6 +397,190 @@
       "description": "Estamos desarrollando un sistema de soporte descentralizado donde tus tickets y su resolución serán registrados en la blockchain de Internet Computer, garantizando transparencia y responsabilidad."
     }
   }
+},
+"dao": {
+  "headline": {
+    "title": "El amanecer de un legado",
+    "subtitle": "¡Es DAO o NUNCA!",
+    "stakeholder_cta": "Conviértete en Stakeholder",
+    "whitepaper_cta": "Leer Whitepaper"
+  },
+  "explainer": {
+    "title": "¿Qué es la DAO de Cosmicrafts?",
+    "description": "La DAO de Cosmicrafts (Organización Autónoma Descentralizada) permite a la comunidad gobernar colectivamente el futuro del ecosistema de juegos Cosmicrafts. A través de la propiedad de tokens SPIRAL, los stakeholders pueden participar en decisiones clave que afectan el desarrollo de la plataforma, la gestión del tesoro y la política económica.",
+    "pillars": {
+      "governance": {
+        "title": "Gobernanza Comunitaria",
+        "description": "Vota en propuestas y da forma a la dirección futura de la plataforma a través de la toma de decisiones democrática."
+      },
+      "treasury": {
+        "title": "Tesoro Compartido",
+        "description": "Gestiona colectivamente un tesoro de 760M de tokens SPIRAL dedicados al crecimiento y desarrollo del ecosistema."
+      },
+      "rewards": {
+        "title": "Recompensas de Staking",
+        "description": "Gana recompensas a través de la participación activa y el compromiso a largo plazo con el crecimiento de la plataforma."
+      }
+    },
+    "links": {
+      "roadmap": "Ver Nuestro Roadmap",
+      "whitepaper": "Leer el Whitepaper"
+    }
+  },
+  "distribution": {
+    "title": "Distribución de Tokens",
+    "treasury": {
+      "title": "Tesoro",
+      "description": "Crecimiento del ecosistema y fondos controlados por la DAO"
+    },
+    "swap": {
+      "title": "Swap SNS",
+      "description": "Venta pública con 8 lanzamientos trimestrales"
+    },
+    "team": {
+      "title": "Equipo de Desarrollo",
+      "description": "Vesting de 8 años para el equipo principal"
+    },
+    "investors": {
+      "title": "Inversores Iniciales",
+      "description": "Primeros patrocinadores con vesting variado"
+    }
+  },
+  "governance": {
+    "title": "Modelo de Gobernanza",
+    "proposal_creation": {
+      "title": "Creación de Propuestas",
+      "requirement": "1,000 SPIRAL",
+      "description": "Stake mínimo requerido para enviar propuestas"
+    },
+    "voting_period": {
+      "title": "Período de Votación",
+      "requirement": "7 Días",
+      "description": "Tiempo estándar de deliberación para propuestas"
+    },
+    "voting_power": {
+      "title": "Poder de Voto",
+      "requirement": "Hasta 3x",
+      "description": "Multiplicador máximo a través de staking y antigüedad"
+    },
+    "lock_period": {
+      "title": "Período de Bloqueo",
+      "requirement": "30d - 8a",
+      "description": "Opciones flexibles de disolución del bloqueo"
+    }
+  },
+  "metrics": {
+    "title": "Métricas de Tokens",
+    "total_supply": "Suministro Total",
+    "treasury_size": "Tamaño del Tesoro",
+    "min_proposal": "Stake Mín. para Propuestas",
+    "initial_apy": "APY Inicial"
+  },
+  "staking": {
+    "title": "Beneficios de Staking",
+    "subtitle": "Gana a Través de la Participación",
+    "description": "Bloquea tus tokens SPIRAL para ganar recompensas y aumentar tu poder de gobernanza",
+    "benefits": {
+      "initial_apy": {
+        "title": "APY Inicial"
+      },
+      "transition": {
+        "title": "Período de Transición"
+      },
+      "final_apy": {
+        "title": "APY Final"
+      }
+    },
+    "multipliers": {
+      "title": "Multiplicadores de Poder",
+      "dissolve": {
+        "title": "Retraso de Disolución"
+      },
+      "age": {
+        "title": "Edad de la Neurona"
+      }
+    }
+  },
+  "rights": {
+    "title": "Derechos de los Stakeholders",
+    "treasury": {
+      "title": "Gestión del Tesoro",
+      "description": "Vota sobre la asignación de fondos del tesoro de la DAO para desarrollo, marketing e iniciativas comunitarias",
+      "items": {
+        "marketing": "Campañas de marketing",
+        "development": "Financiación de desarrollo",
+        "partnerships": "Alianzas estratégicas"
+      }
+    },
+    "economic": {
+      "title": "Políticas Económicas",
+      "description": "Da forma al marco económico del ecosistema a través de la toma de decisiones colectiva",
+      "items": {
+        "tokenomics": "Ajustes de tokenomics",
+        "staking": "Cambios en tasas de staking",
+        "fees": "Estructuras de tarifas"
+      }
+    },
+    "roadmap": {
+      "title": "Roadmap de Desarrollo",
+      "description": "Influye en las prioridades de desarrollo técnico y de producto de la plataforma",
+      "items": {
+        "features": "Priorización de características",
+        "expansions": "Expansiones de juegos", 
+        "improvements": "Mejoras técnicas"
+      }
+    },
+    "community": {
+      "title": "Programas Comunitarios",
+      "description": "Establece y gobierna iniciativas lideradas por la comunidad para hacer crecer el ecosistema",
+      "items": {
+        "creators": "Financiación de creadores de contenido",
+        "events": "Eventos y torneos",
+        "education": "Programas educativos"
+      }
+    }
+  },
+  "join": {
+    "title": "¡Reclama Tu Poder Cósmico!",
+    "description": "Únete a la DAO y participa en la gobernanza de la primera franquicia de juegos totalmente on-chain",
+    "stats": {
+      "voting": "Poder de Voto Máx.",
+      "apy": "Rango de APY",
+      "period": "Período de Votación"
+    },
+    "stakeholder_cta": "Conviértete en Stakeholder",
+    "whitepaper_cta": "Leer Whitepaper"
+  }
+},
+"proposals": {
+  "title": "Propuestas Activas",
+  "for": "A favor",
+  "against": "En contra",
+  "vote_for": "Votar a Favor",
+  "vote_against": "Votar en Contra",
+  "status": {
+    "active": "Activa",
+    "passed": "Aprobada",
+    "rejected": "Rechazada",
+    "executed": "Ejecutada",
+    "pending": "Pendiente"
+  },
+  "examples": {
+    "creator": {
+      "title": "Programa de Creadores de Contenido Comunitario",
+      "summary": "Establecer un marco para que los creadores de contenido reciban financiación para promover el ecosistema Cosmicrafts"
+    },
+    "treasury": {
+      "title": "Estrategia de Diversificación del Tesoro",
+      "summary": "Asignar el 5% de los fondos del tesoro a inversiones estratégicas en protocolos alineados con el ecosistema"
+    }
+  }
+},
+"meta": {
+  "dao": {
+    "title": "DAO de Cosmicrafts - Gobernanza Descentralizada para el Futuro de los Juegos",
+    "description": "Únete a la DAO de Cosmicrafts y participa en la gobernanza descentralizada para el futuro de los juegos cósmicos. Haz stake de tokens SPIRAL para ganar recompensas y poder de voto."
+  }
 }
 }
 
