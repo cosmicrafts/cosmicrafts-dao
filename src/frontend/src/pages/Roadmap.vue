@@ -2077,24 +2077,20 @@ export default {
   
   .description {
     grid-area: description;
-    font-size: 0.9rem;
-    line-height: 1.4;
     width: 100%;
     margin: 0.5rem 0;
+    padding-right: 0;
   }
   
   .progress-wrapper {
     grid-area: progress;
-    position: static;
-    display: flex;
-    align-items: center;
     width: 100%;
+    justify-content: flex-end;
     margin-top: 0.5rem;
   }
-  
+
   .progress-container {
-    flex-grow: 1;
-    height: 6px;
+    width: 120px; /* Give progress bar more space */
   }
   
   .toggle-icon {
@@ -2158,8 +2154,8 @@ export default {
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  margin-right: 8rem; /* Increased space for indicators */
-  padding-right: 1rem;
+  margin-right: 0;
+  padding-right: 0;
   transform-style: preserve-3d;
 }
 
@@ -2172,7 +2168,9 @@ export default {
 }
 
 .description {
-  font-size: 0.8125rem;
+  position: relative;
+  width:  100%;
+  font-size: 0.75rem;
   color: var(--cosmic-text-secondary);
   margin: 0;
   transition: color 0.3s var(--animation-smooth);
@@ -2187,17 +2185,18 @@ export default {
 
 /* Status indicators positioning and alignment */
 .status-indicators {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.75rem;
-  transform-style: preserve-3d;
-}
+    position: static;
+    grid-area: status;
+    align-items: flex-start;
+    padding: 0;
+  }
 
 /* Task status and progress text side by side */
 .task-status-wrapper {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+    width: 100%;
   gap: 0.5rem;
   margin-bottom: 0;
   flex-wrap: nowrap;
@@ -2242,6 +2241,7 @@ export default {
   background: rgba(30, 40, 60, 0.5);
   border-radius: 2px;
   padding: 0.25rem;
+  
 }
 
 .toggle-icon.small {

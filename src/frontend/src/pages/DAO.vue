@@ -20,22 +20,22 @@
         <!-- Headline Titles -->
         <h1 class="primary-headline"
           :style="{ transform: `translateY(${scrollY * -0.065}px) scale(${1 - scrollY * 0.000425})` }">
-          The dawn of a legacy
+          {{ $t('dao.headline.title', 'The dawn of a legacy') }}
         </h1>
 
         <p class="cta-subtext"
           :style="{ transform: `translateY(${scrollY * -0.005}px) scale(${1 - scrollY * -0.001225})` }">
-          It's DAO or NEVER!
+          {{ $t('dao.headline.subtitle', 'It\'s DAO or NEVER!') }}
         </p>
         <!-- Call-to-Action Buttons Container -->
         <div class="cta-buttons-container">
-          <a href="https://nns.ic0.app" target="_blank" class="cta-button">
+          <a :href="daoAppUrl" target="_blank" rel="noopener noreferrer" class="cta-button">
             <i class="fas fa-rocket"></i>
-            Become a Stakeholder
+            {{ $t('dao.headline.stakeholder_cta', 'Become a Stakeholder') }}
           </a>
           <router-link to="/whitepaper" class="cta-button whitepaper-btn">
             <i class="fas fa-book"></i>
-            Read Whitepaper
+            {{ $t('dao.headline.whitepaper_cta', 'Read Whitepaper') }}
           </router-link>
         </div>
       </div>
@@ -43,17 +43,17 @@
 
     <!-- Distribution Section -->
     <section class="distribution-section">
-      <h2 class="section-title text-gradient">Token Distribution</h2>
+      <h2 class="section-title text-gradient">{{ $t('dao.distribution.title', 'Token Distribution') }}</h2>
       <div class="distribution-grid">
         <div class="distribution-card cosmic-card">
           <div class="distribution-icon treasury">
             <i class="fas fa-vault"></i>
           </div>
           <div class="distribution-content">
-            <h3>Treasury</h3>
+            <h3>{{ $t('dao.distribution.treasury.title', 'Treasury') }}</h3>
             <p class="percentage">76%</p>
             <p class="amount">760M SPIRAL</p>
-            <p class="description">Ecosystem growth and DAO-controlled funds</p>
+            <p class="description">{{ $t('dao.distribution.treasury.description', 'Ecosystem growth and DAO-controlled funds') }}</p>
           </div>
         </div>
 
@@ -62,10 +62,10 @@
             <i class="fas fa-exchange-alt"></i>
           </div>
           <div class="distribution-content">
-            <h3>SNS Swap</h3>
+            <h3>{{ $t('dao.distribution.swap.title', 'SNS Swap') }}</h3>
             <p class="percentage">12%</p>
             <p class="amount">120M SPIRAL</p>
-            <p class="description">Public sale with 8 quarterly releases</p>
+            <p class="description">{{ $t('dao.distribution.swap.description', 'Public sale with 8 quarterly releases') }}</p>
           </div>
         </div>
 
@@ -74,10 +74,10 @@
             <i class="fas fa-users-cog"></i>
           </div>
           <div class="distribution-content">
-            <h3>Developer Team</h3>
+            <h3>{{ $t('dao.distribution.team.title', 'Developer Team') }}</h3>
             <p class="percentage">8%</p>
             <p class="amount">80M SPIRAL</p>
-            <p class="description">8-year vesting for core team</p>
+            <p class="description">{{ $t('dao.distribution.team.description', '8-year vesting for core team') }}</p>
           </div>
         </div>
 
@@ -86,10 +86,10 @@
             <i class="fas fa-seedling"></i>
           </div>
           <div class="distribution-content">
-            <h3>Seed Investors</h3>
+            <h3>{{ $t('dao.distribution.investors.title', 'Seed Investors') }}</h3>
             <p class="percentage">4%</p>
             <p class="amount">40M SPIRAL</p>
-            <p class="description">Early backers with varied vesting</p>
+            <p class="description">{{ $t('dao.distribution.investors.description', 'Early backers with varied vesting') }}</p>
           </div>
         </div>
       </div>
@@ -97,16 +97,16 @@
 
     <!-- Governance Section -->
     <section class="governance-section">
-      <h2 class="section-title text-gradient">Governance Model</h2>
+      <h2 class="section-title text-gradient">{{ $t('dao.governance.title', 'Governance Model') }}</h2>
       <div class="governance-grid">
         <div class="governance-card cosmic-card">
           <div class="governance-icon">
             <i class="fas fa-gavel"></i>
           </div>
           <div class="governance-content">
-            <h3>Proposal Creation</h3>
-            <p class="requirement">1,000 SPIRAL</p>
-            <p class="description">Minimum stake required to submit proposals</p>
+            <h3>{{ $t('dao.governance.proposal_creation.title', 'Proposal Creation') }}</h3>
+            <p class="requirement">{{ $t('dao.governance.proposal_creation.requirement', '1,000 SPIRAL') }}</p>
+            <p class="description">{{ $t('dao.governance.proposal_creation.description', 'Minimum stake required to submit proposals') }}</p>
           </div>
         </div>
 
@@ -115,9 +115,9 @@
             <i class="fas fa-clock"></i>
           </div>
           <div class="governance-content">
-            <h3>Voting Period</h3>
-            <p class="requirement">7 Days</p>
-            <p class="description">Standard deliberation time for proposals</p>
+            <h3>{{ $t('dao.governance.voting_period.title', 'Voting Period') }}</h3>
+            <p class="requirement">{{ $t('dao.governance.voting_period.requirement', '7 Days') }}</p>
+            <p class="description">{{ $t('dao.governance.voting_period.description', 'Standard deliberation time for proposals') }}</p>
           </div>
         </div>
 
@@ -126,9 +126,9 @@
             <i class="fas fa-chart-line"></i>
           </div>
           <div class="governance-content">
-            <h3>Voting Power</h3>
-            <p class="requirement">Up to 3x</p>
-            <p class="description">Maximum multiplier through staking and age</p>
+            <h3>{{ $t('dao.governance.voting_power.title', 'Voting Power') }}</h3>
+            <p class="requirement">{{ $t('dao.governance.voting_power.requirement', 'Up to 3x') }}</p>
+            <p class="description">{{ $t('dao.governance.voting_power.description', 'Maximum multiplier through staking and age') }}</p>
           </div>
         </div>
 
@@ -137,9 +137,9 @@
             <i class="fas fa-lock-clock"></i>
           </div>
           <div class="governance-content">
-            <h3>Lock Period</h3>
-            <p class="requirement">30d - 8y</p>
-            <p class="description">Flexible dissolve delay options</p>
+            <h3>{{ $t('dao.governance.lock_period.title', 'Lock Period') }}</h3>
+            <p class="requirement">{{ $t('dao.governance.lock_period.requirement', '30d - 8y') }}</p>
+            <p class="description">{{ $t('dao.governance.lock_period.description', 'Flexible dissolve delay options') }}</p>
           </div>
         </div>
       </div>
@@ -147,7 +147,7 @@
 
     <!-- Stats Overview Section -->
     <section class="stats-overview cosmic-card">
-      <h2 class="section-title text-gradient">Token Metrics</h2>
+      <h2 class="section-title text-gradient">{{ $t('dao.metrics.title', 'Token Metrics') }}</h2>
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon">
@@ -155,7 +155,7 @@
           </div>
           <div class="stat-content">
             <h3>1B</h3>
-            <p>Total Supply</p>
+            <p>{{ $t('dao.metrics.total_supply', 'Total Supply') }}</p>
           </div>
         </div>
 
@@ -165,7 +165,7 @@
           </div>
           <div class="stat-content">
             <h3>760M</h3>
-            <p>Treasury Size</p>
+            <p>{{ $t('dao.metrics.treasury_size', 'Treasury Size') }}</p>
           </div>
         </div>
 
@@ -175,7 +175,7 @@
           </div>
           <div class="stat-content">
             <h3>1,000</h3>
-            <p>Min. Proposal Stake</p>
+            <p>{{ $t('dao.metrics.min_proposal', 'Min. Proposal Stake') }}</p>
           </div>
         </div>
 
@@ -185,7 +185,7 @@
           </div>
           <div class="stat-content">
             <h3>8%</h3>
-            <p>Initial APY</p>
+            <p>{{ $t('dao.metrics.initial_apy', 'Initial APY') }}</p>
           </div>
         </div>
       </div>
@@ -193,12 +193,12 @@
 
     <!-- Staking Benefits -->
     <section class="staking-section cosmic-card">
-      <h2 class="section-title text-gradient">Staking Benefits</h2>
+      <h2 class="section-title text-gradient">{{ $t('dao.staking.title', 'Staking Benefits') }}</h2>
       
       <div class="staking-content">
         <div class="staking-info">
-          <h3>Earn Through Participation</h3>
-          <p>Lock your SPIRAL tokens to earn rewards and increase your governance power</p>
+          <h3>{{ $t('dao.staking.subtitle', 'Earn Through Participation') }}</h3>
+          <p>{{ $t('dao.staking.description', 'Lock your SPIRAL tokens to earn rewards and increase your governance power') }}</p>
           
           <div class="benefits-grid">
             <div class="benefit-item">
@@ -206,7 +206,7 @@
                 <i class="fas fa-percentage"></i>
               </div>
               <div class="benefit-content">
-                <h4>Initial APY</h4>
+                <h4>{{ $t('dao.staking.initial_apy.title', 'Initial APY') }}</h4>
                 <p class="value">8%</p>
               </div>
             </div>
@@ -216,7 +216,7 @@
                 <i class="fas fa-hourglass-half"></i>
               </div>
               <div class="benefit-content">
-                <h4>Transition Period</h4>
+                <h4>{{ $t('dao.staking.transition.title', 'Transition Period') }}</h4>
                 <p class="value">8 Years</p>
               </div>
             </div>
@@ -226,7 +226,7 @@
                 <i class="fas fa-chart-pie"></i>
               </div>
               <div class="benefit-content">
-                <h4>Final APY</h4>
+                <h4>{{ $t('dao.staking.final_apy.title', 'Final APY') }}</h4>
                 <p class="value">1%</p>
               </div>
             </div>
@@ -234,12 +234,12 @@
         </div>
 
         <div class="power-multipliers">
-          <h3>Power Multipliers</h3>
+          <h3>{{ $t('dao.staking.multipliers.title', 'Power Multipliers') }}</h3>
           <div class="multiplier-grid">
             <div class="multiplier-card">
               <div class="multiplier-header">
                 <i class="fas fa-lock"></i>
-                <h4>Dissolve Delay</h4>
+                <h4>{{ $t('dao.staking.multipliers.dissolve.title', 'Dissolve Delay') }}</h4>
               </div>
               <div class="multiplier-content">
                 <p class="bonus">+100%</p>
@@ -250,7 +250,7 @@
             <div class="multiplier-card">
               <div class="multiplier-header">
                 <i class="fas fa-history"></i>
-                <h4>Neuron Age</h4>
+                <h4>{{ $t('dao.staking.multipliers.age.title', 'Neuron Age') }}</h4>
               </div>
               <div class="multiplier-content">
                 <p class="bonus">+100%</p>
@@ -264,7 +264,7 @@
 
     <!-- Stakeholder Rights Section -->
     <section class="stakeholder-section">
-      <h2 class="section-title text-gradient">Stakeholder Rights</h2>
+      <h2 class="section-title text-gradient">{{ $t('dao.rights.title', 'Stakeholder Rights') }}</h2>
       
       <div class="rights-grid">
         <div class="rights-card cosmic-card">
@@ -272,12 +272,12 @@
             <i class="fas fa-landmark"></i>
           </div>
           <div class="rights-content">
-            <h3>Treasury Management</h3>
-            <p>Vote on allocation of DAO treasury funds for development, marketing, and community initiatives</p>
+            <h3>{{ $t('dao.rights.treasury.title', 'Treasury Management') }}</h3>
+            <p>{{ $t('dao.rights.treasury.description', 'Vote on allocation of DAO treasury funds for development, marketing, and community initiatives') }}</p>
             <ul class="rights-list">
-              <li>Marketing campaigns</li>
-              <li>Development funding</li>
-              <li>Strategic partnerships</li>
+              <li>{{ $t('dao.rights.treasury.items.marketing', 'Marketing campaigns') }}</li>
+              <li>{{ $t('dao.rights.treasury.items.development', 'Development funding') }}</li>
+              <li>{{ $t('dao.rights.treasury.items.partnerships', 'Strategic partnerships') }}</li>
             </ul>
           </div>
         </div>
@@ -287,12 +287,12 @@
             <i class="fas fa-cogs"></i>
           </div>
           <div class="rights-content">
-            <h3>Economic Policies</h3>
-            <p>Shape the economic framework of the ecosystem through collective decision-making</p>
+            <h3>{{ $t('dao.rights.economic.title', 'Economic Policies') }}</h3>
+            <p>{{ $t('dao.rights.economic.description', 'Shape the economic framework of the ecosystem through collective decision-making') }}</p>
             <ul class="rights-list">
-              <li>Tokenomics adjustments</li>
-              <li>Staking rate changes</li>
-              <li>Fee structures</li>
+              <li>{{ $t('dao.rights.economic.items.tokenomics', 'Tokenomics adjustments') }}</li>
+              <li>{{ $t('dao.rights.economic.items.staking', 'Staking rate changes') }}</li>
+              <li>{{ $t('dao.rights.economic.items.fees', 'Fee structures') }}</li>
             </ul>
           </div>
         </div>
@@ -302,12 +302,12 @@
             <i class="fas fa-tasks"></i>
           </div>
           <div class="rights-content">
-            <h3>Development Roadmap</h3>
-            <p>Influence the technical and product development priorities of the platform</p>
+            <h3>{{ $t('dao.rights.roadmap.title', 'Development Roadmap') }}</h3>
+            <p>{{ $t('dao.rights.roadmap.description', 'Influence the technical and product development priorities of the platform') }}</p>
             <ul class="rights-list">
-              <li>Feature prioritization</li>
-              <li>Game expansions</li>
-              <li>Technical improvements</li>
+              <li>{{ $t('dao.rights.roadmap.items.features', 'Feature prioritization') }}</li>
+              <li>{{ $t('dao.rights.roadmap.items.expansions', 'Game expansions') }}</li>
+              <li>{{ $t('dao.rights.roadmap.items.improvements', 'Technical improvements') }}</li>
             </ul>
           </div>
         </div>
@@ -317,12 +317,12 @@
             <i class="fas fa-handshake"></i>
           </div>
           <div class="rights-content">
-            <h3>Community Programs</h3>
-            <p>Establish and govern community-led initiatives to grow the ecosystem</p>
+            <h3>{{ $t('dao.rights.community.title', 'Community Programs') }}</h3>
+            <p>{{ $t('dao.rights.community.description', 'Establish and govern community-led initiatives to grow the ecosystem') }}</p>
             <ul class="rights-list">
-              <li>Content creator funding</li>
-              <li>Events and tournaments</li>
-              <li>Educational programs</li>
+              <li>{{ $t('dao.rights.community.items.creators', 'Content creator funding') }}</li>
+              <li>{{ $t('dao.rights.community.items.events', 'Events and tournaments') }}</li>
+              <li>{{ $t('dao.rights.community.items.education', 'Educational programs') }}</li>
             </ul>
           </div>
         </div>
@@ -330,12 +330,12 @@
     </section>
 
     <!-- Active Proposals -->
-    <section class="proposals-section">
-      <h2 class="section-title text-gradient">Active Proposals</h2>
+    <section v-if="activeProposals.length > 0" class="proposals-section">
+      <h2 class="section-title text-gradient">{{ $t('dao.proposals.title', 'Active Proposals') }}</h2>
       
       <div class="proposals-grid">
         <div v-for="proposal in activeProposals" 
-             :key="proposal.id" 
+             :key="`proposal-${proposal.id}`" 
              class="proposal-card cosmic-card">
           <div class="proposal-header">
             <div class="proposal-title">
@@ -343,7 +343,7 @@
               <span class="proposal-id">#{{ proposal.id }}</span>
             </div>
             <span class="proposal-status" :class="proposal.status">
-              {{ proposal.status }}
+              {{ $t(`dao.proposals.status.${proposal.status}`, proposal.status) }}
             </span>
           </div>
           
@@ -356,8 +356,8 @@
                      :style="{ width: `${proposal.forPercentage}%` }"></div>
               </div>
               <div class="vote-counts">
-                <span class="for">For: {{ proposal.forVotes }}</span>
-                <span class="against">Against: {{ proposal.againstVotes }}</span>
+                <span class="for">{{ $t('dao.proposals.for', 'For') }}: {{ proposal.forVotes }}</span>
+                <span class="against">{{ $t('dao.proposals.against', 'Against') }}: {{ proposal.againstVotes }}</span>
               </div>
             </div>
             
@@ -368,13 +368,13 @@
           </div>
           
           <div class="proposal-actions">
-            <a href="https://nns.ic0.app" target="_blank" class="cosmic-button primary">
+            <a :href="daoAppUrl" target="_blank" rel="noopener noreferrer" class="cosmic-button primary">
               <i class="fas fa-check"></i>
-              Vote For
+              {{ $t('dao.proposals.vote_for', 'Vote For') }}
             </a>
-            <a href="https://nns.ic0.app" target="_blank" class="cosmic-button secondary">
+            <a :href="daoAppUrl" target="_blank" rel="noopener noreferrer" class="cosmic-button secondary">
               <i class="fas fa-times"></i>
-              Vote Against
+              {{ $t('dao.proposals.vote_against', 'Vote Against') }}
             </a>
           </div>
         </div>
@@ -384,37 +384,37 @@
     <!-- Join CTA Section -->
     <section class="join-section cosmic-card">
       <div class="join-content">
-        <h2 class="text-gradient">Claim Your Cosmic Power!</h2>
-        <p>Join the DAO and participate in governing the first fully on-chain gaming franchise</p>
+        <h2 class="text-gradient">{{ $t('dao.join.title', 'Claim Your Cosmic Power!') }}</h2>
+        <p>{{ $t('dao.join.description', 'Join the DAO and participate in governing the first fully on-chain gaming franchise') }}</p>
         
         <div class="join-stats">
           <div class="join-stat">
             <i class="fas fa-vote-yea"></i>
             <span class="value">3x</span>
-            <span class="label">Max Voting Power</span>
+            <span class="label">{{ $t('dao.join.stats.voting', 'Max Voting Power') }}</span>
           </div>
           
           <div class="join-stat">
             <i class="fas fa-chart-line"></i>
             <span class="value">8→1%</span>
-            <span class="label">APY Range</span>
+            <span class="label">{{ $t('dao.join.stats.apy', 'APY Range') }}</span>
           </div>
           
           <div class="join-stat">
             <i class="fas fa-calendar-alt"></i>
             <span class="value">7 Days</span>
-            <span class="label">Voting Period</span>
+            <span class="label">{{ $t('dao.join.stats.period', 'Voting Period') }}</span>
           </div>
         </div>
         
         <div class="join-buttons">
-          <a href="https://nns.ic0.app" target="_blank" class="cosmic-button primary">
+          <a :href="daoAppUrl" target="_blank" rel="noopener noreferrer" class="cosmic-button primary">
             <i class="fas fa-rocket"></i>
-            Become a Stakeholder
+            {{ $t('dao.join.stakeholder_cta', 'Become a Stakeholder') }}
           </a>
           <router-link to="/whitepaper" class="cosmic-button secondary">
             <i class="fas fa-book"></i>
-            Read Whitepaper
+            {{ $t('dao.join.whitepaper_cta', 'Read Whitepaper') }}
           </router-link>
         </div>
       </div>
@@ -423,7 +423,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 // Import multi-language logos and DAO image
@@ -438,12 +438,16 @@ import heroImage2AR from '@/assets/icons/logo-ar.svg';
 export default {
   name: "DAOPage",
   setup() {
-    const { locale } = useI18n();
-
+    const { t, locale } = useI18n();
+    
     // Reactive Properties
     const scrollY = ref(0);
+    const starfield = ref(null);
     const tooltip = ref(null);
     const tooltipVisible = ref(false);
+    const daoAppUrl = ref('https://nns.ic0.app');
+    const isLoading = ref(false);
+    const error = ref(null);
     
     // Mock data for active proposals
     const activeProposals = ref([
@@ -482,13 +486,21 @@ export default {
       return heroLogoMap[locale.value] || heroLogoMap.default;
     });
 
+    // Performance optimization: Use requestAnimationFrame for scroll events
+    let ticking = false;
     function handleScroll() {
-      scrollY.value = window.scrollY;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          scrollY.value = window.scrollY;
+          ticking = false;
+        });
+        ticking = true;
+      }
     }
     
     function handleJoin() {
       // Redirect to NNS dashboard for participation
-      window.open('https://nns.ic0.app', '_blank');
+      window.open(daoAppUrl.value, '_blank', 'noopener,noreferrer');
     }
 
     // Tooltip control methods
@@ -502,10 +514,81 @@ export default {
       tooltipVisible.value = false;
     }
 
+    // Initialize canvas effects
+    function initCanvasEffects() {
+      if (starfield.value) {
+        try {
+          // Starfield implementation
+          const canvas = starfield.value;
+          const ctx = canvas.getContext('2d');
+          
+          // Set canvas dimensions
+          const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            drawStars(); // Redraw stars when canvas is resized
+          };
+          
+          // Create stars
+          const stars = [];
+          const createStars = () => {
+            const starCount = Math.floor((canvas.width * canvas.height) / 1000);
+            for (let i = 0; i < starCount; i++) {
+              stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5,
+                opacity: Math.random(),
+                speed: Math.random() * 0.05
+              });
+            }
+          };
+          
+          // Draw stars
+          const drawStars = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            
+            stars.forEach(star => {
+              ctx.globalAlpha = star.opacity;
+              ctx.beginPath();
+              ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+              ctx.fill();
+              
+              // Move star
+              star.y += star.speed;
+              
+              // Reset star position if it goes off screen
+              if (star.y > canvas.height) {
+                star.y = 0;
+                star.x = Math.random() * canvas.width;
+              }
+            });
+            
+            // Request next frame
+            requestAnimationFrame(drawStars);
+          };
+          
+          // Initialize
+          resizeCanvas();
+          createStars();
+          drawStars();
+          
+          // Handle window resize
+          window.addEventListener('resize', resizeCanvas, { passive: true });
+        } catch (err) {
+          console.error('Canvas initialization error:', err);
+          // Silently fail for production - no visual effect is better than a broken page
+        }
+      }
+    }
+
     onMounted(() => {
-      window.addEventListener('scroll', handleScroll);
+      // Add passive: true for better performance
+      window.addEventListener('scroll', handleScroll, { passive: true });
       
-      // Initialize starfield or other animations here if needed
+      // Initialize starfield or other animations
+      initCanvasEffects();
     });
 
     onUnmounted(() => {
@@ -520,7 +603,11 @@ export default {
       showTooltip,
       hideTooltip,
       activeProposals,
-      handleJoin
+      handleJoin,
+      daoAppUrl,
+      starfield,
+      isLoading,
+      error
     };
   },
 };
@@ -535,9 +622,9 @@ export default {
   margin: 0;
   padding: 0;
   line-height: 1.2;
-  
+  /* Add content-visibility for better performance */
+  contain: content;
 }
-
 
 .noise-canvas {
   position: absolute;
@@ -545,6 +632,8 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+  /* Optimize canvas rendering */
+  will-change: transform;
 }
 
 /* Headline Section Styles */
@@ -564,6 +653,9 @@ export default {
   background-blend-mode: overlay;
   perspective: 1500px;
   transform-style: preserve-3d;
+  /* Add content-visibility for better performance */
+  content-visibility: auto;
+  contain-intrinsic-size: 100vh;
 }
 
 .headline::before {
@@ -3835,6 +3927,77 @@ export default {
   /* Adjust starfield canvas for mobile */
   #starfield {
     opacity: 0.6;
+  }
+}
+
+/* Performance optimizations for animations */
+.hero-logo, .dao-image, .primary-headline, .cta-subtext, .cta-buttons-container {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Optimize images with loading attribute */
+img.hero-logo, img.dao-image {
+  loading: lazy;
+}
+
+/* Optimize animations with hardware acceleration */
+.distribution-card:hover, .governance-card:hover, .stat-card:hover, 
+.rights-card:hover, .proposal-card:hover, .multiplier-card:hover {
+  transform: translateY(-4px) translateZ(0);
+  will-change: transform, box-shadow;
+}
+
+/* Optimize transitions */
+.cta-button, .cosmic-button, .join-button {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              background 0.3s ease, 
+              box-shadow 0.3s ease;
+  will-change: transform, background, box-shadow;
+}
+
+/* Add print styles for better accessibility */
+@media print {
+  .dao-page {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .headline, .distribution-section, .governance-section,
+  .stats-overview, .staking-section, .stakeholder-section,
+  .proposals-section, .join-section {
+    page-break-inside: avoid;
+    background: white !important;
+    color: black !important;
+    margin: 20px 0;
+    padding: 20px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .cta-buttons-container, .join-buttons, .proposal-actions {
+    display: none !important;
+  }
+}
+
+/* Optimize for reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .hero-logo, .dao-image, .primary-headline, .cta-subtext {
+    transform: none !important;
+  }
+  
+  @keyframes float {
+    0%, 50%, 100% { transform: translateY(0px); }
+  }
+  
+  @keyframes sectionReveal {
+    from, to { opacity: 1; transform: none; }
   }
 }
 </style>
