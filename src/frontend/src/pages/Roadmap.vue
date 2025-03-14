@@ -2947,4 +2947,339 @@ export default {
   justify-content: flex-end;
   align-items: center;
 }
+
+/* Add page entrance animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Apply animations to desktop hero components */
+.desktop-hero-section {
+  animation: fadeInRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.logo-area {
+  opacity: 0;
+  animation: scaleIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+}
+
+.title-area {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+}
+
+.hero-actions {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+}
+
+/* Apply animations to mobile hero components */
+.compact-hero {
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.compact-hero-left {
+  opacity: 0;
+  animation: fadeInRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+}
+
+.compact-hero-center {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+}
+
+.compact-hero-right {
+  opacity: 0;
+  animation: fadeInLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+}
+
+/* Apply animations to search section */
+.search-container {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
+}
+
+/* Apply animations to roadmap content */
+.scrollable-content {
+  opacity: 0;
+  animation: fadeIn 1s ease 1s forwards;
+}
+
+/* Individual quarter entrances */
+.quarter {
+  opacity: 0;
+  animation: fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Apply staggered delays to quarters */
+.quarter:nth-child(1) { animation-delay: 1.1s; }
+.quarter:nth-child(2) { animation-delay: 1.2s; }
+.quarter:nth-child(3) { animation-delay: 1.3s; }
+.quarter:nth-child(4) { animation-delay: 1.4s; }
+.quarter:nth-child(5) { animation-delay: 1.5s; }
+.quarter:nth-child(6) { animation-delay: 1.6s; }
+.quarter:nth-child(7) { animation-delay: 1.7s; }
+.quarter:nth-child(8) { animation-delay: 1.8s; }
+
+/* Make sure current quarter gets attention */
+.quarter.current-quarter {
+  animation: scaleIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2s forwards;
+}
+
+/* Don't animate when showing/hiding nested items */
+.quarter.active, 
+.milestone.active,
+.task.active {
+  animation: none;
+  opacity: 1;
+}
+
+/* Optimize animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .desktop-hero-section, .compact-hero, .logo-area, .title-area, 
+  .hero-actions, .compact-hero-left, .compact-hero-center, 
+  .compact-hero-right, .search-container, .scrollable-content,
+  .quarter, .quarter.current-quarter {
+    animation: fadeIn 0.5s ease forwards !important;
+    animation-delay: 0s !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Refined animations for search and roadmap content */
+
+/* Search container animation */
+.search-container {
+  opacity: 0;
+  transform-origin: top center;
+  animation: searchReveal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
+}
+
+@keyframes searchReveal {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.5) translateY(-10px);
+    box-shadow: 0 0 0 rgba(15, 185, 253, 0);
+  }
+  60% {
+    opacity: 1;
+    transform: scaleY(1.05) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+    box-shadow: var(--cosmic-shadow-md);
+  }
+}
+
+/* Apply a glow effect to the search input */
+.search-input-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 10px rgba(15, 185, 253, 0.4), 
+              0 0 20px rgba(15, 185, 253, 0.2);
+  opacity: 0;
+  animation: searchGlow 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.6s forwards;
+  pointer-events: none;
+}
+
+@keyframes searchGlow {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Roadmap container reveal animation */
+.scrollable-content {
+  position: relative;
+  opacity: 0;
+  transform-origin: top center;
+  animation: contentReveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
+}
+
+@keyframes contentReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  }
+  30% {
+    clip-path: polygon(0 0, 100% 0, 100% 5%, 0 5%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+/* Enhanced quarter animations with staggered revealing */
+.quarter {
+  opacity: 0;
+  transform: translateY(15px);
+  filter: blur(5px);
+  animation: quarterReveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes quarterReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* More elegant staggered delays for quarters */
+.quarter:nth-child(1) { animation-delay: 1.1s; }
+.quarter:nth-child(2) { animation-delay: 1.2s; }
+.quarter:nth-child(3) { animation-delay: 1.3s; }
+.quarter:nth-child(4) { animation-delay: 1.4s; }
+.quarter:nth-child(5) { animation-delay: 1.5s; }
+.quarter:nth-child(6) { animation-delay: 1.6s; }
+.quarter:nth-child(7) { animation-delay: 1.7s; }
+.quarter:nth-child(8) { animation-delay: 1.8s; }
+.quarter:nth-child(9) { animation-delay: 1.9s; }
+.quarter:nth-child(10) { animation-delay: 2.0s; }
+
+/* Special treatment for current quarter */
+.quarter.current-quarter {
+  animation: currentQuarterReveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) 2s forwards;
+}
+
+@keyframes currentQuarterReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(15px) scale(0.96);
+    filter: blur(5px);
+    box-shadow: 0 0 0 rgba(15, 185, 253, 0);
+  }
+  60% {
+    transform: translateY(0) scale(1.02);
+    filter: blur(0);
+    box-shadow: 0 0 15px rgba(15, 185, 253, 0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+    box-shadow: var(--cosmic-glow-blue-md);
+  }
+}
+
+/* Add a subtle scanning line effect to the content */
+.scrollable-content::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, 
+    transparent 0%, 
+    rgba(15, 185, 253, 0.5) 50%, 
+    transparent 100%
+  );
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+  animation: scanLine 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s;
+}
+
+@keyframes scanLine {
+  0% {
+    opacity: 0;
+    top: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    top: 100%;
+  }
+}
+
+/* Improve reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .search-container, .scrollable-content, .quarter, .quarter.current-quarter,
+  .search-input-wrapper::after, .scrollable-content::after {
+    animation: fadeIn 0.5s ease forwards !important;
+    animation-delay: 0s !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    box-shadow: inherit !important;
+    clip-path: none !important;
+  }
+  
+  .search-input-wrapper::after, .scrollable-content::after {
+    display: none !important;
+  }
+}
 </style>
