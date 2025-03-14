@@ -3004,120 +3004,72 @@ export default {
 
 /* Apply animations to desktop hero components */
 .desktop-hero-section {
-  animation: fadeInRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: fadeInRight 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .logo-area {
   opacity: 0;
-  animation: scaleIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+  animation: scaleIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
 }
 
 .title-area {
   opacity: 0;
-  animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+  animation: fadeInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
 }
 
 .hero-actions {
   opacity: 0;
-  animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+  animation: fadeInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
 }
 
 /* Apply animations to mobile hero components */
 .compact-hero {
-  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .compact-hero-left {
   opacity: 0;
-  animation: fadeInRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+  animation: fadeInRight 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
 }
 
 .compact-hero-center {
   opacity: 0;
-  animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+  animation: fadeInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.15s forwards;
 }
 
 .compact-hero-right {
   opacity: 0;
-  animation: fadeInLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+  animation: fadeInLeft 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
 }
 
-/* Apply animations to search section */
-.search-container {
-  opacity: 0;
-  animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
-}
-
-/* Apply animations to roadmap content */
-.scrollable-content {
-  opacity: 0;
-  animation: fadeIn 1s ease 1s forwards;
-}
-
-/* Individual quarter entrances */
-.quarter {
-  opacity: 0;
-  animation: fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-/* Apply staggered delays to quarters */
-.quarter:nth-child(1) { animation-delay: 1.1s; }
-.quarter:nth-child(2) { animation-delay: 1.2s; }
-.quarter:nth-child(3) { animation-delay: 1.3s; }
-.quarter:nth-child(4) { animation-delay: 1.4s; }
-.quarter:nth-child(5) { animation-delay: 1.5s; }
-.quarter:nth-child(6) { animation-delay: 1.6s; }
-.quarter:nth-child(7) { animation-delay: 1.7s; }
-.quarter:nth-child(8) { animation-delay: 1.8s; }
-
-/* Make sure current quarter gets attention */
-.quarter.current-quarter {
-  animation: scaleIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2s forwards;
-}
-
-/* Don't animate when showing/hiding nested items */
-.quarter.active, 
-.milestone.active,
-.task.active {
-  animation: none;
-  opacity: 1;
-}
-
-/* Optimize animations for users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .desktop-hero-section, .compact-hero, .logo-area, .title-area, 
-  .hero-actions, .compact-hero-left, .compact-hero-center, 
-  .compact-hero-right, .search-container, .scrollable-content,
-  .quarter, .quarter.current-quarter {
-    animation: fadeIn 0.5s ease forwards !important;
-    animation-delay: 0s !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
-
-/* Refined animations for search and roadmap content */
-
-/* Search container animation */
+/* Apply animations to search section - more sophisticated treatment */
 .search-container {
   opacity: 0;
   transform-origin: top center;
-  animation: searchReveal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
+  animation: searchReveal 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+  will-change: transform, opacity;
+  transform: perspective(1000px);
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  box-shadow: 0 0 0 rgba(15, 185, 253, 0);
 }
 
 @keyframes searchReveal {
   0% {
     opacity: 0;
-    transform: scaleY(0.5) translateY(-10px);
+    transform: perspective(1000px) rotateX(-5deg) translateY(-10px) scale(0.98);
     box-shadow: 0 0 0 rgba(15, 185, 253, 0);
   }
-  60% {
+  40% {
     opacity: 1;
-    transform: scaleY(1.05) translateY(0);
+    transform: perspective(1000px) rotateX(1deg) translateY(0) scale(1.01);
+  }
+  70% {
+    transform: perspective(1000px) rotateX(-0.5deg) translateY(0) scale(0.995);
   }
   100% {
     opacity: 1;
-    transform: scaleY(1) translateY(0);
+    transform: perspective(1000px) rotateX(0) translateY(0) scale(1);
     box-shadow: var(--cosmic-shadow-md);
   }
 }
@@ -3134,7 +3086,7 @@ export default {
   box-shadow: 0 0 10px rgba(15, 185, 253, 0.4), 
               0 0 20px rgba(15, 185, 253, 0.2);
   opacity: 0;
-  animation: searchGlow 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.6s forwards;
+  animation: searchGlow 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
   pointer-events: none;
 }
 
@@ -3150,22 +3102,25 @@ export default {
   }
 }
 
-/* Roadmap container reveal animation */
+/* Roadmap container reveal animation - starts earlier and faster */
 .scrollable-content {
   position: relative;
   opacity: 0;
   transform-origin: top center;
-  animation: contentReveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
+  animation: contentReveal 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+  will-change: transform, opacity; /* Performance optimization */
+  backface-visibility: hidden; /* Fix blur during animation */
+  perspective: 1000px; /* Fix blur during animation */
 }
 
 @keyframes contentReveal {
   0% {
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(12px);
     clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
   }
   30% {
-    clip-path: polygon(0 0, 100% 0, 100% 5%, 0 5%);
+    clip-path: polygon(0 0, 100% 0, 100% 8%, 0 8%);
   }
   100% {
     opacity: 1;
@@ -3174,65 +3129,64 @@ export default {
   }
 }
 
-/* Enhanced quarter animations with staggered revealing */
+/* Enhanced quarter animations with staggered revealing - starts earlier */
 .quarter {
   opacity: 0;
-  transform: translateY(15px);
-  filter: blur(5px);
-  animation: quarterReveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transform: translateY(12px);
+  filter: blur(0); /* Remove initial blur to fix the bug */
+  animation: quarterReveal 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  will-change: transform, opacity; /* Performance optimization */
+  backface-visibility: hidden; /* Fix blur during animation */
+  perspective: 1000px; /* Fix blur during animation */
 }
 
 @keyframes quarterReveal {
   0% {
     opacity: 0;
-    transform: translateY(15px);
-    filter: blur(5px);
+    transform: translateY(12px);
   }
   100% {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0);
   }
 }
 
-/* More elegant staggered delays for quarters */
-.quarter:nth-child(1) { animation-delay: 1.1s; }
-.quarter:nth-child(2) { animation-delay: 1.2s; }
-.quarter:nth-child(3) { animation-delay: 1.3s; }
-.quarter:nth-child(4) { animation-delay: 1.4s; }
-.quarter:nth-child(5) { animation-delay: 1.5s; }
-.quarter:nth-child(6) { animation-delay: 1.6s; }
-.quarter:nth-child(7) { animation-delay: 1.7s; }
-.quarter:nth-child(8) { animation-delay: 1.8s; }
-.quarter:nth-child(9) { animation-delay: 1.9s; }
-.quarter:nth-child(10) { animation-delay: 2.0s; }
+/* More elegant staggered delays for quarters - shorter delays */
+.quarter:nth-child(1) { animation-delay: 0.5s; }
+.quarter:nth-child(2) { animation-delay: 0.55s; }
+.quarter:nth-child(3) { animation-delay: 0.6s; }
+.quarter:nth-child(4) { animation-delay: 0.65s; }
+.quarter:nth-child(5) { animation-delay: 0.7s; }
+.quarter:nth-child(6) { animation-delay: 0.75s; }
+.quarter:nth-child(7) { animation-delay: 0.8s; }
+.quarter:nth-child(8) { animation-delay: 0.85s; }
+.quarter:nth-child(9) { animation-delay: 0.9s; }
+.quarter:nth-child(10) { animation-delay: 0.95s; }
 
-/* Special treatment for current quarter */
+/* Special treatment for current quarter - faster and starting earlier */
 .quarter.current-quarter {
-  animation: currentQuarterReveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) 2s forwards;
+  animation: currentQuarterReveal 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 1s forwards;
+  will-change: transform, opacity, box-shadow; /* Performance optimization */
 }
 
 @keyframes currentQuarterReveal {
   0% {
     opacity: 0;
-    transform: translateY(15px) scale(0.96);
-    filter: blur(5px);
+    transform: translateY(10px) scale(0.97);
     box-shadow: 0 0 0 rgba(15, 185, 253, 0);
   }
   60% {
     transform: translateY(0) scale(1.02);
-    filter: blur(0);
-    box-shadow: 0 0 15px rgba(15, 185, 253, 0.5);
+    box-shadow: 0 0 12px rgba(15, 185, 253, 0.5);
   }
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0);
     box-shadow: var(--cosmic-glow-blue-md);
   }
 }
 
-/* Add a subtle scanning line effect to the content */
+/* Add a subtle scanning line effect to the content - starts earlier */
 .scrollable-content::after {
   content: '';
   position: absolute;
@@ -3248,7 +3202,7 @@ export default {
   opacity: 0;
   z-index: 1;
   pointer-events: none;
-  animation: scanLine 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s;
+  animation: scanLine 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.7s;
 }
 
 @keyframes scanLine {
@@ -3269,7 +3223,7 @@ export default {
 @media (prefers-reduced-motion: reduce) {
   .search-container, .scrollable-content, .quarter, .quarter.current-quarter,
   .search-input-wrapper::after, .scrollable-content::after {
-    animation: fadeIn 0.5s ease forwards !important;
+    animation: fadeIn 0.3s ease forwards !important;
     animation-delay: 0s !important;
     opacity: 1 !important;
     transform: none !important;
