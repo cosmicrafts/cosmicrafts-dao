@@ -1008,7 +1008,7 @@ export default {
   right: 0;
   bottom: 0;
   background: 
-  url('@/assets/webp/hyperspace02.webp') center/cover no-repeat,
+  url('@/assets/webp/hyperspace03.webp') center/cover no-repeat,
     radial-gradient(circle at 10% 20%, rgba(88, 101, 242, 0.4) 0%, transparent 40%),
     radial-gradient(circle at 80% 30%, rgba(15, 185, 253, 0.3) 0%, transparent 40%),
     radial-gradient(circle at 40% 70%, rgba(201, 42, 253, 0.3) 0%, transparent 40%),

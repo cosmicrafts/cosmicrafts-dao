@@ -538,40 +538,57 @@ export default {
           const stars = [];
           const createStars = () => {
             const starCount = Math.floor((canvas.width * canvas.height) / 1000);
+            stars.length = 0; // Clear any existing stars
+            
+            // Create stars with a delayed appearance effect
             for (let i = 0; i < starCount; i++) {
               stars.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
                 radius: Math.random() * 1.5,
-                opacity: Math.random(),
-                speed: Math.random() * 0.05
+                opacity: 0, // Start with 0 opacity
+                targetOpacity: Math.random(), // Target opacity to animate to
+                speed: Math.random() * 0.05,
+                delay: Math.random() * 2000 // Random delay for each star (up to 2s)
               });
             }
           };
           
-          // Draw stars
+          // Draw stars on canvas
           const drawStars = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'white';
+            if (!ctx) return;
             
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Current time for animation
+            const now = Date.now();
+            const animStart = now - 500; // Animation started 500ms after function call
+            
+            // Draw each star
+            ctx.fillStyle = '#ffffff';
             stars.forEach(star => {
+              // Calculate current opacity based on delay
+              if (star.opacity < star.targetOpacity && now > animStart + star.delay) {
+                star.opacity = Math.min(
+                  star.targetOpacity, 
+                  star.opacity + 0.01
+                );
+              }
+              
               ctx.globalAlpha = star.opacity;
               ctx.beginPath();
               ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
               ctx.fill();
               
-              // Move star
+              // Move stars slightly for subtle twinkling effect
               star.y += star.speed;
               
-              // Reset star position if it goes off screen
+              // Wrap stars at bottom of screen
               if (star.y > canvas.height) {
                 star.y = 0;
-                star.x = Math.random() * canvas.width;
               }
             });
-            
-            // Request next frame
-            requestAnimationFrame(drawStars);
           };
           
           // Initialize
@@ -588,12 +605,36 @@ export default {
       }
     }
 
+    // Initialize canvas effects and setup event listeners
     onMounted(() => {
-      // Add passive: true for better performance
+      // Add scroll event listener with passive: true for better performance
       window.addEventListener('scroll', handleScroll, { passive: true });
       
-      // Initialize starfield or other animations
+      // Initialize canvas effects
       initCanvasEffects();
+      
+      // Create entrance animation for the hero section
+      const heroElements = [
+        '.hero-logo',
+        '.dao-image',
+        '.primary-headline',
+        '.cta-subtext',
+        '.cta-buttons-container .cta-button:first-child',
+        '.cta-buttons-container .cta-button:last-child'
+      ];
+      
+      // Ensure animations reset if page is reloaded midway through
+      heroElements.forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) {
+          element.style.opacity = '0';
+        }
+      });
+      
+      // Set initial opacity for starfield
+      if (starfield.value) {
+        starfield.value.style.opacity = '0';
+      }
     });
 
     onUnmounted(() => {
@@ -661,6 +702,13 @@ export default {
   /* Add content-visibility for better performance */
   content-visibility: auto;
   contain-intrinsic-size: 100vh;
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .headline::before {
@@ -697,6 +745,41 @@ export default {
   padding: 0 2rem;
 }
 
+/* Add new animations for hero elements */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+
+@keyframes glowPulse {
+  0% {
+    filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(15, 185, 253, 0.7));
+  }
+  100% {
+    filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.3));
+  }
+}
+
 .hero-logo {
   max-width: 16rem;
   margin-bottom: -8rem;
@@ -705,6 +788,9 @@ export default {
   transform-style: preserve-3d;
   transform: translateZ(20px);
   will-change: transform;
+  opacity: 0;
+  animation: scaleIn 0.7s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.1s forwards,
+             glowPulse 3s ease-in-out 1.4s infinite;
 }
 
 .dao-image {
@@ -715,13 +801,38 @@ export default {
   transform-style: preserve-3d;
   transform: translateZ(40px);
   will-change: transform;
-  animation: float 6s ease-in-out infinite;
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.3s forwards,
+             float 6s ease-in-out 1.2s infinite;
 }
 
 @keyframes float {
   0% { transform: translateZ(40px) translateY(0px); }
   50% { transform: translateZ(40px) translateY(-15px); }
   100% { transform: translateZ(40px) translateY(0px); }
+}
+
+@keyframes textGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes lineReveal {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 15rem;
+    opacity: 0.7;
+  }
 }
 
 .primary-headline {
@@ -733,6 +844,7 @@ export default {
   background: linear-gradient(180deg, 
     rgba(135, 192, 255, 1) 0%, 
     rgba(0, 123, 255, 1) 100%);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -744,6 +856,9 @@ export default {
   will-change: transform;
   transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.5s forwards,
+             textGradientShift 8s ease infinite 1.6s;
 }
 
 .primary-headline::after {
@@ -759,7 +874,8 @@ export default {
     rgba(15, 185, 253, 0.8) 50%, 
     rgba(15, 185, 253, 0) 100%);
   border-radius: 2px;
-  opacity: 0.7;
+  opacity: 0;
+  animation: lineReveal 1s ease 0.7s forwards;
 }
 
 .cta-subtext {
@@ -774,6 +890,23 @@ export default {
   transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: transform;
   letter-spacing: 0.02em;
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.7s forwards;
+}
+
+@keyframes buttonPop {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9) translateZ(25px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.03) translateZ(25px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) translateZ(25px);
+  }
 }
 
 .cta-buttons-container {
@@ -784,6 +917,40 @@ export default {
   transform-style: preserve-3d;
   transform: translateZ(25px);
   transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.cta-buttons-container .cta-button:first-child {
+  opacity: 0;
+  animation: buttonPop 0.9s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.9s forwards;
+}
+
+.cta-buttons-container .cta-button:last-child {
+  opacity: 0;
+  animation: buttonPop 0.9s cubic-bezier(0.17, 0.67, 0.3, 1.33) 1.1s forwards;
+}
+
+/* Add canvas particles animation */
+@keyframes canvasFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.45;
+  }
+}
+
+.noise-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  mix-blend-mode: overlay;
+  z-index: 1;
+  animation: canvasFadeIn 1.5s ease 0.2s forwards;
+  /* Optimize canvas rendering */
   will-change: transform;
 }
 
