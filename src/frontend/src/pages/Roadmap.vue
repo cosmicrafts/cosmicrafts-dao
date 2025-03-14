@@ -1525,6 +1525,49 @@ export default {
   border: 1px solid var(--quarter-border);
   box-shadow: var(--cosmic-shadow-sm);
   transition: all 0.3s var(--animation-bounce);
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  /* Update border styling for mobile to prevent content from being cut off */
+  .quarter-header {
+    border-left: 0 !important; /* Remove left border on mobile */
+    padding-left: 1rem !important; /* Add consistent padding */
+    border-top: 4px solid var(--cosmic-blue) !important; /* Use top border instead */
+  }
+  
+  .quarter.completed .quarter-header {
+    border-left: 0 !important;
+    border-top: 4px solid var(--status-completed) !important;
+  }
+  
+  .milestone-header {
+    border-left: 0 !important;
+    padding-left: 1rem !important;
+    border-top: 3px solid var(--cosmic-purple) !important;
+  }
+  
+  .task-header {
+    border-left: 0 !important;
+    padding-left: 1rem !important;
+    border-top: 2px solid var(--cosmic-pink) !important;
+  }
+  
+  /* Adjust scrollable content padding */
+  .scrollable-content {
+    padding: 0.5rem;
+  }
+  
+  /* Ensure all content containers fill width properly */
+  .quarters-container,
+  .quarter,
+  .milestone,
+  .task,
+  .subtask {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 /* Completed Quarter */
@@ -1942,8 +1985,8 @@ export default {
 
 /* Mobile adjustments for status tags and progress text */
 @media (max-width: 768px) {
+  /* Basic responsive adjustments */
   .cosmic-title {
-    margin-top: -1.25rem;
     font-size: 1.75rem;
   }
   
@@ -1951,150 +1994,162 @@ export default {
     font-size: 1.24rem;
   }
   
-  .search-input {
-    font-size: 1rem;
+  /* Improve container fluidity */
+  .scrollable-content {
+    padding: 0.75rem;
+    width: auto;
+    height: auto;
+    max-height: calc(100vh - 180px);
   }
   
-  .description {
-    font-size: 1rem; /* Increased from 0.55rem for better readability */
-    line-height: 1.4;
-    margin-bottom: 0.5rem;
-  }
-
-  .subtask-description {
-    font-size: 0.95rem; /* Increased for better readability */
-    line-height: 1.4;
-  }
-
-  .hero-section {
-    display: block;
+  .quarters-container {
+    gap: 0.75rem;
+    padding: 0;
   }
   
+  /* Make quarters more flexible */
+  .quarter, .milestone, .task {
+    width: 100%;
+    margin: 0;
+    border-radius: 8px;
+  }
+  
+  /* Complete redesign of the headers for mobile */
   .quarter-header,
   .milestone-header,
   .task-header {
-    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "title status"
+      "description description"
+      "progress progress";
+    gap: 0.5rem;
     padding: 1rem;
-    padding-right: 6rem; /* Space for status tags on right */
-    padding-bottom: 3.5rem; /* Space for progress bar and toggle at bottom */
-    min-height: auto;
+    border-left: none;
+    border-top: 4px solid var(--cosmic-blue);
   }
   
-  .header-content {
-    width: 100%;
-    margin-right: 0;
-    padding-right: 0;
+  .quarter.completed .quarter-header {
+    border-top: 4px solid var(--status-completed);
   }
   
-  /* Position elements for mobile */
-  .status-indicators {
-    position: static; /* Reset absolute positioning */
+  .milestone-header {
+    border-top: 3px solid var(--cosmic-purple);
   }
   
-  /* Place tag and completion counter at top right */
-  .task-status-wrapper {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    gap: 0.4rem;
-    z-index: 10;
+  .task-header {
+    border-top: 2px solid var(--cosmic-pink);
   }
-  
-  /* Place progress bar and toggle at bottom */
-  .progress-wrapper {
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-    right: 1rem;
-    flex-direction: row; /* Ensure row direction on mobile too */
-    justify-content: space-between;
-    width: calc(100% - 2rem);
+
+  /* Reposition elements within the grid */
+  .title-with-status {
+    grid-area: title;
+    display: flex;
     align-items: center;
+    width: 100%;
+    margin: 0;
+  }
+  
+  .status-icon {
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+  }
+  
+  .title-with-status h2,
+  .title-with-status h3,
+  .title-with-status h4 {
+    font-size: 1.1rem;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  
+  .task-status-wrapper {
+    grid-area: status;
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0;
+  }
+  
+  .description {
+    grid-area: description;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+  
+  .progress-wrapper {
+    grid-area: progress;
+    position: static;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.5rem;
   }
   
   .progress-container {
-    width: calc(100% - 2.5rem); /* Full width minus toggle icon space */
-    height: 4px;
-  }
-  
-  .task-status {
-    font-size: 0.85rem; /* Increased from 0.65rem */
-    padding: 0.2rem 0.45rem; /* Slightly more padding */
-  }
-  
-  .task-status-wrapper .progress-text {
-    font-size: 0.85rem; /* Increased from 0.65rem */
-    font-weight: 600;
-  }
-  
-  /* Make headers more readable on mobile */
-  .header-content h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.35rem;
-  }
-  
-  .header-content h3 {
-    font-size: 1.35rem;
-    margin-bottom: 0.35rem;
-  }
-  
-  .header-content h4 {
-    font-size: 1.2rem;
-    margin-bottom: 0.35rem;
+    flex-grow: 1;
+    height: 6px;
   }
   
   .toggle-icon {
-    width: 0.9rem;
-    height: 0.9rem;
-    padding: 0.2rem;
+    flex-shrink: 0;
+    margin-left: 0.75rem;
+    width: 1.1rem;
+    height: 1.1rem;
   }
   
-  .toggle-icon.small {
-    width: 0.7rem;
-    height: 0.7rem;
-    padding: 0.15rem;
+  /* Status styles */
+  .task-status {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
   }
   
-  .horizontal {
-    height: 1.5px;
+  .progress-text {
+    font-size: 0.7rem;
+    margin-left: 0.25rem;
   }
   
-  .vertical {
-    width: 1.5px;
-  }
-  
-  /* Adjust task tags to fit better in mobile view */
+  /* Tags and subtasks */
   .task-tags {
-    display: flex;
+    width: 100%;
     flex-wrap: wrap;
     gap: 0.35rem;
     margin-top: 0.5rem;
   }
   
-  /* Add hover effects for icons */
-  .quarter:hover .icon-line {
-    background-color: rgb(0, 195, 255);
+  .task-tag {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
   }
-
-  .milestone:hover .icon-line {
-    background-color: rgb(255, 166, 0);
+  
+  .subtask-header {
+    flex-wrap: wrap;
   }
-
-  .task:hover .icon-line {
-    background-color: rgb(0, 208, 255);
+  
+  .checkbox-container {
+    flex: 1;
+    min-width: 0;
   }
-
-  .roadmap-container {
-    flex-direction: column; /* Stack elements on mobile */
+  
+  .checkbox-container label {
+    white-space: normal;
+    word-break: break-word;
   }
-
-  .main-content-wrapper {
-    width: 100%;
-    min-height: unset; /* Remove min-height constraint on mobile */
+  
+  .subtask-status {
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
   }
-
-  .scrollable-content {
-    height: calc(100vh - var(--header-height) - var(--page-padding) * 2 - 150px); /* Adjust height for mobile */
+  
+  .subtask-description {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
   }
 }
 
