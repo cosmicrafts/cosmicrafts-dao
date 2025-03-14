@@ -43,6 +43,7 @@
               <div class="compact-hero-right">
                 <button class="compact-quarter-btn" @click="scrollToCurrentQuarter">
                   <span class="pulse-ring"></span>
+                  <span class="btn-text">Current</span>
                   <span class="btn-icon">→</span>
                 </button>
               </div>
@@ -1007,6 +1008,7 @@ export default {
   right: 0;
   bottom: 0;
   background: 
+  url('@/assets/webp/hyperspace02.webp') center/cover no-repeat,
     radial-gradient(circle at 10% 20%, rgba(88, 101, 242, 0.4) 0%, transparent 40%),
     radial-gradient(circle at 80% 30%, rgba(15, 185, 253, 0.3) 0%, transparent 40%),
     radial-gradient(circle at 40% 70%, rgba(201, 42, 253, 0.3) 0%, transparent 40%),
@@ -1014,9 +1016,8 @@ export default {
   filter: blur(var(--glass-blur));
   z-index: 0;
   pointer-events: none;
-  perspective: 1200px;
   transform-style: preserve-3d;
-  opacity: 0.8;
+  opacity: .25;
 }
 
 .cosmic-background::before {
@@ -1119,22 +1120,15 @@ export default {
   }
 }
 
-/* Enhanced Desktop Hero Section */
+/* Enhanced Desktop Hero Section - remove background and outline */
 .desktop-hero-section {
   display: none;
   height: 100%;
   width: 350px;
   min-width: 350px;
-  position: relative; /* Changed from fixed to relative */
+  position: relative;
   overflow: hidden;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, rgba(7, 20, 42, 0.85), rgba(25, 57, 105, 0.6));
-  border: 1px solid rgba(15, 185, 253, 0.3);
-  box-shadow: 
-    0 10px 30px rgba(0, 0, 0, 0.2),
-    0 0 0 1px rgba(15, 185, 253, 0.1),
-    inset 0 0 40px rgba(15, 185, 253, 0.05);
-  margin-right: 2rem; /* Add gap between hero and roadmap content */
+  margin-right: 2rem; /* Keep gap between hero and roadmap content */
 }
 
 @media (min-width: 1024px) {
@@ -1160,30 +1154,29 @@ export default {
   }
 }
 
-.desktop-hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 50% 50%, rgba(15, 185, 253, 0.15), transparent 70%),
-              radial-gradient(circle at 80% 20%, rgba(103, 58, 183, 0.1), transparent 50%);
-  opacity: 0.8;
-  z-index: -1;
-  pointer-events: none;
+/* Remove the background styles */
+.desktop-hero-section::before, 
+.desktop-hero-section::after {
+  display: none;
 }
 
-.desktop-hero-section::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
+/* Desktop Hero Content */
+.desktop-hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 30% 70%, rgba(15, 185, 253, 0.05), transparent 70%);
-  opacity: 0.5;
-  z-index: 0;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+/* Remove the background styles for desktop hero content */
+.desktop-hero-content::before {
+  display: none;
 }
 
 /* Add star field to desktop hero */
@@ -1391,7 +1384,7 @@ export default {
 /* Search Section */
 .search-container {
   width: 100%;
-  margin-top: 1rem;
+
 }
 
 .search-input-wrapper {
@@ -1402,7 +1395,7 @@ export default {
     var(--cosmic-shadow-md),
     inset 0 2px 4px rgba(0, 0, 0, 0.1);
   background: linear-gradient(135deg,
-    rgba(16, 20, 38, 0.8) 0%,
+    rgba(16, 20, 38, 0.5) 0%,
     rgba(16, 20, 38, 0.6) 100%
   );
   border: 1px solid rgba(15, 185, 253, 0.25);
@@ -1416,7 +1409,6 @@ export default {
   box-shadow: 
     var(--cosmic-glow-blue-sm),
     inset 0 2px 4px rgba(0, 0, 0, 0.1);
-  transform: translateY(-1px);
 }
 
 .search-icon {
@@ -1976,7 +1968,6 @@ export default {
 
   .hero-section {
     display: block;
-    margin-top: 1rem; /* Add margin to hero section on mobile */
   }
   
   .quarter-header,
@@ -2697,34 +2688,18 @@ export default {
 /* New Compact Hero Section for Mobile */
 .compact-hero {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: .25rem;
+  margin-top: -1rem;
   overflow: hidden;
-  border-radius: 0.75rem;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, rgba(7, 20, 42, 0.8), rgba(25, 57, 105, 0.5));
-  border: 1px solid rgba(15, 185, 253, 0.2);
-  box-shadow: var(--cosmic-shadow-md);
-  transform-style: preserve-3d;
-  perspective: 800px;
 }
 
-/* Star animation for mobile hero background */
+/* Remove the background from compact hero */
 .compact-hero::before {
-  content: '';
-  position: absolute;
-  top: -150px;
-  left: -150px;
-  right: -150px;
-  bottom: -150px;
-  background-color: transparent;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23FFFFFF' stroke-opacity='0.7'%3E%3Ccircle r='1' cx='32' cy='52'/%3E%3Ccircle r='0.5' cx='76' cy='29'/%3E%3Ccircle r='1.2' cx='102' cy='97'/%3E%3Ccircle r='0.7' cx='143' cy='152'/%3E%3Ccircle r='1.1' cx='186' cy='61'/%3E%3Ccircle r='0.4' cx='241' cy='98'/%3E%3Ccircle r='1.5' cx='126' cy='205'/%3E%3Ccircle r='0.8' cx='220' cy='211'/%3E%3Ccircle r='1.3' cx='310' cy='40'/%3E%3Ccircle r='0.6' cx='376' cy='87'/%3E%3Ccircle r='1.2' cx='400' cy='180'/%3E%3Ccircle r='0.9' cx='466' cy='158'/%3E%3Ccircle r='1.4' cx='355' cy='220'/%3E%3Ccircle r='0.7' cx='523' cy='41'/%3E%3Ccircle r='1.2' cx='574' cy='95'/%3E%3Ccircle r='0.8' cx='629' cy='163'/%3E%3Ccircle r='1.3' cx='590' cy='219'/%3E%3Ccircle r='0.5' cx='670' cy='50'/%3E%3Ccircle r='1.1' cx='738' cy='95'/%3E%3Ccircle r='0.6' cx='777' cy='170'/%3E%3Ccircle r='1.4' cx='710' cy='210'/%3E%3Ccircle r='0.7' cx='70' cy='290'/%3E%3Ccircle r='1.3' cx='126' cy='329'/%3E%3Ccircle r='0.8' cx='195' cy='280'/%3E%3Ccircle r='1.5' cx='235' cy='340'/%3E%3Ccircle r='0.6' cx='320' cy='310'/%3E%3Ccircle r='1.2' cx='370' cy='268'/%3E%3Ccircle r='0.9' cx='420' cy='340'/%3E%3Ccircle r='1.4' cx='460' cy='290'/%3E%3Ccircle r='0.5' cx='520' cy='320'/%3E%3Ccircle r='1.1' cx='580' cy='270'/%3E%3Ccircle r='0.7' cx='610' cy='310'/%3E%3Ccircle r='1.3' cx='650' cy='340'/%3E%3Ccircle r='0.8' cx='720' cy='290'/%3E%3Ccircle r='1.2' cx='750' cy='330'/%3E%3Ccircle r='0.6' cx='50' cy='420'/%3E%3Ccircle r='1.4' cx='110' cy='370'/%3E%3Ccircle r='0.7' cx='160' cy='410'/%3E%3Ccircle r='1.2' cx='200' cy='380'/%3E%3Ccircle r='0.8' cx='240' cy='440'/%3E%3Ccircle r='1.3' cx='290' cy='380'/%3E%3Ccircle r='0.5' cx='340' cy='420'/%3E%3Ccircle r='1.1' cx='380' cy='370'/%3E%3Ccircle r='0.6' cx='430' cy='430'/%3E%3Ccircle r='1.4' cx='480' cy='380'/%3E%3Ccircle r='0.7' cx='530' cy='410'/%3E%3Ccircle r='1.3' cx='570' cy='390'/%3E%3Ccircle r='0.8' cx='630' cy='420'/%3E%3Ccircle r='1.5' cx='670' cy='380'/%3E%3Ccircle r='0.7' cx='720' cy='410'/%3E%3Ccircle r='1.1' cx='760' cy='370'/%3E%3Ccircle r='0.8' cx='50' cy='490'/%3E%3Ccircle r='1.3' cx='100' cy='460'/%3E%3Ccircle r='0.6' cx='148' cy='510'/%3E%3Ccircle r='1.2' cx='192' cy='470'/%3E%3Ccircle r='0.9' cx='246' cy='500'/%3E%3Ccircle r='1.4' cx='290' cy='460'/%3E%3Ccircle r='0.7' cx='340' cy='510'/%3E%3Ccircle r='1.3' cx='390' cy='480'/%3E%3Ccircle r='0.5' cx='420' cy='520'/%3E%3Ccircle r='1.1' cx='470' cy='470'/%3E%3Ccircle r='0.8' cx='520' cy='510'/%3E%3Ccircle r='1.2' cx='580' cy='490'/%3E%3Ccircle r='0.9' cx='610' cy='530'/%3E%3Ccircle r='1.4' cx='650' cy='490'/%3E%3Ccircle r='0.7' cx='700' cy='530'/%3E%3Ccircle r='1.2' cx='750' cy='490'/%3E%3Ccircle r='0.6' cx='70' cy='580'/%3E%3Ccircle r='1.4' cx='120' cy='550'/%3E%3Ccircle r='0.8' cx='170' cy='590'/%3E%3Ccircle r='1.3' cx='220' cy='560'/%3E%3Ccircle r='0.5' cx='270' cy='610'/%3E%3Ccircle r='1.1' cx='320' cy='580'/%3E%3Ccircle r='0.6' cx='370' cy='620'/%3E%3Ccircle r='1.2' cx='420' cy='580'/%3E%3Ccircle r='0.9' cx='470' cy='610'/%3E%3Ccircle r='1.4' cx='520' cy='570'/%3E%3Ccircle r='0.7' cx='570' cy='610'/%3E%3Ccircle r='1.3' cx='620' cy='580'/%3E%3Ccircle r='0.5' cx='670' cy='610'/%3E%3Ccircle r='1.1' cx='710' cy='570'/%3E%3Ccircle r='0.8' cx='750' cy='600'/%3E%3Ccircle r='1.3' cx='30' cy='650'/%3E%3Ccircle r='0.6' cx='90' cy='620'/%3E%3Ccircle r='1.2' cx='140' cy='670'/%3E%3Ccircle r='0.9' cx='190' cy='630'/%3E%3Ccircle r='1.4' cx='240' cy='670'/%3E%3Ccircle r='0.7' cx='290' cy='640'/%3E%3Ccircle r='1.3' cx='350' cy='670'/%3E%3Ccircle r='0.5' cx='390' cy='630'/%3E%3Ccircle r='1.1' cx='440' cy='670'/%3E%3Ccircle r='0.8' cx='490' cy='630'/%3E%3Ccircle r='1.2' cx='550' cy='670'/%3E%3Ccircle r='0.6' cx='600' cy='640'/%3E%3Ccircle r='1.3' cx='650' cy='670'/%3E%3Ccircle r='0.7' cx='700' cy='640'/%3E%3Ccircle r='1.1' cx='750' cy='670'/%3E%3Ccircle r='0.8' cx='50' cy='720'/%3E%3Ccircle r='1.2' cx='90' cy='740'/%3E%3Ccircle r='0.9' cx='140' cy='710'/%3E%3Ccircle r='1.4' cx='190' cy='750'/%3E%3Ccircle r='0.6' cx='240' cy='720'/%3E%3Ccircle r='1.2' cx='290' cy='750'/%3E%3Ccircle r='0.8' cx='350' cy='710'/%3E%3Ccircle r='1.3' cx='400' cy='750'/%3E%3Ccircle r='0.5' cx='450' cy='720'/%3E%3Ccircle r='1.1' cx='500' cy='740'/%3E%3Ccircle r='0.7' cx='550' cy='710'/%3E%3Ccircle r='1.4' cx='600' cy='750'/%3E%3Ccircle r='0.6' cx='650' cy='730'/%3E%3Ccircle r='1.2' cx='700' cy='710'/%3E%3Ccircle r='0.9' cx='750' cy='750'/%3E%3C/g%3E%3Cg fill='white' fill-opacity='0.15'%3E%3Ccircle r='2' cx='32' cy='52'/%3E%3Ccircle r='1' cx='76' cy='29'/%3E%3Ccircle r='2.4' cx='102' cy='97'/%3E%3Ccircle r='1.4' cx='143' cy='152'/%3E%3Ccircle r='2.2' cx='186' cy='61'/%3E%3Ccircle r='0.8' cx='241' cy='98'/%3E%3Ccircle r='3' cx='126' cy='205'/%3E%3Ccircle r='1.6' cx='220' cy='211'/%3E%3Ccircle r='2.6' cx='310' cy='40'/%3E%3Ccircle r='1.2' cx='376' cy='87'/%3E%3Ccircle r='2.4' cx='400' cy='180'/%3E%3Ccircle r='1.8' cx='466' cy='158'/%3E%3Ccircle r='2.8' cx='355' cy='220'/%3E%3Ccircle r='1.4' cx='523' cy='41'/%3E%3Ccircle r='2.4' cx='574' cy='95'/%3E%3Ccircle r='1.6' cx='629' cy='163'/%3E%3Ccircle r='2.6' cx='590' cy='219'/%3E%3C/g%3E%3C/svg%3E");
-  background-position: 0 0;
-  background-size: 100% 100%;
-  opacity: 0.9;
-  z-index: 0;
-  transform-style: preserve-3d;
-  transform: translateZ(-50px);
-  animation: starfieldMove 60s linear infinite alternate;
-  pointer-events: none;
+  display: none;
 }
 
 .compact-hero-content {
@@ -2745,8 +2720,7 @@ export default {
 .compact-hero-logo {
   width: 2.5rem;
   height: 2.5rem;
-  filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.6));
-  animation: pulseLogo 6s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 4px rgba(15, 186, 253, 0.338));
 }
 
 .compact-hero-center {
@@ -2790,25 +2764,31 @@ export default {
 /* Compact quarter button */
 .compact-quarter-btn {
   position: relative;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.8rem;
   border: none;
   background: linear-gradient(to right, #0fb9fd, #673ab7);
   color: white;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s var(--animation-bounce);
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+}
+
+.compact-quarter-btn .btn-text {
+  position: relative;
+  z-index: 1;
 }
 
 .compact-quarter-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3),
+              0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
 .compact-quarter-btn:active {
@@ -2825,6 +2805,7 @@ export default {
   background: linear-gradient(to right, #673ab7, #0fb9fd);
   opacity: 0;
   transition: opacity 0.3s var(--animation-smooth);
+  z-index: 0;
 }
 
 .compact-quarter-btn:hover::before {
@@ -2834,7 +2815,7 @@ export default {
 .compact-quarter-btn .btn-icon {
   position: relative;
   z-index: 1;
-  font-size: 1.2rem;
+  font-size: 1rem;
   transition: transform 0.3s var(--animation-bounce);
 }
 
@@ -2848,7 +2829,7 @@ export default {
   top: 0;
   right: 0;
   bottom: 0;
-  border-radius: 50%;
+  border-radius: 0.8rem;
   animation: pulseCTA 2s infinite;
 }
 
@@ -2860,7 +2841,7 @@ export default {
 
 /* Search Section */
 .search-container {
-  width: 100%;
+  width: 99%;
 }
 
 @keyframes rotateGradient {
@@ -2937,5 +2918,33 @@ export default {
     transparent
   );
   opacity: 0.35;
+}
+
+/* Mobile compact hero styling */
+.compact-hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 1rem;
+}
+
+.compact-hero-left {
+  flex: 0 0 auto;
+  margin-right: 0.75rem;
+}
+
+.compact-hero-center {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  padding-right: 0.5rem;
+}
+
+.compact-hero-right {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 </style>
