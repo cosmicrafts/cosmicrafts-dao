@@ -94,19 +94,19 @@
 
         <!-- Social Media Links -->
         <div class="social-links">
-          <a href="https://twitter.com/CosmicraftsDAO" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://x.com/cosmicrafts" :class="{ 'initial-load': !hasLoadedOnce }">
             <img src="@/assets/icons/x.svg" alt="Twitter" />
           </a>
           <a href="https://discord.com/invite/cosmicrafts-884272584491941888" :class="{ 'initial-load': !hasLoadedOnce }">
             <img src="@/assets/icons/discord.svg" alt="Discord" />
           </a>
-          <a href="https://www.youtube.com/@CosmicraftsDAO" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://www.youtube.com/@cosmicrafts" :class="{ 'initial-load': !hasLoadedOnce }">
             <img src="@/assets/icons/youtube.svg" alt="YouTube" />
           </a>
-          <a href="https://instagram.com/CosmicraftsDAO" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://instagram.com/cosmicraftz" :class="{ 'initial-load': !hasLoadedOnce }">
             <img src="@/assets/icons/instagram.svg" alt="Instagram" />
           </a>
-          <a href="https://facebook.com/CosmicraftsDAO" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://facebook.com/cosmicrafts" :class="{ 'initial-load': !hasLoadedOnce }">
             <img src="@/assets/icons/facebook.svg" alt="Facebook" />
           </a>
         </div>
@@ -231,11 +231,11 @@ const slides = ref([
 
 // **Social Media Links**
 const socialLinks = [
-  { link: 'https://twitter.com/CosmicraftsDAO', icon: '@/assets/icons/x.svg', alt: 'Twitter' },
+  { link: 'https://x.com/cosmicrafts', icon: '@/assets/icons/x.svg', alt: 'Twitter' },
   { link: 'https://discord.com/invite/cosmicrafts-884272584491941888', icon: '@/assets/icons/discord.svg', alt: 'Discord' },
-  { link: 'https://www.youtube.com/@CosmicraftsDAO', icon: '@/assets/icons/youtube.svg', alt: 'YouTube' },
-  { link: 'https://instagram.com/CosmicraftsDAO', icon: '@/assets/icons/instagram.svg', alt: 'Instagram' },
-  { link: 'https://facebook.com/CosmicraftsDAO', icon: '@/assets/icons/facebook.svg', alt: 'Facebook' },
+  { link: 'https://www.youtube.com/@cosmicrafts', icon: '@/assets/icons/youtube.svg', alt: 'YouTube' },
+  { link: 'https://instagram.com/cosmicrafts', icon: '@/assets/icons/instagram.svg', alt: 'Instagram' },
+  { link: 'https://facebook.com/cosmicrafts', icon: '@/assets/icons/facebook.svg', alt: 'Facebook' },
 ];
 
 // **Function to handle CTA button clicks**

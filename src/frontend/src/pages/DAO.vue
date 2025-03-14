@@ -1,10 +1,13 @@
 <template>
   <div class="dao-page">
+    <!-- Enhanced Cosmic Background -->
+    <div class="cosmic-background"></div>
+    
+    <!-- Background Canvas for Stars (fixed on viewport) -->
+    <canvas id="starfield" ref="starfield" class="global-starfield"></canvas>
+
     <!-- Headline Section -->
     <section class="headline" :style="{ backgroundPositionY: `${scrollY * -0.15}px` }">
-      <!-- Background Canvas for Stars -->
-      <canvas id="starfield" ref="starfield" class="noise-canvas" :style="{ top: `${scrollY * 0.5}px` }"></canvas>
-
       <!-- Content Wrapper -->
       <div class="content">
         <div>
@@ -531,6 +534,7 @@ export default {
           const resizeCanvas = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            createStars(); // Recreate stars when canvas is resized
             drawStars(); // Redraw stars when canvas is resized
           };
           
@@ -547,8 +551,8 @@ export default {
                 y: Math.random() * canvas.height,
                 radius: Math.random() * 1.5,
                 opacity: 0, // Start with 0 opacity
-                targetOpacity: Math.random(), // Target opacity to animate to
-                speed: Math.random() * 0.05,
+                targetOpacity: 0.7 + Math.random() * 0.3, // Target opacity between 0.7-1.0
+                twinkleSpeed: 0.002 + Math.random() * 0.008, // Add twinkle speed for each star
                 delay: Math.random() * 2000 // Random delay for each star (up to 2s)
               });
             }
@@ -576,28 +580,40 @@ export default {
                 );
               }
               
-              ctx.globalAlpha = star.opacity;
+              // Add subtle twinkling effect
+              const twinkle = Math.sin(now * star.twinkleSpeed) * 0.2;
+              const currentOpacity = Math.max(0.1, Math.min(star.targetOpacity, star.opacity + twinkle));
+              
+              ctx.globalAlpha = currentOpacity;
               ctx.beginPath();
               ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
               ctx.fill();
               
-              // Move stars slightly for subtle twinkling effect
-              star.y += star.speed;
-              
-              // Wrap stars at bottom of screen
-              if (star.y > canvas.height) {
-                star.y = 0;
-              }
+              // No vertical movement - stars stay fixed
             });
+          };
+          
+          // Animation loop
+          let animationFrameId;
+          const animate = () => {
+            drawStars();
+            animationFrameId = requestAnimationFrame(animate);
           };
           
           // Initialize
           resizeCanvas();
-          createStars();
-          drawStars();
+          animate(); // Start animation loop
           
           // Handle window resize
           window.addEventListener('resize', resizeCanvas, { passive: true });
+          
+          // Clean up animation on component unmount
+          onUnmounted(() => {
+            if (animationFrameId) {
+              cancelAnimationFrame(animationFrameId);
+            }
+            window.removeEventListener('resize', resizeCanvas);
+          });
         } catch (err) {
           console.error('Canvas initialization error:', err);
           // Silently fail for production - no visual effect is better than a broken page
@@ -631,14 +647,12 @@ export default {
         }
       });
       
-      // Set initial opacity for starfield
-      if (starfield.value) {
-        starfield.value.style.opacity = '0';
-      }
+      // No need to set initial opacity for starfield - handled by CSS animation
     });
 
     onUnmounted(() => {
       window.removeEventListener('scroll', handleScroll);
+      // Note: Canvas cleanup is handled in initCanvasEffects
     });
 
     return {
@@ -670,8 +684,86 @@ export default {
   line-height: 1.2;
   /* Add content-visibility for better performance */
   contain: content;
+  position: relative; /* Ensure proper positioning for absolute elements */
+  min-height: 100vh;
+  /* Cosmic theme variables */
+  --hero-accent-glow: rgba(15, 185, 253, 0.25);
 }
 
+/* Enhanced Cosmic Background */
+.cosmic-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(88, 101, 242, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(15, 185, 253, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 40% 70%, rgba(201, 42, 253, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 60% 50%, rgba(103, 58, 183, 0.1) 0%, transparent 50%),
+    var(--background-color);
+  z-index: 0;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  opacity: 1;
+  background-attachment: fixed; /* Fix background to viewport */
+}
+
+.cosmic-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 50% 30%, var(--hero-accent-glow) 0%, transparent 60%);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+  animation: subtlePulse 8s infinite alternate cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  background-attachment: fixed; /* Fix background to viewport */
+}
+
+@keyframes subtlePulse {
+  0% {
+    opacity: 0.3;
+    background-position: 0% 0%;
+  }
+  100% {
+    opacity: 0.6;
+    background-position: 0% 10%;
+  }
+}
+
+/* Global starfield that spans the entire page */
+.global-starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0;
+  mix-blend-mode: screen;
+  z-index: 2; /* Higher than cosmic background */
+  pointer-events: none;
+  will-change: opacity;
+  animation: starfieldFadeIn 1.5s ease 0.2s forwards;
+}
+
+@keyframes starfieldFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.45;
+  }
+}
+
+/* Keep original .noise-canvas for compatibility with existing code */
 .noise-canvas {
   position: absolute;
   top: 0;
@@ -4396,5 +4488,18 @@ img.hero-logo, img.dao-image {
     max-width: 280px;
     justify-content: center;
   }
+}
+
+/* Add z-index to content sections */
+.headline, 
+.dao-explainer-section, 
+.distribution-section, 
+.governance-section, 
+.stats-overview, 
+.staking-section, 
+.stakeholder-section, 
+.join-section {
+  position: relative;
+  z-index: 10; /* Higher than background elements */
 }
 </style>

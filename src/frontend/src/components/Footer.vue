@@ -29,19 +29,19 @@ const toggleSection = (section) => {
       <div class="social-top-container">
         <h4 class="social-top-title cosmic-text-glow">{{ t('footer.stayConnected') }}</h4>
         <div class="social-icons-group">
-          <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon">
+          <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer">
             <img src="@/assets/icons/discord.svg" alt="Discord" />
           </a>
-          <a href="https://twitter.com/CosmicraftsDAO" class="cosmic-social-icon">
+          <a href="https://x.com/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer">
             <img src="@/assets/icons/x.svg" alt="Twitter" />
           </a>
-          <a href="https://facebook.com/CosmicraftsDAO" class="cosmic-social-icon">
+          <a href="https://facebook.com/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer">
             <img src="@/assets/icons/facebook.svg" alt="Facebook" />
           </a>
-          <a href="https://dscvr.one/p/cosmicrafts" class="cosmic-social-icon">
+          <a href="https://dscvr.one/p/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer">
             <img src="@/assets/icons/dscvr.svg" alt="DSCVR" />
           </a>
-          <a href="https://distrikt.app/u/cosmicrafts" class="cosmic-social-icon">
+          <a href="https://distrikt.app/u/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer">
             <img src="@/assets/icons/distrikt.svg" alt="Distrikt" />
           </a>
         </div>
@@ -95,19 +95,19 @@ const toggleSection = (section) => {
     
     <!-- Mobile Footer Social Bar - Kept at the top -->
     <div class="mobile-social-bar">
-      <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon mobile-social-icon">
+      <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon mobile-social-icon" target="_blank" rel="noopener noreferrer">
         <img src="@/assets/icons/discord.svg" alt="Discord" />
       </a>
-      <a href="https://twitter.com/CosmicraftsDAO" class="cosmic-social-icon mobile-social-icon">
-        <img src="@/assets/icons/x.svg" alt="Twitter" />
+      <a href="https://x.com/cosmicrafts" class="cosmic-social-icon mobile-social-icon" target="_blank" rel="noopener noreferrer">
+        <img src="@/assets/icons/x.svg" alt="X" />
       </a>
-      <a href="https://facebook.com/CosmicraftsDAO" class="cosmic-social-icon mobile-social-icon">
+      <a href="https://facebook.com/cosmicrafts" class="cosmic-social-icon mobile-social-icon" target="_blank" rel="noopener noreferrer">
         <img src="@/assets/icons/facebook.svg" alt="Facebook" />
       </a>
-      <a href="https://dscvr.one/p/cosmicrafts" class="cosmic-social-icon mobile-social-icon">
+      <a href="https://dscvr.one/p/cosmicrafts" class="cosmic-social-icon mobile-social-icon" target="_blank" rel="noopener noreferrer">
         <img src="@/assets/icons/dscvr.svg" alt="DSCVR" />
       </a>
-      <a href="https://distrikt.app/u/cosmicrafts" class="cosmic-social-icon mobile-social-icon">
+      <a href="https://distrikt.app/u/cosmicrafts" class="cosmic-social-icon mobile-social-icon" target="_blank" rel="noopener noreferrer">
         <img src="@/assets/icons/distrikt.svg" alt="Distrikt" />
       </a>
     </div>
