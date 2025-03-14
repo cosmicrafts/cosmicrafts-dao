@@ -22,7 +22,6 @@ const handleCtaClick = (action) => {
 
   .hero {
     position: relative;
-    z-index: 2;
     margin-top: 0;
   }
   

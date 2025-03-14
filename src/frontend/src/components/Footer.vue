@@ -11,20 +11,42 @@ const { t } = useI18n();
 // Get current year for copyright
 const currentYear = new Date().getFullYear();
 
-// Mobile accordion state
-const expandedSection = ref(null);
+// Check if mobile (initial check)
+const isMobile = ref(window.innerWidth <= 768);
+
+// Initialize with appropriate sections expanded (all on desktop, none on mobile)
+const expandedSections = ref(new Set(isMobile.value ? [] : ['explore', 'legal']));
+
+// Update mobile state on resize
+window.addEventListener('resize', () => {
+  isMobile.value = window.innerWidth <= 768;
+  
+  // If transitioning to desktop, open all sections
+  if (!isMobile.value) {
+    expandedSections.value = new Set(['explore', 'legal']);
+  }
+});
 
 const toggleSection = (section) => {
-  expandedSection.value = expandedSection.value === section ? null : section;
+  if (expandedSections.value.has(section)) {
+    expandedSections.value.delete(section);
+  } else {
+    expandedSections.value.add(section);
+  }
+};
+
+// Helper to check if a section is expanded
+const isSectionExpanded = (section) => {
+  return expandedSections.value.has(section);
 };
 </script>
 
 <template>
-  <!-- Desktop Footer (New Design) -->
-  <footer class="cosmic-footer desktop-footer">
+  <!-- Desktop Footer -->
+  <footer class="cosmic-footer">
     <div class="footer-cosmic-bg"></div>
     
-    <!-- Social Buttons Row (Now at the top) -->
+    <!-- Social Buttons Row -->
     <div class="social-top-row">
       <div class="social-top-container">
         <h4 class="social-top-title cosmic-text-glow">{{ t('footer.stayConnected') }}</h4>
@@ -48,120 +70,57 @@ const toggleSection = (section) => {
       </div>
     </div>
 
-    <div class="footer-container">
-      <!-- Main Content -->
-      <div class="footer-sections">
-        <!-- Navigation Sections -->
-        <div class="footer-nav-sections">
-          <div class="footer-nav-group">
-            <h4 class="nav-title cosmic-text-glow">{{ t('footer.explore') }}</h4>
-            <ul class="nav-list">
+    <!-- Accordion Container -->
+    <div class="accordion-container">
+      <!-- Navigation Sections in Row -->
+      <div class="nav-row">
+        <div class="accordion cosmic-panel">
+          <div 
+            class="accordion-header" 
+            :class="{ 'active': isSectionExpanded('explore') }"
+            @click="toggleSection('explore')"
+          >
+            <h4 class="cosmic-text-glow">{{ t('footer.explore') }}</h4>
+            <i class="fas" :class="isSectionExpanded('explore') ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+          </div>
+          <div class="accordion-content" :style="{ maxHeight: isSectionExpanded('explore') ? '200px' : '0' }">
+            <ul class="link-list">
               <li><router-link to="/careers" class="cosmic-nav-link">{{ t('footer.careers') }}</router-link></li>
               <li><router-link to="/about" class="cosmic-nav-link">{{ t('footer.about') }}</router-link></li>
-              <li><router-link to="/contact" class="cosmic-nav-link">{{ t('footer.support') }}</router-link></li>
+              <li><router-link to="/contact" class="cosmic-nav-link">{{ t('footer.contact') }}</router-link></li>
             </ul>
           </div>
+        </div>
 
-          <div class="footer-nav-group">
-            <h4 class="nav-title cosmic-text-glow">{{ t('footer.legal') }}</h4>
-            <ul class="nav-list">
+        <div class="accordion cosmic-panel">
+          <div 
+            class="accordion-header" 
+            :class="{ 'active': isSectionExpanded('legal') }"
+            @click="toggleSection('legal')"
+          >
+            <h4 class="cosmic-text-glow">{{ t('footer.legal') }}</h4>
+            <i class="fas" :class="isSectionExpanded('legal') ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+          </div>
+          <div class="accordion-content" :style="{ maxHeight: isSectionExpanded('legal') ? '200px' : '0' }">
+            <ul class="link-list">
               <li><router-link to="/privacy" class="cosmic-nav-link">{{ t('footer.privacy') }}</router-link></li>
               <li><router-link to="/legal" class="cosmic-nav-link">{{ t('footer.legal') }}</router-link></li>
               <li><router-link to="/terms" class="cosmic-nav-link">{{ t('footer.terms') }}</router-link></li>
             </ul>
           </div>
         </div>
-        
-        <!-- Language Selector below navigation -->
-        <div class="language-below-section">
-          <LanguageSelector context="footer" />
-        </div>
-      </div>
-      
-      <!-- Footer Bottom -->
-      <div class="footer-bottom">
-        <img src="@/assets/icons/wou.svg" alt="World of Unreal" class="wou-logo cosmic-float" />
-        <p class="copyright-text">
-          © {{ currentYear }} World of Unreal, LLC.<br>
-          {{ t('footer.trademarks') }}
-        </p>
       </div>
     </div>
-  </footer>
 
-  <!-- Mobile Footer -->
-  <footer class="cosmic-footer mobile-footer">
-    <div class="footer-cosmic-bg"></div>
-    
-    <!-- Mobile Footer Social Bar - Kept at the top -->
-    <div class="mobile-social-bar">
-      <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon mobile-social-icon" target="_blank" rel="noopener noreferrer">
-        <img src="@/assets/icons/discord.svg" alt="Discord" />
-      </a>
-      <a href="https://x.com/cosmicrafts" class="cosmic-social-icon mobile-social-icon" target="_blank" rel="noopener noreferrer">
-        <img src="@/assets/icons/x.svg" alt="X" />
-      </a>
-      <a href="https://facebook.com/cosmicrafts" class="cosmic-social-icon mobile-social-icon" target="_blank" rel="noopener noreferrer">
-        <img src="@/assets/icons/facebook.svg" alt="Facebook" />
-      </a>
-      <a href="https://dscvr.one/p/cosmicrafts" class="cosmic-social-icon mobile-social-icon" target="_blank" rel="noopener noreferrer">
-        <img src="@/assets/icons/dscvr.svg" alt="DSCVR" />
-      </a>
-      <a href="https://distrikt.app/u/cosmicrafts" class="cosmic-social-icon mobile-social-icon" target="_blank" rel="noopener noreferrer">
-        <img src="@/assets/icons/distrikt.svg" alt="Distrikt" />
-      </a>
-    </div>
-    
-    <!-- Mobile Footer Accordions -->
-    <div class="mobile-accordion-container">
-      <!-- Explore Section -->
-      <div class="mobile-accordion cosmic-panel">
-        <div 
-          class="mobile-accordion-header" 
-          :class="{ 'active': expandedSection === 'explore' }"
-          @click="toggleSection('explore')"
-        >
-          <h4 class="cosmic-text-glow">{{ t('footer.explore') }}</h4>
-          <i class="fas" :class="expandedSection === 'explore' ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-        </div>
-        <div class="mobile-accordion-content" :class="{ 'expanded': expandedSection === 'explore' }">
-          <ul class="mobile-link-list">
-            <li><router-link to="/careers" class="cosmic-nav-link">{{ t('footer.careers') }}</router-link></li>
-            <li><router-link to="/about" class="cosmic-nav-link">{{ t('footer.about') }}</router-link></li>
-            <li><router-link to="/contact" class="cosmic-nav-link">{{ t('footer.contact') }}</router-link></li>
-          </ul>
-        </div>
-      </div>
-      
-      <!-- Legal Section -->
-      <div class="mobile-accordion cosmic-panel">
-        <div 
-          class="mobile-accordion-header" 
-          :class="{ 'active': expandedSection === 'legal' }"
-          @click="toggleSection('legal')"
-        >
-          <h4 class="cosmic-text-glow">{{ t('footer.legal') }}</h4>
-          <i class="fas" :class="expandedSection === 'legal' ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-        </div>
-        <div class="mobile-accordion-content" :class="{ 'expanded': expandedSection === 'legal' }">
-          <ul class="mobile-link-list">
-            <li><router-link to="/privacy" class="cosmic-nav-link">{{ t('footer.privacy') }}</router-link></li>
-            <li><router-link to="/legal" class="cosmic-nav-link">{{ t('footer.legal') }}</router-link></li>
-            <li><router-link to="/terms" class="cosmic-nav-link">{{ t('footer.terms') }}</router-link></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Language Selector Row - Moved to after menus -->
+    <!-- Language Selector -->
     <div class="language-row">
       <LanguageSelector context="footer" />
     </div>
-    
-    <!-- Mobile Footer Copyright with Logo -->
-    <div class="mobile-copyright-container">
-      <img src="@/assets/icons/wou.svg" alt="World of Unreal Logo" class="mobile-copyright-logo cosmic-float" />
-      <div class="mobile-copyright">
+
+    <!-- Footer Bottom -->
+    <div class="copyright-container">
+      <img src="@/assets/icons/wou.svg" alt="World of Unreal" class="copyright-logo" />
+      <div class="copyright">
         <p>© {{ currentYear }} World of Unreal, LLC.</p>
         <p>{{ t('footer.trademarks') }}</p>
       </div>
@@ -170,17 +129,14 @@ const toggleSection = (section) => {
 </template>
 
 <style scoped>
-/* Main Footer Styles (Shared) */
+/* Main Footer Styles */
 .cosmic-footer {
   position: relative;
   color: var(--cosmic-text-primary);
-  overflow: hidden;
-  background: linear-gradient(180deg, 
-    rgba(8, 9, 12, 0.98) 0%, 
-    rgba(15, 25, 45, 0.98) 100%);
-  border-top: 2px solid rgba(15, 185, 253, 0.2);
+  background: linear-gradient(to bottom, rgba(33, 41, 65, 0.5), rgba(24, 30, 45, 0.849));
+  border-top: 1px solid rgba(51, 201, 255, 0.157);
   backdrop-filter: var(--cosmic-glass-blur);
-  text-align: center; /* Center all text */
+  overflow: hidden;
 }
 
 .footer-cosmic-bg {
@@ -189,8 +145,8 @@ const toggleSection = (section) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(15, 185, 253, 0.05) 0%, transparent 70%);
-  opacity: 0.5;
+  background: var(--cosmic-glass-bg);
+  opacity: 0.8;
   z-index: 0;
   pointer-events: none;
 }
@@ -206,126 +162,28 @@ const toggleSection = (section) => {
   opacity: 0.3;
 }
 
-/* Desktop Footer Styles */
-.footer-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1.5rem 1rem 1rem; /* Reduced padding */
-}
-
-/* New Footer Layout - Centered */
-.footer-sections {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0;
-  position: relative;
-}
-
-.footer-nav-sections {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 6rem; /* Increased gap between nav groups */
-  padding: 0;
-  margin-bottom: 2rem;
-}
-
-/* Language Below Section */
-.language-below-section {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(15, 185, 253, 0.1);
-}
-
-/* Navigation Groups */
-.footer-nav-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem; /* Increased gap */
-}
-
-.nav-title {
-  font-size: 1rem; /* MUCH larger font size */
-  font-weight: 700;
-  color: var(--cosmic-blue);
-  position: relative;
-  padding-bottom: 0.75rem;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.nav-title::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4rem;
-  height: 3px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    var(--cosmic-blue) 50%,
-    transparent 100%);
-  box-shadow: var(--cosmic-glow-blue-sm);
-}
-
-.nav-list {
-  list-style: none;
-  padding: 0;
-  margin-top: -1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .25rem; /* Increased gap */
-}
-
-.nav-list a {
-  color: var(--cosmic-text-secondary);
-  text-decoration: none;
-  transition: all var(--cosmic-transition-fast);
-  display: inline-block;
-  font-size: 1rem; /* MUCH larger font size */
-  padding: .5rem 8rem;
-  border-radius: var(--cosmic-radius-md);
-  font-weight: 500;
-}
-
-.nav-list a:hover {
-  color: var(--cosmic-blue);
-  transform: translateY(-3px);
-  text-shadow: var(--cosmic-glow-blue-sm);
-  background: rgba(15, 185, 253, 0.05);
-  box-shadow: var(--cosmic-shadow-sm);
-  font-weight: 600;
-}
-
-/* Social Top Row (New) */
+/* Social Top Row */
 .social-top-row {
   display: flex;
   justify-content: center;
-  padding: 1rem; /* Increased padding */
+  padding: 1rem;
   background: rgba(15, 185, 253, 0.05);
   border-bottom: 1px solid rgba(15, 185, 253, 0.1);
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
 .social-top-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .social-top-title {
-  font-size: 1rem; /* Larger font size */
+  font-size: 1.25rem;
   font-weight: 700;
-  color: var(--cosmic-blue);
+  color: rgb(0, 208, 255);
   margin: 0;
   text-shadow: var(--cosmic-glow-blue-sm);
   text-transform: uppercase;
@@ -335,40 +193,132 @@ const toggleSection = (section) => {
 .social-icons-group {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+  gap: 2rem;
+  flex-wrap: nowrap;
 }
 
-/* Footer Bottom */
-.desktop-footer .footer-bottom {
+.cosmic-social-icon {
+  width: 4rem !important;
+  height: 4rem !important;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(15, 185, 253, 0.1);
-  position: relative;
+  justify-content: center;
+  padding: 0;
+  transition: all var(--cosmic-transition-fast);
 }
 
-.wou-logo {
-  width: 80px; /* Larger logo */
-  filter: drop-shadow(var(--cosmic-glow-blue-sm));
-  transition: all var(--cosmic-transition-medium);
+.cosmic-social-icon:hover {
+  transform: translateY(-3px);
 }
 
-.wou-logo:hover {
-  filter: drop-shadow(var(--cosmic-glow-blue-md));
-  transform: scale(1.1);
+.cosmic-social-icon img {
+  width: 24px;
+  height: 24px;
 }
 
-.copyright-text {
-  font-size: 0.9rem; /* Slightly larger */
-  color: var(--cosmic-text-tertiary);
+/* Accordion Styles */
+.accordion-container {
+  margin: 1rem auto;
+  width: 100%;
+  padding: .5rem;
+  max-width: 800px;
+}
+
+.nav-row {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.accordion {
+  flex: 1;
+  max-width: 400px;
+  margin-bottom: 0.5rem;
+  border-radius: var(--cosmic-radius-lg);
+  background: var(--cosmic-glass-bg);
+  border: var(--cosmic-glass-border-blue);
+  overflow: hidden;
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--cosmic-glass-bg);
+  border-bottom: 1px solid rgba(51, 201, 255, 0.1);
+}
+
+.accordion-header h4 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   text-align: center;
-  line-height: 1.6;
+  /* Allow space for icon */
+  width: calc(100% - 30px);
 }
 
-/* Language Row Styles */
+.accordion-header i {
+  display: block;
+  color: var(--cosmic-blue);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: 1.2rem;
+}
+
+.accordion-header.active {
+  background: var(--cosmic-glass-bg-lighter);
+}
+
+.accordion-header.active i {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  max-height: none;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  background: var(--cosmic-glass-bg-lighter);
+}
+
+.link-list {
+  list-style: none;
+  padding: 1rem;
+  margin: 0;
+  text-align: center;
+}
+
+.link-list li {
+  margin-bottom: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.link-list li:hover {
+  transform: translateY(-3px);
+}
+
+.link-list a {
+  color: var(--cosmic-text-secondary);
+  text-decoration: none;
+  font-size: 1.2rem;
+  display: block;
+  padding: 0.5rem 0;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.link-list a:hover,
+.link-list a:active {
+  color: var(--cosmic-blue);
+  text-shadow: var(--cosmic-glow-blue-sm);
+}
+
+/* Language Row */
 .language-row {
   display: flex;
   justify-content: center;
@@ -376,246 +326,145 @@ const toggleSection = (section) => {
   background: rgba(15, 185, 253, 0.05);
   border-top: 1px solid rgba(15, 185, 253, 0.1);
   margin-top: 0.5rem;
+  width: 100%;
 }
 
-/* Responsive Breakpoints for Desktop */
-@media (max-width: 1200px) {
-  .desktop-footer .footer-container {
-    padding: 1.5rem 1.5rem 1rem;
-  }
-  
-  .footer-nav-sections {
-    gap: 4rem; /* Reduced gap on smaller screens */
-  }
-}
-
-@media (max-width: 992px) {
-  .nav-title {
-    font-size: 1.25rem; /* Slightly smaller on medium screens */
-  }
-  
-  .nav-list a {
-    font-size: 1.25rem; /* Slightly smaller on medium screens */
-  }
-}
-
-/* Mobile Footer Styles */
-.mobile-footer {
-  display: none;
-  padding: 1.5rem 0 1rem;
+/* Copyright Container */
+.copyright-container {
+  background: var(--cosmic-glass-bg);
+  padding: 2rem 1rem;
   position: relative;
-  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border-top: var(--cosmic-glass-border-blue);
+  margin-bottom: 0;
+  width: 100%;
 }
 
-.mobile-social-bar {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.75rem;
-  padding: 0 1.5rem;
-  margin-bottom: 1.5rem;
+.copyright-logo {
+  width: 4rem;
+  margin-top: 0.15rem;
+  filter: drop-shadow(var(--cosmic-glow-blue-sm));
 }
 
-.mobile-social-icon {
-  width: 100% !important;
-  height: auto !important;
-  aspect-ratio: 1;
+.copyright {
+  text-align: center;
+  font-size: 0.65rem;
+  color: var(--color-text-disabled);
+  line-height: 1.1;
 }
 
-/* Media query adjustments */
-@media (max-width: 400px) {
-  .mobile-social-bar {
-    gap: 0.5rem;
-    padding: 0 1rem;
+.copyright p {
+  margin: 0.1rem 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .nav-row {
+    flex-direction: column;
+    align-items: center;
+    max-width: 360px;
+  }
+
+  .accordion {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .accordion-content {
+    max-height: 0; /* Collapsed by default on mobile */
   }
   
-  .mobile-social-icon img {
+  .accordion-content[style*="200px"] {
+    /* Maintain the spacing and padding when expanded */
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .accordion-header {
+    justify-content: space-between;
+    border-bottom: none;
+  }
+  
+  .accordion-header h4 {
+    text-align: left;
+    width: auto;
+  }
+  
+  .accordion-header i {
+    display: block;
+  }
+
+  /* On mobile, start with all sections collapsed */
+  .accordion-content {
+    max-height: 0 !important;
+  }
+  
+  /* Override for expanded sections */
+  .accordion-content[style*="200px"] {
+    max-height: 200px !important;
+  }
+
+  .social-top-row {
+    padding: 1rem 1.5rem;
+  }
+
+  .language-row {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .copyright-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .social-icons-group {
+    gap: 1.5rem;
+  }
+  
+  .cosmic-social-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .cosmic-social-icon img {
     width: 20px;
     height: 20px;
   }
 }
 
-.mobile-accordion-container {
-  margin: 0 1rem 1rem;
-}
+@media (max-width: 400px) {
+  .accordion-container {
+    padding: 1rem;
+  }
 
-.mobile-accordion {
-  margin-bottom: 0.75rem;
-  border-radius: var(--cosmic-radius-lg);
-  overflow: hidden;
-  background: rgba(15, 185, 253, 0.05);
-  border: 1px solid rgba(15, 185, 253, 0.1);
-}
+  .nav-row,
+  .social-top-row,
+  .language-row,
+  .copyright-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 
-.mobile-accordion-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.25rem; /* Increased padding */
-  cursor: pointer;
-  transition: all var(--cosmic-transition-fast);
-}
-
-.mobile-accordion-header h4 {
-  margin: 0;
-  font-size: 1.6rem; /* MUCH larger font size */
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.mobile-accordion-header i {
-  color: var(--cosmic-blue);
-  transition: transform var(--cosmic-transition-fast);
-  font-size: 1.2rem; /* Larger icon */
-}
-
-.mobile-accordion-header.active {
-  background: rgba(15, 185, 253, 0.1);
-}
-
-.mobile-accordion-header.active i {
-  transform: rotate(180deg);
-}
-
-.mobile-accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.mobile-accordion-content.expanded {
-  max-height: 300px; /* Increased max height for larger text */
-}
-
-.mobile-link-list {
-  list-style: none;
-  padding: 0.5rem 1.25rem 1.25rem;
-  margin: 0;
-  text-align: center; /* Center mobile links */
-}
-
-.mobile-link-list li {
-  margin-bottom: 0.75rem; /* Increased margin */
-}
-
-.mobile-link-list a {
-  color: var(--cosmic-text-secondary);
-  text-decoration: none;
-  font-size: 1.4rem; /* MUCH larger font size */
-  display: block;
-  padding: 0.75rem 0;
-  transition: all var(--cosmic-transition-fast);
-  font-weight: 500;
-}
-
-.mobile-link-list a:hover, .mobile-link-list a:active {
-  color: var(--cosmic-blue);
-  transform: translateY(-3px);
-  text-shadow: var(--cosmic-glow-blue-sm);
-}
-
-.mobile-language-selector {
-  padding: 0 1.5rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  justify-content: center;
-}
-
-.mobile-copyright-container {
-  background: linear-gradient(180deg,
-    rgba(15, 185, 253, 0.03) 0%,
-    rgba(15, 185, 253, 0.05) 100%);
-  padding: 2rem 1.5rem;
-  position: relative;
-  text-align: center;
-}
-
-.mobile-copyright-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(15, 185, 253, 0.3) 50%,
-    transparent 100%);
-  filter: blur(1px);
-}
-
-.mobile-copyright-logo {
-  width: 72px; /* Larger logo */
-  margin-bottom: .5rem;
-  filter: drop-shadow(var(--cosmic-glow-blue-sm));
-}
-
-.mobile-copyright {
-  text-align: center;
-  font-size: 0.8rem; /* Slightly larger */
-  color: var(--cosmic-text-tertiary);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.mobile-copyright p {
-  margin: 0.35rem 0;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .desktop-footer {
-    display: none;
+  .social-icons-group {
+    gap: 1rem;
   }
   
-  .mobile-footer {
-    display: block;
+  .cosmic-social-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .cosmic-social-icon img {
+    width: 18px;
+    height: 18px;
   }
 }
 
-/* Footer Bottom Styles - Consistent between desktop and mobile */
-.footer-bottom,
-.mobile-copyright-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 1.5rem 1.5rem 1rem;
-  background: linear-gradient(180deg,
-    rgba(15, 185, 253, 0.03) 0%,
-    rgba(15, 185, 253, 0.05) 100%);
-  margin-top: 0;
-}
-
-.copyright-container,
-.mobile-copyright-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.copyright-logo,
-.mobile-copyright-logo {
-  width: 72px;
-  margin-bottom: 0.75rem;
-  filter: drop-shadow(var(--cosmic-glow-blue-sm));
-  transition: all var(--cosmic-transition-medium);
-}
-
-.copyright-logo:hover,
-.mobile-copyright-logo:hover {
-  filter: drop-shadow(var(--cosmic-glow-blue-md));
-  transform: scale(1.1);
-}
-
-.copyright,
-.mobile-copyright {
-  font-size: 0.8rem;
-  color: var(--cosmic-text-tertiary);
-  line-height: 1.5;
-}
-
-/* Additional hover effects for all interactive elements */
+/* Hover effects for interactive elements */
 a, button {
   position: relative;
   z-index: 1;
