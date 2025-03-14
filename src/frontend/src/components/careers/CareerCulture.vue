@@ -1,45 +1,16 @@
 <template>
   <section id="culture" class="vision-section">
-    <!-- Cosmic Background Elements -->
-    <div class="vision-starfield">
-      <div class="vision-star" style="--size: 3px; --top: 15%; --left: 10%;"></div>
-      <div class="vision-star" style="--size: 2px; --top: 25%; --left: 30%;"></div>
-      <div class="vision-star" style="--size: 4px; --top: 40%; --left: 70%;"></div>
-      <div class="vision-star" style="--size: 2px; --top: 65%; --left: 85%;"></div>
-      <div class="vision-star" style="--size: 3px; --top: 82%; --left: 45%;"></div>
-      <div class="vision-star" style="--size: 2px; --top: 70%; --left: 20%;"></div>
-      <div class="vision-star" style="--size: 3px; --top: 30%; --left: 50%;"></div>
-      <div class="vision-star" style="--size: 4px; --top: 55%; --left: 60%;"></div>
-      <div class="vision-star" style="--size: 2px; --top: 35%; --left: 15%;"></div>
-      <div class="vision-star" style="--size: 3px; --top: 50%; --left: 90%;"></div>
-      <div class="vision-star" style="--size: 2px; --top: 10%; --left: 60%;"></div>
-      <div class="vision-star" style="--size: 4px; --top: 90%; --left: 75%;"></div>
-      <div class="vision-star" style="--size: 3px; --top: 5%; --left: 25%;"></div>
-      <div class="vision-star" style="--size: 2px; --top: 75%; --left: 5%;"></div>
-      <div class="vision-star" style="--size: 3px; --top: 60%; --left: 40%;"></div>
-    </div>
-    
-    <div class="cosmic-nebula left-nebula"></div>
-    <div class="cosmic-nebula right-nebula"></div>
-    
-    <div class="cosmic-dust-particles">
-      <div class="dust-particle" style="--size: 3px; --delay: 0s; --speed: 20s;"></div>
-      <div class="dust-particle" style="--size: 2px; --delay: 2s; --speed: 15s;"></div>
-      <div class="dust-particle" style="--size: 4px; --delay: 4s; --speed: 25s;"></div>
-      <div class="dust-particle" style="--size: 3px; --delay: 6s; --speed: 18s;"></div>
-      <div class="dust-particle" style="--size: 2px; --delay: 8s; --speed: 22s;"></div>
-      <div class="dust-particle" style="--size: 3px; --delay: 10s; --speed: 17s;"></div>
-      <div class="dust-particle" style="--size: 4px; --delay: 12s; --speed: 24s;"></div>
-      <div class="dust-particle" style="--size: 2px; --delay: 14s; --speed: 19s;"></div>
-    </div>
-    
     <div class="cosmic-container">
       <div class="section-header vision-header">
         <div class="header-accent-wrapper">
           <div class="header-accent"></div>
         </div>
-        <h2 class="section-title vision-title">Our Vision & Culture</h2>
-        <p class="section-subtitle vision-subtitle">Build with us. We're direct, focused, and relentlessly committed to creating exceptional games that matter</p>
+        <h2 class="section-title vision-title">
+          <span class="title-gradient">Our Vision & Culture</span>
+        </h2>
+        <div class="subtitle-container">
+          <p class="section-subtitle vision-subtitle">Build with us. We're direct, focused, and relentlessly committed to creating exceptional games that matter</p>
+        </div>
       </div>
       
       <div class="culture-grid">
@@ -94,12 +65,6 @@
           <p>We're obsessed with excellence and expect the same from you. Long hours, tough challenges, and a refusal to settle for "good enough." That's how we build legendary products.</p>
         </div>
       </div>
-
-      <div class="culture-portal">
-        <div class="portal-ring"></div>
-        <div class="portal-core"></div>
-        <div class="portal-glow"></div>
-      </div>
     </div>
   </section>
 </template>
@@ -115,8 +80,8 @@ export default {
 .vision-section {
   position: relative;
   z-index: 1;
-  padding: 150px 0 100px;
-  margin-top: -150px;
+  margin-top: 2rem;
+
   background: transparent;
   overflow: visible;
   min-height: 100vh;
@@ -124,22 +89,6 @@ export default {
 
 .vision-section::before {
   display: none;
-}
-
-.vision-starfield {
-  display: none; /* Hide individual background elements as they're now in parent */
-}
-
-.cosmic-nebula {
-  display: none; /* Hide individual background elements as they're now in parent */
-}
-
-.cosmic-dust-particles {
-  display: none; /* Hide individual background elements as they're now in parent */
-}
-
-.dust-particle {
-  display: none; /* Hide individual background elements as they're now in parent */
 }
 
 .cosmic-container {
@@ -191,13 +140,58 @@ export default {
   transform: translateY(30px);
   animation: titleReveal 1s var(--animation-bounce) forwards;
   animation-delay: 0.5s;
-  text-shadow: 0 0 20px rgba(15, 185, 253, 0.3);
   position: relative;
   z-index: 2;
-  color: var(--cosmic-text-primary);
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  margin-bottom: 1rem;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.title-gradient {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #e6f7ff 25%,
+    var(--cosmic-blue) 50%,
+    #0088cc 75%,
+    #006da3 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  animation: gradientFlow 8s ease infinite, glow 3s ease-in-out infinite alternate;
+  padding: 0.1em 0;
+  position: relative;
+  display: inline-block;
+}
+
+.title-gradient::after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 3px;
+  left: 25%;
+  bottom: -12px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--cosmic-blue) 50%,
+    transparent 100%
+  );
+  opacity: 0.7;
+  border-radius: 3px;
+}
+
+.subtitle-container {
+  position: relative;
+  margin-top: 1.5rem;
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .vision-subtitle {
@@ -208,10 +202,14 @@ export default {
   position: relative;
   z-index: 2;
   color: var(--cosmic-text-secondary);
-  font-size: clamp(1.1rem, 2vw, 1.25rem);
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.6;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  padding: 0 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .culture-grid {
@@ -447,65 +445,6 @@ export default {
   color: var(--cosmic-text-primary);
 }
 
-.culture-portal {
-  position: absolute;
-  bottom: -100px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 200px;
-  height: 200px;
-  opacity: 0.6;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.portal-ring {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 2px solid rgba(15, 185, 253, 0.5);
-  border-radius: 50%;
-  box-shadow: 
-    0 0 20px rgba(15, 185, 253, 0.3),
-    0 0 40px rgba(15, 185, 253, 0.1),
-    inset 0 0 15px rgba(15, 185, 253, 0.3);
-  animation: portalRotateSlow 30s linear infinite;
-}
-
-.portal-core {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30%;
-  height: 30%;
-  background: rgba(15, 185, 253, 0.5);
-  border-radius: 50%;
-  filter: blur(5px);
-  box-shadow: 0 0 20px rgba(15, 185, 253, 0.5);
-  animation: portalCorePulseSlow 4s infinite alternate ease-in-out;
-}
-
-.portal-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 70%;
-  height: 70%;
-  background: radial-gradient(
-    circle at center,
-    rgba(15, 185, 253, 0.3) 0%,
-    rgba(15, 185, 253, 0.1) 40%,
-    rgba(15, 185, 253, 0) 70%
-  );
-  border-radius: 50%;
-  filter: blur(15px);
-  animation: portalGlowPulseSlow 5s infinite alternate ease-in-out;
-}
-
 /* Animation Keyframes */
 @keyframes titleReveal {
   from {
@@ -553,63 +492,6 @@ export default {
   }
 }
 
-@keyframes starTwinkle {
-  0% {
-    opacity: 0.3;
-    transform: scale(0.8);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
-
-@keyframes nebulaFloat {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 0.15;
-  }
-  50% {
-    opacity: 0.2;
-  }
-  100% {
-    transform: translateY(-30px) scale(1.1);
-    opacity: 0.15;
-  }
-}
-
-@keyframes floatDust {
-  0% {
-    transform: translateY(0) translateX(0);
-    opacity: 0.2;
-  }
-  25% {
-    opacity: 0.4;
-  }
-  50% {
-    transform: translateY(-100px) translateX(100px);
-    opacity: 0.3;
-  }
-  75% {
-    opacity: 0.1;
-  }
-  100% {
-    transform: translateY(-200px) translateX(200px);
-    opacity: 0;
-  }
-}
-
-@keyframes orbPulse {
-  0% {
-    transform: scale(0.8);
-    box-shadow: 0 0 10px rgba(15, 185, 253, 0.6);
-  }
-  100% {
-    transform: scale(1.2);
-    box-shadow: 0 0 20px rgba(15, 185, 253, 0.8);
-  }
-}
-
 @keyframes rayRotate {
   from {
     transform: rotate(0deg);
@@ -628,35 +510,15 @@ export default {
   }
 }
 
-@keyframes portalRotateSlow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-@keyframes portalCorePulseSlow {
-  0% {
-    opacity: 0.5;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  100% {
-    opacity: 0.7;
-    transform: translate(-50%, -50%) scale(1.2);
-  }
-}
-
-@keyframes portalGlowPulseSlow {
-  0% {
-    opacity: 0.3;
-    transform: translate(-50%, -50%) scale(0.9);
-  }
-  100% {
-    opacity: 0.6;
-    transform: translate(-50%, -50%) scale(1.1);
-  }
+@keyframes glow {
+  0% { filter: drop-shadow(0 0 2px rgba(15, 185, 253, 0.3)); }
+  100% { filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.6)); }
 }
 
 /* Mobile Styles */
@@ -715,12 +577,6 @@ export default {
   .icon-ray {
     width: 50px;
   }
-  
-  .culture-portal {
-    width: 150px;
-    height: 150px;
-    bottom: -75px;
-  }
 }
 
 /* Tablet Styles */
@@ -749,12 +605,6 @@ export default {
   
   .culture-card p {
     font-size: 0.95rem;
-  }
-  
-  .culture-portal {
-    width: 180px;
-    height: 180px;
-    bottom: -90px;
   }
 }
 

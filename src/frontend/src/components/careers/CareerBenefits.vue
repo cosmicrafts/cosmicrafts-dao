@@ -37,26 +37,12 @@
                 <p>Generous personal development budget, conference attendance, and regular internal workshops to keep your skills cutting-edge.</p>
               </div>
             </li>
-            <li class="benefit-item cosmic-hover-effect">
-              <i class="fas fa-heart"></i>
-              <div>
-                <h4>Comprehensive Healthcare</h4>
-                <p>Premium health, dental, and vision coverage for you and your dependents, regardless of your location.</p>
-              </div>
-            </li>
-            <li class="benefit-item cosmic-hover-effect">
-              <i class="fas fa-battery-full"></i>
-              <div>
-                <h4>Recharge Time</h4>
-                <p>Unlimited paid time off, company-wide wellness days, and sabbatical opportunities after extended tenure.</p>
-              </div>
-            </li>
           </ul>
         </div>
         <div class="benefits-graphic">
           <div class="graphic-element cosmic-panel with-glow">
             <div class="graphic-content">
-              <img src="/src/assets/webp/tokenomics.webp" alt="Cosmicrafts benefits" class="benefits-image" />
+              <img src="/src/assets/webp/hyperspace02.webp" alt="Cosmicrafts benefits" class="benefits-image" />
             </div>
           </div>
         </div>
@@ -73,11 +59,6 @@ export default {
 
 <style scoped>
 .benefits-section {
-  background: radial-gradient(to bottom, 
-    rgba(15, 25, 35, 0), 
-    rgba(20, 137, 255, 0.1), 
-    rgba(15, 25, 35, 0)
-  );
   position: relative;
   overflow: hidden;
   padding: 2rem 1rem;
@@ -90,9 +71,6 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(15, 185, 253, 0.1) 0%, transparent 60%),
-    radial-gradient(circle at 80% 70%, rgba(103, 58, 183, 0.1) 0%, transparent 60%);
   z-index: 0;
   opacity: 0.6;
 }
@@ -194,8 +172,6 @@ export default {
 .benefit-item:nth-child(2) { animation-delay: 0.2s; }
 .benefit-item:nth-child(3) { animation-delay: 0.3s; }
 .benefit-item:nth-child(4) { animation-delay: 0.4s; }
-.benefit-item:nth-child(5) { animation-delay: 0.5s; }
-.benefit-item:nth-child(6) { animation-delay: 0.6s; }
 
 .benefit-item::before {
   content: '';

@@ -30,7 +30,7 @@
         
         <div class="join-graphic">
           <div class="floating-astronaut">
-            <img src="/src/assets/webp/tokenomics.webp" alt="Cosmic Astronaut" class="astronaut-img">
+            <img src="/src/assets/webp/hero4.webp" alt="Cosmic Astronaut" class="astronaut-img">
             <div class="glow-effect"></div>
           </div>
         </div>
@@ -39,19 +39,15 @@
       <div class="community-links">
         <h3>Follow Our Journey</h3>
         <div class="social-links">
-          <a href="#" class="social-link">
+          <a href="https://twitter.com/cosmicrafts" class="social-link">
             <i class="fab fa-twitter"></i>
             <span>Twitter</span>
           </a>
-          <a href="#" class="social-link">
+          <a href="https://github.com/cosmicrafts" class="social-link">
             <i class="fab fa-github"></i>
             <span>GitHub</span>
           </a>
-          <a href="#" class="social-link">
-            <i class="fab fa-linkedin"></i>
-            <span>LinkedIn</span>
-          </a>
-          <a href="#" class="social-link">
+          <a href="https://medium.com/@cosmicrafts" class="social-link">
             <i class="fab fa-medium"></i>
             <span>Medium</span>
           </a>
@@ -70,8 +66,8 @@ export default {
 <style scoped>
 /* Join Section - Enhanced with interactive effects */
 .join-section {
-  padding-top: 6rem;
-  padding-bottom: 10rem;
+  margin-top: -4rem;
+  padding: 4rem;
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -84,11 +80,6 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(
-    ellipse at top right,
-    rgba(15, 185, 253, 0.15) 0%,
-    rgba(15, 185, 253, 0) 70%
-  );
   z-index: -1;
   opacity: 0.6;
   animation: pulseBackground 15s infinite alternate var(--animation-smooth);
@@ -102,7 +93,6 @@ export default {
   position: relative;
   margin-bottom: 5rem;
   backdrop-filter: blur(10px);
-  background: var(--cosmic-glass-bg-darker);
   box-shadow: var(--cosmic-shadow-lg);
   transform: translateY(50px);
   opacity: 0;

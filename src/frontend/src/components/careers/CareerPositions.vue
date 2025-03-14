@@ -2,19 +2,14 @@
   <section id="open-positions" class="positions-section">
     <div class="container mx-auto px-4">
       <div class="section-header text-center mb-16">
-        <h2 class="section-title mb-6">Open Opportunities</h2>
-        <p class="section-subtitle">Join our team of visionaries and innovators shaping the future of web3.</p>
-      </div>
-
-      <!-- Position Filters -->
-      <div class="positions-filter">
-        <span class="filter-title">Filter by:</span>
-        <div class="filter-buttons">
-          <button class="filter-button active">All Roles</button>
-          <button class="filter-button">Engineering</button>
-          <button class="filter-button">Design</button>
-          <button class="filter-button">Product</button>
-          <button class="filter-button">Community</button>
+        <div class="header-accent-wrapper">
+          <div class="header-accent"></div>
+        </div>
+        <h2 class="section-title mb-6">
+          <span class="title-gradient">Open Opportunities</span>
+        </h2>
+        <div class="subtitle-container">
+          <p class="section-subtitle">Join our team of visionaries and innovators shaping the future of web3.</p>
         </div>
       </div>
 
@@ -52,8 +47,9 @@
           <div class="position-overview" v-if="!position.open">
             <p>{{ truncateDescription(position.description) }}</p>
             <div class="overview-footer">
-              <button class="cosmic-btn cosmic-btn-outline view-details-btn" @click="togglePosition(index)">
-                View Full Details
+              <button class="cosmic-button cosmic-button-outline view-details-btn" @click="togglePosition(index)">
+                <span class="btn-icon"><i class="fas fa-plus-circle"></i></span>
+                <span class="btn-text">View Full Details</span>
               </button>
             </div>
           </div>
@@ -97,7 +93,7 @@
               </a>
               <div class="apply-note">
                 <i class="fas fa-info-circle"></i>
-                <span>Applications are reviewed within 48 hours</span>
+                <span>Applications are reviewed within 2 weeks</span>
               </div>
             </div>
           </div>
@@ -106,12 +102,15 @@
 
       <!-- Empty State (No Positions) -->
       <div class="empty-state cosmic-card" v-if="positions.length === 0">
-        <i class="fas fa-search"></i>
-        <h3>No Open Positions Currently</h3>
-        <p>We don't have any open positions matching your criteria at the moment. However, we're always looking for talented individuals. Submit your information and we'll reach out when there's a match.</p>
-        <a href="mailto:careers@cosmicrafts.com" class="cosmic-btn cosmic-btn-primary">
-          Send Your Portfolio
-        </a>
+        <div class="empty-state-content">
+          <i class="fas fa-search"></i>
+          <h3>No Open Positions Currently</h3>
+          <p>We don't have any open positions at the moment. However, we're always looking for talented individuals. Submit your information and we'll reach out when there's a match.</p>
+          <a href="mailto:careers@cosmicrafts.com" class="cosmic-button cosmic-button-primary">
+            <i class="fas fa-paper-plane"></i>
+            Send Your Portfolio
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -186,10 +185,18 @@ export default {
 /* Positions Section - Enhanced with modern UI techniques */
 .positions-section {
   background: linear-gradient(to bottom, transparent, rgba(15, 25, 35, 0.5), transparent);
-  padding-top: 8rem;
-  padding-bottom: 8rem;
+  margin-top: -4rem;
   position: relative;
   overflow: hidden;
+  padding: 6rem 0;
+}
+
+.positions-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  padding: 0 2rem;
 }
 
 .positions-section::before {
@@ -200,115 +207,129 @@ export default {
   top: 0;
   left: 0;
   background: 
-    radial-gradient(circle at 10% 20%, rgba(15, 185, 253, 0.1) 0%, transparent 20%), 
-    radial-gradient(circle at 90% 80%, rgba(103, 58, 183, 0.1) 0%, transparent 20%);
+    radial-gradient(circle at 10% 20%, rgba(15, 185, 253, 0.1) 0%, transparent 50%), 
+    radial-gradient(circle at 90% 80%, rgba(103, 58, 183, 0.1) 0%, transparent 50%);
   z-index: -1;
   opacity: 0.8;
 }
 
-.positions-filter {
-  display: flex;
-  align-items: center;
-  margin-bottom: 3rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeSlideUp 0.8s var(--animation-smooth) forwards;
-  animation-delay: 0.3s;
+.section-header {
+  margin-bottom: 5rem;
   position: relative;
   z-index: 2;
+  text-align: center;
 }
 
-.filter-title {
-  font-size: 1.1rem;
-  color: var(--cosmic-text-primary);
-  margin-right: 1rem;
-  font-weight: 500;
-}
-
-.filter-buttons {
+.header-accent-wrapper {
+  position: relative;
+  height: 60px;
+  width: 100%;
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  position: relative;
-}
-
-.filter-button {
-  padding: 0.5rem 1.25rem;
-  background: var(--cosmic-glass-bg);
-  border: var(--cosmic-glass-border);
-  border-radius: 20px;
-  color: var(--cosmic-text-secondary);
-  cursor: pointer;
-  transition: all 0.4s var(--animation-bounce);
-  font-size: 0.9rem;
-  position: relative;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
-  z-index: 1;
+  margin-bottom: 1rem;
 }
 
-.filter-button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0.05) 40%,
-    transparent 60%
+.header-accent {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(15, 185, 253, 0.7) 0%,
+    rgba(15, 185, 253, 0.3) 50%,
+    rgba(15, 185, 253, 0) 70%
   );
   opacity: 0;
-  transition: opacity 0.3s var(--animation-smooth);
-  z-index: -1;
-  border-radius: inherit;
+  animation: accentReveal 1s var(--animation-bounce) forwards;
+  animation-delay: 0.2s;
+  transform: scale(0);
+  filter: blur(5px);
 }
 
-.filter-button::after {
+.section-title {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: titleReveal 1s var(--animation-bounce) forwards;
+  animation-delay: 0.5s;
+  position: relative;
+  z-index: 2;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.title-gradient {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #e6f7ff 25%,
+    var(--cosmic-blue) 50%,
+    #0088cc 75%,
+    #006da3 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  animation: gradientFlow 8s ease infinite, glow 3s ease-in-out infinite alternate;
+  padding: 0.1em 0;
+  position: relative;
+  display: inline-block;
+}
+
+.title-gradient::after {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 5px;
-  height: 5px;
-  background: var(--cosmic-blue);
-  border-radius: 50%;
-  z-index: -1;
+  width: 50%;
+  height: 3px;
+  left: 25%;
+  bottom: -12px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--cosmic-blue) 50%,
+    transparent 100%
+  );
+  opacity: 0.7;
+  border-radius: 3px;
+}
+
+.subtitle-container {
+  position: relative;
+  margin-top: 1.5rem;
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-subtitle {
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.5s var(--animation-bounce), opacity 0.5s;
-}
-
-.filter-button:hover, .filter-button.active {
-  background: var(--cosmic-glass-bg-lighter);
-  color: var(--cosmic-text-primary);
-  border-color: var(--cosmic-blue);
-  box-shadow: var(--cosmic-glow-blue-sm);
-  transform: translateY(-3px);
-}
-
-.filter-button:hover::before, .filter-button.active::before {
-  opacity: 1;
-}
-
-.filter-button:active {
-  transform: translateY(0);
-}
-
-.filter-button.active {
-  background: rgba(15, 185, 253, 0.15);
-  color: var(--cosmic-blue);
-  font-weight: 600;
-}
-
-.filter-button.active::after {
-  opacity: 0.2;
-  transform: translate(-50%, -50%) scale(40);
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease-out forwards;
+  animation-delay: 0.8s;
+  position: relative;
+  z-index: 2;
+  color: var(--cosmic-text-secondary);
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  padding: 0 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .positions-grid {
   display: grid;
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 800px), 1fr));
+  gap: 2.5rem;
   margin-bottom: 4rem;
   position: relative;
   transition: height 0.6s var(--animation-smooth);
@@ -323,6 +344,7 @@ export default {
   animation: fadeSlideUp 1s var(--animation-smooth) forwards;
   position: relative;
   z-index: 1;
+  margin-bottom: 1rem;
 }
 
 .position-card:nth-child(1) { animation-delay: 0.1s; }
@@ -362,7 +384,7 @@ export default {
 }
 
 .position-header {
-  padding: 1.5rem;
+  padding: 1.75rem 2rem;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -506,7 +528,7 @@ export default {
 }
 
 .position-overview {
-  padding: 1.5rem;
+  padding: 1.75rem 2rem;
   border-bottom: var(--cosmic-glass-border);
   position: relative;
   z-index: 1;
@@ -526,38 +548,57 @@ export default {
 }
 
 .view-details-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
   font-size: 0.95rem;
-  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  background: transparent;
+  border: 1px solid rgba(15, 185, 253, 0.4);
+  color: var(--cosmic-text-primary);
   transition: all 0.4s var(--animation-bounce);
   position: relative;
   overflow: hidden;
+  box-shadow: var(--cosmic-glow-blue-sm);
+  font-weight: 500;
 }
 
 .view-details-btn::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: linear-gradient(
     120deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0.05) 40%,
-    transparent 60%
+    rgba(15, 185, 253, 0.1),
+    rgba(15, 185, 253, 0.05) 50%,
+    transparent 70%
   );
   opacity: 0;
   transition: opacity 0.3s var(--animation-smooth);
   z-index: -1;
+  border-radius: inherit;
+}
+
+.view-details-btn .btn-icon {
+  color: var(--cosmic-blue);
+  transition: all 0.4s var(--animation-bounce);
 }
 
 .view-details-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), var(--cosmic-glow-blue-sm);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), var(--cosmic-glow-blue-md);
+  border-color: var(--cosmic-blue);
+  color: var(--cosmic-blue);
 }
 
 .view-details-btn:hover::before {
   opacity: 1;
+}
+
+.view-details-btn:hover .btn-icon {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.6));
 }
 
 .view-details-btn:active {
@@ -565,7 +606,7 @@ export default {
 }
 
 .position-details {
-  padding: 1.5rem;
+  padding: 2rem;
   animation: expandSection 0.6s var(--animation-bounce);
   transform-origin: top center;
   position: relative;
@@ -573,7 +614,7 @@ export default {
 }
 
 .position-full-description {
-  padding: 1.5rem;
+  padding: 1.75rem;
   margin-bottom: 2rem;
   background: var(--cosmic-glass-bg-darker);
   border-radius: 12px;
@@ -659,7 +700,7 @@ export default {
 }
 
 .position-section h4 {
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem 1.75rem;
   margin: 0;
   background: var(--cosmic-glass-bg);
   color: var(--cosmic-blue);
@@ -687,7 +728,7 @@ export default {
 
 .section-items {
   list-style: none;
-  padding: 1.5rem;
+  padding: 1.75rem;
   margin: 0;
   display: grid;
   gap: 1rem;
@@ -849,14 +890,14 @@ export default {
 }
 
 .empty-state {
-  padding: 4rem;
+  padding: 0;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  background: transparent;
+  background: var(--cosmic-glass-bg-darker);
   border: var(--cosmic-glass-border);
+  border-radius: 16px;
   backdrop-filter: blur(8px);
   position: relative;
   overflow: hidden;
@@ -864,6 +905,9 @@ export default {
   transform: translateY(30px);
   animation: fadeSlideUp 1s var(--animation-bounce) forwards;
   animation-delay: 0.3s;
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
+  margin: 3rem auto;
+  max-width: 1000px;
 }
 
 .empty-state::before {
@@ -875,44 +919,106 @@ export default {
     rgba(15, 185, 253, 0.05) 0%,
     transparent 70%
   );
-  z-index: -1;
+  z-index: 0;
   opacity: 0.7;
 }
 
+.empty-state-content {
+  padding: 6rem 4rem;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
 .empty-state i {
-  font-size: 4rem;
+  font-size: 5rem;
   color: var(--cosmic-blue);
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   animation: pulseIcon 3s infinite alternate var(--animation-smooth);
-  filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.3));
+  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.3));
 }
 
 .empty-state h3 {
-  font-size: 2rem;
+  font-size: 2.75rem;
+  margin-bottom: 1.5rem;
   color: var(--cosmic-text-primary);
   background: var(--cosmic-gradient-blue);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  letter-spacing: -0.02em;
 }
 
 .empty-state p {
   color: var(--cosmic-text-secondary);
-  max-width: 600px;
-  margin: 0 auto 1.5rem;
-  line-height: 1.6;
-  font-size: 1.1rem;
+  max-width: 640px;
+  margin: 0 auto 2rem;
+  line-height: 1.8;
+  font-size: 1.25rem;
+  padding: 0 1rem;
 }
 
-.empty-state .cosmic-btn {
+.empty-state .cosmic-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
   padding: 1rem 2rem;
   font-size: 1.1rem;
+  border-radius: 50px;
+  background: linear-gradient(135deg, rgba(15, 185, 253, 0.8), rgba(15, 185, 253, 0.6));
+  color: #fff;
+  border: none;
+  font-weight: 600;
   transition: all 0.4s var(--animation-bounce);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(15, 185, 253, 0.3);
 }
 
-.empty-state .cosmic-btn:hover {
+.empty-state .cosmic-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s var(--animation-smooth);
+  z-index: 0;
+  border-radius: inherit;
+}
+
+.empty-state .cosmic-button:hover {
   transform: translateY(-5px);
-  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-md);
+  box-shadow: var(--cosmic-shadow-lg), var(--cosmic-glow-blue-md);
+}
+
+.empty-state .cosmic-button:hover::before {
+  opacity: 1;
+}
+
+.empty-state .cosmic-button:active {
+  transform: translateY(-2px);
+}
+
+.empty-state .cosmic-button i {
+  font-size: 1rem;
+  margin: 0;
+  animation: none;
+  filter: none;
+}
+
+.empty-state .cosmic-button:hover i {
+  transform: translateX(3px);
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
 }
 
 @keyframes fadeSlideUp {
@@ -968,27 +1074,99 @@ export default {
   }
 }
 
+@keyframes accentReveal {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+}
+
+@keyframes titleReveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes glow {
+  0% { filter: drop-shadow(0 0 2px rgba(15, 185, 253, 0.3)); }
+  100% { filter: drop-shadow(0 0 10px rgba(15, 185, 253, 0.6)); }
+}
+
 /* Mobile Styles */
+@media (max-width: 992px) {
+  .positions-section {
+    padding: 5rem 0;
+  }
+
+  .section-header {
+    margin-bottom: 4rem;
+  }
+
+  .positions-grid {
+    gap: 2rem;
+  }
+
+  .empty-state-content {
+    padding: 5rem 3rem;
+    gap: 2rem;
+  }
+}
+
 @media (max-width: 768px) {
-  .filter-buttons {
-    flex-direction: column;
-    width: 100%;
+  .positions-section {
+    padding: 4rem 0;
+    margin-top: -2rem;
   }
-  
-  .filter-button {
-    width: 100%;
-    text-align: center;
+
+  .positions-section .container {
+    padding: 0 1.25rem;
   }
-  
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
   .position-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    padding: 1.5rem 1.25rem;
   }
   
   .position-action {
     margin-left: 0;
     align-self: flex-end;
+    position: absolute;
+    top: 1.5rem;
+    right: 1.25rem;
   }
   
   .position-meta {
@@ -998,10 +1176,44 @@ export default {
   
   .position-title {
     font-size: 1.25rem;
+    padding-right: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .position-overview {
+    padding: 1.5rem 1.25rem;
   }
   
-  .view-details-btn, .apply-btn {
-    width: 100%;
+  .position-details {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .position-full-description {
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .section-items {
+    padding: 1.25rem;
+  }
+
+  .position-section h4 {
+    padding: 1.25rem;
+    font-size: 1.1rem;
+  }
+
+  .section-item {
+    padding: 1rem;
+  }
+
+  .position-apply {
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .empty-state-content {
+    padding: 3rem 1.5rem;
+    gap: 1.75rem;
   }
 }
 </style> 

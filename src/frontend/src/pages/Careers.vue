@@ -56,37 +56,18 @@
         
         <!-- Energy Streams -->
         <div class="portal-energy-streams">
-          <div class="energy-stream" style="--angle: 0deg;">
-            <div class="energy-particles"></div>
-          </div>
           <div class="energy-stream" style="--angle: 45deg;">
-            <div class="energy-particles"></div>
-          </div>
-          <div class="energy-stream" style="--angle: 90deg;">
             <div class="energy-particles"></div>
           </div>
           <div class="energy-stream" style="--angle: 135deg;">
             <div class="energy-particles"></div>
           </div>
-          <div class="energy-stream" style="--angle: 180deg;">
-            <div class="energy-particles"></div>
-          </div>
           <div class="energy-stream" style="--angle: 225deg;">
-            <div class="energy-particles"></div>
-          </div>
-          <div class="energy-stream" style="--angle: 270deg;">
             <div class="energy-particles"></div>
           </div>
           <div class="energy-stream" style="--angle: 315deg;">
             <div class="energy-particles"></div>
           </div>
-        </div>
-        
-        <!-- Energy Orbs -->
-        <div class="energy-orbs">
-          <div class="energy-orb" style="--delay: 0s; --scale: 0.6;"></div>
-          <div class="energy-orb" style="--delay: 1.5s; --scale: 0.8;"></div>
-          <div class="energy-orb" style="--delay: 3s; --scale: 0.5;"></div>
         </div>
         
         <!-- Hexagon Grid -->
@@ -145,7 +126,6 @@
     <CareerCulture />
     <CareerBenefits />
     <CareerPositions />
-    <CareerProcess />
     <CareerJoin />
   </div>
 </template>
@@ -155,7 +135,6 @@ import CareerHero from '../components/careers/CareerHero.vue'
 import CareerCulture from '../components/careers/CareerCulture.vue'
 import CareerBenefits from '../components/careers/CareerBenefits.vue'
 import CareerPositions from '../components/careers/CareerPositions.vue'
-import CareerProcess from '../components/careers/CareerProcess.vue'
 import CareerJoin from '../components/careers/CareerJoin.vue'
 
 export default {
@@ -165,7 +144,6 @@ export default {
     CareerCulture,
     CareerBenefits,
     CareerPositions,
-    CareerProcess,
     CareerJoin
   },
   metaInfo: {

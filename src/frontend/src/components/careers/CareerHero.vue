@@ -7,7 +7,7 @@
         </h1>
         <p class="hero-subtitle">We're seeking exceptional talent to push the boundaries of gaming, AI, and blockchain technology.</p>
         <div class="hero-cta">
-          <a href="#open-positions" class="cosmic-button cosmic-button-primary hero-button">
+          <a @click="scrollToPositions" class="cosmic-button cosmic-button-primary hero-button">
             <i class="fas fa-rocket"></i>
             Explore Opportunities
           </a>
@@ -145,6 +145,20 @@ export default {
       const nextSection = document.getElementById('culture');
       if (nextSection) {
         nextSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    },
+    scrollToPositions() {
+      const positionsSection = document.getElementById('open-positions');
+      if (positionsSection) {
+        // Account for header height with offset
+        const headerHeight = 80; // Adjust this value based on your header height
+        const positionRect = positionsSection.getBoundingClientRect();
+        const offsetPosition = positionRect.top + window.pageYOffset - headerHeight;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
       }
     }
   }
