@@ -1,46 +1,173 @@
 <template>
   <div class="dao-page">
     <!-- Enhanced Cosmic Background -->
-    <div class="cosmic-background"></div>
+    <div class="cosmic-background">
+      <!-- Dynamic Accent Glows -->
+      <div class="cosmic-accent-glow top-left-glow"></div>
+      <div class="cosmic-accent-glow bottom-right-glow"></div>
+      
+      <!-- Floating Elements -->
+      <div class="floating-elements">
+        <div class="floating-element" style="--delay: 0s; --depth: 30px; --rotation: -5deg; --top: 15%; --left: 10%;">
+          <div class="element-particles">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="floating-element" style="--delay: 1s; --depth: 60px; --rotation: 5deg; --top: 65%; --left: 20%;">
+          <div class="element-particles">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="floating-element" style="--delay: 2s; --depth: 90px; --rotation: -7deg; --top: 25%; --right: 12%;">
+          <div class="element-particles">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="floating-element" style="--delay: 3s; --depth: 40px; --rotation: 7deg; --bottom: 20%; --right: 15%;">
+          <div class="element-particles">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Cosmic Portal Elements -->
+      <div class="cosmic-portal-bg">
+        <div class="portal-ring outer-ring"></div>
+        <div class="portal-ring inner-ring"></div>
+        <div class="portal-shield"></div>
+        <div class="portal-stars">
+          <div class="portal-star" style="--index: 1;"></div>
+          <div class="portal-star" style="--index: 2;"></div>
+          <div class="portal-star" style="--index: 3;"></div>
+          <div class="portal-star" style="--index: 4;"></div>
+          <div class="portal-star" style="--index: 5;"></div>
+          <div class="portal-star" style="--index: 6;"></div>
+          <div class="portal-star" style="--index: 7;"></div>
+          <div class="portal-star" style="--index: 8;"></div>
+        </div>
+        <div class="portal-glow"></div>
+        <div class="portal-core"></div>
+        
+        <!-- Logo Watermark -->
+        <div class="cosmic-logo-watermark">
+          <div class="logo-glow-effect"></div>
+          <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts" class="logo-image" />
+        </div>
+        
+        <!-- Energy Streams -->
+        <div class="portal-energy-streams">
+          <div class="energy-stream" style="--angle: 45deg;">
+            <div class="energy-particles"></div>
+          </div>
+          <div class="energy-stream" style="--angle: 135deg;">
+            <div class="energy-particles"></div>
+          </div>
+          <div class="energy-stream" style="--angle: 225deg;">
+            <div class="energy-particles"></div>
+          </div>
+          <div class="energy-stream" style="--angle: 315deg;">
+            <div class="energy-particles"></div>
+          </div>
+        </div>
+        
+        <!-- Hexagon Grid -->
+        <div class="portal-hexagons">
+          <div class="hexagon-grid"></div>
+        </div>
+        
+        <!-- Data Points -->
+        <div class="portal-data-points">
+          <div class="data-point" style="--pos: 30%; --delay: 0s;"></div>
+          <div class="data-point" style="--pos: 70%; --delay: 0.7s;"></div>
+          <div class="data-point" style="--pos: 20%; --delay: 1.4s;"></div>
+          <div class="data-point" style="--pos: 85%; --delay: 2.1s;"></div>
+          <div class="data-point" style="--pos: 40%; --delay: 2.8s;"></div>
+          <div class="data-point" style="--pos: 60%; --delay: 3.5s;"></div>
+        </div>
+      </div>
+      
+      <!-- Starfield -->
+      <div class="cosmic-starfield">
+        <div class="cosmic-star" style="--size: 3px; --top: 5%; --left: 10%;"></div>
+        <div class="cosmic-star" style="--size: 2px; --top: 15%; --left: 30%;"></div>
+        <div class="cosmic-star" style="--size: 4px; --top: 30%; --left: 70%;"></div>
+        <div class="cosmic-star" style="--size: 2px; --top: 45%; --left: 85%;"></div>
+        <div class="cosmic-star" style="--size: 3px; --top: 60%; --left: 45%;"></div>
+        <div class="cosmic-star" style="--size: 2px; --top: 75%; --left: 20%;"></div>
+        <div class="cosmic-star" style="--size: 3px; --top: 20%; --left: 50%;"></div>
+        <div class="cosmic-star" style="--size: 4px; --top: 40%; --left: 60%;"></div>
+        <div class="cosmic-star" style="--size: 2px; --top: 55%; --left: 15%;"></div>
+        <div class="cosmic-star" style="--size: 3px; --top: 70%; --left: 90%;"></div>
+        <div class="cosmic-star" style="--size: 2px; --top: 85%; --left: 60%;"></div>
+        <div class="cosmic-star" style="--size: 4px; --top: 95%; --left: 75%;"></div>
+        <div class="cosmic-star" style="--size: 3px; --top: 8%; --left: 25%;"></div>
+        <div class="cosmic-star" style="--size: 2px; --top: 25%; --left: 5%;"></div>
+      </div>
+      
+      <!-- Cosmic Dust Particles -->
+      <div class="cosmic-dust-particles">
+        <div class="dust-particle" style="--size: 3px; --delay: 0s; --speed: 20s;"></div>
+        <div class="dust-particle" style="--size: 2px; --delay: 2s; --speed: 15s;"></div>
+        <div class="dust-particle" style="--size: 4px; --delay: 4s; --speed: 25s;"></div>
+        <div class="dust-particle" style="--size: 3px; --delay: 6s; --speed: 18s;"></div>
+        <div class="dust-particle" style="--size: 2px; --delay: 8s; --speed: 22s;"></div>
+        <div class="dust-particle" style="--size: 3px; --delay: 10s; --speed: 17s;"></div>
+        <div class="dust-particle" style="--size: 4px; --delay: 12s; --speed: 24s;"></div>
+        <div class="dust-particle" style="--size: 2px; --delay: 14s; --speed: 19s;"></div>
+      </div>
+      
+      <!-- Gradient Overlays -->
+      <div class="cosmic-gradient-overlay top-gradient"></div>
+      <div class="cosmic-gradient-overlay bottom-gradient"></div>
+    </div>
     
     <!-- Background Canvas for Stars (fixed on viewport) -->
     <canvas id="starfield" ref="starfield" class="global-starfield"></canvas>
 
-    <!-- Headline Section -->
-    <section class="headline" :style="{ backgroundPositionY: `${scrollY * -0.15}px` }">
-      <!-- Content Wrapper -->
-      <div class="content">
-        <div>
-          <!-- DAO Hero Logo -->
-          <img :src="dynamicHeroLogo" alt="DAO Logo" class="hero-logo"
-            :style="{ transform: `translateY(${scrollY * 0.075}px) scale(${1.1 - scrollY * 0.00155})` }" />
-        </div>
-        <div>
-          <!-- Hero Image -->
-          <img src="@/assets/icons/DAO-1.svg" alt="DAO Illustration" class="dao-image"
-            :style="{ transform: `translateY(${scrollY * -0.065}px) scale(${1 - scrollY * 0.000825})` }" />
-        </div>
-        <!-- Headline Titles -->
-        <h1 class="primary-headline"
-          :style="{ transform: `translateY(${scrollY * -0.065}px) scale(${1 - scrollY * 0.000425})` }">
-          {{ $t('dao.headline.title', 'The dawn of a legacy') }}
-        </h1>
+    <!-- Hero Section -->
+    <section class="dao-hero">
+      <div class="content-container">
+        <div class="hero-content">
+          <div class="hero-image-wrapper">
+            <img :src="dynamicHeroLogo" alt="DAO Logo" class="hero-emblem" />
+          </div>
 
-        <p class="cta-subtext"
-          :style="{ transform: `translateY(${scrollY * -0.005}px) scale(${1 - scrollY * -0.001225})` }">
-          {{ $t('dao.headline.subtitle', 'It\'s DAO or NEVER!') }}
-        </p>
-        <!-- Call-to-Action Buttons Container -->
-        <div class="cta-buttons-container">
-          <a :href="daoAppUrl" target="_blank" rel="noopener noreferrer" class="cta-button">
-            <i class="fas fa-rocket"></i>
-            {{ $t('dao.headline.stakeholder_cta', 'Become a Stakeholder') }}
-          </a>
-          <router-link to="/whitepaper" class="cta-button whitepaper-btn">
-            <i class="fas fa-book"></i>
-            {{ $t('dao.headline.whitepaper_cta', 'Read Whitepaper') }}
-          </router-link>
+          <div class="dao-image-wrapper">
+            <img src="@/assets/icons/DAO-1.svg" alt="DAO Illustration" class="dao-image" />
+          </div>
+
+          <h1 class="hero-title" data-text="The dawn of a legacy">
+            {{ $t('dao.headline.title', 'The dawn of a legacy') }}
+          </h1>
+
+          <div class="hero-subtitle">
+            {{ $t('dao.headline.subtitle', 'It\'s DAO or NEVER!') }}
+          </div>
+
+          <div class="hero-actions">
+            <a :href="daoAppUrl" target="_blank" rel="noopener noreferrer" class="cosmic-button primary-button">
+              <span class="button-glow"></span>
+              <span class="button-content">
+                <i class="fas fa-rocket"></i>
+                {{ $t('dao.headline.stakeholder_cta', 'Become a Stakeholder') }}
+              </span>
+            </a>
+            <router-link to="/whitepaper" class="cosmic-button secondary-button">
+              <span class="button-glow"></span>
+              <span class="button-content">
+                <i class="fas fa-book"></i>
+                {{ $t('dao.headline.whitepaper_cta', 'Read Whitepaper') }}
+              </span>
+            </router-link>
+          </div>
         </div>
+      </div>
+
+      <!-- Floating Elements -->
+      <div class="hero-floating-elements">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
       </div>
     </section>
 
@@ -687,7 +814,27 @@ export default {
   position: relative; /* Ensure proper positioning for absolute elements */
   min-height: 100vh;
   /* Cosmic theme variables */
-  --hero-accent-glow: rgba(15, 185, 253, 0.25);
+  --cosmic-glass-bg: rgba(16, 20, 38, 0.6);
+  --cosmic-glass-bg-darker: rgba(16, 20, 38, 0.8);
+  --cosmic-glass-bg-lighter: rgba(16, 20, 38, 0.4);
+  --cosmic-glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --cosmic-glass-border-blue: 1px solid rgba(15, 185, 253, 0.2);
+  --cosmic-glow-blue-sm: 0 0 15px rgba(15, 185, 253, 0.15);
+  --cosmic-glow-blue-md: 0 0 25px rgba(15, 185, 253, 0.25);
+  --cosmic-shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.1);
+  --cosmic-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --cosmic-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.2);
+  --cosmic-blue: rgb(15, 185, 253);
+  --cosmic-purple: rgb(103, 58, 183);
+  --cosmic-text-primary: rgb(245, 245, 255);
+  --cosmic-text-secondary: rgba(245, 245, 255, 0.75);
+  --cosmic-text-tertiary: rgba(245, 245, 255, 0.5);
+  --animation-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-bounce: cubic-bezier(0.2, 0.8, 0.2, 1.2);
+  --animation-delay-base: 0.1s;
+  --cosmic-bg-dark: rgb(10, 14, 28);
+  --hero-accent-glow: rgba(15, 185, 253, 0.3);
+  --glass-blur: 60px;
 }
 
 /* Enhanced Cosmic Background */
@@ -695,48 +842,414 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  background: 
-    radial-gradient(circle at 10% 20%, rgba(88, 101, 242, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 80% 30%, rgba(15, 185, 253, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 40% 70%, rgba(201, 42, 253, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 60% 50%, rgba(103, 58, 183, 0.1) 0%, transparent 50%),
-    var(--background-color);
+  width: 100%;
+  height: 100%;
   z-index: 0;
   pointer-events: none;
-  transform-style: preserve-3d;
-  opacity: 1;
-  background-attachment: fixed; /* Fix background to viewport */
+  overflow: hidden;
+  perspective: 1200px;
 }
 
-.cosmic-background::before {
-  content: '';
+/* Dynamic Accent Glows */
+.cosmic-accent-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(var(--glass-blur));
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.top-left-glow {
+  top: -50%;
+  left: -20%;
+  width: 70%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    var(--hero-accent-glow) 0%,
+    rgba(15, 185, 253, 0.15) 30%,
+    rgba(15, 185, 253, 0) 70%
+  );
+  animation: orbitEffect 20s infinite alternate var(--animation-smooth);
+}
+
+.bottom-right-glow {
+  bottom: -10%;
+  right: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(103, 58, 183, 0.3) 0%,
+    rgba(103, 58, 183, 0.1) 50%,
+    rgba(103, 58, 183, 0) 70%
+  );
+  animation: pulseBackground 15s infinite alternate var(--animation-smooth);
+}
+
+/* Floating Elements */
+.floating-elements {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  z-index: 2;
+}
+
+.floating-element {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 20, 38, 0.75);
+  border: 1px solid rgba(15, 185, 253, 0.3);
+  border-radius: 16px;
+  box-shadow: 
+    0 0 15px rgba(15, 185, 253, 0.15),
+    0 10px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  transform-style: preserve-3d;
+  animation-timing-function: var(--animation-smooth);
+  animation: float 10s infinite alternate;
+  animation-delay: var(--delay);
+  transform: rotate(var(--rotation)) translateZ(var(--depth));
+}
+
+.element-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  transform-style: preserve-3d;
+  z-index: 1;
+}
+
+.element-particles span {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cosmic-blue);
+  opacity: 0.5;
+  box-shadow: 0 0 10px rgba(15, 185, 253, 0.8);
+  animation: particleFloat 3s infinite alternate ease-in-out;
+}
+
+.element-particles span:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+.element-particles span:nth-child(2) { top: 15%; right: 15%; animation-delay: 0.5s; }
+.element-particles span:nth-child(3) { bottom: 15%; left: 15%; animation-delay: 1s; }
+.element-particles span:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 1.5s; }
+
+/* Cosmic Portal Background */
+.cosmic-portal-bg {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  z-index: 1;
+  perspective: 1000px;
+  opacity: 0.6;
+}
+
+.portal-ring {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.5);
+  opacity: 0.6;
+  animation-fill-mode: forwards;
+}
+
+.outer-ring {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 4px solid rgba(15, 185, 253, 0.5);
+  box-shadow: 
+    0 0 20px rgba(15, 185, 253, 0.3),
+    0 0 40px rgba(15, 185, 253, 0.2),
+    inset 0 0 20px rgba(15, 185, 253, 0.3);
+  animation: portalPulse 8s infinite alternate var(--animation-smooth), 
+             portalRotate 40s linear infinite;
+  transform: scale(1) rotate(0deg);
+}
+
+.inner-ring {
+  top: 15%;
+  left: 15%;
+  width: 70%;
+  height: 70%;
+  border: 2px solid rgba(15, 185, 253, 0.4);
+  box-shadow: 
+    0 0 15px rgba(15, 185, 253, 0.3),
+    0 0 30px rgba(15, 185, 253, 0.1),
+    inset 0 0 10px rgba(15, 185, 253, 0.3);
+  animation: portalPulse 6s infinite alternate-reverse var(--animation-smooth), 
+             portalRotate 30s linear infinite reverse;
+  transform: scale(1) rotate(0deg);
+}
+
+.portal-shield {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(15, 185, 253, 0.05) 0%,
+    rgba(15, 185, 253, 0.02) 60%,
+    rgba(15, 185, 253, 0.01) 80%
+  );
+  box-shadow: inset 0 0 30px rgba(15, 185, 253, 0.1);
+  opacity: 0.5;
+  animation: shieldPulse 10s infinite alternate-reverse var(--animation-smooth);
+  pointer-events: none;
+}
+
+.portal-stars {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    radial-gradient(circle at 50% 30%, var(--hero-accent-glow) 0%, transparent 60%);
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.6;
-  animation: subtlePulse 8s infinite alternate cubic-bezier(0.445, 0.05, 0.55, 0.95);
-  background-attachment: fixed; /* Fix background to viewport */
+  animation: portalRotate 60s linear infinite reverse;
 }
 
-@keyframes subtlePulse {
-  0% {
-    opacity: 0.3;
-    background-position: 0% 0%;
-  }
-  100% {
-    opacity: 0.6;
-    background-position: 0% 10%;
-  }
+.portal-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(15, 185, 253, 0.6);
+  opacity: 0.6;
+  animation: portalStarPulse 3s infinite alternate var(--animation-smooth);
+  animation-delay: calc(var(--index) * 0.3s);
+}
+
+.portal-star:nth-child(1) { top: 20%; left: 10%; }
+.portal-star:nth-child(2) { top: 10%; left: 50%; }
+.portal-star:nth-child(3) { top: 20%; left: 90%; }
+.portal-star:nth-child(4) { top: 50%; left: 95%; }
+.portal-star:nth-child(5) { top: 80%; left: 90%; }
+.portal-star:nth-child(6) { top: 90%; left: 50%; }
+.portal-star:nth-child(7) { top: 80%; left: 10%; }
+.portal-star:nth-child(8) { top: 50%; left: 5%; }
+
+.portal-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 185, 253, .3);
+  box-shadow: 0 0 64px rgba(0, 183, 255, 0.6);
+  border-radius: 50%;
+  animation: portalCorePulse 4s infinite alternate var(--animation-smooth);
+}
+
+/* Logo Watermark */
+.cosmic-logo-watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64vw;
+  height: 64vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.logo-image {
+  max-width: 36%;
+  max-height: 100%;
+  animation: logoBreathing 10s infinite alternate-reverse var(--animation-smooth);
+  z-index: 3;
+  position: relative;
+}
+
+/* Energy Streams */
+.portal-energy-streams {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: portalRotate 30s linear infinite;
+}
+
+.energy-stream {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    rgba(15, 185, 253, 0),
+    rgba(15, 185, 253, 0.25),
+    rgba(15, 185, 253, 0)
+  );
+  transform-origin: left center;
+  transform: rotate(var(--angle));
+  opacity: 0.6;
+  filter: blur(1px);
+  border-radius: 1px;
+}
+
+/* Hexagon Grid */
+.portal-hexagons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  overflow: hidden;
+  opacity: 0.4;
+}
+
+.hexagon-grid {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  background-image: 
+    repeating-linear-gradient(0deg, rgba(15, 185, 253, 0.1) 0px, transparent 1px, transparent 30px),
+    repeating-linear-gradient(60deg, rgba(15, 185, 253, 0.1) 0px, transparent 1px, transparent 30px),
+    repeating-linear-gradient(120deg, rgba(15, 185, 253, 0.1) 0px, transparent 1px, transparent 30px);
+  border-radius: 50%;
+  animation: rotateGrid 60s linear infinite;
+  opacity: 0.5;
+}
+
+/* Data Points */
+.portal-data-points {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.data-point {
+  position: absolute;
+  top: var(--pos);
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(15, 185, 253, 0.1) 30%,
+    rgba(15, 185, 253, 0.3) 50%,
+    rgba(15, 185, 253, 0.1) 70%,
+    transparent 100%
+  );
+  animation: dataPointScan 6s infinite;
+  animation-delay: var(--delay);
+  opacity: 0.6;
+}
+
+/* Starfield */
+.cosmic-starfield {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cosmic-star {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  top: var(--top);
+  left: var(--left);
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 calc(var(--size) * 2) rgba(255, 255, 255, 0.5),
+              0 0 calc(var(--size) * 4) rgba(15, 185, 253, 0.3);
+  animation: starTwinkle 3s infinite alternate;
+  animation-delay: calc(var(--top) * 0.01s);
+}
+
+/* Dust Particles */
+.cosmic-dust-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.dust-particle {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  box-shadow: 0 0 calc(var(--size) * 2) rgba(255, 255, 255, 0.5),
+              0 0 calc(var(--size) * 4) rgba(15, 185, 253, 0.3);
+  animation: floatDust var(--speed) linear infinite;
+  animation-delay: var(--delay);
+  opacity: 0.3;
+}
+
+.dust-particle:nth-child(1) { top: 10%; left: 20%; }
+.dust-particle:nth-child(2) { top: 25%; left: 70%; }
+.dust-particle:nth-child(3) { top: 40%; left: 30%; }
+.dust-particle:nth-child(4) { top: 55%; left: 80%; }
+.dust-particle:nth-child(5) { top: 70%; left: 15%; }
+.dust-particle:nth-child(6) { top: 85%; left: 60%; }
+.dust-particle:nth-child(7) { top: 15%; left: 45%; }
+.dust-particle:nth-child(8) { top: 35%; left: 90%; }
+
+/* Gradient Overlays */
+.cosmic-gradient-overlay {
+  position: absolute;
+  width: 100%;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.top-gradient {
+  top: 0;
+  height: 30vh;
+  background: linear-gradient(
+    to bottom,
+    var(--cosmic-bg-dark) 0%,
+    transparent 100%
+  );
+}
+
+.bottom-gradient {
+  bottom: 0;
+  height: 30vh;
+  background: linear-gradient(
+    to top,
+    var(--cosmic-bg-dark) 0%,
+    transparent 100%
+  );
 }
 
 /* Global starfield that spans the entire page */
@@ -887,15 +1400,17 @@ export default {
 
 .dao-image {
   max-width: 14rem;
-  margin-bottom: -8rem;
-  filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.35));
-  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  transform-style: preserve-3d;
-  transform: translateZ(40px);
-  will-change: transform;
+  filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.35))
+          drop-shadow(0 0 40px rgba(15, 185, 253, 0.2));
+  will-change: transform, filter;
   opacity: 0;
-  animation: fadeInUp 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.3s forwards,
-             float 6s ease-in-out 1.2s infinite;
+  animation: fadeInUp 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.3s forwards;
+  transition: filter 0.5s ease;
+}
+
+.dao-image:hover {
+  filter: drop-shadow(0 0 25px rgba(15, 185, 253, 0.5))
+          drop-shadow(0 0 50px rgba(15, 185, 253, 0.3));
 }
 
 @keyframes float {
@@ -933,24 +1448,54 @@ export default {
   margin-top: 4rem;
   margin-bottom: 1rem;
   text-transform: uppercase;
-  background: linear-gradient(180deg, 
-    rgba(135, 192, 255, 1) 0%, 
-    rgba(0, 123, 255, 1) 100%);
-  background-size: 200% 200%;
+  position: relative;
+  background: linear-gradient(
+    300deg,
+    rgba(135, 192, 255, 1) 0%,
+    rgba(15, 185, 253, 1) 25%,
+    rgba(88, 101, 242, 1) 50%,
+    rgba(15, 185, 253, 1) 75%,
+    rgba(135, 192, 255, 1) 100%
+  );
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
-  text-shadow: 0 10px 30px rgba(0, 123, 255, 0.5);
-  letter-spacing: -0.02em;
+  text-shadow: 
+    0 0 30px rgba(15, 185, 253, 0.3),
+    0 0 60px rgba(15, 185, 253, 0.1);
+  letter-spacing: 0.02em;
   transform-style: preserve-3d;
   transform: translateZ(30px);
   will-change: transform;
   transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  position: relative;
-  opacity: 0;
-  animation: fadeInUp 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.5s forwards,
-             textGradientShift 8s ease infinite 1.6s;
+  animation: 
+    fadeInUp 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.5s forwards,
+    gradientFlow 8s linear infinite,
+    cosmicPulse 4s ease-in-out infinite;
+}
+
+.primary-headline::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 185, 253, 0.15) 0%,
+    transparent 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  z-index: -1;
+  filter: blur(8px);
+  opacity: 0.7;
+  transform: translateZ(15px);
 }
 
 .primary-headline::after {
@@ -960,14 +1505,58 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   width: 15rem;
-  height: 3px;
-  background: linear-gradient(90deg, 
+  height: 2px;
+  background: linear-gradient(
+    90deg, 
     rgba(15, 185, 253, 0) 0%, 
     rgba(15, 185, 253, 0.8) 50%, 
-    rgba(15, 185, 253, 0) 100%);
+    rgba(15, 185, 253, 0) 100%
+  );
+  filter: blur(1px);
   border-radius: 2px;
   opacity: 0;
   animation: lineReveal 1s ease 0.7s forwards;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes cosmicPulse {
+  0% { 
+    text-shadow: 
+      0 0 30px rgba(15, 185, 253, 0.3),
+      0 0 60px rgba(15, 185, 253, 0.1);
+  }
+  50% { 
+    text-shadow: 
+      0 0 40px rgba(15, 185, 253, 0.4),
+      0 0 80px rgba(15, 185, 253, 0.2);
+  }
+  100% { 
+    text-shadow: 
+      0 0 30px rgba(15, 185, 253, 0.3),
+      0 0 60px rgba(15, 185, 253, 0.1);
+  }
+}
+
+/* Mobile optimization for the enhanced title */
+@media (max-width: 768px) {
+  .primary-headline {
+    font-size: 2.5rem;
+    margin-top: 2rem;
+    letter-spacing: 0.01em;
+    text-shadow: 
+      0 0 20px rgba(15, 185, 253, 0.3),
+      0 0 40px rgba(15, 185, 253, 0.1);
+  }
+
+  .primary-headline::after {
+    width: 10rem;
+    height: 1.5px;
+  }
 }
 
 .cta-subtext {
@@ -4116,82 +4705,201 @@ export default {
 @media (max-width: 768px) {
   .headline {
     min-height: 100vh;
-    padding: 6rem 1.5rem 4rem;
-    text-align: center;
+    padding: 4rem 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
   }
 
   .content {
     width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
+    max-width: 100%;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
   }
 
   .hero-logo {
-    width: 180px;
+    width: 140px;
+    max-width: 140px;
     height: auto;
-    margin-bottom: 2rem;
+    margin-bottom: -2rem;
+    transform: translateZ(10px);
   }
 
   .dao-image {
-    width: 280px;
+    width: 200px;
+    max-width: 200px;
     height: auto;
-    margin: 1rem auto 2rem;
-    filter: drop-shadow(0 10px 20px rgba(15, 185, 253, 0.2));
+    margin-bottom: -2rem;
+    transform: translateZ(20px);
   }
 
   .primary-headline {
-    font-size: 2.75rem;
+    font-size: calc(2rem + 2vw);
     line-height: 1.2;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-primary) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 5px 15px rgba(15, 185, 253, 0.2);
+    margin: 0;
+    padding: 0 0.5rem;
+    width: 100%;
+    text-align: center;
+    transform: translateZ(15px);
   }
 
   .cta-subtext {
-    font-size: 1.5rem;
-    margin-bottom: 2.5rem;
-    color: var(--color-text-secondary);
+    font-size: calc(1rem + 1vw);
+    margin: 0.5rem 0 1rem;
+    padding: 0 1rem;
+    width: 100%;
+    text-align: center;
+    transform: translateZ(10px);
   }
 
   .cta-buttons-container {
-    display: flex;
     flex-direction: column;
-    gap: 1rem;
     width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
+    max-width: 280px;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 0;
   }
 
   .cta-button {
     width: 100%;
-    padding: 1.1rem 1.5rem;
-    font-size: 1.1rem;
+    padding: 0.9rem 1.5rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    border-radius: 12px;
+    gap: 0.5rem;
+    transform: none !important;
   }
 
-  .cta-button i {
-    margin-right: 0.75rem;
+  /* Adjust entrance animations for mobile */
+  @keyframes mobileHeroFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px) translateZ(var(--z-depth));
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) translateZ(var(--z-depth));
+    }
   }
 
-  /* Improve touch feedback */
-  .cta-button:active {
-    transform: scale(0.98) !important;
-    transition: all 0.2s ease;
+  .hero-logo {
+    --z-depth: 10px;
+    animation: mobileHeroFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards;
   }
 
-  /* Adjust starfield canvas for mobile */
-  #starfield {
-    opacity: 0.6;
+  .dao-image {
+    --z-depth: 20px;
+    animation: mobileHeroFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards;
   }
+
+  .primary-headline {
+    --z-depth: 15px;
+    animation: 
+      mobileHeroFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards,
+      gradientFlow 8s linear infinite,
+      cosmicPulse 4s ease-in-out infinite;
+  }
+
+  .cta-subtext {
+    --z-depth: 10px;
+    animation: mobileHeroFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s forwards;
+  }
+
+  .cta-buttons-container .cta-button {
+    --z-depth: 5px;
+    animation: mobileHeroFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) var(--delay) forwards;
+  }
+
+  .cta-buttons-container .cta-button:first-child {
+    --delay: 0.9s;
+  }
+
+  .cta-buttons-container .cta-button:last-child {
+    --delay: 1.1s;
+  }
+
+  /* Optimize floating animation for mobile */
+  @keyframes mobileFloat {
+    0% { transform: translateZ(20px) translateY(0); }
+    50% { transform: translateZ(20px) translateY(-8px); }
+    100% { transform: translateZ(20px) translateY(0); }
+  }
+
+  .dao-image {
+    animation: 
+      mobileHeroFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards,
+      mobileFloat 4s ease-in-out infinite;
+  }
+
+  /* Adjust glow effects for better mobile performance */
+  .hero-logo {
+    filter: drop-shadow(0 0 10px rgba(0, 123, 255, 0.2));
+  }
+
+  .dao-image {
+    filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.25));
+  }
+
+  .primary-headline {
+    text-shadow: 
+      0 0 15px rgba(15, 185, 253, 0.2),
+      0 0 30px rgba(15, 185, 253, 0.1);
+  }
+
+  /* Ensure content stays within viewport */
+  .cosmic-background,
+  .global-starfield {
+    height: 100%;
+    position: fixed;
+  }
+}
+
+/* Additional optimization for very small screens */
+@media (max-width: 380px) {
+  .headline {
+    padding: 3rem 0.5rem;
+  }
+
+  .hero-logo {
+    width: 120px;
+    margin-bottom: -1.5rem;
+  }
+
+  .dao-image {
+    width: 180px;
+    margin-bottom: -1.5rem;
+  }
+
+  .primary-headline {
+    font-size: calc(1.75rem + 2vw);
+  }
+
+  .cta-subtext {
+    font-size: calc(0.9rem + 1vw);
+  }
+
+  .cta-buttons-container {
+    max-width: 250px;
+  }
+
+  .cta-button {
+    padding: 0.8rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Ensure proper stacking context and hardware acceleration */
+.headline * {
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Performance optimizations for animations */
@@ -4502,4 +5210,631 @@ img.hero-logo, img.dao-image {
   position: relative;
   z-index: 10; /* Higher than background elements */
 }
+
+/* Animation Keyframes for Cosmic Background */
+@keyframes starTwinkle {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(5px, -5px) scale(1.5);
+    opacity: 0.8;
+  }
+}
+
+@keyframes floatDust {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.2;
+  }
+  25% {
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-100px) translateX(100px);
+    opacity: 0.3;
+  }
+  75% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateY(-200px) translateX(200px);
+    opacity: 0;
+  }
+}
+
+@keyframes orbitEffect {
+  0% {
+    transform: rotate(0deg) translateX(0) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: rotate(360deg) translateX(50px) scale(1.2);
+    opacity: 0.4;
+  }
+}
+
+@keyframes pulseBackground {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.9) translateX(0);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1.1) translateX(-30px);
+  }
+}
+
+@keyframes portalPulse {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes portalRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes portalStarPulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes portalGlowPulse {
+  0% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  100% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+@keyframes portalCorePulse {
+  0% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  100% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+@keyframes rotateGrid {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shieldPulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes dataPointScan {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes logoBreathing {
+  0%, 100% {
+    opacity: 0.15;
+    filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.8)) 
+            drop-shadow(0 0 30px rgba(15, 185, 253, 0.5))
+            brightness(1.2) contrast(1.1) hue-rotate(0deg);
+    transform: scale(1);
+  }
+  25% {
+    opacity: 0.2;
+    filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.9)) 
+            drop-shadow(0 0 40px rgba(15, 185, 253, 0.6))
+            brightness(1.4) contrast(1.2) hue-rotate(5deg);
+    transform: scale(1.02);
+  }
+  50% {
+    opacity: 0.12;
+    filter: drop-shadow(0 0 12px rgba(15, 185, 253, 0.7)) 
+            drop-shadow(0 0 25px rgba(15, 185, 253, 0.4))
+            brightness(1.1) contrast(1) hue-rotate(-3deg);
+    transform: scale(0.98);
+  }
+  75% {
+    opacity: 0.22;
+    filter: drop-shadow(0 0 25px rgba(15, 185, 253, 1)) 
+            drop-shadow(0 0 50px rgba(15, 185, 253, 0.7))
+            brightness(1.5) contrast(1.3) hue-rotate(3deg);
+    transform: scale(1.03);
+  }
+}
+
+.dao-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  background-color: transparent;
+  color: var(--cosmic-text-primary);
+  text-align: center;
+  z-index: 1;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.content-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 2rem;
+}
+
+.hero-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-image-wrapper {
+  margin-bottom: -2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-emblem {
+  max-width: 16rem;
+  will-change: transform, filter;
+  opacity: 0;
+  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.35)) 
+          drop-shadow(0 0 30px rgba(15, 185, 253, 0.2));
+  animation: scaleIn 0.7s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.1s forwards,
+           glowPulse 3s ease-in-out 1.4s infinite;
+}
+
+.dao-image-wrapper {
+  margin-bottom: -6rem;
+  position: relative;
+  z-index: 1;
+}
+
+.dao-image {
+  max-width: 14rem;
+  filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.35))
+          drop-shadow(0 0 40px rgba(15, 185, 253, 0.2));
+  will-change: transform, filter;
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.3s forwards;
+  transition: filter 0.5s ease;
+}
+
+.dao-image:hover {
+  filter: drop-shadow(0 0 25px rgba(15, 185, 253, 0.5))
+          drop-shadow(0 0 50px rgba(15, 185, 253, 0.3));
+}
+
+.hero-title {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(
+    300deg, 
+    rgba(255, 255, 255, 1) 0%,
+    rgba(15, 185, 253, 1) 25%,
+    rgba(88, 101, 242, 1) 50%,
+    rgba(15, 185, 253, 1) 75%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 
+    0 0 30px rgba(15, 185, 253, 0.3),
+    0 0 60px rgba(15, 185, 253, 0.1);
+  transform-style: preserve-3d;
+  transform: translateZ(10px);
+  will-change: transform;
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: 
+    titleReveal 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.5s forwards,
+    titleGradientFlow 8s linear infinite,
+    titleCosmicPulse 4s ease-in-out infinite;
+  opacity: 0;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: rgba(209, 217, 230, 0.9);
+  font-style: italic;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transform-style: preserve-3d;
+  transform: translateZ(20px);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.7s forwards;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  transform-style: preserve-3d;
+  transform: translateZ(25px);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+  width: 100%;
+  max-width: 600px;
+}
+
+.cosmic-button {
+  padding: 1.1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--cosmic-text-primary);
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.8) 0%,
+    rgba(15, 185, 253, 0.6) 100%
+  );
+  border: 2px solid rgba(15, 185, 253, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(15, 185, 253, 0.2);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  opacity: 0;
+  animation: buttonPop 0.9s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.9s forwards;
+}
+
+.cosmic-button.primary-button {
+  animation-delay: 0.9s;
+}
+
+.cosmic-button.secondary-button {
+  background: linear-gradient(135deg,
+    rgba(38, 79, 137, 0.95) 0%,
+    rgba(26, 60, 110, 0.95) 100%
+  );
+  border: 2px solid rgba(61, 136, 214, 0.7);
+  animation-delay: 1.1s;
+}
+
+.cosmic-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(15, 185, 253, 0.3);
+}
+
+.cosmic-button.secondary-button:hover {
+  background: linear-gradient(135deg,
+    rgba(49, 115, 199, 0.95) 0%,
+    rgba(30, 78, 141, 0.95) 100%
+  );
+  box-shadow: 0 6px 20px rgba(123, 187, 255, 0.4);
+}
+
+.cosmic-button i {
+  font-size: 1.25rem;
+}
+
+.button-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%);
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform 0.6s ease;
+  z-index: -1;
+}
+
+.cosmic-button:hover .button-glow {
+  transform: translateX(100%) rotate(45deg);
+}
+
+/* Mobile Responsive Styles for Hero */
+@media (max-width: 768px) {
+  .dao-hero {
+    padding: 0;
+    height: 100vh;
+  }
+
+  .content-container {
+    padding: 0 1rem;
+  }
+
+  .hero-emblem {
+    max-width: 10rem;
+  }
+
+  .dao-image {
+    max-width: 10rem;
+    margin-bottom: -2rem;
+  }
+
+  .hero-title {
+    font-size: calc(1.75rem + 2vw);
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: calc(1rem + 1vw);
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 280px;
+  }
+
+  .cosmic-button {
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dao-hero {
+    padding: 0;
+  }
+
+  .content-container {
+    padding: 0 0.5rem;
+  }
+
+  .hero-emblem {
+    max-width: 8rem;
+  }
+
+  .dao-image {
+    max-width: 8rem;
+    margin-bottom: -1.5rem;
+  }
+
+  .hero-floating-elements .floating-shape {
+    opacity: 0.3; /* Reduce opacity for better mobile visibility */
+    transform: scale(0.7); /* Make shapes smaller on mobile */
+  }
+}
+
+.cosmic-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  perspective: 1200px;
+}
+
+.hero-floating-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floating-shape {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(15, 185, 253, 0.1) 100%);
+  opacity: 0.5;
+  animation: floatShape 8s infinite ease-in-out;
+}
+
+.floating-shape.shape-1 { 
+  top: 15%; 
+  left: 15%; 
+  width: 120px;
+  height: 120px;
+  animation-delay: 0s;
+}
+
+.floating-shape.shape-2 { 
+  top: 70%; 
+  left: 70%; 
+  width: 80px;
+  height: 80px;
+  animation-delay: 1s;
+}
+
+.floating-shape.shape-3 { 
+  top: 40%; 
+  left: 25%; 
+  width: 60px;
+  height: 60px;
+  animation-delay: 2s;
+}
+
+@keyframes floatShape {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+  50% { transform: translateY(-20px) rotate(45deg); opacity: 0.7; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glowPulse {
+  0% {
+    filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(15, 185, 253, 0.7));
+  }
+  100% {
+    filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.3));
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes buttonPop {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes titleReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+    letter-spacing: 0.3em;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.1em;
+  }
+}
+
+@keyframes titleGradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes titleCosmicPulse {
+  0% { 
+    text-shadow: 
+      0 0 30px rgba(15, 185, 253, 0.3),
+      0 0 60px rgba(15, 185, 253, 0.1);
+  }
+  50% { 
+    text-shadow: 
+      0 0 40px rgba(15, 185, 253, 0.4),
+      0 0 80px rgba(15, 185, 253, 0.2);
+  }
+  100% { 
+    text-shadow: 
+      0 0 30px rgba(15, 185, 253, 0.3),
+      0 0 60px rgba(15, 185, 253, 0.1);
+  }
+}
+
+@keyframes floatShape {
+  0%, 100% { 
+    transform: translateY(0) rotate(0deg); 
+    opacity: 0.3; 
+  }
+  50% { 
+    transform: translateY(-20px) rotate(45deg); 
+    opacity: 0.7; 
+  }
+}
 </style>
+

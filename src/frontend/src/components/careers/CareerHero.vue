@@ -108,11 +108,6 @@
           <div class="energy-particles"></div>
         </div>
       </div>
-      <div class="energy-orbs">
-        <div class="energy-orb" style="--delay: 0s; --scale: 0.6;"></div>
-        <div class="energy-orb" style="--delay: 1.5s; --scale: 0.8;"></div>
-        <div class="energy-orb" style="--delay: 3s; --scale: 0.5;"></div>
-      </div>
       <div class="portal-hexagons">
         <div class="hexagon-grid"></div>
       </div>
@@ -858,36 +853,6 @@ export default {
   animation-delay: calc(var(--angle) * 0.01s + 1.5s);
 }
 
-.energy-orbs {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.energy-orb {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(15, 185, 253, 0.6);
-  box-shadow: 
-    0 0 10px rgba(15, 185, 253, 0.8),
-    0 0 20px rgba(15, 185, 253, 0.4);
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
-  animation: 
-    orbExpand 1s var(--animation-bounce) forwards,
-    orbFloat 8s infinite linear;
-  animation-delay: 2s, calc(2s + var(--delay));
-  filter: blur(1px);
-  z-index: 2;
-}
-
 /* Animation Keyframes */
 @keyframes textReveal {
   from {
@@ -1378,33 +1343,6 @@ export default {
   }
 }
 
-@keyframes orbExpand {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0;
-  }
-  80% {
-    transform: translate(-50%, -50%) scale(calc(var(--scale) * 1.2));
-    opacity: 0.8;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(var(--scale));
-    opacity: 0.6;
-  }
-}
-
-@keyframes orbFloat {
-  0% {
-    transform: translate(-50%, -50%) scale(var(--scale)) rotate(0deg) translateX(0);
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(var(--scale)) rotate(180deg) translateX(40px);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(var(--scale)) rotate(360deg) translateX(0);
-  }
-}
-
 /* Mobile Styles - Update for new elements */
 @media (max-width: 768px) {
   .cosmic-portal {
@@ -1421,11 +1359,6 @@ export default {
   .energy-stream {
     width: 70px;
     height: 2px;
-  }
-  
-  .energy-orb {
-    width: 15px;
-    height: 15px;
   }
   
   .inner-ring {
