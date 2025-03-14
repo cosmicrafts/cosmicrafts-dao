@@ -653,61 +653,63 @@ export default {
     function initCanvasEffects() {
       if (starfield.value) {
         try {
-          // Starfield implementation
+          // Get canvas and context
           const canvas = starfield.value;
           const ctx = canvas.getContext('2d');
           
-          // Set canvas dimensions
-          const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            createStars(); // Recreate stars when canvas is resized
-            drawStars(); // Redraw stars when canvas is resized
-          };
+          // Get device pixel ratio
+          const dpr = window.devicePixelRatio || 1;
           
           // Create stars
           const stars = [];
           const createStars = () => {
-            const starCount = Math.floor((canvas.width * canvas.height) / 1000);
-            stars.length = 0; // Clear any existing stars
+            // Set canvas dimensions with pixel ratio
+            const width = window.innerWidth;
+            const height = window.innerHeight;
             
-            // Create stars with a delayed appearance effect
+            // Set display size
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            
+            // Set actual size in memory
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            
+            // Scale context to match pixel ratio
+            ctx.scale(dpr, dpr);
+            
+            // Calculate star count based on screen area
+            const starCount = Math.floor((width * height) / 1600);
+            stars.length = 0;
+            
             for (let i = 0; i < starCount; i++) {
               stars.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 1.5,
-                opacity: 0, // Start with 0 opacity
-                targetOpacity: 0.7 + Math.random() * 0.3, // Target opacity between 0.7-1.0
-                twinkleSpeed: 0.002 + Math.random() * 0.008, // Add twinkle speed for each star
-                delay: Math.random() * 2000 // Random delay for each star (up to 2s)
+                x: Math.random() * width,
+                y: Math.random() * height,
+                radius: (Math.random() * 1.5) + 0.5,
+                opacity: 0,
+                targetOpacity: 0.7 + Math.random() * 0.3,
+                twinkleSpeed: 0.002 + Math.random() * 0.008,
+                delay: Math.random() * 2000
               });
             }
           };
           
-          // Draw stars on canvas
+          // Draw stars
           const drawStars = () => {
             if (!ctx) return;
             
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
             
-            // Current time for animation
             const now = Date.now();
-            const animStart = now - 500; // Animation started 500ms after function call
+            const animStart = now - 500;
             
-            // Draw each star
             ctx.fillStyle = '#ffffff';
             stars.forEach(star => {
-              // Calculate current opacity based on delay
               if (star.opacity < star.targetOpacity && now > animStart + star.delay) {
-                star.opacity = Math.min(
-                  star.targetOpacity, 
-                  star.opacity + 0.01
-                );
+                star.opacity = Math.min(star.targetOpacity, star.opacity + 0.01);
               }
               
-              // Add subtle twinkling effect
               const twinkle = Math.sin(now * star.twinkleSpeed) * 0.2;
               const currentOpacity = Math.max(0.1, Math.min(star.targetOpacity, star.opacity + twinkle));
               
@@ -715,8 +717,6 @@ export default {
               ctx.beginPath();
               ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
               ctx.fill();
-              
-              // No vertical movement - stars stay fixed
             });
           };
           
@@ -727,23 +727,29 @@ export default {
             animationFrameId = requestAnimationFrame(animate);
           };
           
-          // Initialize
-          resizeCanvas();
-          animate(); // Start animation loop
+          // Handle window resize
+          const handleResize = () => {
+            // Reset scale before resizing
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            createStars();
+          };
+          
+          // Initial setup
+          createStars();
+          animate();
           
           // Handle window resize
-          window.addEventListener('resize', resizeCanvas, { passive: true });
+          window.addEventListener('resize', handleResize, { passive: true });
           
-          // Clean up animation on component unmount
+          // Clean up
           onUnmounted(() => {
             if (animationFrameId) {
               cancelAnimationFrame(animationFrameId);
             }
-            window.removeEventListener('resize', resizeCanvas);
+            window.removeEventListener('resize', handleResize);
           });
         } catch (err) {
           console.error('Canvas initialization error:', err);
-          // Silently fail for production - no visual effect is better than a broken page
         }
       }
     }
@@ -1261,10 +1267,13 @@ export default {
   height: 100vh;
   opacity: 0;
   mix-blend-mode: screen;
-  z-index: 2; /* Higher than cosmic background */
+  z-index: 2;
   pointer-events: none;
   will-change: opacity;
   animation: starfieldFadeIn 1.5s ease 0.2s forwards;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 @keyframes starfieldFadeIn {
@@ -1272,7 +1281,7 @@ export default {
     opacity: 0;
   }
   to {
-    opacity: 0.45;
+    opacity: 0.6; /* Increased opacity for better visibility */
   }
 }
 
