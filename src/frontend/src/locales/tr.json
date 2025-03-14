@@ -360,5 +360,189 @@
       "mobileTitle": "Teknik Doküman Bölümleri",
       "mobileSubtitle": "Bölümleri Keşfet"
     }
+  },
+  "dao": {
+    "headline": {
+      "title": "Bir mirasın şafağı",
+      "subtitle": "Ya DAO ya da asla!",
+      "stakeholder_cta": "Paydaş Ol",
+      "whitepaper_cta": "Teknik Raporu Oku"
+    },
+    "explainer": {
+      "title": "Cosmicrafts DAO nedir?",
+      "description": "Cosmicrafts DAO (Merkeziyetsiz Otonom Organizasyon), topluluğun Cosmicrafts oyun ekosisteminin geleceğini kolektif olarak yönetmesini sağlar. SPIRAL token sahipliği aracılığıyla, paydaşlar platform geliştirme, hazine yönetimi ve ekonomi politikasını etkileyen kilit kararlara katılabilirler.",
+      "pillars": {
+        "governance": {
+          "title": "Topluluk Yönetişimi",
+          "description": "Teklifler üzerinde oy kullanın ve demokratik karar alma yoluyla platformun gelecek yönünü şekillendirin."
+        },
+        "treasury": {
+          "title": "Ortak Hazine",
+          "description": "Ekosistem büyümesi ve gelişimine adanmış 760 milyon SPIRAL token'dan oluşan bir hazineyi kolektif olarak yönetin."
+        },
+        "rewards": {
+          "title": "Staking Ödülleri",
+          "description": "Aktif katılım ve platform büyümesine uzun vadeli bağlılık yoluyla ödüller kazanın."
+        }
+      },
+      "links": {
+        "roadmap": "Yol Haritamızı Görüntüle",
+        "whitepaper": "Teknik Raporu Oku"
+      }
+    },
+    "distribution": {
+      "title": "Token Dağılımı",
+      "treasury": {
+        "title": "Hazine",
+        "description": "Ekosistem büyümesi ve DAO kontrolündeki fonlar"
+      },
+      "swap": {
+        "title": "SNS Takas",
+        "description": "8 üç aylık piyasaya sürüm ile halka satış"
+      },
+      "team": {
+        "title": "Geliştirme Ekibi",
+        "description": "Çekirdek ekip için 8 yıllık hak ediş süresi"
+      },
+      "investors": {
+        "title": "İlk Yatırımcılar",
+        "description": "Çeşitli hak ediş sürelerine sahip erken destekçiler"
+      }
+    },
+    "governance": {
+      "title": "Yönetişim Modeli",
+      "proposal_creation": {
+        "title": "Teklif Oluşturma",
+        "requirement": "1,000 SPIRAL",
+        "description": "Teklif göndermek için gereken minimum stake"
+      },
+      "voting_period": {
+        "title": "Oylama Süresi",
+        "requirement": "7 Gün",
+        "description": "Teklifler için standart müzakere süresi"
+      },
+      "voting_power": {
+        "title": "Oy Gücü",
+        "requirement": "3 kata kadar",
+        "description": "Staking ve yaş yoluyla maksimum çarpan"
+      },
+      "lock_period": {
+        "title": "Kilitleme Süresi",
+        "requirement": "30g - 8y",
+        "description": "Kilit çözme için esnek seçenekler"
+      }
+    },
+    "metrics": {
+      "title": "Token Metrikleri",
+      "total_supply": "Toplam Arz",
+      "treasury_size": "Hazine Büyüklüğü",
+      "min_proposal": "Teklifler için Min. Stake",
+      "initial_apy": "Başlangıç APY"
+    },
+    "staking": {
+      "title": "Staking Faydaları",
+      "subtitle": "Katılım Yoluyla Kazanın",
+      "description": "Ödüller kazanmak ve yönetişim gücünüzü artırmak için SPIRAL token'larınızı kilitleyin",
+      "benefits": {
+        "initial_apy": {
+          "title": "Başlangıç APY"
+        },
+        "transition": {
+          "title": "Geçiş Dönemi"
+        },
+        "final_apy": {
+          "title": "Final APY"
+        }
+      },
+      "multipliers": {
+        "title": "Güç Çarpanları",
+        "dissolve": {
+          "title": "Çözülme Gecikmesi"
+        },
+        "age": {
+          "title": "Nöron Yaşı"
+        }
+      }
+    },
+    "rights": {
+      "title": "Paydaş Hakları",
+      "treasury": {
+        "title": "Hazine Yönetimi",
+        "description": "Geliştirme, pazarlama ve topluluk girişimleri için DAO hazine fonlarının tahsisi üzerinde oy kullanın",
+        "items": {
+          "marketing": "Pazarlama kampanyaları",
+          "development": "Geliştirme fonlaması",
+          "partnerships": "Stratejik ortaklıklar"
+        }
+      },
+      "economic": {
+        "title": "Ekonomik Politikalar",
+        "description": "Kolektif karar alma yoluyla ekosistemin ekonomik çerçevesini şekillendirin",
+        "items": {
+          "tokenomics": "Tokenomics ayarlamaları",
+          "staking": "Staking oranı değişiklikleri",
+          "fees": "Ücret yapıları"
+        }
+      },
+      "roadmap": {
+        "title": "Geliştirme Yol Haritası",
+        "description": "Platformun teknik ve ürün geliştirme öncelikleri üzerinde etki yaratın",
+        "items": {
+          "features": "Özellik önceliklendirme",
+          "expansions": "Oyun genişletmeleri",
+          "improvements": "Teknik iyileştirmeler"
+        }
+      },
+      "community": {
+        "title": "Topluluk Programları",
+        "description": "Ekosistemi büyütmek için topluluk liderliğindeki girişimleri kurun ve yönetin",
+        "items": {
+          "creators": "İçerik oluşturucu fonlaması",
+          "events": "Etkinlikler ve turnuvalar",
+          "education": "Eğitim programları"
+        }
+      }
+    },
+    "join": {
+      "title": "Kozmik Gücünü Talep Et!",
+      "description": "DAO'ya katılın ve tamamen zincir üzerindeki ilk oyun markasının yönetişimine katılın",
+      "stats": {
+        "voting": "Maks. Oy Gücü",
+        "apy": "APY Aralığı",
+        "period": "Oylama Süresi"
+      },
+      "stakeholder_cta": "Paydaş Ol",
+      "whitepaper_cta": "Teknik Raporu Oku"
+    }
+  },
+  "proposals": {
+    "title": "Aktif Teklifler",
+    "for": "Lehte",
+    "against": "Aleyhte",
+    "vote_for": "Lehte Oy Ver",
+    "vote_against": "Aleyhte Oy Ver",
+    "status": {
+      "active": "Aktif",
+      "passed": "Kabul Edildi",
+      "rejected": "Reddedildi",
+      "executed": "Yürütüldü",
+      "pending": "Beklemede"
+    },
+    "examples": {
+      "creator": {
+        "title": "Topluluk İçerik Oluşturucu Programı",
+        "summary": "İçerik oluşturucuların Cosmicrafts ekosistemini tanıtmak için fon alabilecekleri bir çerçeve kurma"
+      },
+      "treasury": {
+        "title": "Hazine Çeşitlendirme Stratejisi",
+        "summary": "Hazine fonlarının %5'ini ekosistemle uyumlu protokollere stratejik yatırımlara tahsis etme"
+      }
+    }
+  },
+  "meta": {
+    "dao": {
+      "title": "Cosmicrafts DAO - Oyunların Geleceği için Merkeziyetsiz Yönetişim",
+      "description": "Cosmicrafts DAO'ya katılın ve kozmik oyunların geleceği için merkeziyetsiz yönetişime katılın. Ödüller ve oy gücü kazanmak için SPIRAL token'larınızı stake edin."
+    }
   }
 }

@@ -361,5 +361,189 @@
       "mobileTitle": "Các Phần Sách Trắng",
       "mobileSubtitle": "Khám Phá Các Chương"
     }
+  },
+  "dao": {
+    "headline": {
+      "title": "Bình minh của một di sản",
+      "subtitle": "Hoặc là DAO hoặc là không bao giờ!",
+      "stakeholder_cta": "Trở thành Stakeholder",
+      "whitepaper_cta": "Đọc Whitepaper"
+    },
+    "explainer": {
+      "title": "Cosmicrafts DAO là gì?",
+      "description": "Cosmicrafts DAO (Tổ chức Tự trị Phi tập trung) cho phép cộng đồng cùng nhau quản lý tương lai của hệ sinh thái trò chơi Cosmicrafts. Thông qua việc sở hữu token SPIRAL, các stakeholder có thể tham gia vào các quyết định quan trọng ảnh hưởng đến việc phát triển nền tảng, quản lý ngân khố và chính sách kinh tế.",
+      "pillars": {
+        "governance": {
+          "title": "Quản trị Cộng đồng",
+          "description": "Bỏ phiếu về các đề xuất và định hình hướng đi tương lai của nền tảng thông qua quá trình ra quyết định dân chủ."
+        },
+        "treasury": {
+          "title": "Ngân khố Chung",
+          "description": "Cùng nhau quản lý ngân khố gồm 760 triệu token SPIRAL dành cho sự phát triển và tăng trưởng của hệ sinh thái."
+        },
+        "rewards": {
+          "title": "Phần thưởng Staking",
+          "description": "Kiếm phần thưởng thông qua sự tham gia tích cực và cam kết lâu dài đối với sự phát triển của nền tảng."
+        }
+      },
+      "links": {
+        "roadmap": "Xem Lộ trình của Chúng tôi",
+        "whitepaper": "Đọc Whitepaper"
+      }
+    },
+    "distribution": {
+      "title": "Phân phối Token",
+      "treasury": {
+        "title": "Ngân khố",
+        "description": "Quỹ phát triển hệ sinh thái và được kiểm soát bởi DAO"
+      },
+      "swap": {
+        "title": "SNS Swap",
+        "description": "Bán công khai với 8 đợt phát hành hàng quý"
+      },
+      "team": {
+        "title": "Đội ngũ Phát triển",
+        "description": "Thời gian vesting 8 năm cho đội ngũ cốt lõi"
+      },
+      "investors": {
+        "title": "Nhà đầu tư Ban đầu",
+        "description": "Những người ủng hộ sớm với vesting đa dạng"
+      }
+    },
+    "governance": {
+      "title": "Mô hình Quản trị",
+      "proposal_creation": {
+        "title": "Tạo Đề xuất",
+        "requirement": "1,000 SPIRAL",
+        "description": "Stake tối thiểu cần thiết để gửi đề xuất"
+      },
+      "voting_period": {
+        "title": "Thời gian Bỏ phiếu",
+        "requirement": "7 Ngày",
+        "description": "Thời gian cân nhắc tiêu chuẩn cho các đề xuất"
+      },
+      "voting_power": {
+        "title": "Sức mạnh Bỏ phiếu",
+        "requirement": "Lên đến 3x",
+        "description": "Bội số tối đa thông qua staking và tuổi thọ"
+      },
+      "lock_period": {
+        "title": "Thời gian Khóa",
+        "requirement": "30d - 8n",
+        "description": "Tùy chọn linh hoạt để giải phóng khóa"
+      }
+    },
+    "metrics": {
+      "title": "Chỉ số Token",
+      "total_supply": "Tổng Cung",
+      "treasury_size": "Kích thước Ngân khố",
+      "min_proposal": "Stake Tối thiểu cho Đề xuất",
+      "initial_apy": "APY Ban đầu"
+    },
+    "staking": {
+      "title": "Lợi ích Staking",
+      "subtitle": "Kiếm lợi Thông qua Tham gia",
+      "description": "Khóa token SPIRAL của bạn để kiếm phần thưởng và tăng quyền lực quản trị",
+      "benefits": {
+        "initial_apy": {
+          "title": "APY Ban đầu"
+        },
+        "transition": {
+          "title": "Thời kỳ Chuyển tiếp"
+        },
+        "final_apy": {
+          "title": "APY Cuối cùng"
+        }
+      },
+      "multipliers": {
+        "title": "Bội số Sức mạnh",
+        "dissolve": {
+          "title": "Độ trễ Giải phóng"
+        },
+        "age": {
+          "title": "Tuổi thọ Neuron"
+        }
+      }
+    },
+    "rights": {
+      "title": "Quyền của Stakeholder",
+      "treasury": {
+        "title": "Quản lý Ngân khố",
+        "description": "Bỏ phiếu về việc phân bổ quỹ ngân khố DAO cho phát triển, tiếp thị và các sáng kiến cộng đồng",
+        "items": {
+          "marketing": "Chiến dịch tiếp thị",
+          "development": "Tài trợ phát triển",
+          "partnerships": "Quan hệ đối tác chiến lược"
+        }
+      },
+      "economic": {
+        "title": "Chính sách Kinh tế",
+        "description": "Định hình khung kinh tế của hệ sinh thái thông qua quá trình ra quyết định tập thể",
+        "items": {
+          "tokenomics": "Điều chỉnh tokenomics",
+          "staking": "Thay đổi tỷ lệ staking",
+          "fees": "Cấu trúc phí"
+        }
+      },
+      "roadmap": {
+        "title": "Lộ trình Phát triển",
+        "description": "Ảnh hưởng đến các ưu tiên phát triển kỹ thuật và sản phẩm của nền tảng",
+        "items": {
+          "features": "Ưu tiên tính năng",
+          "expansions": "Mở rộng trò chơi",
+          "improvements": "Cải tiến kỹ thuật"
+        }
+      },
+      "community": {
+        "title": "Chương trình Cộng đồng",
+        "description": "Thiết lập và quản lý các sáng kiến do cộng đồng lãnh đạo để phát triển hệ sinh thái",
+        "items": {
+          "creators": "Tài trợ người sáng tạo nội dung",
+          "events": "Sự kiện và giải đấu",
+          "education": "Chương trình giáo dục"
+        }
+      }
+    },
+    "join": {
+      "title": "Giành lấy Sức mạnh Vũ trụ của Bạn!",
+      "description": "Tham gia DAO và tham gia quản trị thương hiệu trò chơi hoàn toàn on-chain đầu tiên",
+      "stats": {
+        "voting": "Sức mạnh Bỏ phiếu Tối đa",
+        "apy": "Phạm vi APY",
+        "period": "Thời gian Bỏ phiếu"
+      },
+      "stakeholder_cta": "Trở thành Stakeholder",
+      "whitepaper_cta": "Đọc Whitepaper"
+    }
+  },
+  "proposals": {
+    "title": "Đề xuất Đang hoạt động",
+    "for": "Ủng hộ",
+    "against": "Phản đối",
+    "vote_for": "Bỏ phiếu Ủng hộ",
+    "vote_against": "Bỏ phiếu Phản đối",
+    "status": {
+      "active": "Đang hoạt động",
+      "passed": "Đã thông qua",
+      "rejected": "Đã từ chối",
+      "executed": "Đã thực hiện",
+      "pending": "Đang chờ xử lý"
+    },
+    "examples": {
+      "creator": {
+        "title": "Chương trình Người Sáng tạo Nội dung Cộng đồng",
+        "summary": "Thiết lập khuôn khổ để người sáng tạo nội dung nhận được tài trợ để quảng bá hệ sinh thái Cosmicrafts"
+      },
+      "treasury": {
+        "title": "Chiến lược Đa dạng hóa Ngân khố",
+        "summary": "Phân bổ 5% quỹ ngân khố cho các khoản đầu tư chiến lược vào các giao thức phù hợp với hệ sinh thái"
+      }
+    }
+  },
+  "meta": {
+    "dao": {
+      "title": "Cosmicrafts DAO - Quản trị Phi tập trung cho Tương lai của Trò chơi",
+      "description": "Tham gia Cosmicrafts DAO và tham gia vào quản trị phi tập trung cho tương lai của trò chơi vũ trụ. Stake token SPIRAL để kiếm phần thưởng và quyền lực bỏ phiếu."
+    }
   }
 }

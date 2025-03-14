@@ -362,5 +362,189 @@
       "mobileTitle": "白皮书章节",
       "mobileSubtitle": "浏览章节"
     }
+  },
+  "dao": {
+    "headline": {
+      "title": "遗产的黎明",
+      "subtitle": "现在是DAO，否则永远不会！",
+      "stakeholder_cta": "成为利益相关者",
+      "whitepaper_cta": "阅读白皮书"
+    },
+    "explainer": {
+      "title": "什么是Cosmicrafts DAO？",
+      "description": "Cosmicrafts DAO（去中心化自治组织）使社区能够集体管理Cosmicrafts游戏生态系统的未来。通过持有SPIRAL代币，利益相关者可以参与影响平台开发、资金管理和经济政策的关键决策。",
+      "pillars": {
+        "governance": {
+          "title": "社区治理",
+          "description": "对提案进行投票，通过民主决策塑造平台的未来方向。"
+        },
+        "treasury": {
+          "title": "共享金库",
+          "description": "集体管理7.6亿SPIRAL代币的金库，专注于生态系统的增长和发展。"
+        },
+        "rewards": {
+          "title": "质押奖励",
+          "description": "通过积极参与和对平台增长的长期承诺获得奖励。"
+        }
+      },
+      "links": {
+        "roadmap": "查看我们的路线图",
+        "whitepaper": "阅读白皮书"
+      }
+    },
+    "distribution": {
+      "title": "代币分配",
+      "treasury": {
+        "title": "金库",
+        "description": "生态系统增长和DAO控制的资金"
+      },
+      "swap": {
+        "title": "SNS交换",
+        "description": "8次季度发布的公开销售"
+      },
+      "team": {
+        "title": "开发团队",
+        "description": "核心团队8年解锁期"
+      },
+      "investors": {
+        "title": "种子投资者",
+        "description": "拥有不同解锁期的早期支持者"
+      }
+    },
+    "governance": {
+      "title": "治理模型",
+      "proposal_creation": {
+        "title": "提案创建",
+        "requirement": "1,000 SPIRAL",
+        "description": "提交提案所需的最低质押"
+      },
+      "voting_period": {
+        "title": "投票期",
+        "requirement": "7天",
+        "description": "提案的标准审议时间"
+      },
+      "voting_power": {
+        "title": "投票权",
+        "requirement": "最高3倍",
+        "description": "通过质押和年龄获得的最大乘数"
+      },
+      "lock_period": {
+        "title": "锁定期",
+        "requirement": "30天-8年",
+        "description": "灵活的解锁选项"
+      }
+    },
+    "metrics": {
+      "title": "代币指标",
+      "total_supply": "总供应量",
+      "treasury_size": "金库规模",
+      "min_proposal": "提案最低质押",
+      "initial_apy": "初始APY"
+    },
+    "staking": {
+      "title": "质押福利",
+      "subtitle": "通过参与获得收益",
+      "description": "锁定你的SPIRAL代币以获得奖励并增加你的治理权力",
+      "benefits": {
+        "initial_apy": {
+          "title": "初始APY"
+        },
+        "transition": {
+          "title": "过渡期"
+        },
+        "final_apy": {
+          "title": "最终APY"
+        }
+      },
+      "multipliers": {
+        "title": "权力乘数",
+        "dissolve": {
+          "title": "解散延迟"
+        },
+        "age": {
+          "title": "神经元年龄"
+        }
+      }
+    },
+    "rights": {
+      "title": "利益相关者权利",
+      "treasury": {
+        "title": "金库管理",
+        "description": "对DAO金库资金用于开发、营销和社区计划的分配进行投票",
+        "items": {
+          "marketing": "营销活动",
+          "development": "开发资金",
+          "partnerships": "战略伙伴关系"
+        }
+      },
+      "economic": {
+        "title": "经济政策",
+        "description": "通过集体决策塑造生态系统的经济框架",
+        "items": {
+          "tokenomics": "代币经济学调整",
+          "staking": "质押率变更",
+          "fees": "费用结构"
+        }
+      },
+      "roadmap": {
+        "title": "开发路线图",
+        "description": "影响平台的技术和产品开发优先事项",
+        "items": {
+          "features": "功能优先级",
+          "expansions": "游戏扩展",
+          "improvements": "技术改进"
+        }
+      },
+      "community": {
+        "title": "社区项目",
+        "description": "建立和管理社区主导的计划，以发展生态系统",
+        "items": {
+          "creators": "内容创作者资金",
+          "events": "活动和比赛",
+          "education": "教育项目"
+        }
+      }
+    },
+    "join": {
+      "title": "主张你的宇宙力量！",
+      "description": "加入DAO并参与管理第一个完全链上的游戏特许经营权",
+      "stats": {
+        "voting": "最大投票权",
+        "apy": "APY范围",
+        "period": "投票期"
+      },
+      "stakeholder_cta": "成为利益相关者",
+      "whitepaper_cta": "阅读白皮书"
+    }
+  },
+  "proposals": {
+    "title": "活跃提案",
+    "for": "支持",
+    "against": "反对",
+    "vote_for": "投票支持",
+    "vote_against": "投票反对",
+    "status": {
+      "active": "活跃",
+      "passed": "通过",
+      "rejected": "拒绝",
+      "executed": "已执行",
+      "pending": "待定"
+    },
+    "examples": {
+      "creator": {
+        "title": "社区内容创作者计划",
+        "summary": "建立框架，使内容创作者能够获得资金，推广Cosmicrafts生态系统"
+      },
+      "treasury": {
+        "title": "金库多元化战略",
+        "summary": "将5%的金库资金分配给与生态系统一致的协议进行战略投资"
+      }
+    }
+  },
+  "meta": {
+    "dao": {
+      "title": "Cosmicrafts DAO - 游戏未来的去中心化治理",
+      "description": "加入Cosmicrafts DAO，参与宇宙游戏未来的去中心化治理。质押SPIRAL代币获得奖励和投票权。"
+    }
   }
 }
