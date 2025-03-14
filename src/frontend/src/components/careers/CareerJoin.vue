@@ -11,30 +11,7 @@
         <div class="cosmic-particle"></div>
       </div>
       
-      <div class="join-container cosmic-card">
-        <div class="join-content">
-          <h2 class="join-title">Not Seeing the Perfect Role?</h2>
-          <p class="join-text">We're always interested in connecting with talented individuals passionate about web3 and blockchain innovation. Send us your portfolio and tell us how you'd like to contribute to our mission.</p>
-          
-          <div class="join-actions">
-            <a href="mailto:careers@cosmicrafts.com" class="cosmic-btn cosmic-btn-primary">
-              <i class="fas fa-envelope"></i>
-              Contact Our Team
-            </a>
-            <a href="#" class="cosmic-btn cosmic-btn-secondary">
-              <i class="fab fa-discord"></i>
-              Join Our Discord
-            </a>
-          </div>
-        </div>
-        
-        <div class="join-graphic">
-          <div class="floating-astronaut">
-            <img src="/src/assets/webp/hero4.webp" alt="Cosmic Astronaut" class="astronaut-img">
-            <div class="glow-effect"></div>
-          </div>
-        </div>
-      </div>
+
       
       <div class="community-links">
         <h3>Follow Our Journey</h3>
