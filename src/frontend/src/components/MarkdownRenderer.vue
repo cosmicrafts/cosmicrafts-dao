@@ -183,6 +183,47 @@ export default {
           return defaultFence(tokens, idx, options, env, self);
         };
 
+        // Add info container support
+        md.use(markdownItContainer, 'info', {
+          validate: function(params) {
+            return params.trim().match(/^info\s*(.*)$/);
+          },
+          render: function (tokens, idx) {
+            const m = tokens[idx].info.trim().match(/^info\s*(.*)$/);
+            if (tokens[idx].nesting === 1) {
+              // opening tag
+              return `<div class="cosmic-info-container">
+                <div class="nebula-particles">
+                  <div class="nebula-particle"></div>
+                  <div class="nebula-particle"></div>
+                  <div class="nebula-particle"></div>
+                  <div class="nebula-particle"></div>
+                  <div class="nebula-particle"></div>
+                </div>
+                <div class="energy-flow"></div>
+                ${m[1] ? `<div class="cosmic-info-title">${md.utils.escapeHtml(m[1])}</div>` : ''}\n`;
+            } else {
+              // closing tag
+              return '</div>\n';
+            }
+          }
+        });
+
+        // Add warning container support
+        md.use(markdownItContainer, 'warning', {
+          validate: function(params) {
+            return params.trim().match(/^warning\s+(.*)$/);
+          },
+          render: function (tokens, idx) {
+            if (tokens[idx].nesting === 1) {
+              const m = tokens[idx].info.trim().match(/^warning\s+(.*)$/);
+              return `<div class="warning-container">${m[1] ? `<div class="warning-title">${md.utils.escapeHtml(m[1])}</div>` : ''}\n`;
+            } else {
+              return '</div>\n';
+            }
+          }
+        });
+
         // Custom image renderer
         md.renderer.rules.image = (tokens, idx, options, env, self) => {
           const token = tokens[idx];
@@ -286,13 +327,24 @@ export default {
       // Custom container for legal documents
       md.use(markdownItContainer, 'info', {
         validate: function(params) {
-          return params.trim().match(/^info\s+(.*)$/);
+          return params.trim().match(/^info\s*(.*)$/);
         },
         render: function (tokens, idx) {
+          const m = tokens[idx].info.trim().match(/^info\s*(.*)$/);
           if (tokens[idx].nesting === 1) {
-            const m = tokens[idx].info.trim().match(/^info\s+(.*)$/);
-            return `<div class="info-container">${m[1] ? `<div class="info-title">${md.utils.escapeHtml(m[1])}</div>` : ''}\n`;
+            // opening tag
+            return `<div class="cosmic-info-container">
+              <div class="nebula-particles">
+                <div class="nebula-particle"></div>
+                <div class="nebula-particle"></div>
+                <div class="nebula-particle"></div>
+                <div class="nebula-particle"></div>
+                <div class="nebula-particle"></div>
+              </div>
+              <div class="energy-flow"></div>
+              ${m[1] ? `<div class="cosmic-info-title">${md.utils.escapeHtml(m[1])}</div>` : ''}\n`;
           } else {
+            // closing tag
             return '</div>\n';
           }
         }
@@ -1225,6 +1277,212 @@ export default {
 .mermaid .arrowheadPath {
   fill: #0FB9FD !important;
   stroke: none !important;
+}
+
+/* Cosmic Info Container */
+.cosmic-info-container {
+  background: linear-gradient(145deg, 
+    rgba(15, 185, 253, 0.08) 0%,
+    rgba(15, 185, 253, 0.05) 100%
+  );
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.1),
+    0 0 15px rgba(15, 185, 253, 0.1);
+  backdrop-filter: blur(10px);
+  isolation: isolate;
+}
+
+/* Cosmic Background Effects */
+.cosmic-info-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(15, 185, 253, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(255, 145, 0, 0.08) 0%,
+      transparent 50%
+    );
+  z-index: -2;
+  opacity: 0.5;
+  animation: nebulaPulse 8s infinite alternate ease-in-out;
+}
+
+.cosmic-info-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #0FB9FD, #4DCFFF);
+  border-radius: 2px 0 0 2px;
+  box-shadow: 0 0 15px rgba(15, 185, 253, 0.3);
+  z-index: 1;
+}
+
+/* Nebula Particles */
+.cosmic-info-container .nebula-particles {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  opacity: 0.4;
+}
+
+.cosmic-info-container .nebula-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(15, 185, 253, 0.8);
+  opacity: 0;
+  animation: particleFade 3s infinite ease-in-out;
+}
+
+.cosmic-info-container .nebula-particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+.cosmic-info-container .nebula-particle:nth-child(2) { top: 60%; left: 20%; animation-delay: 0.5s; }
+.cosmic-info-container .nebula-particle:nth-child(3) { top: 30%; left: 80%; animation-delay: 1s; }
+.cosmic-info-container .nebula-particle:nth-child(4) { top: 70%; left: 90%; animation-delay: 1.5s; }
+.cosmic-info-container .nebula-particle:nth-child(5) { top: 40%; left: 40%; animation-delay: 2s; }
+
+/* Energy Flow Effect */
+.cosmic-info-container .energy-flow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(15, 185, 253, 0.05),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: energyFlow 8s infinite ease-in-out;
+  z-index: -1;
+}
+
+/* Title Enhancement */
+.cosmic-info-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cosmic-blue);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-shadow: 0 0 10px rgba(15, 185, 253, 0.3);
+  position: relative;
+  z-index: 2;
+}
+
+.cosmic-info-title::before {
+  content: 'ℹ️';
+  font-size: 1.2rem;
+  background: rgba(15, 185, 253, 0.1);
+  padding: 0.5rem;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 10px rgba(15, 185, 253, 0.2),
+    0 0 20px rgba(15, 185, 253, 0.1);
+  animation: iconPulse 4s infinite alternate ease-in-out;
+}
+
+/* Content Styling */
+.cosmic-info-container p,
+.cosmic-info-container ul,
+.cosmic-info-container li {
+  position: relative;
+  z-index: 2;
+}
+
+/* Animation Keyframes */
+@keyframes nebulaPulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+@keyframes particleFade {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-10px) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(1);
+  }
+}
+
+@keyframes energyFlow {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  50% {
+    transform: translateX(100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+}
+
+@keyframes iconPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(15, 185, 253, 0.2);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(15, 185, 253, 0.3);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(15, 185, 253, 0.2);
+  }
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .cosmic-info-container {
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+  }
+  
+  .cosmic-info-title {
+    font-size: 1rem;
+  }
+  
+  .cosmic-info-title::before {
+    font-size: 1rem;
+    padding: 0.4rem;
+  }
 }
 
 /* Keep existing styles at the bottom */
