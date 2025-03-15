@@ -1,66 +1,6 @@
 <template>
   <div class="about-page">
-    <!-- Headline Section -->
-    <section class="headline" :style="{ backgroundPositionY: `${scrollY * -0.15}px` }">
-      <!-- Background Canvas for Stars -->
-      <canvas id="starfield" ref="starfield" class="noise-canvas" :style="{ top: `${scrollY * 0.5}px` }"></canvas>
-
-      <!-- Content Wrapper -->
-      <div class="content">
-        <div class="hero-content">
-          <img src="@/assets/webp/bg-adventures.webp" alt="About Cosmicrafts" class="hero-logo"
-            :style="{ transform: `translateY(${scrollY * 0.075}px) scale(${1.1 - scrollY * 0.00155})` }" />
-          
-          <h1 class="primary-headline"
-            :style="{ transform: `translateY(${scrollY * -0.065}px) scale(${1 - scrollY * 0.000425})` }">
-            {{ $t('about.title') }}
-          </h1>
-
-          <p class="cta-subtext"
-            :style="{ transform: `translateY(${scrollY * -0.045}px) scale(${1 - scrollY * 0.000325})` }">
-            {{ $t('about.mission.description') }}
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Vision Section -->
-    <section class="vision-section cosmic-card">
-      <div class="vision-content">
-        <h2 class="section-title text-gradient">Our Vision</h2>
-        <div class="vision-grid">
-          <div class="vision-card">
-            <div class="vision-icon">
-              <i class="fas fa-gamepad"></i>
-            </div>
-            <div class="vision-content">
-              <h3>Gaming Innovation</h3>
-              <p>Creating next-generation games that seamlessly blend traditional gaming with blockchain technology</p>
-            </div>
-          </div>
-
-          <div class="vision-card">
-            <div class="vision-icon">
-              <i class="fas fa-brain"></i>
-            </div>
-            <div class="vision-content">
-              <h3>AI Integration</h3>
-              <p>Leveraging artificial intelligence to create dynamic, personalized gaming experiences</p>
-            </div>
-          </div>
-
-          <div class="vision-card">
-            <div class="vision-icon">
-              <i class="fas fa-link"></i>
-            </div>
-            <div class="vision-content">
-              <h3>Blockchain Gaming</h3>
-              <p>Empowering players with true ownership and value through blockchain technology</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+   
 
     <!-- Team Section -->
     <section class="team-section">
@@ -103,22 +43,6 @@
             <span class="contributor-alias">{{ member.alias }}</span>
             <h4 class="contributor-role">{{ member.role }}</h4>
             <p class="contributor-bio">{{ member.description }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Values Section -->
-    <section class="values-section">
-      <h2 class="section-title text-gradient">Core Values</h2>
-      <div class="values-grid">
-        <div class="value-card cosmic-card" v-for="value in values" :key="value.key">
-          <div class="value-icon">
-            <i :class="value.icon"></i>
-          </div>
-          <div class="value-content">
-            <h3>{{ $t(`about.values.${value.key}.title`) }}</h3>
-            <p>{{ $t(`about.values.${value.key}.description`) }}</p>
           </div>
         </div>
       </div>
@@ -552,19 +476,6 @@ const teamMembers = [
   line-height: 1.6;
 }
 
-/* Values Section Styles */
-.values-section {
-  padding: 6rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.values-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2.5rem;
-  margin-top: 4rem;
-}
 
 /* Shared Styles */
 .section-title {
