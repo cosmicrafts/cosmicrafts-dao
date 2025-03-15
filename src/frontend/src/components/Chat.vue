@@ -277,9 +277,10 @@ watch(messages, () => {
 // Focus input whenever chat is opened
 watch(showChat, (newValue) => {
   if (newValue) {
-    // Chat was opened, focus the input
+    // Chat was opened, focus the input and scroll to latest message
     nextTick(() => {
       focusInput();
+      scrollToBottom();
     });
   }
 });
@@ -336,7 +337,7 @@ const sendPrompt = async (): Promise<void> => {
     console.log('Sending request to OpenRouter:', {
       url: `${API_BASE_URL}/chat/completions`,
       body: {
-        model: "google/gemma-3-27b-it:free",
+        model: "meta-llama/llama-3.3-70b-instruct:free",
         messages: chatMessages,
         temperature: 0.7,
         top_p: 0.7,
@@ -422,18 +423,27 @@ const sendPrompt = async (): Promise<void> => {
             const content = json.choices?.[0]?.delta?.content || '';
             
             if (content) {
-              // Check if this contains "reasoning" or ends with "reasoning>"
-              if (content.toLowerCase().includes('reasoning')) {
-                isThinking.value = true;
-                thinkingContent.value += content;
-              } else if (isThinking.value && content.includes('</reasoning>')) {
+              if (content.includes('</reasoning>')) {
+                // Split the content at </reasoning>
+                const parts = content.split('</reasoning>');
+                // Add the first part to thinking content
+                thinkingContent.value += parts[0];
+                
+                // Format the complete thinking content plus the actual response
+                const actualResponse = parts.slice(1).join('').trim();
+                currentMessage.value = `<div class="thinking-content">
+                  <div class="thinking-label">Reasoning:</div>
+                  <span class="thinking-text">${thinkingContent.value}</span>
+                </div>${actualResponse}`;
+                
                 isThinking.value = false;
-                thinkingContent.value = '';
-                currentMessage.value = content.split('</reasoning>')[1].trim();
-              } else if (isThinking.value) {
-                thinkingContent.value += content;
               } else {
-                currentMessage.value += content;
+                // Always add to thinking content and show formatted until we see </reasoning>
+                thinkingContent.value += content;
+                currentMessage.value = `<div class="thinking-content">
+                  <div class="thinking-label">Reasoning:</div>
+                  <span class="thinking-text">${thinkingContent.value}</span>
+                </div>`;
               }
             }
           } catch (err) {
@@ -450,9 +460,14 @@ const sendPrompt = async (): Promise<void> => {
       }
     }
 
+    // Store the complete message with reasoning tags
+    const completeMessage = thinkingContent.value ? 
+      `<reasoning>${thinkingContent.value}</reasoning>${currentMessage.value}` :
+      currentMessage.value;
+    
     messages.value.push({
       role: "assistant",
-      content: currentMessage.value,
+      content: completeMessage,
     });
 
     currentMessage.value = "";
@@ -1063,6 +1078,21 @@ defineExpose({
   isOpen,
   toggleChat
 });
+
+// Add these after other reactive refs
+const MESSAGE_CHUNK_SIZE = 512;
+const visibleMessages = ref<number>(MESSAGE_CHUNK_SIZE);
+const canLoadMore = computed(() => messages.value.length > visibleMessages.value);
+
+// Add this method after other methods
+const loadMoreMessages = () => {
+  visibleMessages.value += MESSAGE_CHUNK_SIZE;
+};
+
+const clearChat = () => {
+  messages.value = [];
+  saveChatHistory(); // Save the empty state to localStorage
+};
 </script>
 
 <template>
@@ -1143,24 +1173,33 @@ defineExpose({
       </div>
 
       <div class="messages">
+        <button 
+          v-if="canLoadMore" 
+          class="load-more-btn"
+          @click="loadMoreMessages"
+        >
+          Load More
+        </button>
+        
         <div
-          v-for="(msg, index) in messages"
+          v-for="(msg, index) in messages.slice(-visibleMessages)"
           :key="index"
           :class="['message', msg.role]"
         >
           <div class="bubble">
-            <span class="message-text">{{ msg.content }}</span>
+            <template v-if="msg.content.includes('<reasoning>')">
+              <div class="thinking-content">
+                <div class="thinking-label">Reasoning:</div>
+                <span class="thinking-text">{{ msg.content.match(/<reasoning>(.*?)<\/reasoning>/s)?.[1] || '' }}</span>
+              </div>
+              <span class="message-text">{{ msg.content.split('</reasoning>')[1] || msg.content }}</span>
+            </template>
+            <span v-else class="message-text">{{ msg.content }}</span>
           </div>
         </div>
 
         <div v-if="currentMessage" class="message assistant">
-          <div class="bubble">
-            <div v-if="isThinking" class="thinking-content">
-              <div class="thinking-label">Thinking...</div>
-              <span class="thinking-text">{{ thinkingContent }}</span>
-            </div>
-            <span v-else class="message-text">{{ currentMessage }}</span>
-          </div>
+          <div class="bubble" v-html="currentMessage"></div>
         </div>
       </div>
       
@@ -1192,6 +1231,13 @@ defineExpose({
             <PaperAirplaneIcon class="icon" />
         </button>
         </div>
+      
+      <!-- Add Clear Chat Button -->
+      <div class="clear-chat-container">
+        <button class="clear-chat-button" @click="clearChat">
+          Clear Chat History
+        </button>
+      </div>
       
       <!-- Resize Handle (only visible when not maximized) -->
       <div 
@@ -1890,14 +1936,15 @@ defineExpose({
 }
 
 .thinking-content {
-  border-left: 2px solid #3b82f6;
+  border-left: 2px solid #858585;
   padding-left: 1rem;
   margin-bottom: 1rem;
-  opacity: 0.7;
+  opacity: 0.65;
+  font-weight: 300;
 }
 
 .thinking-label {
-  color: #3b82f6;
+  color: #858585;
   font-size: 0.8rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
@@ -1905,6 +1952,77 @@ defineExpose({
 
 .thinking-text {
   font-style: italic;
-  color: #a3a3a3;
+  color: #a0a0a0;
+  font-weight: 300;
+}
+
+/* ✅ Load More Button */
+.load-more-btn {
+  position: sticky;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(59, 130, 246, 0.2);
+  color: white;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0.5rem 0;
+  transition: all 0.2s ease;
+  z-index: 1;
+}
+
+.load-more-btn:hover {
+  background: rgba(59, 130, 246, 0.3);
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+/* Add this style to ensure v-html content inherits styles */
+.bubble :deep(.thinking-content) {
+  border-left: 2px solid #858585;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+  opacity: 0.65;
+  font-weight: 300;
+}
+
+.bubble :deep(.thinking-label) {
+  color: #858585;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.bubble :deep(.thinking-text) {
+  font-style: italic;
+  color: #a0a0a0;
+  font-weight: 300;
+}
+
+/* Clear Chat Button Styles */
+.clear-chat-container {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+  background: #1e1e1e38;
+  border-top: 1px solid rgba(126, 126, 126, 0.1);
+}
+
+.clear-chat-button {
+  background: rgba(220, 38, 38, 0.2);
+  color: #ff9999;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.clear-chat-button:hover {
+  background: rgba(220, 38, 38, 0.3);
+  border-color: rgba(220, 38, 38, 0.4);
+  color: #ffcccc;
 }
 </style>
