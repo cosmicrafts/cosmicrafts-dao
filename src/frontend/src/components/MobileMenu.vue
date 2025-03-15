@@ -86,7 +86,7 @@ const scrollToTop = () => {
     </div>
     
     <div class="language-selector-container u-hover">
-  <LanguageSelector />
+  <LanguageSelector context="mobile" />
 </div>
 
   </nav>

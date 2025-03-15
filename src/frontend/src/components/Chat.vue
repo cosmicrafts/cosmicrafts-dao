@@ -6,6 +6,9 @@ import EmojiPicker from './EmojiPicker.vue';
 import { useAuthStore } from '../stores/auth';
 import { useLanguageStore, languages } from '../stores/language';
 
+// Replace OpenAI client with OpenRouter base URL
+const API_BASE_URL = 'https://openrouter.ai/api/v1';
+
 // Reactive state
 const showChat = ref<boolean>(false);
 const isHovering = ref<boolean>(false);
@@ -342,15 +345,52 @@ const sendPrompt = async (): Promise<void> => {
     const userId = (authStore.player as any)?.username || "guest";
     const tempPrompt = await injectMemory(userId, userMessage);
 
-    const response: Response = await fetch("http://127.0.0.1:11434/api/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "robotina",
-        prompt: tempPrompt,
-        stream: true,
-      }),
+    // Create the messages array for OpenAI format with proper typing
+    const chatMessages = [
+      { role: "system", content: "You are a helpful AI assistant for the Cosmicrafts game. Keep answers short and concise." },
+      { role: "user", content: tempPrompt }
+    ];
+
+    console.log('Sending request to OpenRouter:', {
+      url: `${API_BASE_URL}/chat/completions`,
+      body: {
+        model: "mistralai/mistral-7b-instruct",
+        messages: chatMessages,
+        temperature: 0.7,
+        top_p: 0.7,
+        max_tokens: 1000,
+        stream: true
+      }
     });
+
+    // Use OpenRouter API directly
+    const response = await fetch(`${API_BASE_URL}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer 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',
+        'HTTP-Referer': window.location.origin,
+        'X-Title': 'Cosmicrafts Chat'
+      },
+      body: JSON.stringify({
+        model: "mistralai/mistral-7b-instruct",
+        messages: chatMessages,
+        temperature: 0.7,
+        top_p: 0.7,
+        max_tokens: 1000,
+        stream: true
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData
+      });
+      throw new Error(`API error: ${response.status} - ${errorData}`);
+    }
 
     const reader = response.body?.getReader();
     if (!reader) throw new Error("Failed to read response stream");
@@ -361,24 +401,33 @@ const sendPrompt = async (): Promise<void> => {
       const { done, value } = await reader.read();
       if (done) break;
 
-      const chunk: string = decoder.decode(value, { stream: true }).trim();
-      const lines: string[] = chunk.split("\n");
-
-      for (const line of lines) {
-        if (!line) continue;
-
-        try {
-          const json = JSON.parse(line);
-          if (json.response) {
-            currentMessage.value += json.response;
+      try {
+        const chunk = decoder.decode(value, { stream: true });
+        console.log('Received chunk:', chunk);
+        const lines = chunk.split('\n').filter(line => line.trim());
+        
+        for (const line of lines) {
+          try {
+            // Strip "data: " prefix before parsing JSON
+            const jsonStr = line.replace(/^data: /, '');
+            if (jsonStr === '[DONE]') break;
+            
+            const json = JSON.parse(jsonStr);
+            console.log('Parsed JSON:', json);
+            const content = json.choices?.[0]?.delta?.content || '';
+            if (content) {
+              currentMessage.value += content;
+            }
+          } catch (err) {
+            console.error("JSON parse error:", err);
           }
-        } catch (err) {
-          console.error("JSON parse error:", err);
         }
+        
+        await nextTick();
+        scrollToBottom();
+      } catch (error) {
+        console.error("Decoding error:", error);
       }
-
-      await nextTick();
-      scrollToBottom();
     }
 
     messages.value.push({
