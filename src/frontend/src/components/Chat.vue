@@ -8,7 +8,7 @@ import { useLanguageStore, languages } from '../stores/language';
 
 // Replace OpenAI client with OpenRouter base URL
 const API_BASE_URL = 'https://openrouter.ai/api/v1';
-const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || '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';
+const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || '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';
 
 // Debug log to check environment variable
 console.log('Environment API Key:', import.meta.env.VITE_OPENROUTER_API_KEY);
@@ -323,6 +323,8 @@ const sendPrompt = async (): Promise<void> => {
   try {
     loading.value = true;
     currentMessage.value = "";
+    thinkingContent.value = "";
+    let responseMessage = "";
 
     // ✅ Fetch structured memory & inject it
     const userId = (authStore.player as any)?.username || "guest";
@@ -429,26 +431,19 @@ const sendPrompt = async (): Promise<void> => {
                 // Add the first part to thinking content
                 thinkingContent.value += parts[0];
                 
-                // Format the complete thinking content plus the actual response
+                // Get the actual response part
                 const actualResponse = parts.slice(1).join('').trim();
-                currentMessage.value = `<div class="thinking-content">
-                  <div class="thinking-label">Reasoning:</div>
-                  <span class="thinking-text">${thinkingContent.value}</span>
-                </div>${actualResponse}`;
+                responseMessage = actualResponse;
+                currentMessage.value = actualResponse;
                 
                 isThinking.value = false;
               } else {
-                // Always add to thinking content and show formatted until we see </reasoning>
+                // Always add to thinking content until we see </reasoning>
                 thinkingContent.value += content;
-                currentMessage.value = `<div class="thinking-content">
-                  <div class="thinking-label">Reasoning:</div>
-                  <span class="thinking-text">${thinkingContent.value}</span>
-                </div>`;
               }
             }
           } catch (err) {
             console.error("JSON parse error:", err);
-            // Log the problematic line for debugging
             console.debug("Problem line:", line);
           }
         }
@@ -460,29 +455,32 @@ const sendPrompt = async (): Promise<void> => {
       }
     }
 
-    // Store the complete message with reasoning tags
+    // Keep the current message visible
     const completeMessage = thinkingContent.value ? 
-      `<reasoning>${thinkingContent.value}</reasoning>${currentMessage.value}` :
-      currentMessage.value;
+      `<reasoning>${thinkingContent.value}</reasoning>${responseMessage}` :
+      responseMessage;
     
     messages.value.push({
       role: "assistant",
       content: completeMessage,
     });
 
-    currentMessage.value = "";
-    thinkingContent.value = "";
+    // Important: Don't clear currentMessage or thinkingContent here
+    loading.value = false;
     isThinking.value = false;
+    
+    saveChatHistory();
+    await nextTick();
+    scrollToBottom();
+    focusInput();
 
   } catch (error) {
     console.error("Chat error:", error);
     messages.value.push({ role: "assistant", content: "Error: Failed to get response" });
-  } finally {
     loading.value = false;
-    saveChatHistory(); // ✅ Save chat history
-    await nextTick();
-    scrollToBottom();
-    focusInput();
+    currentMessage.value = "";
+    thinkingContent.value = "";
+    isThinking.value = false;
   }
 };
 
@@ -1093,6 +1091,14 @@ const clearChat = () => {
   messages.value = [];
   saveChatHistory(); // Save the empty state to localStorage
 };
+
+// Add to props section at the top of the script
+const props = defineProps({
+  showWelcomeTooltip: {
+    type: Boolean,
+    default: false
+  }
+});
 </script>
 
 <template>
@@ -1112,7 +1118,21 @@ const clearChat = () => {
       <XMarkIcon v-else class="icon" />
     </transition>
     
-    <!-- Tooltip -->
+    <!-- Welcome Tooltip -->
+    <Transition name="fade">
+      <div v-if="showWelcomeTooltip && !showChat" class="welcome-tooltip">
+        <div class="welcome-content">
+          <span class="wave">👋</span>
+          <div class="welcome-text">
+            <div class="welcome-title">Hey there!</div>
+            <div class="welcome-message">I'm your AI assistant. Need any help?</div>
+          </div>
+        </div>
+        <div class="welcome-hint">Press 'A' or click me to chat</div>
+      </div>
+    </Transition>
+
+    <!-- Regular Tooltip -->
     <div class="tooltip" :class="{ 'visible': isHovering }">
       <span class="tooltip-text">{{ showChat ? 'Close' : 'Open your AI Assistant' }}</span>
       <span class="tooltip-hotkey">Hotkey: <span class="key">{{ showChat ? 'ESC' : 'A' }}</span></span>
@@ -1188,49 +1208,57 @@ const clearChat = () => {
         >
           <div class="bubble">
             <template v-if="msg.content.includes('<reasoning>')">
+              <span class="message-text">{{ msg.content.split('</reasoning>')[1] || msg.content }}</span>
               <div class="thinking-content">
                 <div class="thinking-label">Reasoning:</div>
                 <span class="thinking-text">{{ msg.content.match(/<reasoning>(.*?)<\/reasoning>/s)?.[1] || '' }}</span>
               </div>
-              <span class="message-text">{{ msg.content.split('</reasoning>')[1] || msg.content }}</span>
             </template>
             <span v-else class="message-text">{{ msg.content }}</span>
           </div>
         </div>
 
-        <div v-if="currentMessage" class="message assistant">
-          <div class="bubble" v-html="currentMessage"></div>
+        <div v-if="currentMessage || loading" class="message assistant">
+          <div class="bubble">
+            <div v-if="currentMessage" class="message-text">{{ currentMessage.split('</reasoning>')[1] || currentMessage }}</div>
+            <div v-if="thinkingContent" class="thinking-content">
+              <div class="thinking-label">Reasoning:</div>
+              <span class="thinking-text">{{ thinkingContent }}</span>
+            </div>
+            <div v-if="loading" class="typing-indicator">
+              <div class="typing-animation">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
       <!-- ✅ Input Area -->
-        <div class="input-area">
+      <div class="input-area">
         <div class="input-wrapper">
-            <!-- Input Field -->
-<div
-  ref="chatInput"
-  class="chat-input"
-  contenteditable="true"
-  @input="updatePrompt"
-  @keydown.enter.prevent="sendPrompt"
-  role="textbox"
-></div>
-
-            <!-- Thinking Indicator (Icon + Text) -->
-            <div v-if="loading" class="thinking-indicator">
-            <div class="dot-flashing"></div>
-            <span class="thinking-text">Thinking...</span>
-            </div>
+          <!-- Input Field -->
+          <div
+            ref="chatInput"
+            class="chat-input"
+            contenteditable="true"
+            @input="updatePrompt"
+            @keydown.enter.prevent="sendPrompt"
+            role="textbox"
+            :class="{ 'input-disabled': loading }"
+          ></div>
         </div>
         <div class="emoji-button-wrapper">
-          <button class="emoji-button" @click.stop="showEmojiPicker = !showEmojiPicker">
-        <FaceSmileIcon class="icon" />
-      </button>
+          <button class="emoji-button" @click.stop="showEmojiPicker = !showEmojiPicker" :disabled="loading">
+            <FaceSmileIcon class="icon" />
+          </button>
         </div>
         <button class="send-icon" @click="sendPrompt" :disabled="loading">
-            <PaperAirplaneIcon class="icon" />
+          <PaperAirplaneIcon class="icon" :class="{ 'icon-disabled': loading }" />
         </button>
-        </div>
+      </div>
       
       <!-- Add Clear Chat Button -->
       <div class="clear-chat-container">
@@ -1528,28 +1556,29 @@ const clearChat = () => {
 .chat-input {
   flex: 1;
   min-height: 40px;
-  max-height: 120px; /* Max height before scrolling */
+  max-height: 120px;
   padding: 0.75rem;
   background: transparent;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle outline when not focused */
+  border: 1px solid rgba(255, 255, 255, 0.1);
   outline: none;
-  overflow-y: hidden;
+  overflow-y: auto;
   word-wrap: break-word;
   white-space: pre-wrap;
   border-radius: 5px;
-  touch-action: auto; /* Allow normal touch behavior */
-  user-select: text; /* Allow text selection */
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .chat-input:focus {
-  outline: none;
   border-color: #00a2fff8;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
 }
 
-
+.chat-input.input-disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.05);
+}
 
 /* ✅ Input Wrapper */
 .input-wrapper {
@@ -1571,14 +1600,15 @@ const clearChat = () => {
 /* ✅ Thinking Indicator (Icon + Text) */
 .thinking-indicator {
   position: absolute;
-  left: 1rem; /* Adjust based on input padding */
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* Space between icon and text */
-  pointer-events: none; /* Ensure it doesn't interfere with input */
+  gap: 0.5rem;
+  pointer-events: none;
 }
+
 /* ✅ Dot Flashing Animation */
 .dot-flashing {
   width: 8px;
@@ -2024,5 +2054,219 @@ const clearChat = () => {
   background: rgba(220, 38, 38, 0.3);
   border-color: rgba(220, 38, 38, 0.4);
   color: #ffcccc;
+}
+
+/* Updated Typing Indicator Styles */
+.typing-indicator {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.typing-animation {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.25rem 0;
+}
+
+.typing-animation .dot {
+  width: 6px;
+  height: 6px;
+  background: #3b82f6;
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite ease-in-out;
+  opacity: 0.6;
+}
+
+.typing-animation .dot:nth-child(1) { animation-delay: 0s; }
+.typing-animation .dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-animation .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+.typing-preview {
+  font-size: 0.95rem;
+  opacity: 0.8;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 0.8;
+    transform: translateY(0);
+  }
+}
+
+/* Input State Styles */
+.input-disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.icon-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Enhanced Thinking Content Styles */
+.thinking-content {
+  border-left: 2px solid #3b82f6;
+  padding-left: 1rem;
+  margin-top: 1rem;
+  opacity: 0.8;
+  font-weight: 300;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 0.8;
+    transform: translateX(0);
+  }
+}
+
+.thinking-label {
+  color: #3b82f6;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.5px;
+}
+
+.thinking-text {
+  font-style: italic;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+/* Ensure v-html content inherits styles */
+.bubble :deep(.thinking-content) {
+  border-left: 2px solid #3b82f6;
+  padding-left: 1rem;
+  margin-top: 1rem;
+  opacity: 0.8;
+  font-weight: 300;
+}
+
+.bubble :deep(.thinking-label) {
+  color: #3b82f6;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.5px;
+}
+
+.bubble :deep(.thinking-text) {
+  font-style: italic;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+/* Welcome Tooltip Styles */
+.welcome-tooltip {
+  position: absolute;
+  bottom: calc(100% + 20px);
+  right: 0;
+  background: rgba(30, 43, 56, 0.95);
+  color: white;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  z-index: 1001;
+  min-width: 260px;
+  backdrop-filter: blur(8px);
+}
+
+.welcome-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  background: rgba(30, 43, 56, 0.95);
+  transform: rotate(45deg);
+  border-right: 1px solid rgba(59, 130, 246, 0.3);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.welcome-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.wave {
+  font-size: 1.5rem;
+  animation: wave 1.5s infinite;
+}
+
+.welcome-text {
+  flex: 1;
+}
+
+.welcome-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #3b82f6;
+}
+
+.welcome-message {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+}
+
+.welcome-hint {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Fade transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 </style>

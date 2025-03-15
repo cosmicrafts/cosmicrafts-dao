@@ -13,6 +13,13 @@ const route = useRoute();
 const isWhitepaper = computed(() => route.path === '/whitepaper');
 const isGame = computed(() => route.path === '/game');
 
+// Add welcome tooltip state
+const hasShownWelcome = ref(localStorage.getItem('hasShownWelcome') === 'true');
+const showWelcomeTooltip = ref(false);
+
+// Provide welcome tooltip state to Chat component
+provide('showWelcomeTooltip', showWelcomeTooltip);
+
 // Add watcher for route changes to force scroll to top
 watch(
   () => route.path,
@@ -86,6 +93,20 @@ const handleKeyDown = (event) => {
 
 onMounted(() => {
   document.addEventListener('keydown', handleKeyDown);
+  
+  // Show welcome tooltip after 10 seconds if it hasn't been shown before
+  if (!hasShownWelcome.value) {
+    setTimeout(() => {
+      showWelcomeTooltip.value = true;
+      // Hide tooltip after 8 seconds
+      setTimeout(() => {
+        showWelcomeTooltip.value = false;
+        // Mark as shown in localStorage
+        localStorage.setItem('hasShownWelcome', 'true');
+        hasShownWelcome.value = true;
+      }, 8000);
+    }, 10000);
+  }
 });
 
 onUnmounted(() => {
@@ -99,8 +120,11 @@ const closeEscMenu = () => {
 </script>
 
 <template>
-  <!-- Persistent Chat Component -->
-  <Chat ref="chatRef" />
+  <!-- Persistent Chat Component with welcome tooltip prop -->
+  <Chat 
+    ref="chatRef"
+    :show-welcome-tooltip="showWelcomeTooltip"
+  />
   
   <main id="app" @keydown.esc="handleEscKey">
     <Header />
