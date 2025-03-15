@@ -998,7 +998,7 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
-  z-index: 9999;
+  z-index: 10;
   background: linear-gradient(to bottom, 
     rgba(14, 24, 36, 0.95),
     rgba(10, 20, 32, 0.98)

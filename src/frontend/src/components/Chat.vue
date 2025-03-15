@@ -8,7 +8,7 @@ import { useLanguageStore, languages } from '../stores/language';
 
 // Replace OpenAI client with OpenRouter base URL
 const API_BASE_URL = 'https://openrouter.ai/api/v1';
-const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || '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';
+const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || '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';
 
 // Debug log to check environment variable
 console.log('Environment API Key:', import.meta.env.VITE_OPENROUTER_API_KEY);
