@@ -8,14 +8,19 @@
     
     <!-- Sky Light Beams -->
     <div class="sky-light-beams">
-      <div class="light-beam" style="--rotate: -5deg;"></div>
-      <div class="light-beam" style="--rotate: 2deg;"></div>
-      <div class="light-beam" style="--rotate: -2deg;"></div>
-      <div class="light-beam" style="--rotate: 4deg;"></div>
-      <div class="light-beam" style="--rotate: -3deg;"></div>
-      <div class="light-beam" style="--rotate: 5deg;"></div>
-      <div class="light-beam" style="--rotate: -4deg;"></div>
-      <div class="light-beam" style="--rotate: 3deg;"></div>
+      <!-- Regular beams - made wider -->
+      <div class="light-beam" style="--rotate: -5deg; width: 5vw;"></div>
+      <div class="light-beam" style="--rotate: 2deg; width: 4vw;"></div>
+      <div class="light-beam" style="--rotate: -2deg; width: 6vw;"></div>
+      <div class="light-beam" style="--rotate: 4deg; width: 4.5vw;"></div>
+      <div class="light-beam" style="--rotate: -3deg; width: 5.5vw;"></div>
+      <div class="light-beam" style="--rotate: 5deg; width: 3.5vw;"></div>
+      <div class="light-beam" style="--rotate: -4deg; width: 4.5vw;"></div>
+      <div class="light-beam" style="--rotate: 3deg; width: 5vw;"></div>
+      
+      <!-- Slow rotating beams -->
+      <div class="light-beam slow-beam" style="--rotate: 15deg; width: 8vw;"></div>
+      <div class="light-beam slow-beam" style="--rotate: -12deg; width: 8vw;"></div>
     </div>
     
     <!-- Starfield Canvas -->
@@ -940,8 +945,8 @@ export default {
 
 .element-particles span {
   position: absolute;
-  width: 5px;
-  height: 5px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background: var(--cosmic-blue);
   opacity: 0.5;
@@ -957,14 +962,12 @@ export default {
 /* Cosmic Portal Background */
 .cosmic-portal-bg {
   position: absolute;
-  top: 40%;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 600px;
+  width: 1200px;
+  height: 1600px;
   z-index: 1;
-  perspective: 1000px;
-  opacity: 0.6;
+  opacity: 0.9;
 }
 
 .portal-ring {
