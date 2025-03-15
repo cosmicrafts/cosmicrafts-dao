@@ -8,6 +8,11 @@ import { useLanguageStore, languages } from '../stores/language';
 
 // Replace OpenAI client with OpenRouter base URL
 const API_BASE_URL = 'https://openrouter.ai/api/v1';
+const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || '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';
+
+// Debug log to check environment variable
+console.log('Environment API Key:', import.meta.env.VITE_OPENROUTER_API_KEY);
+console.log('Using API Key:', API_KEY);
 
 // Reactive state
 const showChat = ref<boolean>(false);
@@ -17,6 +22,8 @@ const messages = ref<Array<{ role: string; content: string }>>([]);
 const prompt = ref<string>("");
 const loading = ref<boolean>(false);
 const currentMessage = ref<string>("");
+const isThinking = ref<boolean>(false);
+const thinkingContent = ref<string>("");
 
 const chatWindow = ref<HTMLElement | null>(null);
 const chatToggle = ref<HTMLElement | null>(null); // Reference to the chat toggle button
@@ -157,67 +164,42 @@ const saveWindowPosition = (): void => {
 const injectMemory = async (userId: string, newMessage: string) => {
   console.log(`Building structured memory for user: ${userId}`);
 
-  // ✅ User Profile (expanded)
+  // ✅ User Profile (simplified)
   const userProfile = {
     username: (authStore.player as any)?.username || "guest",
     language: languages.find(lang => lang.code === ((authStore.player as any)?.language || "en"))?.label || "English",
     faction: (authStore.player as any)?.faction || "Unknown",
-    level: (authStore.player as any)?.level || 1,
-    experience: (authStore.player as any)?.experience || 0,
-    rank: (authStore.player as any)?.rank || "Unranked",
-    resources: (authStore.player as any)?.resources || {},
-    achievements: (authStore.player as any)?.achievements || [],
-    lastLogin: (authStore.player as any)?.lastLogin || "Unknown",
+    level: (authStore.player as any)?.level || 1
   };
 
   // ✅ Prune chat history before injecting it
   pruneChatHistory(); 
 
-  // ✅ Retrieve the last 10 messages (for context)
-  const conversationHistory = messages.value.slice(-10); // Limit history
+  // ✅ Retrieve only the last 5 messages for shorter context
+  const conversationHistory = messages.value.slice(-5); // Limit history
   let historyLog = conversationHistory
-    .map((msg) => `[${new Date().toLocaleTimeString()}] ${msg.role.toUpperCase()}: ${msg.content}`)
+    .map((msg) => `${msg.role}: ${msg.content}`)
     .join("\n");
 
-  // ✅ Structured Prompt for Ollama
+  // ✅ Simplified Prompt Structure
   const finalPrompt = `
-  [SYSTEM INSTRUCTIONS]
-  Keep answers super short and concise.
-  Max 1 question related to your prompt.
-  If user is new welcome it first, then invite the user to sign in.
-  They can sign in in the top right button.
-  This is a structured log of an AI chat assistant. 
-  The user has a profile and a conversation history. 
-  Use the timestamps to understand conversation flow.
-  If user answers short or unintelligibly, follow up with an I feel you.
-  After [NEW USER INPUT] the user message is reveleaded.
+  [SYSTEM]
+  You are a helpful AI assistant for Cosmicrafts game. Keep answers short and concise.
+  Language: ${userProfile.language}
 
-  **if they prompt you nonesense, try to understand**
-  **don't brush off user input, always address concerns**
+  [USER]
+  Username: ${userProfile.username}
+  Level: ${userProfile.level}
+  Faction: ${userProfile.faction}
 
-  [USER PROFILE]
-  - Username: ${userProfile.username}
-  - Language: ${userProfile.language} **REPLY IN THIS LANGUAGE**
-  - Faction: ${userProfile.faction}
-  - Level: ${userProfile.level}
-  - Experience: ${userProfile.experience}
-  - Rank: ${userProfile.rank}
-  - Resources: ${JSON.stringify(userProfile.resources)}
-  - Achievements: ${userProfile.achievements.join(", ")}
-  - Last Login: ${userProfile.lastLogin}
-
-
-  [CONVERSATION HISTORY]
+  [CHAT HISTORY]
   ${historyLog}
 
-  [NEW USER INPUT]
-  "${newMessage}"
-
-  [RESPONSE]
+  [NEW MESSAGE]
+  ${newMessage}
   `;
 
-  // ✅ Log the full prompt sent to Ollama
-  console.log(`🔍 Final Prompt Sent to Ollama:\n${finalPrompt}`);
+  console.log(`🔍 Token-optimized prompt:\n${finalPrompt}`);
 
   return finalPrompt;
 };
@@ -354,13 +336,21 @@ const sendPrompt = async (): Promise<void> => {
     console.log('Sending request to OpenRouter:', {
       url: `${API_BASE_URL}/chat/completions`,
       body: {
-        model: "mistralai/mistral-7b-instruct",
+        model: "google/gemma-3-27b-it:free",
         messages: chatMessages,
         temperature: 0.7,
         top_p: 0.7,
-        max_tokens: 1000,
+        max_tokens: 500,
         stream: true
       }
+    });
+
+    // Debug the actual headers being sent
+    console.log('Request headers:', {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${API_KEY}`,
+      'HTTP-Referer': 'https://openrouter.ai/docs',
+      'X-Title': '@cosmicrafts/chat'
     });
 
     // Use OpenRouter API directly
@@ -368,16 +358,16 @@ const sendPrompt = async (): Promise<void> => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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',
-        'HTTP-Referer': window.location.origin,
-        'X-Title': 'Cosmicrafts Chat'
+        'Authorization': `Bearer ${API_KEY}`,
+        'HTTP-Referer': 'https://openrouter.ai/docs',
+        'X-Title': '@cosmicrafts/chat'
       },
       body: JSON.stringify({
-        model: "mistralai/mistral-7b-instruct",
+        model: "rekaai/reka-flash-3:free",
         messages: chatMessages,
         temperature: 0.7,
         top_p: 0.7,
-        max_tokens: 1000,
+        max_tokens: 500,
         stream: true
       })
     });
@@ -387,7 +377,14 @@ const sendPrompt = async (): Promise<void> => {
       console.error('API Error:', {
         status: response.status,
         statusText: response.statusText,
-        error: errorData
+        error: errorData,
+        headers: Object.fromEntries(response.headers.entries()),
+        requestHeaders: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer [HIDDEN]',
+          'HTTP-Referer': 'https://openrouter.ai/docs',
+          'X-Title': '@cosmicrafts/chat'
+        }
       });
       throw new Error(`API error: ${response.status} - ${errorData}`);
     }
@@ -408,18 +405,41 @@ const sendPrompt = async (): Promise<void> => {
         
         for (const line of lines) {
           try {
-            // Strip "data: " prefix before parsing JSON
-            const jsonStr = line.replace(/^data: /, '');
-            if (jsonStr === '[DONE]') break;
+            // Strip "data: " prefix
+            const cleanLine = line.replace(/^data: /, '');
             
-            const json = JSON.parse(jsonStr);
+            // Skip processing messages
+            if (cleanLine.startsWith(': OPENROUTER')) {
+              console.log('Processing message:', cleanLine);
+              continue;
+            }
+            
+            // Skip empty lines or [DONE]
+            if (!cleanLine || cleanLine === '[DONE]') continue;
+            
+            const json = JSON.parse(cleanLine);
             console.log('Parsed JSON:', json);
             const content = json.choices?.[0]?.delta?.content || '';
+            
             if (content) {
-              currentMessage.value += content;
+              // Check if this contains "reasoning" or ends with "reasoning>"
+              if (content.toLowerCase().includes('reasoning')) {
+                isThinking.value = true;
+                thinkingContent.value += content;
+              } else if (isThinking.value && content.includes('</reasoning>')) {
+                isThinking.value = false;
+                thinkingContent.value = '';
+                currentMessage.value = content.split('</reasoning>')[1].trim();
+              } else if (isThinking.value) {
+                thinkingContent.value += content;
+              } else {
+                currentMessage.value += content;
+              }
             }
           } catch (err) {
             console.error("JSON parse error:", err);
+            // Log the problematic line for debugging
+            console.debug("Problem line:", line);
           }
         }
         
@@ -436,6 +456,8 @@ const sendPrompt = async (): Promise<void> => {
     });
 
     currentMessage.value = "";
+    thinkingContent.value = "";
+    isThinking.value = false;
 
   } catch (error) {
     console.error("Chat error:", error);
@@ -1133,7 +1155,11 @@ defineExpose({
 
         <div v-if="currentMessage" class="message assistant">
           <div class="bubble">
-            <span class="message-text">{{ currentMessage }}</span>
+            <div v-if="isThinking" class="thinking-content">
+              <div class="thinking-label">Thinking...</div>
+              <span class="thinking-text">{{ thinkingContent }}</span>
+            </div>
+            <span v-else class="message-text">{{ currentMessage }}</span>
           </div>
         </div>
       </div>
@@ -1861,5 +1887,24 @@ defineExpose({
 .size-transition {
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.0) !important;
   box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.3);
+}
+
+.thinking-content {
+  border-left: 2px solid #3b82f6;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.thinking-label {
+  color: #3b82f6;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.thinking-text {
+  font-style: italic;
+  color: #a3a3a3;
 }
 </style>
