@@ -9,7 +9,7 @@ url: https://cosmicrafts.com
 
 NnsProposal:
     title: "NNS Proposal to create an SNS named 'Cosmicrafts'"
-    url: "https://forum.dfinity.org/thread-where-this-sns-is-discussed"
+    url: "https://forum.dfinity.org/t/cosmicrafts-dao-sns-launch/42289"
     summary:  |
       # Summary
       Proposal to create an SNS DAO for Cosmicrafts.
@@ -43,7 +43,7 @@ fallback_controller_principals:
     - p4xu5-kv3gb-haipp-fai4p-cyhzx-3sqyw-2kob6-pvjqv-jkhma-dntyd-aae
 
 dapp_canisters:
-    - bkyz2-fmaaa-aaaaa-qaaaq-cai
+    - opcce-byaaa-aaaak-qcgda-cai
 
 Token:
     name: Spiral
