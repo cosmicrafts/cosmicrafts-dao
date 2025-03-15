@@ -1,5 +1,26 @@
 <template>
   <div class="dao-page">
+    <!-- Fixed center logo -->
+    <div class="cosmic-logo-watermark">
+      <div class="logo-glow-effect"></div>
+      <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts" class="logo-image" />
+    </div>
+    
+    <!-- Sky Light Beams -->
+    <div class="sky-light-beams">
+      <div class="light-beam" style="--rotate: -5deg;"></div>
+      <div class="light-beam" style="--rotate: 2deg;"></div>
+      <div class="light-beam" style="--rotate: -2deg;"></div>
+      <div class="light-beam" style="--rotate: 4deg;"></div>
+      <div class="light-beam" style="--rotate: -3deg;"></div>
+      <div class="light-beam" style="--rotate: 5deg;"></div>
+      <div class="light-beam" style="--rotate: -4deg;"></div>
+      <div class="light-beam" style="--rotate: 3deg;"></div>
+    </div>
+    
+    <!-- Starfield Canvas -->
+    <canvas ref="starfield" class="global-starfield"></canvas>
+    
     <!-- Enhanced Cosmic Background -->
     <div class="cosmic-background">
       <!-- Dynamic Accent Glows -->
@@ -48,11 +69,6 @@
         <div class="portal-glow"></div>
         <div class="portal-core"></div>
         
-        <!-- Logo Watermark -->
-        <div class="cosmic-logo-watermark">
-          <div class="logo-glow-effect"></div>
-          <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts" class="logo-image" />
-        </div>
         
         <!-- Energy Streams -->
         <div class="portal-energy-streams">
@@ -86,24 +102,6 @@
         </div>
       </div>
       
-      <!-- Starfield -->
-      <div class="cosmic-starfield">
-        <div class="cosmic-star" style="--size: 3px; --top: 5%; --left: 10%;"></div>
-        <div class="cosmic-star" style="--size: 2px; --top: 15%; --left: 30%;"></div>
-        <div class="cosmic-star" style="--size: 4px; --top: 30%; --left: 70%;"></div>
-        <div class="cosmic-star" style="--size: 2px; --top: 45%; --left: 85%;"></div>
-        <div class="cosmic-star" style="--size: 3px; --top: 60%; --left: 45%;"></div>
-        <div class="cosmic-star" style="--size: 2px; --top: 75%; --left: 20%;"></div>
-        <div class="cosmic-star" style="--size: 3px; --top: 20%; --left: 50%;"></div>
-        <div class="cosmic-star" style="--size: 4px; --top: 40%; --left: 60%;"></div>
-        <div class="cosmic-star" style="--size: 2px; --top: 55%; --left: 15%;"></div>
-        <div class="cosmic-star" style="--size: 3px; --top: 70%; --left: 90%;"></div>
-        <div class="cosmic-star" style="--size: 2px; --top: 85%; --left: 60%;"></div>
-        <div class="cosmic-star" style="--size: 4px; --top: 95%; --left: 75%;"></div>
-        <div class="cosmic-star" style="--size: 3px; --top: 8%; --left: 25%;"></div>
-        <div class="cosmic-star" style="--size: 2px; --top: 25%; --left: 5%;"></div>
-      </div>
-      
       <!-- Cosmic Dust Particles -->
       <div class="cosmic-dust-particles">
         <div class="dust-particle" style="--size: 3px; --delay: 0s; --speed: 20s;"></div>
@@ -121,9 +119,6 @@
       <div class="cosmic-gradient-overlay bottom-gradient"></div>
     </div>
     
-    <!-- Background Canvas for Stars (fixed on viewport) -->
-    <canvas id="starfield" ref="starfield" class="global-starfield"></canvas>
-
     <!-- Hero Section -->
     <section class="dao-hero">
       <div class="content-container">
@@ -841,6 +836,16 @@ export default {
   --cosmic-bg-dark: rgb(10, 14, 28);
   --hero-accent-glow: rgba(15, 185, 253, 0.3);
   --glass-blur: 60px;
+  --cosmic-bg-primary: #0a111f;
+  --cosmic-bg-secondary: #1a2035;
+  --cosmic-accent-glow: rgba(65, 195, 255, 0.8);
+  --cosmic-highlight-1: #41c3ff;
+  --cosmic-highlight-2: #5a6bff;
+  --cosmic-font-glow: 0 0 10px rgba(65, 195, 255, 0.5);
+  min-height: 100vh;
+  background: radial-gradient(ellipse at center, var(--cosmic-bg-secondary) 0%, var(--cosmic-bg-primary) 100%);
+  position: relative;
+  overflow: hidden;
 }
 
 /* Enhanced Cosmic Background */
@@ -1068,21 +1073,72 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 64vw;
-  height: 64vh;
+  width: 300px;
+  height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  z-index: 10;
+  z-index: 999; /* Make it appear above everything */
+}
+
+.logo-glow-effect {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, 
+    rgba(65, 195, 255, 0.3) 0%,
+    rgba(65, 195, 255, 0.2) 30%,
+    rgba(65, 195, 255, 0.1) 50%,
+    rgba(65, 195, 255, 0) 70%);
+  border-radius: 50%;
+  filter: blur(20px);
+  opacity: 0.7;
+  animation: logoGlowPulse 4s infinite alternate ease-in-out;
 }
 
 .logo-image {
-  max-width: 36%;
-  max-height: 100%;
-  animation: logoBreathing 10s infinite alternate-reverse var(--animation-smooth);
-  z-index: 3;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  animation: logoFade 5s infinite alternate ease-in-out;
+  z-index: 1000;
   position: relative;
+  opacity: 0.3;
+  filter: drop-shadow(0 0 20px rgba(65, 195, 255, 0.8)) 
+         drop-shadow(0 0 40px rgba(65, 195, 255, 0.5));
+}
+
+@keyframes logoGlowPulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes logoFade {
+  0% {
+    opacity: 0.2;
+    filter: drop-shadow(0 0 15px rgba(65, 195, 255, 0.6)) 
+           drop-shadow(0 0 30px rgba(65, 195, 255, 0.3));
+  }
+  100% {
+    opacity: 0.4;
+    filter: drop-shadow(0 0 30px rgba(65, 195, 255, 1)) 
+           drop-shadow(0 0 60px rgba(65, 195, 255, 0.6));
+  }
+}
+
+/* Make the logo responsive */
+@media (max-width: 768px) {
+  .cosmic-logo-watermark {
+    width: 200px;
+    height: 200px;
+  }
 }
 
 /* Energy Streams */
@@ -5730,4 +5786,137 @@ img.hero-logo, img.dao-image {
   100% { background-position: 0% 50%; }
 }
 
+/* Sky Light Beams */
+.sky-light-beams {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.light-beam {
+  position: absolute;
+  width: 3vw;
+  height: 100vh;
+  background: linear-gradient(to bottom, 
+    rgba(65, 195, 255, 0) 0%,
+    rgba(65, 195, 255, 0.05) 20%,
+    rgba(65, 195, 255, 0.1) 40%,
+    rgba(65, 195, 255, 0.05) 60%,
+    rgba(65, 195, 255, 0) 100%);
+  opacity: 0;
+  transform: translateY(-100%) rotate(var(--rotate, 0deg));
+  filter: blur(8px);
+  animation: beamMove 15s infinite ease-in-out;
+}
+
+.light-beam:nth-child(1) {
+  left: 15%;
+  animation-delay: 0s;
+  width: 4vw;
+}
+
+.light-beam:nth-child(2) {
+  left: 30%;
+  animation-delay: 3s;
+  width: 2vw;
+}
+
+.light-beam:nth-child(3) {
+  left: 50%;
+  animation-delay: 7s;
+  width: 5vw;
+}
+
+.light-beam:nth-child(4) {
+  left: 65%;
+  animation-delay: 5s;
+  width: 3vw;
+}
+
+.light-beam:nth-child(5) {
+  left: 85%;
+  animation-delay: 2s;
+  width: 4vw;
+}
+
+.light-beam:nth-child(6) {
+  left: 10%;
+  animation-delay: 9s;
+  width: 2.5vw;
+}
+
+.light-beam:nth-child(7) {
+  left: 40%;
+  animation-delay: 11s;
+  width: 3.5vw;
+}
+
+.light-beam:nth-child(8) {
+  left: 75%;
+  animation-delay: 4s;
+  width: 3vw;
+}
+
+@keyframes beamMove {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%) rotate(var(--rotate, 0deg));
+  }
+  20% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%) rotate(var(--rotate, 0deg));
+  }
+}
+
+/* Logo Watermark */
+.cosmic-logo-watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.light-beam {
+  position: absolute;
+  width: 3vw;
+  height: 100vh;
+  background: linear-gradient(to bottom, 
+    rgba(65, 195, 255, 0) 0%,
+    rgba(65, 195, 255, 0.05) 20%,
+    rgba(65, 195, 255, 0.1) 40%,
+    rgba(65, 195, 255, 0.05) 60%,
+    rgba(65, 195, 255, 0) 100%);
+  opacity: 0;
+  transform: translateY(-100%) rotate(var(--rotate, 0deg));
+  filter: blur(8px);
+  animation: beamMove 15s infinite ease-in-out;
+}
+
+@keyframes beamMove {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%) rotate(var(--rotate, 0deg));
+  }
+  20% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%) rotate(var(--rotate, 0deg));
+  }
+}
 </style>
