@@ -241,7 +241,29 @@ Swap:
     minimum_participant_icp: 100 tokens
     maximum_participant_icp: 100_000 tokens
     restricted_countries:
-        - AQ
+        - AF  
+        - AL  
+        - BY  
+        - CD  
+        - CF  
+        - CU  
+        - ET  
+        - HK  
+        - IQ  
+        - IR  
+        - KP  
+        - LB  
+        - LY  
+        - ML  
+        - MM  
+        - NI  
+        - RU  
+        - SD  
+        - SO  
+        - SS  
+        - SY  
+        - VE  
+        - YE
     VestingSchedule:
         events: 8
         interval: 3 month
