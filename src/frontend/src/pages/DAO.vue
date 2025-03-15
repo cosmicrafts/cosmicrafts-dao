@@ -5579,14 +5579,15 @@ img.hero-logo, img.dao-image {
 }
 
 .dao-image-wrapper {
-  margin-bottom: -2rem; /* Reduced to bring text closer */
+  margin-top: 1.25rem;
+  margin-bottom: -4rem; /* Reduced to bring text closer */
   position: relative;
   z-index: 2;
   transform: translateY(-2rem); /* Move up to overlap */
 }
 
 .dao-image {
-  max-width: 14rem;
+  max-width: 12rem;
   filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.35))
           drop-shadow(0 0 40px rgba(15, 185, 253, 0.2));
   will-change: transform, filter;
@@ -5596,7 +5597,7 @@ img.hero-logo, img.dao-image {
 }
 
 .hero-title {
-  font-size: 4rem;
+  font-size: 3rem;
   margin: 0.5rem 0;
   font-weight: 900;
   text-transform: uppercase;
@@ -5717,6 +5718,9 @@ img.hero-logo, img.dao-image {
   }
 
   .dao-image-wrapper {
+
+    margin-top: 0rem;
+
     margin-bottom: -1rem;
     transform: translateY(-1rem);
   }

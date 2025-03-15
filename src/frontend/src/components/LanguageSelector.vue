@@ -32,13 +32,15 @@ const languages = [
 const props = defineProps({
   context: {
     type: String,
-    default: 'header', // 'header' or 'footer'
+    default: 'header', // 'header', 'footer', or 'mobile'
   }
 });
 
 // Computed property to determine dropdown position based on context
 const getDropdownPosition = computed(() => {
-  return props.context === 'footer' ? 'dropdown-top' : 'dropdown-bottom';
+  if (props.context === 'footer') return 'dropdown-top';
+  if (props.context === 'mobile') return 'dropdown-mobile';
+  return 'dropdown-bottom';
 });
 
 const changeLanguage = (languageCode) => {
@@ -52,8 +54,19 @@ const toggleDropdown = (event) => {
 };
 
 const handleClickOutside = (event) => {
-  const dropdownElement = document.querySelector('.language-selector');
-  if (dropdownElement && !dropdownElement.contains(event.target)) {
+  // Get all language selectors
+  const dropdownElements = document.querySelectorAll('.language-selector');
+  let isInsideAnyDropdown = false;
+  
+  // Check if click is inside any language selector
+  dropdownElements.forEach(element => {
+    if (element.contains(event.target)) {
+      isInsideAnyDropdown = true;
+    }
+  });
+  
+  // Close dropdown if click is outside all language selectors
+  if (!isInsideAnyDropdown) {
     isDropdownOpen.value = false;
   }
 };
@@ -69,7 +82,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="language-selector" @click="toggleDropdown">
+  <div class="language-selector" :class="context" @click="toggleDropdown">
     <img src="@/assets/icons/lang.svg" alt="Language Icon" class="lang-icon" />
     <span class="lang-label">
       {{ currentLanguageLabel }}
@@ -176,6 +189,17 @@ onBeforeUnmount(() => {
   transform-origin: top right;
 }
 
+/* Position for mobile menu */
+.dropdown-mobile {
+  bottom: 120%;
+  left: 0;
+  transform: none;
+  transform-origin: bottom left;
+  z-index: 20;
+  box-shadow: var(--cosmic-shadow-lg), var(--cosmic-glow-blue-md);
+  border: 2px solid rgba(15, 185, 253, 0.3);
+}
+
 /* Language items */
 .lang-item {
   display: flex;
@@ -233,6 +257,40 @@ onBeforeUnmount(() => {
   .header .language-selector .lang-label {
     display: none;
   }
+}
+
+/* Mobile menu specific styling */
+.language-selector[class*="mobile"] {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+.language-selector[class*="mobile"]:hover {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+.language-selector[class*="mobile"] .lang-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  filter: drop-shadow(var(--cosmic-glow-blue-sm));
+}
+
+.language-selector[class*="mobile"] .lang-label {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--cosmic-text-primary);
+}
+
+.language-selector[class*="mobile"]:hover .lang-label {
+  color: var(--cosmic-blue);
+  text-shadow: var(--cosmic-glow-blue-sm);
 }
 
 @media (max-width: 576px) {
