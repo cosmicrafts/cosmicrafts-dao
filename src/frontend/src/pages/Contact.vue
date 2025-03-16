@@ -119,12 +119,17 @@ const openChat = (event) => {
   min-height: calc(100vh - 6rem);
   display: flex;
   flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .support-header {
   text-align: center;
   margin-bottom: 4rem;
   padding-top: 2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .animated-title {
@@ -138,6 +143,11 @@ const openChat = (event) => {
   letter-spacing: -0.02em;
   text-shadow: var(--shadow-text-medium);
   animation: fadeInDown 1s ease-out;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 @keyframes fadeInDown {
@@ -151,6 +161,8 @@ const openChat = (event) => {
   max-width: 600px;
   margin: 0 auto;
   animation: fadeIn 1s ease-out 0.3s both;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .support-options-grid {
@@ -158,6 +170,8 @@ const openChat = (event) => {
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   margin-top: 2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .support-card {
@@ -178,6 +192,8 @@ const openChat = (event) => {
   overflow: hidden;
   animation: fadeIn 1s ease-out;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .support-card::before {
@@ -282,6 +298,8 @@ const openChat = (event) => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .support-content h3 {
@@ -290,6 +308,10 @@ const openChat = (event) => {
   margin-bottom: 1rem;
   font-weight: var(--weight-bold);
   text-shadow: var(--shadow-text-light);
+  width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .support-content p {
@@ -298,6 +320,8 @@ const openChat = (event) => {
   margin-bottom: 2rem;
   line-height: 1.6;
   max-width: 400px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cosmic-button {
@@ -318,6 +342,7 @@ const openChat = (event) => {
   width: 100%;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .cosmic-button.primary {
@@ -387,28 +412,43 @@ const openChat = (event) => {
 @media (max-width: 1024px) {
   .support-options-grid {
     grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 
 @media (max-width: 768px) {
   .support-container {
     padding: 7rem 1rem 2rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .support-header {
     padding-top: 1rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .animated-title {
     font-size: 2.5rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .support-options-grid {
     grid-template-columns: 1fr;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 1.5rem;
   }
 
   .support-card {
     padding: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .support-icon {
@@ -422,25 +462,79 @@ const openChat = (event) => {
 
   .support-content h3 {
     font-size: 1.25rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .support-content p {
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
   }
 
   .cosmic-button {
     max-width: 90%;
     min-width: unset;
     margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .coming-soon-section {
     margin-top: 2rem;
     padding: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .coming-soon-content h2 {
     font-size: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .coming-soon-content p {
     font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .support-container {
+    padding: 6rem 0.75rem 1.5rem;
+  }
+  
+  .animated-title {
+    font-size: 2rem;
+  }
+  
+  .page-subtitle {
+    font-size: 1rem;
+  }
+  
+  .support-card {
+    padding: 1.25rem;
+  }
+  
+  .support-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 1rem;
+  }
+  
+  .support-content h3 {
+    font-size: 1.1rem;
+  }
+  
+  .support-content p {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .cosmic-button {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
   }
 }
 
@@ -521,6 +615,8 @@ const openChat = (event) => {
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .coming-soon-section:hover {
@@ -532,6 +628,8 @@ const openChat = (event) => {
 .coming-soon-content {
   max-width: 800px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .coming-soon-content h2 {
@@ -542,6 +640,10 @@ const openChat = (event) => {
   background-clip: text;
   color: transparent;
   font-weight: var(--weight-black);
+  width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .coming-soon-content p {
@@ -549,6 +651,8 @@ const openChat = (event) => {
   margin-bottom: 2rem;
   font-size: 1.1rem;
   line-height: 1.6;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .coming-soon-badge {

@@ -1,6 +1,6 @@
 # Politique de Confidentialité
 
-[[toc:2-3]]
+
 
 ## Introduction
 

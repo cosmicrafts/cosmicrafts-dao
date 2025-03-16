@@ -1,6 +1,6 @@
 # Hukuki Bildirimler
 
-[[toc:2-3]]
+
 
 ## Giriş
 

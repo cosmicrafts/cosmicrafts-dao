@@ -1,6 +1,6 @@
 # Nutzungsbedingungen
 
-[[toc:2-3]]
+
 
 ## Einführung
 Willkommen bei Cosmicrafts. Diese Nutzungsbedingungen ("Bedingungen") regeln Ihren Zugang zu und die Nutzung der Website, Plattform, Anwendungen und aller zugehörigen Dienste von Cosmicrafts (zusammen die "Dienste").

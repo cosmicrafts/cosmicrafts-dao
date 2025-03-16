@@ -1,6 +1,6 @@
 # Rechtliche Hinweise
 
-[[toc:2-3]]
+
 
 ## Einführung
 

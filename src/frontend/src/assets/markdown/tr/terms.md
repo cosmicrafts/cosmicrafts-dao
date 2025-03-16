@@ -1,6 +1,6 @@
 # Kullanım Koşulları
 
-[[toc:2-3]]
+
 
 ## Giriş
 Cosmicrafts'a hoş geldiniz. Bu Kullanım Koşulları ("Koşullar"), Cosmicrafts'ın web sitesi, platformu, uygulamaları ve ilişkili hizmetlerine (topluca "Hizmetler") erişiminizi ve kullanımınızı düzenler.

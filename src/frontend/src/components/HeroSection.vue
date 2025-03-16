@@ -1075,8 +1075,8 @@ onUnmounted(() => {
   /* Stack CTA panel items in rows */
   .cta-panel {
     flex-direction: column;
-    gap: .5rem;
-    padding: 1.2rem 1rem;
+    gap: .25rem; /* Reduced from .5rem */
+    padding: 0.8rem 1rem; /* Reduced from 1.2rem 1rem */
   }
 
   /* Slide indicator adjustments for mobile */
@@ -1094,8 +1094,8 @@ onUnmounted(() => {
   .cta-buttons {
     flex-direction: column;
     width: 88%;
-    gap: 0.8rem;
-    margin-bottom: .5rem;
+    gap: 0.5rem; /* Reduced from 0.8rem */
+    margin-bottom: .25rem; /* Reduced from .5rem */
   }
 
   /* Smaller hero title text */
@@ -1128,6 +1128,36 @@ onUnmounted(() => {
   /* Move nav controls up on mobile */
   .nav-controls {
     top: 40%; /* Move even higher on mobile */
+  }
+
+  /* Stack CTA panel items in rows */
+  .cta-panel {
+    flex-direction: column;
+    gap: .25rem; /* Reduced from .5rem */
+    padding: 0.8rem 1rem; /* Reduced from 1.2rem 1rem */
+  }
+
+  /* Each button takes full width in its row */
+  .cta-buttons {
+    flex-direction: column;
+    width: 88%;
+    gap: 0.5rem; /* Reduced from 0.8rem */
+    margin-bottom: .25rem; /* Reduced from .5rem */
+  }
+  
+  /* Smaller social icons for mobile */
+  .social-links {
+    gap: 0.5rem; /* Reduced from 1rem */
+  }
+  
+  .social-links .cosmic-social-icon {
+    width: 2rem; /* Reduced from 2.5rem */
+    height: 2rem; /* Reduced from 2.5rem */
+  }
+  
+  .social-links .cosmic-social-icon img {
+    width: 1rem; /* Reduced from 1.2rem */
+    height: 1rem; /* Reduced from 1.2rem */
   }
 }
 
@@ -1207,21 +1237,33 @@ onUnmounted(() => {
   
   /* Optimize CTA panel for very small screens */
   .cta-panel {
-    padding: 1rem 0.8rem;
+    padding: 0.6rem 0.8rem; /* Reduced from 1rem 0.8rem */
   }
   
   .cta-buttons {
     width: 95%;
+    gap: 0.4rem; /* Reduced from previous value */
   }
   
   .cosmic-button {
-    padding: 0.6rem 1.2rem;
+    padding: 0.5rem 1.2rem; /* Reduced vertical padding from 0.6rem */
     font-size: 0.85rem;
   }
 
   /* Move nav controls up even more on small devices */
   .nav-controls {
     top: 35%;
+  }
+
+  /* Even smaller social icons */
+  .social-links .cosmic-social-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  
+  .social-links .cosmic-social-icon img {
+    width: 0.9rem;
+    height: 0.9rem;
   }
 }
 
@@ -1263,7 +1305,7 @@ onUnmounted(() => {
   
   .cta-panel {
     flex-direction: row;
-    padding: 0.8rem;
+    padding: 0.5rem 0.8rem; /* Reduced from 0.8rem */
   }
   
   .cta-buttons {

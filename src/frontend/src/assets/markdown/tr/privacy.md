@@ -1,6 +1,6 @@
 # Gizlilik Politikası
 
-[[toc:2-3]]
+
 
 ## Giriş
 

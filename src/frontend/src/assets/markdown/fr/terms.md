@@ -1,6 +1,6 @@
 # Conditions Générales d'Utilisation
 
-[[toc:2-3]]
+
 
 ## Introduction
 Bienvenue sur Cosmicrafts. Les présentes Conditions Générales d'Utilisation ("CGU") régissent votre accès et votre utilisation du site web, de la plateforme, des applications et de tous les services associés de Cosmicrafts (collectivement, les "Services").

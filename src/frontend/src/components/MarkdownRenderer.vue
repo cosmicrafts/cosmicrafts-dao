@@ -877,6 +877,8 @@ export default {
   content: '★';
   position: absolute;
   left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
   color: #0FB9FD;
   font-size: 1rem;
   background: linear-gradient(45deg, #0FB9FD, #4DCFFF);
@@ -885,12 +887,17 @@ export default {
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 10px rgba(15, 185, 253, 0.5);
   animation: pulse 2s infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
+  0% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.2); }
+  100% { transform: translateY(-50%) scale(1); }
 }
 
 .markdown-content ul li ul {
@@ -899,19 +906,25 @@ export default {
 
 .markdown-content ul li ul li {
   background: linear-gradient(90deg, 
-    rgba(0, 229, 164, 0.1),
-    rgba(0, 229, 164, 0.05) 50%,
+    rgba(255, 0, 0, 0.981),
+    rgba(15, 185, 253, 0.05) 50%,
     transparent
   );
+  padding-left: 3.5rem;
 }
 
 .markdown-content ul li ul li::before {
-  content: '✧';
-  background: linear-gradient(45deg, #00E5A4, #4DCFFF);
+  content: '•';
+  left: 1.5rem;
+  font-size: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  background: linear-gradient(45deg, #0FB9FD, #4DCFFF);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 8px rgba(0, 229, 164, 0.5);
+  text-shadow: 0 0 8px rgba(15, 185, 253, 0.5);
 }
 
 /* New Ordered List Styling */
@@ -922,7 +935,7 @@ export default {
   counter-reset: cosmic-counter;
 }
 
-.markdown-content ol li {
+.markdown-content ol > li {
   position: relative;
   padding: 1rem 1rem 1rem 4rem;
   margin-bottom: 1rem;
@@ -936,7 +949,7 @@ export default {
   transition: all 0.3s ease;
 }
 
-.markdown-content ol li:hover {
+.markdown-content ol > li:hover {
   transform: translateX(10px);
   background: linear-gradient(90deg, 
     rgba(255, 145, 0, 0.15),
@@ -945,7 +958,7 @@ export default {
   );
 }
 
-.markdown-content ol li::before {
+.markdown-content ol > li::before {
   content: counter(cosmic-counter);
   position: absolute;
   left: 1rem;
@@ -963,6 +976,68 @@ export default {
   font-size: 1rem;
   box-shadow: 0 0 15px rgba(255, 145, 0, 0.3);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Fix for nested ordered lists */
+.markdown-content ol ol {
+  margin: 1rem 0 0.5rem 0;
+  counter-reset: cosmic-nested-counter;
+}
+
+.markdown-content ol ol li {
+  counter-increment: cosmic-nested-counter;
+  background: linear-gradient(90deg, 
+    rgba(15, 185, 253, 0.1),
+    rgba(15, 185, 253, 0.05) 50%,
+    transparent
+  );
+  padding-left: 3.5rem;
+}
+
+.markdown-content ol ol li::before {
+  content: counter(cosmic-nested-counter);
+  background: linear-gradient(135deg, #0FB9FD, #4DCFFF);
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.9rem;
+  left: 1rem;
+  color: white;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Fix for nested unordered lists within ordered lists */
+.markdown-content ol li ul {
+  margin: 1rem 0 0.5rem 0;
+}
+
+.markdown-content ol li ul li {
+  counter-increment: none;
+  background: linear-gradient(90deg, 
+    rgba(15, 185, 253, 0.1),
+    rgba(15, 185, 253, 0.05) 50%,
+    transparent
+  );
+  padding-left: 3.5rem;
+}
+
+.markdown-content ol li ul li::before {
+  content: '•';
+  left: 1.5rem;
+  font-size: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  background: linear-gradient(45deg, #0FB9FD, #4DCFFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 8px rgba(15, 185, 253, 0.5);
 }
 
 /* Blockquotes with gradient border */
@@ -1482,6 +1557,160 @@ export default {
   .cosmic-info-title::before {
     font-size: 1rem;
     padding: 0.4rem;
+  }
+  
+  /* Mobile list styling improvements */
+  .markdown-content ul li {
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+  }
+  
+  .markdown-content ul li::before {
+    left: 0.75rem;
+    font-size: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .markdown-content ul li ul {
+    margin: 0.75rem 0 0.25rem 0;
+  }
+  
+  .markdown-content ul li ul li {
+    padding-left: 2.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, 
+      rgba(15, 185, 253, 0.1),
+      rgba(15, 185, 253, 0.05) 50%,
+      transparent
+    );
+  }
+  
+  .markdown-content ul li ul li::before {
+    left: 1rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.2rem;
+    height: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(45deg, #0FB9FD, #4DCFFF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 8px rgba(15, 185, 253, 0.5);
+  }
+  
+  /* Mobile ordered list styling */
+  .markdown-content ol > li {
+    padding: 0.75rem 0.75rem 0.75rem 3rem;
+  }
+  
+  .markdown-content ol > li::before {
+    left: 0.75rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.9rem;
+    background: linear-gradient(135deg, #FF9100, #FFB800);
+  }
+  
+  .markdown-content ol ol li {
+    padding-left: 2.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, 
+      rgba(15, 185, 253, 0.1),
+      rgba(15, 185, 253, 0.05) 50%,
+      transparent
+    );
+  }
+  
+  .markdown-content ol ol li::before {
+    left: 0.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.8rem;
+    background: linear-gradient(135deg, #0FB9FD, #4DCFFF);
+  }
+  
+  .markdown-content ol li ul li {
+    padding-left: 2.5rem;
+    background: linear-gradient(90deg, 
+      rgba(15, 185, 253, 0.1),
+      rgba(15, 185, 253, 0.05) 50%,
+      transparent
+    );
+  }
+  
+  .markdown-content ol li ul li::before {
+    left: 1rem;
+    background: linear-gradient(45deg, #0FB9FD, #4DCFFF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 8px rgba(15, 185, 253, 0.5);
+  }
+  
+  /* Improve nested list readability on small screens */
+  .markdown-content ul li ul li ul li,
+  .markdown-content ol li ol li ol li,
+  .markdown-content ol li ul li ul li,
+  .markdown-content ul li ol li ul li {
+    padding-left: 2.25rem;
+    background: linear-gradient(90deg, 
+      rgba(15, 185, 253, 0.08),
+      rgba(15, 185, 253, 0.04) 50%,
+      transparent
+    );
+  }
+  
+  .markdown-content ul li ul li ul li::before,
+  .markdown-content ol li ul li ul li::before {
+    left: 0.75rem;
+    background: linear-gradient(45deg, #0FB9FD, #4DCFFF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 8px rgba(15, 185, 253, 0.5);
+  }
+  
+  /* Fix animation for mobile */
+  @keyframes pulse {
+    0% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(1.2); }
+    100% { transform: translateY(-50%) scale(1); }
+  }
+}
+
+@media (max-width: 480px) {
+  /* Even smaller screens */
+  .markdown-content ul li,
+  .markdown-content ol > li {
+    padding-right: 0.5rem;
+  }
+  
+  .markdown-content ul li ul li,
+  .markdown-content ol ol li,
+  .markdown-content ol li ul li {
+    padding-left: 2.25rem;
+  }
+  
+  .markdown-content ul li::before {
+    transform: translateY(-50%) scale(0.9);
+  }
+  
+  .markdown-content ul li ul li::before {
+    left: 0.75rem;
+  }
+  
+  .markdown-content ol > li::before {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  
+  .markdown-content ol ol li::before {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 }
 

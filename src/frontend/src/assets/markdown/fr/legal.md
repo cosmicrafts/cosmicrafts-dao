@@ -1,6 +1,6 @@
 # Avis Juridiques
 
-[[toc:2-3]]
+
 
 ## Introduction
 

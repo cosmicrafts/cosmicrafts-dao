@@ -1,6 +1,6 @@
 # Terms of Service
 
-[[toc:2-3]]
+
 
 ## Introduction
 Welcome to Cosmicrafts. These Terms of Service ("Terms") govern your access to and use of Cosmicrafts' website, platform, applications, and any associated services (collectively, the "Services"). 

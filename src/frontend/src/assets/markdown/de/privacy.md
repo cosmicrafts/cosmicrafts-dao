@@ -1,6 +1,6 @@
 # Datenschutzrichtlinie
 
-[[toc:2-3]]
+
 
 ## Einleitung
 

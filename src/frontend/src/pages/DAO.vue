@@ -5291,4 +5291,24 @@ img.hero-logo, img.dao-image {
     padding: 1.25rem 0.75rem;
   }
 }
+
+.hero-emblem {
+  max-width: 180px;
+  height: auto;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.3));
+}
+
+@media (max-width: 768px) {
+  .hero-emblem {
+    max-width: 120px;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-emblem {
+    max-width: 100px;
+  }
+}
 </style>

@@ -1,6 +1,6 @@
 # Avisos Legais
 
-[[toc:2-3]]
+
 
 ## Introdução
 

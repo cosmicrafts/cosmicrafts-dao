@@ -1,6 +1,6 @@
 # Thông Báo Pháp Lý
 
-[[toc:2-3]]
+
 
 ## Giới Thiệu
 

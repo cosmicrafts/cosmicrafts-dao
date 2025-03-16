@@ -1,6 +1,6 @@
 # Privacy Policy
 
-[[toc:2-3]]
+
 
 ## Introduction
 

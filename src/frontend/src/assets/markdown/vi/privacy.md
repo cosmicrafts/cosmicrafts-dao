@@ -1,6 +1,6 @@
 # Chính Sách Bảo Mật
 
-[[toc:2-3]]
+
 
 ## Giới thiệu
 

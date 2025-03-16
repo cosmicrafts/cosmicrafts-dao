@@ -1,6 +1,6 @@
 # Điều Khoản Dịch Vụ
 
-[[toc:2-3]]
+
 
 ## Giới Thiệu
 Chào mừng đến với Cosmicrafts. Các Điều Khoản Dịch Vụ này ("Điều Khoản") quy định việc truy cập và sử dụng trang web, nền tảng, ứng dụng và bất kỳ dịch vụ liên quan nào của Cosmicrafts (gọi chung là "Dịch Vụ").
