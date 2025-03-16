@@ -157,6 +157,13 @@ const isSectionExpanded = (section) => {
   border-top: var(--cosmic-glass-border-blue);
   backdrop-filter: var(--cosmic-glass-blur);
   overflow: hidden;
+  width: 100vw;
+  max-width: 100vw;
+  box-sizing: border-box;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .footer-cosmic-bg {
@@ -191,6 +198,7 @@ const isSectionExpanded = (section) => {
   border-bottom: var(--cosmic-glass-border-blue);
   width: 100%;
   margin-bottom: 1rem;
+  box-sizing: border-box;
 }
 
 .social-top-container {
@@ -198,6 +206,10 @@ const isSectionExpanded = (section) => {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
 
 .social-top-title {
@@ -247,6 +259,7 @@ const isSectionExpanded = (section) => {
   width: 100%;
   padding: .5rem;
   max-width: 800px;
+  box-sizing: border-box;
 }
 
 .nav-row {
@@ -255,6 +268,7 @@ const isSectionExpanded = (section) => {
   justify-content: center;
   width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .accordion {
@@ -264,6 +278,7 @@ const isSectionExpanded = (section) => {
   border-radius: var(--cosmic-radius-lg);
   border: var(--cosmic-glass-border-blue);
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .accordion-header {
@@ -394,10 +409,29 @@ const isSectionExpanded = (section) => {
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+  .cosmic-footer {
+    padding: 0;
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden;
+    left: 0;
+    right: 0;
+  }
+  
+  .accordion-container {
+    width: 100%;
+    padding: 0.5rem;
+    max-width: 100%;
+  }
+  
   .nav-row {
     flex-direction: column;
     align-items: center;
-    max-width: 360px;
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+    gap: 1rem;
   }
 
   .accordion {
@@ -423,6 +457,7 @@ const isSectionExpanded = (section) => {
   .accordion-header h4 {
     text-align: left;
     width: auto;
+    font-size: 1.2rem;
   }
   
   .accordion-header i {
@@ -439,20 +474,36 @@ const isSectionExpanded = (section) => {
     max-height: 200px !important;
   }
 
+  .social-top-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
   .social-top-row {
-    padding: 1rem 1.5rem;
+    padding: 1rem 0;
+    width: 100%;
   }
 
   .language-row {
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 0;
+    width: 100%;
   }
 
   .copyright-container {
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 0;
+    width: 100%;
   }
 
   .social-icons-group {
-    gap: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
   }
   
   .cosmic-social-icon {
@@ -466,21 +517,41 @@ const isSectionExpanded = (section) => {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
+  .cosmic-footer {
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
   .accordion-container {
-    padding: 1rem;
+    padding: 0;
+    width: 100%;
   }
 
-  .nav-row,
+  .nav-row {
+    max-width: 100%;
+    padding: 0 0.5rem;
+    width: 100%;
+    gap: 0.5rem;
+  }
+  
   .social-top-row,
   .language-row,
   .copyright-container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+  }
+  
+  .social-top-container {
+    padding: 0 0.5rem;
   }
 
   .social-icons-group {
-    gap: 1rem;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: center;
   }
   
   .cosmic-social-icon {
@@ -489,8 +560,37 @@ const isSectionExpanded = (section) => {
   }
   
   .cosmic-social-icon img {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
+  }
+  
+  .link-list a {
+    font-size: 1rem;
+    padding: 0.4rem 0;
+  }
+  
+  .copyright-logo {
+    width: 3rem;
+  }
+  
+  .accordion-header h4 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .social-icons-group {
+    gap: 0.5rem;
+  }
+  
+  .cosmic-social-icon {
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+  }
+  
+  .cosmic-social-icon img {
+    width: 14px;
+    height: 14px;
   }
 }
 </style>

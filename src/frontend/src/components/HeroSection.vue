@@ -94,19 +94,19 @@
 
         <!-- Social Media Links -->
         <div class="social-links">
-          <a href="https://x.com/cosmicrafts" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://x.com/cosmicrafts" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }">
             <img src="@/assets/icons/x.svg" alt="Twitter" />
           </a>
-          <a href="https://discord.com/invite/cosmicrafts-884272584491941888" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }">
             <img src="@/assets/icons/discord.svg" alt="Discord" />
           </a>
-          <a href="https://www.youtube.com/@cosmicrafts" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://www.youtube.com/@cosmicrafts" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }">
             <img src="@/assets/icons/youtube.svg" alt="YouTube" />
           </a>
-          <a href="https://instagram.com/cosmicraftz" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://instagram.com/cosmicraftz" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }">
             <img src="@/assets/icons/instagram.svg" alt="Instagram" />
           </a>
-          <a href="https://facebook.com/cosmicrafts" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://facebook.com/cosmicrafts" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }">
             <img src="@/assets/icons/facebook.svg" alt="Facebook" />
           </a>
         </div>
@@ -115,8 +115,14 @@
 
     <!-- Navigation Controls -->
     <div class="nav-controls" :class="{ 'initial-load': !hasLoadedOnce }">
-      <button @click="prevSlide">&#10094;</button>
-      <button @click="nextSlide">&#10095;</button>
+      <button class="cosmic-nav-arrow" @click="prevSlide">
+        <span class="nav-arrow-glow"></span>
+        &#10094;
+      </button>
+      <button class="cosmic-nav-arrow" @click="nextSlide">
+        <span class="nav-arrow-glow"></span>
+        &#10095;
+      </button>
     </div>
 
     <!-- Referral Code Notification -->
@@ -424,14 +430,17 @@ function transitionSlides(newSlide, direction) {
   slideDirection.value = direction; // Set the direction (either "next" or "prev")
   isLeaving.value = true;
   
+  // Faster transition with reduced timeout
   setTimeout(() => {
     currentSlide.value = newSlide;
     isLeaving.value = false;
     isEntering.value = true;
+    
+    // Faster reset of entering state
     setTimeout(() => {
       isEntering.value = false;
-    }, 50); // Faster animation
-  }, 50); // Faster animation
+    }, 30); // Reduced from 50ms
+  }, 30); // Reduced from 50ms
 }
 
 // **Slide navigation functions**
@@ -496,7 +505,7 @@ onMounted(() => {
   // Mark as loaded after initial animations - faster finish
   setTimeout(() => {
     hasLoadedOnce.value = true;
-  }, 2000); // Shorter timeout for faster animations
+  }, 1200); // Reduced from 2000ms for faster initial load
   
   // Set initial mobile status
   updateMobileStatus();
@@ -526,12 +535,12 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--cosmic-text-primary);
   overflow: hidden;
-  background: radial-gradient(circle at 30% 30%, rgb(22, 44, 76), rgb(8, 14, 26) 70%);
+  background: radial-gradient(circle at 30% 30%, var(--cosmic-bg-dark), var(--cosmic-bg-darkest) 70%);
   /* Add initial state for page entry animation */
   opacity: 0;
-  animation: revealPage 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.1s forwards; /* Faster animation */
+  animation: revealPage 0.5s cubic-bezier(0.19, 1, 0.22, 1) 0.1s forwards; /* Faster animation */
   perspective: 1000px;
 }
 
@@ -554,7 +563,7 @@ onUnmounted(() => {
   z-index: 0;
   /* Add starfield intro animation */
   opacity: 0;
-  animation: starfieldReveal 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.2s forwards; /* Faster animation */
+  animation: starfieldReveal 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.2s forwards; /* Faster animation */
 }
 
 @keyframes starfieldReveal {
@@ -588,14 +597,14 @@ onUnmounted(() => {
 
 /* Initial page load animation for hero content */
 .hero-content {
-  animation: contentReveal 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.3s forwards; /* Faster animation */
+  animation: contentReveal 0.5s cubic-bezier(0.19, 1, 0.22, 1) 0.3s forwards; /* Faster animation */
   opacity: 0;
 }
 
 @keyframes contentReveal {
   0% {
     opacity: 0;
-    transform: scale(0.95) translateZ(-50px);
+    transform: scale(0.95) translateZ(-30px);
   }
   100% {
     opacity: 1;
@@ -605,7 +614,7 @@ onUnmounted(() => {
 
 /* Initial page load state for hero image (separated from slide transitions) */
 .hero-image.initial-load {
-  animation: heroImageEntry 1s cubic-bezier(0.23, 1, 0.32, 1) 0.4s forwards !important; /* Faster animation */
+  animation: heroImageEntry 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0.4s forwards !important; /* Faster animation */
   opacity: 0;
   transform: translateY(30px) scale(0.9) translateZ(-10px);
 }
@@ -617,7 +626,7 @@ onUnmounted(() => {
   opacity: 0.95;
   filter: drop-shadow(0px 0px 36px rgba(0, 183, 255, 0.25));
   transform-style: preserve-3d;
-  transition: transform 0.3s ease-out, filter 0.3s ease-out;
+  transition: transform var(--cosmic-transition-medium), filter var(--cosmic-transition-medium);
 }
 
 .hero-image:hover {
@@ -633,7 +642,7 @@ onUnmounted(() => {
   }
   60% {
     opacity: 1;
-    transform: translateY(-10px) scale(1.02) translateZ(20px);
+    transform: translateY(-5px) scale(1.02) translateZ(20px);
     filter: drop-shadow(0px 0px 50px rgba(0, 183, 255, 0.4));
   }
   100% {
@@ -645,7 +654,7 @@ onUnmounted(() => {
 
 /* Initial page load state for hero logo (separated from slide transitions) */
 .hero-logo.initial-load {
-  animation: heroLogoEntry 0.9s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards !important; /* Faster animation */
+  animation: heroLogoEntry 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0.5s forwards !important; /* Faster animation */
   opacity: 0;
   transform: translateY(-30px) scale(0.8) translateZ(-20px);
 }
@@ -656,7 +665,7 @@ onUnmounted(() => {
   z-index: 3;
   filter: drop-shadow(0px 0px 36px rgba(0, 183, 255, 0.25));
   transform-style: preserve-3d;
-  transition: transform 0.4s ease-out, filter 0.4s ease-out;
+  transition: transform var(--cosmic-transition-medium), filter var(--cosmic-transition-medium);
 }
 
 .hero-logo:hover {
@@ -684,7 +693,7 @@ onUnmounted(() => {
 
 /* Initial page load state for hero title (separated from slide transitions) */
 .hero-title.initial-load {
-  animation: titleEntry 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.7s forwards !important; /* Faster animation */
+  animation: titleEntry 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards !important; /* Faster animation */
   opacity: 0;
   transform: translateY(20px) translateZ(-30px);
 }
@@ -694,18 +703,18 @@ onUnmounted(() => {
   font-weight: bold;
   margin-top: -3.5rem;
   z-index: 3;
-  text-shadow: 0px 0px 36px rgba(0, 174, 255, 0.507);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(120, 200, 255, 0.9));
+  text-shadow: var(--cosmic-glow-blue-sm);
+  background: linear-gradient(180deg, var(--cosmic-text-primary), var(--cosmic-blue-light));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
   padding: 0.5rem 1.5rem;
-  transition: transform 0.4s ease-out, text-shadow 0.4s ease-out;
+  transition: transform var(--cosmic-transition-medium), text-shadow var(--cosmic-transition-medium);
   transform-style: preserve-3d;
 }
 
 .hero-title:hover {
-  text-shadow: 0px 0px 20px rgba(0, 174, 255, 0.9);
+  text-shadow: var(--cosmic-glow-blue-md);
   transform: translateZ(25px);
 }
 
@@ -731,7 +740,7 @@ onUnmounted(() => {
 
 /* Initial page load state for CTA panel (only animates on page load) */
 .cta-panel.initial-load {
-  animation: ctaPanelEntry 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.8s forwards; /* Faster animation */
+  animation: ctaPanelEntry 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards; /* Faster animation */
   opacity: 0;
   transform: translateY(100%) translateZ(-50px);
 }
@@ -746,21 +755,27 @@ onUnmounted(() => {
   justify-content: center;
   padding: 1.5rem 2rem;
   gap: 1.5rem;
-  background: linear-gradient(125deg, rgba(49, 71, 119, 0.4), rgba(33, 44, 89, 0.45), rgba(127, 38, 139, 0.45));
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--cosmic-glass-bg);
+  backdrop-filter: var(--cosmic-glass-blur);
+  border-top: var(--cosmic-glass-border-blue);
   z-index: 6;
   box-sizing: border-box;
   opacity: 1; /* Ensure it's visible by default after initial animation */
   transform-style: preserve-3d;
   transform: translateZ(0);
-  transition: transform 0.5s ease-out, backdrop-filter 0.5s ease-out;
+  transition: all var(--cosmic-transition-medium);
   box-shadow: 
     0 -10px 30px rgba(0, 0, 0, 0.25),
     0 -1px 10px rgba(0, 140, 255, 0.15);
   overflow: hidden;
 }
 
+.cta-panel:hover {
+  border-top: 1px solid rgba(15, 185, 253, 0.3);
+  box-shadow: 
+    0 -10px 30px rgba(0, 0, 0, 0.3),
+    0 -1px 15px rgba(0, 140, 255, 0.25);
+}
 
 /* CTA Buttons */
 .cta-buttons {
@@ -772,246 +787,18 @@ onUnmounted(() => {
 
 /* Initial page load state for buttons (only animates on page load) */
 .cosmic-button.initial-load:nth-child(1) {
-  animation: buttonEntry 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.9s forwards; /* Faster animation */
+  animation: buttonEntry 0.3s cubic-bezier(0.23, 1, 0.32, 1) 0.7s forwards; /* Faster animation */
   opacity: 0;
   transform: translateY(20px) translateZ(-20px);
 }
 
 .cosmic-button.initial-load:nth-child(2) {
-  animation: buttonEntry 0.5s cubic-bezier(0.23, 1, 0.32, 1) 1.0s forwards; /* Faster animation */
+  animation: buttonEntry 0.3s cubic-bezier(0.23, 1, 0.32, 1) 0.8s forwards; /* Faster animation */
   opacity: 0;
   transform: translateY(20px) translateZ(-20px);
 }
 
-/* Base cosmic button */
-.cosmic-button {
-  position: relative;
-  padding: 0.7rem 1.6rem;
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--cosmic-text-primary, rgba(255, 255, 255, 0.95));
-  border-radius: 10px;
-  cursor: pointer;
-  letter-spacing: 0.5px;
-  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  border: none;
-  overflow: hidden;
-  z-index: 1;
-  box-shadow: 
-    0 4px 15px rgba(0, 0, 0, 0.25),
-    0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-  text-transform: uppercase;
-  transform-style: preserve-3d;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-.cosmic-button:hover {
-  transform: translateY(-3px) translateZ(10px) scale(1.02);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.3), 
-    0 0 20px rgba(15, 185, 253, 0.4),
-    0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-}
-
-.cosmic-button:active {
-  transform: translateY(-1px) translateZ(5px);
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.2), 
-    0 0 15px rgba(15, 185, 253, 0.3),
-    0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-.cosmic-button .button-text {
-  position: relative;
-  z-index: 3;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(210, 230, 255, 0.9));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.cosmic-button:hover .button-text {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(160, 220, 255, 1));
-  -webkit-background-clip: text;
-  filter: drop-shadow(0 0 5px rgba(0, 183, 255, 0.5));
-}
-
-/* Primary cosmic button */
-.cosmic-button-primary {
-  background: linear-gradient(135deg, 
-    rgba(15, 185, 253, 0.9) 0%, 
-    rgba(77, 207, 255, 0.9) 50%,
-    rgba(0, 157, 223, 0.9) 100%);
-  color: #fff;
-  box-shadow: 
-    0 6px 15px rgba(0, 0, 0, 0.25),
-    0 0 15px rgba(15, 185, 253, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.cosmic-button-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, 
-    rgba(15, 185, 253, 0.9) 0%, 
-    rgba(77, 207, 255, 1) 50%, 
-    rgba(0, 140, 255, 0.9) 100%);
-  opacity: 0;
-  z-index: -1;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  transform: translateZ(-1px);
-}
-
-.cosmic-button-primary:hover::before {
-  opacity: 1;
-  transform: translateZ(0);
-}
-
-/* Outline cosmic button - Orange version */
-.cosmic-button-outline {
-  background: linear-gradient(135deg, 
-    rgba(255, 172, 6, 0.9) 0%, 
-    rgba(255, 123, 0, 0.9) 50%,
-    rgba(205, 105, 12, 0.9) 100%);
-  border: 1px solid rgba(255, 153, 0, 0.3);
-  color: #fff;
-  box-shadow: 
-    0 4px 15px rgba(0, 0, 0, 0.25),
-    0 0 15px rgba(255, 153, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.cosmic-button-outline::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, 
-    rgba(255, 172, 6, 0.95) 0%, 
-    rgba(255, 123, 0, 1) 50%,
-    rgba(205, 105, 12, 0.95) 100%);
-  opacity: 0;
-  z-index: -1;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  transform: translateZ(-1px);
-}
-
-.cosmic-button-outline:hover {
-  border-color: rgba(255, 153, 0, 0.5);
-  box-shadow: 
-    0 8px 20px rgba(0, 0, 0, 0.3), 
-    0 0 20px rgba(255, 153, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.15);
-}
-
-.cosmic-button-outline:hover::before {
-  opacity: 1;
-  transform: translateZ(0);
-}
-
-.cosmic-button-outline .button-text {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 230, 200, 0.9));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.cosmic-button-outline:hover .button-text {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 240, 220, 1));
-  -webkit-background-clip: text;
-  filter: drop-shadow(0 0 5px rgba(255, 153, 0, 0.5));
-}
-
-/* Button glow effect - Adjusted for both button types */
-.button-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  filter: blur(5px);
-}
-
-.cosmic-button-primary:hover .button-glow {
-  opacity: 0.8;
-  animation: pulseGlow 2s infinite alternate;
-  background: radial-gradient(circle at center, rgba(15, 185, 253, 0.6) 0%, transparent 70%);
-}
-
-.cosmic-button-outline:hover .button-glow {
-  opacity: 0.8;
-  animation: pulseGlow 2s infinite alternate;
-  background: radial-gradient(circle at center, rgba(255, 153, 0, 0.6) 0%, transparent 70%);
-}
-
-/* Button particles effect */
-.button-particles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.button-particles::before,
-.button-particles::after {
-  content: '';
-  position: absolute;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  filter: blur(1px);
-}
-
-.button-particles::before {
-  width: 6px;
-  height: 6px;
-  top: 30%;
-  left: 20%;
-  box-shadow: 
-    30px 10px 0 -2px rgba(255, 255, 255, 0.6),
-    60px -5px 0 -1px rgba(255, 255, 255, 0.5),
-    90px 20px 0 -3px rgba(255, 255, 255, 0.4);
-}
-
-.button-particles::after {
-  width: 4px;
-  height: 4px;
-  top: 60%;
-  left: 30%;
-  box-shadow: 
-    25px -15px 0 -1px rgba(255, 255, 255, 0.5),
-    55px 5px 0 -2px rgba(255, 255, 255, 0.4),
-    75px -10px 0 rgba(255, 255, 255, 0.3);
-}
-
-.cosmic-button:hover .button-particles::before,
-.cosmic-button:hover .button-particles::after {
-  opacity: 1;
-  animation: floatParticles 3s linear infinite;
-}
+/* Button animations and effects are now defined in cosmic-theme.css */
 
 @keyframes floatParticles {
   0% {
@@ -1027,14 +814,23 @@ onUnmounted(() => {
   }
 }
 
+@keyframes pulseGlow {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.9);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1.1);
+    filter: blur(10px);
+  }
+}
+
 @keyframes buttonEntry {
   0% {
     opacity: 0;
-    transform: translateY(20px) translateZ(-20px);
-  }
-  70% {
-    opacity: 1;
-    transform: translateY(-5px) translateZ(5px);
+    transform: translateY(20px) translateZ(-30px);
   }
   100% {
     opacity: 1;
@@ -1050,75 +846,62 @@ onUnmounted(() => {
 }
 
 /* Initial page load state for social links (only animates on page load) */
-.social-links a.initial-load:nth-child(1) {
-  animation: socialIconEntry 0.4s cubic-bezier(0.23, 1, 0.32, 1) 1.0s forwards; /* Faster animation */
+.social-links .cosmic-social-icon.initial-load:nth-child(1) {
+  animation: socialIconEntry 0.25s cubic-bezier(0.23, 1, 0.32, 1) 0.8s forwards; /* Faster animation */
   opacity: 0;
   transform: scale(0.7);
 }
 
-.social-links a.initial-load:nth-child(2) {
-  animation: socialIconEntry 0.4s cubic-bezier(0.23, 1, 0.32, 1) 1.05s forwards; /* Faster animation */
+.social-links .cosmic-social-icon.initial-load:nth-child(2) {
+  animation: socialIconEntry 0.25s cubic-bezier(0.23, 1, 0.32, 1) 0.85s forwards; /* Faster animation */
   opacity: 0;
   transform: scale(0.7);
 }
 
-.social-links a.initial-load:nth-child(3) {
-  animation: socialIconEntry 0.4s cubic-bezier(0.23, 1, 0.32, 1) 1.1s forwards; /* Faster animation */
+.social-links .cosmic-social-icon.initial-load:nth-child(3) {
+  animation: socialIconEntry 0.25s cubic-bezier(0.23, 1, 0.32, 1) 0.9s forwards; /* Faster animation */
   opacity: 0;
   transform: scale(0.7);
 }
 
-.social-links a.initial-load:nth-child(4) {
-  animation: socialIconEntry 0.4s cubic-bezier(0.23, 1, 0.32, 1) 1.15s forwards; /* Faster animation */
+.social-links .cosmic-social-icon.initial-load:nth-child(4) {
+  animation: socialIconEntry 0.25s cubic-bezier(0.23, 1, 0.32, 1) 0.95s forwards; /* Faster animation */
   opacity: 0;
   transform: scale(0.7);
 }
 
-.social-links a.initial-load:nth-child(5) {
-  animation: socialIconEntry 0.4s cubic-bezier(0.23, 1, 0.32, 1) 1.2s forwards; /* Faster animation */
+.social-links .cosmic-social-icon.initial-load:nth-child(5) {
+  animation: socialIconEntry 0.25s cubic-bezier(0.23, 1, 0.32, 1) 1.0s forwards; /* Faster animation */
   opacity: 0;
   transform: scale(0.7);
-}
-
-.social-links a {
-  opacity: 0.8; /* Ensure social links are visible by default after initial animation */
 }
 
 @keyframes socialIconEntry {
   0% {
     opacity: 0;
-    transform: scale(0.7);
-  }
-  70% {
-    opacity: 1;
-    transform: scale(1.2);
+    transform: translateY(15px) scale(0.8);
   }
   100% {
-    opacity: 0.8;
-    transform: scale(1);
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
-.social-links img {
-  opacity: 0.8;
-  padding: 0.5rem;
-  width: 24px;
-  height: 24px;
-  transition: transform 0.1s, opacity 0.1s, filter 0.1s;
+/* Social icon styles are now defined in cosmic-theme.css */
+.social-links .cosmic-social-icon {
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
-.social-links img:hover {
-  background: rgba(255, 255, 255, 0.05);
-  transform: scale(1.1);
-  opacity: 1;
-  border-radius: 8px;
-  filter: drop-shadow(0px 0px 24px rgba(0, 145, 255, 0.784));
+.social-links .cosmic-social-icon img {
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 /* **Navigation Controls** */
 /* Initial page load state for nav controls (only animates on page load) */
 .nav-controls.initial-load {
-  animation: navControlsEntry 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0.9s forwards; /* Faster animation */
+  animation: navControlsEntry 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0.7s forwards; /* Faster animation */
   opacity: 0;
 }
 
@@ -1147,247 +930,7 @@ onUnmounted(() => {
   }
 }
 
-.nav-controls button {
-  pointer-events: auto; /* Make buttons clickable */
-  background: rgba(0, 26, 54, 0.4);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 50%;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #fff;
-  width: 3.5rem;
-  height: 3.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 1.5rem;
-  transform: translateZ(0);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 
-    0 5px 15px rgba(0, 0, 0, 0.2),
-    0 0 5px rgba(0, 80, 255, 0.2),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-}
-
-.nav-controls button::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-  opacity: 0;
-  transform: scale(0.5);
-  transition: all 0.4s ease;
-}
-
-.nav-controls button:hover {
-  color: #00c3ff;
-  transform: translateZ(10px) scale(1.08);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.3),
-    0 0 15px rgba(0, 119, 255, 0.5),
-    inset 0 0 0 1px rgba(0, 119, 255, 0.2);
-}
-
-.nav-controls button:hover::before {
-  opacity: 1;
-  animation: pulse 1.5s infinite alternate;
-  transform: scale(1);
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.3;
-    transform: scale(0.9) rotate(0deg);
-  }
-  100% {
-    opacity: 0.7;
-    transform: scale(1.1) rotate(35deg);
-  }
-}
-
-.title-indicator-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transform-style: preserve-3d;
-}
-
-/* **Slide Indicators Container** */
-/* Initial page load state for slide indicators (only animates on page load) */
-.slide-indicators.initial-load {
-  animation: indicatorsEntry 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0.8s forwards; /* Faster animation */
-  opacity: 0;
-}
-
-.slide-indicators {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 1rem;
-  z-index: 6;
-  margin-top: .25rem;
-  opacity: 1; /* Ensure it's visible by default after initial animation */
-  transform-style: preserve-3d;
-}
-
-@keyframes indicatorsEntry {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(15px) translateZ(-20px);
-  }
-  70% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-5px) translateZ(15px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) translateZ(0);
-  }
-}
-
-/* Slide Indicator Styling */
-/* Initial page load state for indicator dots (only animates on page load) */
-.slide-indicators span.initial-load {
-  opacity: 0;
-  transform: scale(0) translateZ(-10px);
-}
-
-.slide-indicators span.initial-load:nth-child(1) {
-  animation: indicatorDot 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.8s forwards; /* Faster animation */
-}
-
-.slide-indicators span.initial-load:nth-child(2) {
-  animation: indicatorDot 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.85s forwards; /* Faster animation */
-}
-
-.slide-indicators span.initial-load:nth-child(3) {
-  animation: indicatorDot 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.9s forwards; /* Faster animation */
-}
-
-.slide-indicators span.initial-load:nth-child(4) {
-  animation: indicatorDot 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.95s forwards; /* Faster animation */
-}
-
-.slide-indicators span {
-  cursor: pointer;
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  background: linear-gradient(145deg, rgb(34, 51, 68), rgb(22, 38, 54));
-  border-radius: 50%;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-    background-color 0.3s ease, 
-    box-shadow 0.3s ease,
-    border 0.3s ease;
-  box-shadow: 
-    0 4px 10px rgba(0, 0, 0, 0.4),
-    inset 0 1px 1px rgba(255, 255, 255, 0.1),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  opacity: 1; /* Ensure dots are visible by default after initial animation */
-  transform-style: preserve-3d;
-  position: relative;
-  overflow: hidden;
-}
-
-.slide-indicators span::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-@keyframes indicatorDot {
-  0% {
-    opacity: 0;
-    transform: scale(0) translateZ(-20px);
-  }
-  70% {
-    opacity: 1;
-    transform: scale(1.3) translateZ(15px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateZ(0);
-  }
-}
-
-/* Hover Effect */
-.slide-indicators span:hover {
-  transform: scale(1.2) translateZ(10px);
-  background: linear-gradient(145deg, rgb(51, 79, 107), rgb(41, 60, 79));
-  box-shadow:
-    0 6px 12px rgba(0, 0, 0, 0.5),
-    0 0 8px rgba(0, 140, 255, 0.2),
-    inset 0 1px 2px rgba(255, 255, 255, 0.2);
-}
-
-.slide-indicators span:hover::before {
-  opacity: 1;
-}
-
-/* Active Slide Indicator */
-/* Initial page load animation for active indicator */
-.slide-indicators span.active.initial-load {
-  animation: activeIndicator 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.0s forwards !important; /* Faster animation */
-}
-
-.slide-indicators span.active {
-  background: linear-gradient(145deg, rgb(0, 171, 255), rgb(0, 102, 255));
-  box-shadow: 
-    0 0 15px rgba(0, 174, 255, 0.4),
-    inset 0 1px 2px rgba(255, 255, 255, 0.5);
-  transform: scale(1.4) translateZ(15px);
-  border: 1px solid rgba(0, 140, 255, 0.5);
-}
-
-.slide-indicators span.active::before {
-  opacity: 1;
-  animation: activeGlow 2s infinite alternate;
-}
-
-@keyframes activeGlow {
-  0% {
-    opacity: 0.5;
-    background-position: 0% 0%;
-  }
-  100% {
-    opacity: 1;
-    background-position: 100% 100%;
-  }
-}
-
-@keyframes activeIndicator {
-  0% {
-    opacity: 0;
-    transform: scale(0) translateZ(-30px);
-    box-shadow: 0 0 0px rgba(0, 174, 255, 0);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.6) translateZ(25px);
-    box-shadow: 0 0 20px rgba(0, 174, 255, 1);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1.4) translateZ(15px);
-    box-shadow: 0 0 15px rgba(0, 174, 255, 0.4);
-  }
-}
-
-/* Responsive Styles Enhancement */
+/* Responsive styles for nav controls */
 @media (max-width: 1024px) {
   .hero-image {
     max-width: 24rem;
@@ -1407,16 +950,109 @@ onUnmounted(() => {
   }
   
   /* Slightly smaller navigation buttons */
-  .nav-controls button {
-    width: 3rem;
-    height: 3rem;
+  .nav-controls .cosmic-nav-arrow {
+    width: 2.75rem;
+    height: 4.5rem;
+    font-size: 1.3rem;
     margin: 0 1rem;
   }
 }
 
+/* Mobile optimizations */
 @media (max-width: 768px) {
-
+  /* Optimize animations for mobile - use transform instead of opacity for better performance */
+  .hero-image.enter-animation-next,
+  .hero-image.enter-animation-prev,
+  .hero-image.leave-animation-next,
+  .hero-image.leave-animation-prev {
+    animation-duration: 0.25s; /* Even faster on mobile */
+    will-change: transform, opacity; /* Hint for browser optimization */
+  }
   
+  .hero-logo.enter-animation,
+  .hero-logo.leave-animation,
+  .hero-title.enter-animation,
+  .hero-title.leave-animation {
+    animation-duration: 0.25s; /* Even faster on mobile */
+    will-change: transform, opacity; /* Hint for browser optimization */
+  }
+  
+  /* Use hardware acceleration for all animations */
+  .hero-image, .hero-logo, .hero-title, .cta-panel, .nav-controls, .slide-indicators {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  /* Reduce animation complexity on mobile */
+  @keyframes heroImageEntry {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes heroLogoEntry {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Optimize slide transitions for mobile */
+  @keyframes slideInRight {
+    from {
+      transform: translateX(20px); /* Smaller distance on mobile */
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOutLeft {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(-20px); /* Smaller distance on mobile */
+      opacity: 0;
+    }
+  }
+  
+  @keyframes slideInLeft {
+    from {
+      transform: translateX(-20px); /* Smaller distance on mobile */
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(20px); /* Smaller distance on mobile */
+      opacity: 0;
+    }
+  }
+  
+  /* Existing mobile styles */
   .hero-image {
     max-width: 18rem; /* Reduced from 24rem */
     margin-top: -8rem;
@@ -1435,7 +1071,7 @@ onUnmounted(() => {
   :deep(.slide:nth-child(2) .hero-logo) {
     max-width: 10rem; /* Increased from 8rem */
   }
-
+  
   /* Stack CTA panel items in rows */
   .cta-panel {
     flex-direction: column;
@@ -1471,10 +1107,10 @@ onUnmounted(() => {
   }
   
   /* Compact nav buttons */
-  .nav-controls button {
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 1.2rem;
+  .nav-controls .cosmic-nav-arrow {
+    width: 2.25rem;
+    height: 3.75rem;
+    font-size: 1.1rem;
     margin: 0 0.5rem;
   }
   
@@ -1492,6 +1128,35 @@ onUnmounted(() => {
 
 /* Add even smaller sizes for very small devices */
 @media (max-width: 480px) {
+  /* Optimize animations for very small devices */
+  .hero-image.enter-animation-next,
+  .hero-image.enter-animation-prev,
+  .hero-image.leave-animation-next,
+  .hero-image.leave-animation-prev {
+    animation-duration: 0.2s; /* Ultra fast on small devices */
+  }
+  
+  /* Reduce animation distance for smoother transitions */
+  @keyframes slideInRight {
+    from { transform: translateX(15px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes slideOutLeft {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(-15px); opacity: 0; }
+  }
+  
+  @keyframes slideInLeft {
+    from { transform: translateX(-15px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(15px); opacity: 0; }
+  }
+
   .hero-image {
     margin-top: -7rem;
     max-width: 15rem;
@@ -1516,10 +1181,10 @@ onUnmounted(() => {
   }
   
   /* Further compact nav buttons */
-  .nav-controls button {
-    width: 2.2rem;
-    height: 2.2rem;
-    font-size: 1rem;
+  .nav-controls .cosmic-nav-arrow {
+    width: 1.75rem;
+    height: 3rem;
+    font-size: 0.9rem;
     margin: 0 0.3rem;
   }
   
@@ -1552,6 +1217,25 @@ onUnmounted(() => {
 
 /* Media query for landscape orientation on mobile */
 @media (max-height: 480px) and (orientation: landscape) {
+  /* Optimize animations for landscape */
+  .hero-image.enter-animation-next,
+  .hero-image.enter-animation-prev,
+  .hero-image.leave-animation-next,
+  .hero-image.leave-animation-prev {
+    animation-duration: 0.2s; /* Ultra fast on landscape */
+  }
+  
+  /* Reduce vertical animation distance */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-5px); }
+  }
+
   .hero-image {
     max-width: 12rem;
     margin-top: -3rem;
@@ -1579,14 +1263,119 @@ onUnmounted(() => {
     margin-bottom: 0;
   }
   
-  .nav-controls button {
+  .nav-controls .cosmic-nav-arrow {
     width: 2rem;
-    height: 2rem;
-    font-size: 1rem;
+    height: 3rem;
+    font-size: 0.9rem;
   }
   
   .social-links {
     display: none; /* Hide social links in landscape for space */
   }
 }
+
+/* Add slide transition animations - optimized for performance */
+.hero-image.enter-animation-next {
+  animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.hero-image.leave-animation-next {
+  animation: slideOutLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.hero-image.enter-animation-prev {
+  animation: slideInLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.hero-image.leave-animation-prev {
+  animation: slideOutRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Optimized slide animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+}
+
+/* Add slide transition animations for logo */
+.hero-logo.enter-animation {
+  animation: fadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.hero-logo.leave-animation {
+  animation: fadeOut 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Add slide transition animations for title */
+.hero-title.enter-animation {
+  animation: fadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.hero-title.leave-animation {
+  animation: fadeOut 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Optimized fade animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Additional responsive styles */
 </style>

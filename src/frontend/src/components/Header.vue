@@ -254,6 +254,8 @@ header {
   height: 3.75rem;
   backdrop-filter: var(--cosmic-glass-blur);
   transition: all var(--cosmic-transition-medium);
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 header:hover {
@@ -468,6 +470,15 @@ header:hover {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  header {
+    left: 0.5rem;
+    right: 0.5rem;
+    padding: 0 1rem;
+    margin-top: 0.5rem;
+    width: calc(100% - 1rem);
+    border-radius: 8px;
+  }
+  
   .burger {
     display: flex; /* Visible on mobile */
   }
@@ -493,6 +504,34 @@ header:hover {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+  }
+  
+  .logo img {
+    margin-left: 0;
+    width: 2.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    left: 0.25rem;
+    right: 0.25rem;
+    width: calc(100% - 0.5rem);
+    padding: 0 0.75rem;
+  }
+  
+  .connect-container {
+    right: 0.25rem;
+  }
+  
+  .connect-container .cosmic-button-outline-primary {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .player-avatar {
+    width: 40px;
+    height: 40px;
   }
 }
 
