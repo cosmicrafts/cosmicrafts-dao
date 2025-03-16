@@ -611,7 +611,7 @@ onUnmounted(() => {
 }
 
 .hero-image {
-  max-width: 24rem;
+  max-width: 22rem;
   margin-top: -4rem;
   z-index: 2;
   opacity: 0.95;
@@ -690,12 +690,12 @@ onUnmounted(() => {
 }
 
 .hero-title {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
-  margin-top: -2rem;
+  margin-top: -3.5rem;
   z-index: 3;
   text-shadow: 0px 0px 36px rgba(0, 174, 255, 0.507);
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(120, 200, 255, 0.9));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(120, 200, 255, 0.9));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
@@ -709,23 +709,7 @@ onUnmounted(() => {
   transform: translateZ(25px);
 }
 
-.hero-title::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 12px;
-  padding: 1px;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), rgba(0, 140, 255, 0.2), rgba(255, 255, 255, 0));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  backdrop-filter: blur(4px);
-  z-index: -1;
-}
+
 
 @keyframes titleEntry {
   0% {
@@ -762,9 +746,9 @@ onUnmounted(() => {
   justify-content: center;
   padding: 1.5rem 2rem;
   gap: 1.5rem;
-  background: linear-gradient(125deg, rgba(11, 21, 38, 0.7), rgba(14, 33, 55, 0.5), rgba(16, 34, 64, 0.4));
+  background: linear-gradient(125deg, rgba(49, 71, 119, 0.359), rgba(33, 44, 89, 0.428), rgba(127, 38, 139, 0.4));
   backdrop-filter: blur(8px);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.181);
   z-index: 6;
   box-sizing: border-box;
   opacity: 1; /* Ensure it's visible by default after initial animation */
@@ -777,33 +761,6 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-.cta-panel::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, 
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(0, 140, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0.2) 80%,
-    rgba(255, 255, 255, 0));
-  opacity: 0.7;
-  filter: blur(1px);
-  animation: glowingBorder 4s linear infinite;
-}
-
-/* Animated border glow effect */
-@keyframes glowingBorder {
-  0% {
-    background-position: -500px 0;
-  }
-  100% {
-    background-position: 500px 0;
-  }
-}
 
 /* CTA Buttons */
 .cta-buttons {
