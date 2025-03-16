@@ -59,15 +59,15 @@ const scrollToTop = () => {
   <!-- Side panel for nav-links and independent language selector -->
   <nav class="mobile-panel" :class="{ 'mobile-panel-open': isOpen }">
     <div class="mobile-panel-header">
+      <!-- Dynamic Language-Based Logo -->
+      <div class="additional-logo-mobile" @click="() => { closeMenu(); scrollToTop(); }">
+        <img :src="additionalLogoSrc" alt="Additional Logo" />
+      </div>
+      
       <div class="close-btn" @click="closeMenu">
         <span class="open"></span>
         <span class="open"></span>
         <span class="open"></span>
-      </div>
-
-      <!-- Dynamic Language-Based Logo -->
-      <div class="additional-logo-mobile" @click="() => { closeMenu(); scrollToTop(); }">
-        <img :src="additionalLogoSrc" alt="Additional Logo" />
       </div>
     </div>
 
@@ -148,7 +148,7 @@ const scrollToTop = () => {
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: var(--cosmic-glass-border-blue);
   position: relative;
 }
 
@@ -167,6 +167,8 @@ const scrollToTop = () => {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .nav-links a {
@@ -180,8 +182,9 @@ const scrollToTop = () => {
   transform: translateX(-64px); /* Slide in effect */
   transition: opacity 0.5s ease, transform 0.5s ease, color 0.25s ease-in-out;
   transition-delay: calc(0.1s * var(--index)); /* Staggered delay */
-  padding: 0.2rem 0.5rem;
+  padding: 0.2rem 0;
   cursor: pointer;
+  text-align: left;
 }
 
 /* When the panel is open, fade in and slide each link */
@@ -204,6 +207,9 @@ const scrollToTop = () => {
   height: 24px;
   justify-content: center;
   transition: transform 0.2s ease, color 0.2s ease;
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
 }
 
 .close-btn:hover {
@@ -237,14 +243,14 @@ const scrollToTop = () => {
 
 .language-selector-container {
   padding: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: var(--cosmic-glass-border-blue);
   margin-top: auto;
 }
 
 /* Additional Logo for Mobile */
 .additional-logo-mobile {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .additional-logo-mobile img {
@@ -260,8 +266,9 @@ const scrollToTop = () => {
 /* Developer section styling */
 .dev-section {
   margin-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: var(--cosmic-glass-border-blue);
   padding-top: 1.5rem;
+  width: 100%;
 }
 
 .section-title {
@@ -271,12 +278,14 @@ const scrollToTop = () => {
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: 600;
+  text-align: left;
 }
 
 .dev-link {
   font-size: 1.5rem !important;
-  padding-left: 0.5rem !important;
   margin-top: 0.5rem;
+  text-align: left;
+  width: 100%;
 }
 
 /* Animation for overlay */

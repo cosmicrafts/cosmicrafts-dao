@@ -907,7 +907,7 @@ onUnmounted(() => {
 
 .nav-controls {
   position: absolute;
-  top: 50%;
+  top: 45%; /* Changed from 50% to 45% to move up */
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -1124,6 +1124,11 @@ onUnmounted(() => {
   .slide:hover .hero-content {
     transform: none; /* Disable hover effect */
   }
+
+  /* Move nav controls up on mobile */
+  .nav-controls {
+    top: 40%; /* Move even higher on mobile */
+  }
 }
 
 /* Add even smaller sizes for very small devices */
@@ -1212,6 +1217,11 @@ onUnmounted(() => {
   .cosmic-button {
     padding: 0.6rem 1.2rem;
     font-size: 0.85rem;
+  }
+
+  /* Move nav controls up even more on small devices */
+  .nav-controls {
+    top: 35%;
   }
 }
 

@@ -3422,6 +3422,10 @@ export default {
   position: relative;
   z-index: 1;
   transform-style: preserve-3d;
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .benefit-content h4 {
@@ -3442,6 +3446,11 @@ export default {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  word-break: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
 }
 
 .benefit-item:hover .benefit-content h4 {
@@ -5023,13 +5032,157 @@ img.hero-logo, img.dao-image {
     rgba(15, 185, 253, 0.04) 100%
   );
   border: 1px solid rgba(15, 185, 253, 0.15);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.08),
+    0 10px 20px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: all 0.4s ease;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
   margin: 0 auto;
 }
 
+.explainer-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 30% 30%, rgba(15, 185, 253, 0.12) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.explainer-container .section-title {
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.explainer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.explainer-text {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.explainer-text p {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.explainer-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.explainer-pillar {
+  padding: 2rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.05) 0%,
+    rgba(15, 185, 253, 0.02) 100%
+  );
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.explainer-pillar:hover {
+  transform: translateY(-5px);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: 
+    0 15px 30px rgba(15, 185, 253, 0.1),
+    0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.pillar-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 185, 253, 0.08);
+  border-radius: 50%;
+  border: 1px solid rgba(15, 185, 253, 0.15);
+  transition: all 0.3s ease;
+}
+
+.pillar-icon i {
+  font-size: 1.75rem;
+  color: var(--color-primary);
+  transition: all 0.3s ease;
+}
+
+.explainer-pillar:hover .pillar-icon {
+  transform: scale(1.1);
+  background: rgba(15, 185, 253, 0.12);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: 0 0 20px rgba(15, 185, 253, 0.2);
+}
+
+.explainer-pillar:hover .pillar-icon i {
+  color: var(--color-primary-light);
+  text-shadow: 0 0 10px rgba(15, 185, 253, 0.5);
+}
+
+.explainer-pillar h3 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  transition: all 0.3s ease;
+}
+
+.explainer-pillar p {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.explainer-pillar:hover h3 {
+  color: var(--color-primary);
+}
+
+.explainer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Mobile Styles for DAO Explainer Section */
 @media (max-width: 768px) {
   .dao-explainer-section {
     padding: 4rem 1rem 2rem;
@@ -5040,633 +5193,11 @@ img.hero-logo, img.dao-image {
     padding: 2rem 1.5rem;
     width: 100%;
   }
-}
-
-@media (max-width: 480px) {
-  .dao-explainer-section {
-    padding: 3rem 0.5rem 1.5rem;
-  }
-  
-  .explainer-container {
-    padding: 1.5rem 1rem;
-    border-radius: 8px;
-  }
-}
-
-/* Animation Keyframes for Cosmic Background */
-@keyframes starTwinkle {
-  0% {
-    opacity: 0.3;
-    transform: scale(0.8);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
-
-@keyframes particleFloat {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.3;
-  }
-  100% {
-    transform: translate(5px, -5px) scale(1.5);
-    opacity: 0.8;
-  }
-}
-
-@keyframes floatDust {
-  0% {
-    transform: translateY(0) translateX(0);
-    opacity: 0.2;
-  }
-  25% {
-    opacity: 0.4;
-  }
-  50% {
-    transform: translateY(-100px) translateX(100px);
-    opacity: 0.3;
-  }
-  75% {
-    opacity: 0.1;
-  }
-  100% {
-    transform: translateY(-200px) translateX(200px);
-    opacity: 0;
-  }
-}
-
-@keyframes orbitEffect {
-  0% {
-    transform: rotate(0deg) translateX(0) scale(1);
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.6;
-  }
-  100% {
-    transform: rotate(360deg) translateX(50px) scale(1.2);
-    opacity: 0.4;
-  }
-}
-
-@keyframes pulseBackground {
-  0% {
-    opacity: 0.3;
-    transform: scale(0.9) translateX(0);
-  }
-  100% {
-    opacity: 0.5;
-    transform: scale(1.1) translateX(-30px);
-  }
-}
-
-@keyframes portalPulse {
-  0% {
-    opacity: 0.5;
-    transform: scale(0.95);
-  }
-  100% {
-    opacity: 0.7;
-    transform: scale(1.05);
-  }
-}
-
-@keyframes portalRotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes portalStarPulse {
-  0% {
-    opacity: 0.3;
-    transform: scale(0.8);
-  }
-  100% {
-    opacity: 0.8;
-    transform: scale(1.3);
-  }
-}
-
-@keyframes portalGlowPulse {
-  0% {
-    opacity: 0.4;
-    transform: translate(-50%, -50%) scale(0.9);
-  }
-  100% {
-    opacity: 0.7;
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-}
-
-@keyframes portalCorePulse {
-  0% {
-    opacity: 0.5;
-    transform: translate(-50%, -50%) scale(0.9);
-  }
-  100% {
-    opacity: 0.8;
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-}
-
-@keyframes rotateGrid {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes shieldPulse {
-  0% {
-    opacity: 0.3;
-    transform: scale(0.95);
-  }
-  100% {
-    opacity: 0.6;
-    transform: scale(1.05);
-  }
-}
-
-@keyframes dataPointScan {
-  0% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-}
-
-@keyframes logoBreathing {
-  0%, 100% {
-    opacity: 0.15;
-    filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.8)) 
-            drop-shadow(0 0 30px rgba(15, 185, 253, 0.5))
-            brightness(1.2) contrast(1.1) hue-rotate(0deg);
-    transform: scale(1);
-  }
-  25% {
-    opacity: 0.2;
-    filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.9)) 
-            drop-shadow(0 0 40px rgba(15, 185, 253, 0.6))
-            brightness(1.4) contrast(1.2) hue-rotate(5deg);
-    transform: scale(1.02);
-  }
-  50% {
-    opacity: 0.12;
-    filter: drop-shadow(0 0 12px rgba(15, 185, 253, 0.7)) 
-            drop-shadow(0 0 25px rgba(15, 185, 253, 0.4))
-            brightness(1.1) contrast(1) hue-rotate(-3deg);
-    transform: scale(0.98);
-  }
-  75% {
-    opacity: 0.22;
-    filter: drop-shadow(0 0 25px rgba(15, 185, 253, 1)) 
-            drop-shadow(0 0 50px rgba(15, 185, 253, 0.7))
-            brightness(1.5) contrast(1.3) hue-rotate(3deg);
-    transform: scale(1.03);
-  }
-}
-
-.dao-hero {
-  position: relative;
-  overflow: hidden;
-  padding: 0;
-  background-color: transparent;
-  color: var(--cosmic-text-primary);
-  text-align: center;
-  z-index: 1;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.content-container {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 1200px;
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
-
-.hero-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 0;
-  position: relative;
-}
-
-.hero-image-wrapper {
-  margin-bottom: -6rem; /* Increased overlap */
-  position: relative;
-  z-index: 3;
-  transform: translateY(2rem); /* Move down slightly */
-}
-
-.hero-emblem {
-  max-width: 16rem;
-  will-change: transform, filter;
-  opacity: 0;
-  filter: drop-shadow(0 0 15px rgba(15, 185, 253, 0.35)) 
-          drop-shadow(0 0 30px rgba(15, 185, 253, 0.2));
-  animation: scaleIn 0.7s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.1s forwards;
-  transition: filter 0.3s ease;
-}
-
-.dao-image-wrapper {
-  margin-top: 1.25rem;
-  margin-bottom: -4rem; /* Reduced to bring text closer */
-  position: relative;
-  z-index: 2;
-  transform: translateY(-2rem); /* Move up to overlap */
-}
-
-.dao-image {
-  max-width: 12rem;
-  filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.35))
-          drop-shadow(0 0 40px rgba(15, 185, 253, 0.2));
-  will-change: transform, filter;
-  opacity: 0;
-  animation: fadeInUp 0.8s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.3s forwards;
-  transition: filter 0.5s ease;
-}
-
-.hero-title {
-  font-size: 3rem;
-  margin: 0.5rem 0;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  position: relative;
-  z-index: 1;
-  background: linear-gradient(
-    300deg, 
-    rgba(255, 255, 255, 1) 0%,
-    rgba(15, 185, 253, 1) 25%,
-    rgba(88, 101, 242, 1) 50%,
-    rgba(15, 185, 253, 1) 75%,
-    rgba(255, 255, 255, 1) 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 
-    0 0 30px rgba(15, 185, 253, 0.3),
-    0 0 60px rgba(15, 185, 253, 0.1);
-  animation: textGradientShift 8s ease infinite;
-  transform: translateY(-1rem); /* Move up slightly */
-}
-
-.hero-subtitle {
-  font-size: 1.75rem;
-  margin: 0.5rem 0 2rem;
-  font-weight: 500;
-  color: var(--cosmic-text-secondary);
-  opacity: 0;
-  animation: fadeInUp 0.6s cubic-bezier(0.17, 0.67, 0.3, 1.33) 0.6s forwards;
-  transform: translateY(-0.5rem); /* Move up slightly */
-}
-
-.hero-actions {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1rem;
-  transform: translateY(-0.5rem); /* Move up slightly */
-}
-
-/* Fix floating elements positioning */
-.hero-floating-elements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.floating-shape {
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background: radial-gradient(circle, 
-    rgba(15, 185, 253, 0.15) 0%, 
-    rgba(15, 185, 253, 0.05) 70%,
-    transparent 100%
-  );
-  filter: blur(20px);
-  opacity: 0.5;
-  animation: floatShape 15s infinite ease-in-out;
-}
-
-.shape-1 {
-  top: 15%;
-  right: 15%;
-  animation-delay: 0s;
-}
-
-.shape-2 {
-  bottom: 25%;
-  left: 10%;
-  width: 120px;
-  height: 120px;
-  animation-delay: -5s;
-}
-
-.shape-3 {
-  top: 40%;
-  right: 25%;
-  width: 100px;
-  height: 100px;
-  animation-delay: -10s;
-}
-
-@keyframes floatShape {
-  0%, 100% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(-20px, 20px);
-  }
-  50% {
-    transform: translate(20px, -20px);
-  }
-  75% {
-    transform: translate(20px, 20px);
-  }
-}
-
-/* Mobile Responsive Adjustments */
-@media (max-width: 768px) {
-  .hero-image-wrapper {
-    margin-bottom: -4rem;
-    transform: translateY(1rem);
-  }
-
-  .hero-emblem {
-    max-width: 10rem;
-  }
-
-  .dao-image-wrapper {
-
-    margin-top: 0rem;
-
-    margin-bottom: -1rem;
-    transform: translateY(-1rem);
-  }
-
-  .dao-image {
-    max-width: 10rem;
-  }
-
-  .hero-title {
-    font-size: calc(1.75rem + 2vw);
-    letter-spacing: 0.05em;
-    margin: 0.25rem 0;
-    transform: translateY(-0.5rem);
-  }
-
-  .hero-subtitle {
-    font-size: calc(1rem + 1vw);
-    margin: 0.25rem 0 1.5rem;
-    transform: translateY(-0.25rem);
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    gap: 1rem;
-    max-width: 280px;
-    width: 100%;
-    transform: translateY(0);
-  }
-
-  .floating-shape {
-    opacity: 0.3;
-    filter: blur(15px);
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-image-wrapper {
-    margin-bottom: -3rem;
-  }
-
-  .hero-emblem {
-    max-width: 12rem;
-    margin-bottom: -1.5rem;
-  }
-
-  .dao-image {
-    max-width: 12rem;
-  }
-
-  .hero-title {
-    font-size: calc(1rem + 1vw);
-  }
-
-  .hero-subtitle {
-    font-size: calc(0.9rem + 1vw);
-  }
-
-  .cosmic-button {
-    padding: 0.8rem 1.2rem;
-    font-size: 0.9rem;
-  }
-}
-
-@keyframes textGradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Sky Light Beams */
-.sky-light-beams {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.light-beam {
-  position: absolute;
-  width: 3vw;
-  height: 100vh;
-  background: linear-gradient(to bottom, 
-    rgba(65, 195, 255, 0) 0%,
-    rgba(65, 195, 255, 0.05) 20%,
-    rgba(65, 195, 255, 0.1) 40%,
-    rgba(65, 195, 255, 0.05) 60%,
-    rgba(65, 195, 255, 0) 100%);
-  opacity: 0;
-  transform: translateY(-100%) rotate(var(--rotate, 0deg));
-  filter: blur(8px);
-  animation: beamMove 15s infinite ease-in-out;
-}
-
-.light-beam:nth-child(1) {
-  left: 15%;
-  animation-delay: 0s;
-  width: 4vw;
-}
-
-.light-beam:nth-child(2) {
-  left: 30%;
-  animation-delay: 3s;
-  width: 2vw;
-}
-
-.light-beam:nth-child(3) {
-  left: 50%;
-  animation-delay: 7s;
-  width: 5vw;
-}
-
-.light-beam:nth-child(4) {
-  left: 65%;
-  animation-delay: 5s;
-  width: 3vw;
-}
-
-.light-beam:nth-child(5) {
-  left: 85%;
-  animation-delay: 2s;
-  width: 4vw;
-}
-
-.light-beam:nth-child(6) {
-  left: 10%;
-  animation-delay: 9s;
-  width: 2.5vw;
-}
-
-.light-beam:nth-child(7) {
-  left: 40%;
-  animation-delay: 11s;
-  width: 3.5vw;
-}
-
-.light-beam:nth-child(8) {
-  left: 75%;
-  animation-delay: 4s;
-  width: 3vw;
-}
-
-@keyframes beamMove {
-  0% {
-    opacity: 0;
-    transform: translateY(-100%) rotate(var(--rotate, 0deg));
-  }
-  20% {
-    opacity: 0.7;
-  }
-  80% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(100%) rotate(var(--rotate, 0deg));
-  }
-}
-
-/* Logo Watermark */
-.cosmic-logo-watermark {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.light-beam {
-  position: absolute;
-  width: 3vw;
-  height: 100vh;
-  background: linear-gradient(to bottom, 
-    rgba(65, 195, 255, 0) 0%,
-    rgba(65, 195, 255, 0.05) 20%,
-    rgba(65, 195, 255, 0.1) 40%,
-    rgba(65, 195, 255, 0.05) 60%,
-    rgba(65, 195, 255, 0) 100%);
-  opacity: 0;
-  transform: translateY(-100%) rotate(var(--rotate, 0deg));
-  filter: blur(8px);
-  animation: beamMove 15s infinite ease-in-out;
-}
-
-@keyframes beamMove {
-  0% {
-    opacity: 0;
-    transform: translateY(-100%) rotate(var(--rotate, 0deg));
-  }
-  20% {
-    opacity: 0.7;
-  }
-  80% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(100%) rotate(var(--rotate, 0deg));
-  }
-}
-
-@media (max-width: 768px) {
-  .dao-page {
-    width: 100vw;
-    max-width: 100vw;
-    overflow-x: hidden;
-  }
-  
-  .dao-explainer-section {
-    padding: 4rem 1rem 2rem;
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-  
-  .explainer-container {
-    padding: 1.5rem;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
   
   .explainer-pillars {
     grid-template-columns: 1fr;
     gap: 1.5rem;
     width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
   }
   
   .explainer-pillar {
@@ -5686,6 +5217,78 @@ img.hero-logo, img.dao-image {
     gap: 1.5rem;
     width: 100%;
     max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .dao-explainer-section {
+    padding: 3rem 0.5rem 1.5rem;
+  }
+  
+  .explainer-container {
+    padding: 1.5rem 1rem;
+    border-radius: 8px;
+  }
+  
+  .explainer-text p {
+    font-size: 1rem;
+  }
+}
+
+/* Add z-index to content sections */
+.headline, 
+.dao-explainer-section, 
+.distribution-section, 
+.governance-section, 
+.stats-overview, 
+.staking-section, 
+.stakeholder-section, 
+.join-section {
+  position: relative;
+  z-index: 10; /* Higher than background elements */
+}
+
+/* Mobile styles for benefits */
+@media (max-width: 768px) {
+  .benefit-item {
+    padding: 1.5rem 1rem;
+  }
+  
+  .benefit-content .value {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .benefit-content h4 {
+    font-size: 1.1rem;
+  }
+  
+  .benefit-content .value {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .benefit-content .value {
+    font-size: 1.75rem;
+  }
+  
+  .benefit-item {
+    padding: 1.5rem 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .benefit-content .value {
+    font-size: 1.5rem;
+  }
+  
+  .benefit-item {
+    padding: 1.25rem 0.75rem;
   }
 }
 </style>
