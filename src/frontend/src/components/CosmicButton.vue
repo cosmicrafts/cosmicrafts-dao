@@ -2,7 +2,7 @@
   <button 
     :class="[
       'cosmic-button', 
-      `cosmic-button-${variant}`,
+      getButtonClass(),
       { 'cosmic-button-icon': icon && !label },
       { 'cosmic-button-loading': loading },
       { 'cosmic-button-block': block },
@@ -15,18 +15,22 @@
   >
     <span v-if="loading" class="cosmic-loading">⟳</span>
     <span v-else-if="icon" class="cosmic-button-icon">{{ icon }}</span>
-    <span v-if="label" class="cosmic-button-label">{{ label }}</span>
+    <span v-if="label" class="button-text">{{ label }}</span>
     <slot></slot>
+    <span class="button-glow"></span>
+    <span class="button-particles"></span>
   </button>
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
   // Button styling
   variant: {
     type: String,
     default: 'primary',
-    validator: (value) => ['primary', 'secondary', 'danger', 'success', 'warning', 'info'].includes(value)
+    validator: (value) => ['primary', 'secondary', 'outline-primary', 'outline-secondary', 'danger', 'success', 'warning', 'info'].includes(value)
   },
   size: {
     type: String,
@@ -72,110 +76,99 @@ const handleClick = (event) => {
     emit('click', event);
   }
 };
+
+const getButtonClass = () => {
+  // Map old variant names to new theme system class names
+  const variantMap = {
+    'primary': 'cosmic-button-primary',
+    'secondary': 'cosmic-button-secondary',
+    'outline-primary': 'cosmic-button-outline-primary',
+    'outline-secondary': 'cosmic-button-outline-secondary',
+    'danger': 'cosmic-button-danger',
+    'success': 'cosmic-button-success',
+    'warning': 'cosmic-button-warning',
+    'info': 'cosmic-button-info'
+  };
+  
+  return variantMap[props.variant] || 'cosmic-button-primary';
+};
 </script>
 
 <style scoped>
-.cosmic-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-medium);
-  font-weight: var(--weight-medium);
-  cursor: pointer;
-  transition: all var(--transition-medium);
-  border: none;
-  color: var(--color-text-primary);
-  position: relative;
-  overflow: hidden;
-}
+/* Inherit base styles from cosmic-theme.css */
+/* Only add button specific styles that aren't in the theme */
 
 /* Size variants */
 .cosmic-button-sm {
-  padding: var(--space-xs) var(--space-sm);
-  font-size: var(--text-xs);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
 }
 
 .cosmic-button-md {
-  padding: var(--space-sm) var(--space-md);
-  font-size: var(--text-md);
+  padding: 0.7rem 1.6rem;
+  font-size: 0.95rem;
 }
 
 .cosmic-button-lg {
-  padding: var(--space-md) var(--space-lg);
-  font-size: var(--text-lg);
+  padding: 0.9rem 2rem;
+  font-size: 1.1rem;
 }
 
-/* Style variants */
-.cosmic-button-primary {
-  background: var(--gradient-button);
-  box-shadow: var(--shadow-small);
-}
-
-.cosmic-button-primary:hover:not(:disabled) {
-  background: var(--gradient-button-hover);
-  box-shadow: var(--shadow-glow-primary);
-  transform: translateY(-2px);
-}
-
-.cosmic-button-secondary {
-  background: transparent;
-  border: var(--border-thin);
-}
-
-.cosmic-button-secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  border: var(--border-highlight);
-  transform: translateY(-2px);
-}
-
+/* Special variants not in the theme */
 .cosmic-button-danger {
-  background-color: var(--color-error);
-}
-
-.cosmic-button-danger:hover:not(:disabled) {
-  background-color: #dc2626;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, 
+    rgba(239, 68, 68, 0.9) 0%, 
+    rgba(220, 38, 38, 0.9) 100%);
+  color: white;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.25),
+    0 0 15px rgba(239, 68, 68, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
 }
 
 .cosmic-button-success {
-  background-color: var(--color-success);
-  color: #000000;
-}
-
-.cosmic-button-success:hover:not(:disabled) {
-  background-color: #00cc76;
-  box-shadow: 0 0 8px rgba(0, 255, 149, 0.5);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.9) 0%, 
+    rgba(5, 150, 105, 0.9) 100%);
+  color: white;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.25),
+    0 0 15px rgba(16, 185, 129, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
 }
 
 .cosmic-button-warning {
-  background-color: var(--color-warning);
-  color: #000000;
-}
-
-.cosmic-button-warning:hover:not(:disabled) {
-  background-color: #d97706;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, 
+    rgba(245, 158, 11, 0.9) 0%, 
+    rgba(217, 119, 6, 0.9) 100%);
+  color: white;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.25),
+    0 0 15px rgba(245, 158, 11, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
 }
 
 .cosmic-button-info {
-  background-color: var(--color-info);
-}
-
-.cosmic-button-info:hover:not(:disabled) {
-  background-color: #3a5cef;
-  box-shadow: 0 0 8px rgba(74, 108, 255, 0.5);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.9) 0%, 
+    rgba(37, 99, 235, 0.9) 100%);
+  color: white;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.25),
+    0 0 15px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
 }
 
 /* States */
 .cosmic-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .cosmic-button-loading {
@@ -187,7 +180,7 @@ const handleClick = (event) => {
   width: 40px;
   height: 40px;
   padding: 0;
-  border-radius: var(--radius-circle);
+  border-radius: 50%;
 }
 
 .cosmic-button-sm.cosmic-button-icon {
@@ -210,7 +203,7 @@ const handleClick = (event) => {
 .cosmic-loading {
   display: inline-block;
   animation: spin 1s linear infinite;
-  margin-right: var(--space-xs);
+  margin-right: 0.5rem;
 }
 
 @keyframes spin {
@@ -220,25 +213,7 @@ const handleClick = (event) => {
 
 /* Active state */
 .cosmic-button:active:not(:disabled) {
-  transform: translateY(1px);
+  transform: translateY(1px) !important;
   opacity: 0.9;
-}
-
-/* Ripple effect on click */
-.cosmic-button::after {
-  content: '';
-  position: absolute;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  transform: scale(0);
-  animation: ripple 0.6s linear;
-  opacity: 1;
-}
-
-@keyframes ripple {
-  to {
-    transform: scale(2.5);
-    opacity: 0;
-  }
 }
 </style> 

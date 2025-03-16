@@ -66,9 +66,8 @@ const scrollToTop = () => {
 
     <!-- Dynamic Language-Based Logo -->
     <div class="additional-logo-mobile" @click="() => { closeMenu(); scrollToTop(); }">
-  <img :src="additionalLogoSrc" alt="Additional Logo" />
-</div>
-
+      <img :src="additionalLogoSrc" alt="Additional Logo" />
+    </div>
 
     <div class="nav-container">
       <ul class="nav-links">
@@ -78,50 +77,62 @@ const scrollToTop = () => {
           { label: 'header.whitepaper', path: '/whitepaper' },
           { label: 'header.roadmap', path: '/roadmap' }
         ]" :key="index">
-          <router-link :to="item.path" :style="{ '--index': index }" @click="closeMenu">
+          <router-link :to="item.path" class="cosmic-nav-link" :style="{ '--index': index }" @click="closeMenu">
             {{ t(item.label) }}
+          </router-link>
+        </li>
+        
+        <!-- Developer section - includes theme guide -->
+        <li class="dev-section">
+          <div class="section-title">Developers</div>
+          <router-link to="/theme-guide" class="cosmic-nav-link dev-link" :style="{ '--index': 5 }" @click="closeMenu">
+            Theme Guide
+          </router-link>
+          <router-link to="/style-guide" class="cosmic-nav-link dev-link" :style="{ '--index': 6 }" @click="closeMenu">
+            Style Guide
           </router-link>
         </li>
       </ul>
     </div>
     
-    <div class="language-selector-container u-hover">
-  <LanguageSelector context="mobile" />
-</div>
-
+    <div class="language-selector-container">
+      <LanguageSelector context="mobile" />
+    </div>
   </nav>
 </template>
   
-  <style scoped>
-  /* Overlay Styling */
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 10;
-  }
-  
+<style scoped>
+/* Overlay Styling */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: var(--cosmic-z-dropdown);
+}
+
 /* Side Panel */
 .mobile-panel {
   position: fixed;
   top: 0;
   left: 0;
-  transform: translateX(-100%) scale(1); /* Start scaled down slightly */
+  transform: translateX(-100%) scale(1);
   width: 60%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.88), rgba(23, 33, 43, 0.77));
+  background: var(--cosmic-glass-bg-darker);
   display: flex;
   flex-direction: column;
   padding: 6rem 1.5rem 2rem;
   transition: transform 0.25s ease-in-out;
-  z-index: 11;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  backdrop-filter: blur(8px);
-  border-right: 1px solid #ffffff12;
+  z-index: var(--cosmic-z-dropdown);
+  border-top-right-radius: var(--cosmic-radius-md);
+  border-bottom-right-radius: var(--cosmic-radius-md);
+  backdrop-filter: var(--cosmic-glass-blur);
+  border-right: var(--cosmic-glass-border);
+  box-shadow: var(--cosmic-shadow-lg);
 }
 
 .mobile-panel-open {
@@ -140,7 +151,7 @@ const scrollToTop = () => {
 }
 
 .nav-links a {
-  color: #ffffff;
+  color: var(--cosmic-text-primary);
   text-decoration: none;
   font-weight: 600;
   font-size: 2rem;
@@ -148,55 +159,10 @@ const scrollToTop = () => {
   position: relative;
   opacity: 0; /* Start invisible */
   transform: translateX(-64px); /* Slide in effect */
-  transition: opacity 0.5s ease, transform 0.5s ease, color 0.25s ease-in-out,
-              border-top 0.3s ease, border-bottom 0.3s ease; /* Add border transition */
+  transition: opacity 0.5s ease, transform 0.5s ease, color 0.25s ease-in-out;
   transition-delay: calc(0.1s * var(--index)); /* Staggered delay */
   padding: 0.2rem 0.5rem;
   cursor: pointer;
-  border-top: 1px solid transparent; /* Start with transparent borders */
-  border-bottom: 1px solid transparent;
-}
-
-.nav-links a:hover {
-  color: #00c3ff;
-  border-bottom: 1px solid #00c3ff;
-  border-top: 1px solid #00c3ff;
-  padding-bottom: 0.2rem; /* Adjust padding to account for the new border */
-  text-shadow: 0px 0px 2px rgba(0, 191, 255, 0.686);
-}
-
-
-
-/* Line Animation */
-.nav-links a::before,
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  height: 2px;
-  width: 50%;
-  background-color: #ffa200;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  box-shadow: 0px 0px 5px rgba(255, 162, 0, 0);
-  transform: scaleX(0); /* Start hidden */
-}
-
-.nav-links a::before {
-  top: -1px; /* Offset top line above text */
-  left: -4%; /* Adjust horizontal offset */
-  transform-origin: left; /* Line grows from the left */
-}
-
-.nav-links a::after {
-  bottom: -1px; /* Offset bottom line below text */
-  right: -4%; /* Adjust horizontal offset */
-  transform-origin: right; /* Line grows from the right */
-}
-
-/* Hover Effect for Line Animation */
-.nav-links a:hover::before,
-.nav-links a:hover::after {
-  transform: scaleX(1.5); /* Grow lines */
-  box-shadow: 0px 0px 5px rgba(255, 162, 0, 0.6);
 }
 
 /* When the panel is open, fade in and slide each link */
@@ -206,7 +172,7 @@ const scrollToTop = () => {
 }
 
 .close-btn {
-    transform: scaleX(0);
+  transform: scaleX(0);
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -225,13 +191,13 @@ const scrollToTop = () => {
   display: block;
   width: 24px;
   height: 3px;
-  background-color: #e2e8f0;
+  background-color: var(--cosmic-text-primary);
   transition: transform 0.1s, opacity 0.1s, background-color 0.25s ease;
 }
 
 .close-btn:hover span {
-  background-color: #00c3ff;
-  box-shadow: 0px 0px 2px rgba(0, 191, 255, 0.6);
+  background-color: var(--cosmic-blue);
+  box-shadow: var(--cosmic-glow-blue-sm);
 }
 
 .close-btn .open:nth-child(1) {
@@ -245,29 +211,49 @@ const scrollToTop = () => {
 .close-btn .open:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
 }
-  .language-selector-container {
-    position: absolute;
-    justify-content: right;
-    bottom: 12%;
-    margin-bottom: 2rem;
-  }
 
+.language-selector-container {
+  position: absolute;
+  justify-content: right;
+  bottom: 12%;
+  margin-bottom: 2rem;
+}
 
-  /* Additional Logo for Mobile */
+/* Additional Logo for Mobile */
 .additional-logo-mobile {
-position: flex;
-margin-top: -2rem;
-margin-bottom: -1rem;
+  position: flex;
+  margin-top: -2rem;
+  margin-bottom: -1rem;
 }
 
 .additional-logo-mobile img {
   width: 8rem;
-  transition: transform 0.25s ease, filter 0.1s ease;
+  transition: transform var(--cosmic-transition-medium), filter var(--cosmic-transition-fast);
 }
 
 .additional-logo-mobile img:hover {
   transform: scale(1.05) rotate(-2deg);
-  filter: drop-shadow(0px 0px 16px rgba(0, 195, 255, 0.18));
+  filter: drop-shadow(0px 0px 16px rgba(0, 195, 255, 0.3));
 }
-  </style>
+
+/* Developer section styling */
+.dev-section {
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+.section-title {
+  font-size: 1rem;
+  color: var(--cosmic-text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.dev-link {
+  font-size: 1.5rem !important;
+  padding-left: 0.5rem !important;
+}
+</style>
   

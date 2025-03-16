@@ -23,6 +23,17 @@
         <li><router-link to="/dao" class="cosmic-hover">{{ t('header.dao') }}</router-link></li>
         <li><router-link to="/whitepaper" class="cosmic-hover">{{ t('header.whitepaper') }}</router-link></li>
         <li><router-link to="/roadmap" class="cosmic-hover">{{ t('header.roadmap') }}</router-link></li>
+        
+        <!-- Developer dropdown -->
+        <li class="dev-dropdown" ref="devDropdownRef">
+          <div class="dropdown-trigger cosmic-hover" @click="toggleDevDropdown">Developers</div>
+          <div v-if="isDevDropdownVisible" class="dev-dropdown-menu">
+            <ul>
+              <li><router-link to="/theme-guide" @click="isDevDropdownVisible = false">Theme Guide</router-link></li>
+              <li><router-link to="/style-guide" @click="isDevDropdownVisible = false">Style Guide</router-link></li>
+            </ul>
+          </div>
+        </li>
       </ul>
     </nav>
 
@@ -56,8 +67,10 @@
         </div>
       </div>
 
-      <button v-else class="cosmic-button cosmic-button-outline" @click="handleLogin">
-        {{ t('header.connect') }}
+      <button v-else class="cosmic-button cosmic-button-outline-primary" @click="handleLogin">
+        <span class="button-text">{{ t('header.connect') }}</span>
+        <span class="button-glow"></span>
+        <span class="button-particles"></span>
       </button>
     </div>
   </header>
@@ -89,10 +102,12 @@ const authStore = useAuthStore();
 const modalStore = useModalStore();
 const playerAvatar = ref(null); // Reactive avatar reference
 const isDropdownVisible = ref(false);
+const isDevDropdownVisible = ref(false);
 
 // Refs for DOM elements - ADD THESE LINES
 const dropdownMenuRef = ref(null); // Ref for the dropdown menu itself
 const avatarContainerRef = ref(null); // Ref for the avatar container (the clickable area)
+const devDropdownRef = ref(null); // Ref for the developer dropdown
 
 
 // Computed property for reactive player avatar
@@ -182,17 +197,31 @@ const additionalLogoSrc = computed(() => {
   return additionalLogoMap[locale.value] || additionalLogoMap.default;
 });
 
-// CLICK OUTSIDE LOGIC - ADD THIS ENTIRE BLOCK
+// Toggle developer dropdown
+const toggleDevDropdown = () => {
+  isDevDropdownVisible.value = !isDevDropdownVisible.value;
+};
+
+// Close dropdowns when clicking outside them
 const handleClickOutside = (event) => {
-  if (isDropdownVisible.value) {
-    if (dropdownMenuRef.value && avatarContainerRef.value) { // Check if refs are defined
-      if (
-        !dropdownMenuRef.value.contains(event.target) && // Click is NOT inside the dropdown menu
-        !avatarContainerRef.value.contains(event.target) // AND click is NOT inside the avatar container
-      ) {
-        isDropdownVisible.value = false; // Close the dropdown
-      }
-    }
+  // Close avatar dropdown
+  if (
+    isDropdownVisible.value &&
+    dropdownMenuRef.value &&
+    avatarContainerRef.value &&
+    !dropdownMenuRef.value.contains(event.target) &&
+    !avatarContainerRef.value.contains(event.target)
+  ) {
+    isDropdownVisible.value = false;
+  }
+  
+  // Close dev dropdown
+  if (
+    isDevDropdownVisible.value &&
+    devDropdownRef.value &&
+    !devDropdownRef.value.contains(event.target)
+  ) {
+    isDevDropdownVisible.value = false;
   }
 };
 
@@ -418,41 +447,12 @@ header:hover {
   text-shadow: var(--cosmic-glow-blue-sm);
 }
 
-/* Connect Button Custom Styling */
-.connect-container .cosmic-button-outline {
+/* Header button styling - removed custom styles to use unified system */
+.connect-container .cosmic-button-outline-primary {
   padding: 0.5rem 1.5rem;
   font-size: 0.95rem;
   border-radius: 8px;
   margin-left: 0.5rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.connect-container .cosmic-button-outline::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(15, 185, 253, 0.05) 0%, rgba(15, 185, 253, 0) 100%);
-  border-radius: 8px;
-  z-index: -1;
-  transition: all var(--cosmic-transition-medium);
-  opacity: 0;
-}
-
-.connect-container .cosmic-button-outline:hover {
-  transform: none;
-  background: rgba(15, 185, 253, 0.1);
-  border-color: var(--cosmic-blue-light);
-  color: var(--cosmic-blue-light);
-  box-shadow: var(--cosmic-shadow-sm), var(--cosmic-glow-blue-sm);
-  text-shadow: var(--cosmic-glow-blue-sm);
-}
-
-.connect-container .cosmic-button-outline:hover::before {
-  opacity: 1;
 }
 
 @media (max-width: 1080px) {
@@ -493,6 +493,69 @@ header:hover {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+  }
+}
+
+/* Developer dropdown styling */
+.dev-dropdown {
+  position: relative;
+}
+
+.dropdown-trigger {
+  cursor: pointer;
+}
+
+.dev-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 160px;
+  background: var(--cosmic-glass-bg-darker);
+  border-radius: var(--cosmic-radius-md);
+  border: var(--cosmic-glass-border);
+  box-shadow: var(--cosmic-shadow-lg);
+  backdrop-filter: var(--cosmic-glass-blur);
+  overflow: hidden;
+  z-index: var(--cosmic-z-dropdown);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.dev-dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dev-dropdown-menu li {
+  padding: 0;
+  transition: background-color 0.2s ease;
+}
+
+.dev-dropdown-menu li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dev-dropdown-menu a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: var(--cosmic-text-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.dev-dropdown-menu a:hover {
+  color: var(--cosmic-blue);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>

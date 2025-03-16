@@ -2,7 +2,7 @@
   <div 
     :class="[
       'cosmic-card',
-      variant ? `cosmic-card-${variant}` : '',
+      getCardVariantClass(),
       { 'cosmic-card-hover': hover },
       { 'cosmic-card-interactive': interactive },
       customClass
@@ -14,7 +14,7 @@
       <div class="cosmic-card-title">
         <span v-if="icon" class="cosmic-card-icon">{{ icon }}</span>
         <slot name="title">
-          <h3 v-if="title" :class="{ 'text-gradient': gradientTitle }">{{ title }}</h3>
+          <h3 v-if="title" :class="getHeaderClass()">{{ title }}</h3>
         </slot>
       </div>
       <slot name="action"></slot>
@@ -70,8 +70,10 @@ const props = defineProps({
   }
 });
 
+const emit = defineEmits(['click']);
+
 const showHeader = computed(() => {
-  return props.title || props.icon || !!slots.title || !!slots.action;
+  return props.title || props.icon || !!$slots.title || !!$slots.action;
 });
 
 const handleClick = (event) => {
@@ -79,21 +81,48 @@ const handleClick = (event) => {
     emit('click', event);
   }
 };
+
+const getCardVariantClass = () => {
+  switch (props.variant) {
+    case 'primary':
+      return 'cosmic-panel-primary';
+    case 'secondary':
+      return 'cosmic-panel-secondary';
+    case 'flat':
+      return 'cosmic-card-flat';
+    default:
+      return '';
+  }
+};
+
+const getHeaderClass = () => {
+  if (!props.gradientTitle) {
+    return '';
+  }
+  
+  return props.variant === 'secondary' ? 'cosmic-title-secondary' : 'cosmic-title';
+};
 </script>
 
 <style scoped>
+/* Inherit most styles from cosmic-theme.css */
+
 .cosmic-card {
-  background: var(--color-surface-primary);
+  background: var(--cosmic-gradient-panel);
   backdrop-filter: blur(8px);
-  border: var(--border-thin);
-  border-radius: var(--radius-medium);
+  border: var(--cosmic-glass-border-blue);
+  border-radius: var(--cosmic-radius-md);
   overflow: hidden;
-  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+  transition: transform var(--cosmic-transition-medium), box-shadow var(--cosmic-transition-medium);
+  transform-style: preserve-3d;
+  transform: translateZ(0);
 }
 
 .cosmic-card-hover:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-medium);
+  transform: translateY(-5px) rotateX(2deg) rotateY(2deg) translateZ(10px);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
+  background: var(--cosmic-gradient-panel-hover);
 }
 
 .cosmic-card-interactive {
@@ -109,59 +138,54 @@ const handleClick = (event) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-md);
-  border-bottom: var(--border-thin);
+  padding: 1rem;
+  border-bottom: var(--cosmic-glass-border-blue);
 }
 
 .cosmic-card-title {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: 0.5rem;
 }
 
 .cosmic-card-title h3 {
   margin: 0;
-  font-size: var(--text-lg);
-  font-weight: var(--weight-bold);
-  color: var(--color-text-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--cosmic-text-primary);
 }
 
 .cosmic-card-icon {
-  font-size: var(--text-xl);
-  color: var(--color-primary);
+  font-size: 1.5rem;
+  color: var(--cosmic-blue);
 }
 
 .cosmic-card-body {
-  padding: var(--space-md);
+  padding: 1rem;
 }
 
 .cosmic-card-footer {
-  padding: var(--space-md);
-  border-top: var(--border-thin);
+  padding: 1rem;
+  border-top: var(--cosmic-glass-border-blue);
   background: rgba(0, 0, 0, 0.1);
 }
 
-/* Variants */
-.cosmic-card-primary {
-  border: 1px solid var(--color-primary);
-  box-shadow: 0 0 8px rgba(0, 195, 255, 0.2);
+/* Secondary variant special handling */
+.cosmic-panel-secondary .cosmic-card-header {
+  border-bottom: var(--cosmic-glass-border-orange);
 }
 
-.cosmic-card-primary .cosmic-card-header {
-  background: rgba(0, 195, 255, 0.1);
+.cosmic-panel-secondary .cosmic-card-footer {
+  border-top: var(--cosmic-glass-border-orange);
 }
 
-.cosmic-card-secondary {
-  border: 1px solid var(--color-secondary);
-  box-shadow: 0 0 8px rgba(255, 0, 195, 0.2);
+.cosmic-panel-secondary .cosmic-card-icon {
+  color: var(--cosmic-orange);
 }
 
-.cosmic-card-secondary .cosmic-card-header {
-  background: rgba(255, 0, 195, 0.1);
-}
-
+/* Flat variant */
 .cosmic-card-flat {
-  background: var(--color-surface-tertiary);
+  background: rgba(35, 50, 65, 0.4);
   border: none;
   box-shadow: none;
 }
@@ -169,15 +193,15 @@ const handleClick = (event) => {
 /* Media queries */
 @media (max-width: 768px) {
   .cosmic-card-body {
-    padding: var(--space-sm);
+    padding: 0.75rem;
   }
   
   .cosmic-card-header {
-    padding: var(--space-sm);
+    padding: 0.75rem;
   }
   
   .cosmic-card-footer {
-    padding: var(--space-sm);
+    padding: 0.75rem;
   }
 }
 </style> 

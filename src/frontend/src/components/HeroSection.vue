@@ -76,7 +76,7 @@
           <button
             v-for="(button, i) in slides[currentSlide].ctaButtons"
             :key="i"
-            :class="['cosmic-button', button.style === 'primary' ? 'cosmic-button-primary' : 'cosmic-button-outline', { 'initial-load': !hasLoadedOnce }]"
+            :class="['cosmic-button', button.style === 'primary' ? 'cosmic-button-primary' : 'cosmic-button-secondary', { 'initial-load': !hasLoadedOnce }]"
             @click="handleCTA(button.link, button.isReferral)"
           >
             <span class="button-text">{{ t(`hero.slides[${currentSlide}].ctaButtons[${i}].text`) }}</span>

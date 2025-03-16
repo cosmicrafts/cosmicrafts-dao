@@ -19,6 +19,7 @@ import Legal from './pages/Legal.vue';
 import Notifications from './pages/Notifications.vue';
 import StyleGuide from './pages/StyleGuide.vue';
 import Contact from './pages/Contact.vue';
+import ThemeGuide from './views/ThemeGuide.vue';
 
 const routes = [
   { path: '/', component: Home, meta: { title: 'header.home' } },
@@ -38,6 +39,7 @@ const routes = [
   { path: '/about', component: () => import('@/pages/About.vue'), meta: { title: 'header.about' } },
   { path: '/contact', component: Contact, meta: { title: 'header.contact' } },
   { path: '/style-guide', component: StyleGuide, meta: { title: 'Style Guide' } },
+  { path: '/theme-guide', component: ThemeGuide, meta: { title: 'Theme Guide' } },
   // New catch-all route for usernames/principals
   {
     path: '/:identifier',

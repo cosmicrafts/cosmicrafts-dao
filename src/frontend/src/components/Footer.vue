@@ -15,7 +15,7 @@ const currentYear = new Date().getFullYear();
 const isMobile = ref(window.innerWidth <= 768);
 
 // Initialize with appropriate sections expanded (all on desktop, none on mobile)
-const expandedSections = ref(new Set(isMobile.value ? [] : ['explore', 'legal']));
+const expandedSections = ref(new Set(isMobile.value ? [] : ['explore', 'legal', 'developers']));
 
 // Update mobile state on resize
 window.addEventListener('resize', () => {
@@ -23,7 +23,7 @@ window.addEventListener('resize', () => {
   
   // If transitioning to desktop, open all sections
   if (!isMobile.value) {
-    expandedSections.value = new Set(['explore', 'legal']);
+    expandedSections.value = new Set(['explore', 'legal', 'developers']);
   }
 });
 
@@ -49,7 +49,7 @@ const isSectionExpanded = (section) => {
     <!-- Social Buttons Row -->
     <div class="social-top-row">
       <div class="social-top-container">
-        <h4 class="social-top-title cosmic-text-glow">{{ t('footer.stayConnected') }}</h4>
+        <h4 class="cosmic-text-glow">{{ t('footer.stayConnected') }}</h4>
         <div class="social-icons-group">
           <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer">
             <img src="@/assets/icons/discord.svg" alt="Discord" />
@@ -74,6 +74,7 @@ const isSectionExpanded = (section) => {
     <div class="accordion-container">
       <!-- Navigation Sections in Row -->
       <div class="nav-row">
+        <!-- Explore Section -->
         <div class="accordion cosmic-panel">
           <div 
             class="accordion-header" 
@@ -92,6 +93,7 @@ const isSectionExpanded = (section) => {
           </div>
         </div>
 
+        <!-- Legal Section -->
         <div class="accordion cosmic-panel">
           <div 
             class="accordion-header" 
@@ -106,6 +108,24 @@ const isSectionExpanded = (section) => {
               <li><router-link to="/privacy" class="cosmic-nav-link">{{ t('footer.privacy') }}</router-link></li>
               <li><router-link to="/legal" class="cosmic-nav-link">{{ t('footer.legal') }}</router-link></li>
               <li><router-link to="/terms" class="cosmic-nav-link">{{ t('footer.terms') }}</router-link></li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Developers Section (New) -->
+        <div class="accordion cosmic-panel">
+          <div 
+            class="accordion-header" 
+            :class="{ 'active': isSectionExpanded('developers') }"
+            @click="toggleSection('developers')"
+          >
+            <h4 class="cosmic-text-glow">Developers</h4>
+            <i class="fas" :class="isSectionExpanded('developers') ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+          </div>
+          <div class="accordion-content" :style="{ maxHeight: isSectionExpanded('developers') ? '200px' : '0' }">
+            <ul class="link-list">
+              <li><router-link to="/theme-guide" class="cosmic-nav-link">Theme Guide</router-link></li>
+              <li><router-link to="/style-guide" class="cosmic-nav-link">Style Guide</router-link></li>
             </ul>
           </div>
         </div>
@@ -133,8 +153,8 @@ const isSectionExpanded = (section) => {
 .cosmic-footer {
   position: relative;
   color: var(--cosmic-text-primary);
-  background: linear-gradient(to bottom, rgba(33, 41, 65, 0.5), rgba(24, 30, 45, 0.849));
-  border-top: 1px solid rgba(51, 201, 255, 0.157);
+  background: var(--cosmic-glass-bg);
+  border-top: var(--cosmic-glass-border-blue);
   backdrop-filter: var(--cosmic-glass-blur);
   overflow: hidden;
 }
@@ -158,7 +178,7 @@ const isSectionExpanded = (section) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 185, 253, 0.03);
+  background: var(--cosmic-blue-translucent-faint);
   opacity: 0.3;
 }
 
@@ -167,8 +187,8 @@ const isSectionExpanded = (section) => {
   display: flex;
   justify-content: center;
   padding: 1rem;
-  background: rgba(15, 185, 253, 0.05);
-  border-bottom: 1px solid rgba(15, 185, 253, 0.1);
+  background: var(--cosmic-blue-translucent-faint);
+  border-bottom: var(--cosmic-glass-border-blue);
   width: 100%;
   margin-bottom: 1rem;
 }
@@ -183,9 +203,8 @@ const isSectionExpanded = (section) => {
 .social-top-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: rgb(0, 208, 255);
+  color: var(--cosmic-blue);
   margin: 0;
-  text-shadow: var(--cosmic-glow-blue-sm);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -197,6 +216,7 @@ const isSectionExpanded = (section) => {
   flex-wrap: nowrap;
 }
 
+/* Cosmic social icon class from theme system */
 .cosmic-social-icon {
   width: 4rem !important;
   height: 4rem !important;
@@ -204,11 +224,16 @@ const isSectionExpanded = (section) => {
   align-items: center;
   justify-content: center;
   padding: 0;
+  border-radius: var(--cosmic-radius-sm);
+  background: var(--cosmic-glass-bg-darker);
+  border: var(--cosmic-glass-border-blue);
   transition: all var(--cosmic-transition-fast);
 }
 
 .cosmic-social-icon:hover {
   transform: translateY(-3px);
+  box-shadow: var(--cosmic-glow-blue-sm);
+  border-color: var(--cosmic-blue);
 }
 
 .cosmic-social-icon img {
@@ -237,7 +262,6 @@ const isSectionExpanded = (section) => {
   max-width: 400px;
   margin-bottom: 0.5rem;
   border-radius: var(--cosmic-radius-lg);
-  background: var(--cosmic-glass-bg);
   border: var(--cosmic-glass-border-blue);
   overflow: hidden;
 }
@@ -248,9 +272,9 @@ const isSectionExpanded = (section) => {
   align-items: center;
   padding: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--cosmic-transition-medium);
   background: var(--cosmic-glass-bg);
-  border-bottom: 1px solid rgba(51, 201, 255, 0.1);
+  border-bottom: var(--cosmic-glass-border-blue);
 }
 
 .accordion-header h4 {
@@ -295,7 +319,7 @@ const isSectionExpanded = (section) => {
 
 .link-list li {
   margin-bottom: 0.5rem;
-  transition: transform 0.3s ease;
+  transition: transform var(--cosmic-transition-fast);
 }
 
 .link-list li:hover {
@@ -308,7 +332,7 @@ const isSectionExpanded = (section) => {
   font-size: 1.2rem;
   display: block;
   padding: 0.5rem 0;
-  transition: all 0.3s ease;
+  transition: all var(--cosmic-transition-fast);
   font-weight: 500;
 }
 
@@ -323,8 +347,8 @@ const isSectionExpanded = (section) => {
   display: flex;
   justify-content: center;
   padding: 0.75rem;
-  background: rgba(15, 185, 253, 0.05);
-  border-top: 1px solid rgba(15, 185, 253, 0.1);
+  background: var(--cosmic-blue-translucent-faint);
+  border-top: var(--cosmic-glass-border-blue);
   margin-top: 0.5rem;
   width: 100%;
 }
@@ -349,12 +373,18 @@ const isSectionExpanded = (section) => {
   width: 4rem;
   margin-top: 0.15rem;
   filter: drop-shadow(var(--cosmic-glow-blue-sm));
+  transition: transform var(--cosmic-transition-medium), filter var(--cosmic-transition-fast);
+}
+
+.copyright-logo:hover {
+  transform: scale(1.05) rotate(-2deg);
+  filter: drop-shadow(0 0 8px var(--cosmic-blue));
 }
 
 .copyright {
   text-align: center;
   font-size: 0.65rem;
-  color: var(--color-text-disabled);
+  color: var(--cosmic-text-disabled);
   line-height: 1.1;
 }
 
@@ -426,8 +456,8 @@ const isSectionExpanded = (section) => {
   }
   
   .cosmic-social-icon {
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
   }
   
   .cosmic-social-icon img {
@@ -454,37 +484,13 @@ const isSectionExpanded = (section) => {
   }
   
   .cosmic-social-icon {
-    width: 2rem;
-    height: 2rem;
+    width: 2rem !important;
+    height: 2rem !important;
   }
   
   .cosmic-social-icon img {
     width: 18px;
     height: 18px;
   }
-}
-
-/* Hover effects for interactive elements */
-a, button {
-  position: relative;
-  z-index: 1;
-}
-
-a::before, button::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(15, 185, 253, 0);
-  border-radius: inherit;
-  transition: all var(--cosmic-transition-fast);
-}
-
-a:hover::before, button:hover::before {
-  background: rgba(15, 185, 253, 0.05);
-  box-shadow: var(--cosmic-glow-blue-sm);
 }
 </style>

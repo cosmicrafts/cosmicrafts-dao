@@ -12,7 +12,7 @@ const closeModal = () => {
 
 <template>
   <div class="modal-overlay" v-if="modalStore.isOpen" @click.self="closeModal">
-    <div class="modal-content">
+    <div class="modal-content cosmic-panel">
       <component :is="modalStore.currentComponent" v-bind="modalStore.props" />
     </div>
   </div>
@@ -25,21 +25,30 @@ const closeModal = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(8, 11, 20, 0.462);
-  backdrop-filter: blur(4px);
+  background: rgba(8, 11, 20, 0.5);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: var(--cosmic-z-modal);
 }
 
 .modal-content {
-  background: linear-gradient(to bottom, rgba(30, 43, 56, 0.88), rgba(23, 33, 43, 0.77));
-  border-radius: 8px;
-  border: 1px solid #ffffff12;
-  padding: 2rem;
   max-width: 90%;
   max-height: 90%;
   overflow-y: auto;
+  transform: translateY(0);
+  animation: modalEntrance 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 </style>
