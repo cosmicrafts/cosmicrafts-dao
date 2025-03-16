@@ -58,15 +58,17 @@ const scrollToTop = () => {
   
   <!-- Side panel for nav-links and independent language selector -->
   <nav class="mobile-panel" :class="{ 'mobile-panel-open': isOpen }">
-    <div class="close-btn" @click="closeMenu">
-      <span class="open"></span>
-      <span class="open"></span>
-      <span class="open"></span>
-    </div>
+    <div class="mobile-panel-header">
+      <div class="close-btn" @click="closeMenu">
+        <span class="open"></span>
+        <span class="open"></span>
+        <span class="open"></span>
+      </div>
 
-    <!-- Dynamic Language-Based Logo -->
-    <div class="additional-logo-mobile" @click="() => { closeMenu(); scrollToTop(); }">
-      <img :src="additionalLogoSrc" alt="Additional Logo" />
+      <!-- Dynamic Language-Based Logo -->
+      <div class="additional-logo-mobile" @click="() => { closeMenu(); scrollToTop(); }">
+        <img :src="additionalLogoSrc" alt="Additional Logo" />
+      </div>
     </div>
 
     <div class="nav-container">
@@ -120,12 +122,13 @@ const scrollToTop = () => {
   top: 0;
   left: 0;
   transform: translateX(-100%) scale(1);
-  width: 60%;
+  width: 80%;
+  max-width: 320px;
   height: 100%;
   background: var(--cosmic-glass-bg-darker);
   display: flex;
   flex-direction: column;
-  padding: 6rem 1.5rem 2rem;
+  padding: 0;
   transition: transform 0.25s ease-in-out;
   z-index: var(--cosmic-z-dropdown);
   border-top-right-radius: var(--cosmic-radius-md);
@@ -139,6 +142,23 @@ const scrollToTop = () => {
   transform: translateX(0) scale(1);
 }
 
+/* Panel Header */
+.mobile-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+/* Navigation Container */
+.nav-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem 1.5rem;
+}
+
 /* Navigation Links */
 .nav-links {
   list-style: none;
@@ -146,15 +166,14 @@ const scrollToTop = () => {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  font-size: 2rem;
+  gap: 1.5rem;
 }
 
 .nav-links a {
   color: var(--cosmic-text-primary);
   text-decoration: none;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 1.75rem;
   display: inline-block;
   position: relative;
   opacity: 0; /* Start invisible */
@@ -171,15 +190,19 @@ const scrollToTop = () => {
   transform: translateX(0);
 }
 
+.nav-links a:hover {
+  color: var(--cosmic-blue);
+  text-shadow: var(--cosmic-glow-blue-sm);
+}
+
 .close-btn {
-  transform: scaleX(0);
   display: flex;
   flex-direction: column;
   cursor: pointer;
   gap: 3px;
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
+  width: 24px;
+  height: 24px;
+  justify-content: center;
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
@@ -213,21 +236,19 @@ const scrollToTop = () => {
 }
 
 .language-selector-container {
-  position: absolute;
-  justify-content: right;
-  bottom: 12%;
-  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
 }
 
 /* Additional Logo for Mobile */
 .additional-logo-mobile {
-  position: flex;
-  margin-top: -2rem;
-  margin-bottom: -1rem;
+  display: flex;
+  justify-content: center;
 }
 
 .additional-logo-mobile img {
-  width: 8rem;
+  width: 6rem;
   transition: transform var(--cosmic-transition-medium), filter var(--cosmic-transition-fast);
 }
 
@@ -240,20 +261,47 @@ const scrollToTop = () => {
 .dev-section {
   margin-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 1rem;
+  padding-top: 1.5rem;
 }
 
 .section-title {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--cosmic-text-secondary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-weight: 600;
 }
 
 .dev-link {
   font-size: 1.5rem !important;
   padding-left: 0.5rem !important;
+  margin-top: 0.5rem;
+}
+
+/* Animation for overlay */
+.overlay-fade {
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .mobile-panel {
+    width: 85%;
+  }
+  
+  .nav-links a {
+    font-size: 1.5rem;
+  }
+  
+  .dev-link {
+    font-size: 1.3rem !important;
+  }
 }
 </style>
   

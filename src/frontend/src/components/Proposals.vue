@@ -110,6 +110,10 @@ export default {
   padding: 4rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .section-title {
@@ -126,6 +130,9 @@ export default {
   text-shadow: 0 5px 15px rgba(15, 185, 253, 0.2);
   letter-spacing: -0.02em;
   transform-style: preserve-3d;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .section-title::after {
@@ -146,6 +153,9 @@ export default {
 .proposals-grid {
   display: grid;
   gap: 2rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .proposal-card {
@@ -159,6 +169,9 @@ export default {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   margin-bottom: 1.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .proposal-card:hover {
@@ -174,10 +187,16 @@ export default {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(15, 185, 253, 0.1);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .proposal-title {
   flex: 1;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .proposal-title h3 {
@@ -213,14 +232,23 @@ export default {
   color: var(--color-text-secondary, #d1d9e6);
   margin-bottom: 2rem;
   line-height: 1.6;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .proposal-stats {
   margin-bottom: 2rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .vote-progress {
   margin-bottom: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .progress-bar {
@@ -229,6 +257,9 @@ export default {
   border-radius: 2px;
   overflow: hidden;
   margin-bottom: 0.75rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .progress-fill {
@@ -243,6 +274,9 @@ export default {
   justify-content: space-between;
   font-size: 0.9rem;
   color: var(--color-text-secondary, #d1d9e6);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .time-remaining {
@@ -260,6 +294,9 @@ export default {
 .proposal-actions {
   display: flex;
   gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .cosmic-button {
@@ -274,6 +311,7 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
+  box-sizing: border-box;
 }
 
 .cosmic-button.primary {
@@ -301,40 +339,99 @@ export default {
 @media (max-width: 768px) {
   .proposals-section {
     padding: 3rem 1rem;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
   }
   
   .section-title {
     font-size: 2.25rem;
     margin-bottom: 2.5rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .proposal-card {
+    padding: 1.5rem 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .proposal-header {
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .proposal-title h3 {
     font-size: 1.25rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .proposal-summary {
     font-size: 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .vote-counts {
     flex-direction: column;
     gap: 0.5rem;
     align-items: flex-start;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .proposal-actions {
     flex-direction: column;
     gap: 0.75rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .cosmic-button {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .proposals-section {
+    padding: 2rem 0.5rem;
+  }
+  
+  .section-title {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+  }
+  
+  .proposal-card {
+    padding: 1.25rem 0.75rem;
+  }
+  
+  .proposal-title h3 {
+    font-size: 1.1rem;
+  }
+  
+  .proposal-summary {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .cosmic-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
   }
 }
 </style> 

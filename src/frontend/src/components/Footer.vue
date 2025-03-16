@@ -507,13 +507,13 @@ const isSectionExpanded = (section) => {
   }
   
   .cosmic-social-icon {
-    width: 2.5rem !important;
-    height: 2.5rem !important;
+    width: 3.5rem !important;
+    height: 3.5rem !important;
   }
   
   .cosmic-social-icon img {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
   }
 }
 
@@ -555,13 +555,13 @@ const isSectionExpanded = (section) => {
   }
   
   .cosmic-social-icon {
-    width: 2rem !important;
-    height: 2rem !important;
+    width: 3rem !important;
+    height: 3rem !important;
   }
   
   .cosmic-social-icon img {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
   }
   
   .link-list a {
@@ -584,13 +584,14 @@ const isSectionExpanded = (section) => {
   }
   
   .cosmic-social-icon {
-    width: 1.75rem !important;
-    height: 1.75rem !important;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
   }
   
   .cosmic-social-icon img {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
   }
 }
 </style>
+

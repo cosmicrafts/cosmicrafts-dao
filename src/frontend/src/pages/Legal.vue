@@ -131,8 +131,19 @@ const scrollToSection = (sectionId) => {
 </script>
 
 <style scoped>
+.cosmic-page-bg {
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
 .legal-container {
   padding-top: 4rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .animated-title {
@@ -153,6 +164,9 @@ const scrollToSection = (sectionId) => {
   border-left: 4px solid var(--color-info);
   background: linear-gradient(to right, rgba(15, 185, 253, 0.08), rgba(15, 185, 253, 0.03));
   animation: fadeIn 1s ease-out;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @keyframes fadeIn {
@@ -182,6 +196,9 @@ const scrollToSection = (sectionId) => {
 .legal-info-content {
   display: grid;
   gap: 2rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .info-section h3 {
@@ -268,6 +285,9 @@ const scrollToSection = (sectionId) => {
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   margin-top: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .policy-link {
@@ -281,6 +301,8 @@ const scrollToSection = (sectionId) => {
   color: var(--color-text-primary);
   text-decoration: none;
   transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .policy-link i {
@@ -321,9 +343,27 @@ const scrollToSection = (sectionId) => {
 }
 
 @media (max-width: 768px) {
+  .cosmic-page-container {
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .legal-container {
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden;
+    padding-top: 3rem;
+  }
+  
   .legal-info,
   .legal-content {
     padding: 1.5rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .legal-title {
@@ -336,6 +376,67 @@ const scrollToSection = (sectionId) => {
   
   .policy-links {
     grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .policy-link {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  
+  .policy-link i {
+    padding: 0.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .info-section {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .cosmic-page-container,
+  .legal-container {
+    padding: 0;
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
+  .animated-title {
+    font-size: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .legal-info,
+  .legal-content {
+    padding: 1rem;
+    margin: 0.5rem;
+    width: calc(100% - 1rem);
+  }
+  
+  .legal-title {
+    font-size: 1.25rem;
+  }
+  
+  .info-section h3 {
+    font-size: 1rem;
+  }
+  
+  .key-points-list {
+    padding-left: 1rem;
+  }
+  
+  .policy-link span strong {
+    font-size: 0.9rem;
+  }
+  
+  .policy-link span small {
+    font-size: 0.75rem;
   }
 }
 
@@ -346,6 +447,9 @@ const scrollToSection = (sectionId) => {
   animation-delay: 0.3s;
   animation-fill-mode: both;
   border-top: 3px solid var(--color-primary);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @keyframes slideIn {

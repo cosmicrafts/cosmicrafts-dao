@@ -133,6 +133,10 @@ const teamMembers = [
   margin: 0;
   padding: 0;
   line-height: 1.2;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 /* Headline Section Styles */
@@ -390,6 +394,9 @@ const teamMembers = [
   grid-template-columns: repeat(3, 1fr);
   gap: 2.5rem;
   margin-top: 4rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .contributor-card {
@@ -402,6 +409,8 @@ const teamMembers = [
   border: 1px solid rgba(15, 185, 253, 0.15);
   border-radius: 12px;
   transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .contributor-profile {
@@ -546,8 +555,16 @@ const teamMembers = [
 }
 
 @media (max-width: 768px) {
+  .about-page {
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
   .headline {
     padding: 6rem 1rem;
+    width: 100%;
+    max-width: 100%;
   }
 
   .primary-headline {
@@ -563,12 +580,18 @@ const teamMembers = [
   .values-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .founder-content {
     grid-template-columns: 1fr;
     text-align: center;
     gap: 2rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .founder-profile {
@@ -583,16 +606,46 @@ const teamMembers = [
 
   .founder-bio {
     font-size: 1.1rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .section-title {
     font-size: 2.5rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .vision-section,
   .team-section,
   .values-section {
     padding: 4rem 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .founder-spotlight,
+  .contributor-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 2rem 1rem;
+  }
+
+  .contributors-grid {
+    padding: 0 0.5rem;
+  }
+  
+  .contributor-card {
+    padding: 1.5rem;
+  }
+  
+  .contributor-profile {
+    width: 150px;
+    height: 150px;
   }
 }
 </style>
