@@ -17,7 +17,7 @@ module Types {
   public type MatchMap = Text;
   public type PlayerFaction = Text;
   public type LanguageCode = Nat8;
-
+  public type TestType = Blob;
 // Player and Friend Details
   public type Player = {
     id: PlayerId;

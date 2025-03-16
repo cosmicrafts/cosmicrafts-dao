@@ -37,8 +37,19 @@
     import MissionOptions "MissionOptions";
     import AchievementData "AchievementData";
     import Set "Set";
+    import Canistergeek "mo:canistergeek/canistergeek";
+    import Prelude "mo:base/Prelude";
 
 shared actor class Cosmicrafts() = Self {
+    // Test type for upgrade verification
+    public type TestType = Text;
+
+    // Canistergeek monitoring setup
+    stable var _canistergeekMonitorUD: ?Canistergeek.UpgradeData = null;
+    stable var _canistergeekLoggerUD: ?Canistergeek.LoggerUpgradeData = null;
+    private let canistergeekMonitor = Canistergeek.Monitor();
+    private let canistergeekLogger = Canistergeek.Logger();
+
 // Types
 
     public type Result<T, E> = { #ok : T; #err : E; };
@@ -165,6 +176,25 @@ shared actor class Cosmicrafts() = Self {
         } else {
             return (false, "Access denied: Only admin can call this function.");
         }
+    };
+
+    // Function to validate caller access
+    private func validateCaller(principal: Principal) : () {
+        if (not (Principal.toText(principal) == ADMIN_PRINCIPAL)) {
+            Debug.print("Access denied for principal: " # Principal.toText(principal));
+            Prelude.unreachable();
+        };
+    };
+
+    // Canistergeek monitoring methods
+    public query ({caller}) func getCanistergeekInformation(request: Canistergeek.GetInformationRequest): async Canistergeek.GetInformationResponse {
+        validateCaller(caller);
+        Canistergeek.getInformation(?canistergeekMonitor, ?canistergeekLogger, request);
+    };
+
+    public shared ({caller}) func updateCanistergeekInformation(request: Canistergeek.UpdateInformationRequest): async () {
+        validateCaller(caller);
+        canistergeekMonitor.updateInformation(request);
     };
 
 //--
@@ -353,6 +383,9 @@ shared actor class Cosmicrafts() = Self {
 
     // Function to create a new general mission
     func createGeneralMission(name: Text, missionCategory: MissionCategory, missionType: MissionType, rewardType: RewardType, rewardAmount: Nat, total: Nat, hoursActive: Nat64): async (Bool, Text, Nat) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Creating general mission: " # name);
+
         let id = generalMissionIDCounter;
         generalMissionIDCounter += 1;
 
@@ -374,6 +407,8 @@ shared actor class Cosmicrafts() = Self {
 
         missions.put(id, newMission);
         activeMissions.put(id, newMission);
+        
+        canistergeekLogger.logMessage("Mission created successfully with ID: " # Nat.toText(id));
         Debug.print("[createGeneralMission] Mission created with ID: " # Nat.toText(id) # ", End Date: " # Nat64.toText(endDate) # ", Start Date: " # Nat64.toText(now));
 
         return (true, "Mission created successfully", id);
@@ -701,6 +736,9 @@ shared actor class Cosmicrafts() = Self {
 
     // Function to create a new user-specific mission
     public func createUserMission(user: PlayerId): async (Bool, Text, Nat) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Creating user mission for user: " # Principal.toText(user));
+
         var userSpecificProgressList: [MissionsUser] = switch (userMissionProgress.get(user)) {
             case (null) { [] };
             case (?missions) { missions };
@@ -777,6 +815,7 @@ shared actor class Cosmicrafts() = Self {
 
         await assignUserMissions(user);
 
+        canistergeekLogger.logMessage("User mission created successfully for user: " # Principal.toText(user));
         return (true, "User-specific missions checked and renewed if necessary.", hourlyResult.2);
     };
 
@@ -788,6 +827,9 @@ shared actor class Cosmicrafts() = Self {
         currentIndex: Nat,
         duration: Nat64
         ): async (Bool, Text, Nat) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Creating user-specific mission for user: " # Principal.toText(user));
+
         let index = shuffledIndices[currentIndex];
         let template = missionOptions[index];
         let rewardAmount = Utils.getMaxMin(template.minReward, template.maxReward);
@@ -1716,7 +1758,6 @@ shared actor class Cosmicrafts() = Self {
                                             claimed = category.claimed;
                                         };
 
-                                        // Update the user's progress
                                         let updatedCategories = Array.tabulate<AchievementCategory>(
                                             Array.size(userCategoriesList),
                                             func(i: Nat): AchievementCategory {
@@ -6003,13 +6044,10 @@ shared actor class Cosmicrafts() = Self {
     };
 
         let icrc1_args : ICRC1.InitArgs = {
-            init_args with minting_account = Option.get(
-                init_args.minting_account,
-                {
-                    owner = CANISTER_ID;
-                    subaccount = null;
-                },
-            );
+            init_args with minting_account = { 
+                owner = CANISTER_ID; 
+                subaccount = null 
+            }
         };
 
     public query func getInitArgs() : async TypesICRC1.TokenInitArgs {
@@ -6266,6 +6304,9 @@ shared actor class Cosmicrafts() = Self {
 
     // Pre-upgrade hook to save the state
     system func preupgrade() {
+        _canistergeekMonitorUD := ?canistergeekMonitor.preupgrade();
+        _canistergeekLoggerUD := ?canistergeekLogger.preupgrade();
+
         _generalUserProgress := Iter.toArray(generalUserProgress.entries());
         _missions := Iter.toArray(missions.entries());
         _activeMissions := Iter.toArray(activeMissions.entries());
@@ -6297,10 +6338,27 @@ shared actor class Cosmicrafts() = Self {
         _inProgress := Iter.toArray(inProgress.entries());
         _finishedGames := Iter.toArray(finishedGames.entries());
 
+        // NFT state preservation
+        _mintedCallers := Iter.toArray(mintedCallersMap.entries());
+        
+        // Update stable variables for minted tokens
+        updateStableVariables();
+
+        // No need to handle tokens, owners, balances, tokenApprovals, operatorApprovals, 
+        // transactions, and transactionsByAccount as they are already stable variables
     };
 
     // Post-upgrade hook to restore the state
     system func postupgrade() {
+        canistergeekMonitor.postupgrade(_canistergeekMonitorUD);
+        _canistergeekMonitorUD := null;
+        
+        canistergeekLogger.postupgrade(_canistergeekLoggerUD);
+        _canistergeekLoggerUD := null;
+        
+        // Set max log messages
+        canistergeekLogger.setMaxMessagesCount(3000);
+
         generalUserProgress := HashMap.fromIter(_generalUserProgress.vals(), 0, Principal.equal, Principal.hash);
         missions := HashMap.fromIter(_missions.vals(), 0, Utils._natEqual, Utils._natHash);
         activeMissions := HashMap.fromIter(_activeMissions.vals(), 0, Utils._natEqual, Utils._natHash);
@@ -6332,6 +6390,16 @@ shared actor class Cosmicrafts() = Self {
         inProgress := HashMap.fromIter(_inProgress.vals(), 0, Utils._natEqual, Utils._natHash);
         finishedGames := HashMap.fromIter(_finishedGames.vals(), 0, Utils._natEqual, Utils._natHash);
 
+        // NFT state restoration
+        mintedCallersMap := HashMap.fromIter(_mintedCallers.vals(), 0, Principal.equal, Principal.hash);
+        
+        // Initialize minted token maps from stable arrays
+        mintedStardustMap := HashMap.fromIter(mintedStardust.vals(), 0, Principal.equal, Principal.hash);
+        mintedChestsMap := HashMap.fromIter(mintedChests.vals(), 0, Principal.equal, Principal.hash);
+        mintedGameNFTsMap := HashMap.fromIter(mintedGameNFTs.vals(), 0, Principal.equal, Principal.hash);
+
+        // No need to restore tokens, owners, balances, tokenApprovals, operatorApprovals,
+        // transactions, and transactionsByAccount as they are already stable variables
     };
 
 //--
@@ -6500,7 +6568,7 @@ shared actor class Cosmicrafts() = Self {
                         case (?2) 3;  // Rare
                         case (?3) 2;  // Epic
                         case (?4) 1;  // Legendary - lowest weight
-                        case (null) 4;  // Default to common if rarity is null
+                        case null 4;  // Default to common if rarity is null
                         case (?_) 4;  // Handle any other unspecified rarity values, defaulting to common
                     }
                 };
