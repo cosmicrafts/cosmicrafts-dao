@@ -144,43 +144,70 @@ shared actor class Cosmicrafts() = Self {
         };
 
     public shared({ caller }) func admin(funcToCall: AdminFunction) : async (Bool, Text) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Admin function called by: " # Principal.toText(caller));
+
         if (caller == ADMIN_PRINCIPAL) {
             Debug.print("Admin function called by admin.");
             switch (funcToCall) {
                 case (#CreateMission(name, missionCategory, missionType, rewardType, rewardAmount, total, hours_active)) {
+                    canistergeekLogger.logMessage("Creating mission: " # name);
                     let (success, message, id) = await createGeneralMission(name, missionCategory, missionType, rewardType, rewardAmount, total, hours_active);
+                    if (success) {
+                        canistergeekLogger.logMessage("Mission created successfully with ID: " # Nat.toText(id));
+                    } else {
+                        canistergeekLogger.logMessage("Mission creation failed: " # message);
+                    };
                     return (success, message # " Mission ID: " # Nat.toText(id));
                 };
                 case (#CreateMissionsPeriodically()) {
+                    canistergeekLogger.logMessage("Creating missions periodically");
                     await createMissionsPeriodically();
                     return (true, "Missions created.");
                 };
                 case (#MintChest(PlayerId, rarity)) {
+                    canistergeekLogger.logMessage("Admin minting chest for: " # Principal.toText(PlayerId) # " with rarity: " # Nat.toText(rarity));
                     let (success, message) = await mintChest(PlayerId, rarity);
+                    if (success) {
+                        canistergeekLogger.logMessage("Admin chest minting successful");
+                    } else {
+                        canistergeekLogger.logMessage("Admin chest minting failed: " # message);
+                    };
                     return (success, message);
                 };
                 case (#BurnToken(_caller, from, tokenId, now)) {
+                    canistergeekLogger.logMessage("Admin burning token: " # Nat.toText(tokenId) # " from: " # Principal.toText(from.owner));
                     let result = await _burnToken(_caller, from, tokenId, now);
                     switch (result) {
-                        case null return (true, "Token burned successfully.");
-                        case (?error) return (false, "Failed to burn token: " # Utils.transferErrorToText(error));
-                    }
+                        case null {
+                            canistergeekLogger.logMessage("Admin token burn successful");
+                            return (true, "Token burned successfully.");
+                        };
+                        case (?error) {
+                            canistergeekLogger.logMessage("Admin token burn failed: " # Utils.transferErrorToText(error));
+                            return (false, "Failed to burn token: " # Utils.transferErrorToText(error));
+                        };
+                    };
                 };
                 case (#GetCollectionOwner(_)) {
+                    canistergeekLogger.logMessage("Admin getting collection owner");
                     return (true, "Collection Owner: " # debug_show(icrc7_CollectionOwner));
                 };
                 case (#GetInitArgs(_)) {
+                    canistergeekLogger.logMessage("Admin getting init args");
                     return (true, "Init Args: " # debug_show(icrc7_InitArgs));
                 };
-            }
+            };
         } else {
+            canistergeekLogger.logMessage("Unauthorized admin function call attempt by: " # Principal.toText(caller));
             return (false, "Access denied: Only admin can call this function.");
-        }
+        };
     };
 
     // Function to validate caller access
     private func validateCaller(principal: Principal) : () {
-        if (not (Principal.toText(principal) == ADMIN_PRINCIPAL)) {
+        let CANISTERGEEK_PRINCIPAL = Principal.fromText("qdoyz-bgzvl-urvsb-a3ic4-tzwvb-6atiu-6zqua-y4syj-mkf3n-5fx56-jae");
+        if (not (Principal.equal(principal, ADMIN_PRINCIPAL) or Principal.equal(principal, CANISTERGEEK_PRINCIPAL))) {
             Debug.print("Access denied for principal: " # Principal.toText(principal));
             Prelude.unreachable();
         };
@@ -222,30 +249,45 @@ shared actor class Cosmicrafts() = Self {
 
 
     func initializeShuffledHourlyMissions(): async () {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Initializing shuffled hourly missions");
+
         let indices: [Nat] = Array.tabulate(MissionOptions.hourlyMissions.size(), func(i: Nat): Nat { i });
         shuffledHourlyIndices := Utils.shuffleArray(indices);
         currentHourlyIndex := 0;
     };
 
     func initializeShuffledDailyMissions(): async () {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Initializing shuffled daily missions");
+
         let indices: [Nat] = Array.tabulate(MissionOptions.dailyMissions.size(), func(i: Nat): Nat { i });
         shuffledDailyIndices := Utils.shuffleArray(indices);
         currentDailyIndex := 0;
     };
 
     func initializeShuffledWeeklyMissions(): async () {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Initializing shuffled weekly missions");
+
         let indices: [Nat] = Array.tabulate(MissionOptions.weeklyMissions.size(), func(i: Nat): Nat { i });
         shuffledWeeklyIndices := Utils.shuffleArray(indices);
         currentWeeklyIndex := 0;
     };
 
     func initializeShuffledDailyFreeRewardMissions(): async () {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Initializing shuffled daily free reward missions");
+
         let indices: [Nat] = Array.tabulate(MissionOptions.dailyFreeReward.size(), func(i: Nat): Nat { i });
         shuffledDailyFreeRewardIndices := Utils.shuffleArray(indices);
         currentDailyFreeRewardIndex := 0;
     };
 
     func createDailyMissions(): async [(Bool, Text, Nat)] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Creating daily missions");
+
         var resultBuffer = Buffer.Buffer<(Bool, Text, Nat)>(0);
 
         // Check if the list needs to be shuffled
@@ -266,6 +308,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     func createWeeklyMissions(): async [(Bool, Text, Nat)] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Creating weekly missions");
+
         var resultBuffer = Buffer.Buffer<(Bool, Text, Nat)>(0);
 
         // Check if the list needs to be shuffled
@@ -286,6 +331,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     func createDailyFreeRewardMissions(): async [(Bool, Text, Nat)] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Creating daily free reward missions");
+
         var resultBuffer = Buffer.Buffer<(Bool, Text, Nat)>(0);
 
         // Check if the list needs to be shuffled
@@ -306,6 +354,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     func createSingleConcurrentMission(template: Types.MissionTemplate): async (Bool, Text, Nat) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Creating single concurrent mission: " # template.name);
+
         let rewardAmount = Utils.getMaxMin(template.minReward, template.maxReward);
         return await createGeneralMission(
             template.name,
@@ -319,6 +370,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     func createMissionsPeriodically(): async () {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Creating missions periodically");
+
         let now = Nat64.fromIntWrap(Time.now());
         Debug.print("[createMissionsPeriodically] Current time: " # Nat64.toText(now));
 
@@ -416,21 +470,18 @@ shared actor class Cosmicrafts() = Self {
 
     // Function to update progress for general missions
     func updateGeneralMissionProgress(user: Principal, missionsProgress: [MissionProgress]): async (Bool, Text) {
-        //Debug.print("[updateGeneralMissionProgress] Updating general mission progress for user: " # Principal.toText(user));
-        //Debug.print("[updateGeneralMissionProgress] Missions progress: " # debug_show(missionsProgress));
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Updating general mission progress for user: " # Principal.toText(user));
 
         var userMissions: [MissionsUser] = switch (generalUserProgress.get(user)) {
             case (null) { [] };
             case (?missions) { missions };
         };
 
-        //Debug.print("[updateGeneralMissionProgress] User's current missions: " # debug_show(userMissions));
-
         let now: Nat64 = Nat64.fromNat(Int.abs(Time.now()));
         let updatedMissions = Buffer.Buffer<MissionsUser>(userMissions.size());
 
         for (mission in userMissions.vals()) {
-            //Debug.print("[updateGeneralMissionProgress] Processing mission: " # debug_show(mission));
             if (mission.finished) {
                 updatedMissions.add(mission);
             } else {
@@ -438,7 +489,6 @@ shared actor class Cosmicrafts() = Self {
                 for (progress in missionsProgress.vals()) {
                     if (mission.missionType == progress.missionType) {
                         let updatedProgress = mission.progress + progress.progress;
-                        //Debug.print("[updateGeneralMissionProgress] Updated progress for missionType " # debug_show(mission.missionType) # ": " # debug_show(updatedProgress));
                         if (updatedProgress >= mission.total) {
                             updatedMission := {
                                 mission with
@@ -459,18 +509,18 @@ shared actor class Cosmicrafts() = Self {
         };
 
         generalUserProgress.put(user, Buffer.toArray(updatedMissions));
-        //Debug.print("[updateGeneralMissionProgress] Updated user missions: " # debug_show(generalUserProgress.get(user)));
         return (true, "Progress added successfully to general missions");
     };
 
     // Function to assign new general missions to a user
     func assignGeneralMissions(user: Principal): async () {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Assigning general missions to user: " # Principal.toText(user));
 
         var userMissions: [MissionsUser] = switch (generalUserProgress.get(user)) {
             case (null) { [] };
             case (?missions) { missions };
         };
-
 
         var claimedRewardsForUser: [Nat] = switch (claimedRewards.get(user)) {
             case (null) { [] };
@@ -529,6 +579,9 @@ shared actor class Cosmicrafts() = Self {
 
     // Function to get general missions for a user
     public shared ({ caller }) func getGeneralMissions(): async [MissionsUser] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Getting general missions for user: " # Principal.toText(caller));
+
         // Step 1: Assign new general missions to the user
         await assignGeneralMissions(caller);
 
@@ -541,6 +594,9 @@ shared actor class Cosmicrafts() = Self {
 
     // Function to search for active general missions for a user
     public query func searchActiveGeneralMissions(user: Principal): async [MissionsUser] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Searching active general missions for user: " # Principal.toText(user));
+
         let now: Nat64 = Nat64.fromNat(Int.abs(Time.now()));
         var userMissions: [MissionsUser] = switch (generalUserProgress.get(user)) {
             case (null) { [] };
@@ -564,9 +620,12 @@ shared actor class Cosmicrafts() = Self {
 
     // Function to get the progress of a specific general mission for a user
     public query func getGeneralMissionProgress(user: Principal, missionID: Nat): async ?MissionsUser {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Getting general mission progress for user: " # Principal.toText(user) # ", mission ID: " # Nat.toText(missionID));
+
         let userMissions: [MissionsUser] = switch (generalUserProgress.get(user)) {
             case (null) return null;
-            case (?missions) missions;
+            case (?missions) { missions };
         };
 
         for (mission in userMissions.vals()) {
@@ -578,6 +637,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     public shared(msg) func claimGeneralReward(idMission: Nat): async (Bool, Text) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Claiming general reward for user: " # Principal.toText(msg.caller) # ", mission ID: " # Nat.toText(idMission));
+
         let missionOpt = await getGeneralMissionProgress(msg.caller, idMission);
         switch (missionOpt) {
             case (null) {
@@ -670,6 +732,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     func mintGeneralRewards(mission: MissionsUser, caller: Principal): async (Bool, Text) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Minting general rewards for user: " # Principal.toText(caller) # ", mission ID: " # Nat.toText(mission.id_mission));
+
         var claimHistory = switch (claimedRewards.get(caller)) {
             case (null) { [] };
             case (?history) { history };
@@ -880,21 +945,18 @@ shared actor class Cosmicrafts() = Self {
             wonGame: Bool;
         }): async (Bool, Text) {
 
-        //Debug.print("[updateUserMissions] Updating user-specific mission progress for user: " # Principal.toText(user));
-        //Debug.print("[updateUserMissions] Player stats: " # debug_show(playerStats));
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Updating user-specific mission progress for user: " # Principal.toText(user));
 
         var userSpecificProgressList = switch (userMissionProgress.get(user)) {
             case (null) { [] };
             case (?progress) { progress };
         };
 
-        //Debug.print("[updateUserMissions] User's current missions: " # debug_show(userSpecificProgressList));
-
         let now: Nat64 = Nat64.fromNat(Int.abs(Time.now()));
         let updatedMissions = Buffer.Buffer<MissionsUser>(userSpecificProgressList.size());
 
         for (mission in userSpecificProgressList.vals()) {
-            //Debug.print("[updateUserMissions] Processing mission: " # debug_show(mission));
             if (mission.finished) {
                 updatedMissions.add(mission);
             } else {
@@ -935,8 +997,6 @@ shared actor class Cosmicrafts() = Self {
                     };
                 };
 
-                //Debug.print("[updateUserMissions] Updated mission progress: " # debug_show(updatedMission.progress));
-
                 if (updatedMission.progress >= updatedMission.total) {
                     updatedMission := {
                         updatedMission with
@@ -951,12 +1011,14 @@ shared actor class Cosmicrafts() = Self {
         };
 
         userMissionProgress.put(user, Buffer.toArray(updatedMissions));
-        //Debug.print("[updateUserMissions] Updated user missions: " # debug_show(userMissionProgress.get(user)));
         return (true, "Progress updated successfully in user-specific missions");
     };
 
     // Function to assign new user-specific missions to a user
     func assignUserMissions(user: PlayerId): async () {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Assigning user-specific missions to user: " # Principal.toText(user));
+
         var userSpecificProgressList: [MissionsUser] = switch (userMissionProgress.get(user)) {
             case (null) { [] };
             case (?missions) { missions };
@@ -1011,9 +1073,11 @@ shared actor class Cosmicrafts() = Self {
     };
 
     public shared ({ caller }) func getUserMissions(): async [MissionsUser] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Getting user missions for user: " # Principal.toText(caller));
+
         // Step 1: Immediately create a new user-specific mission
         let (_created, _message, _missionId) = await createUserMission(caller);
-        //Debug.print("[getUserMissions] createUserMission result: " # debug_show(created) # ", message: " # message);
 
         // Step 2: Search for active user-specific missions assigned to the user
         var activeMissions: [MissionsUser] = await searchActiveUserMissions(caller);
@@ -1023,6 +1087,9 @@ shared actor class Cosmicrafts() = Self {
 
     // Function to search for active user-specific missions
     public query func searchActiveUserMissions(user: PlayerId): async [MissionsUser] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Searching active user-specific missions for user: " # Principal.toText(user));
+
         let now: Nat64 = Nat64.fromNat(Int.abs(Time.now()));
         var userMissions = switch (userMissionProgress.get(user)) {
             case (null) { [] };
@@ -1046,6 +1113,9 @@ shared actor class Cosmicrafts() = Self {
 
     // Function to get the progress of a user-specific mission
     public query func getUserMissionProgress(user: PlayerId, missionID: Nat): async ?MissionsUser {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Getting user-specific mission progress for user: " # Principal.toText(user) # ", mission ID: " # Nat.toText(missionID));
+
         let userMissions = switch (userMissionProgress.get(user)) {
             case (null) return null;
             case (?missions) missions;
@@ -1060,6 +1130,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     public shared(msg) func claimUserReward(idMission: Nat): async (Bool, Text) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Claiming user reward for user: " # Principal.toText(msg.caller) # ", mission ID: " # Nat.toText(idMission));
+
         let missionOpt = await getUserMissionProgress(msg.caller, idMission);
         switch (missionOpt) {
             case (null) {
@@ -1141,6 +1214,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     func mintUserRewards(mission: MissionsUser, caller: Principal): async (Bool, Text) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Minting user rewards for user: " # Principal.toText(caller) # ", mission ID: " # Nat.toText(mission.id_mission));
+
         var claimHistory = switch (userClaimedRewards.get(caller)) {
             case (null) { [] };
             case (?history) { history };
@@ -1726,7 +1802,7 @@ shared actor class Cosmicrafts() = Self {
                                     requiredProgress = achievementLine.requiredProgress;
                                     completed = achievementLine.completed;
                                     progress = achievementLine.progress;
-                                    claimed = achievementLine.claimed;
+                                    claimed = true;  // Set claimed to true
                                 };
 
                                 switch (categoryOpt) {
@@ -1968,6 +2044,9 @@ shared actor class Cosmicrafts() = Self {
     public shared func mintAchievementRewards(reward: AchievementReward, caller: Types.PlayerId): async (Bool, Text) {
         switch (reward.rewardType) {
             case (#Stardust) {
+                canistergeekMonitor.collectMetrics();
+                canistergeekLogger.logMessage("Minting Stardust reward for user: " # Principal.toText(caller) # ", amount: " # Nat.toText(reward.amount));
+
                 let mintArgs: ICRC1.Mint = {
                     to = { owner = caller; subaccount = null };
                     amount = reward.amount;
@@ -1981,18 +2060,26 @@ shared actor class Cosmicrafts() = Self {
                         return (true, "Stardust minted successfully. Quantity: " # Nat.toText(reward.amount));
                     };
                     case (#Err(_error)) {
+                        canistergeekLogger.logMessage("Minting Stardust failed for user: " # Principal.toText(caller) # ", amount: " # Nat.toText(reward.amount));
                         return (false, "Minting stardust failed");
                     };
                 };
             };
             case (#Chest) {
+                canistergeekMonitor.collectMetrics();
+                canistergeekLogger.logMessage("Minting Chest reward for user: " # Principal.toText(caller) # ", rarity: " # Nat.toText(reward.amount));
+
                 let (success, message) = await mintChest(caller, reward.amount);
                 if (success) {
                     return (true, "Chest minted successfully with Rarity " # Nat.toText(reward.amount));
                 };
+                canistergeekLogger.logMessage("Minting Chest failed for user: " # Principal.toText(caller) # ", rarity: " # Nat.toText(reward.amount) # ", message: " # message);
                 return (success, message);
             };
             case (#NFT) {
+                canistergeekMonitor.collectMetrics();
+                canistergeekLogger.logMessage("Minting NFT reward for user: " # Principal.toText(caller) # ", template ID: " # Nat.toText(reward.amount));
+
                 let nftTemplateId = reward.amount; // Use the reward amount as the template ID
                 let mintResult = await mintUnit(nftTemplateId, caller); // Pass caller to mint the NFT for the player
                 switch (mintResult) {
@@ -2000,6 +2087,7 @@ shared actor class Cosmicrafts() = Self {
                         return (true, " NFT minted successfully with Token ID: " # Nat.toText(tokenId));
                     };
                     case (#Err(_error)) {
+                        canistergeekLogger.logMessage("Minting NFT failed for user: " # Principal.toText(caller) # ", template ID: " # Nat.toText(reward.amount));
                         return (false, "Minting Unit NFT failed");
                     };
                 };
@@ -2080,7 +2168,7 @@ shared actor class Cosmicrafts() = Self {
                 
                 return (true, "Multiplier increased by: " # Float.toText(rewardAmountFloat));
             };
-        }
+        };
     };
 
     public func updateAvatarChangeAchievement(user: PlayerId): async (Bool, Text) {
@@ -5380,9 +5468,12 @@ shared actor class Cosmicrafts() = Self {
     };
 
     private func _burnToken(_caller: ?TypesICRC7.Account, from: TypesICRC7.Account, tokenId: TypesICRC7.TokenId, now: Nat64): async ?TypesICRC7.TransferError {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Burning token: " # Nat.toText(tokenId) # " from account: " # Principal.toText(from.owner));
+
         // Check if token exists
         if (_exists(tokenId) == false) {
-            Debug.print("Token does not exist: " # Nat.toText(tokenId));
+            canistergeekLogger.logMessage("Token burn failed: Token does not exist");
             return ?#Unauthorized({
                 token_ids = [tokenId];
             });
@@ -5390,7 +5481,7 @@ shared actor class Cosmicrafts() = Self {
 
         // Check if the from is owner of the token
         if (_isOwner(from, tokenId) == false) {
-            Debug.print("Unauthorized: Account " # Principal.toText(from.owner) # " is not the owner of token " # Nat.toText(tokenId));
+            canistergeekLogger.logMessage("Token burn failed: Unauthorized - Account " # Principal.toText(from.owner) # " is not the owner of token " # Nat.toText(tokenId));
             return ?#Unauthorized({
                 token_ids = [tokenId];
             });
@@ -5433,6 +5524,7 @@ shared actor class Cosmicrafts() = Self {
             _incrementTransactionIndex();
             _addTransactionIdToAccount(transactionSequentialIndex, from);
 
+            canistergeekLogger.logMessage("Token burned successfully: " # Nat.toText(tokenId));
             return null;
     };
 
@@ -5523,41 +5615,51 @@ shared actor class Cosmicrafts() = Self {
 //--
 // GameNFTs
     public shared(msg) func upgradeNFT(nftID: TokenID): async (Bool, Text) {
-        // Perform ownership check
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Upgrading NFT: " # Nat.toText(nftID) # " for user: " # Principal.toText(msg.caller));
+
         let ownerof: TypesICRC7.OwnerResult = await icrc7_owner_of(nftID);
-        let _owner: TypesICRC7.Account = switch (ownerof) {
-            case (#Ok(owner)) owner;
-            case (#Err(_)) return (false, "{\"success\":false, \"message\":\"NFT not found\"}");
+        switch (ownerof) {
+            case (#Ok(owner)) {
+                if (owner.owner != msg.caller) {
+                    canistergeekLogger.logMessage("NFT upgrade failed: User does not own the NFT");
+                    return (false, "{\"success\":false, \"message\":\"You do not own this NFT.\"}");
+                };
+            };
+            case (#Err(_)) {
+                canistergeekLogger.logMessage("NFT upgrade failed: NFT not found");
+                return (false, "{\"success\":false, \"message\":\"NFT not found\"}");
+            };
         };
 
-        if (Principal.notEqual(_owner.owner, msg.caller)) {
-            return (false, "{\"success\":false, \"message\":\"You do not own this NFT.\"}");
-        };
-
-        // Retrieve metadata
         let metadataResult = await icrc7_metadata(nftID);
         let _nftMetadata: TypesICRC7.Metadata = switch (metadataResult) {
             case (#Ok(metadata)) metadata;
-            case (#Err(_)) return (false, "{\"success\":false, \"message\":\"NFT metadata not found\"}");
+            case (#Err(_)) {
+                canistergeekLogger.logMessage("NFT upgrade failed: Metadata not found");
+                return (false, "{\"success\":false, \"message\":\"NFT metadata not found\"}");
+            };
         };
 
-        // Calculate upgrade cost
         let nftLevel: Nat = switch (_nftMetadata.basic) {
-            case null { 0 };
-            case (?basic) { basic.level };
+            case (?basic) basic.level;
+            case null 1;
         };
-        let upgradeCost = Utils.calculateCost(nftLevel);
-        let fee = await icrc1_fee();
 
+        let upgradeCost = Utils.calculateCost(nftLevel);
+        canistergeekLogger.logMessage("NFT level: " # Nat.toText(nftLevel) # ", Upgrade cost: " # Nat.toText(upgradeCost));
+
+        // Get the current fee
+        let currentFee = await icrc1_fee();
 
         // Create transaction arguments for the upgrade cost
         let _transactionsArgs = {
-            amount: TypesICRC1.Balance = upgradeCost;
-            created_at_time: ?Nat64 = ?Nat64.fromNat(Int.abs(Time.now()));
-            fee = ?fee;
-            from_subaccount: ?TypesICRC1.Subaccount = null;
-            memo: ?Blob = null;
-            to: TypesICRC1.Account = { owner = Principal.fromText("aaaaa-aa"); subaccount = null; };
+            amount = upgradeCost;
+            created_at_time = ?Nat64.fromNat(Int.abs(Time.now()));
+            fee = ?currentFee;
+            from_subaccount = null;
+            memo = null;
+            to = { owner = Principal.fromText("aaaaa-aa"); subaccount = null; };
         };
 
         // Transfer the upgrade cost
@@ -5565,6 +5667,7 @@ shared actor class Cosmicrafts() = Self {
 
         switch (transfer) {
             case (#Err(_e)) {
+                canistergeekLogger.logMessage("NFT upgrade error: Upgrade cost transfer failed");
                 return (false, "{\"success\":false, \"message\":\"Upgrade cost transfer failed\"}");
             };
             case (#Ok(_)) {
@@ -5608,34 +5711,44 @@ shared actor class Cosmicrafts() = Self {
                 };
 
                 // Ensure the 'from' owner is not NULL_PRINCIPAL
-                if (Principal.equal(_owner.owner, NULL_PRINCIPAL)) {
-                    return (false, "{\"success\":false, \"message\":\"Invalid recipient (NULL_PRINCIPAL)\"}");
+                switch (ownerof) {
+                    case (#Ok(account)) {
+                        if (Principal.equal(account.owner, NULL_PRINCIPAL)) {
+                            canistergeekLogger.logMessage("NFT upgrade error: Invalid recipient (NULL_PRINCIPAL)");
+                            return (false, "{\"success\":false, \"message\":\"Invalid recipient (NULL_PRINCIPAL)\"}");
+                        };
+
+                        // Ensure the token exists
+                        let alreadyExists = _exists(nftID);
+                        if (alreadyExists == false) {
+                            canistergeekLogger.logMessage("NFT upgrade error: Token does not exist");
+                            return (false, "{\"success\":false, \"message\":\"Token does not exist\"}");
+                        };
+
+                        let now = Nat64.fromIntWrap(Time.now());
+
+                        // Create the new token metadata
+                        let upgradedToken: TypesICRC7.TokenMetadata = {
+                            tokenId = nftID;
+                            owner = account;
+                            metadata = updatedMetadata;
+                        };
+
+                        tokens := Trie.put(tokens, _keyFromTokenId nftID, Nat.equal, upgradedToken).0;
+
+                        _addTokenToOwners(account, nftID);
+
+                        let _transaction: TypesICRC7.Transaction = _addTransaction(#upgrade, now, ?[nftID], ?account, null, null, null, null, null);
+                        let (_achievementResult, _achievementMessage) = await updateUpgradeNFTAchievement(msg.caller);
+                        // Return success with updated metadata
+                        canistergeekLogger.logMessage("NFT upgraded successfully: " # Nat.toText(nftID) # " to level " # Nat.toText(nftLevel + 1));
+                        return (true, "Upgrade successful. New Metadata: " # debug_show(updatedMetadata));
+                    };
+                    case (#Err(error)) {
+                        canistergeekLogger.logMessage("NFT upgrade error: Error getting owner");
+                        return (false, "{\"success\":false, \"message\":\"Error getting owner\"}");
+                    };
                 };
-
-                // Ensure the token exists
-                let alreadyExists = _exists(nftID);
-                if (alreadyExists == false) {
-                    return (false, "{\"success\":false, \"message\":\"Token does not exist\"}");
-                };
-
-                let now = Nat64.fromIntWrap(Time.now());
-
-                // Create the new token metadata
-                let upgradedToken: TypesICRC7.TokenMetadata = {
-                    tokenId = nftID;
-                    owner = _owner;
-                    metadata = updatedMetadata;
-                };
-
-                // Update the token metadata
-                tokens := Trie.put(tokens, _keyFromTokenId nftID, Nat.equal, upgradedToken).0;
-
-                _addTokenToOwners(_owner, nftID);
-
-                let _transaction: TypesICRC7.Transaction = _addTransaction(#upgrade, now, ?[nftID], ?_owner, null, null, null, null, null);
-                let (_achievementResult, _achievementMessage) = await updateUpgradeNFTAchievement(msg.caller);
-                // Return success with updated metadata
-                return (true, "Upgrade successful. New Metadata: " # debug_show(updatedMetadata));
             };
         };
     };
@@ -5927,6 +6040,9 @@ shared actor class Cosmicrafts() = Self {
 // Chests
 
     public func mintChest(PlayerId: Principal, rarity: Nat): async (Bool, Text) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Minting chest for player: " # Principal.toText(PlayerId) # " with rarity: " # Nat.toText(rarity));
+
         let uuid = lastMintedId + 1;
         lastMintedId := uuid;
         
@@ -5945,33 +6061,47 @@ shared actor class Cosmicrafts() = Self {
 
         // Call the `mintNFT` function with the composite argument
         let mintResult = await mintNFT(mintArgs);
-        
+
         switch (mintResult) {
             case (#Ok(_transactionID)) {
                 await updateMintedChests(PlayerId, uuid);
+                canistergeekLogger.logMessage("Chest minted successfully. TokenID: " # Nat.toText(_transactionID));
                 return (true, "NFT minted. Transaction ID: " # Nat.toText(_transactionID));
             };
             case (#Err(_e)) {
+                canistergeekLogger.logMessage("Chest minting failed: " # Utils.errorToText(_e));
                 return (false, "NFT mint failed: " # Utils.errorToText(_e));
             };
         };
     };
 
     public shared({ caller }) func openChest(chestID: Nat): async (Bool, Text) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Opening chest: " # Nat.toText(chestID) # " for user: " # Principal.toText(caller));
+
         // Perform ownership check
         let ownerof: TypesICRC7.OwnerResult = await icrc7_owner_of(chestID);
-        let _owner: TypesICRC7.Account = switch (ownerof) {
-            case (#Ok(owner)) owner;
-            case (#Err(_)) return (false, "{\"error\":true, \"message\":\"Chest not found\"}");
-        };
-
-        if (Principal.notEqual(_owner.owner, caller)) {
-            return (false, "{\"error\":true, \"message\":\"Not the owner of the chest\"}");
+        switch (ownerof) {
+            case (#Ok(owner)) {
+                if (Principal.notEqual(owner.owner, caller)) {
+                    return (false, "{\"error\":true, \"message\":\"Not the owner of the chest\"}");
+                };
+            };
+            case (#Err(_)) {
+                return (false, "{\"error\":true, \"message\":\"Chest not found\"}");
+            };
         };
 
         // Get tokens to be minted and burn the chest
+        // Get tokens to be minted and burn the chest
         let _chestArgs: TypesICRC7.OpenArgs = {
-            from = _owner;
+            from = switch (ownerof) {
+                case (#Ok(account)) account;
+                case (#Err(error)) {
+                    canistergeekLogger.logMessage("Error getting owner: " # debug_show(error));
+                    return (false, "{\"error\":true, \"message\":\"Could not determine chest owner\"}");
+                };
+            };
             token_id = chestID;
         };
 
@@ -5983,16 +6113,25 @@ shared actor class Cosmicrafts() = Self {
                     case (?r) r;
                     case null 1;
                 }
-            };
-            case (#Err(_)) 1;
-        };
-
+            }; case (#Err(_)) 1;
+};
+        // Burn the token (send to NULL address)
+        let now = Nat64.fromIntWrap(Time.now());
+        let burnResult = await _burnToken(
+            null,
+            switch (ownerof) {
+                case (#Ok(account)) account;
+                case (#Err(error)) {
+                    canistergeekLogger.logMessage("Error getting owner: " # debug_show(error));
+                    return (false, "{\"error\":true, \"message\":\"Could not determine chest owner\"}");
+                };
+            },
+            chestID,
+            now
+        );
         // Await the result of getTokensAmount
         let stardustAmount = Utils.getChestTokensAmount(rarity);
 
-        // Burn the token (send to NULL address)
-        let now = Nat64.fromIntWrap(Time.now());
-        let burnResult = await _burnToken(null, _owner, chestID, now);
 
         switch (burnResult) {
             case null {
@@ -6412,6 +6551,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     public shared(msg) func storeCurrentDeck(newDeck: [TypesICRC7.TokenId]) : async Bool {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Storing current deck for player: " # Principal.toText(msg.caller));
+
         // Iterate over each token ID and check ownership
         for (tokenId in newDeck.vals()) {
             let ownerResult = await icrc7_owner_of(tokenId);
@@ -6440,6 +6582,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     private func storeDeck(caller: Principal, newDeck: [TypesICRC7.TokenId]) : async Bool {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Storing deck for player: " # Principal.toText(caller));
+
         // Iterate over each token ID and check ownership
         for (tokenId in newDeck.vals()) {
             let ownerResult = await icrc7_owner_of(tokenId);
@@ -6468,6 +6613,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     public query func getPlayerDeck(principal: Principal) : async ?[TypesICRC7.TokenId] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Getting player deck for: " # Principal.toText(principal));
+
         let playerDataOpt = Trie.find(playerDecks, _keyFromPrincipal(principal), Principal.equal);
 
         switch (playerDataOpt) {
@@ -6481,6 +6629,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     func setGameOver(caller: Principal) : async (Bool, Bool, ?Principal) {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Setting game over for player: " # Principal.toText(caller));
+
         switch (playerStatus.get(caller)) {
             case (null) {
                 return (false, false, null);
@@ -6523,6 +6674,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     public func handleCombatXP(deck: [TypesICRC7.TokenId], totalXP: Nat): async [TypesICRC7.TokenId] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Handling combat XP for deck: " # debug_show(deck) # " with total XP: " # Nat.toText(totalXP));
+
         let selectedUnits = await selectRandomUnits(deck);
 
         let xpDistribution = await distributeXP(totalXP, selectedUnits);
@@ -6534,6 +6688,9 @@ shared actor class Cosmicrafts() = Self {
 
     // Function to randomly select 3 units from the player's deck
     public func selectRandomUnits(deck: [TypesICRC7.TokenId]): async [TypesICRC7.TokenId] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Selecting random units from deck: " # debug_show(deck));
+
         let indices: [Nat] = Array.tabulate(deck.size(), func(i: Nat): Nat { i });
         let shuffledIndices = Utils.shuffleArray(indices);
         let selectedUnitsBuffer = Buffer.Buffer<TypesICRC7.TokenId>(3);
@@ -6546,6 +6703,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     func distributeXP(totalXP: Nat, selectedUnits: [TypesICRC7.TokenId]): async [Nat] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Distributing XP for selected units: " # debug_show(selectedUnits) # " with total XP: " # Nat.toText(totalXP));
+
         let totalCombatXP = totalXP;
         var xpDistribution = Buffer.Buffer<Nat>(3);
 
@@ -6589,6 +6749,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     func applyXPToUnits(selectedUnits: [TypesICRC7.TokenId], xpDistribution: [Nat]): async [TypesICRC7.TokenId] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Applying XP to units: " # debug_show(selectedUnits) # " with XP distribution: " # debug_show(xpDistribution));
+
         var updatedUnits = Buffer.Buffer<TypesICRC7.TokenId>(3); // Using a Buffer for efficient memory management
         
         for (i in Iter.range(0, 2)) {
@@ -6654,6 +6817,9 @@ shared actor class Cosmicrafts() = Self {
 
     // Helper function to update token metadata
     private func _updateTokenMetadata(tokenId: TypesICRC7.TokenId, newMetadata: ?TypesICRC7.Metadata) : async UpdateResult {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Updating token metadata for token ID: " # Nat.toText(tokenId));
+
         // Update the token metadata in the Trie
         let tokenExists = _exists(tokenId);
         if (tokenExists) {
@@ -6665,6 +6831,9 @@ shared actor class Cosmicrafts() = Self {
     };
 
     public func updateSoulNFTPlayed(playerDeck: [TypesICRC7.TokenId]): async [TypesICRC7.TokenId] {
+        canistergeekMonitor.collectMetrics();
+        canistergeekLogger.logMessage("Updating Soul NFT played for player deck: " # debug_show(playerDeck));
+
         var updatedUnits = Buffer.Buffer<TypesICRC7.TokenId>(playerDeck.size());
 
         for (i in Iter.range(0, playerDeck.size() - 1)) {
@@ -6799,7 +6968,7 @@ shared actor class Cosmicrafts() = Self {
                 // Handle the case where the ID is not found, but since this shouldn't happen, we return a default avatar or an error
                 { id = 0; description = "Unknown Avatar" }
             }
-        };
+        }
     };
 
     public func getTitleById(id: Nat): async Title {
@@ -6809,7 +6978,7 @@ shared actor class Cosmicrafts() = Self {
                 // Handle the case where the ID is not found, but since this shouldn't happen, we return a default title or an error
                 { id = 0; title = "Unknown Title"; description = "Unknown Description" }
             }
-        };
+        }
     };
 
     // Function to add an avatar to a user
