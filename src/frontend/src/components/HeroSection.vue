@@ -746,9 +746,9 @@ onUnmounted(() => {
   justify-content: center;
   padding: 1.5rem 2rem;
   gap: 1.5rem;
-  background: linear-gradient(125deg, rgba(49, 71, 119, 0.359), rgba(33, 44, 89, 0.428), rgba(127, 38, 139, 0.4));
-  backdrop-filter: blur(8px);
-  border-top: 1px solid rgba(255, 255, 255, 0.181);
+  background: linear-gradient(125deg, rgba(49, 71, 119, 0.4), rgba(33, 44, 89, 0.45), rgba(127, 38, 139, 0.45));
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   z-index: 6;
   box-sizing: border-box;
   opacity: 1; /* Ensure it's visible by default after initial animation */
@@ -756,8 +756,8 @@ onUnmounted(() => {
   transform: translateZ(0);
   transition: transform 0.5s ease-out, backdrop-filter 0.5s ease-out;
   box-shadow: 
-    0 -10px 30px rgba(0, 0, 0, 0.2),
-    0 -1px 10px rgba(0, 140, 255, 0.1);
+    0 -10px 30px rgba(0, 0, 0, 0.25),
+    0 -1px 10px rgba(0, 140, 255, 0.15);
   overflow: hidden;
 }
 
@@ -845,13 +845,13 @@ onUnmounted(() => {
 /* Primary cosmic button */
 .cosmic-button-primary {
   background: linear-gradient(135deg, 
-    rgba(15, 185, 253, 0.85) 0%, 
-    rgba(77, 207, 255, 0.85) 50%,
-    rgba(0, 157, 223, 0.85) 100%);
+    rgba(15, 185, 253, 0.9) 0%, 
+    rgba(77, 207, 255, 0.9) 50%,
+    rgba(0, 157, 223, 0.9) 100%);
   color: #fff;
   box-shadow: 
     0 6px 15px rgba(0, 0, 0, 0.25),
-    0 0 15px rgba(15, 185, 253, 0.3),
+    0 0 15px rgba(15, 185, 253, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2),
     inset 0 -2px 0 rgba(0, 0, 0, 0.1);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -865,9 +865,9 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg, 
-    rgba(15, 185, 253, 0.8) 0%, 
-    rgba(77, 207, 255, 0.9) 50%, 
-    rgba(0, 140, 255, 0.8) 100%);
+    rgba(15, 185, 253, 0.9) 0%, 
+    rgba(77, 207, 255, 1) 50%, 
+    rgba(0, 140, 255, 0.9) 100%);
   opacity: 0;
   z-index: -1;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -879,17 +879,20 @@ onUnmounted(() => {
   transform: translateZ(0);
 }
 
-/* Outline cosmic button */
+/* Outline cosmic button - Orange version */
 .cosmic-button-outline {
-  background: rgba(15, 185, 253, 0.08);
-  border: 1px solid rgba(15, 185, 253, 0.3);
-  color: rgba(15, 185, 253, 0.9);
+  background: linear-gradient(135deg, 
+    rgba(255, 172, 6, 0.9) 0%, 
+    rgba(255, 123, 0, 0.9) 50%,
+    rgba(205, 105, 12, 0.9) 100%);
+  border: 1px solid rgba(255, 153, 0, 0.3);
+  color: #fff;
   box-shadow: 
-    0 4px 15px rgba(0, 0, 0, 0.2),
-    0 0 15px rgba(15, 185, 253, 0.1),
-    inset 0 0 0 1px rgba(15, 185, 253, 0.1);
-  backdrop-filter: blur(4px);
-  text-shadow: 0 0 5px rgba(15, 185, 253, 0.4);
+    0 4px 15px rgba(0, 0, 0, 0.25),
+    0 0 15px rgba(255, 153, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .cosmic-button-outline::before {
@@ -899,7 +902,10 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(15, 185, 253, 0.15);
+  background: linear-gradient(135deg, 
+    rgba(255, 172, 6, 0.95) 0%, 
+    rgba(255, 123, 0, 1) 50%,
+    rgba(205, 105, 12, 0.95) 100%);
   opacity: 0;
   z-index: -1;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -907,13 +913,12 @@ onUnmounted(() => {
 }
 
 .cosmic-button-outline:hover {
-  border-color: rgba(15, 185, 253, 0.5);
-  color: rgba(15, 185, 253, 1);
-  text-shadow: 0 0 8px rgba(15, 185, 253, 0.6);
+  border-color: rgba(255, 153, 0, 0.5);
   box-shadow: 
-    0 8px 20px rgba(0, 0, 0, 0.25), 
-    0 0 20px rgba(15, 185, 253, 0.3),
-    inset 0 0 0 1px rgba(15, 185, 253, 0.2);
+    0 8px 20px rgba(0, 0, 0, 0.3), 
+    0 0 20px rgba(255, 153, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.15);
 }
 
 .cosmic-button-outline:hover::before {
@@ -921,7 +926,19 @@ onUnmounted(() => {
   transform: translateZ(0);
 }
 
-/* Button glow effect */
+.cosmic-button-outline .button-text {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 230, 200, 0.9));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cosmic-button-outline:hover .button-text {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 240, 220, 1));
+  -webkit-background-clip: text;
+  filter: drop-shadow(0 0 5px rgba(255, 153, 0, 0.5));
+}
+
+/* Button glow effect - Adjusted for both button types */
 .button-glow {
   position: absolute;
   top: 0;
@@ -930,27 +947,20 @@ onUnmounted(() => {
   height: 100%;
   z-index: 0;
   opacity: 0;
-  background: radial-gradient(circle at center, rgba(15, 185, 253, 0.6) 0%, transparent 70%);
   transition: opacity 0.5s ease;
   filter: blur(5px);
 }
 
-.cosmic-button:hover .button-glow {
+.cosmic-button-primary:hover .button-glow {
   opacity: 0.8;
   animation: pulseGlow 2s infinite alternate;
+  background: radial-gradient(circle at center, rgba(15, 185, 253, 0.6) 0%, transparent 70%);
 }
 
-@keyframes pulseGlow {
-  0% {
-    opacity: 0.4;
-    transform: scale(1);
-    filter: blur(5px);
-  }
-  100% {
-    opacity: 0.8;
-    transform: scale(1.2);
-    filter: blur(10px);
-  }
+.cosmic-button-outline:hover .button-glow {
+  opacity: 0.8;
+  animation: pulseGlow 2s infinite alternate;
+  background: radial-gradient(circle at center, rgba(255, 153, 0, 0.6) 0%, transparent 70%);
 }
 
 /* Button particles effect */
