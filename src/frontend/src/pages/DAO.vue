@@ -584,8 +584,8 @@ export default {
             // Scale context to match pixel ratio
             ctx.scale(dpr, dpr);
             
-            // Calculate star count based on screen area
-            const starCount = Math.floor((width * height) / 1600);
+            // Calculate star count based on screen area with increased density
+            const starCount = Math.floor((width * height) / 1000); // Increased density from 1600 to 1000
             stars.length = 0;
             
             for (let i = 0; i < starCount; i++) {
@@ -1244,7 +1244,7 @@ export default {
     opacity: 0;
   }
   to {
-    opacity: 0.6; /* Increased opacity for better visibility */
+    opacity: 0.8; /* Increased opacity for better visibility */
   }
 }
 
@@ -1805,7 +1805,7 @@ export default {
 
 /* Distribution Section Styles */
 .distribution-section {
-  padding: 8rem 2rem 6rem;
+  padding: 1rem 2rem 6rem;
   margin-top: -2rem;
   z-index: 2;
   position: relative;
@@ -2209,8 +2209,8 @@ export default {
 
 /* Governance Section Styles */
 .governance-section {
-  padding: 6rem 2rem 4rem;
-  margin-top: -2rem;
+  padding: 1rem 2rem 4rem;
+  margin-top: -4rem;
   z-index: 1;
   position: relative;
   width: 100%;
@@ -2450,21 +2450,10 @@ export default {
 
 /* Stakeholder Rights Section Styles - Desktop */
 .stakeholder-section {
-  padding: 6rem 2rem 4rem;
+  padding: 2rem 2rem 4rem;
   position: relative;
   overflow: hidden;
-  max-width: 1200px;
-  margin: 4rem auto;
-  background: linear-gradient(145deg,
-    rgba(15, 185, 253, 0.05) 0%,
-    rgba(15, 185, 253, 0.02) 100%
-  );
   border-radius: 12px;
-  border: 1px solid rgba(15, 185, 253, 0.1);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.05),
-    0 5px 15px rgba(0, 0, 0, 0.03);
-  width: 100%;
   max-width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -2487,13 +2476,13 @@ export default {
   z-index: 1;
   transform-style: preserve-3d;
   transition: all 0.4s ease;
-  margin-bottom: 3.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .rights-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2.5rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
   position: relative;
   z-index: 1;
   width: 100%;
@@ -2515,6 +2504,7 @@ export default {
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
   width: 100%;
+
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -2574,9 +2564,9 @@ export default {
 }
 
 .rights-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.75rem;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto .5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2609,7 +2599,7 @@ export default {
 }
 
 .rights-icon i {
-  font-size: 2rem;
+  font-size: 3rem;
   color: var(--color-primary);
   text-shadow: 0 0 15px rgba(15, 185, 253, 0.3);
   transition: all 0.4s ease;
@@ -2650,8 +2640,8 @@ export default {
 }
 
 .rights-content h3 {
-  font-size: 1.4rem;
-  margin-bottom: 1.25rem;
+  font-size: 2rem;
+  margin-bottom: .5rem;
   font-weight: var(--weight-bold);
   background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-primary) 100%);
   -webkit-background-clip: text;
@@ -2663,8 +2653,7 @@ export default {
 .rights-content p {
   font-size: 1rem;
   color: var(--color-text-secondary);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+  line-height: 1.1;
   transform: translateZ(5px);
   transition: all 0.3s ease;
 }
@@ -2681,8 +2670,8 @@ export default {
   margin-bottom: 0.75rem;
   position: relative;
   padding-left: 1.5rem;
-  font-size: 0.95rem;
-  color: var(--color-text-tertiary);
+  font-size: 0.85rem;
+  color: rgb(122, 242, 255);
   transition: all 0.3s ease;
   transform: translateZ(2px);
 }
@@ -2943,9 +2932,8 @@ export default {
 
 /* Join Section Styles */
 .join-section {
-  padding: 4rem 2rem;
-  margin: 4rem auto;
-  max-width: 1200px;
+  padding: 2rem 2rem;
+
   text-align: center;
   background: linear-gradient(135deg,
     rgba(15, 185, 253, 0.08) 0%,
@@ -3345,22 +3333,30 @@ export default {
 }
 
 /* Power Multipliers Section */
+
 .power-multipliers {
-  padding: 2rem;
-  margin-top: 2rem;
-  background: var(--cosmic-glass-bg);
+  padding: 1rem;
+  margin-top: -2.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
+  background: linear-gradient(145deg,
+    rgba(15, 185, 253, 0.06) 0%,
+    rgba(15, 185, 253, 0.1) 100%
+  );
   border-radius: 16px;
-  border: 1px solid rgba(15, 185, 253, 0.15);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-  width: 100%;
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
+  position: relative;
+  width: 100%;
   overflow: hidden;
 }
 
 .power-multipliers h3 {
   font-size: 2.25rem;
-  margin-bottom: 2rem;
-  text-align: left;
+  margin-bottom: 3rem;
+  text-align: center;
   color: var(--cosmic-text-primary);
   font-weight: 700;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
@@ -3635,7 +3631,7 @@ export default {
 
 /* Enhanced Stats Overview Section Styles */
 .stats-section {
-  padding: 8rem 2rem 6rem;
+  padding: 2rem 2rem 6rem;
   margin-top: -2rem;
   z-index: 2;
   position: relative;
@@ -4889,7 +4885,7 @@ img.hero-logo, img.dao-image {
 
 /* DAO Explainer Section Styles */
 .dao-explainer-section {
-  padding: 6rem 2rem 4rem;
+  padding: 2rem 2rem 4rem;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
@@ -5214,23 +5210,19 @@ img.hero-logo, img.dao-image {
   position: relative;
   z-index: 1;
   background: linear-gradient(
-    300deg, 
-    rgba(255, 255, 255, 1) 0%,
-    rgba(15, 185, 253, 1) 25%,
-    rgba(88, 101, 242, 1) 50%,
-    rgba(15, 185, 253, 1) 75%,
-    rgba(255, 255, 255, 1) 100%
+    135deg,
+    var(--cosmic-highlight-1) 0%,
+    var(--cosmic-highlight-2) 50%,
+    var(--cosmic-highlight-1) 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
-  text-shadow: 
-    0 0 30px rgba(15, 185, 253, 0.3),
-    0 0 60px rgba(15, 185, 253, 0.1);
+  text-shadow: var(--cosmic-font-glow);
   animation: textGradientShift 8s ease infinite;
-  transform: translateY(-1rem); /* Move up slightly */
+  transform: translateY(-1rem);
 }
 
 .hero-subtitle {
@@ -5844,7 +5836,7 @@ img.hero-logo, img.dao-image {
 /* Update Power Multipliers for full width */
 .multipliers-section .power-multipliers {
   padding: 2.5rem;
-  margin-top: 2.5rem;
+  margin-top: -2.5rem;
   margin-left: auto;
   margin-right: auto;
   max-width: 1200px;
@@ -5873,28 +5865,42 @@ img.hero-logo, img.dao-image {
 /* Responsive styles for multipliers section */
 @media (max-width: 768px) {
   .multipliers-section {
-    padding: 1rem 0.75rem;
-    overflow: hidden;
+    padding: 3rem 1rem 2rem;
+    overflow: visible;
   }
   
   .multipliers-section .power-multipliers {
-    max-width: 100%;
-    padding: 1.5rem;
-    margin: 1rem 0;
+    max-width: 90%;
+    padding: 1.75rem 1.5rem;
+    margin: 1rem auto;
     border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .multipliers-section .power-multipliers h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
   }
   
   .multipliers-section .multiplier-grid {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: 1.5rem;
     width: 100%;
   }
   
   .multipliers-section .multiplier-card {
-    padding: 1.25rem;
-    max-width: 100%;
+    padding: 1.5rem;
+    max-width: 90%;
+    margin: 0 auto;
     box-sizing: border-box;
+    transform: translateY(0);
+    opacity: 0;
+    animation: slideInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
+  
+  .multipliers-section .multiplier-card:nth-child(1) { animation-delay: 0.1s; }
+  .multipliers-section .multiplier-card:nth-child(2) { animation-delay: 0.3s; }
   
   .multipliers-section .multiplier-header i {
     width: 70px;
@@ -5910,23 +5916,34 @@ img.hero-logo, img.dao-image {
   .multipliers-section .multiplier-content .time {
     font-size: 1.2rem;
   }
+  
+  .multipliers-section .multiplier-card:active {
+    transform: scale(0.98);
+    background: linear-gradient(145deg,
+      rgba(15, 185, 253, 0.08) 0%,
+      rgba(15, 185, 253, 0.12) 100%
+    );
+    border-color: rgba(15, 185, 253, 0.25);
+    transition: all 0.3s ease;
+  }
 }
 
-/* More targeted mobile styles */
+/* More targeted styles for smaller mobile devices */
 @media (max-width: 480px) {
   .multipliers-section {
-    padding: 0.5rem;
+    padding: 2rem 0.75rem 1.5rem;
   }
   
   .multipliers-section .power-multipliers {
+    max-width: 100%;
     padding: 1.25rem;
-    margin-top: 0.75rem;
+    margin: 0.75rem auto;
+    border-radius: 8px;
   }
   
   .multipliers-section .power-multipliers h3 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    text-align: center;
   }
   
   .multipliers-section .multiplier-grid {
@@ -5934,7 +5951,8 @@ img.hero-logo, img.dao-image {
   }
   
   .multipliers-section .multiplier-card {
-    padding: 1rem;
+    padding: 1.25rem;
+    max-width: 100%;
   }
   
   .multipliers-section .multiplier-header i {
@@ -5954,5 +5972,21 @@ img.hero-logo, img.dao-image {
   .multipliers-section .multiplier-content .time {
     font-size: 1rem;
   }
+}
+
+.text-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--cosmic-highlight-1) 0%,
+    var(--cosmic-highlight-2) 50%,
+    var(--cosmic-highlight-1) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: var(--cosmic-font-glow);
+  animation: textGradientShift 8s ease infinite;
 }
 </style>
