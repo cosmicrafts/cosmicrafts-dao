@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import { FaceSmileIcon, XMarkIcon, PaperAirplaneIcon } from "@heroicons/vue/24/solid";
-import { ref, nextTick, onMounted, onUnmounted, watch, computed, shallowRef, inject } from "vue";
+import { ref, nextTick, onMounted, onUnmounted, watch, computed } from "vue";
+
+import EmojiPicker from './EmojiPicker.vue';
+import { useAuthStore } from '../stores/auth';
+import { useLanguageStore, languages } from '../stores/language';
+
+// Replace OpenAI client with OpenRouter base URL
+const API_BASE_URL = 'https://openrouter.ai/api/v1';
+
+// Define API keys with proper logging
+const PRIMARY_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
+// Use a known working key as backup
+const BACKUP_API_KEY = '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';
 
 // Define props
 const props = defineProps({
@@ -10,32 +22,29 @@ const props = defineProps({
   }
 });
 
-import EmojiPicker from './EmojiPicker.vue';
-import { useAuthStore } from '../stores/auth';
-import { useLanguageStore, languages } from '../stores/language';
+// Use the first available API key, ensure it's properly formatted
+const API_KEY = PRIMARY_API_KEY || BACKUP_API_KEY;
 
-// Use fixed API key instead of env variable to reduce lookup overhead
-const API_BASE_URL = 'https://openrouter.ai/api/v1';
-// Update API key with correct format - OpenRouter keys start with sk-or-v1-
-// This key needs to be replaced with a valid key from https://openrouter.ai/keys
-const API_KEY = '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';
-// Add a backup key in case the primary one fails - you'll need to replace this with a valid key
-const BACKUP_API_KEY = 'sk-or-v1-abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuvwxyz';
+// For debugging - uncomment if needed
+// console.log('API Key being used:', API_KEY ? 'Key available' : 'No key available');
 
-// Reactive state - use shallowRef for complex objects to improve performance
+// Debug log to check environment variable
+// console.log('Environment API Key available:', !!PRIMARY_API_KEY);
+// console.log('Using API Key type:', PRIMARY_API_KEY ? 'Environment' : 'Backup');
+
+// Reactive state
 const showChat = ref<boolean>(false);
 const isHovering = ref<boolean>(false);
 const isAnimating = ref<boolean>(false);
-const messages = shallowRef<Array<{ role: string; content: string }>>([]);
+const messages = ref<Array<{ role: string; content: string }>>([]);
 const prompt = ref<string>("");
 const loading = ref<boolean>(false);
 const currentMessage = ref<string>("");
 const isThinking = ref<boolean>(false);
 const thinkingContent = ref<string>("");
 
-// DOM refs
 const chatWindow = ref<HTMLElement | null>(null);
-const chatToggle = ref<HTMLElement | null>(null);
+const chatToggle = ref<HTMLElement | null>(null); // Reference to the chat toggle button
 const isDragging = ref<boolean>(false);
 const isResizing = ref<boolean>(false);
 const startX = ref<number>(0);
@@ -44,13 +53,13 @@ const startWidth = ref<number>(0);
 const startHeight = ref<number>(0);
 const offsetX = ref<number>(0);
 const offsetY = ref<number>(0);
-const isIconDragging = ref<boolean>(false);
+const isIconDragging = ref<boolean>(false); // Track if the chat icon is being dragged
 const iconStartX = ref<number>(0);
 const iconStartY = ref<number>(0);
 const iconOffsetX = ref<number>(0);
 const iconOffsetY = ref<number>(0);
-const lastTapTime = ref<number>(0);
-const isMaximized = ref<boolean>(false);
+const lastTapTime = ref<number>(0); // For detecting double taps on mobile
+const isMaximized = ref<boolean>(false); // Track if the chat window is maximized
 const previousWindowState = ref<{
   width: string;
   height: string;
@@ -72,6 +81,7 @@ const iconPosition = ref<{ left: string; bottom: string | null; right: string | 
   right: '1rem',
   top: null
 });
+// Chat window position
 const windowPosition = ref<{ left: string; bottom: string | null; right: string | null; top: string | null }>({
   left: 'auto',
   bottom: '6rem',
@@ -79,25 +89,16 @@ const windowPosition = ref<{ left: string; bottom: string | null; right: string 
   top: null
 });
 
-// Virtual scrolling implementation
-const VISIBLE_MESSAGES = 10; // Number of messages to render at once
-const startIndex = ref<number>(0);
-const visibleMessages = computed(() => {
-  const start = Math.max(0, messages.value.length - VISIBLE_MESSAGES - startIndex.value);
-  const end = messages.value.length - startIndex.value;
-  return messages.value.slice(start, end);
-});
-const canLoadMore = computed(() => messages.value.length > VISIBLE_MESSAGES + startIndex.value);
-
 const authStore = useAuthStore();
 const languageStore = useLanguageStore();
-const MAX_HISTORY_TOKENS = 800; // Reduced from 1000 for better performance
+const MAX_HISTORY_TOKENS = 1000; // Adjust for performance
 const showEmojiPicker = ref<boolean>(false);
-const chatInput = ref<HTMLElement | null>(null);
+const chatInput = ref<HTMLElement | null>(null); // Reference for the input box
 
 // Track if we've moved during touch
 const hasMoved = ref<boolean>(false);
-const lastHeaderTapTime = ref<number>(0);
+
+const lastHeaderTapTime = ref<number>(0); // For detecting double taps on header
 
 // Expose the chat's visibility state to parent components
 const isOpen = computed(() => showChat.value);
@@ -105,27 +106,18 @@ const isOpen = computed(() => showChat.value);
 // Add a new ref for storing the input text
 const savedInputText = ref<string>("");
 
-// Debounced save function to reduce localStorage writes
-let saveTimeout: number | null = null;
-const debouncedSave = (data: any, key: string) => {
-  if (saveTimeout) {
-    clearTimeout(saveTimeout);
-  }
-  saveTimeout = window.setTimeout(() => {
-    localStorage.setItem(key, JSON.stringify(data));
-  }, 500);
-};
-
 // Load saved position from localStorage with validation
 const loadIconPosition = (): void => {
-  try {
-    const savedPosition = localStorage.getItem('chatIconPosition');
-    if (savedPosition) {
-      iconPosition.value = JSON.parse(savedPosition);
+  const savedPosition = localStorage.getItem('chatIconPosition');
+  if (savedPosition) {
+    try {
+      const parsedPosition = JSON.parse(savedPosition);
+      // Apply the saved position, but validate it first
+      iconPosition.value = parsedPosition;
+    } catch (error) {
+      console.error('Error parsing saved chat icon position', error);
+      resetIconPosition();
     }
-  } catch (error) {
-    console.error('Error parsing saved chat icon position', error);
-    resetIconPosition();
   }
 };
 
@@ -137,7 +129,7 @@ const resetIconPosition = (): void => {
     right: '1rem',
     top: null
   };
-  debouncedSave(iconPosition.value, 'chatIconPosition');
+  saveIconPosition();
 };
 
 // Check if the icon is within visible bounds and fix if needed
@@ -153,6 +145,7 @@ const checkIconVisibility = (): void => {
   const isOffScreenY = iconRect.top < 0 || iconRect.bottom > viewportHeight;
   
   if (isOffScreenX || isOffScreenY) {
+    console.log('Chat icon was off-screen, resetting position');
     resetIconPosition();
     
     // Apply the reset position to the element
@@ -168,49 +161,60 @@ const checkIconVisibility = (): void => {
   }
 };
 
-// Save position to localStorage with debounce
+// Save position to localStorage
 const saveIconPosition = (): void => {
-  debouncedSave(iconPosition.value, 'chatIconPosition');
+  localStorage.setItem('chatIconPosition', JSON.stringify(iconPosition.value));
 };
 
 // Load saved window position from localStorage
 const loadWindowPosition = (): void => {
-  try {
-    const savedPosition = localStorage.getItem('chatWindowPosition');
-    if (savedPosition) {
-      windowPosition.value = JSON.parse(savedPosition);
-    }
-  } catch (error) {
-    console.error('Error parsing saved window position', error);
+  const savedPosition = localStorage.getItem('chatWindowPosition');
+  if (savedPosition) {
+    windowPosition.value = JSON.parse(savedPosition);
   }
 };
 
-// Save window position to localStorage with debounce
+// Save window position to localStorage
 const saveWindowPosition = (): void => {
-  debouncedSave(windowPosition.value, 'chatWindowPosition');
+  localStorage.setItem('chatWindowPosition', JSON.stringify(windowPosition.value));
 };
 
-// Optimized memory injection function
 const injectMemory = async (userId: string, newMessage: string) => {
-  // Prune chat history before injecting it
+  console.log(`Building structured memory for user: ${userId}`);
+
+  // Get the current language from the language store
+  const languageStore = useLanguageStore();
+  
+  // ✅ User Profile (simplified)
+  const userProfile = {
+    username: (authStore.player as any)?.username || "guest",
+    // Get language from player profile, fallback to language store, then to English
+    language: languages.find(lang => lang.code === ((authStore.player as any)?.language || languageStore.currentLanguage || "en"))?.label || "English",
+    faction: (authStore.player as any)?.faction || "Unknown",
+    level: (authStore.player as any)?.level || 1
+  };
+
+  // Log the language being used for debugging
+  console.log(`Using language: ${userProfile.language} (code: ${(authStore.player as any)?.language || languageStore.currentLanguage || "en"})`);
+
+  // ✅ Prune chat history before injecting it
   pruneChatHistory(); 
 
-  // Retrieve only the last 3 messages for shorter context (reduced from 5)
-  const conversationHistory = messages.value.slice(-3);
+  // ✅ Retrieve only the last 5 messages for shorter context
+  const conversationHistory = messages.value.slice(-5); // Limit history
   let historyLog = conversationHistory
     .map((msg) => `${msg.role}: ${msg.content}`)
     .join("\n");
 
-  // Simplified Prompt Structure
-  return `
+  // ✅ Simplified Prompt Structure
+  const finalPrompt = `
   [SYSTEM]
   You are a helpful AI assistant for Cosmicrafts game. Keep answers short and concise.
-  Language: ${languages.find(lang => lang.code === ((authStore.player as any)?.language || "en"))?.label || "English"}
 
   [USER]
-  Username: ${(authStore.player as any)?.username || "guest"}
-  Level: ${(authStore.player as any)?.level || 1}
-  Faction: ${(authStore.player as any)?.faction || "Unknown"}
+  Username: ${userProfile.username}
+  Level: ${userProfile.level}
+  Faction: ${userProfile.faction}
 
   [CHAT HISTORY]
   ${historyLog}
@@ -218,26 +222,25 @@ const injectMemory = async (userId: string, newMessage: string) => {
   [NEW MESSAGE]
   ${newMessage}
   `;
+
+  console.log(`🔍 Token-optimized prompt:\n${finalPrompt}`);
+
+  return finalPrompt;
 };
 
-// Optimized chat history saving with debounce
+
 const saveChatHistory = () => {
-  debouncedSave(messages.value, 'chatHistory');
+  localStorage.setItem("chatHistory", JSON.stringify(messages.value));
 };
 
 const loadChatHistory = () => {
-  try {
-    const storedChat = localStorage.getItem("chatHistory");
-    if (storedChat) {
-      messages.value = JSON.parse(storedChat);
-    }
-  } catch (error) {
-    console.error('Error loading chat history', error);
-    messages.value = [];
+  const storedChat = localStorage.getItem("chatHistory");
+  if (storedChat) {
+    messages.value = JSON.parse(storedChat);
   }
 };
 
-// Optimized event listeners with passive option for touch events
+// Load saved position on component mount
 onMounted(() => {
   loadChatHistory();
   loadIconPosition();
@@ -252,16 +255,16 @@ onMounted(() => {
       });
       
       // After applying the position, check if it's visible
-      requestAnimationFrame(() => {
+      setTimeout(() => {
         checkIconVisibility();
-      });
+      }, 100); // Small delay to ensure the styles were applied
     }
   });
   
-  // Add global event listeners with passive option where possible
+  // Add global event listeners
   document.addEventListener('keydown', handleKeyDown);
   document.addEventListener('click', handleClickOutside);
-  window.addEventListener('resize', checkIconVisibility, { passive: true });
+  window.addEventListener('resize', checkIconVisibility);
 });
 
 // Handle keyboard shortcuts
@@ -272,7 +275,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
                         activeElement instanceof HTMLTextAreaElement ||
                         activeElement?.getAttribute('contenteditable') === 'true';
   
-  // 'A' key to open chat (only when not already open and not typing in an input)
+  // 'C' key to open chat (only when not already open and not typing in an input)
   if (event.key.toLowerCase() === 'a' && !showChat.value && !isInputActive) {
     toggleChat();
     event.preventDefault();
@@ -290,10 +293,10 @@ const handleKeyDown = (event: KeyboardEvent): void => {
   }
 };
 
-// Optimize watch by using deep: false where possible
+// 🔥 Save history after every message
 watch(messages, () => {
   saveChatHistory();
-}, { deep: false });
+});
 
 // Focus input whenever chat is opened
 watch(showChat, (newValue) => {
@@ -306,14 +309,11 @@ watch(showChat, (newValue) => {
   }
 });
 
-// Optimized pruning function
 const pruneChatHistory = () => {
-  if (messages.value.length <= 5) return; // Don't prune if we have 5 or fewer messages
-  
   let totalTokens = 0;
   let prunedMessages = [];
 
-  // Keep latest messages until reaching the max token limit
+  // ✅ Keep latest messages until reaching the max token limit
   for (let i = messages.value.length - 1; i >= 0; i--) {
     const msg = messages.value[i];
     const msgTokens = msg.content.length / 4; // Approximate token count
@@ -327,40 +327,12 @@ const pruneChatHistory = () => {
   messages.value = prunedMessages;
 };
 
-// Function to get a demo key from OpenRouter if both keys fail
-const getDemoKey = async (): Promise<string> => {
-  try {
-    // Try to get a demo key from OpenRouter
-    const response = await fetch('https://openrouter.ai/api/v1/auth/key', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        'client': 'Cosmicrafts Game',
-        'origin': 'https://cosmicrafts.io'
-      })
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to get demo key: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    console.log("Successfully obtained a demo key");
-    return data.key;
-  } catch (error) {
-    console.error("Error getting demo key:", error);
-    throw error;
-  }
-};
-
-// Optimized send message function
+// ✅ Send Message to Backend
 const sendPrompt = async (): Promise<void> => {
   if (!prompt.value.trim() || loading.value) return;
 
   const userMessage: string = prompt.value.trim();
-  messages.value = [...messages.value, { role: "user", content: userMessage }];
+  messages.value.push({ role: "user", content: userMessage });
   
   // Clear input field and saved text after sending
   if (chatInput.value) {
@@ -375,9 +347,8 @@ const sendPrompt = async (): Promise<void> => {
   try {
     loading.value = true;
     currentMessage.value = "";
-    thinkingContent.value = "";
 
-    // Fetch structured memory & inject it
+    // ✅ Fetch structured memory & inject it
     const userId = (authStore.player as any)?.username || "guest";
     const tempPrompt = await injectMemory(userId, userMessage);
 
@@ -387,78 +358,88 @@ const sendPrompt = async (): Promise<void> => {
       { role: "user", content: tempPrompt }
     ];
 
-    // Log the API key being used (masked for security)
-    console.log("Using API key:", `${API_KEY.substring(0, 12)}...${API_KEY.substring(API_KEY.length - 5)}`);
-    
-    // Use OpenRouter API directly
-    let response;
+    // Try with primary key first, then fallback to backup
     let currentKey = API_KEY;
-    
-    try {
-      // Prepare request options
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${currentKey}`,
-          'HTTP-Referer': 'https://cosmicrafts.io',
-          'X-Title': 'Cosmicrafts Game'
-        },
-        body: JSON.stringify({
-          model: "rekaai/reka-flash-3:free",
-          messages: chatMessages,
-          temperature: 0.5,
-          top_p: 0.4,
-          max_tokens: 128,
-          stream: true
-        })
-      };
+    let response;
+    let attempts = 0;
+    const maxAttempts = 2; // Only try primary and backup, no demo key
+    let requestSuccessful = false;
+
+    while (attempts < maxAttempts && !requestSuccessful) {
+      attempts++;
       
-      // First attempt with primary key
-      response = await fetch(`${API_BASE_URL}/chat/completions`, requestOptions);
-      
-      // If primary key fails with 401, try backup key
-      if (response.status === 401) {
-        console.log("Primary API key failed with 401 Unauthorized. Trying backup key...");
-        currentKey = BACKUP_API_KEY;
+      try {
+        // Ensure the key is properly formatted and has no whitespace
+        const formattedKey = currentKey.trim();
         
-        // Update authorization header with backup key
-        requestOptions.headers['Authorization'] = `Bearer ${currentKey}`;
+        // Only log in development mode
+        if (import.meta.env.DEV) {
+          console.log(`Attempt ${attempts}: Making request to OpenRouter`);
+        }
         
-        // Try again with backup key
-        response = await fetch(`${API_BASE_URL}/chat/completions`, requestOptions);
+        response = await fetch(`${API_BASE_URL}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${formattedKey}`,
+            'HTTP-Referer': 'https://openrouter.ai/docs',
+            'X-Title': 'Cosmicrafts Game'
+          },
+          body: JSON.stringify({
+            model: "rekaai/reka-flash-3:free",
+            messages: chatMessages,
+            temperature: 0.7,
+            top_p: 0.7,
+            max_tokens: 500,
+            stream: true
+          })
+        });
         
-        // If backup also fails, try to get a demo key
-        if (response.status === 401) {
-          console.log("Backup key also failed. Attempting to get a demo key...");
-          try {
-            currentKey = await getDemoKey();
-            
-            // Update authorization header with demo key
-            requestOptions.headers['Authorization'] = `Bearer ${currentKey}`;
-            
-            // Try again with demo key
-            response = await fetch(`${API_BASE_URL}/chat/completions`, requestOptions);
-          } catch (demoKeyError) {
-            console.error("Failed to get demo key:", demoKeyError);
-            const errorText = await response.text();
-            console.error("Both API keys failed with 401 Unauthorized:", errorText);
-            throw new Error(`API authentication failed: ${errorText || response.status}`);
+        if (response.ok) {
+          requestSuccessful = true;
+          if (import.meta.env.DEV && attempts > 1) {
+            console.log('Backup API key succeeded after primary key failed');
+          }
+          break; // Exit the loop if successful
+        } else {
+          const errorData = await response.text();
+          
+          // Only log the error if we're in development mode or if this is the final attempt
+          if (import.meta.env.DEV || attempts === maxAttempts) {
+            console.error(`API Error (Attempt ${attempts}):`, {
+              status: response.status,
+              statusText: response.statusText,
+              error: errorData
+            });
+          }
+          
+          // Switch to backup key if primary fails
+          if (attempts === 1 && BACKUP_API_KEY) {
+            if (import.meta.env.DEV) {
+              console.log('Primary API key failed. Trying backup key...');
+            }
+            // Use the hardcoded key directly to avoid any issues
+            currentKey = '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';
+          } else {
+            throw new Error(`API error: ${response.status} - ${errorData}`);
           }
         }
+      } catch (fetchError) {
+        if (import.meta.env.DEV) {
+          console.error(`Fetch error (Attempt ${attempts}):`, fetchError);
+        }
+        if (attempts === maxAttempts) {
+          throw fetchError;
+        }
       }
-    } catch (error) {
-      console.error("Fetch error:", error);
-      throw error;
     }
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`API error: ${response.status}`, errorText);
-      throw new Error(`API error: ${response.status} - ${errorText || 'Unknown error'}`);
+    if (!requestSuccessful) {
+      throw new Error('Failed to get a response after multiple attempts');
     }
 
-    const reader = response.body?.getReader();
+    // At this point we know response is defined and successful
+    const reader = response!.body?.getReader();
     if (!reader) throw new Error("Failed to read response stream");
 
     const decoder = new TextDecoder();
@@ -469,6 +450,7 @@ const sendPrompt = async (): Promise<void> => {
 
       try {
         const chunk = decoder.decode(value, { stream: true });
+        // console.log('Received chunk:', chunk);
         const lines = chunk.split('\n').filter(line => line.trim());
         
         for (const line of lines) {
@@ -478,6 +460,7 @@ const sendPrompt = async (): Promise<void> => {
             
             // Skip processing messages
             if (cleanLine.startsWith(': OPENROUTER')) {
+              // console.log('Processing message:', cleanLine);
               continue;
             }
             
@@ -485,6 +468,7 @@ const sendPrompt = async (): Promise<void> => {
             if (!cleanLine || cleanLine === '[DONE]') continue;
             
             const json = JSON.parse(cleanLine);
+            // console.log('Parsed JSON:', json);
             const content = json.choices?.[0]?.delta?.content || '';
             
             if (content) {
@@ -513,13 +497,13 @@ const sendPrompt = async (): Promise<void> => {
             }
           } catch (err) {
             console.error("JSON parse error:", err);
+            // Log the problematic line for debugging
+            console.debug("Problem line:", line);
           }
         }
         
-        // Use requestAnimationFrame for smoother UI updates
-        requestAnimationFrame(() => {
-          scrollToBottom();
-        });
+        await nextTick();
+        scrollToBottom();
       } catch (error) {
         console.error("Decoding error:", error);
       }
@@ -530,10 +514,10 @@ const sendPrompt = async (): Promise<void> => {
       `<reasoning>${thinkingContent.value}</reasoning>${currentMessage.value}` :
       currentMessage.value;
     
-    messages.value = [...messages.value, {
+    messages.value.push({
       role: "assistant",
       content: completeMessage,
-    }];
+    });
 
     currentMessage.value = "";
     thinkingContent.value = "";
@@ -541,28 +525,25 @@ const sendPrompt = async (): Promise<void> => {
 
   } catch (error) {
     console.error("Chat error:", error);
-    messages.value = [...messages.value, { role: "assistant", content: "Error: Failed to get response" }];
+    messages.value.push({ role: "assistant", content: "Error: Failed to get response" });
   } finally {
     loading.value = false;
-    saveChatHistory();
-    requestAnimationFrame(() => {
-      scrollToBottom();
-      focusInput();
-    });
+    saveChatHistory(); // ✅ Save chat history
+    await nextTick();
+    scrollToBottom();
+    focusInput();
   }
 };
 
-// Optimized scroll function using requestAnimationFrame
+// ✅ Auto-scroll function
 const scrollToBottom = (): void => {
-  requestAnimationFrame(() => {
-    const chatMessages: HTMLElement | null = document.querySelector(".messages");
-    if (chatMessages) {
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-  });
+  const chatMessages: HTMLElement | null = document.querySelector(".messages");
+  if (chatMessages) {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
 };
 
-// Optimized toggle chat function
+// ✅ Toggle Chat with Animation
 const toggleChat = (): void => {
   isAnimating.value = true;
   
@@ -586,7 +567,7 @@ const toggleChat = (): void => {
   setTimeout(() => (isAnimating.value = false), 300);
 };
 
-// Toggle maximize/restore chat window
+// ✅ Toggle maximize/restore chat window
 const toggleMaximize = (): void => {
   if (!chatWindow.value) return;
   
@@ -637,12 +618,12 @@ const toggleMaximize = (): void => {
   }, 300);
   
   // Scroll to bottom after resize
-  requestAnimationFrame(() => {
+  nextTick(() => {
     scrollToBottom();
   });
 };
 
-// Make chat resizable from edges/corners
+// ✅ Make chat resizable from edges/corners
 const startResize = (event: MouseEvent): void => {
   if (!chatWindow.value || isMaximized.value) return; // Don't allow resize when maximized
 
@@ -683,7 +664,7 @@ const stopResize = (): void => {
   document.removeEventListener("mouseup", stopResize);
 };
 
-// Make chat draggable
+// ✅ Make chat draggable
 const startDrag = (event: MouseEvent): void => {
   if (!chatWindow.value || isMaximized.value) return; // Don't allow drag when maximized
   
@@ -752,7 +733,7 @@ const dragChat = (event: MouseEvent | TouchEvent): void => {
 
 const stopDrag = (): void => {
   if (isDragging.value && chatWindow.value) {
-    isDragging.value = false;
+  isDragging.value = false;
     
     // Convert transform to actual position
     const transform = chatWindow.value.style.transform;
@@ -782,14 +763,14 @@ const stopDrag = (): void => {
     }
     
     // Remove event listeners
-    document.removeEventListener("mousemove", dragChat);
-    document.removeEventListener("mouseup", stopDrag);
+  document.removeEventListener("mousemove", dragChat);
+  document.removeEventListener("mouseup", stopDrag);
     document.removeEventListener("touchmove", dragChat);
     document.removeEventListener("touchend", stopDrag);
   }
 };
 
-// Touch event handlers for chat window
+// ✅ Touch event handlers for chat window
 const handleWindowTouchStart = (event: TouchEvent): void => {
   if (!chatWindow.value || event.touches.length !== 1 || isMaximized.value && (event.target as HTMLElement).closest('.resize-handle')) return;
   
@@ -826,7 +807,7 @@ const handleWindowTouchStart = (event: TouchEvent): void => {
   document.addEventListener("touchend", stopDrag);
 };
 
-// Touch support for resize handle
+// ✅ Touch support for resize handle
 const handleResizeTouchStart = (event: TouchEvent): void => {
   if (!chatWindow.value || event.touches.length !== 1 || isMaximized.value) return;
   
@@ -865,7 +846,7 @@ const resizeTouchMove = (event: TouchEvent): void => {
   previousWindowState.value.height = chatWindow.value.style.height;
 };
 
-// Make chat icon draggable (Mouse events)
+// ✅ Make chat icon draggable (Mouse events)
 const startIconDrag = (event: MouseEvent): void => {
   // Prevent default to avoid text selection during drag
   event.preventDefault();
@@ -978,7 +959,7 @@ const stopIconDrag = (event: MouseEvent | TouchEvent): void => {
   }
 };
 
-// Touch event handlers for mobile
+// ✅ Touch event handlers for mobile
 const handleTouchStart = (event: TouchEvent): void => {
   if (!chatToggle.value || event.touches.length !== 1) return;
   
@@ -1009,64 +990,6 @@ const handleTouchStart = (event: TouchEvent): void => {
   document.addEventListener("touchmove", dragIcon, { passive: false });
   document.addEventListener("touchend", handleTouchEnd);
 };
-
-// Handle touch end for the chat icon
-const handleTouchEnd = (event: TouchEvent): void => {
-  if (!isIconDragging.value) return;
-  
-  isIconDragging.value = false;
-  
-  // If we haven't moved much, treat it as a tap
-  if (!hasMoved.value) {
-    toggleChat();
-  }
-  
-  // Reset the moved flag
-  hasMoved.value = false;
-  
-  // Save the new position
-  saveIconPosition();
-  
-  // Remove event listeners
-  document.removeEventListener("touchmove", dragIcon);
-  document.removeEventListener("touchend", handleTouchEnd);
-};
-
-// Optimized loadMoreMessages function for virtual scrolling
-const loadMoreMessages = () => {
-  startIndex.value += 5;
-  if (startIndex.value > messages.value.length - VISIBLE_MESSAGES) {
-    startIndex.value = messages.value.length - VISIBLE_MESSAGES;
-  }
-};
-
-// Optimized clearChat function
-const clearChat = () => {
-  messages.value = [];
-  localStorage.removeItem('chatHistory'); // Direct removal instead of saving empty array
-};
-
-// Add intersection observer for lazy loading
-onMounted(() => {
-  // Set up intersection observer for lazy loading images/content
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const lazyElement = entry.target as HTMLElement;
-        if (lazyElement.dataset.src) {
-          lazyElement.setAttribute('src', lazyElement.dataset.src);
-          lazyElement.removeAttribute('data-src');
-        }
-        observer.unobserve(lazyElement);
-      }
-    });
-  }, { rootMargin: '100px' });
-  
-  // Observe all elements with data-src attribute
-  document.querySelectorAll('[data-src]').forEach(el => {
-    observer.observe(el);
-  });
-});
 
 // ✅ Auto-expand logic
 const updatePrompt = (): void => {
@@ -1154,6 +1077,28 @@ onUnmounted(() => {
   window.removeEventListener('resize', checkIconVisibility);
 });
 
+// Handle touch end for the chat icon
+const handleTouchEnd = (event: TouchEvent): void => {
+  if (!isIconDragging.value) return;
+  
+  isIconDragging.value = false;
+  
+  // If we haven't moved much, treat it as a tap
+  if (!hasMoved.value) {
+    toggleChat();
+  }
+  
+  // Reset the moved flag
+  hasMoved.value = false;
+  
+  // Save the new position
+  saveIconPosition();
+  
+  // Remove event listeners
+  document.removeEventListener("touchmove", dragIcon);
+  document.removeEventListener("touchend", handleTouchEnd);
+};
+
 // ✅ Handle click outside the chat window to close it
 const handleClickOutside = (event: MouseEvent): void => {
   if (showChat.value && chatWindow.value && !chatWindow.value.contains(event.target as Node)) {
@@ -1182,6 +1127,21 @@ defineExpose({
   isOpen,
   toggleChat
 });
+
+// Add these after other reactive refs
+const MESSAGE_CHUNK_SIZE = 512;
+const visibleMessages = ref<number>(MESSAGE_CHUNK_SIZE);
+const canLoadMore = computed(() => messages.value.length > visibleMessages.value);
+
+// Add this method after other methods
+const loadMoreMessages = () => {
+  visibleMessages.value += MESSAGE_CHUNK_SIZE;
+};
+
+const clearChat = () => {
+  messages.value = [];
+  saveChatHistory(); // Save the empty state to localStorage
+};
 </script>
 
 <template>
@@ -1271,7 +1231,7 @@ defineExpose({
         </button>
         
         <div
-          v-for="(msg, index) in visibleMessages"
+          v-for="(msg, index) in messages.slice(-visibleMessages)"
           :key="index"
           :class="['message', msg.role]"
         >
@@ -1365,12 +1325,14 @@ defineExpose({
   background-color: rgba(30, 43, 56, 0.9);
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease-out;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: 
+    transform 0.3s ease-out, 
+    background-color 0.4s ease-out, /* ⏳ Slow fade-out */
+    box-shadow 0.6s ease-out; /* ⏳ Longer glow fade */
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
   z-index: 99900;
   touch-action: none; /* Prevents default touch actions */
   user-select: none; /* Prevents text selection during drag */
-  will-change: transform; /* Optimize for animations */
 }
 
 .chat-toggle .icon {
@@ -1395,8 +1357,8 @@ defineExpose({
 }
 
 .hover-scale:hover {
-  transform: scale(1.1);
   background-color: rgba(0, 195, 255, 0.862); /* Lighter blue background on hover */
+  box-shadow: 0 4px 16px rgba(0, 208, 255, 0.896);
 }
 
 /* ✅ Chat Window */
@@ -1418,9 +1380,9 @@ defineExpose({
   border: 1px solid rgba(126, 126, 126, 0.1);
   touch-action: none; /* Prevents default touch actions */
   user-select: none; /* Prevents text selection during drag */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease-out;
-  will-change: transform, width, height; /* Optimize for animations */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-out;
+  will-change: transform; /* Optimize for animations */
 }
 
 /* Maximized state */
@@ -1466,7 +1428,7 @@ defineExpose({
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition: all 0.2s ease;
   width: 2.5rem;
   height: 2.5rem;
 }
@@ -1524,6 +1486,21 @@ defineExpose({
 
 .resize-handle:hover::before {
   opacity: 1;
+  background-image: 
+    linear-gradient(to bottom right,
+      transparent 0%,
+      transparent 40%,
+      rgba(59, 130, 246, 0.9) 40%,
+      rgba(59, 130, 246, 0.9) 50%,
+      transparent 50%,
+      transparent 65%,
+      rgba(59, 130, 246, 0.9) 65%,
+      rgba(59, 130, 246, 0.9) 75%,
+      transparent 75%,
+      transparent 90%,
+      rgba(59, 130, 246, 0.9) 90%,
+      rgba(59, 130, 246, 0.9) 100%
+    );
 }
 
 /* ✅ Chat Messages */
@@ -1538,7 +1515,6 @@ defineExpose({
   overflow-x: hidden; /* ✅ Prevents horizontal scrolling */
   touch-action: auto; /* Allow normal touch behavior in messages */
   user-select: text; /* Allow text selection in messages */
-  contain: content; /* Improve scrolling performance */
 }
 
 /* ✅ Chat Bubbles */
@@ -1551,7 +1527,6 @@ defineExpose({
   display: inline-block;
   overflow: hidden; /* ✅ Ensures text stays inside */
   white-space: normal; /* ✅ Forces text to wrap instead of overflowing */
-  contain: content; /* Improve rendering performance */
 }
 
 .message-text {
@@ -1564,7 +1539,6 @@ defineExpose({
 .user {
   display: flex;
   justify-content: flex-end;
-  contain: layout; /* Improve layout performance */
 }
 
 .user .bubble {
@@ -1577,7 +1551,6 @@ defineExpose({
 .assistant {
   display: flex;
   justify-content: flex-start;
-  contain: layout; /* Improve layout performance */
 }
 
 .assistant .bubble {
@@ -1625,12 +1598,23 @@ defineExpose({
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
 }
 
+
+
 /* ✅ Input Wrapper */
 .input-wrapper {
   flex: 1; /* ✅ Ensures input takes up remaining space */
   display: flex;
   align-items: center;
   position: relative;
+}
+
+/* ✅ Thinking Icon */
+.thinking-icon {
+  position: relative;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ✅ Thinking Indicator (Icon + Text) */
@@ -1644,8 +1628,7 @@ defineExpose({
   gap: 0.5rem; /* Space between icon and text */
   pointer-events: none; /* Ensure it doesn't interfere with input */
 }
-
-/* ✅ Dot Flashing Animation - Optimized */
+/* ✅ Dot Flashing Animation */
 .dot-flashing {
   width: 8px;
   height: 8px;
@@ -1653,7 +1636,6 @@ defineExpose({
   background-color: #3b82f6;
   animation: dotFlashing 1s infinite linear alternate;
   animation-delay: 0.5s;
-  will-change: opacity; /* Optimize animation */
 }
 
 .dot-flashing::before,
@@ -1666,7 +1648,6 @@ defineExpose({
   height: 8px;
   border-radius: 50%;
   background-color: #3b82f6;
-  will-change: opacity; /* Optimize animation */
 }
 
 .dot-flashing::before {
@@ -1683,11 +1664,11 @@ defineExpose({
 
 @keyframes dotFlashing {
   0% {
-    opacity: 1;
+    background-color: #3b82f6;
   }
   50%,
   100% {
-    opacity: 0.2;
+    background-color: rgba(59, 130, 246, 0.2);
   }
 }
 
@@ -1697,9 +1678,52 @@ defineExpose({
   font-size: 0.9rem;
 }
 
+/* ✅ Three-Dot Typing Animation */
+.dot-typing {
+  position: absolute;
+  left: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1rem;
+}
+
+.dot-typing span {
+  width: 5px;
+  height: 5px;
+  margin: 0 3px;
+  background-color: #3b82f6;
+  border-radius: 50%;
+  animation: typingDots 1.4s infinite ease-in-out;
+}
+
+.dot-typing span:nth-child(1) { animation-delay: 0s; }
+.dot-typing span:nth-child(2) { animation-delay: 0.2s; }
+.dot-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingDots {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ✅ Glowing Text Effect */
+.thinking-glow {
+  position: absolute;
+  color: rgba(59, 130, 246, 0.8);
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+  animation: glowPulse 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes glowPulse {
+  0% { opacity: 0.5; text-shadow: 0 0 4px rgba(59, 130, 246, 0.3); }
+  100% { opacity: 1; text-shadow: 0 0 12px rgba(59, 130, 246, 0.8); }
+}
+
+
 /* ✅ Scrollbar - Webkit (Chrome, Edge, Safari) */
 .messages::-webkit-scrollbar {
-  width: 0.5rem; /* Slimmer scrollbar for better performance */
+  width: 1rem; /* Slim scrollbar */
 }
 
 .messages::-webkit-scrollbar-track {
@@ -1710,11 +1734,16 @@ defineExpose({
 .messages::-webkit-scrollbar-thumb {
   background: rgba(59, 130, 246, 0.8); /* Blue thumb */
   border-radius: 24px;
+  transition: background 0.3s ease;
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 1); /* Brighten on hover */
 }
 
 /* ✅ Scrollbar - Firefox */
 .messages {
-  scrollbar-width: thin;
+  scrollbar-width: 1rem;
   scrollbar-color: rgba(59, 130, 246, 0.8) rgba(255, 255, 255, 0.1);
 }
 
@@ -1729,7 +1758,7 @@ defineExpose({
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition: all 0.2s ease;
   width: 2.5rem;
   height: 2.5rem;
 }
@@ -1762,7 +1791,7 @@ defineExpose({
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition: all 0.2s ease;
   width: 2.5rem;
   height: 2.5rem;
 }
@@ -1801,7 +1830,7 @@ defineExpose({
   border-radius: 6px;
   font-size: 0.85rem;
   white-space: nowrap;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -1811,7 +1840,6 @@ defineExpose({
   align-items: flex-start;
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 1001;
-  will-change: opacity, transform; /* Optimize animations */
 }
 
 .tooltip::after {
@@ -1853,17 +1881,47 @@ defineExpose({
   font-weight: bold;
 }
 
-/* ✅ New animations for chat window - Optimized */
+/* ✅ Close Button Tooltip */
+.close-tooltip {
+  top: 40px;
+  right: 0;
+}
+
+.close-tooltip::after {
+  top: -5px;
+  bottom: auto;
+  border-top: none;
+  border-left: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.close-button-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.close-button-wrapper:hover .close-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s;
+}
+
+/* ✅ New animations for chat window */
 .slide-fade-enter-active,
 .slide-fade-leave-active {
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  will-change: transform, opacity;
+  transition: all 0.3s ease;
 }
 
 .slide-fade-enter-from,
 .slide-fade-leave-to {
   transform: translateX(20px);
   opacity: 0;
+}
+
+/* Add a subtle shadow animation */
+.chat-window {
+  transition: box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Control wrapper for tooltips */
@@ -1889,7 +1947,7 @@ defineExpose({
   border-radius: 6px;
   font-size: 0.85rem;
   white-space: nowrap;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transform: translateY(-10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -1899,7 +1957,6 @@ defineExpose({
   align-items: flex-start;
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 1001;
-  will-change: opacity, transform;
 }
 
 .control-tooltip::after {
@@ -1924,6 +1981,7 @@ defineExpose({
 /* Size transition for maximize/restore */
 .size-transition {
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.0) !important;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.3);
 }
 
 .thinking-content {

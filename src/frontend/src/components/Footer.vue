@@ -398,9 +398,9 @@ const isSectionExpanded = (section) => {
 
 .copyright {
   text-align: center;
-  font-size: 0.65rem;
-  color: var(--cosmic-text-disabled);
-  line-height: 1.1;
+  font-size: 0.55rem;
+  color: gray;
+  line-height: 1.2;
 }
 
 .copyright p {
@@ -570,7 +570,7 @@ const isSectionExpanded = (section) => {
   }
   
   .copyright-logo {
-    width: 3rem;
+    width: 3.75rem;
   }
   
   .accordion-header h4 {
