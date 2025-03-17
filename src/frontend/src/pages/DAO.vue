@@ -327,7 +327,7 @@
           <div class="multiplier-grid">
             <div class="multiplier-card">
               <div class="multiplier-header">
-                <i class="fas fa-lock"></i>
+                <i class="fas fa-shield-alt"></i>
                 <h4>{{ $t('dao.staking.multipliers.dissolve.title', 'Dissolve Delay') }}</h4>
               </div>
               <div class="multiplier-content">
@@ -338,7 +338,7 @@
 
             <div class="multiplier-card">
               <div class="multiplier-header">
-                <i class="fas fa-history"></i>
+                <i class="fas fa-hourglass-half"></i>
                 <h4>{{ $t('dao.staking.multipliers.age.title', 'Neuron Age') }}</h4>
               </div>
               <div class="multiplier-content">
@@ -2519,8 +2519,8 @@ export default {
 
 .rights-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
   position: relative;
   z-index: 1;
   width: 100%;
@@ -2529,20 +2529,22 @@ export default {
 }
 
 .rights-card {
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   text-align: center;
   background: linear-gradient(135deg,
     rgba(15, 185, 253, 0.03) 0%,
     rgba(15, 185, 253, 0.06) 100%
   );
   border: 1px solid rgba(15, 185, 253, 0.1);
-  border-radius: 10px;
+  border-radius: 16px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .rights-card::before {
@@ -3374,7 +3376,7 @@ export default {
   padding: 2rem;
   margin-top: 2rem;
   background: var(--cosmic-glass-bg);
-  border-radius: 12px;
+  border-radius: 16px;
   border: 1px solid rgba(15, 185, 253, 0.15);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
   width: 100%;
@@ -3383,7 +3385,7 @@ export default {
 }
 
 .power-multipliers h3 {
-  font-size: 2rem;
+  font-size: 2.25rem;
   margin-bottom: 2rem;
   text-align: left;
   color: var(--cosmic-text-primary);
@@ -3397,29 +3399,31 @@ export default {
 .multiplier-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  gap: 2.5rem;
   width: 100%;
   box-sizing: border-box;
 }
 
 .multiplier-card {
-  padding: 2rem;
+  padding: 2.5rem;
   background: linear-gradient(145deg,
     rgba(15, 185, 253, 0.03) 0%,
     rgba(15, 185, 253, 0.07) 100%
   );
-  border-radius: 12px;
+  border-radius: 16px;
   border: 1px solid rgba(15, 185, 253, 0.15);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   width: 100%;
   box-sizing: border-box;
   text-align: center;
+  transform-style: preserve-3d;
+  position: relative;
 }
 
 .multiplier-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(15, 185, 253, 0.15);
+  transform: translateY(-5px) translateZ(0);
+  box-shadow: 0 12px 30px rgba(15, 185, 253, 0.15);
   border-color: rgba(15, 185, 253, 0.3);
 }
 
@@ -3431,11 +3435,11 @@ export default {
 }
 
 .multiplier-header i {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: var(--cosmic-blue);
-  margin-bottom: 1rem;
-  width: 70px;
-  height: 70px;
+  margin-bottom: 1.5rem;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   background: linear-gradient(135deg,
     rgba(15, 185, 253, 0.1) 0%,
@@ -3446,12 +3450,12 @@ export default {
   justify-content: center;
   transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
   box-shadow: 
-    0 10px 20px rgba(15, 185, 253, 0.1),
-    0 5px 10px rgba(0, 0, 0, 0.05);
+    0 15px 30px rgba(15, 185, 253, 0.1),
+    0 8px 15px rgba(0, 0, 0, 0.05);
 }
 
 .multiplier-header h4 {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 600;
   color: var(--cosmic-text-primary);
   margin: 0;
@@ -3459,25 +3463,54 @@ export default {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
 }
 
 .multiplier-content {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .multiplier-content .bonus {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 2.8rem;
+  font-weight: 800;
   color: var(--cosmic-blue);
   margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
 }
 
 .multiplier-content .time {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   color: var(--cosmic-text-secondary);
   margin: 0;
+  transition: all 0.3s ease;
+}
+
+.multiplier-card:hover .multiplier-header i {
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(15, 185, 253, 0.15);
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.2) 0%,
+    rgba(15, 185, 253, 0.3) 100%
+  );
+}
+
+.multiplier-card:hover .multiplier-header h4 {
+  transform: translateZ(5px);
+}
+
+.multiplier-card:hover .multiplier-content .bonus {
+  transform: translateZ(5px);
+}
+
+.multiplier-card:hover .multiplier-content .time {
+  color: var(--color-primary);
 }
 
 /* Media queries for responsive design */
