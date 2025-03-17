@@ -2216,13 +2216,6 @@ export default {
   overflow-x: hidden;
 }
 
-.section-title {
-  font-size: 2.5rem;
-  text-align: center;
-  margin-bottom: 3rem;
-  font-weight: var(--weight-black);
-}
-
 .governance-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -2230,6 +2223,14 @@ export default {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  font-weight: var(--weight-black);
 }
 
 .governance-card {
@@ -3370,266 +3371,259 @@ export default {
 
 /* Power Multipliers Section */
 .power-multipliers {
-  padding: 0;
-  margin-top: 1rem;
-  background: transparent;
-  border: none;
-  box-shadow: none;
+  padding: 2rem;
+  margin-top: 2rem;
+  background: var(--cosmic-glass-bg);
+  border-radius: 12px;
+  border: 1px solid rgba(15, 185, 253, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .power-multipliers h3 {
-  font-size: 1.75rem;
-  margin-bottom: 1.5rem;
-  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: left;
+  color: var(--cosmic-text-primary);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .multiplier-grid {
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .multiplier-card {
-  padding: 1.5rem;
-  text-align: left;
-  display: flex;
-  align-items: center;
+  padding: 2rem;
   background: linear-gradient(145deg,
     rgba(15, 185, 253, 0.03) 0%,
     rgba(15, 185, 253, 0.07) 100%
   );
-  border: 1px solid rgba(15, 185, 253, 0.15);
   border-radius: 12px;
-  box-shadow: 
-    0 15px 35px rgba(0, 0, 0, 0.05),
-    0 5px 15px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(15, 185, 253, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.multiplier-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(15, 185, 253, 0.15);
+  border-color: rgba(15, 185, 253, 0.3);
 }
 
 .multiplier-header {
-  margin-bottom: 0;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 1.5rem;
-  flex-shrink: 0;
-  width: 60px;
+  margin-bottom: 1.5rem;
 }
 
 .multiplier-header i {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  color: var(--cosmic-blue);
+  margin-bottom: 1rem;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.1) 0%,
+    rgba(15, 185, 253, 0.2) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 
+    0 10px 20px rgba(15, 185, 253, 0.1),
+    0 5px 10px rgba(0, 0, 0, 0.05);
 }
 
 .multiplier-header h4 {
-  font-size: 0.9rem;
-  text-align: center;
-  line-height: 1.2;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--cosmic-text-primary);
+  margin: 0;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .multiplier-content {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.25rem;
+  align-items: center;
 }
 
 .multiplier-content .bonus {
-  font-size: 1.8rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--cosmic-blue);
+  margin: 0 0 0.5rem 0;
 }
 
 .multiplier-content .time {
-  font-size: 0.9rem;
-  opacity: 0.8;
+  font-size: 1.25rem;
+  color: var(--cosmic-text-secondary);
+  margin: 0;
 }
 
-.multiplier-card:hover .multiplier-content .bonus {
-  text-shadow: 0 0 10px rgba(15, 185, 253, 0.3);
-  transform: translateZ(10px);
-}
-
-.multiplier-card:hover .multiplier-content .time {
-  color: var(--color-text-primary);
-}
-
-/* Media queries for staking benefits section */
+/* Media queries for responsive design */
 @media (max-width: 768px) {
-  /* Mobile Staking Benefits styling */
-  .staking-section {
-    padding: 3rem 1rem;
-    border-radius: 8px;
+  .governance-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem;
   }
   
-  .staking-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-  }
-  
-  .staking-info {
-    order: 1;
+  .governance-card {
+    max-width: 400px;
+    margin: 0 auto;
   }
   
   .power-multipliers {
-    order: 2;
-    padding: 0;
-    border-radius: 0;
-    margin-top: 1rem;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-  }
-  
-  .power-multipliers::before {
-    display: none;
-  }
-  
-  .power-multipliers:hover {
-    transform: none;
-    box-shadow: none;
-    border-color: transparent;
-  }
-  
-  .staking-info h3 {
-    font-size: 1.5rem;
-    text-align: center;
-    margin-bottom: 0.75rem;
-  }
-  
-  .staking-info > p {
-    font-size: 1rem;
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .benefits-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .benefit-item {
-    padding: 1.25rem;
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-    text-align: left;
-  }
-  
-  .benefit-icon {
-    margin: 0;
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
-  }
-  
-  .benefit-content {
-    text-align: left;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .benefit-content h4 {
-    margin-bottom: 0;
-  }
-  
-  .benefit-content .value {
-    margin-left: auto;
-    font-size: 1.3rem;
+    padding: 1.5rem;
+    max-width: 400px;
+    margin: 2rem auto 0;
   }
   
   .power-multipliers h3 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+    text-align: center;
     margin-bottom: 1.5rem;
   }
   
   .multiplier-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 1.5rem;
   }
   
   .multiplier-card {
     padding: 1.5rem;
-    background: linear-gradient(145deg,
-      rgba(15, 185, 253, 0.03) 0%,
-      rgba(15, 185, 253, 0.07) 100%
-    );
-    border: 1px solid rgba(15, 185, 253, 0.15);
-    border-radius: 12px;
-    box-shadow: 
-      0 15px 35px rgba(0, 0, 0, 0.05),
-      0 5px 15px rgba(0, 0, 0, 0.03);
     display: flex;
+    flex-direction: column;
     align-items: center;
-    text-align: left;
+    text-align: center;
+    max-width: 100%;
+    margin: 0 auto;
+    
+    /* Add smooth entrance animation */
+    opacity: 0;
+    animation: slideInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  
+  .multiplier-card:nth-child(1) { animation-delay: 0.1s; }
+  .multiplier-card:nth-child(2) { animation-delay: 0.2s; }
+  
+  @keyframes slideInUp {
+    from { 
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   
   .multiplier-header {
-    margin-bottom: 0;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 1.5rem;
-    flex-shrink: 0;
-    width: 60px;
+    margin-bottom: 1rem;
+    width: 100%;
   }
   
   .multiplier-header i {
     font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .multiplier-header h4 {
+    font-size: 1.2rem;
     margin-bottom: 0.5rem;
   }
   
-  .multiplier-header h4 {
-    font-size: 0.9rem;
-    text-align: center;
-    line-height: 1.2;
+  .multiplier-content {
+    width: 100%;
   }
   
-  .multiplier-content {
-    flex: 1;
+  .multiplier-content .bonus {
+    font-size: 2rem;
+  }
+  
+  .multiplier-content .time {
+    font-size: 1.1rem;
+  }
+  
+  /* Enhance focus states for mobile touch interactions */
+  .multiplier-card:active {
+    background: linear-gradient(145deg,
+      rgba(15, 185, 253, 0.08) 0%,
+      rgba(15, 185, 253, 0.12) 100%
+    );
+    border-color: rgba(15, 185, 253, 0.35);
+    transform: scale(0.98);
+    transition: all 0.3s ease;
+  }
+  
+  /* DAO Explainer Section Mobile Improvements */
+  .explainer-pillar {
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+    align-items: center;
+    text-align: center;
+    max-width: 100%;
+    margin: 0 auto;
+    
+    /* Add smooth entrance animation */
+    opacity: 0;
+    animation: slideInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
   
-  .multiplier-content .bonus {
-    font-size: 1.8rem;
-    margin-bottom: 0.25rem;
+  .explainer-pillar:nth-child(1) { animation-delay: 0.1s; }
+  .explainer-pillar:nth-child(2) { animation-delay: 0.2s; }
+  .explainer-pillar:nth-child(3) { animation-delay: 0.3s; }
+  
+  .pillar-icon {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 1rem;
   }
   
-  .multiplier-content .time {
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .power-multipliers h3 {
+  .explainer-pillar h3 {
     font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   
-  .multiplier-card {
-    padding: 1.25rem;
+  .explainer-pillar p {
+    font-size: 1rem;
+    line-height: 1.5;
   }
   
-  .multiplier-header {
-    width: 50px;
-    margin-right: 1.25rem;
-  }
-  
-  .multiplier-header i {
-    font-size: 1.6rem;
-  }
-  
-  .multiplier-header h4 {
-    font-size: 0.8rem;
-  }
-  
-  .multiplier-content .bonus {
-    font-size: 1.6rem;
-  }
-  
-  .multiplier-content .time {
-    font-size: 0.85rem;
+  /* Enhance focus states for mobile touch interactions */
+  .explainer-pillar:active {
+    background: linear-gradient(145deg,
+      rgba(15, 185, 253, 0.08) 0%,
+      rgba(15, 185, 253, 0.12) 100%
+    );
+    border-color: rgba(15, 185, 253, 0.35);
+    transform: scale(0.98) !important;
+    transition: all 0.3s ease;
   }
 }
 

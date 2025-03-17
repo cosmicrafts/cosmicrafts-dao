@@ -74,7 +74,6 @@ const scrollToTop = () => {
     <div class="nav-container">
       <ul class="nav-links">
         <li v-for="(item, index) in [
-          { label: 'header.games', path: '/game' },
           { label: 'header.dao', path: '/dao' },
           { label: 'header.whitepaper', path: '/whitepaper' },
           { label: 'header.roadmap', path: '/roadmap' }
@@ -177,7 +176,7 @@ const scrollToTop = () => {
   color: var(--cosmic-text-primary);
   text-decoration: none;
   font-weight: 600;
-  font-size: 1.75rem;
+  font-size: 3rem;
   display: inline-block;
   position: relative;
   opacity: 0; /* Start invisible */
@@ -307,7 +306,7 @@ const scrollToTop = () => {
   }
   
   .nav-links a {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
   
   .dev-link {
