@@ -10,7 +10,6 @@
     import Principal "mo:base/Principal";
     import Time "mo:base/Time";
     import Buffer "mo:base/Buffer";
-    import Option "mo:base/Option";
     import Array "mo:base/Array";
     import Debug "mo:base/Debug";
     import Text "mo:base/Text";
@@ -5744,7 +5743,7 @@ shared actor class Cosmicrafts() = Self {
                         canistergeekLogger.logMessage("NFT upgraded successfully: " # Nat.toText(nftID) # " to level " # Nat.toText(nftLevel + 1));
                         return (true, "Upgrade successful. New Metadata: " # debug_show(updatedMetadata));
                     };
-                    case (#Err(error)) {
+                    case (#Err(_error)) {
                         canistergeekLogger.logMessage("NFT upgrade error: Error getting owner");
                         return (false, "{\"success\":false, \"message\":\"Error getting owner\"}");
                     };

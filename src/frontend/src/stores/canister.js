@@ -45,16 +45,16 @@ export const useCanisterStore = defineStore('canister', {
         }
 
         // ✅ Log the canister IDs to ensure they are correct
-        console.log('Canister IDs:', this.canisterIds);
+        //console.log('Canister IDs:', this.canisterIds);
 
         // ✅ Initialize all canisters and log their creation
-        console.log(`Creating actor for cosmicrafts with ID: ${this.canisterIds.cosmicrafts}`);
+        //console.log(`Creating actor for cosmicrafts with ID: ${this.canisterIds.cosmicrafts}`);
         canisters.cosmicrafts = createActorBackend(this.canisterIds.cosmicrafts, { agent });
-        console.log(`Cosmicrafts actor created:`, canisters.cosmicrafts);
+        //console.log(`Cosmicrafts actor created:`, canisters.cosmicrafts);
 
-        console.log(`Creating actor for roadmap with ID: ${this.canisterIds.roadmap}`);
+        //console.log(`Creating actor for roadmap with ID: ${this.canisterIds.roadmap}`);
         canisters.roadmap = createActorRoadmap(this.canisterIds.roadmap, { agent });
-        console.log(`Roadmap actor created:`, canisters.roadmap);
+        //console.log(`Roadmap actor created:`, canisters.roadmap);
 
         initializing = false;
       }
