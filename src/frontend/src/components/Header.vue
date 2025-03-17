@@ -61,6 +61,18 @@
 
         <div v-if="isDropdownVisible" class="dropdown-menu" ref="dropdownMenuRef">
           <ul>
+            <li class="principal-item">
+              <div class="principal-id-display">
+                <span class="principal-label">{{ t('header.principalId') }}</span>
+                <div class="principal-value-container">
+                  <span class="principal-value">{{ formatPrincipal(getPrincipalString) }}</span>
+                  <button @click.stop="copyPrincipal" class="copy-button">
+                    <i class="fas fa-copy"></i>
+                    <span v-if="copySuccess" class="copy-tooltip">{{ t('header.copied') }}</span>
+                  </button>
+                </div>
+              </div>
+            </li>
             <li @click="goToDashboard">{{ t('header.dashboard') }}</li>
             <li @click="logout">{{ t('header.signout') }}</li>
           </ul>
@@ -103,12 +115,49 @@ const modalStore = useModalStore();
 const playerAvatar = ref(null); // Reactive avatar reference
 const isDropdownVisible = ref(false);
 const isDevDropdownVisible = ref(false);
+const copySuccess = ref(false);
 
 // Refs for DOM elements - ADD THESE LINES
 const dropdownMenuRef = ref(null); // Ref for the dropdown menu itself
 const avatarContainerRef = ref(null); // Ref for the avatar container (the clickable area)
 const devDropdownRef = ref(null); // Ref for the developer dropdown
 
+// Principal ID utilities
+const getPrincipalString = computed(() => {
+  try {
+    const identity = authStore.getIdentity();
+    return identity ? identity.getPrincipal().toText() : '';
+  } catch (error) {
+    console.error('Error getting principal string:', error);
+    return '';
+  }
+});
+
+const formatPrincipal = (principal) => {
+  if (!principal) return '';
+  // Format to show first 5 and last 3 with ... in middle
+  if (principal.length <= 8) return principal;
+  return `${principal.slice(0, 5)}...${principal.slice(-3)}`;
+};
+
+const copyPrincipal = async (event) => {
+  event.stopPropagation(); // Prevent closing the dropdown
+  const principalText = getPrincipalString.value;
+  if (principalText) {
+    try {
+      await navigator.clipboard.writeText(principalText);
+      copySuccess.value = true;
+      console.log('Copied principal to clipboard:', principalText);
+      setTimeout(() => {
+        copySuccess.value = false;
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy principal:', err);
+    }
+  } else {
+    console.error('No principal available to copy');
+  }
+};
 
 // Computed property for reactive player avatar
 const computedPlayerAvatar = computed(() => playerAvatar.value);
@@ -447,6 +496,85 @@ header:hover {
   background-color: rgba(15, 185, 253, 0.1);
   color: var(--cosmic-blue);
   text-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.principal-item {
+  padding: 0.5rem !important;
+  cursor: default !important;
+}
+
+.principal-item:hover {
+  background-color: transparent !important;
+  color: var(--cosmic-text-primary) !important;
+  text-shadow: none !important;
+}
+
+.principal-id-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.principal-label {
+  font-size: 0.75rem;
+  color: var(--cosmic-text-secondary);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.principal-value-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--cosmic-glass-bg-darker);
+  border-radius: var(--cosmic-radius-sm);
+  padding: 0.35rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.principal-value {
+  font-family: 'Fira Code', monospace;
+  font-weight: normal;
+  color: var(--cosmic-text-primary);
+}
+
+.copy-button {
+  position: relative;
+  background: transparent;
+  border: none;
+  color: var(--cosmic-text-secondary);
+  cursor: pointer;
+  transition: color var(--cosmic-transition-fast);
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.copy-button:hover {
+  color: var(--cosmic-blue);
+}
+
+.copy-tooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--cosmic-radius-sm);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0; }
+  20%, 80% { opacity: 1; }
 }
 
 /* Header button styling - removed custom styles to use unified system */

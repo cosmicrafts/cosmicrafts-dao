@@ -1,0 +1,18 @@
+{
+  "dashboard": {
+    "principal": "Principal ID",
+    "copied": "Copied!",
+    "yourReferralCode": "Your Referral Code",
+    "shareCodeSubtext": "Share your code with friends to earn rewards",
+    "multiplier": "Multiplier",
+    "multiplierSubtext": "Your current reward multiplier",
+    "directReferrals": "Direct Referrals",
+    "indirectReferrals": "Indirect Referrals",
+    "beyondReferrals": "Extended Network",
+    "referralTree": "Referral Tree",
+    "noReferralCode": "No referral code yet"
+  },
+  "header": {
+    "principalId": "Principal ID"
+  }
+} 

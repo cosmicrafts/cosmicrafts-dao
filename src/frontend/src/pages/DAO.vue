@@ -5010,9 +5010,8 @@ img.hero-logo, img.dao-image {
 
 /* DAO Explainer Section Styles */
 .dao-explainer-section {
-  padding: 6rem 2rem 4rem;
+  padding: 4rem;
   max-width: 1200px;
-  margin: 0 auto;
   position: relative;
   z-index: 2;
   width: 100%;

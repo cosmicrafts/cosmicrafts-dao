@@ -59,7 +59,8 @@
     "signout": "Sign out",
     "profile": "Profile",
     "roadmap": "Roadmap",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "principalId": "Principal ID"
   },
   "error": {
     "title": "Whoah!",
@@ -674,6 +675,8 @@
     "retry": "Retry",
     "welcome": "Welcome, {username}!",
     "subtitle": "Your cosmic journey awaits",
+    "principal": "Principal ID",
+    "copied": "Copied!",
     
     "tabs": {
       "overview": "Overview",
