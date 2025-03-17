@@ -84,7 +84,8 @@ const scrollToTop = () => {
           </router-link>
         </li>
         
-        <!-- Developer section - includes theme guide -->
+        <!-- Developer section - commented out for now -->
+        <!--
         <li class="dev-section">
           <div class="section-title">Developers</div>
           <router-link to="/theme-guide" class="cosmic-nav-link dev-link" :style="{ '--index': 5 }" @click="closeMenu">
@@ -94,6 +95,7 @@ const scrollToTop = () => {
             Style Guide
           </router-link>
         </li>
+        -->
       </ul>
     </div>
     

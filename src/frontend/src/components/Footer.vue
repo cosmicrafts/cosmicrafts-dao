@@ -15,7 +15,7 @@ const currentYear = new Date().getFullYear();
 const isMobile = ref(window.innerWidth <= 768);
 
 // Initialize with appropriate sections expanded (all on desktop, none on mobile)
-const expandedSections = ref(new Set(isMobile.value ? [] : ['explore', 'legal', 'developers']));
+const expandedSections = ref(new Set(isMobile.value ? [] : ['explore', 'legal']));
 
 // Update mobile state on resize
 window.addEventListener('resize', () => {
@@ -23,7 +23,7 @@ window.addEventListener('resize', () => {
   
   // If transitioning to desktop, open all sections
   if (!isMobile.value) {
-    expandedSections.value = new Set(['explore', 'legal', 'developers']);
+    expandedSections.value = new Set(['explore', 'legal']);
   }
 });
 
@@ -70,7 +70,32 @@ const isSectionExpanded = (section) => {
       </div>
     </div>
 
-    <!-- Accordion Container -->
+    <!-- Desktop Navigation (visible only on desktop) -->
+    <div class="desktop-nav-container">
+      <div class="desktop-nav-row">
+        <!-- Explore Section -->
+        <div class="desktop-nav-column cosmic-panel">
+          <h4 class="cosmic-text-glow desktop-nav-title">{{ t('footer.explore') }}</h4>
+          <ul class="desktop-link-list">
+            <li><router-link to="/careers" class="cosmic-nav-link">{{ t('footer.careers') }}</router-link></li>
+            <li><router-link to="/about" class="cosmic-nav-link">{{ t('footer.about') }}</router-link></li>
+            <li><router-link to="/contact" class="cosmic-nav-link">{{ t('footer.support') }}</router-link></li>
+          </ul>
+        </div>
+
+        <!-- Legal Section -->
+        <div class="desktop-nav-column cosmic-panel">
+          <h4 class="cosmic-text-glow desktop-nav-title">{{ t('footer.legal') }}</h4>
+          <ul class="desktop-link-list">
+            <li><router-link to="/privacy" class="cosmic-nav-link">{{ t('footer.privacy') }}</router-link></li>
+            <li><router-link to="/legal" class="cosmic-nav-link">{{ t('footer.legal') }}</router-link></li>
+            <li><router-link to="/terms" class="cosmic-nav-link">{{ t('footer.terms') }}</router-link></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Accordion Container (visible only on mobile) -->
     <div class="accordion-container">
       <!-- Navigation Sections in Row -->
       <div class="nav-row">
@@ -108,24 +133,6 @@ const isSectionExpanded = (section) => {
               <li><router-link to="/privacy" class="cosmic-nav-link">{{ t('footer.privacy') }}</router-link></li>
               <li><router-link to="/legal" class="cosmic-nav-link">{{ t('footer.legal') }}</router-link></li>
               <li><router-link to="/terms" class="cosmic-nav-link">{{ t('footer.terms') }}</router-link></li>
-            </ul>
-          </div>
-        </div>
-        
-        <!-- Developers Section (New) -->
-        <div class="accordion cosmic-panel">
-          <div 
-            class="accordion-header" 
-            :class="{ 'active': isSectionExpanded('developers') }"
-            @click="toggleSection('developers')"
-          >
-            <h4 class="cosmic-text-glow">Developers</h4>
-            <i class="fas" :class="isSectionExpanded('developers') ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-          </div>
-          <div class="accordion-content" :style="{ maxHeight: isSectionExpanded('developers') ? '200px' : '0' }">
-            <ul class="link-list">
-              <li><router-link to="/theme-guide" class="cosmic-nav-link">Theme Guide</router-link></li>
-              <li><router-link to="/style-guide" class="cosmic-nav-link">Style Guide</router-link></li>
             </ul>
           </div>
         </div>
@@ -253,8 +260,98 @@ const isSectionExpanded = (section) => {
   height: 24px;
 }
 
-/* Accordion Styles */
+/* Desktop Navigation Styles */
+.desktop-nav-container {
+  margin: 2rem auto;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+.desktop-nav-row {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  width: 100%;
+}
+
+.desktop-nav-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  border-radius: var(--cosmic-radius-lg);
+  border: var(--cosmic-glass-border-blue);
+  background: var(--cosmic-glass-bg-lighter);
+  min-width: 200px;
+  transition: all var(--cosmic-transition-medium);
+}
+
+.desktop-nav-column:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--cosmic-glow-blue-sm);
+  border-color: var(--cosmic-blue);
+}
+
+.desktop-nav-title {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  position: relative;
+}
+
+.desktop-nav-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2px;
+  background: var(--cosmic-blue);
+  box-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.desktop-link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.desktop-link-list li {
+  margin-bottom: 1rem;
+  transition: transform var(--cosmic-transition-fast);
+}
+
+.desktop-link-list li:hover {
+  transform: translateY(-3px);
+}
+
+.desktop-link-list a {
+  color: var(--cosmic-text-secondary);
+  text-decoration: none;
+  font-size: 1.2rem;
+  display: block;
+  padding: 0.5rem 0;
+  transition: all var(--cosmic-transition-fast);
+  font-weight: 500;
+}
+
+.desktop-link-list a:hover,
+.desktop-link-list a:active {
+  color: var(--cosmic-blue);
+  text-shadow: var(--cosmic-glow-blue-sm);
+}
+
+/* Accordion Styles (Mobile) */
 .accordion-container {
+  display: none; /* Hidden on desktop */
   margin: 1rem auto;
   width: 100%;
   padding: .5rem;
@@ -418,7 +515,14 @@ const isSectionExpanded = (section) => {
     right: 0;
   }
   
+  /* Hide desktop navigation on mobile */
+  .desktop-nav-container {
+    display: none;
+  }
+  
+  /* Show accordion on mobile */
   .accordion-container {
+    display: block;
     width: 100%;
     padding: 0.5rem;
     max-width: 100%;

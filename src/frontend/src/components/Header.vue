@@ -24,7 +24,8 @@
         <li><router-link to="/whitepaper" class="cosmic-hover">{{ t('header.whitepaper') }}</router-link></li>
         <li><router-link to="/roadmap" class="cosmic-hover">{{ t('header.roadmap') }}</router-link></li>
         
-        <!-- Developer dropdown -->
+        <!-- Developer dropdown - commented out for now -->
+        <!--
         <li class="dev-dropdown" ref="devDropdownRef">
           <div class="dropdown-trigger cosmic-hover" @click="toggleDevDropdown">Developers</div>
           <div v-if="isDevDropdownVisible" class="dev-dropdown-menu">
@@ -34,6 +35,7 @@
             </ul>
           </div>
         </li>
+        -->
       </ul>
     </nav>
 
@@ -114,13 +116,13 @@ const authStore = useAuthStore();
 const modalStore = useModalStore();
 const playerAvatar = ref(null); // Reactive avatar reference
 const isDropdownVisible = ref(false);
-const isDevDropdownVisible = ref(false);
+// const isDevDropdownVisible = ref(false); // Commented out for developer mode
 const copySuccess = ref(false);
 
 // Refs for DOM elements - ADD THESE LINES
 const dropdownMenuRef = ref(null); // Ref for the dropdown menu itself
 const avatarContainerRef = ref(null); // Ref for the avatar container (the clickable area)
-const devDropdownRef = ref(null); // Ref for the developer dropdown
+// const devDropdownRef = ref(null); // Commented out for developer mode
 
 // Principal ID utilities
 const getPrincipalString = computed(() => {
@@ -246,10 +248,12 @@ const additionalLogoSrc = computed(() => {
   return additionalLogoMap[locale.value] || additionalLogoMap.default;
 });
 
-// Toggle developer dropdown
+// Toggle developer dropdown - commented out for now
+/*
 const toggleDevDropdown = () => {
   isDevDropdownVisible.value = !isDevDropdownVisible.value;
 };
+*/
 
 // Close dropdowns when clicking outside them
 const handleClickOutside = (event) => {
@@ -264,7 +268,8 @@ const handleClickOutside = (event) => {
     isDropdownVisible.value = false;
   }
   
-  // Close dev dropdown
+  // Close dev dropdown - commented out for now
+  /*
   if (
     isDevDropdownVisible.value &&
     devDropdownRef.value &&
@@ -272,6 +277,7 @@ const handleClickOutside = (event) => {
   ) {
     isDevDropdownVisible.value = false;
   }
+  */
 };
 
 onMounted(() => {
