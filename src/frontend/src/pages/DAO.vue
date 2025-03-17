@@ -173,7 +173,7 @@
 
     <!-- DAO Explanation Section -->
     <section class="dao-explainer-section">
-      <div class="explainer-container cosmic-card">
+      <div class="explainer-container">
         <h2 class="section-title text-gradient">{{ $t('dao.explainer.title', 'What is the Cosmicrafts DAO?') }}</h2>
         <div class="explainer-content">
           <div class="explainer-text">
@@ -4907,11 +4907,11 @@ img.hero-logo, img.dao-image {
   padding: 3rem;
   border-radius: 12px;
   background: linear-gradient(135deg,
-    rgba(15, 185, 253, 0.08) 0%,
-    rgba(15, 185, 253, 0.04) 100%
+    rgba(15, 185, 253, 0.04) 0%,
+    rgba(15, 185, 253, 0.01) 100%
   );
-  border: 1px solid rgba(15, 185, 253, 0.15);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -5141,6 +5141,9 @@ img.hero-logo, img.dao-image {
   align-items: center;
   justify-content: center;
   width: 100%;
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
 
 .content-container {
@@ -5153,6 +5156,10 @@ img.hero-logo, img.dao-image {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  border: none;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
 }
 
 .hero-content {
