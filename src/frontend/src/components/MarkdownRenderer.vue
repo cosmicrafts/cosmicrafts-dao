@@ -906,7 +906,7 @@ export default {
 
 .markdown-content ul li ul li {
   background: linear-gradient(90deg, 
-    rgba(255, 0, 0, 0.981),
+    rgba(0, 183, 255, 0.137),
     rgba(15, 185, 253, 0.05) 50%,
     transparent
   );
@@ -940,8 +940,8 @@ export default {
   padding: 1rem 1rem 1rem 4rem;
   margin-bottom: 1rem;
   background: linear-gradient(90deg, 
-    rgba(255, 145, 0, 0.1),
-    rgba(255, 145, 0, 0.05) 50%,
+    rgba(97, 55, 0, 0.315),
+    rgba(255, 145, 0, 0.144) 50%,
     transparent
   );
   border-radius: 8px;
@@ -1019,7 +1019,7 @@ export default {
 .markdown-content ol li ul li {
   counter-increment: none;
   background: linear-gradient(90deg, 
-    rgba(15, 185, 253, 0.1),
+    rgba(253, 178, 15, 0.288),
     rgba(15, 185, 253, 0.05) 50%,
     transparent
   );

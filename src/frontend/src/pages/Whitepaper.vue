@@ -596,7 +596,7 @@ export default {
   --color-bg-dark: rgba(30, 43, 56, 0.6);
   --color-bg-darker: rgba(23, 33, 43, 0.98);
   
-  --color-border: rgba(58, 58, 58, 0.24);
+  --color-border: rgba(255, 255, 255, 0.11);
   
   --color-text-primary: rgba(255, 255, 255, 0.95);
   --color-text-secondary: rgba(255, 255, 255, 0.7);
@@ -629,7 +629,7 @@ export default {
 .sidebar {
   height: 100%;
   overflow: hidden;
-  border-color: var(--cosmic-glass-border);
+  border-color: rgba(0, 217, 255, 0.164);
   border-style: solid;
   border-width: 0;
   display: flex;
@@ -992,7 +992,7 @@ export default {
   flex-direction: column;
   width: 100%;
   justify-content: center;
-  padding: 1.25rem 1.5rem;
+  padding: 1.5rem 1.5rem;
   position: relative;
   border: var(--cosmic-glass-border-blue);
   background: var(--cosmic-glass-bg);
@@ -1032,13 +1032,13 @@ export default {
 }
 
 .navigation-buttons .button.prev {
-  padding-left: 3.5rem;
+  padding-left: 5rem;
   text-align: left;
   align-items: flex-start;
 }
 
 .navigation-buttons .button.next {
-  padding-right: 3.5rem;
+  padding-right: 5rem;
   text-align: right;
   align-items: flex-end;
 }

@@ -34,34 +34,6 @@
       <div class="cosmic-accent-glow center-glow"></div>
       <div class="cosmic-accent-glow bottom-left-glow"></div>
       
-      <!-- Page-wide overlays -->
-      <div class="cosmic-overlay dark-overlay"></div>
-      <div class="cosmic-overlay blur-overlay"></div>
-      
-      <!-- Floating Elements -->
-      <div class="floating-elements">
-        <div class="floating-element" style="--delay: 0s; --depth: 30px; --rotation: -5deg; --top: 15%; --left: 10%;">
-          <div class="element-particles">
-            <span></span><span></span><span></span><span></span>
-          </div>
-        </div>
-        <div class="floating-element" style="--delay: 1s; --depth: 60px; --rotation: 5deg; --top: 65%; --left: 20%;">
-          <div class="element-particles">
-            <span></span><span></span><span></span><span></span>
-          </div>
-        </div>
-        <div class="floating-element" style="--delay: 2s; --depth: 90px; --rotation: -7deg; --top: 25%; --right: 12%;">
-          <div class="element-particles">
-            <span></span><span></span><span></span><span></span>
-          </div>
-        </div>
-        <div class="floating-element" style="--delay: 3s; --depth: 40px; --rotation: 7deg; --bottom: 20%; --right: 15%;">
-          <div class="element-particles">
-            <span></span><span></span><span></span><span></span>
-          </div>
-        </div>
-      </div>
-      
       <!-- Cosmic Portal Elements -->
       <div class="cosmic-portal-bg">
         <div class="portal-ring outer-ring"></div>
@@ -125,8 +97,6 @@
         <div class="dust-particle" style="--size: 2px; --delay: 14s; --speed: 19s;"></div>
       </div>
       
-      <!-- Gradient Overlays -->
-      <div class="cosmic-gradient-overlay top-gradient"></div>
       <div class="cosmic-gradient-overlay bottom-gradient"></div>
     </div>
     
@@ -543,7 +513,7 @@ export default {
 
           // Apply parallax effect
           if (starfield.value) {
-            starfield.value.style.top = `${-scrollY.value * parallaxFactor.value}px`;
+            starfield.value.style.transform = `translateY(${-scrollY.value * parallaxFactor.value}px)`;
           }
 
           ticking = false;
@@ -576,7 +546,7 @@ export default {
           const ctx = canvas.getContext('2d');
           
           // Get device pixel ratio
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const dpr = window.devicePixelRatio || 1;
           
           let animationFrameId;
 
@@ -601,24 +571,24 @@ export default {
             // Scale context
             ctx.scale(dpr, dpr);
             
-            // Create more visible stars
-            const starCount = Math.floor((width * height) / 800); // Increase density
+            // Calculate star count based on screen area
+            const starCount = Math.floor((width * height) / 1600);
             stars.length = 0;
             
             for (let i = 0; i < starCount; i++) {
               stars.push({
                 x: Math.random() * width,
                 y: Math.random() * height,
-                radius: Math.random() * 2 + 1, // Larger stars
+                radius: (Math.random() * 1.5) + 0.5,
                 opacity: 0,
-                targetOpacity: Math.random() * 0.5 + 0.5, // Brighter stars
-                twinkleSpeed: 0.003 + Math.random() * 0.01,
-                delay: Math.random() * 1000
+                targetOpacity: 0.7 + Math.random() * 0.3,
+                twinkleSpeed: 0.002 + Math.random() * 0.008,
+                delay: Math.random() * 2000
               });
             }
           };
           
-          // Draw stars with enhanced visibility
+          // Draw stars
           const drawStars = () => {
             if (!ctx) return;
             
@@ -629,11 +599,11 @@ export default {
             
             stars.forEach(star => {
               if (star.opacity < star.targetOpacity && now > animStart + star.delay) {
-                star.opacity = Math.min(star.targetOpacity, star.opacity + 0.02); // Faster fade in
+                star.opacity = Math.min(star.targetOpacity, star.opacity + 0.01);
               }
               
-              const twinkle = Math.sin(now * star.twinkleSpeed) * 0.3; // More pronounced twinkling
-              const currentOpacity = Math.max(0.2, Math.min(1, star.opacity + twinkle));
+              const twinkle = Math.sin(now * star.twinkleSpeed) * 0.2;
+              const currentOpacity = Math.max(0.1, Math.min(star.targetOpacity, star.opacity + twinkle));
               
               // Draw star with glow effect
               const gradient = ctx.createRadialGradient(
@@ -660,9 +630,9 @@ export default {
           
           // Handle window resize
           const handleResize = () => {
+            // Reset scale before resizing
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             createStars();
-            drawStars();
           };
           
           // Initial setup
@@ -772,7 +742,6 @@ export default {
   --animation-delay-base: 0.1s;
   --cosmic-bg-dark: rgb(10, 14, 28);
   --hero-accent-glow: rgba(15, 185, 253, 0.3);
-  --glass-blur: 60px;
   --cosmic-bg-primary: #0a111f;
   --cosmic-bg-secondary: #1a2035;
   --cosmic-accent-glow: rgba(65, 195, 255, 0.8);
@@ -795,18 +764,17 @@ export default {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 600vh;
   z-index: 0;
   pointer-events: none;
   overflow: visible;
-  background: var(--cosmic-bg-primary);
+  background: rgba(0, 0, 0, 0.349);
 }
 
 /* Dynamic Accent Glows */
 .cosmic-accent-glow {
   position: fixed;
   border-radius: 50%;
-  filter: blur(var(--glass-blur));
   opacity: 0.6;
   z-index: 1;
   pointer-events: none;
@@ -879,39 +847,45 @@ export default {
 
 .floating-element {
   position: absolute;
-  width: 70px;
-  height: 70px;
+  width: var(--width, 15vw);
+  height: 1080px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: rgba(16, 20, 38, 0.75);
-  border: 1px solid rgba(15, 185, 253, 0.3);
-  border-radius: 16px;
-  box-shadow: 
-    0 0 15px rgba(15, 185, 253, 0.15),
-    0 10px 30px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(8px);
+
   transform-style: preserve-3d;
   animation-timing-function: var(--animation-smooth);
   animation: float 10s infinite alternate;
   animation-delay: var(--delay);
+  
+  /* Position each element based on its CSS variables */
+  top: var(--top, auto);
+  left: var(--left, auto);
+  right: var(--right, auto);
+  bottom: var(--bottom, auto);
   transform: rotate(var(--rotation)) translateZ(var(--depth));
+  
+  /* For performance */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  
+  /* Ensure responsiveness */
+  max-width: var(--width, 50vw);
 }
 
 .element-particles {
-  position: absolute;
+  position: relative;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  transform-style: preserve-3d;
   z-index: 1;
 }
 
 .element-particles span {
-  position: absolute;
-  width: 15px;
-  height: 15px;
+  position: relative;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--cosmic-blue);
   opacity: 0.5;
@@ -1035,6 +1009,11 @@ export default {
   animation: portalCorePulse 4s infinite alternate var(--animation-smooth);
 }
 
+.cosmic-card {
+  padding: 1rem;
+  width: 100%;
+}
+
 /* Logo Watermark */
 .cosmic-logo-watermark {
   position: fixed;
@@ -1054,7 +1033,6 @@ export default {
     rgba(65, 195, 255, 0.02) 50%,
     rgba(65, 195, 255, 0) 70%);
   border-radius: 50%;
-  filter: blur(15px);
   opacity: 0.3;
   animation: logoGlowPulse 4s infinite alternate ease-in-out;
 }
@@ -1069,6 +1047,7 @@ export default {
   opacity: 0.2;
   filter: none; /* Remove the drop shadow */
 }
+
 
 @keyframes logoGlowPulse {
   0% {
@@ -1128,7 +1107,7 @@ export default {
   transform-origin: left center;
   transform: rotate(var(--angle));
   opacity: 0.6;
-  filter: blur(1px);
+
   border-radius: 1px;
 }
 
@@ -1288,7 +1267,7 @@ export default {
   mix-blend-mode: screen;
   opacity: 1;
   will-change: transform;
-  transform: translateZ(0);
+  transform: translateZ(0); /* Hardware acceleration */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
@@ -1321,13 +1300,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, 
-    rgba(8, 9, 12, 0.95) 0%, 
-    rgba(29, 38, 60, 0.95) 50%,
-    rgba(8, 9, 12, 0.95) 100%), 
-    url('@/assets/webp/daoheadline.webp') no-repeat center center;
+  background: url('@/assets/webp/daoheadline.webp') no-repeat center center;
   background-size: cover;
-  background-blend-mode: overlay;
   perspective: 1500px;
   transform-style: preserve-3d;
   /* Add content-visibility for better performance */
@@ -1342,18 +1316,9 @@ export default {
   to { opacity: 1; }
 }
 
+/* Removing the blue tint overlay */
 .headline::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 50% 30%, 
-    rgba(15, 185, 253, 0.12) 0%, 
-    transparent 60%);
-  z-index: 1;
-  pointer-events: none;
+  display: none; /* Hide the overlay */
 }
 
 .noise-canvas {
@@ -1440,9 +1405,15 @@ export default {
 }
 
 @keyframes float {
-  0% { transform: translateZ(40px) translateY(0px); }
-  50% { transform: translateZ(40px) translateY(-15px); }
-  100% { transform: translateZ(40px) translateY(0px); }
+  0% { 
+    transform: rotate(var(--rotation)) translateZ(var(--depth)) translateY(0px); 
+  }
+  50% { 
+    transform: rotate(var(--rotation)) translateZ(var(--depth)) translateY(-15px); 
+  }
+  100% { 
+    transform: rotate(var(--rotation)) translateZ(var(--depth)) translateY(0px); 
+  }
 }
 
 @keyframes textGradientShift {
@@ -1519,7 +1490,7 @@ export default {
   background-clip: text;
   color: transparent;
   z-index: -1;
-  filter: blur(8px);
+
   opacity: 0.7;
   transform: translateZ(15px);
 }
@@ -1538,7 +1509,6 @@ export default {
     rgba(15, 185, 253, 0.8) 50%, 
     rgba(15, 185, 253, 0) 100%
   );
-  filter: blur(1px);
   border-radius: 2px;
   opacity: 0;
   animation: lineReveal 1s ease 0.7s forwards;
@@ -2987,7 +2957,6 @@ export default {
 /* Join Section Styles */
 .join-section {
   padding: 4rem 2rem;
-
   text-align: center;
   background: linear-gradient(135deg,
     rgba(15, 185, 253, 0.08) 0%,
@@ -3065,7 +3034,7 @@ export default {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.75s cubic-bezier(0.25, 0.1, 0.25, 1); /* Slower, more elegant transition */
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: transparent;
   color: var(--cosmic-text-primary);
@@ -3074,7 +3043,7 @@ export default {
 .join-buttons .cosmic-button i {
   font-size: 1.5rem;
   margin-right: 1rem;
-  transition: all 0.3s ease;
+  transition: all 0.75s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bounce effect for icon */
 }
 
 .join-buttons .cosmic-button.primary {
@@ -3084,6 +3053,7 @@ export default {
   );
   border: 1px solid rgba(15, 185, 253, 0.3);
   box-shadow: 0 4px 15px rgba(15, 185, 253, 0.2);
+  transition: all 0.75s cubic-bezier(0.25, 0.1, 0.25, 1); /* Consistent transition */
 }
 
 .join-buttons .cosmic-button.primary:hover {
@@ -3096,18 +3066,19 @@ export default {
     0 6px 25px rgba(15, 185, 253, 0.3),
     inset 0 0 20px rgba(15, 185, 253, 0.4);
   color: #ffffff;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
 .join-buttons .cosmic-button.primary:hover i {
   color: var(--cosmic-highlight-1);
   text-shadow: 0 0 10px rgba(15, 185, 253, 0.8);
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(5deg);
 }
 
 .join-buttons .cosmic-button.secondary {
   background: rgba(15, 185, 253, 0.08);
   border: 1px solid rgba(15, 185, 253, 0.2);
+  transition: all 0.75s cubic-bezier(0.25, 0.1, 0.25, 1); /* Consistent transition */
 }
 
 .join-buttons .cosmic-button.secondary:hover {
@@ -3116,13 +3087,13 @@ export default {
   box-shadow: 
     0 4px 20px rgba(15, 185, 253, 0.15),
     inset 0 0 15px rgba(15, 185, 253, 0.2);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
 .join-buttons .cosmic-button.secondary:hover i {
   color: var(--cosmic-highlight-1);
   text-shadow: 0 0 8px rgba(15, 185, 253, 0.6);
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(5deg);
 }
 
 /* Add a glow effect behind the buttons */
@@ -3139,7 +3110,7 @@ export default {
     transparent 100%
   );
   transform: translateX(-100%) rotate(45deg);
-  transition: transform 0.6s ease;
+  transition: transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1); /* Slower shimmer effect */
   z-index: 1;
 }
 
@@ -5067,14 +5038,9 @@ img.hero-logo, img.dao-image {
 }
 
 @keyframes particleFloat {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.3;
-  }
-  100% {
-    transform: translate(5px, -5px) scale(1.5);
-    opacity: 0.8;
-  }
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(5px, -5px); }
+  100% { transform: translate(0, 0); }
 }
 
 @keyframes floatDust {
@@ -5382,7 +5348,6 @@ img.hero-logo, img.dao-image {
     rgba(15, 185, 253, 0.03) 70%,
     transparent 100%
   );
-  filter: blur(15px);
   opacity: 0.2;
   animation: floatShape 15s infinite ease-in-out;
 }
@@ -5470,7 +5435,6 @@ img.hero-logo, img.dao-image {
 
   .floating-shape {
     opacity: 0.2;
-    filter: blur(15px);
   }
 }
 
@@ -5510,600 +5474,57 @@ img.hero-logo, img.dao-image {
 
 /* Sky Light Beams */
 .sky-light-beams {
-  position: fixed;
+  position: fixed; /* Changed from absolute to fixed */
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   z-index: 1;
-  overflow: hidden;
+  overflow: visible;
   pointer-events: none;
 }
 
 .light-beam {
   position: absolute;
+  top: -50%;
+  left: calc(10% + (var(--rotate) * 30px));
+  height: 200vh; /* Extended height to cover entire scroll */
   width: 3vw;
-  height: 100vh;
-  background: linear-gradient(to bottom, 
-    rgba(65, 195, 255, 0) 0%,
-    rgba(65, 195, 255, 0.05) 20%,
-    rgba(65, 195, 255, 0.1) 40%,
-    rgba(65, 195, 255, 0.05) 60%,
-    rgba(65, 195, 255, 0) 100%);
-  opacity: 0;
-  transform: translateY(-100%) rotate(var(--rotate, 0deg));
-  filter: blur(8px);
-  animation: beamMove 15s infinite ease-in-out;
-}
-
-.light-beam:nth-child(1) {
-  left: 15%;
-  animation-delay: 0s;
-  width: 4vw;
-}
-
-.light-beam:nth-child(2) {
-  left: 30%;
-  animation-delay: 3s;
-  width: 2vw;
-}
-
-.light-beam:nth-child(3) {
-  left: 50%;
-  animation-delay: 7s;
-  width: 5vw;
-}
-
-.light-beam:nth-child(4) {
-  left: 65%;
-  animation-delay: 5s;
-  width: 3vw;
-}
-
-.light-beam:nth-child(5) {
-  left: 85%;
-  animation-delay: 2s;
-  width: 4vw;
-}
-
-.light-beam:nth-child(6) {
-  left: 10%;
-  animation-delay: 9s;
-  width: 2.5vw;
-}
-
-.light-beam:nth-child(7) {
-  left: 40%;
-  animation-delay: 11s;
-  width: 3.5vw;
-}
-
-.light-beam:nth-child(8) {
-  left: 75%;
-  animation-delay: 4s;
-  width: 3vw;
-}
-
-@keyframes beamMove {
-  0% {
-    opacity: 0;
-    transform: translateY(-100%) rotate(var(--rotate, 0deg));
-  }
-  20% {
-    opacity: 0.7;
-  }
-  80% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(100%) rotate(var(--rotate, 0deg));
-  }
-}
-
-/* Logo Watermark */
-.cosmic-logo-watermark {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.light-beam {
-  position: absolute;
-  width: 3vw;
-  height: 100vh;
-  background: linear-gradient(to bottom, 
-    rgba(65, 195, 255, 0) 0%,
-    rgba(65, 195, 255, 0.05) 20%,
-    rgba(65, 195, 255, 0.1) 40%,
-    rgba(65, 195, 255, 0.05) 60%,
-    rgba(65, 195, 255, 0) 100%);
-  opacity: 0;
-  transform: translateY(-100%) rotate(var(--rotate, 0deg));
-  filter: blur(8px);
-  animation: beamMove 15s infinite ease-in-out;
-}
-
-@keyframes beamMove {
-  0% {
-    opacity: 0;
-    transform: translateY(-100%) rotate(var(--rotate, 0deg));
-  }
-  20% {
-    opacity: 0.7;
-  }
-  80% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(100%) rotate(var(--rotate, 0deg));
-  }
-}
-
-@media (max-width: 768px) {
-  .dao-page {
-    width: 100vw;
-    max-width: 100vw;
-    overflow-x: hidden;
-  }
-  
-  .dao-explainer-section {
-    padding: 4rem 1rem 2rem;
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-  
-  .explainer-container {
-    padding: 1.5rem;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .explainer-pillars {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .explainer-pillar {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .distribution-section {
-    padding: 0 1rem;
-    width: 100%;
-    max-width: 100%;
-  }
-  
-  .distribution-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    width: 100%;
-    max-width: 100%;
-  }
-}
-
-.explainer-links {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-top: 2rem;
-  width: 100%;
-}
-
-@media (max-width: 768px) {
-  .explainer-links {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-    max-width: 260px;
-    margin: 2rem auto 0;
-  }
-  
-  .explainer-links .cta-button {
-    width: 100%;
-    padding: 1rem 1.5rem;
-    font-size: 1.1rem;
-    justify-content: center;
-  }
-}
-
-.explainer-pillars {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 2.5rem;
-  width: 100%;
-}
-
-.explainer-pillar {
-  padding: 2rem;
-  text-align: center;
-  background: linear-gradient(145deg,
-    rgba(15, 185, 253, 0.03) 0%,
-    rgba(15, 185, 253, 0.07) 100%
-  );
-  border: 1px solid rgba(15, 185, 253, 0.15);
-  border-radius: 12px;
-  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 
-    0 15px 35px rgba(0, 0, 0, 0.05),
-    0 5px 15px rgba(0, 0, 0, 0.03);
-  transform-style: preserve-3d;
-  transform: translateZ(0);
-}
-
-.explainer-pillar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg,
-    transparent 0%,
-    rgba(15, 185, 253, 0.05) 100%
-  );
-  opacity: 0;
-  z-index: 0;
-  transition: all 0.5s ease;
-}
-
-.explainer-pillar::after {
-  content: '';
-  position: absolute;
-  top: -100%;
-  left: -100%;
-  width: 300%;
-  height: 300%;
   background: linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.03) 50%,
-    rgba(255, 255, 255, 0) 100%
+    to bottom,
+    rgba(15, 185, 253, 0) 0%,
+    rgba(15, 185, 253, 0.05) 30%,
+    rgba(15, 185, 253, 0.1) 70%,
+    rgba(15, 185, 253, 0) 100%
   );
-  transform: rotate(45deg);
-  transition: transform 1s ease;
-  z-index: 0;
-  pointer-events: none;
+  transform: rotate(var(--rotate));
+  filter: blur(3px);
+  opacity: 0.7;
+  will-change: transform;
 }
 
-.explainer-pillar:hover {
-  transform: translateY(-10px) rotateX(2deg) rotateY(2deg) translateZ(10px);
-  border-color: rgba(15, 185, 253, 0.3);
-  box-shadow: 
-    0 25px 50px rgba(15, 185, 253, 0.1),
-    0 10px 20px rgba(0, 0, 0, 0.05);
-}
+/* Remove all floating elements related CSS */
+/* Floating Elements - REMOVED */
 
-.explainer-pillar:hover::before {
-  opacity: 1;
-}
+/* Element Particles - REMOVED */
 
-.explainer-pillar:hover::after {
-  transform: translateY(100%) translateX(100%) rotate(45deg);
-  transition: transform 0.8s ease;
-}
-
-.pillar-icon {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: linear-gradient(135deg,
-    rgba(15, 185, 253, 0.1) 0%,
-    rgba(15, 185, 253, 0.2) 100%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.5rem;
-  position: relative;
-  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  box-shadow: 
-    0 10px 20px rgba(15, 185, 253, 0.1),
-    0 5px 10px rgba(0, 0, 0, 0.05);
-}
-
-.pillar-icon::before {
-  content: '';
-  position: absolute;
-  top: -5px;
-  left: -5px;
-  right: -5px;
-  bottom: -5px;
-  border-radius: 50%;
-  border: 1px solid rgba(15, 185, 253, 0.2);
-  opacity: 0.5;
-  transition: all 0.4s ease;
-}
-
-.pillar-icon i {
-  font-size: 1.8rem;
-  color: rgba(15, 185, 253, 0.9);
-  transition: all 0.4s ease;
-}
-
-.explainer-pillar:hover .pillar-icon {
-  transform: translateY(-5px) scale(1.1);
-  background: linear-gradient(135deg,
-    rgba(15, 185, 253, 0.2) 0%,
-    rgba(15, 185, 253, 0.4) 100%
-  );
-  box-shadow: 
-    0 15px 30px rgba(15, 185, 253, 0.2),
-    0 8px 15px rgba(0, 0, 0, 0.08);
-}
-
-.explainer-pillar:hover .pillar-icon::before {
-  opacity: 0.8;
-  transform: scale(1.1);
-}
-
-.explainer-pillar:hover .pillar-icon i {
-  color: rgba(255, 255, 255, 0.95);
-  transform: scale(1.1);
-}
-
-.explainer-pillar h3 {
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
-  color: var(--color-text-primary);
-  transition: all 0.3s ease;
-}
-
-.explainer-pillar p {
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  transition: all 0.3s ease;
-}
-
-.explainer-pillar:hover h3 {
-  color: rgba(15, 185, 253, 0.9);
-}
-
-.explainer-pillar:hover p {
-  color: var(--color-text-primary);
-}
-
-@media (max-width: 992px) {
-  .explainer-pillars {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .explainer-pillars {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  
-  .explainer-pillar {
-    display: flex;
-    text-align: left;
-    padding: 1.5rem;
-    align-items: center;
-    transform: none !important;
-  }
-  
-  .pillar-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 1.5rem 0 0;
-    flex-shrink: 0;
-  }
-  
-  .pillar-icon i {
-    font-size: 1.5rem;
-  }
-  
-  .explainer-pillar h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .explainer-pillar p {
-    font-size: 0.95rem;
-    margin: 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .explainer-pillar {
-    padding: 1.25rem;
-  }
-  
-  .pillar-icon {
-    width: 50px;
-    height: 50px;
-    margin: 0 1.25rem 0 0;
-  }
-  
-  .pillar-icon i {
-    font-size: 1.3rem;
-  }
-  
-  .explainer-pillar h3 {
-    font-size: 1.1rem;
-  }
-  
-  .explainer-pillar p {
-    font-size: 0.9rem;
-  }
-}
-
-/* Multipliers Section */
-.multipliers-section {
-  padding: 2rem;
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
-}
-
-/* Update Power Multipliers for full width */
-.multipliers-section .power-multipliers {
-  padding: 2.5rem;
-  margin-top: -2.5rem;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1200px;
-  background: linear-gradient(145deg,
-    rgba(15, 185, 253, 0.06) 0%,
-    rgba(15, 185, 253, 0.1) 100%
-  );
-  border-radius: 16px;
-  border: 1px solid rgba(15, 185, 253, 0.2);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  box-sizing: border-box;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-.multipliers-section .multiplier-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2.5rem;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-/* Responsive styles for multipliers section */
-@media (max-width: 768px) {
-  .multipliers-section {
-    padding: 3rem 1rem 2rem;
-    overflow: visible;
-  }
-  
-  .multipliers-section .power-multipliers {
-    max-width: 90%;
-    padding: 1.75rem 1.5rem;
-    margin: 1rem auto;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  }
-  
-  .multipliers-section .power-multipliers h3 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-  
-  .multipliers-section .multiplier-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    width: 100%;
-  }
-  
-  .multipliers-section .multiplier-card {
-    padding: 1.5rem;
-    max-width: 90%;
-    margin: 0 auto;
-    box-sizing: border-box;
-    transform: translateY(0);
-    opacity: 0;
-    animation: slideInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  }
-  
-  .multipliers-section .multiplier-card:nth-child(1) { animation-delay: 0.1s; }
-  .multipliers-section .multiplier-card:nth-child(2) { animation-delay: 0.3s; }
-  
-  .multipliers-section .multiplier-header i {
-    width: 70px;
-    height: 70px;
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-  }
-  
-  .multipliers-section .multiplier-content .bonus {
-    font-size: 2.2rem;
-  }
-  
-  .multipliers-section .multiplier-content .time {
-    font-size: 1.2rem;
-  }
-  
-  .multipliers-section .multiplier-card:active {
-    transform: scale(0.98);
-    background: linear-gradient(145deg,
-      rgba(15, 185, 253, 0.08) 0%,
-      rgba(15, 185, 253, 0.12) 100%
-    );
-    border-color: rgba(15, 185, 253, 0.25);
-    transition: all 0.3s ease;
-  }
-}
-
-/* More targeted styles for smaller mobile devices */
-@media (max-width: 480px) {
-  .multipliers-section {
-    padding: 2rem 0.75rem 1.5rem;
-  }
-  
-  .multipliers-section .power-multipliers {
-    max-width: 100%;
-    padding: 1.25rem;
-    margin: 0.75rem auto;
-    border-radius: 8px;
-  }
-  
-  .multipliers-section .power-multipliers h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .multipliers-section .multiplier-grid {
-    gap: 1rem;
-  }
-  
-  .multipliers-section .multiplier-card {
-    padding: 1.25rem;
-    max-width: 100%;
-  }
-  
-  .multipliers-section .multiplier-header i {
-    width: 60px;
-    height: 60px;
-    font-size: 1.5rem;
-  }
-  
-  .multipliers-section .multiplier-header h4 {
-    font-size: 1.1rem;
-  }
-  
-  .multipliers-section .multiplier-content .bonus {
-    font-size: 2rem;
-  }
-  
-  .multipliers-section .multiplier-content .time {
-    font-size: 1rem;
-  }
-}
+/* Keep the rest of the CSS */
+// ... existing code ...
 
 .text-gradient {
   background: linear-gradient(
     135deg,
-    var(--cosmic-highlight-1) 0%,
-    var(--cosmic-highlight-2) 50%,
-    var(--cosmic-highlight-1) 100%
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(125, 210, 255, 0.9) 30%,
+    rgba(65, 195, 255, 0.85) 70%,
+    rgba(255, 255, 255, 0.95) 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  text-shadow: var(--cosmic-font-glow);
+  text-shadow: 0 0 5px rgba(65, 195, 255, 0.4);
   animation: textGradientShift 8s ease infinite;
 }
 </style>
