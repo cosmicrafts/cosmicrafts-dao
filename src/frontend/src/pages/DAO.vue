@@ -31,6 +31,12 @@
       <!-- Dynamic Accent Glows -->
       <div class="cosmic-accent-glow top-left-glow"></div>
       <div class="cosmic-accent-glow bottom-right-glow"></div>
+      <div class="cosmic-accent-glow center-glow"></div>
+      <div class="cosmic-accent-glow bottom-left-glow"></div>
+      
+      <!-- Page-wide overlays -->
+      <div class="cosmic-overlay dark-overlay"></div>
+      <div class="cosmic-overlay blur-overlay"></div>
       
       <!-- Floating Elements -->
       <div class="floating-elements">
@@ -489,6 +495,7 @@ export default {
     const daoAppUrl = ref('https://nns.ic0.app');
     const isLoading = ref(false);
     const error = ref(null);
+    const parallaxFactor = ref(0.2);
     
     // Mock data for active proposals
     const activeProposals = ref([
@@ -533,6 +540,12 @@ export default {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           scrollY.value = window.scrollY;
+
+          // Apply parallax effect
+          if (starfield.value) {
+            starfield.value.style.top = `${-scrollY.value * parallaxFactor.value}px`;
+          }
+
           ticking = false;
         });
         ticking = true;
@@ -559,19 +572,23 @@ export default {
     function initCanvasEffects() {
       if (starfield.value) {
         try {
-          // Get canvas and context
           const canvas = starfield.value;
           const ctx = canvas.getContext('2d');
           
           // Get device pixel ratio
-          const dpr = window.devicePixelRatio || 1;
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
           
+          let animationFrameId;
+
           // Create stars
           const stars = [];
           const createStars = () => {
-            // Set canvas dimensions with pixel ratio
             const width = window.innerWidth;
-            const height = window.innerHeight;
+            // Use the max between the body and the viewport, + a buffer to fill on scroll
+            const height = Math.max(
+              document.body.scrollHeight,
+              window.innerHeight
+            ) + (window.innerHeight * parallaxFactor.value * 2);
             
             // Set display size
             canvas.style.width = width + 'px';
@@ -581,27 +598,27 @@ export default {
             canvas.width = width * dpr;
             canvas.height = height * dpr;
             
-            // Scale context to match pixel ratio
+            // Scale context
             ctx.scale(dpr, dpr);
             
-            // Calculate star count based on screen area with increased density
-            const starCount = Math.floor((width * height) / 1000); // Increased density from 1600 to 1000
+            // Create more visible stars
+            const starCount = Math.floor((width * height) / 800); // Increase density
             stars.length = 0;
             
             for (let i = 0; i < starCount; i++) {
               stars.push({
                 x: Math.random() * width,
                 y: Math.random() * height,
-                radius: (Math.random() * 1.5) + 0.5,
+                radius: Math.random() * 2 + 1, // Larger stars
                 opacity: 0,
-                targetOpacity: 0.7 + Math.random() * 0.3,
-                twinkleSpeed: 0.002 + Math.random() * 0.008,
-                delay: Math.random() * 2000
+                targetOpacity: Math.random() * 0.5 + 0.5, // Brighter stars
+                twinkleSpeed: 0.003 + Math.random() * 0.01,
+                delay: Math.random() * 1000
               });
             }
           };
           
-          // Draw stars
+          // Draw stars with enhanced visibility
           const drawStars = () => {
             if (!ctx) return;
             
@@ -610,24 +627,32 @@ export default {
             const now = Date.now();
             const animStart = now - 500;
             
-            ctx.fillStyle = '#ffffff';
             stars.forEach(star => {
               if (star.opacity < star.targetOpacity && now > animStart + star.delay) {
-                star.opacity = Math.min(star.targetOpacity, star.opacity + 0.01);
+                star.opacity = Math.min(star.targetOpacity, star.opacity + 0.02); // Faster fade in
               }
               
-              const twinkle = Math.sin(now * star.twinkleSpeed) * 0.2;
-              const currentOpacity = Math.max(0.1, Math.min(star.targetOpacity, star.opacity + twinkle));
+              const twinkle = Math.sin(now * star.twinkleSpeed) * 0.3; // More pronounced twinkling
+              const currentOpacity = Math.max(0.2, Math.min(1, star.opacity + twinkle));
               
-              ctx.globalAlpha = currentOpacity;
+              // Draw star with glow effect
+              const gradient = ctx.createRadialGradient(
+                star.x, star.y, 0,
+                star.x, star.y, star.radius * 2
+              );
+              
+              gradient.addColorStop(0, `rgba(255, 255, 255, ${currentOpacity})`);
+              gradient.addColorStop(0.5, `rgba(155, 176, 255, ${currentOpacity * 0.5})`);
+              gradient.addColorStop(1, 'rgba(155, 176, 255, 0)');
+              
+              ctx.fillStyle = gradient;
               ctx.beginPath();
-              ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+              ctx.arc(star.x, star.y, star.radius * 2, 0, Math.PI * 2);
               ctx.fill();
             });
           };
           
           // Animation loop
-          let animationFrameId;
           const animate = () => {
             drawStars();
             animationFrameId = requestAnimationFrame(animate);
@@ -635,9 +660,9 @@ export default {
           
           // Handle window resize
           const handleResize = () => {
-            // Reset scale before resizing
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             createStars();
+            drawStars();
           };
           
           // Initial setup
@@ -706,7 +731,8 @@ export default {
       daoAppUrl,
       starfield,
       isLoading,
-      error
+      error,
+      parallaxFactor
     };
   },
 };
@@ -768,21 +794,22 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: 0;
   pointer-events: none;
-  overflow: hidden;
-  perspective: 1200px;
+  overflow: visible;
+  background: var(--cosmic-bg-primary);
 }
 
 /* Dynamic Accent Glows */
 .cosmic-accent-glow {
-  position: absolute;
+  position: fixed;
   border-radius: 50%;
   filter: blur(var(--glass-blur));
   opacity: 0.6;
   z-index: 1;
+  pointer-events: none;
 }
 
 .top-left-glow {
@@ -802,6 +829,34 @@ export default {
 .bottom-right-glow {
   bottom: -10%;
   right: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(103, 58, 183, 0.3) 0%,
+    rgba(103, 58, 183, 0.1) 50%,
+    rgba(103, 58, 183, 0) 70%
+  );
+  animation: pulseBackground 15s infinite alternate var(--animation-smooth);
+}
+
+.center-glow {
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(15, 185, 253, 0.1) 0%,
+    rgba(15, 185, 253, 0.05) 30%,
+    rgba(15, 185, 253, 0) 70%
+  );
+  animation: orbitEffect 20s infinite alternate var(--animation-smooth);
+}
+
+.bottom-left-glow {
+  bottom: -10%;
+  left: -10%;
   width: 50%;
   height: 50%;
   background: radial-gradient(
@@ -1198,7 +1253,7 @@ export default {
   width: 100%;
   z-index: 4;
   pointer-events: none;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 .top-gradient {
@@ -1227,13 +1282,12 @@ export default {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
-  opacity: 0;
-  mix-blend-mode: screen;
-  z-index: 2;
+  height: auto; /* Allow height to be set dynamically by JS */
+  z-index: 1;
   pointer-events: none;
-  will-change: opacity;
-  animation: starfieldFadeIn 1.5s ease 0.2s forwards;
+  mix-blend-mode: screen;
+  opacity: 1;
+  will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -1244,7 +1298,7 @@ export default {
     opacity: 0;
   }
   to {
-    opacity: 0.8; /* Increased opacity for better visibility */
+    opacity: 1; /* Increase opacity for better visibility */
   }
 }
 
@@ -2211,7 +2265,7 @@ export default {
 .governance-section {
   padding: 1rem 2rem 4rem;
   margin-top: -4rem;
-  z-index: 1;
+  z-index: 2;
   position: relative;
   width: 100%;
   max-width: 100%;
@@ -2932,7 +2986,7 @@ export default {
 
 /* Join Section Styles */
 .join-section {
-  padding: 2rem 2rem;
+  padding: 4rem 2rem;
 
   text-align: center;
   background: linear-gradient(135deg,
@@ -3003,30 +3057,52 @@ export default {
 .join-buttons .cosmic-button {
   padding: 1rem 2rem;
   font-size: 1.1rem;
-  flex: 0 1 auto; /* Allow buttons to maintain natural width */
-  min-width: 200px; /* Set a minimum width */
-  max-width: 300px; /* Set a maximum width */
+  flex: 0 1 auto;
+  min-width: 200px;
+  max-width: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: var(--cosmic-text-primary);
 }
 
 .join-buttons .cosmic-button i {
-  font-size: 1.5rem; /* Bigger icon */
-  margin-right: 1rem; /* Add gap between icon and text */
+  font-size: 1.5rem;
+  margin-right: 1rem;
   transition: all 0.3s ease;
 }
 
-.join-buttons .cosmic-button:hover i {
-  transform: scale(1.2);
-}
-
 .join-buttons .cosmic-button.primary {
-  background: linear-gradient(135deg, 
-    rgba(15, 185, 253, 0.85) 0%, 
+  background: linear-gradient(135deg,
+    rgba(15, 185, 253, 0.85) 0%,
     rgba(15, 185, 253, 0.65) 100%
   );
-  box-shadow: 0 6px 20px rgba(15, 185, 253, 0.25);
+  border: 1px solid rgba(15, 185, 253, 0.3);
+  box-shadow: 0 4px 15px rgba(15, 185, 253, 0.2);
+}
+
+.join-buttons .cosmic-button.primary:hover {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  border-color: rgba(15, 185, 253, 0.6);
+  box-shadow: 
+    0 6px 25px rgba(15, 185, 253, 0.3),
+    inset 0 0 20px rgba(15, 185, 253, 0.4);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.join-buttons .cosmic-button.primary:hover i {
+  color: var(--cosmic-highlight-1);
+  text-shadow: 0 0 10px rgba(15, 185, 253, 0.8);
+  transform: scale(1.1);
 }
 
 .join-buttons .cosmic-button.secondary {
@@ -3034,21 +3110,62 @@ export default {
   border: 1px solid rgba(15, 185, 253, 0.2);
 }
 
+.join-buttons .cosmic-button.secondary:hover {
+  background: rgba(15, 185, 253, 0.12);
+  border-color: rgba(15, 185, 253, 0.4);
+  box-shadow: 
+    0 4px 20px rgba(15, 185, 253, 0.15),
+    inset 0 0 15px rgba(15, 185, 253, 0.2);
+  transform: translateY(-2px);
+}
+
+.join-buttons .cosmic-button.secondary:hover i {
+  color: var(--cosmic-highlight-1);
+  text-shadow: 0 0 8px rgba(15, 185, 253, 0.6);
+  transform: scale(1.1);
+}
+
+/* Add a glow effect behind the buttons */
+.join-buttons .cosmic-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg,
+    transparent 0%,
+    rgba(15, 185, 253, 0.1) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform 0.6s ease;
+  z-index: 1;
+}
+
+.join-buttons .cosmic-button:hover::before {
+  transform: translateX(100%) rotate(45deg);
+}
+
+/* Ensure text and icons stay on top */
+.join-buttons .cosmic-button span {
+  position: relative;
+  z-index: 2;
+}
+
 @media (max-width: 768px) {
   .join-buttons {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    max-width: 280px; /* Constrain the width of the container */
-    margin: 0 auto; /* Center the container */
+    max-width: 280px;
+    margin: 0 auto;
   }
   
   .join-buttons .cosmic-button {
+    width: 100%;
     padding: 0.9rem 1.5rem;
     font-size: 1rem;
-    width: 100%;
-    min-width: 0; /* Override min-width on mobile */
-    max-width: 100%; /* Allow full width of container */
   }
   
   .join-buttons .cosmic-button i {
@@ -5131,7 +5248,7 @@ img.hero-logo, img.dao-image {
   background-color: transparent;
   color: var(--cosmic-text-primary);
   text-align: center;
-  z-index: 1;
+  z-index: 2;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -5144,7 +5261,7 @@ img.hero-logo, img.dao-image {
 
 .content-container {
   position: relative;
-  z-index: 2;
+  z-index: 2; /* Ensure content stays above starfield */
   width: 100%;
   max-width: 1200px;
   padding: 0 2rem;
