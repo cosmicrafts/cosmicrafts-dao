@@ -112,7 +112,7 @@ const scrollToSection = (sectionId) => {
   // Find the heading element by ID
   const element = document.getElementById(targetId);
   if (element) {
-    const headerOffset = 120; // Fixed header height (approximately)
+    const headerOffset = 140; // Fixed header height (approximately)
     
     // Calculate the target position
     const elementPosition = element.getBoundingClientRect().top;
@@ -142,7 +142,7 @@ const scrollToSection = (sectionId) => {
 }
 
 .terms-container {
-  padding-top: 4rem;
+  padding-top: 4.5rem;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -358,7 +358,7 @@ const scrollToSection = (sectionId) => {
     width: 100vw;
     max-width: 100vw;
     overflow-x: hidden;
-    padding-top: 3rem;
+    padding-top: 4rem;
   }
   
   .terms-overview,
@@ -405,6 +405,7 @@ const scrollToSection = (sectionId) => {
   .cosmic-page-container,
   .terms-container {
     padding: 0;
+    padding-top: 3.5rem;
     width: 100vw;
     max-width: 100vw;
     overflow-x: hidden;

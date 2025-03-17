@@ -1864,7 +1864,7 @@ const getBeyondTier = (count) => {
 /* Responsive Styles */
 @media (max-width: 768px) {
   .dashboard-page {
-    padding-top: 6rem;
+    padding-top: 4rem;
   }
 
   .welcome-container {

@@ -454,6 +454,195 @@ const isSectionExpanded = (section) => {
   text-shadow: var(--cosmic-glow-blue-sm);
 }
 
+/* Mobile Button Styles (DAO-style) */
+@media (max-width: 768px) {
+  .link-list {
+    padding: 0.75rem;
+  }
+  
+  .link-list li {
+    margin-bottom: 0.75rem;
+  }
+  
+  .link-list a {
+    background: var(--cosmic-glass-bg-darker);
+    border: var(--cosmic-glass-border-blue);
+    border-radius: var(--cosmic-radius-md);
+    padding: 0.75rem 0.5rem;
+    height: auto;
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--cosmic-text-primary);
+    box-shadow: var(--cosmic-shadow-sm);
+    transition: all var(--cosmic-transition-fast);
+    word-break: break-word;
+    white-space: normal;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .link-list a:hover,
+  .link-list a:active {
+    background: var(--cosmic-glass-bg-lighter);
+    border-color: var(--cosmic-blue);
+    box-shadow: var(--cosmic-glow-blue-sm);
+    transform: translateY(-2px);
+  }
+  
+  .accordion-content {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .cosmic-footer {
+    padding: 0;
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden;
+    left: 0;
+    right: 0;
+  }
+  
+  /* Hide desktop navigation on mobile */
+  .desktop-nav-container {
+    display: none;
+  }
+  
+  /* Show accordion on mobile */
+  .accordion-container {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    max-width: 100%;
+  }
+  
+  .nav-row {
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+
+  .accordion {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .accordion-content {
+    max-height: 0; /* Collapsed by default on mobile */
+  }
+  
+  .accordion-content[style*="200px"] {
+    /* Maintain the spacing and padding when expanded */
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .accordion-header {
+    justify-content: space-between;
+    border-bottom: none;
+  }
+  
+  .accordion-header h4 {
+    text-align: left;
+    width: auto;
+    font-size: 1.2rem;
+  }
+  
+  .accordion-header i {
+    display: block;
+  }
+
+  /* On mobile, start with all sections collapsed */
+  .accordion-content {
+    max-height: 0 !important;
+  }
+  
+  /* Override for expanded sections */
+  .accordion-content[style*="200px"] {
+    max-height: 300px !important;
+  }
+
+  .social-top-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
+  .social-top-row {
+    padding: 1rem 0;
+    width: 100%;
+  }
+
+  .language-row {
+    padding: 0.75rem 0;
+    width: 100%;
+  }
+
+  .copyright-container {
+    padding: 1.5rem 0;
+    width: 100%;
+  }
+
+  .social-icons-group {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .cosmic-social-icon {
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+  }
+  
+  .cosmic-social-icon img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .link-list {
+    padding: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .link-list a {
+    font-size: 0.9rem;
+    padding: 0.6rem 0.5rem;
+    min-height: 2.25rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .social-icons-group {
+    gap: 0.5rem;
+  }
+  
+  .cosmic-social-icon {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+  
+  .cosmic-social-icon img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
 /* Language Row */
 .language-row {
   display: flex;
@@ -575,7 +764,7 @@ const isSectionExpanded = (section) => {
   
   /* Override for expanded sections */
   .accordion-content[style*="200px"] {
-    max-height: 200px !important;
+    max-height: 300px !important;
   }
 
   .social-top-container {
@@ -668,9 +857,14 @@ const isSectionExpanded = (section) => {
     height: 20px;
   }
   
+  .link-list {
+    padding: 0.5rem;
+  }
+  
   .link-list a {
     font-size: 1rem;
-    padding: 0.4rem 0;
+    padding: 0.6rem 0.75rem;
+    min-height: 2.25rem;
   }
   
   .copyright-logo {
