@@ -2216,7 +2216,7 @@ export default {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow: visible;
 }
 
 .governance-grid {
@@ -2226,7 +2226,8 @@ export default {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow: visible;
+  padding: 0.5rem;
 }
 
 .section-title {
@@ -2237,20 +2238,21 @@ export default {
 }
 
 .governance-card {
-  padding: 2rem;
+  padding: 1.5rem;
   text-align: center;
   background: linear-gradient(135deg,
     rgba(15, 185, 253, 0.05) 0%,
     rgba(15, 185, 253, 0.02) 100%
   );
   border: 1px solid rgba(15, 185, 253, 0.1);
-  border-radius: 6px;
+  border-radius: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   width: 100%;
   box-sizing: border-box;
+  margin-bottom: 0.5rem;
 }
 
 .governance-card::before {
@@ -2270,9 +2272,10 @@ export default {
 }
 
 .governance-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-8px);
   border-color: rgba(15, 185, 253, 0.3);
-  box-shadow: 0 8px 30px rgba(15, 185, 253, 0.15);
+  box-shadow: 0 12px 30px rgba(15, 185, 253, 0.15);
+  z-index: 2;
 }
 
 .governance-card:hover::before {
@@ -2322,8 +2325,8 @@ export default {
 }
 
 .governance-content h3 {
-  font-size: 1.4rem;
-  margin-bottom: 1.25rem;
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
   font-weight: var(--weight-bold);
   background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-primary) 100%);
   -webkit-background-clip: text;
@@ -2332,12 +2335,22 @@ export default {
   transition: all 0.3s ease;
 }
 
-.governance-content p {
-  font-size: 1rem;
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+.governance-content .requirement {
+  font-size: 1.5rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
   transform: translateZ(5px);
+  transition: all 0.3s ease;
+}
+
+.governance-content .description {
+  font-size: 1rem;
+  font-weight: var(--weight-normal);
+  color: var(--color-text-tertiary);
+  line-height: 1.5;
+  margin-bottom: 0;
   transition: all 0.3s ease;
 }
 
@@ -2394,87 +2407,44 @@ export default {
 /* Enhanced Mobile Styles for Governance Section */
 @media (max-width: 768px) {
   .governance-section {
-    padding: 4rem 1.5rem;
-    margin-top: 0;
+    padding: 4rem 1rem 3rem;
   }
   
   .governance-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
+    padding: 0.5rem;
   }
   
   .governance-card {
-    /* Create modern card-based layout for mobile */
-    display: flex;
-    flex-direction: column;
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 2.5rem 1.5rem;
-    border-radius: 16px;
-    
-    /* Add smooth entrance animation */
-    opacity: 0;
-    animation: cardSlideIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    
-    /* Reset hover effects for touch */
-    transform: none !important;
-  }
-  
-  .governance-card:nth-child(1) { animation-delay: 0.1s; }
-  .governance-card:nth-child(2) { animation-delay: 0.2s; }
-  .governance-card:nth-child(3) { animation-delay: 0.3s; }
-  .governance-card:nth-child(4) { animation-delay: 0.4s; }
-  
-  @keyframes cardSlideIn {
-    from { 
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to { 
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .governance-icon {
-    width: 70px;
-    height: 70px;
-    margin: 0 auto 1.5rem;
-  }
-  
-  .governance-content {
-    text-align: center;
+    max-width: 100%;
+    margin: 0 auto 1rem;
+    padding: 1.25rem;
+    overflow: visible;
   }
   
   .governance-content h3 {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
-  }
-  
-  .governance-content p {
-    font-size: 1.1rem;
-    margin-bottom: 1.25rem;
-  }
-  
-  .governance-list {
-    text-align: left;
-    padding: 0.5rem 0;
-  }
-  
-  .governance-list li {
+    font-size: 1.5rem;
     margin-bottom: 0.75rem;
-    font-size: 1rem;
   }
   
-  /* Enhance focus states for mobile touch interactions */
+  .governance-content .requirement {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .governance-content .description {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  
   .governance-card:active {
-    background: linear-gradient(135deg,
+    transform: scale(0.98);
+    background: linear-gradient(145deg,
       rgba(15, 185, 253, 0.08) 0%,
       rgba(15, 185, 253, 0.12) 100%
     );
-    border-color: rgba(15, 185, 253, 0.35);
-    transform: scale(0.98) !important;
-    transition: all 0.2s ease;
+    border-color: rgba(15, 185, 253, 0.25);
   }
 }
 
@@ -5881,6 +5851,7 @@ img.hero-logo, img.dao-image {
   box-sizing: border-box;
   position: relative;
   width: 100%;
+  overflow: hidden;
 }
 
 .multipliers-section .multiplier-grid {
@@ -5895,17 +5866,86 @@ img.hero-logo, img.dao-image {
 /* Responsive styles for multipliers section */
 @media (max-width: 768px) {
   .multipliers-section {
-    padding: 1rem;
+    padding: 1rem 0.75rem;
+    overflow: hidden;
   }
   
   .multipliers-section .power-multipliers {
-    max-width: 480px;
+    max-width: 100%;
     padding: 1.5rem;
+    margin: 1rem 0;
+    border-radius: 12px;
   }
   
   .multipliers-section .multiplier-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1.25rem;
+    width: 100%;
+  }
+  
+  .multipliers-section .multiplier-card {
+    padding: 1.25rem;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .multipliers-section .multiplier-header i {
+    width: 70px;
+    height: 70px;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .multipliers-section .multiplier-content .bonus {
+    font-size: 2.2rem;
+  }
+  
+  .multipliers-section .multiplier-content .time {
+    font-size: 1.2rem;
+  }
+}
+
+/* More targeted mobile styles */
+@media (max-width: 480px) {
+  .multipliers-section {
+    padding: 0.5rem;
+  }
+  
+  .multipliers-section .power-multipliers {
+    padding: 1.25rem;
+    margin-top: 0.75rem;
+  }
+  
+  .multipliers-section .power-multipliers h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .multipliers-section .multiplier-grid {
+    gap: 1rem;
+  }
+  
+  .multipliers-section .multiplier-card {
+    padding: 1rem;
+  }
+  
+  .multipliers-section .multiplier-header i {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+  
+  .multipliers-section .multiplier-header h4 {
+    font-size: 1.1rem;
+  }
+  
+  .multipliers-section .multiplier-content .bonus {
+    font-size: 2rem;
+  }
+  
+  .multipliers-section .multiplier-content .time {
+    font-size: 1rem;
   }
 }
 </style>
