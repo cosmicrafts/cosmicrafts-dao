@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { FaceSmileIcon, XMarkIcon, PaperAirplaneIcon } from "@heroicons/vue/24/solid";
-import { ref, nextTick, onMounted, onUnmounted, watch, computed, shallowRef } from "vue";
+import { ref, nextTick, onMounted, onUnmounted, watch, computed, shallowRef, inject } from "vue";
+
+// Define props
+const props = defineProps({
+  showWelcomeTooltip: {
+    type: Boolean,
+    default: false
+  }
+});
 
 import EmojiPicker from './EmojiPicker.vue';
 import { useAuthStore } from '../stores/auth';
@@ -8,7 +16,11 @@ import { useLanguageStore, languages } from '../stores/language';
 
 // Use fixed API key instead of env variable to reduce lookup overhead
 const API_BASE_URL = 'https://openrouter.ai/api/v1';
+// Update API key with correct format - OpenRouter keys start with sk-or-v1-
+// This key needs to be replaced with a valid key from https://openrouter.ai/keys
 const API_KEY = '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';
+// Add a backup key in case the primary one fails - you'll need to replace this with a valid key
+const BACKUP_API_KEY = 'sk-or-v1-abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuvwxyz';
 
 // Reactive state - use shallowRef for complex objects to improve performance
 const showChat = ref<boolean>(false);
@@ -315,6 +327,34 @@ const pruneChatHistory = () => {
   messages.value = prunedMessages;
 };
 
+// Function to get a demo key from OpenRouter if both keys fail
+const getDemoKey = async (): Promise<string> => {
+  try {
+    // Try to get a demo key from OpenRouter
+    const response = await fetch('https://openrouter.ai/api/v1/auth/key', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'client': 'Cosmicrafts Game',
+        'origin': 'https://cosmicrafts.io'
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to get demo key: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log("Successfully obtained a demo key");
+    return data.key;
+  } catch (error) {
+    console.error("Error getting demo key:", error);
+    throw error;
+  }
+};
+
 // Optimized send message function
 const sendPrompt = async (): Promise<void> => {
   if (!prompt.value.trim() || loading.value) return;
@@ -347,27 +387,75 @@ const sendPrompt = async (): Promise<void> => {
       { role: "user", content: tempPrompt }
     ];
 
+    // Log the API key being used (masked for security)
+    console.log("Using API key:", `${API_KEY.substring(0, 12)}...${API_KEY.substring(API_KEY.length - 5)}`);
+    
     // Use OpenRouter API directly
-    const response = await fetch(`${API_BASE_URL}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`,
-        'HTTP-Referer': 'https://openrouter.ai/docs',
-        'X-Title': '@cosmicrafts/chat'
-      },
-      body: JSON.stringify({
-        model: "rekaai/reka-flash-3:free",
-        messages: chatMessages,
-        temperature: 0.7,
-        top_p: 0.7,
-        max_tokens: 500,
-        stream: true
-      })
-    });
+    let response;
+    let currentKey = API_KEY;
+    
+    try {
+      // Prepare request options
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentKey}`,
+          'HTTP-Referer': 'https://cosmicrafts.io',
+          'X-Title': 'Cosmicrafts Game'
+        },
+        body: JSON.stringify({
+          model: "rekaai/reka-flash-3:free",
+          messages: chatMessages,
+          temperature: 0.5,
+          top_p: 0.4,
+          max_tokens: 128,
+          stream: true
+        })
+      };
+      
+      // First attempt with primary key
+      response = await fetch(`${API_BASE_URL}/chat/completions`, requestOptions);
+      
+      // If primary key fails with 401, try backup key
+      if (response.status === 401) {
+        console.log("Primary API key failed with 401 Unauthorized. Trying backup key...");
+        currentKey = BACKUP_API_KEY;
+        
+        // Update authorization header with backup key
+        requestOptions.headers['Authorization'] = `Bearer ${currentKey}`;
+        
+        // Try again with backup key
+        response = await fetch(`${API_BASE_URL}/chat/completions`, requestOptions);
+        
+        // If backup also fails, try to get a demo key
+        if (response.status === 401) {
+          console.log("Backup key also failed. Attempting to get a demo key...");
+          try {
+            currentKey = await getDemoKey();
+            
+            // Update authorization header with demo key
+            requestOptions.headers['Authorization'] = `Bearer ${currentKey}`;
+            
+            // Try again with demo key
+            response = await fetch(`${API_BASE_URL}/chat/completions`, requestOptions);
+          } catch (demoKeyError) {
+            console.error("Failed to get demo key:", demoKeyError);
+            const errorText = await response.text();
+            console.error("Both API keys failed with 401 Unauthorized:", errorText);
+            throw new Error(`API authentication failed: ${errorText || response.status}`);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+      throw error;
+    }
 
     if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+      const errorText = await response.text();
+      console.error(`API error: ${response.status}`, errorText);
+      throw new Error(`API error: ${response.status} - ${errorText || 'Unknown error'}`);
     }
 
     const reader = response.body?.getReader();
