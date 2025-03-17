@@ -1,32 +1,29 @@
 <script setup lang="ts">
 import { FaceSmileIcon, XMarkIcon, PaperAirplaneIcon } from "@heroicons/vue/24/solid";
-import { ref, nextTick, onMounted, onUnmounted, watch, computed } from "vue";
+import { ref, nextTick, onMounted, onUnmounted, watch, computed, shallowRef } from "vue";
 
 import EmojiPicker from './EmojiPicker.vue';
 import { useAuthStore } from '../stores/auth';
 import { useLanguageStore, languages } from '../stores/language';
 
-// Replace OpenAI client with OpenRouter base URL
+// Use fixed API key instead of env variable to reduce lookup overhead
 const API_BASE_URL = 'https://openrouter.ai/api/v1';
-const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || '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';
+const API_KEY = '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';
 
-// Debug log to check environment variable
-console.log('Environment API Key:', import.meta.env.VITE_OPENROUTER_API_KEY);
-console.log('Using API Key:', API_KEY);
-
-// Reactive state
+// Reactive state - use shallowRef for complex objects to improve performance
 const showChat = ref<boolean>(false);
 const isHovering = ref<boolean>(false);
 const isAnimating = ref<boolean>(false);
-const messages = ref<Array<{ role: string; content: string }>>([]);
+const messages = shallowRef<Array<{ role: string; content: string }>>([]);
 const prompt = ref<string>("");
 const loading = ref<boolean>(false);
 const currentMessage = ref<string>("");
 const isThinking = ref<boolean>(false);
 const thinkingContent = ref<string>("");
 
+// DOM refs
 const chatWindow = ref<HTMLElement | null>(null);
-const chatToggle = ref<HTMLElement | null>(null); // Reference to the chat toggle button
+const chatToggle = ref<HTMLElement | null>(null);
 const isDragging = ref<boolean>(false);
 const isResizing = ref<boolean>(false);
 const startX = ref<number>(0);
@@ -35,13 +32,13 @@ const startWidth = ref<number>(0);
 const startHeight = ref<number>(0);
 const offsetX = ref<number>(0);
 const offsetY = ref<number>(0);
-const isIconDragging = ref<boolean>(false); // Track if the chat icon is being dragged
+const isIconDragging = ref<boolean>(false);
 const iconStartX = ref<number>(0);
 const iconStartY = ref<number>(0);
 const iconOffsetX = ref<number>(0);
 const iconOffsetY = ref<number>(0);
-const lastTapTime = ref<number>(0); // For detecting double taps on mobile
-const isMaximized = ref<boolean>(false); // Track if the chat window is maximized
+const lastTapTime = ref<number>(0);
+const isMaximized = ref<boolean>(false);
 const previousWindowState = ref<{
   width: string;
   height: string;
@@ -63,7 +60,6 @@ const iconPosition = ref<{ left: string; bottom: string | null; right: string | 
   right: '1rem',
   top: null
 });
-// Chat window position
 const windowPosition = ref<{ left: string; bottom: string | null; right: string | null; top: string | null }>({
   left: 'auto',
   bottom: '6rem',
@@ -71,16 +67,25 @@ const windowPosition = ref<{ left: string; bottom: string | null; right: string 
   top: null
 });
 
+// Virtual scrolling implementation
+const VISIBLE_MESSAGES = 10; // Number of messages to render at once
+const startIndex = ref<number>(0);
+const visibleMessages = computed(() => {
+  const start = Math.max(0, messages.value.length - VISIBLE_MESSAGES - startIndex.value);
+  const end = messages.value.length - startIndex.value;
+  return messages.value.slice(start, end);
+});
+const canLoadMore = computed(() => messages.value.length > VISIBLE_MESSAGES + startIndex.value);
+
 const authStore = useAuthStore();
 const languageStore = useLanguageStore();
-const MAX_HISTORY_TOKENS = 1000; // Adjust for performance
+const MAX_HISTORY_TOKENS = 800; // Reduced from 1000 for better performance
 const showEmojiPicker = ref<boolean>(false);
-const chatInput = ref<HTMLElement | null>(null); // Reference for the input box
+const chatInput = ref<HTMLElement | null>(null);
 
 // Track if we've moved during touch
 const hasMoved = ref<boolean>(false);
-
-const lastHeaderTapTime = ref<number>(0); // For detecting double taps on header
+const lastHeaderTapTime = ref<number>(0);
 
 // Expose the chat's visibility state to parent components
 const isOpen = computed(() => showChat.value);
@@ -88,18 +93,27 @@ const isOpen = computed(() => showChat.value);
 // Add a new ref for storing the input text
 const savedInputText = ref<string>("");
 
+// Debounced save function to reduce localStorage writes
+let saveTimeout: number | null = null;
+const debouncedSave = (data: any, key: string) => {
+  if (saveTimeout) {
+    clearTimeout(saveTimeout);
+  }
+  saveTimeout = window.setTimeout(() => {
+    localStorage.setItem(key, JSON.stringify(data));
+  }, 500);
+};
+
 // Load saved position from localStorage with validation
 const loadIconPosition = (): void => {
-  const savedPosition = localStorage.getItem('chatIconPosition');
-  if (savedPosition) {
-    try {
-      const parsedPosition = JSON.parse(savedPosition);
-      // Apply the saved position, but validate it first
-      iconPosition.value = parsedPosition;
-    } catch (error) {
-      console.error('Error parsing saved chat icon position', error);
-      resetIconPosition();
+  try {
+    const savedPosition = localStorage.getItem('chatIconPosition');
+    if (savedPosition) {
+      iconPosition.value = JSON.parse(savedPosition);
     }
+  } catch (error) {
+    console.error('Error parsing saved chat icon position', error);
+    resetIconPosition();
   }
 };
 
@@ -111,7 +125,7 @@ const resetIconPosition = (): void => {
     right: '1rem',
     top: null
   };
-  saveIconPosition();
+  debouncedSave(iconPosition.value, 'chatIconPosition');
 };
 
 // Check if the icon is within visible bounds and fix if needed
@@ -127,7 +141,6 @@ const checkIconVisibility = (): void => {
   const isOffScreenY = iconRect.top < 0 || iconRect.bottom > viewportHeight;
   
   if (isOffScreenX || isOffScreenY) {
-    console.log('Chat icon was off-screen, resetting position');
     resetIconPosition();
     
     // Apply the reset position to the element
@@ -143,54 +156,49 @@ const checkIconVisibility = (): void => {
   }
 };
 
-// Save position to localStorage
+// Save position to localStorage with debounce
 const saveIconPosition = (): void => {
-  localStorage.setItem('chatIconPosition', JSON.stringify(iconPosition.value));
+  debouncedSave(iconPosition.value, 'chatIconPosition');
 };
 
 // Load saved window position from localStorage
 const loadWindowPosition = (): void => {
-  const savedPosition = localStorage.getItem('chatWindowPosition');
-  if (savedPosition) {
-    windowPosition.value = JSON.parse(savedPosition);
+  try {
+    const savedPosition = localStorage.getItem('chatWindowPosition');
+    if (savedPosition) {
+      windowPosition.value = JSON.parse(savedPosition);
+    }
+  } catch (error) {
+    console.error('Error parsing saved window position', error);
   }
 };
 
-// Save window position to localStorage
+// Save window position to localStorage with debounce
 const saveWindowPosition = (): void => {
-  localStorage.setItem('chatWindowPosition', JSON.stringify(windowPosition.value));
+  debouncedSave(windowPosition.value, 'chatWindowPosition');
 };
 
+// Optimized memory injection function
 const injectMemory = async (userId: string, newMessage: string) => {
-  console.log(`Building structured memory for user: ${userId}`);
-
-  // ✅ User Profile (simplified)
-  const userProfile = {
-    username: (authStore.player as any)?.username || "guest",
-    language: languages.find(lang => lang.code === ((authStore.player as any)?.language || "en"))?.label || "English",
-    faction: (authStore.player as any)?.faction || "Unknown",
-    level: (authStore.player as any)?.level || 1
-  };
-
-  // ✅ Prune chat history before injecting it
+  // Prune chat history before injecting it
   pruneChatHistory(); 
 
-  // ✅ Retrieve only the last 5 messages for shorter context
-  const conversationHistory = messages.value.slice(-5); // Limit history
+  // Retrieve only the last 3 messages for shorter context (reduced from 5)
+  const conversationHistory = messages.value.slice(-3);
   let historyLog = conversationHistory
     .map((msg) => `${msg.role}: ${msg.content}`)
     .join("\n");
 
-  // ✅ Simplified Prompt Structure
-  const finalPrompt = `
+  // Simplified Prompt Structure
+  return `
   [SYSTEM]
   You are a helpful AI assistant for Cosmicrafts game. Keep answers short and concise.
-  Language: ${userProfile.language}
+  Language: ${languages.find(lang => lang.code === ((authStore.player as any)?.language || "en"))?.label || "English"}
 
   [USER]
-  Username: ${userProfile.username}
-  Level: ${userProfile.level}
-  Faction: ${userProfile.faction}
+  Username: ${(authStore.player as any)?.username || "guest"}
+  Level: ${(authStore.player as any)?.level || 1}
+  Faction: ${(authStore.player as any)?.faction || "Unknown"}
 
   [CHAT HISTORY]
   ${historyLog}
@@ -198,25 +206,26 @@ const injectMemory = async (userId: string, newMessage: string) => {
   [NEW MESSAGE]
   ${newMessage}
   `;
-
-  console.log(`🔍 Token-optimized prompt:\n${finalPrompt}`);
-
-  return finalPrompt;
 };
 
-
+// Optimized chat history saving with debounce
 const saveChatHistory = () => {
-  localStorage.setItem("chatHistory", JSON.stringify(messages.value));
+  debouncedSave(messages.value, 'chatHistory');
 };
 
 const loadChatHistory = () => {
-  const storedChat = localStorage.getItem("chatHistory");
-  if (storedChat) {
-    messages.value = JSON.parse(storedChat);
+  try {
+    const storedChat = localStorage.getItem("chatHistory");
+    if (storedChat) {
+      messages.value = JSON.parse(storedChat);
+    }
+  } catch (error) {
+    console.error('Error loading chat history', error);
+    messages.value = [];
   }
 };
 
-// Load saved position on component mount
+// Optimized event listeners with passive option for touch events
 onMounted(() => {
   loadChatHistory();
   loadIconPosition();
@@ -231,16 +240,16 @@ onMounted(() => {
       });
       
       // After applying the position, check if it's visible
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         checkIconVisibility();
-      }, 100); // Small delay to ensure the styles were applied
+      });
     }
   });
   
-  // Add global event listeners
+  // Add global event listeners with passive option where possible
   document.addEventListener('keydown', handleKeyDown);
   document.addEventListener('click', handleClickOutside);
-  window.addEventListener('resize', checkIconVisibility);
+  window.addEventListener('resize', checkIconVisibility, { passive: true });
 });
 
 // Handle keyboard shortcuts
@@ -251,7 +260,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
                         activeElement instanceof HTMLTextAreaElement ||
                         activeElement?.getAttribute('contenteditable') === 'true';
   
-  // 'C' key to open chat (only when not already open and not typing in an input)
+  // 'A' key to open chat (only when not already open and not typing in an input)
   if (event.key.toLowerCase() === 'a' && !showChat.value && !isInputActive) {
     toggleChat();
     event.preventDefault();
@@ -269,10 +278,10 @@ const handleKeyDown = (event: KeyboardEvent): void => {
   }
 };
 
-// 🔥 Save history after every message
+// Optimize watch by using deep: false where possible
 watch(messages, () => {
   saveChatHistory();
-});
+}, { deep: false });
 
 // Focus input whenever chat is opened
 watch(showChat, (newValue) => {
@@ -285,11 +294,14 @@ watch(showChat, (newValue) => {
   }
 });
 
+// Optimized pruning function
 const pruneChatHistory = () => {
+  if (messages.value.length <= 5) return; // Don't prune if we have 5 or fewer messages
+  
   let totalTokens = 0;
   let prunedMessages = [];
 
-  // ✅ Keep latest messages until reaching the max token limit
+  // Keep latest messages until reaching the max token limit
   for (let i = messages.value.length - 1; i >= 0; i--) {
     const msg = messages.value[i];
     const msgTokens = msg.content.length / 4; // Approximate token count
@@ -303,12 +315,12 @@ const pruneChatHistory = () => {
   messages.value = prunedMessages;
 };
 
-// ✅ Send Message to Backend
+// Optimized send message function
 const sendPrompt = async (): Promise<void> => {
   if (!prompt.value.trim() || loading.value) return;
 
   const userMessage: string = prompt.value.trim();
-  messages.value.push({ role: "user", content: userMessage });
+  messages.value = [...messages.value, { role: "user", content: userMessage }];
   
   // Clear input field and saved text after sending
   if (chatInput.value) {
@@ -324,9 +336,8 @@ const sendPrompt = async (): Promise<void> => {
     loading.value = true;
     currentMessage.value = "";
     thinkingContent.value = "";
-    let responseMessage = "";
 
-    // ✅ Fetch structured memory & inject it
+    // Fetch structured memory & inject it
     const userId = (authStore.player as any)?.username || "guest";
     const tempPrompt = await injectMemory(userId, userMessage);
 
@@ -335,26 +346,6 @@ const sendPrompt = async (): Promise<void> => {
       { role: "system", content: "You are a helpful AI assistant for the Cosmicrafts game. Keep answers short and concise." },
       { role: "user", content: tempPrompt }
     ];
-
-    console.log('Sending request to OpenRouter:', {
-      url: `${API_BASE_URL}/chat/completions`,
-      body: {
-        model: "meta-llama/llama-3.3-70b-instruct:free",
-        messages: chatMessages,
-        temperature: 0.7,
-        top_p: 0.7,
-        max_tokens: 500,
-        stream: true
-      }
-    });
-
-    // Debug the actual headers being sent
-    console.log('Request headers:', {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${API_KEY}`,
-      'HTTP-Referer': 'https://openrouter.ai/docs',
-      'X-Title': '@cosmicrafts/chat'
-    });
 
     // Use OpenRouter API directly
     const response = await fetch(`${API_BASE_URL}/chat/completions`, {
@@ -376,20 +367,7 @@ const sendPrompt = async (): Promise<void> => {
     });
 
     if (!response.ok) {
-      const errorData = await response.text();
-      console.error('API Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorData,
-        headers: Object.fromEntries(response.headers.entries()),
-        requestHeaders: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer [HIDDEN]',
-          'HTTP-Referer': 'https://openrouter.ai/docs',
-          'X-Title': '@cosmicrafts/chat'
-        }
-      });
-      throw new Error(`API error: ${response.status} - ${errorData}`);
+      throw new Error(`API error: ${response.status}`);
     }
 
     const reader = response.body?.getReader();
@@ -403,7 +381,6 @@ const sendPrompt = async (): Promise<void> => {
 
       try {
         const chunk = decoder.decode(value, { stream: true });
-        console.log('Received chunk:', chunk);
         const lines = chunk.split('\n').filter(line => line.trim());
         
         for (const line of lines) {
@@ -413,7 +390,6 @@ const sendPrompt = async (): Promise<void> => {
             
             // Skip processing messages
             if (cleanLine.startsWith(': OPENROUTER')) {
-              console.log('Processing message:', cleanLine);
               continue;
             }
             
@@ -421,7 +397,6 @@ const sendPrompt = async (): Promise<void> => {
             if (!cleanLine || cleanLine === '[DONE]') continue;
             
             const json = JSON.parse(cleanLine);
-            console.log('Parsed JSON:', json);
             const content = json.choices?.[0]?.delta?.content || '';
             
             if (content) {
@@ -431,68 +406,75 @@ const sendPrompt = async (): Promise<void> => {
                 // Add the first part to thinking content
                 thinkingContent.value += parts[0];
                 
-                // Get the actual response part
+                // Format the complete thinking content plus the actual response
                 const actualResponse = parts.slice(1).join('').trim();
-                responseMessage = actualResponse;
-                currentMessage.value = actualResponse;
+                currentMessage.value = `<div class="thinking-content">
+                  <div class="thinking-label">Reasoning:</div>
+                  <span class="thinking-text">${thinkingContent.value}</span>
+                </div>${actualResponse}`;
                 
                 isThinking.value = false;
               } else {
-                // Always add to thinking content until we see </reasoning>
+                // Always add to thinking content and show formatted until we see </reasoning>
                 thinkingContent.value += content;
+                currentMessage.value = `<div class="thinking-content">
+                  <div class="thinking-label">Reasoning:</div>
+                  <span class="thinking-text">${thinkingContent.value}</span>
+                </div>`;
               }
             }
           } catch (err) {
             console.error("JSON parse error:", err);
-            console.debug("Problem line:", line);
           }
         }
         
-        await nextTick();
-        scrollToBottom();
+        // Use requestAnimationFrame for smoother UI updates
+        requestAnimationFrame(() => {
+          scrollToBottom();
+        });
       } catch (error) {
         console.error("Decoding error:", error);
       }
     }
 
-    // Keep the current message visible
+    // Store the complete message with reasoning tags
     const completeMessage = thinkingContent.value ? 
-      `<reasoning>${thinkingContent.value}</reasoning>${responseMessage}` :
-      responseMessage;
+      `<reasoning>${thinkingContent.value}</reasoning>${currentMessage.value}` :
+      currentMessage.value;
     
-    messages.value.push({
+    messages.value = [...messages.value, {
       role: "assistant",
       content: completeMessage,
-    });
+    }];
 
-    // Important: Don't clear currentMessage or thinkingContent here
-    loading.value = false;
-    isThinking.value = false;
-    
-    saveChatHistory();
-    await nextTick();
-    scrollToBottom();
-    focusInput();
-
-  } catch (error) {
-    console.error("Chat error:", error);
-    messages.value.push({ role: "assistant", content: "Error: Failed to get response" });
-    loading.value = false;
     currentMessage.value = "";
     thinkingContent.value = "";
     isThinking.value = false;
+
+  } catch (error) {
+    console.error("Chat error:", error);
+    messages.value = [...messages.value, { role: "assistant", content: "Error: Failed to get response" }];
+  } finally {
+    loading.value = false;
+    saveChatHistory();
+    requestAnimationFrame(() => {
+      scrollToBottom();
+      focusInput();
+    });
   }
 };
 
-// ✅ Auto-scroll function
+// Optimized scroll function using requestAnimationFrame
 const scrollToBottom = (): void => {
-  const chatMessages: HTMLElement | null = document.querySelector(".messages");
-  if (chatMessages) {
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
+  requestAnimationFrame(() => {
+    const chatMessages: HTMLElement | null = document.querySelector(".messages");
+    if (chatMessages) {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  });
 };
 
-// ✅ Toggle Chat with Animation
+// Optimized toggle chat function
 const toggleChat = (): void => {
   isAnimating.value = true;
   
@@ -516,7 +498,7 @@ const toggleChat = (): void => {
   setTimeout(() => (isAnimating.value = false), 300);
 };
 
-// ✅ Toggle maximize/restore chat window
+// Toggle maximize/restore chat window
 const toggleMaximize = (): void => {
   if (!chatWindow.value) return;
   
@@ -567,12 +549,12 @@ const toggleMaximize = (): void => {
   }, 300);
   
   // Scroll to bottom after resize
-  nextTick(() => {
+  requestAnimationFrame(() => {
     scrollToBottom();
   });
 };
 
-// ✅ Make chat resizable from edges/corners
+// Make chat resizable from edges/corners
 const startResize = (event: MouseEvent): void => {
   if (!chatWindow.value || isMaximized.value) return; // Don't allow resize when maximized
 
@@ -613,7 +595,7 @@ const stopResize = (): void => {
   document.removeEventListener("mouseup", stopResize);
 };
 
-// ✅ Make chat draggable
+// Make chat draggable
 const startDrag = (event: MouseEvent): void => {
   if (!chatWindow.value || isMaximized.value) return; // Don't allow drag when maximized
   
@@ -682,7 +664,7 @@ const dragChat = (event: MouseEvent | TouchEvent): void => {
 
 const stopDrag = (): void => {
   if (isDragging.value && chatWindow.value) {
-  isDragging.value = false;
+    isDragging.value = false;
     
     // Convert transform to actual position
     const transform = chatWindow.value.style.transform;
@@ -712,14 +694,14 @@ const stopDrag = (): void => {
     }
     
     // Remove event listeners
-  document.removeEventListener("mousemove", dragChat);
-  document.removeEventListener("mouseup", stopDrag);
+    document.removeEventListener("mousemove", dragChat);
+    document.removeEventListener("mouseup", stopDrag);
     document.removeEventListener("touchmove", dragChat);
     document.removeEventListener("touchend", stopDrag);
   }
 };
 
-// ✅ Touch event handlers for chat window
+// Touch event handlers for chat window
 const handleWindowTouchStart = (event: TouchEvent): void => {
   if (!chatWindow.value || event.touches.length !== 1 || isMaximized.value && (event.target as HTMLElement).closest('.resize-handle')) return;
   
@@ -756,7 +738,7 @@ const handleWindowTouchStart = (event: TouchEvent): void => {
   document.addEventListener("touchend", stopDrag);
 };
 
-// ✅ Touch support for resize handle
+// Touch support for resize handle
 const handleResizeTouchStart = (event: TouchEvent): void => {
   if (!chatWindow.value || event.touches.length !== 1 || isMaximized.value) return;
   
@@ -795,7 +777,7 @@ const resizeTouchMove = (event: TouchEvent): void => {
   previousWindowState.value.height = chatWindow.value.style.height;
 };
 
-// ✅ Make chat icon draggable (Mouse events)
+// Make chat icon draggable (Mouse events)
 const startIconDrag = (event: MouseEvent): void => {
   // Prevent default to avoid text selection during drag
   event.preventDefault();
@@ -908,7 +890,7 @@ const stopIconDrag = (event: MouseEvent | TouchEvent): void => {
   }
 };
 
-// ✅ Touch event handlers for mobile
+// Touch event handlers for mobile
 const handleTouchStart = (event: TouchEvent): void => {
   if (!chatToggle.value || event.touches.length !== 1) return;
   
@@ -939,6 +921,64 @@ const handleTouchStart = (event: TouchEvent): void => {
   document.addEventListener("touchmove", dragIcon, { passive: false });
   document.addEventListener("touchend", handleTouchEnd);
 };
+
+// Handle touch end for the chat icon
+const handleTouchEnd = (event: TouchEvent): void => {
+  if (!isIconDragging.value) return;
+  
+  isIconDragging.value = false;
+  
+  // If we haven't moved much, treat it as a tap
+  if (!hasMoved.value) {
+    toggleChat();
+  }
+  
+  // Reset the moved flag
+  hasMoved.value = false;
+  
+  // Save the new position
+  saveIconPosition();
+  
+  // Remove event listeners
+  document.removeEventListener("touchmove", dragIcon);
+  document.removeEventListener("touchend", handleTouchEnd);
+};
+
+// Optimized loadMoreMessages function for virtual scrolling
+const loadMoreMessages = () => {
+  startIndex.value += 5;
+  if (startIndex.value > messages.value.length - VISIBLE_MESSAGES) {
+    startIndex.value = messages.value.length - VISIBLE_MESSAGES;
+  }
+};
+
+// Optimized clearChat function
+const clearChat = () => {
+  messages.value = [];
+  localStorage.removeItem('chatHistory'); // Direct removal instead of saving empty array
+};
+
+// Add intersection observer for lazy loading
+onMounted(() => {
+  // Set up intersection observer for lazy loading images/content
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const lazyElement = entry.target as HTMLElement;
+        if (lazyElement.dataset.src) {
+          lazyElement.setAttribute('src', lazyElement.dataset.src);
+          lazyElement.removeAttribute('data-src');
+        }
+        observer.unobserve(lazyElement);
+      }
+    });
+  }, { rootMargin: '100px' });
+  
+  // Observe all elements with data-src attribute
+  document.querySelectorAll('[data-src]').forEach(el => {
+    observer.observe(el);
+  });
+});
 
 // ✅ Auto-expand logic
 const updatePrompt = (): void => {
@@ -1026,28 +1066,6 @@ onUnmounted(() => {
   window.removeEventListener('resize', checkIconVisibility);
 });
 
-// Handle touch end for the chat icon
-const handleTouchEnd = (event: TouchEvent): void => {
-  if (!isIconDragging.value) return;
-  
-  isIconDragging.value = false;
-  
-  // If we haven't moved much, treat it as a tap
-  if (!hasMoved.value) {
-    toggleChat();
-  }
-  
-  // Reset the moved flag
-  hasMoved.value = false;
-  
-  // Save the new position
-  saveIconPosition();
-  
-  // Remove event listeners
-  document.removeEventListener("touchmove", dragIcon);
-  document.removeEventListener("touchend", handleTouchEnd);
-};
-
 // ✅ Handle click outside the chat window to close it
 const handleClickOutside = (event: MouseEvent): void => {
   if (showChat.value && chatWindow.value && !chatWindow.value.contains(event.target as Node)) {
@@ -1076,29 +1094,6 @@ defineExpose({
   isOpen,
   toggleChat
 });
-
-// Add these after other reactive refs
-const MESSAGE_CHUNK_SIZE = 512;
-const visibleMessages = ref<number>(MESSAGE_CHUNK_SIZE);
-const canLoadMore = computed(() => messages.value.length > visibleMessages.value);
-
-// Add this method after other methods
-const loadMoreMessages = () => {
-  visibleMessages.value += MESSAGE_CHUNK_SIZE;
-};
-
-const clearChat = () => {
-  messages.value = [];
-  saveChatHistory(); // Save the empty state to localStorage
-};
-
-// Add to props section at the top of the script
-const props = defineProps({
-  showWelcomeTooltip: {
-    type: Boolean,
-    default: false
-  }
-});
 </script>
 
 <template>
@@ -1118,21 +1113,7 @@ const props = defineProps({
       <XMarkIcon v-else class="icon" />
     </transition>
     
-    <!-- Welcome Tooltip -->
-    <Transition name="fade">
-      <div v-if="showWelcomeTooltip && !showChat" class="welcome-tooltip">
-        <div class="welcome-content">
-          <span class="wave">👋</span>
-          <div class="welcome-text">
-            <div class="welcome-title">Hey there!</div>
-            <div class="welcome-message">I'm your AI assistant. Need any help?</div>
-          </div>
-        </div>
-        <div class="welcome-hint">Press 'A' or click me to chat</div>
-      </div>
-    </Transition>
-
-    <!-- Regular Tooltip -->
+    <!-- Tooltip -->
     <div class="tooltip" :class="{ 'visible': isHovering }">
       <span class="tooltip-text">{{ showChat ? 'Close' : 'Open your AI Assistant' }}</span>
       <span class="tooltip-hotkey">Hotkey: <span class="key">{{ showChat ? 'ESC' : 'A' }}</span></span>
@@ -1202,63 +1183,55 @@ const props = defineProps({
         </button>
         
         <div
-          v-for="(msg, index) in messages.slice(-visibleMessages)"
+          v-for="(msg, index) in visibleMessages"
           :key="index"
           :class="['message', msg.role]"
         >
           <div class="bubble">
             <template v-if="msg.content.includes('<reasoning>')">
-              <span class="message-text">{{ msg.content.split('</reasoning>')[1] || msg.content }}</span>
               <div class="thinking-content">
                 <div class="thinking-label">Reasoning:</div>
                 <span class="thinking-text">{{ msg.content.match(/<reasoning>(.*?)<\/reasoning>/s)?.[1] || '' }}</span>
               </div>
+              <span class="message-text">{{ msg.content.split('</reasoning>')[1] || msg.content }}</span>
             </template>
             <span v-else class="message-text">{{ msg.content }}</span>
           </div>
         </div>
 
-        <div v-if="currentMessage || loading" class="message assistant">
-          <div class="bubble">
-            <div v-if="currentMessage" class="message-text">{{ currentMessage.split('</reasoning>')[1] || currentMessage }}</div>
-            <div v-if="thinkingContent" class="thinking-content">
-              <div class="thinking-label">Reasoning:</div>
-              <span class="thinking-text">{{ thinkingContent }}</span>
-            </div>
-            <div v-if="loading" class="typing-indicator">
-              <div class="typing-animation">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-              </div>
-            </div>
-          </div>
+        <div v-if="currentMessage" class="message assistant">
+          <div class="bubble" v-html="currentMessage"></div>
         </div>
       </div>
       
       <!-- ✅ Input Area -->
-      <div class="input-area">
+        <div class="input-area">
         <div class="input-wrapper">
-          <!-- Input Field -->
-          <div
-            ref="chatInput"
-            class="chat-input"
-            contenteditable="true"
-            @input="updatePrompt"
-            @keydown.enter.prevent="sendPrompt"
-            role="textbox"
-            :class="{ 'input-disabled': loading }"
-          ></div>
+            <!-- Input Field -->
+<div
+  ref="chatInput"
+  class="chat-input"
+  contenteditable="true"
+  @input="updatePrompt"
+  @keydown.enter.prevent="sendPrompt"
+  role="textbox"
+></div>
+
+            <!-- Thinking Indicator (Icon + Text) -->
+            <div v-if="loading" class="thinking-indicator">
+            <div class="dot-flashing"></div>
+            <span class="thinking-text">Thinking...</span>
+            </div>
         </div>
         <div class="emoji-button-wrapper">
-          <button class="emoji-button" @click.stop="showEmojiPicker = !showEmojiPicker" :disabled="loading">
-            <FaceSmileIcon class="icon" />
-          </button>
+          <button class="emoji-button" @click.stop="showEmojiPicker = !showEmojiPicker">
+        <FaceSmileIcon class="icon" />
+      </button>
         </div>
         <button class="send-icon" @click="sendPrompt" :disabled="loading">
-          <PaperAirplaneIcon class="icon" :class="{ 'icon-disabled': loading }" />
+            <PaperAirplaneIcon class="icon" />
         </button>
-      </div>
+        </div>
       
       <!-- Add Clear Chat Button -->
       <div class="clear-chat-container">
@@ -1304,14 +1277,12 @@ const props = defineProps({
   background-color: rgba(30, 43, 56, 0.9);
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: 
-    transform 0.3s ease-out, 
-    background-color 0.4s ease-out, /* ⏳ Slow fade-out */
-    box-shadow 0.6s ease-out; /* ⏳ Longer glow fade */
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
+  transition: transform 0.3s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 99900;
   touch-action: none; /* Prevents default touch actions */
   user-select: none; /* Prevents text selection during drag */
+  will-change: transform; /* Optimize for animations */
 }
 
 .chat-toggle .icon {
@@ -1336,8 +1307,8 @@ const props = defineProps({
 }
 
 .hover-scale:hover {
+  transform: scale(1.1);
   background-color: rgba(0, 195, 255, 0.862); /* Lighter blue background on hover */
-  box-shadow: 0 4px 16px rgba(0, 208, 255, 0.896);
 }
 
 /* ✅ Chat Window */
@@ -1359,9 +1330,9 @@ const props = defineProps({
   border: 1px solid rgba(126, 126, 126, 0.1);
   touch-action: none; /* Prevents default touch actions */
   user-select: none; /* Prevents text selection during drag */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease-out;
-  will-change: transform; /* Optimize for animations */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-out;
+  will-change: transform, width, height; /* Optimize for animations */
 }
 
 /* Maximized state */
@@ -1407,7 +1378,7 @@ const props = defineProps({
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease;
   width: 2.5rem;
   height: 2.5rem;
 }
@@ -1465,21 +1436,6 @@ const props = defineProps({
 
 .resize-handle:hover::before {
   opacity: 1;
-  background-image: 
-    linear-gradient(to bottom right,
-      transparent 0%,
-      transparent 40%,
-      rgba(59, 130, 246, 0.9) 40%,
-      rgba(59, 130, 246, 0.9) 50%,
-      transparent 50%,
-      transparent 65%,
-      rgba(59, 130, 246, 0.9) 65%,
-      rgba(59, 130, 246, 0.9) 75%,
-      transparent 75%,
-      transparent 90%,
-      rgba(59, 130, 246, 0.9) 90%,
-      rgba(59, 130, 246, 0.9) 100%
-    );
 }
 
 /* ✅ Chat Messages */
@@ -1494,6 +1450,7 @@ const props = defineProps({
   overflow-x: hidden; /* ✅ Prevents horizontal scrolling */
   touch-action: auto; /* Allow normal touch behavior in messages */
   user-select: text; /* Allow text selection in messages */
+  contain: content; /* Improve scrolling performance */
 }
 
 /* ✅ Chat Bubbles */
@@ -1506,6 +1463,7 @@ const props = defineProps({
   display: inline-block;
   overflow: hidden; /* ✅ Ensures text stays inside */
   white-space: normal; /* ✅ Forces text to wrap instead of overflowing */
+  contain: content; /* Improve rendering performance */
 }
 
 .message-text {
@@ -1518,6 +1476,7 @@ const props = defineProps({
 .user {
   display: flex;
   justify-content: flex-end;
+  contain: layout; /* Improve layout performance */
 }
 
 .user .bubble {
@@ -1530,6 +1489,7 @@ const props = defineProps({
 .assistant {
   display: flex;
   justify-content: flex-start;
+  contain: layout; /* Improve layout performance */
 }
 
 .assistant .bubble {
@@ -1556,28 +1516,25 @@ const props = defineProps({
 .chat-input {
   flex: 1;
   min-height: 40px;
-  max-height: 120px;
+  max-height: 120px; /* Max height before scrolling */
   padding: 0.75rem;
   background: transparent;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle outline when not focused */
   outline: none;
-  overflow-y: auto;
+  overflow-y: hidden;
   word-wrap: break-word;
   white-space: pre-wrap;
   border-radius: 5px;
-  transition: all 0.2s ease;
+  touch-action: auto; /* Allow normal touch behavior */
+  user-select: text; /* Allow text selection */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .chat-input:focus {
+  outline: none;
   border-color: #00a2fff8;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
-}
-
-.chat-input.input-disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  background: rgba(255, 255, 255, 0.05);
 }
 
 /* ✅ Input Wrapper */
@@ -1588,28 +1545,19 @@ const props = defineProps({
   position: relative;
 }
 
-/* ✅ Thinking Icon */
-.thinking-icon {
-  position: relative;
-  left: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 /* ✅ Thinking Indicator (Icon + Text) */
 .thinking-indicator {
   position: absolute;
-  left: 1rem;
+  left: 1rem; /* Adjust based on input padding */
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  pointer-events: none;
+  gap: 0.5rem; /* Space between icon and text */
+  pointer-events: none; /* Ensure it doesn't interfere with input */
 }
 
-/* ✅ Dot Flashing Animation */
+/* ✅ Dot Flashing Animation - Optimized */
 .dot-flashing {
   width: 8px;
   height: 8px;
@@ -1617,6 +1565,7 @@ const props = defineProps({
   background-color: #3b82f6;
   animation: dotFlashing 1s infinite linear alternate;
   animation-delay: 0.5s;
+  will-change: opacity; /* Optimize animation */
 }
 
 .dot-flashing::before,
@@ -1629,6 +1578,7 @@ const props = defineProps({
   height: 8px;
   border-radius: 50%;
   background-color: #3b82f6;
+  will-change: opacity; /* Optimize animation */
 }
 
 .dot-flashing::before {
@@ -1645,11 +1595,11 @@ const props = defineProps({
 
 @keyframes dotFlashing {
   0% {
-    background-color: #3b82f6;
+    opacity: 1;
   }
   50%,
   100% {
-    background-color: rgba(59, 130, 246, 0.2);
+    opacity: 0.2;
   }
 }
 
@@ -1659,52 +1609,9 @@ const props = defineProps({
   font-size: 0.9rem;
 }
 
-/* ✅ Three-Dot Typing Animation */
-.dot-typing {
-  position: absolute;
-  left: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 1rem;
-}
-
-.dot-typing span {
-  width: 5px;
-  height: 5px;
-  margin: 0 3px;
-  background-color: #3b82f6;
-  border-radius: 50%;
-  animation: typingDots 1.4s infinite ease-in-out;
-}
-
-.dot-typing span:nth-child(1) { animation-delay: 0s; }
-.dot-typing span:nth-child(2) { animation-delay: 0.2s; }
-.dot-typing span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes typingDots {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.2); }
-}
-
-/* ✅ Glowing Text Effect */
-.thinking-glow {
-  position: absolute;
-  color: rgba(59, 130, 246, 0.8);
-  font-weight: bold;
-  text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
-  animation: glowPulse 1.5s infinite alternate ease-in-out;
-}
-
-@keyframes glowPulse {
-  0% { opacity: 0.5; text-shadow: 0 0 4px rgba(59, 130, 246, 0.3); }
-  100% { opacity: 1; text-shadow: 0 0 12px rgba(59, 130, 246, 0.8); }
-}
-
-
 /* ✅ Scrollbar - Webkit (Chrome, Edge, Safari) */
 .messages::-webkit-scrollbar {
-  width: 1rem; /* Slim scrollbar */
+  width: 0.5rem; /* Slimmer scrollbar for better performance */
 }
 
 .messages::-webkit-scrollbar-track {
@@ -1715,16 +1622,11 @@ const props = defineProps({
 .messages::-webkit-scrollbar-thumb {
   background: rgba(59, 130, 246, 0.8); /* Blue thumb */
   border-radius: 24px;
-  transition: background 0.3s ease;
-}
-
-.messages::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 1); /* Brighten on hover */
 }
 
 /* ✅ Scrollbar - Firefox */
 .messages {
-  scrollbar-width: 1rem;
+  scrollbar-width: thin;
   scrollbar-color: rgba(59, 130, 246, 0.8) rgba(255, 255, 255, 0.1);
 }
 
@@ -1739,7 +1641,7 @@ const props = defineProps({
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease;
   width: 2.5rem;
   height: 2.5rem;
 }
@@ -1772,7 +1674,7 @@ const props = defineProps({
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease;
   width: 2.5rem;
   height: 2.5rem;
 }
@@ -1811,7 +1713,7 @@ const props = defineProps({
   border-radius: 6px;
   font-size: 0.85rem;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -1821,6 +1723,7 @@ const props = defineProps({
   align-items: flex-start;
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 1001;
+  will-change: opacity, transform; /* Optimize animations */
 }
 
 .tooltip::after {
@@ -1862,47 +1765,17 @@ const props = defineProps({
   font-weight: bold;
 }
 
-/* ✅ Close Button Tooltip */
-.close-tooltip {
-  top: 40px;
-  right: 0;
-}
-
-.close-tooltip::after {
-  top: -5px;
-  bottom: auto;
-  border-top: none;
-  border-left: none;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.close-button-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.close-button-wrapper:hover .close-tooltip {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.5s;
-}
-
-/* ✅ New animations for chat window */
+/* ✅ New animations for chat window - Optimized */
 .slide-fade-enter-active,
 .slide-fade-leave-active {
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  will-change: transform, opacity;
 }
 
 .slide-fade-enter-from,
 .slide-fade-leave-to {
   transform: translateX(20px);
   opacity: 0;
-}
-
-/* Add a subtle shadow animation */
-.chat-window {
-  transition: box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Control wrapper for tooltips */
@@ -1928,7 +1801,7 @@ const props = defineProps({
   border-radius: 6px;
   font-size: 0.85rem;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transform: translateY(-10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -1938,6 +1811,7 @@ const props = defineProps({
   align-items: flex-start;
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 1001;
+  will-change: opacity, transform;
 }
 
 .control-tooltip::after {
@@ -1962,7 +1836,6 @@ const props = defineProps({
 /* Size transition for maximize/restore */
 .size-transition {
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.0) !important;
-  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.3);
 }
 
 .thinking-content {
@@ -2054,219 +1927,5 @@ const props = defineProps({
   background: rgba(220, 38, 38, 0.3);
   border-color: rgba(220, 38, 38, 0.4);
   color: #ffcccc;
-}
-
-/* Updated Typing Indicator Styles */
-.typing-indicator {
-  margin-top: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.typing-animation {
-  display: flex;
-  gap: 0.4rem;
-  padding: 0.25rem 0;
-}
-
-.typing-animation .dot {
-  width: 6px;
-  height: 6px;
-  background: #3b82f6;
-  border-radius: 50%;
-  animation: typingBounce 1.4s infinite ease-in-out;
-  opacity: 0.6;
-}
-
-.typing-animation .dot:nth-child(1) { animation-delay: 0s; }
-.typing-animation .dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-animation .dot:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes typingBounce {
-  0%, 60%, 100% {
-    transform: translateY(0);
-    opacity: 0.6;
-  }
-  30% {
-    transform: translateY(-4px);
-    opacity: 1;
-  }
-}
-
-.typing-preview {
-  font-size: 0.95rem;
-  opacity: 0.8;
-  animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 0.8;
-    transform: translateY(0);
-  }
-}
-
-/* Input State Styles */
-.input-disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.icon-disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Enhanced Thinking Content Styles */
-.thinking-content {
-  border-left: 2px solid #3b82f6;
-  padding-left: 1rem;
-  margin-top: 1rem;
-  opacity: 0.8;
-  font-weight: 300;
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 0.8;
-    transform: translateX(0);
-  }
-}
-
-.thinking-label {
-  color: #3b82f6;
-  font-size: 0.8rem;
-  font-weight: 500;
-  margin-bottom: 0.25rem;
-  letter-spacing: 0.5px;
-}
-
-.thinking-text {
-  font-style: italic;
-  color: #e2e8f0;
-  line-height: 1.5;
-}
-
-/* Ensure v-html content inherits styles */
-.bubble :deep(.thinking-content) {
-  border-left: 2px solid #3b82f6;
-  padding-left: 1rem;
-  margin-top: 1rem;
-  opacity: 0.8;
-  font-weight: 300;
-}
-
-.bubble :deep(.thinking-label) {
-  color: #3b82f6;
-  font-size: 0.8rem;
-  font-weight: 500;
-  margin-bottom: 0.25rem;
-  letter-spacing: 0.5px;
-}
-
-.bubble :deep(.thinking-text) {
-  font-style: italic;
-  color: #e2e8f0;
-  line-height: 1.5;
-}
-
-/* Welcome Tooltip Styles */
-.welcome-tooltip {
-  position: absolute;
-  bottom: calc(100% + 20px);
-  right: 0;
-  background: rgba(30, 43, 56, 0.95);
-  color: white;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 0.95rem;
-  white-space: nowrap;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  z-index: 1001;
-  min-width: 260px;
-  backdrop-filter: blur(8px);
-}
-
-.welcome-tooltip::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  right: 12px;
-  width: 16px;
-  height: 16px;
-  background: rgba(30, 43, 56, 0.95);
-  transform: rotate(45deg);
-  border-right: 1px solid rgba(59, 130, 246, 0.3);
-  border-bottom: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-.welcome-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.wave {
-  font-size: 1.5rem;
-  animation: wave 1.5s infinite;
-}
-
-.welcome-text {
-  flex: 1;
-}
-
-.welcome-title {
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: #3b82f6;
-}
-
-.welcome-message {
-  color: #e2e8f0;
-  font-size: 0.9rem;
-}
-
-.welcome-hint {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 8px;
-  margin-top: 8px;
-}
-
-@keyframes wave {
-  0% { transform: rotate(0deg); }
-  10% { transform: rotate(14deg); }
-  20% { transform: rotate(-8deg); }
-  30% { transform: rotate(14deg); }
-  40% { transform: rotate(-4deg); }
-  50% { transform: rotate(10deg); }
-  60% { transform: rotate(0deg); }
-  100% { transform: rotate(0deg); }
-}
-
-/* Fade transition */
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
 }
 </style>
