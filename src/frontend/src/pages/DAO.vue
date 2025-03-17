@@ -321,30 +321,33 @@
             <p class="description">{{ $t('dao.governance.lock_period.description', 'Flexible dissolve delay options') }}</p>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="power-multipliers">
-          <h3>{{ $t('dao.staking.multipliers.title', 'Power Multipliers') }}</h3>
-          <div class="multiplier-grid">
-            <div class="multiplier-card">
-              <div class="multiplier-header">
-                <i class="fas fa-shield-alt"></i>
-                <h4>{{ $t('dao.staking.multipliers.dissolve.title', 'Dissolve Delay') }}</h4>
-              </div>
-              <div class="multiplier-content">
-                <p class="bonus">+100%</p>
-                <p class="time">8 years</p>
-              </div>
+    <!-- Multipliers Section -->
+    <section class="multipliers-section">
+      <div class="power-multipliers">
+        <h3>{{ $t('dao.staking.multipliers.title', 'Power Multipliers') }}</h3>
+        <div class="multiplier-grid">
+          <div class="multiplier-card">
+            <div class="multiplier-header">
+              <i class="fas fa-shield-alt"></i>
+              <h4>{{ $t('dao.staking.multipliers.dissolve.title', 'Dissolve Delay') }}</h4>
             </div>
+            <div class="multiplier-content">
+              <p class="bonus">+100%</p>
+              <p class="time">8 years</p>
+            </div>
+          </div>
 
-            <div class="multiplier-card">
-              <div class="multiplier-header">
-                <i class="fas fa-hourglass-half"></i>
-                <h4>{{ $t('dao.staking.multipliers.age.title', 'Neuron Age') }}</h4>
-              </div>
-              <div class="multiplier-content">
-                <p class="bonus">+100%</p>
-                <p class="time">365 days</p>
-              </div>
+          <div class="multiplier-card">
+            <div class="multiplier-header">
+              <i class="fas fa-hourglass-half"></i>
+              <h4>{{ $t('dao.staking.multipliers.age.title', 'Neuron Age') }}</h4>
+            </div>
+            <div class="multiplier-content">
+              <p class="bonus">+100%</p>
+              <p class="time">365 days</p>
             </div>
           </div>
         </div>
@@ -5850,6 +5853,59 @@ img.hero-logo, img.dao-image {
   
   .explainer-pillar p {
     font-size: 0.9rem;
+  }
+}
+
+/* Multipliers Section */
+.multipliers-section {
+  padding: 2rem;
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Update Power Multipliers for full width */
+.multipliers-section .power-multipliers {
+  padding: 2.5rem;
+  margin-top: 2.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
+  background: linear-gradient(145deg,
+    rgba(15, 185, 253, 0.06) 0%,
+    rgba(15, 185, 253, 0.1) 100%
+  );
+  border-radius: 16px;
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+}
+
+.multipliers-section .multiplier-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Responsive styles for multipliers section */
+@media (max-width: 768px) {
+  .multipliers-section {
+    padding: 1rem;
+  }
+  
+  .multipliers-section .power-multipliers {
+    max-width: 480px;
+    padding: 1.5rem;
+  }
+  
+  .multipliers-section .multiplier-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 </style>
