@@ -12,19 +12,9 @@ const addFontAwesome = () => {
   if (!document.getElementById('font-awesome-script')) {
     const script = document.createElement('script');
     script.id = 'font-awesome-script';
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js';
-    script.integrity = 'sha512-Tn2m0TIpgVyTzzvmxLNuqbSJH3JP8jm+Cy3hvHrW7ndTDcJ1w5mBiksqDBb8GpE2ksktFvDB/ykZ0mDpsZj20w==';
+    script.src = 'https://kit.fontawesome.com/a076d05399.js';
     script.crossOrigin = 'anonymous';
     document.head.appendChild(script);
-    
-    // Also add the CSS for immediate visual feedback
-    const link = document.createElement('link');
-    link.id = 'font-awesome-css';
-    link.rel = 'stylesheet';
-    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
-    link.integrity = 'sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==';
-    link.crossOrigin = 'anonymous';
-    document.head.appendChild(link);
   }
 };
 
@@ -1258,8 +1248,8 @@ const formatMessage = (text: string): string => {
   for (const bullet of bulletPoints) {
     const content = bullet.fullMatch;
     
-    // CASE 1: Faction or Major Entities - "• The Cosmic Era: Learn about the game's setting."
-    const infoMatch = content.match(/•\s+(?:The\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+){1,3}|[A-Z][a-z]+|[A-Z]{2,})\s*(?::|-)?\s*(.+)/);
+    // CASE 1: Match patterns like "• The Cosmic Era: Learn about the game's setting."
+    const infoMatch = content.match(/•\s+(?:The\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)+|[A-Z]+[A-Za-z]*|[A-Z]{2})\s*(?::|-)?\s*(.+)/);
     if (infoMatch) {
       const title = infoMatch[1].trim();
       const description = infoMatch[2] ? infoMatch[2].trim() : '';
@@ -1267,16 +1257,9 @@ const formatMessage = (text: string): string => {
       // Get the full text for the data-value to preserve the entire option
       const fullText = title + (description ? ': ' + description : '');
       
-      // Check if this is likely a faction
-      const isFaction = title.match(/Cosmicons|Spirats|Webes|Celestials|Archs|Spades|Empire|Pirates|Guardians|Alliance|Federation|Order/i);
-      
-      // Choose appropriate button class and icon
-      const buttonClass = isFaction ? 'cta-button faction-btn' : 'cta-button';
-      const icon = isFaction ? 'fa-flag' : 'fa-info-circle';
-      
       // Generate a button with the appropriate content and icon
-      const buttonHtml = `<button class="${buttonClass} response-option-btn" data-value="${fullText}">
-        <i class="fas ${icon}"></i>
+      const buttonHtml = `<button class="cta-button response-option-btn" data-value="${fullText}">
+        <i class="fas fa-info-circle"></i>
         ${title}
         ${description ? `<span class="option-description">${description}</span>` : ''}
       </button>`;
@@ -1287,7 +1270,7 @@ const formatMessage = (text: string): string => {
     }
     
     // CASE 2: Option with parenthetical description like "• LT (for leveling tips)"
-    const optionMatch = content.match(/•\s+([A-Z0-9]{1,4})\s*\(([^)]+)\)/);
+    const optionMatch = content.match(/•\s+([A-Z0-9]+)\s*\(([^)]+)\)/);
     if (optionMatch) {
       const optionCode = optionMatch[1].trim();
       const description = optionMatch[2].trim();
@@ -1317,22 +1300,6 @@ const formatMessage = (text: string): string => {
       const buttonHtml = `<button class="cta-button whitepaper-btn response-option-btn action-btn" data-value="${value}">
         <i class="fas fa-question-circle"></i>
         ${fullPhrase}
-      </button>`;
-      
-      // Replace the bullet point with the button
-      processedText = processedText.replace(content, buttonHtml);
-      continue;
-    }
-    
-    // CASE 4: Generic action items like "• Explore the world" or "• View achievements"
-    const actionMatch = content.match(/•\s+([A-Z][a-z]+(?:\s+[a-z]+){1,4})/);
-    if (actionMatch) {
-      const action = actionMatch[1].trim();
-      
-      // Generate a button for this action
-      const buttonHtml = `<button class="cta-button response-option-btn action-btn" data-value="${action}">
-        <i class="fas fa-arrow-right"></i>
-        ${action}
       </button>`;
       
       // Replace the bullet point with the button
@@ -1376,15 +1343,8 @@ const formatMessage = (text: string): string => {
       const description = featureMatch[2].trim();
       const fullText = `${feature}: ${description}`;
       
-      // Check if this is likely a faction
-      const isFaction = feature.match(/Cosmicons|Spirats|Webes|Celestials|Archs|Spades|Empire|Pirates|Guardians|Alliance|Federation|Order/i);
-      
-      // Choose appropriate button class and icon
-      const buttonClass = isFaction ? 'cta-button faction-btn' : 'cta-button';
-      const icon = isFaction ? 'fa-flag' : 'fa-star';
-      
-      return `. <button class="${buttonClass} response-option-btn" data-value="${fullText}">
-        <i class="fas ${icon}"></i>
+      return `. <button class="cta-button response-option-btn" data-value="${fullText}">
+        <i class="fas fa-star"></i>
         ${feature}
         <span class="option-description">${description}</span>
       </button>`;
@@ -1407,16 +1367,7 @@ const formatMessage = (text: string): string => {
     return match; // Return unchanged if no patterns match
   });
   
-  // PHASE 4: Match numbered or lettered options (1. Option or A. Option)
-  const numberedPattern = /\n(?:\d+\.|[A-Z]\.)\s+([A-Z][a-zA-Z\s]+(?:\([^)]+\)|:[^.!?]+)?)/g;
-  processedText = processedText.replace(numberedPattern, (match, option) => {
-    return `\n<button class="cta-button response-option-btn" data-value="${option.trim()}">
-      <i class="fas fa-list-ol"></i>
-      ${option.trim()}
-    </button>`;
-  });
-  
-  // PHASE 5: Format remaining text with markdown-style formatting
+  // PHASE 4: Format remaining text with markdown-style formatting
   
   // Convert markdown-style bold
   let formatted = processedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
