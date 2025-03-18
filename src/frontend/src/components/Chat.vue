@@ -7,6 +7,27 @@ import MarkdownRenderer from './MarkdownRenderer.vue';
 import { useAuthStore } from '../stores/auth';
 import { useLanguageStore, languages } from '../stores/language';
 
+// Add FontAwesome script to make sure icons work
+const addFontAwesome = () => {
+  if (!document.getElementById('font-awesome-script')) {
+    const script = document.createElement('script');
+    script.id = 'font-awesome-script';
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js';
+    script.integrity = 'sha512-Tn2m0TIpgVyTzzvmxLNuqbSJH3JP8jm+Cy3hvHrW7ndTDcJ1w5mBiksqDBb8GpE2ksktFvDB/ykZ0mDpsZj20w==';
+    script.crossOrigin = 'anonymous';
+    document.head.appendChild(script);
+    
+    // Also add the CSS for immediate visual feedback
+    const link = document.createElement('link');
+    link.id = 'font-awesome-css';
+    link.rel = 'stylesheet';
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+    link.integrity = 'sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==';
+    link.crossOrigin = 'anonymous';
+    document.head.appendChild(link);
+  }
+};
+
 // Replace OpenAI client with OpenRouter base URL
 const API_BASE_URL = 'https://openrouter.ai/api/v1';
 
@@ -335,6 +356,9 @@ onMounted(() => {
       }, 100); // Small delay to ensure the styles were applied
     }
   });
+  
+  // Add FontAwesome for the buttons
+  addFontAwesome();
   
   // Add global event listeners
   document.addEventListener('keydown', handleKeyDown);
@@ -1209,7 +1233,7 @@ const formatMessage = (text: string): string => {
   text = text.replace(/<reasoning>.*?<\/reasoning>/gs, '');
   
   // If the message already contains HTML buttons, don't reformat it
-  if (text.includes('<button class="response-option-btn"')) {
+  if (text.includes('<button class="cta-button"')) {
     return text;
   }
   
@@ -1234,8 +1258,8 @@ const formatMessage = (text: string): string => {
   for (const bullet of bulletPoints) {
     const content = bullet.fullMatch;
     
-    // CASE 1: Match patterns like "• The Cosmic Era: Learn about the game's setting."
-    const infoMatch = content.match(/•\s+(?:The\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)+|[A-Z]+[A-Za-z]*|[A-Z]{2})\s*(?::|-)?\s*(.+)/);
+    // CASE 1: Faction or Major Entities - "• The Cosmic Era: Learn about the game's setting."
+    const infoMatch = content.match(/•\s+(?:The\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+){1,3}|[A-Z][a-z]+|[A-Z]{2,})\s*(?::|-)?\s*(.+)/);
     if (infoMatch) {
       const title = infoMatch[1].trim();
       const description = infoMatch[2] ? infoMatch[2].trim() : '';
@@ -1243,8 +1267,19 @@ const formatMessage = (text: string): string => {
       // Get the full text for the data-value to preserve the entire option
       const fullText = title + (description ? ': ' + description : '');
       
-      // Generate a button with the appropriate content
-      const buttonHtml = `<button class="response-option-btn" data-value="${fullText}">${title}<span class="option-description">${description}</span></button>`;
+      // Check if this is likely a faction
+      const isFaction = title.match(/Cosmicons|Spirats|Webes|Celestials|Archs|Spades|Empire|Pirates|Guardians|Alliance|Federation|Order/i);
+      
+      // Choose appropriate button class and icon
+      const buttonClass = isFaction ? 'cta-button faction-btn' : 'cta-button';
+      const icon = isFaction ? 'fa-flag' : 'fa-info-circle';
+      
+      // Generate a button with the appropriate content and icon
+      const buttonHtml = `<button class="${buttonClass} response-option-btn" data-value="${fullText}">
+        <i class="fas ${icon}"></i>
+        ${title}
+        ${description ? `<span class="option-description">${description}</span>` : ''}
+      </button>`;
       
       // Replace the bullet point with the button
       processedText = processedText.replace(content, buttonHtml);
@@ -1252,7 +1287,7 @@ const formatMessage = (text: string): string => {
     }
     
     // CASE 2: Option with parenthetical description like "• LT (for leveling tips)"
-    const optionMatch = content.match(/•\s+([A-Z0-9]+)\s*\(([^)]+)\)/);
+    const optionMatch = content.match(/•\s+([A-Z0-9]{1,4})\s*\(([^)]+)\)/);
     if (optionMatch) {
       const optionCode = optionMatch[1].trim();
       const description = optionMatch[2].trim();
@@ -1261,7 +1296,11 @@ const formatMessage = (text: string): string => {
       const fullText = `${optionCode} (${description})`;
       
       // Generate a button for this option
-      const buttonHtml = `<button class="response-option-btn inline-option" data-value="${fullText}">${optionCode}<span class="option-description">(${description})</span></button>`;
+      const buttonHtml = `<button class="cta-button response-option-btn inline-option" data-value="${fullText}">
+        <i class="fas fa-code"></i>
+        ${optionCode}
+        <span class="option-description">(${description})</span>
+      </button>`;
       
       // Replace the bullet point with the button
       processedText = processedText.replace(content, buttonHtml);
@@ -1275,7 +1314,26 @@ const formatMessage = (text: string): string => {
       const value = fullPhrase;
       
       // Generate a button for this action
-      const buttonHtml = `<button class="response-option-btn action-btn" data-value="${value}">${fullPhrase}</button>`;
+      const buttonHtml = `<button class="cta-button whitepaper-btn response-option-btn action-btn" data-value="${value}">
+        <i class="fas fa-question-circle"></i>
+        ${fullPhrase}
+      </button>`;
+      
+      // Replace the bullet point with the button
+      processedText = processedText.replace(content, buttonHtml);
+      continue;
+    }
+    
+    // CASE 4: Generic action items like "• Explore the world" or "• View achievements"
+    const actionMatch = content.match(/•\s+([A-Z][a-z]+(?:\s+[a-z]+){1,4})/);
+    if (actionMatch) {
+      const action = actionMatch[1].trim();
+      
+      // Generate a button for this action
+      const buttonHtml = `<button class="cta-button response-option-btn action-btn" data-value="${action}">
+        <i class="fas fa-arrow-right"></i>
+        ${action}
+      </button>`;
       
       // Replace the bullet point with the button
       processedText = processedText.replace(content, buttonHtml);
@@ -1289,17 +1347,76 @@ const formatMessage = (text: string): string => {
   const typePattern = /Type\s+([A-Z]{1,3})\s+for\s+([^.]+)/gi;
   processedText = processedText.replace(typePattern, (match, code, description) => {
     const fullText = `${code} for ${description.trim()}`;
-    return `<button class="response-option-btn inline-option" data-value="${fullText}">${code}<span class="option-description">(${description.trim()})</span></button>`;
+    return `<button class="cta-button response-option-btn inline-option" data-value="${fullText}">
+      <i class="fas fa-keyboard"></i>
+      ${code}
+      <span class="option-description">(${description.trim()})</span>
+    </button>`;
   });
   
   // CODE PATTERN: Match standalone codes like "ST" or "FI" especially after bullet points
   const codePattern = /\b([A-Z]{2})\b\s*\(([^)]+)\)/g;
   processedText = processedText.replace(codePattern, (match, code, description) => {
     const fullText = `${code} (${description.trim()})`;
-    return `<button class="response-option-btn inline-option" data-value="${fullText}">${code}<span class="option-description">(${description.trim()})</span></button>`;
+    return `<button class="cta-button response-option-btn inline-option" data-value="${fullText}">
+      <i class="fas fa-tag"></i>
+      ${code}
+      <span class="option-description">(${description.trim()})</span>
+    </button>`;
   });
   
-  // PHASE 3: Format remaining text with markdown-style formatting
+  // PHASE 3: Look for sentence-based patterns after periods
+  // This new pattern helps find button-worthy content after periods
+  const sentencePattern = /\.(?:\s+)([A-Z][^.!?:]+?(?::[^.!?]+|[^.!?]*?\([^)]+\)))/g;
+  processedText = processedText.replace(sentencePattern, (match, sentenceContent) => {
+    // Check if this looks like a "Feature: Description" pattern
+    const featureMatch = sentenceContent.match(/^([A-Z][a-zA-Z\s]+):\s*(.+)$/);
+    if (featureMatch) {
+      const feature = featureMatch[1].trim();
+      const description = featureMatch[2].trim();
+      const fullText = `${feature}: ${description}`;
+      
+      // Check if this is likely a faction
+      const isFaction = feature.match(/Cosmicons|Spirats|Webes|Celestials|Archs|Spades|Empire|Pirates|Guardians|Alliance|Federation|Order/i);
+      
+      // Choose appropriate button class and icon
+      const buttonClass = isFaction ? 'cta-button faction-btn' : 'cta-button';
+      const icon = isFaction ? 'fa-flag' : 'fa-star';
+      
+      return `. <button class="${buttonClass} response-option-btn" data-value="${fullText}">
+        <i class="fas ${icon}"></i>
+        ${feature}
+        <span class="option-description">${description}</span>
+      </button>`;
+    }
+    
+    // Check if this looks like an "Option (description)" pattern
+    const optionMatch = sentenceContent.match(/^([A-Z]{2,})\s*\(([^)]+)\)/);
+    if (optionMatch) {
+      const code = optionMatch[1].trim();
+      const description = optionMatch[2].trim();
+      const fullText = `${code} (${description})`;
+      
+      return `. <button class="cta-button response-option-btn inline-option" data-value="${fullText}">
+        <i class="fas fa-code"></i>
+        ${code}
+        <span class="option-description">(${description})</span>
+      </button>`;
+    }
+    
+    return match; // Return unchanged if no patterns match
+  });
+  
+  // PHASE 4: Match numbered or lettered options (1. Option or A. Option)
+  const numberedPattern = /\n(?:\d+\.|[A-Z]\.)\s+([A-Z][a-zA-Z\s]+(?:\([^)]+\)|:[^.!?]+)?)/g;
+  processedText = processedText.replace(numberedPattern, (match, option) => {
+    return `\n<button class="cta-button response-option-btn" data-value="${option.trim()}">
+      <i class="fas fa-list-ol"></i>
+      ${option.trim()}
+    </button>`;
+  });
+  
+  // PHASE 5: Format remaining text with markdown-style formatting
   
   // Convert markdown-style bold
   let formatted = processedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
@@ -1510,7 +1627,7 @@ const handleResponseOptionClick = (event: Event) => {
   </Teleport>
 </template>
 
-<style scoped>
+<style>
 /* ✅ Floating Chat Button */
 .chat-toggle {
   position: fixed;
@@ -2351,88 +2468,187 @@ const handleResponseOptionClick = (event: Event) => {
   width: 100%;
 }
 
-.response-option-btn {
-  background: rgba(15, 185, 253, 0.15);
-  border: 1px solid rgba(15, 185, 253, 0.3);
-  color: #4DCFFF;
-  border-radius: 4px;
-  padding: 0.5rem;
-  cursor: pointer;
-  text-align: left;
-  font-size: 0.875rem;
-  transition: all 0.2s ease;
-  display: flex;
+/* Styling to match DAO.vue's beautiful cta-buttons */
+.cta-button,
+.bubble .message-text button.cta-button,
+.formatted-message button.cta-button {
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 1.1rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  color: #f0f9ff !important;
+  background: linear-gradient(to bottom, 
+    rgba(74, 144, 226, 0.95) 0%, 
+    rgba(38, 79, 137, 0.95) 100%) !important;
+  border: 2px solid rgba(79, 174, 255, 0.7) !important;
+  border-radius: 8px !important;
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    0 10px 25px rgba(79, 174, 255, 0.4) !important;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+  overflow: hidden;
+  z-index: 1;
+  transform-style: preserve-3d;
+  margin-bottom: 0.5rem;
+  width: auto;
+  max-width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
 }
 
-.response-option-btn:hover {
-  background: rgba(15, 185, 253, 0.25);
-  border-color: rgba(15, 185, 253, 0.4);
-  box-shadow: 0 0 5px rgba(15, 185, 253, 0.3);
-  transform: translateY(-1px);
+.cta-button::before,
+.bubble .message-text button.cta-button::before,
+.formatted-message button.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(255, 255, 255, 0) 100%);
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform 0.6s ease;
+  z-index: -1;
 }
 
-.response-option-btn:active {
-  transform: translateY(0);
-  box-shadow: none;
+.cta-button i,
+.bubble .message-text button.cta-button i,
+.formatted-message button.cta-button i {
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
 }
 
-.option-description {
-  color: #a0a0a0;
-  font-size: 0.8rem;
+.cta-button:hover,
+.bubble .message-text button.cta-button:hover,
+.formatted-message button.cta-button:hover {
+  transform: translateY(-5px) scale(1.03);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  background: linear-gradient(to bottom, 
+    rgba(61, 146, 243, 0.95) 0%, 
+    rgba(40, 122, 237, 0.95) 100%) !important;
+  box-shadow: 
+    inset 0 2px 10px rgba(146, 217, 255, 0.9),
+    0 15px 30px rgba(30, 184, 255, 0.5) !important;
+  color: #ffffff !important;
+}
+
+.cta-button:hover::before,
+.bubble .message-text button.cta-button:hover::before,
+.formatted-message button.cta-button:hover::before {
+  transform: translateX(100%) rotate(45deg);
+}
+
+.cta-button:hover i,
+.bubble .message-text button.cta-button:hover i,
+.formatted-message button.cta-button:hover i {
+  transform: scale(1.2) rotate(5deg);
+  color: rgba(200, 230, 255, 1);
+}
+
+.cta-button:active,
+.bubble .message-text button.cta-button:active,
+.formatted-message button.cta-button:active {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 
+    inset 0 2px 8px rgba(146, 217, 255, 0.7),
+    0 8px 16px rgba(30, 184, 255, 0.3) !important;
+  transition: all 0.1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Whitepaper button style for action buttons */
+.cta-button.whitepaper-btn,
+.bubble .message-text button.cta-button.whitepaper-btn,
+.formatted-message button.cta-button.whitepaper-btn {
+  background: linear-gradient(to bottom, 
+    rgba(38, 79, 137, 0.95) 0%, 
+    rgba(26, 60, 110, 0.95) 100%) !important;
+  border: 2px solid rgba(61, 136, 214, 0.7) !important;
+}
+
+.cta-button.whitepaper-btn:hover,
+.bubble .message-text button.cta-button.whitepaper-btn:hover,
+.formatted-message button.cta-button.whitepaper-btn:hover {
+  background: linear-gradient(to bottom, 
+    rgba(49, 115, 199, 0.95) 0%, 
+    rgba(30, 78, 141, 0.95) 100%) !important;
+  box-shadow: 
+    inset 0 2px 10px rgba(123, 187, 255, 0.8),
+    0 15px 30px rgba(61, 142, 255, 0.4) !important;
+}
+
+/* Inline option styling */
+.cta-button.inline-option,
+.bubble .message-text button.cta-button.inline-option,
+.formatted-message button.cta-button.inline-option {
+  display: inline-flex;
+  margin: 0.25rem 0.5rem 0.25rem 0;
+  padding: 0.8rem 1.2rem;
+  font-size: 0.95rem;
+}
+
+.option-description,
+.bubble .message-text button .option-description,
+.formatted-message button .option-description {
+  color: rgba(220, 240, 255, 0.8) !important;
+  font-size: 0.85rem;
   margin-left: 0.5rem;
   white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: normal;
+}
+
+.cta-button:hover .option-description,
+.bubble .message-text button.cta-button:hover .option-description,
+.formatted-message button.cta-button:hover .option-description {
+  color: rgba(255, 255, 255, 0.95) !important;
 }
 
 @media (max-width: 480px) {
-  .option-description {
+  .cta-button,
+  .bubble .message-text button.cta-button,
+  .formatted-message button.cta-button {
+    padding: 0.9rem 1.2rem;
+    font-size: 1rem;
+    width: 100%;
+  }
+  
+  .option-description,
+  .bubble .message-text button .option-description,
+  .formatted-message button .option-description {
     width: 100%;
     margin-left: 0;
     margin-top: 0.25rem;
+    font-size: 0.8rem;
   }
-}
-
-.response-option-btn.inline-option {
-  display: inline-flex;
-  margin: 0.25rem;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.8rem;
-}
-
-.response-option-btn.inline-option .option-description {
-  font-size: 0.75rem;
-}
-
-/* New faction button styles */
-.faction-btn {
-  background: rgba(65, 45, 199, 0.15);
-  border-color: rgba(65, 45, 199, 0.3);
-  color: #8b7dff;
-  font-weight: 600;
-  padding: 0.75rem;
-  margin-bottom: 0.25rem;
-}
-
-.faction-btn:hover {
-  background: rgba(65, 45, 199, 0.25);
-  border-color: rgba(65, 45, 199, 0.5);
-  box-shadow: 0 0 8px rgba(65, 45, 199, 0.3);
-}
-
-/* Action button styles */
-.action-btn {
-  background: rgba(45, 199, 93, 0.15);
-  border-color: rgba(45, 199, 93, 0.3);
-  color: #5dce98;
-}
-
-.action-btn:hover {
-  background: rgba(45, 199, 93, 0.25);
-  border-color: rgba(45, 199, 93, 0.5);
-  box-shadow: 0 0 8px rgba(45, 199, 93, 0.3);
+  
+  .cta-button.inline-option,
+  .bubble .message-text button.cta-button.inline-option,
+  .formatted-message button.cta-button.inline-option {
+    width: auto;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+  }
+  
+  .cta-button i,
+  .bubble .message-text button.cta-button i,
+  .formatted-message button.cta-button i {
+    font-size: 1.1rem;
+  }
 }
 
 /* Response option container */
@@ -2443,30 +2659,56 @@ const handleResponseOptionClick = (event: Event) => {
   width: 100%;
 }
 
+/* Faction button styles - special variant */
+.faction-btn,
+.bubble .message-text button.faction-btn,
+.formatted-message button.faction-btn {
+  background: linear-gradient(to bottom, 
+    rgba(81, 65, 190, 0.95) 0%, 
+    rgba(55, 40, 165, 0.95) 100%) !important;
+  border-color: rgba(120, 100, 250, 0.7) !important;
+}
+
+.faction-btn:hover,
+.bubble .message-text button.faction-btn:hover,
+.formatted-message button.faction-btn:hover {
+  background: linear-gradient(to bottom, 
+    rgba(100, 85, 210, 0.95) 0%, 
+    rgba(75, 60, 185, 0.95) 100%) !important;
+  box-shadow: 
+    inset 0 2px 10px rgba(150, 130, 255, 0.9),
+    0 15px 30px rgba(120, 100, 250, 0.5) !important;
+}
+
+/* Action button styles - special variant */
+.action-btn,
+.bubble .message-text button.action-btn,
+.formatted-message button.action-btn {
+  background: linear-gradient(to bottom, 
+    rgba(45, 165, 90, 0.95) 0%, 
+    rgba(30, 140, 70, 0.95) 100%) !important;
+  border-color: rgba(60, 190, 110, 0.7) !important;
+}
+
+.action-btn:hover,
+.bubble .message-text button.action-btn:hover,
+.formatted-message button.action-btn:hover {
+  background: linear-gradient(to bottom, 
+    rgba(60, 180, 105, 0.95) 0%, 
+    rgba(45, 155, 85, 0.95) 100%) !important;
+  box-shadow: 
+    inset 0 2px 10px rgba(100, 230, 150, 0.9),
+    0 15px 30px rgba(60, 190, 110, 0.5) !important;
+}
+
 .faction-description {
-  padding: 0.5rem;
-  font-size: 0.875rem;
-  color: #ccc;
-  background: rgba(65, 45, 199, 0.05);
-  border-radius: 0 0 4px 4px;
-  margin-top: -1px;
-  border: 1px solid rgba(65, 45, 199, 0.15);
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: #d9e5ff;
+  background: rgba(65, 45, 199, 0.15);
+  border-radius: 0 0 8px 8px;
+  margin-top: -2px;
+  border: 1px solid rgba(65, 45, 199, 0.25);
   border-top: none;
-}
-
-/* Chat headings */
-.chat-heading {
-  color: #4DCFFF;
-  margin: 1rem 0 0.5rem 0;
-  font-weight: 600;
-}
-
-.option-description {
-  color: #a0a0a0;
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
-  white-space: normal;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 </style>
