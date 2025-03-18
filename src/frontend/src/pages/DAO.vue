@@ -6,6 +6,23 @@
       <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts" class="logo-image" />
     </div>
     
+    <!-- Sky Light Beams -->
+    <div class="sky-light-beams">
+      <!-- Regular beams - made wider -->
+      <div class="light-beam" style="--rotate: -5deg; width: 5vw;"></div>
+      <div class="light-beam" style="--rotate: 2deg; width: 4vw;"></div>
+      <div class="light-beam" style="--rotate: -2deg; width: 6vw;"></div>
+      <div class="light-beam" style="--rotate: 4deg; width: 4.5vw;"></div>
+      <div class="light-beam" style="--rotate: -3deg; width: 5.5vw;"></div>
+      <div class="light-beam" style="--rotate: 5deg; width: 3.5vw;"></div>
+      <div class="light-beam" style="--rotate: -4deg; width: 4.5vw;"></div>
+      <div class="light-beam" style="--rotate: 3deg; width: 5vw;"></div>
+      
+      <!-- Slow rotating beams -->
+      <div class="light-beam slow-beam" style="--rotate: 15deg; width: 8vw;"></div>
+      <div class="light-beam slow-beam" style="--rotate: -12deg; width: 8vw;"></div>
+    </div>
+    
     <!-- Starfield Canvas -->
     <canvas ref="starfield" class="global-starfield"></canvas>
     
@@ -14,18 +31,96 @@
       <!-- Dynamic Accent Glows -->
       <div class="cosmic-accent-glow top-left-glow"></div>
       <div class="cosmic-accent-glow bottom-right-glow"></div>
-      <div class="cosmic-accent-glow center-glow"></div>
-      <div class="cosmic-accent-glow bottom-left-glow"></div>
+      
+      <!-- Floating Elements -->
+      <div class="floating-elements">
+        <div class="floating-element" style="--delay: 0s; --depth: 30px; --rotation: -5deg; --top: 15%; --left: 10%;">
+          <div class="element-particles">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="floating-element" style="--delay: 1s; --depth: 60px; --rotation: 5deg; --top: 65%; --left: 20%;">
+          <div class="element-particles">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="floating-element" style="--delay: 2s; --depth: 90px; --rotation: -7deg; --top: 25%; --right: 12%;">
+          <div class="element-particles">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="floating-element" style="--delay: 3s; --depth: 40px; --rotation: 7deg; --bottom: 20%; --right: 15%;">
+          <div class="element-particles">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
       
       <!-- Cosmic Portal Elements -->
       <div class="cosmic-portal-bg">
         <div class="portal-ring outer-ring"></div>
         <div class="portal-ring inner-ring"></div>
         <div class="portal-shield"></div>
+        <div class="portal-stars">
+          <div class="portal-star" style="--index: 1;"></div>
+          <div class="portal-star" style="--index: 2;"></div>
+          <div class="portal-star" style="--index: 3;"></div>
+          <div class="portal-star" style="--index: 4;"></div>
+          <div class="portal-star" style="--index: 5;"></div>
+          <div class="portal-star" style="--index: 6;"></div>
+          <div class="portal-star" style="--index: 7;"></div>
+          <div class="portal-star" style="--index: 8;"></div>
+        </div>
         <div class="portal-glow"></div>
         <div class="portal-core"></div>
+        
+        
+        <!-- Energy Streams -->
+        <div class="portal-energy-streams">
+          <div class="energy-stream" style="--angle: 45deg;">
+            <div class="energy-particles"></div>
+          </div>
+          <div class="energy-stream" style="--angle: 135deg;">
+            <div class="energy-particles"></div>
+          </div>
+          <div class="energy-stream" style="--angle: 225deg;">
+            <div class="energy-particles"></div>
+          </div>
+          <div class="energy-stream" style="--angle: 315deg;">
+            <div class="energy-particles"></div>
+          </div>
+        </div>
+        
+        <!-- Hexagon Grid -->
+        <div class="portal-hexagons">
+          <div class="hexagon-grid"></div>
+        </div>
+        
+        <!-- Data Points -->
+        <div class="portal-data-points">
+          <div class="data-point" style="--pos: 30%; --delay: 0s;"></div>
+          <div class="data-point" style="--pos: 70%; --delay: 0.7s;"></div>
+          <div class="data-point" style="--pos: 20%; --delay: 1.4s;"></div>
+          <div class="data-point" style="--pos: 85%; --delay: 2.1s;"></div>
+          <div class="data-point" style="--pos: 40%; --delay: 2.8s;"></div>
+          <div class="data-point" style="--pos: 60%; --delay: 3.5s;"></div>
+        </div>
       </div>
       
+      <!-- Cosmic Dust Particles -->
+      <div class="cosmic-dust-particles">
+        <div class="dust-particle" style="--size: 3px; --delay: 0s; --speed: 20s;"></div>
+        <div class="dust-particle" style="--size: 2px; --delay: 2s; --speed: 15s;"></div>
+        <div class="dust-particle" style="--size: 4px; --delay: 4s; --speed: 25s;"></div>
+        <div class="dust-particle" style="--size: 3px; --delay: 6s; --speed: 18s;"></div>
+        <div class="dust-particle" style="--size: 2px; --delay: 8s; --speed: 22s;"></div>
+        <div class="dust-particle" style="--size: 3px; --delay: 10s; --speed: 17s;"></div>
+        <div class="dust-particle" style="--size: 4px; --delay: 12s; --speed: 24s;"></div>
+        <div class="dust-particle" style="--size: 2px; --delay: 14s; --speed: 19s;"></div>
+      </div>
+      
+      <!-- Gradient Overlays -->
+      <div class="cosmic-gradient-overlay top-gradient"></div>
       <div class="cosmic-gradient-overlay bottom-gradient"></div>
     </div>
     
@@ -394,7 +489,6 @@ export default {
     const daoAppUrl = ref('https://nns.ic0.app');
     const isLoading = ref(false);
     const error = ref(null);
-    const parallaxFactor = ref(0.1); // Reduced from 0.2 for better performance
     
     // Mock data for active proposals
     const activeProposals = ref([
@@ -439,12 +533,6 @@ export default {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           scrollY.value = window.scrollY;
-
-          // Apply parallax effect
-          if (starfield.value) {
-            starfield.value.style.transform = `translateY(${-scrollY.value * parallaxFactor.value}px)`;
-          }
-
           ticking = false;
         });
         ticking = true;
@@ -471,23 +559,19 @@ export default {
     function initCanvasEffects() {
       if (starfield.value) {
         try {
+          // Get canvas and context
           const canvas = starfield.value;
           const ctx = canvas.getContext('2d');
           
           // Get device pixel ratio
           const dpr = window.devicePixelRatio || 1;
           
-          let animationFrameId;
-
           // Create stars
           const stars = [];
           const createStars = () => {
+            // Set canvas dimensions with pixel ratio
             const width = window.innerWidth;
-            // Use the max between the body and the viewport, + a buffer to fill on scroll
-            const height = Math.max(
-              document.body.scrollHeight,
-              window.innerHeight
-            ) + (window.innerHeight * parallaxFactor.value * 2);
+            const height = window.innerHeight;
             
             // Set display size
             canvas.style.width = width + 'px';
@@ -497,11 +581,11 @@ export default {
             canvas.width = width * dpr;
             canvas.height = height * dpr;
             
-            // Scale context
+            // Scale context to match pixel ratio
             ctx.scale(dpr, dpr);
             
-            // Calculate star count based on screen area
-            const starCount = Math.floor((width * height) / 1600);
+            // Calculate star count based on screen area with increased density
+            const starCount = Math.floor((width * height) / 1000); // Increased density from 1600 to 1000
             stars.length = 0;
             
             for (let i = 0; i < starCount; i++) {
@@ -526,6 +610,7 @@ export default {
             const now = Date.now();
             const animStart = now - 500;
             
+            ctx.fillStyle = '#ffffff';
             stars.forEach(star => {
               if (star.opacity < star.targetOpacity && now > animStart + star.delay) {
                 star.opacity = Math.min(star.targetOpacity, star.opacity + 0.01);
@@ -534,24 +619,15 @@ export default {
               const twinkle = Math.sin(now * star.twinkleSpeed) * 0.2;
               const currentOpacity = Math.max(0.1, Math.min(star.targetOpacity, star.opacity + twinkle));
               
-              // Draw star with glow effect
-              const gradient = ctx.createRadialGradient(
-                star.x, star.y, 0,
-                star.x, star.y, star.radius * 2
-              );
-              
-              gradient.addColorStop(0, `rgba(255, 255, 255, ${currentOpacity})`);
-              gradient.addColorStop(0.5, `rgba(155, 176, 255, ${currentOpacity * 0.5})`);
-              gradient.addColorStop(1, 'rgba(155, 176, 255, 0)');
-              
-              ctx.fillStyle = gradient;
+              ctx.globalAlpha = currentOpacity;
               ctx.beginPath();
-              ctx.arc(star.x, star.y, star.radius * 2, 0, Math.PI * 2);
+              ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
               ctx.fill();
             });
           };
           
           // Animation loop
+          let animationFrameId;
           const animate = () => {
             drawStars();
             animationFrameId = requestAnimationFrame(animate);
@@ -630,8 +706,7 @@ export default {
       daoAppUrl,
       starfield,
       isLoading,
-      error,
-      parallaxFactor
+      error
     };
   },
 };
@@ -671,7 +746,7 @@ export default {
   --animation-delay-base: 0.1s;
   --cosmic-bg-dark: rgb(10, 14, 28);
   --hero-accent-glow: rgba(15, 185, 253, 0.3);
-  --glass-blur: 10px; /* Reduced blur from 25px to 10px */
+  --glass-blur: 60px;
   --cosmic-bg-primary: #0a111f;
   --cosmic-bg-secondary: #1a2035;
   --cosmic-accent-glow: rgba(65, 195, 255, 0.8);
@@ -693,22 +768,21 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 600vh;
+  width: 100%;
+  height: 100%;
   z-index: 0;
   pointer-events: none;
-  overflow: visible;
-  background: rgba(0, 0, 0, 0.349);
+  overflow: hidden;
+  perspective: 1200px;
 }
 
 /* Dynamic Accent Glows */
 .cosmic-accent-glow {
-  position: fixed;
+  position: absolute;
   border-radius: 50%;
   filter: blur(var(--glass-blur));
   opacity: 0.6;
   z-index: 1;
-  pointer-events: none;
 }
 
 .top-left-glow {
@@ -739,34 +813,6 @@ export default {
   animation: pulseBackground 15s infinite alternate var(--animation-smooth);
 }
 
-.center-glow {
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    circle at center,
-    rgba(15, 185, 253, 0.1) 0%,
-    rgba(15, 185, 253, 0.05) 30%,
-    rgba(15, 185, 253, 0) 70%
-  );
-  animation: orbitEffect 20s infinite alternate var(--animation-smooth);
-}
-
-.bottom-left-glow {
-  bottom: -10%;
-  left: -10%;
-  width: 50%;
-  height: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(103, 58, 183, 0.3) 0%,
-    rgba(103, 58, 183, 0.1) 50%,
-    rgba(103, 58, 183, 0) 70%
-  );
-  animation: pulseBackground 15s infinite alternate var(--animation-smooth);
-}
-
 /* Floating Elements */
 .floating-elements {
   position: absolute;
@@ -778,7 +824,7 @@ export default {
 
 .floating-element {
   position: absolute;
-  width: 800px;
+  width: 70px;
   height: 70px;
   display: flex;
   align-items: center;
@@ -794,29 +840,16 @@ export default {
   animation-timing-function: var(--animation-smooth);
   animation: float 10s infinite alternate;
   animation-delay: var(--delay);
-  
-  /* Position each element based on its CSS variables */
-  top: var(--top, auto);
-  left: var(--left, auto);
-  right: var(--right, auto);
-  bottom: var(--bottom, auto);
   transform: rotate(var(--rotation)) translateZ(var(--depth));
-  
-  /* For performance */
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  
-  /* Reduce maximum size for better performance */
-  max-width: 50vw;
 }
 
 .element-particles {
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
+  transform-style: preserve-3d;
   z-index: 1;
 }
 
@@ -904,22 +937,35 @@ export default {
   pointer-events: none;
 }
 
-.portal-glow {
+.portal-stars {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, 
-    rgba(15, 185, 253, 0.1) 0%, 
-    rgba(15, 185, 253, 0.05) 30%,
-    transparent 100%
-  );
-  border-radius: 50%;
-  filter: blur(15px);
-  opacity: 0.2;
-  animation: glowPulse 15s infinite ease-in-out;
+  animation: portalRotate 60s linear infinite reverse;
 }
+
+.portal-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(15, 185, 253, 0.6);
+  opacity: 0.6;
+  animation: portalStarPulse 3s infinite alternate var(--animation-smooth);
+  animation-delay: calc(var(--index) * 0.3s);
+}
+
+.portal-star:nth-child(1) { top: 20%; left: 10%; }
+.portal-star:nth-child(2) { top: 10%; left: 50%; }
+.portal-star:nth-child(3) { top: 20%; left: 90%; }
+.portal-star:nth-child(4) { top: 50%; left: 95%; }
+.portal-star:nth-child(5) { top: 80%; left: 90%; }
+.portal-star:nth-child(6) { top: 90%; left: 50%; }
+.portal-star:nth-child(7) { top: 80%; left: 10%; }
+.portal-star:nth-child(8) { top: 50%; left: 5%; }
 
 .portal-core {
   position: absolute;
@@ -953,7 +999,7 @@ export default {
     rgba(65, 195, 255, 0.02) 50%,
     rgba(65, 195, 255, 0) 70%);
   border-radius: 50%;
-  filter: blur(4px);
+  filter: blur(15px);
   opacity: 0.3;
   animation: logoGlowPulse 4s infinite alternate ease-in-out;
 }
@@ -1000,6 +1046,92 @@ export default {
     height: 200px;
     opacity: 0.1; /* Even less visible on mobile */
   }
+}
+
+/* Energy Streams */
+.portal-energy-streams {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: portalRotate 30s linear infinite;
+}
+
+.energy-stream {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    rgba(15, 185, 253, 0),
+    rgba(15, 185, 253, 0.25),
+    rgba(15, 185, 253, 0)
+  );
+  transform-origin: left center;
+  transform: rotate(var(--angle));
+  opacity: 0.6;
+  filter: blur(1px);
+  border-radius: 1px;
+}
+
+/* Hexagon Grid */
+.portal-hexagons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  overflow: hidden;
+  opacity: 0.4;
+}
+
+.hexagon-grid {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  background-image: 
+    repeating-linear-gradient(0deg, rgba(15, 185, 253, 0.1) 0px, transparent 1px, transparent 30px),
+    repeating-linear-gradient(60deg, rgba(15, 185, 253, 0.1) 0px, transparent 1px, transparent 30px),
+    repeating-linear-gradient(120deg, rgba(15, 185, 253, 0.1) 0px, transparent 1px, transparent 30px);
+  border-radius: 50%;
+  animation: rotateGrid 60s linear infinite;
+  opacity: 0.5;
+}
+
+/* Data Points */
+.portal-data-points {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.data-point {
+  position: absolute;
+  top: var(--pos);
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(15, 185, 253, 0.1) 30%,
+    rgba(15, 185, 253, 0.3) 50%,
+    rgba(15, 185, 253, 0.1) 70%,
+    transparent 100%
+  );
+  animation: dataPointScan 6s infinite;
+  animation-delay: var(--delay);
+  opacity: 0.6;
 }
 
 /* Starfield */
@@ -1066,7 +1198,7 @@ export default {
   width: 100%;
   z-index: 4;
   pointer-events: none;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .top-gradient {
@@ -1095,13 +1227,14 @@ export default {
   top: 0;
   left: 0;
   width: 100vw;
-  height: auto; /* Allow height to be set dynamically by JS */
-  z-index: 1;
-  pointer-events: none;
+  height: 100vh;
+  opacity: 0;
   mix-blend-mode: screen;
-  opacity: 1;
-  will-change: transform;
-  transform: translateZ(0); /* Hardware acceleration */
+  z-index: 2;
+  pointer-events: none;
+  will-change: opacity;
+  animation: starfieldFadeIn 1.5s ease 0.2s forwards;
+  transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
@@ -1111,7 +1244,7 @@ export default {
     opacity: 0;
   }
   to {
-    opacity: 1; /* Increase opacity for better visibility */
+    opacity: 0.8; /* Increased opacity for better visibility */
   }
 }
 
@@ -1134,8 +1267,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url('@/assets/webp/daoheadline.webp') no-repeat center center;
+  background: linear-gradient(135deg, 
+    rgba(8, 9, 12, 0.95) 0%, 
+    rgba(29, 38, 60, 0.95) 50%,
+    rgba(8, 9, 12, 0.95) 100%), 
+    url('@/assets/webp/daoheadline.webp') no-repeat center center;
   background-size: cover;
+  background-blend-mode: overlay;
   perspective: 1500px;
   transform-style: preserve-3d;
   /* Add content-visibility for better performance */
@@ -1150,9 +1288,18 @@ export default {
   to { opacity: 1; }
 }
 
-/* Removing the blue tint overlay */
 .headline::before {
-  display: none; /* Hide the overlay */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 30%, 
+    rgba(15, 185, 253, 0.12) 0%, 
+    transparent 60%);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .noise-canvas {
@@ -1239,15 +1386,9 @@ export default {
 }
 
 @keyframes float {
-  0% { 
-    transform: rotate(var(--rotation)) translateZ(var(--depth)) translateY(0px); 
-  }
-  50% { 
-    transform: rotate(var(--rotation)) translateZ(var(--depth)) translateY(-15px); 
-  }
-  100% { 
-    transform: rotate(var(--rotation)) translateZ(var(--depth)) translateY(0px); 
-  }
+  0% { transform: translateZ(40px) translateY(0px); }
+  50% { transform: translateZ(40px) translateY(-15px); }
+  100% { transform: translateZ(40px) translateY(0px); }
 }
 
 @keyframes textGradientShift {
@@ -2070,7 +2211,7 @@ export default {
 .governance-section {
   padding: 1rem 2rem 4rem;
   margin-top: -4rem;
-  z-index: 2;
+  z-index: 1;
   position: relative;
   width: 100%;
   max-width: 100%;
@@ -2791,7 +2932,7 @@ export default {
 
 /* Join Section Styles */
 .join-section {
-  padding: 4rem 2rem;
+  padding: 2rem 2rem;
 
   text-align: center;
   background: linear-gradient(135deg,
@@ -2862,102 +3003,35 @@ export default {
 .join-buttons .cosmic-button {
   padding: 1rem 2rem;
   font-size: 1.1rem;
-  flex: 0 1 auto;
-  min-width: 200px;
-  max-width: 300px;
+  flex: 0 1 auto; /* Allow buttons to maintain natural width */
+  min-width: 200px; /* Set a minimum width */
+  max-width: 300px; /* Set a maximum width */
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.75s cubic-bezier(0.25, 0.1, 0.25, 1); /* Slower, more elegant transition */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: transparent;
-  color: var(--cosmic-text-primary);
 }
 
 .join-buttons .cosmic-button i {
-  font-size: 1.5rem;
-  margin-right: 1rem;
-  transition: all 0.75s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bounce effect for icon */
+  font-size: 1.5rem; /* Bigger icon */
+  margin-right: 1rem; /* Add gap between icon and text */
+  transition: all 0.3s ease;
+}
+
+.join-buttons .cosmic-button:hover i {
+  transform: scale(1.2);
 }
 
 .join-buttons .cosmic-button.primary {
-  background: linear-gradient(135deg,
-    rgba(15, 185, 253, 0.85) 0%,
+  background: linear-gradient(135deg, 
+    rgba(15, 185, 253, 0.85) 0%, 
     rgba(15, 185, 253, 0.65) 100%
   );
-  border: 1px solid rgba(15, 185, 253, 0.3);
-  box-shadow: 0 4px 15px rgba(15, 185, 253, 0.2);
-  transition: all 0.75s cubic-bezier(0.25, 0.1, 0.25, 1); /* Consistent transition */
-}
-
-.join-buttons .cosmic-button.primary:hover {
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  border-color: rgba(15, 185, 253, 0.6);
-  box-shadow: 
-    0 6px 25px rgba(15, 185, 253, 0.3),
-    inset 0 0 20px rgba(15, 185, 253, 0.4);
-  color: #ffffff;
-  transform: translateY(-3px);
-}
-
-.join-buttons .cosmic-button.primary:hover i {
-  color: var(--cosmic-highlight-1);
-  text-shadow: 0 0 10px rgba(15, 185, 253, 0.8);
-  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 6px 20px rgba(15, 185, 253, 0.25);
 }
 
 .join-buttons .cosmic-button.secondary {
   background: rgba(15, 185, 253, 0.08);
   border: 1px solid rgba(15, 185, 253, 0.2);
-  transition: all 0.75s cubic-bezier(0.25, 0.1, 0.25, 1); /* Consistent transition */
-}
-
-.join-buttons .cosmic-button.secondary:hover {
-  background: rgba(15, 185, 253, 0.12);
-  border-color: rgba(15, 185, 253, 0.4);
-  box-shadow: 
-    0 4px 20px rgba(15, 185, 253, 0.15),
-    inset 0 0 15px rgba(15, 185, 253, 0.2);
-  transform: translateY(-3px);
-}
-
-.join-buttons .cosmic-button.secondary:hover i {
-  color: var(--cosmic-highlight-1);
-  text-shadow: 0 0 8px rgba(15, 185, 253, 0.6);
-  transform: scale(1.1) rotate(5deg);
-}
-
-/* Add a glow effect behind the buttons */
-.join-buttons .cosmic-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg,
-    transparent 0%,
-    rgba(15, 185, 253, 0.1) 50%,
-    transparent 100%
-  );
-  transform: translateX(-100%) rotate(45deg);
-  transition: transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1); /* Slower shimmer effect */
-  z-index: 1;
-}
-
-.join-buttons .cosmic-button:hover::before {
-  transform: translateX(100%) rotate(45deg);
-}
-
-/* Ensure text and icons stay on top */
-.join-buttons .cosmic-button span {
-  position: relative;
-  z-index: 2;
 }
 
 @media (max-width: 768px) {
@@ -2965,14 +3039,16 @@ export default {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    max-width: 280px;
-    margin: 0 auto;
+    max-width: 280px; /* Constrain the width of the container */
+    margin: 0 auto; /* Center the container */
   }
   
   .join-buttons .cosmic-button {
-    width: 100%;
     padding: 0.9rem 1.5rem;
     font-size: 1rem;
+    width: 100%;
+    min-width: 0; /* Override min-width on mobile */
+    max-width: 100%; /* Allow full width of container */
   }
   
   .join-buttons .cosmic-button i {
@@ -3257,12 +3333,9 @@ export default {
 }
 
 /* Power Multipliers Section */
-
 .power-multipliers {
-  padding: 1rem;
-  margin-top: -2.5rem;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 2rem;
+  margin: 0 auto;
   max-width: 1200px;
   background: linear-gradient(145deg,
     rgba(15, 185, 253, 0.06) 0%,
@@ -3291,14 +3364,15 @@ export default {
 
 .multiplier-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
   width: 100%;
   box-sizing: border-box;
+  padding: 0 1rem;
 }
 
 .multiplier-card {
-  padding: 2.5rem;
+  padding: 2rem;
   background: linear-gradient(145deg,
     rgba(15, 185, 253, 0.03) 0%,
     rgba(15, 185, 253, 0.07) 100%
@@ -3385,25 +3459,79 @@ export default {
   transition: all 0.3s ease;
 }
 
-.multiplier-card:hover .multiplier-header i {
-  transform: scale(1.05);
-  box-shadow: 0 20px 40px rgba(15, 185, 253, 0.15);
-  background: linear-gradient(135deg,
-    rgba(15, 185, 253, 0.2) 0%,
-    rgba(15, 185, 253, 0.3) 100%
-  );
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .power-multipliers {
+    padding: 1.5rem;
+    margin: 0 1rem;
+    width: calc(100% - 2rem);
+  }
+
+  .power-multipliers h3 {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .multiplier-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0;
+  }
+
+  .multiplier-card {
+    padding: 1.5rem;
+  }
+
+  .multiplier-header i {
+    font-size: 2rem;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 1rem;
+  }
+
+  .multiplier-header h4 {
+    font-size: 1.2rem;
+  }
+
+  .multiplier-content .bonus {
+    font-size: 2.2rem;
+  }
+
+  .multiplier-content .time {
+    font-size: 1.2rem;
+  }
 }
 
-.multiplier-card:hover .multiplier-header h4 {
-  transform: translateZ(5px);
-}
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .power-multipliers {
+    padding: 1rem;
+    margin: 0 0.5rem;
+    width: calc(100% - 1rem);
+  }
 
-.multiplier-card:hover .multiplier-content .bonus {
-  transform: translateZ(5px);
-}
+  .power-multipliers h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
 
-.multiplier-card:hover .multiplier-content .time {
-  color: var(--color-primary);
+  .multiplier-card {
+    padding: 1.25rem;
+  }
+
+  .multiplier-header i {
+    width: 60px;
+    height: 60px;
+    font-size: 1.8rem;
+  }
+
+  .multiplier-content .bonus {
+    font-size: 2rem;
+  }
+
+  .multiplier-content .time {
+    font-size: 1.1rem;
+  }
 }
 
 /* Media queries for responsive design */
@@ -4874,9 +5002,14 @@ img.hero-logo, img.dao-image {
 }
 
 @keyframes particleFloat {
-  0% { transform: translate(0, 0); }
-  50% { transform: translate(5px, -5px); }
-  100% { transform: translate(0, 0); }
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(5px, -5px) scale(1.5);
+    opacity: 0.8;
+  }
 }
 
 @keyframes floatDust {
@@ -5050,20 +5183,20 @@ img.hero-logo, img.dao-image {
   background-color: transparent;
   color: var(--cosmic-text-primary);
   text-align: center;
-  z-index: 2;
+  z-index: 1;
   height: 100vh;
   display: flex;
   align-items: center;
+  border: 1px solid rgba(0, 183, 255, 0.151);
+  box-shadow: 0 0 12px rgba(0, 238, 255, 0.205);
   justify-content: center;
   width: 100%;
-  border: none;
   outline: none;
-  box-shadow: none;
 }
 
 .content-container {
   position: relative;
-  z-index: 2; /* Ensure content stays above starfield */
+  z-index: 2;
   width: 100%;
   max-width: 1200px;
   padding: 0 2rem;
@@ -5334,7 +5467,7 @@ img.hero-logo, img.dao-image {
     rgba(65, 195, 255, 0) 100%);
   opacity: 0;
   transform: translateY(-100%) rotate(var(--rotate, 0deg));
-  filter: blur(3px); /* Reduced from 8px */
+  filter: blur(8px);
   animation: beamMove 15s infinite ease-in-out;
 }
 
@@ -5423,7 +5556,7 @@ img.hero-logo, img.dao-image {
     rgba(65, 195, 255, 0) 100%);
   opacity: 0;
   transform: translateY(-100%) rotate(var(--rotate, 0deg));
-  filter: blur(3px); /* Reduced from 8px */
+  filter: blur(8px);
   animation: beamMove 15s infinite ease-in-out;
 }
 
@@ -5908,6 +6041,4 @@ img.hero-logo, img.dao-image {
   text-shadow: var(--cosmic-font-glow);
   animation: textGradientShift 8s ease infinite;
 }
-
-
 </style>
