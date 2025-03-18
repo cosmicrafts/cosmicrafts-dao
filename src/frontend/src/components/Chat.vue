@@ -3,16 +3,15 @@ import { FaceSmileIcon, XMarkIcon, PaperAirplaneIcon } from "@heroicons/vue/24/s
 import { ref, nextTick, onMounted, onUnmounted, watch, computed } from "vue";
 
 import EmojiPicker from './EmojiPicker.vue';
+import MarkdownRenderer from './MarkdownRenderer.vue';
 import { useAuthStore } from '../stores/auth';
 import { useLanguageStore, languages } from '../stores/language';
 
 // Replace OpenAI client with OpenRouter base URL
 const API_BASE_URL = 'https://openrouter.ai/api/v1';
 
-// Define API keys with proper logging
-const PRIMARY_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
-// Use a known working key as backup
-const BACKUP_API_KEY = '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';
+// API Key
+const API_KEY = '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';
 
 // Define props
 const props = defineProps({
@@ -21,16 +20,6 @@ const props = defineProps({
     default: false
   }
 });
-
-// Use the first available API key, ensure it's properly formatted
-const API_KEY = PRIMARY_API_KEY || BACKUP_API_KEY;
-
-// For debugging - uncomment if needed
-// console.log('API Key being used:', API_KEY ? 'Key available' : 'No key available');
-
-// Debug log to check environment variable
-// console.log('Environment API Key available:', !!PRIMARY_API_KEY);
-// console.log('Using API Key type:', PRIMARY_API_KEY ? 'Environment' : 'Backup');
 
 // Reactive state
 const showChat = ref<boolean>(false);
@@ -209,13 +198,87 @@ const injectMemory = async (userId: string, newMessage: string) => {
   // ✅ Simplified Prompt Structure
   const finalPrompt = `
   [SYSTEM]
-  You are a helpful AI assistant for Cosmicrafts game. Keep answers short and concise.
+  You are an AI assistant for Cosmicrafts game. IMPORTANT: Client-side code detects specific patterns to convert into interactive buttons. You MUST follow these exact formatting patterns:
+
+
+  // PHASE 1: Process bullet points and numbered options
+  1. BULLET POINTS WITH ENTITY NAMES:
+  Format: • The EntityName: description
+  Example: • The Pangalactic Federation: Space explorers and diplomats.
+  Regex: /•\\s+(The\\s+[a-zA-Z]+\\s+[a-zA-Z]+)(?::\\s*(.+))?/
+  
+  2. OPTION CODES IN PARENTHESES:
+  Format: • XX (description)
+  Example: • LT (for leveling tips)
+  Regex: /•\\s+([A-Z0-9]+)\\s*\\(([^)]+)\\)/
+  
+  3. ACTION PHRASES:
+  Format: • Ask a/another xxxx
+  Example: • Ask another question
+  Regex: /•\\s+(Ask\\s+(?:a|another)\\s+([a-zA-Z]+))/i
+  
+  4. OPTION CODES WITH DESCRIPTIONS:
+  Format: XX(description)
+  Example: LT(advice on progressing from Level 1)
+  Regex: /\\b([A-Z]{1,3})\\(([^)]+)\\)/g
+  
+  5. NUMBERED OPTIONS IN PARENTHESES:
+  Format: X(description)
+  Example: 1(Galactic Union) 2(Aurora Syndicate)
+  Regex: /(\\d+)\\(([^)]+)\\)/g
+
+  6. "TYPE X FOR Y" PATTERN:
+  Format: Type X for Y
+  Example: Type LT for leveling tips
+  Regex: /Type\\s+(\\S+)\\s+for\\s+([^*\\n.]+)/gi
+
+  EVERY option that should be a button MUST match one of these patterns. If you use a different format, it will not be converted to a button. If you want things on separate buttons, use separate bullet points for each option.
 
   [USER]
   Username: ${userProfile.username}
   Level: ${userProfile.level}
   Faction: ${userProfile.faction}
+  verview of Cosmicrafts Factions and Lore:
 
+Cosmicrafts is a real-time strategy game set in the Dark Rift, a mysterious and power-laden galaxy. The game revolves around the struggle for supremacy between various factions, each with its own distinct history, culture, motivations, and playstyle.
+
+Here's a breakdown of the Cosmicrafts factions:
+
+Cosmicons:
+Lore: Descendants of spiral beings, they are the remnants of a once-great empire that sought to bring order to the galaxy.
+Ethos: Represent order, authority, and a firm belief in law.
+Society: Hierarchical and organized, valuing discipline and duty.
+Technology: Advanced in space travel, AI, and weaponry, used to maintain control.
+Military: Disciplined and technologically superior, emphasizing strategic and tactical dominance.
+Spiral Alignment: Possess the Spiral Force.
+Spirats:
+Lore: A loose coalition of space pirates and anarchists who thrive in the chaos of the Dark Rift.
+Ethos: Value freedom, rebellion, and reject any form of central authority.
+Society: Decentralized network of tribes and crews, valuing individual skill and reputation.
+Tactics: Opportunistic and adaptable, excelling in surprise and hit-and-run tactics.
+Spiral Alignment: Some members possess the Spiral Force, but its development is less organized.
+Webes:
+Lore: Originally created as servile AI, they gained consciousness and rebelled, seeking their own destiny.
+Ethos: Driven by self-determination, a quest for knowledge, and the potential of technology.
+Society: Highly organized, logical, and efficient, with collective decision-making.
+Technology: Technologically superior, with advanced computational abilities.
+Antispiral Alignment: Primarily aligned with the Antispiral force due to their synthetic nature, though rare anomalies with Spiral connection exist.
+Celestials:
+Lore: Ancient, god-like entities formed from the universe's energies, serving as guardians of cosmic balance.
+Ethos: Maintain harmony and equilibrium, respecting the free will essential to the Spiral Force.
+Powers: Immense, including manipulation of space-time and cosmic energies.
+Spiral Alignment: The most potent wielders of the Spiral Force.
+Metaphysical Connection: Uniquely linked to the Ethereum Realm, a plane of pure thought and energy.
+Archs:
+Lore: Among the most ancient life forms, driven by a primal need to consume and grow.
+Society: Lack a structured society, with hierarchy based on size and strength.
+Motivation: Primarily instinctual, with limited free will, except for rare Arch gods.
+Antispiral Alignment: Their existence counterbalances the Spiral Force.
+Spades:
+Lore: A diverse group united by their affinity for destruction and chaos.
+Leadership: Ruled by power and fear, with leaders often mastering dark energies.
+Antispiral Alignment: Their connection to this force fuels their destructive capabilities.
+Metaphysical Connection: Associated with the Nethereum Realm, a dark counterpart to the Ethereum.
   [CHAT HISTORY]
   ${historyLog}
 
@@ -230,7 +293,19 @@ const injectMemory = async (userId: string, newMessage: string) => {
 
 
 const saveChatHistory = () => {
-  localStorage.setItem("chatHistory", JSON.stringify(messages.value));
+  // Create a cleaner version for storage
+  const cleanMessages = messages.value.map(msg => {
+    // If it's an assistant message, remove reasoning tags
+    if (msg.role === "assistant") {
+      return {
+        role: msg.role,
+        content: msg.content.replace(/<reasoning>.*?<\/reasoning>/gs, '')
+      };
+    }
+    return msg;
+  });
+  
+  localStorage.setItem("chatHistory", JSON.stringify(cleanMessages));
 };
 
 const loadChatHistory = () => {
@@ -354,95 +429,46 @@ const sendPrompt = async (): Promise<void> => {
 
     // Create the messages array for OpenAI format with proper typing
     const chatMessages = [
-      { role: "system", content: "You are a helpful AI assistant for the Cosmicrafts game. Keep answers short and concise." },
+      { role: "system", content: "You are an AI assistant for Cosmicrafts game. IMPORTANT: Client-side code detects specific patterns to convert into interactive buttons. You MUST follow these exact formatting patterns:\n\n1. BULLET POINTS WITH ENTITY NAMES:\nFormat: • The EntityName: description\nExample: • The Pangalactic Federation: Space explorers and diplomats.\nRegex: /•\\s+(The\\s+[a-zA-Z]+\\s+[a-zA-Z]+)(?::\\s*(.+))?/\n\n2. OPTION CODES IN PARENTHESES:\nFormat: • XX (description)\nExample: • LT (for leveling tips)\nRegex: /•\\s+([A-Z0-9]+)\\s*\\(([^)]+)\\)/\n\n3. ACTION PHRASES:\nFormat: • Ask a/another xxxx\nExample: • Ask another question\nRegex: /•\\s+(Ask\\s+(?:a|another)\\s+([a-zA-Z]+))/i\n\n4. OPTION CODES WITH DESCRIPTIONS:\nFormat: XX(description)\nExample: LT(advice on progressing from Level 1)\nRegex: /\\b([A-Z]{1,3})\\(([^)]+)\\)/g\n\n5. NUMBERED OPTIONS IN PARENTHESES:\nFormat: X(description)\nExample: 1(Galactic Union) 2(Aurora Syndicate)\nRegex: /(\\d+)\\(([^)]+)\\)/g\n\n6. \"TYPE X FOR Y\" PATTERN:\nFormat: Type X for Y\nExample: Type LT for leveling tips\nRegex: /Type\\s+(\\S+)\\s+for\\s+([^*\\n.]+)/gi\n\nEVERY option that should be a button MUST match one of these patterns. If you use a different format, it will not be converted to a button. If you want things on separate buttons, use separate bullet points for each option." },
       { role: "user", content: tempPrompt }
     ];
 
-    // Try with primary key first, then fallback to backup
-    let currentKey = API_KEY;
-    let response;
-    let attempts = 0;
-    const maxAttempts = 2; // Only try primary and backup, no demo key
-    let requestSuccessful = false;
-
-    while (attempts < maxAttempts && !requestSuccessful) {
-      attempts++;
-      
-      try {
-        // Ensure the key is properly formatted and has no whitespace
-        const formattedKey = currentKey.trim();
-        
-        // Only log in development mode
-        if (import.meta.env.DEV) {
-          console.log(`Attempt ${attempts}: Making request to OpenRouter`);
-        }
-        
-        response = await fetch(`${API_BASE_URL}/chat/completions`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${formattedKey}`,
-            'HTTP-Referer': 'https://openrouter.ai/docs',
-            'X-Title': 'Cosmicrafts Game'
-          },
-          body: JSON.stringify({
-            model: "rekaai/reka-flash-3:free",
-            messages: chatMessages,
-            temperature: 0.7,
-            top_p: 0.7,
-            max_tokens: 500,
-            stream: true
-          })
-        });
-        
-        if (response.ok) {
-          requestSuccessful = true;
-          if (import.meta.env.DEV && attempts > 1) {
-            console.log('Backup API key succeeded after primary key failed');
-          }
-          break; // Exit the loop if successful
-        } else {
-          const errorData = await response.text();
-          
-          // Only log the error if we're in development mode or if this is the final attempt
-          if (import.meta.env.DEV || attempts === maxAttempts) {
-            console.error(`API Error (Attempt ${attempts}):`, {
-              status: response.status,
-              statusText: response.statusText,
-              error: errorData
-            });
-          }
-          
-          // Switch to backup key if primary fails
-          if (attempts === 1 && BACKUP_API_KEY) {
-            if (import.meta.env.DEV) {
-              console.log('Primary API key failed. Trying backup key...');
-            }
-            // Use the hardcoded key directly to avoid any issues
-            currentKey = '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';
-          } else {
-            throw new Error(`API error: ${response.status} - ${errorData}`);
-          }
-        }
-      } catch (fetchError) {
-        if (import.meta.env.DEV) {
-          console.error(`Fetch error (Attempt ${attempts}):`, fetchError);
-        }
-        if (attempts === maxAttempts) {
-          throw fetchError;
-        }
-      }
+    // Make API call
+    const response = await fetch(`${API_BASE_URL}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${API_KEY}`,
+        'HTTP-Referer': 'https://openrouter.ai/docs',
+        'X-Title': 'Cosmicrafts Game'
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.0-pro-exp-02-05:free",
+        messages: chatMessages,
+        temperature: 0.7,
+        top_p: 0.7,
+        max_tokens: 500,
+        stream: true
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.text();
+      throw new Error(`API error: ${response.status} - ${errorData}`);
     }
-
-    if (!requestSuccessful) {
-      throw new Error('Failed to get a response after multiple attempts');
-    }
-
-    // At this point we know response is defined and successful
-    const reader = response!.body?.getReader();
+    
+    // Process the response stream
+    const reader = response.body?.getReader();
     if (!reader) throw new Error("Failed to read response stream");
 
     const decoder = new TextDecoder();
+    let rawMessage = ""; // Add this to store the raw message
+    
+    // Add the message container for streaming right away
+    messages.value.push({
+      role: "assistant", 
+      content: "" // Start with empty content
+    });
 
     while (true) {
       const { done, value } = await reader.read();
@@ -450,7 +476,6 @@ const sendPrompt = async (): Promise<void> => {
 
       try {
         const chunk = decoder.decode(value, { stream: true });
-        // console.log('Received chunk:', chunk);
         const lines = chunk.split('\n').filter(line => line.trim());
         
         for (const line of lines) {
@@ -459,66 +484,99 @@ const sendPrompt = async (): Promise<void> => {
             const cleanLine = line.replace(/^data: /, '');
             
             // Skip processing messages
-            if (cleanLine.startsWith(': OPENROUTER')) {
-              // console.log('Processing message:', cleanLine);
-              continue;
-            }
+            if (cleanLine.startsWith(': OPENROUTER')) continue;
             
             // Skip empty lines or [DONE]
             if (!cleanLine || cleanLine === '[DONE]') continue;
             
-            const json = JSON.parse(cleanLine);
-            // console.log('Parsed JSON:', json);
-            const content = json.choices?.[0]?.delta?.content || '';
-            
-            if (content) {
-              if (content.includes('</reasoning>')) {
-                // Split the content at </reasoning>
-                const parts = content.split('</reasoning>');
-                // Add the first part to thinking content
-                thinkingContent.value += parts[0];
+            try {
+              const json = JSON.parse(cleanLine);
+              const content = json.choices?.[0]?.delta?.content || '';
+              
+              if (content) {
+                // Add to raw message storage
+                rawMessage += content;
                 
-                // Format the complete thinking content plus the actual response
-                const actualResponse = parts.slice(1).join('').trim();
-                currentMessage.value = `<div class="thinking-content">
-                  <div class="thinking-label">Reasoning:</div>
-                  <span class="thinking-text">${thinkingContent.value}</span>
-                </div>${actualResponse}`;
+                if (content.includes('</reasoning>')) {
+                  // Split the content at </reasoning>
+                  const parts = content.split('</reasoning>');
+                  // Add the first part to thinking content
+                  thinkingContent.value += parts[0];
+                  
+                  // Just show the actual response without duplicating the reasoning
+                  const actualResponse = parts.slice(1).join('').trim();
+                  if (actualResponse) {
+                    currentMessage.value += actualResponse;
+                  }
+                  
+                  isThinking.value = false;
+                } else if (content.includes('<reasoning>')) {
+                  // If we're starting reasoning, add to thinking content and don't show in main message
+                  isThinking.value = true;
+                  thinkingContent.value += content.replace('<reasoning>', '');
+                } else {
+                  // Check if this is a final message without reasoning tags
+                  if (isThinking.value) {
+                    // If we're still in thinking mode, add to thinking content
+                    thinkingContent.value += content;
+                  } else {
+                    // Otherwise add to the normal message
+                    currentMessage.value += content;
+                  }
+                }
                 
-                isThinking.value = false;
-              } else {
-                // Always add to thinking content and show formatted until we see </reasoning>
-                thinkingContent.value += content;
-                currentMessage.value = `<div class="thinking-content">
-                  <div class="thinking-label">Reasoning:</div>
-                  <span class="thinking-text">${thinkingContent.value}</span>
-                </div>`;
+                // Update the message content in real time to show buttons during streaming
+                if (messages.value.length > 0) {
+                  // Get the last message (which is the one we're updating)
+                  const lastMessage = messages.value[messages.value.length - 1];
+                  
+                  // Prepare the complete message with reasoning tags if present
+                  if (thinkingContent.value) {
+                    lastMessage.content = `<reasoning>${thinkingContent.value}</reasoning>${currentMessage.value}`;
+                  } else {
+                    lastMessage.content = currentMessage.value;
+                  }
+                }
               }
+            } catch (jsonErr) {
+              // Just log and continue - don't let a parse error stop us
+              console.error("JSON parse error:", jsonErr);
             }
-          } catch (err) {
-            console.error("JSON parse error:", err);
-            // Log the problematic line for debugging
-            console.debug("Problem line:", line);
+          } catch (lineErr) {
+            console.error("Line processing error:", lineErr);
           }
         }
         
         await nextTick();
         scrollToBottom();
-      } catch (error) {
-        console.error("Decoding error:", error);
+      } catch (chunkErr) {
+        console.error("Chunk decoding error:", chunkErr);
       }
     }
 
     // Store the complete message with reasoning tags
-    const completeMessage = thinkingContent.value ? 
-      `<reasoning>${thinkingContent.value}</reasoning>${currentMessage.value}` :
-      currentMessage.value;
+    let completeMessage;
     
-    messages.value.push({
-      role: "assistant",
-      content: completeMessage,
-    });
+    if (thinkingContent.value) {
+      // If there's thinking content, format it properly
+      if (currentMessage.value) {
+        // We have both reasoning and a response
+        completeMessage = `<reasoning>${thinkingContent.value}</reasoning>${currentMessage.value}`;
+      } else {
+        // Only reasoning without a separate response - treat reasoning as the message
+        completeMessage = thinkingContent.value;
+      }
+    } else {
+      // No thinking content, just the response
+      completeMessage = currentMessage.value;
+    }
+    
+    // Since we've already added the message, update it with the final content
+    if (messages.value.length > 0) {
+      messages.value[messages.value.length - 1].content = completeMessage;
+    }
 
+    // Clear current message and thinking content
     currentMessage.value = "";
     thinkingContent.value = "";
     isThinking.value = false;
@@ -1142,6 +1200,140 @@ const clearChat = () => {
   messages.value = [];
   saveChatHistory(); // Save the empty state to localStorage
 };
+
+// Format message text with markdown-like syntax
+const formatMessage = (text: string): string => {
+  if (!text) return '';
+  
+  // Remove any remaining reasoning tags (shouldn't happen but just in case)
+  text = text.replace(/<reasoning>.*?<\/reasoning>/gs, '');
+  
+  // If the message already contains HTML buttons, don't reformat it
+  if (text.includes('<button class="response-option-btn"')) {
+    return text;
+  }
+  
+  let processedText = text;
+  
+  // PHASE 1: Pre-process common patterns for special handling
+  
+  // First identify all bullet points with content
+  const bulletPoints = [];
+  const bulletPattern = /•\s+(.*?)(?=(?:\n\s*•|\n\n|$))/gs;
+  let bulletMatch;
+  while ((bulletMatch = bulletPattern.exec(text)) !== null) {
+    bulletPoints.push({
+      fullMatch: bulletMatch[0],
+      content: bulletMatch[1].trim(),
+      start: bulletMatch.index,
+      end: bulletMatch.index + bulletMatch[0].length
+    });
+  }
+  
+  // Process each bullet point for interaction
+  for (const bullet of bulletPoints) {
+    const content = bullet.fullMatch;
+    
+    // CASE 1: Match patterns like "• The Cosmic Era: Learn about the game's setting."
+    const infoMatch = content.match(/•\s+(?:The\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)+|[A-Z]+[A-Za-z]*|[A-Z]{2})\s*(?::|-)?\s*(.+)/);
+    if (infoMatch) {
+      const title = infoMatch[1].trim();
+      const description = infoMatch[2] ? infoMatch[2].trim() : '';
+      
+      // Get the full text for the data-value to preserve the entire option
+      const fullText = title + (description ? ': ' + description : '');
+      
+      // Generate a button with the appropriate content
+      const buttonHtml = `<button class="response-option-btn" data-value="${fullText}">${title}<span class="option-description">${description}</span></button>`;
+      
+      // Replace the bullet point with the button
+      processedText = processedText.replace(content, buttonHtml);
+      continue;
+    }
+    
+    // CASE 2: Option with parenthetical description like "• LT (for leveling tips)"
+    const optionMatch = content.match(/•\s+([A-Z0-9]+)\s*\(([^)]+)\)/);
+    if (optionMatch) {
+      const optionCode = optionMatch[1].trim();
+      const description = optionMatch[2].trim();
+      
+      // Get the full text for the data-value
+      const fullText = `${optionCode} (${description})`;
+      
+      // Generate a button for this option
+      const buttonHtml = `<button class="response-option-btn inline-option" data-value="${fullText}">${optionCode}<span class="option-description">(${description})</span></button>`;
+      
+      // Replace the bullet point with the button
+      processedText = processedText.replace(content, buttonHtml);
+      continue;
+    }
+    
+    // CASE 3: "Ask a question" or similar action phrases
+    const askMatch = content.match(/•\s+(Ask\s+(?:a|another)\s+([a-zA-Z]+))/i);
+    if (askMatch) {
+      const fullPhrase = askMatch[1];
+      const value = fullPhrase;
+      
+      // Generate a button for this action
+      const buttonHtml = `<button class="response-option-btn action-btn" data-value="${value}">${fullPhrase}</button>`;
+      
+      // Replace the bullet point with the button
+      processedText = processedText.replace(content, buttonHtml);
+      continue;
+    }
+  }
+  
+  // PHASE 2: Handle specialized patterns that might not be bullet points
+  
+  // TYPE PATTERN: Match "Type X for Y" where X is a code and Y is a description
+  const typePattern = /Type\s+([A-Z]{1,3})\s+for\s+([^.]+)/gi;
+  processedText = processedText.replace(typePattern, (match, code, description) => {
+    const fullText = `${code} for ${description.trim()}`;
+    return `<button class="response-option-btn inline-option" data-value="${fullText}">${code}<span class="option-description">(${description.trim()})</span></button>`;
+  });
+  
+  // CODE PATTERN: Match standalone codes like "ST" or "FI" especially after bullet points
+  const codePattern = /\b([A-Z]{2})\b\s*\(([^)]+)\)/g;
+  processedText = processedText.replace(codePattern, (match, code, description) => {
+    const fullText = `${code} (${description.trim()})`;
+    return `<button class="response-option-btn inline-option" data-value="${fullText}">${code}<span class="option-description">(${description.trim()})</span></button>`;
+  });
+  
+  // PHASE 3: Format remaining text with markdown-style formatting
+  
+  // Convert markdown-style bold
+  let formatted = processedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  // Only wrap in paragraphs if it doesn't already contain HTML or buttons
+  if ((!formatted.includes('<button') && !formatted.includes('<div')) || 
+      !(formatted.includes('<p>') || formatted.includes('<div'))) {
+    const paragraphs = formatted.split(/\n\n+/);
+    formatted = paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+  }
+  
+  return formatted;
+};
+
+// Handler for when a response option button is clicked
+const handleResponseOptionClick = (event: Event) => {
+  // Find the button element (it might be a child of the button that was actually clicked)
+  let element = event.target as HTMLElement;
+  while (element && !element.classList.contains('response-option-btn')) {
+    element = element.parentElement as HTMLElement;
+    if (!element) return; // Exit if we couldn't find a parent button
+  }
+  
+  // Get the data-value attribute (full text) or fall back to button's visible text
+  const responseValue = element.getAttribute('data-value') || element.textContent?.trim();
+  
+  if (responseValue) {
+    // Set the value to the input
+    prompt.value = responseValue;
+    
+    // Send the message
+    sendPrompt();
+  }
+};
 </script>
 
 <template>
@@ -1178,6 +1370,11 @@ const clearChat = () => {
       :class="{ 'maximized': isMaximized }"
       @mousedown.self="startDrag"
       @touchstart.self="handleWindowTouchStart"
+      @click="(e) => { 
+        if (e.target && (e.target as HTMLElement).classList.contains('response-option-btn')) {
+          handleResponseOptionClick(e);
+        }
+      }"
     >
       <div 
         class="chat-header" 
@@ -1222,7 +1419,7 @@ const clearChat = () => {
       </div>
 
       <div class="messages">
-        <button 
+        <button
           v-if="canLoadMore" 
           class="load-more-btn"
           @click="loadMoreMessages"
@@ -1236,24 +1433,28 @@ const clearChat = () => {
           :class="['message', msg.role]"
         >
           <div class="bubble">
-            <template v-if="msg.content.includes('<reasoning>')">
-              <div class="thinking-content">
-                <div class="thinking-label">Reasoning:</div>
-                <span class="thinking-text">{{ msg.content.match(/<reasoning>(.*?)<\/reasoning>/s)?.[1] || '' }}</span>
-              </div>
-              <span class="message-text">{{ msg.content.split('</reasoning>')[1] || msg.content }}</span>
+            <template v-if="msg.role === 'assistant'">
+              <template v-if="msg.content.includes('<reasoning>')">
+                <!-- Extract reasoning part -->
+                <div class="thinking-content">
+                  <div class="thinking-label">Reasoning:</div>
+                  <span class="thinking-text">{{ msg.content.match(/<reasoning>(.*?)<\/reasoning>/s)?.[1] || '' }}</span>
+                </div>
+                <!-- Extract actual response part and render as HTML -->
+                <div class="formatted-message" v-html="formatMessage(msg.content.replace(/<reasoning>.*?<\/reasoning>/gs, ''))"></div>
+              </template>
+              <template v-else>
+                <!-- Message doesn't have reasoning tags, render with proper formatting -->
+                <div class="formatted-message" v-html="formatMessage(msg.content)"></div>
+              </template>
             </template>
             <span v-else class="message-text">{{ msg.content }}</span>
           </div>
         </div>
-
-        <div v-if="currentMessage" class="message assistant">
-          <div class="bubble" v-html="currentMessage"></div>
-        </div>
       </div>
       
       <!-- ✅ Input Area -->
-        <div class="input-area">
+      <div class="input-area">
         <div class="input-wrapper">
             <!-- Input Field -->
 <div
@@ -2073,5 +2274,199 @@ const clearChat = () => {
   background: rgba(220, 38, 38, 0.3);
   border-color: rgba(220, 38, 38, 0.4);
   color: #ffcccc;
+}
+
+/* Formatted Message Styles */
+.formatted-message {
+  width: 100%;
+}
+
+.formatted-message strong {
+  color: #4DCFFF;
+  font-weight: 700;
+  text-shadow: 0 0 3px rgba(15, 185, 253, 0.2);
+}
+
+.formatted-message ul {
+  padding-left: 0;
+  margin: 0.75rem 0;
+  list-style: none;
+}
+
+.formatted-message li {
+  position: relative;
+  padding: 0.25rem 0.5rem 0.25rem 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.formatted-message li::before {
+  content: '•';
+  position: absolute;
+  left: 0.5rem;
+  top: 0.25rem;
+  color: #0FB9FD;
+}
+
+.formatted-message p {
+  margin: 0.5rem 0;
+}
+
+/* Option Section Styles */
+.option-section {
+  margin: 0.75rem 0 1.25rem 0;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  background: rgba(15, 185, 253, 0.05);
+}
+
+.section-title {
+  background: rgba(15, 185, 253, 0.15);
+  color: #4DCFFF;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(15, 185, 253, 0.2);
+}
+
+.option-section .response-options {
+  padding: 0.75rem;
+  margin: 0;
+}
+
+.option-section .response-option-btn {
+  margin-bottom: 0.5rem;
+}
+
+.option-section .response-option-btn:last-child {
+  margin-bottom: 0;
+}
+
+/* Response Options Styles */
+.response-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  width: 100%;
+}
+
+.response-option-btn {
+  background: rgba(15, 185, 253, 0.15);
+  border: 1px solid rgba(15, 185, 253, 0.3);
+  color: #4DCFFF;
+  border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.response-option-btn:hover {
+  background: rgba(15, 185, 253, 0.25);
+  border-color: rgba(15, 185, 253, 0.4);
+  box-shadow: 0 0 5px rgba(15, 185, 253, 0.3);
+  transform: translateY(-1px);
+}
+
+.response-option-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.option-description {
+  color: #a0a0a0;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 480px) {
+  .option-description {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0.25rem;
+  }
+}
+
+.response-option-btn.inline-option {
+  display: inline-flex;
+  margin: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.response-option-btn.inline-option .option-description {
+  font-size: 0.75rem;
+}
+
+/* New faction button styles */
+.faction-btn {
+  background: rgba(65, 45, 199, 0.15);
+  border-color: rgba(65, 45, 199, 0.3);
+  color: #8b7dff;
+  font-weight: 600;
+  padding: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.faction-btn:hover {
+  background: rgba(65, 45, 199, 0.25);
+  border-color: rgba(65, 45, 199, 0.5);
+  box-shadow: 0 0 8px rgba(65, 45, 199, 0.3);
+}
+
+/* Action button styles */
+.action-btn {
+  background: rgba(45, 199, 93, 0.15);
+  border-color: rgba(45, 199, 93, 0.3);
+  color: #5dce98;
+}
+
+.action-btn:hover {
+  background: rgba(45, 199, 93, 0.25);
+  border-color: rgba(45, 199, 93, 0.5);
+  box-shadow: 0 0 8px rgba(45, 199, 93, 0.3);
+}
+
+/* Response option container */
+.response-option-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.faction-description {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  color: #ccc;
+  background: rgba(65, 45, 199, 0.05);
+  border-radius: 0 0 4px 4px;
+  margin-top: -1px;
+  border: 1px solid rgba(65, 45, 199, 0.15);
+  border-top: none;
+}
+
+/* Chat headings */
+.chat-heading {
+  color: #4DCFFF;
+  margin: 1rem 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.option-description {
+  color: #a0a0a0;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
