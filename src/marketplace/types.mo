@@ -47,6 +47,7 @@ module {
         #Cancelled;
         #PriceChanged;
         #CollectionRegistered;
+        #Withdrawn;
     };
     
     // Main data types
@@ -101,6 +102,10 @@ module {
         #CollectionNotRegistered;
         #CollectionAlreadyRegistered;
         #NotICRC7Compliant;
+        #ListingTicketNotFound;
+        #ListingTicketExpired;
+        #NFTNotTransferred;
+        #ListingNotCancelled;
     };
     
     // ICRC7 Interface Types (copied from ICRC7 spec)

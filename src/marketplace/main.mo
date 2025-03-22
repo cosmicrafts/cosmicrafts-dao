@@ -65,6 +65,23 @@ actor class Marketplace() = this {
     private var collections = HashMap.HashMap<CollectionId, Collection>(0, Principal.equal, Principal.hash);
     private var tokenToListing = HashMap.HashMap<TokenKey, ListingId>(0, tokenKeyEqual, tokenKeyHash);
 
+    // New type for listing creation
+    public type ListingCreationTicket = {
+        id: Nat;
+        collectionId: CollectionId;
+        tokenId: TokenId;
+        seller: Principal;
+        price: Nat;
+        expires: Time.Time;
+    };
+
+    // Stable storage for tickets
+    private stable var listingTicketsEntries : [(Nat, ListingCreationTicket)] = [];
+
+    // Runtime state
+    private var listingTickets = HashMap.HashMap<Nat, ListingCreationTicket>(0, Nat.equal, Utils.natHash);
+    private stable var nextTicketId : Nat = 1;
+
     // ================ System Functions ================
     system func preupgrade() {
         listingsEntries := Iter.toArray(listings.entries());
@@ -72,6 +89,7 @@ actor class Marketplace() = this {
         userListingsEntries := Iter.toArray(userListings.entries());
         collectionsEntries := Iter.toArray(collections.entries());
         tokenToListingEntries := Iter.toArray(tokenToListing.entries());
+        listingTicketsEntries := Iter.toArray(listingTickets.entries());
     };
 
     system func postupgrade() {
@@ -111,6 +129,14 @@ actor class Marketplace() = this {
         userListingsEntries := [];
         collectionsEntries := [];
         tokenToListingEntries := [];
+
+        listingTickets := HashMap.fromIter<Nat, ListingCreationTicket>(
+            Iter.fromArray(listingTicketsEntries),
+            listingTicketsEntries.size(),
+            Nat.equal,
+            Utils.natHash
+        );
+        listingTicketsEntries := [];
     };
 
     // ================ Private Helper Methods ================
@@ -391,13 +417,10 @@ actor class Marketplace() = this {
                 // Here is where you would handle the payment
                 // For now, we assume payment is handled off-chain or in a separate step
                 
-                // Removed self-buy check for development
-                
-                // Transfer NFT from seller to buyer
+                // In custodial model, marketplace transfers from itself to buyer
                 let nftBackend : NFTBackend = actor(Principal.toText(listing.collectionId));
                 
                 let transferArgs : Types.TransferArgs = {
-                    spender_subaccount = null;
                     from = ?{ owner = listing.seller; subaccount = null };
                     to = { owner = caller; subaccount = null };
                     token_ids = [listing.tokenId];
@@ -413,7 +436,7 @@ actor class Marketplace() = this {
                         return #err(#TransferFailed(error));
                     };
                     case (#ok(_)) {
-                        // Update listing
+                        // Update listing status to sold
                         let updatedListing : Listing = {
                             id = listing.id;
                             collectionId = listing.collectionId;
@@ -708,5 +731,203 @@ actor class Marketplace() = this {
     // Get the owner of the marketplace
     public query func getOwner() : async Principal {
         return owner;
+    };
+
+    // Step 1: Create a listing ticket
+    public shared({ caller }) func createListingTicket(
+        collectionId: CollectionId,
+        tokenId: TokenId,
+        price: Nat
+    ) : async Result.Result<Nat, Error> {
+        if (price == 0) {
+            return #err(#InvalidPrice);
+        };
+        
+        // Check if collection is registered
+        switch (collections.get(collectionId)) {
+            case (null) { return #err(#CollectionNotRegistered) };
+            case (_) { };
+        };
+        
+        // Check if token is already listed
+        let tokenKey : TokenKey = { collectionId = collectionId; tokenId = tokenId };
+        switch (tokenToListing.get(tokenKey)) {
+            case (?_) { return #err(#AlreadyListed) };
+            case (null) { };
+        };
+        
+        // Create ticket (valid for 10 minutes)
+        let ticketId = nextTicketId;
+        let expirationTime = Time.now() + 10 * 60 * 1_000_000_000; // 10 minutes in nanoseconds
+        
+        let ticket : ListingCreationTicket = {
+            id = ticketId;
+            collectionId = collectionId;
+            tokenId = tokenId;
+            seller = caller;
+            price = price;
+            expires = expirationTime;
+        };
+        
+        listingTickets.put(ticketId, ticket);
+        nextTicketId += 1;
+        
+        return #ok(ticketId);
+    };
+
+    // Step 2: Confirm listing after NFT transfer
+    public shared({ caller }) func confirmListing(
+        ticketId: Nat
+    ) : async Result.Result<ListingId, Error> {
+        switch (listingTickets.get(ticketId)) {
+            case (null) { 
+                return #err(#ListingTicketNotFound);
+            };
+            case (?ticket) {
+                // Check if ticket has expired
+                if (Time.now() > ticket.expires) {
+                    listingTickets.delete(ticketId);
+                    return #err(#ListingTicketExpired);
+                };
+                
+                // Verify caller is the seller
+                if (caller != ticket.seller) {
+                    return #err(#NotSeller);
+                };
+                
+                // Verify NFT is now owned by the marketplace
+                let nftBackend : NFTBackend = actor(Principal.toText(ticket.collectionId));
+                let ownerResult = await nftBackend.icrc7_owner_of(ticket.tokenId);
+                
+                switch (ownerResult) {
+                    case (#err(_)) {
+                        return #err(#TokenNotFound);
+                    };
+                    case (#ok(owner)) {
+                        if (owner.owner != Principal.fromActor(this)) {
+                            return #err(#NFTNotTransferred);
+                        };
+                    };
+                };
+                
+                // Create the actual listing
+                let listingId = nextListingId;
+                let timestamp = Time.now();
+                
+                let listing : Listing = {
+                    id = listingId;
+                    collectionId = ticket.collectionId;
+                    tokenId = ticket.tokenId;
+                    seller = ticket.seller;
+                    price = ticket.price;
+                    status = #Active;
+                    createdAt = timestamp;
+                    updatedAt = timestamp;
+                };
+                
+                // Store listing data
+                listings.put(listingId, listing);
+                let tokenKey : TokenKey = { 
+                    collectionId = ticket.collectionId;
+                    tokenId = ticket.tokenId 
+                };
+                tokenToListing.put(tokenKey, listingId);
+                _addToUserListings(ticket.seller, listingId);
+                
+                // Remove the ticket
+                listingTickets.delete(ticketId);
+                
+                // Record transaction
+                let _ = _recordTransaction(
+                    #Listed,
+                    listingId,
+                    ticket.collectionId,
+                    ticket.tokenId,
+                    ticket.seller,
+                    null,
+                    ticket.price,
+                    timestamp
+                );
+                
+                nextListingId += 1;
+                
+                return #ok(listingId);
+            };
+        };
+    };
+
+    // New function to cancel a listing ticket
+    public shared({ caller }) func cancelListingTicket(
+        ticketId: Nat
+    ) : async Result.Result<(), Error> {
+        switch (listingTickets.get(ticketId)) {
+            case (null) { 
+                return #err(#ListingTicketNotFound);
+            };
+            case (?ticket) {
+                if (caller != ticket.seller) {
+                    return #err(#NotSeller);
+                };
+                
+                listingTickets.delete(ticketId);
+                return #ok();
+            };
+        };
+    };
+
+    // Add ability to withdraw an NFT if listing is cancelled
+    public shared({ caller }) func withdrawNFT(
+        listingId: ListingId
+    ) : async Result.Result<(), Error> {
+        switch (listings.get(listingId)) {
+            case (null) {
+                return #err(#ListingNotFound);
+            };
+            case (?listing) {
+                if (listing.status != #Cancelled) {
+                    return #err(#ListingNotCancelled);
+                };
+                
+                if (listing.seller != caller) {
+                    return #err(#NotSeller);
+                };
+                
+                // Transfer NFT back to seller
+                let nftBackend : NFTBackend = actor(Principal.toText(listing.collectionId));
+                
+                let transferArgs : Types.TransferArgs = {
+                    spender_subaccount = null;
+                    from = ?{ owner = Principal.fromActor(this); subaccount = null };
+                    to = { owner = caller; subaccount = null };
+                    token_ids = [listing.tokenId];
+                    memo = null;
+                    created_at_time = ?Nat64.fromNat(Int.abs(Time.now()));
+                    is_atomic = ?true;
+                };
+                
+                let transferResult = await nftBackend.icrc7_transfer(transferArgs);
+                
+                switch (transferResult) {
+                    case (#err(error)) {
+                        return #err(#TransferFailed(error));
+                    };
+                    case (#ok(_)) {
+                        // Record withdrawal transaction
+                        let _ = _recordTransaction(
+                            #Withdrawn,
+                            listingId,
+                            listing.collectionId,
+                            listing.tokenId,
+                            caller,
+                            null,
+                            0,
+                            Time.now()
+                        );
+                        
+                        return #ok();
+                    };
+                };
+            };
+        };
     };
 } 

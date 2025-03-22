@@ -1,10 +1,8 @@
 import Hash "mo:base/Hash";
-import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 import Nat8 "mo:base/Nat8";
 import Nat32 "mo:base/Nat32";
 import Buffer "mo:base/Buffer";
-import Text "mo:base/Text";
 
 module {
     // Custom hash function for Nat values

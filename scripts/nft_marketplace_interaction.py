@@ -66,15 +66,14 @@ def mint_nft_chest(user_principal, quality):
         return None
 
 def list_nft(user_principal, token_id, price):
-    """List an NFT on the marketplace."""
+    """List an NFT on the marketplace using the non-custodial model."""
     print(f"\n📝 Listing NFT with token ID {token_id} for {price} tokens...")
     
     # Call the listNFT function in the marketplace canister
     command = f'dfx canister call {MARKETPLACE_CANISTER_ID} listNFT "(principal \\"{BACKEND_CANISTER_ID}\\", {token_id}, {price})"'
     result = run_command(command)
     
-    if "variant { ok" in result:
-        # Extract listing ID from result
+    if result and "variant { ok" in result:
         try:
             listing_id = result.split("variant { ok = ")[1].split(" }")[0]
             print(f"✅ NFT successfully listed with listing ID: {listing_id}")
@@ -83,7 +82,10 @@ def list_nft(user_principal, token_id, price):
             print(f"✅ NFT listed successfully, but couldn't extract listing ID from: {result}")
             return None
     else:
-        print(f"❌ Failed to list NFT: {result}")
+        if result:
+            print(f"❌ Failed to list NFT: {result}")
+        else:
+            print(f"❌ Failed to list NFT: No result returned")
         return None
 
 def main():
@@ -107,14 +109,26 @@ def main():
             minted_tokens.append((token_id, quality))
         time.sleep(1)  # Small delay between mints
     
-    # 4. List the minted NFTs
+    # 4. List the minted NFTs using non-custodial model
     if minted_tokens:
         print("\n📋 Listing NFTs on the marketplace...")
+        listed_tokens = []
+        
         for token_id, quality in minted_tokens:
             # Price based on quality (just an example)
             price = quality * 100_000_000  # Higher quality = higher price
-            list_nft(user_principal, token_id, price)
+            listing_id = list_nft(user_principal, token_id, price)
+            if listing_id:
+                listed_tokens.append((token_id, quality, listing_id))
             time.sleep(1)  # Small delay between listings
+            
+        print(f"\n✅ Successfully listed {len(listed_tokens)} out of {len(minted_tokens)} NFTs")
+        
+        # Display summary of listed NFTs
+        if listed_tokens:
+            print("\n📊 Listed NFTs Summary:")
+            for token_id, quality, listing_id in listed_tokens:
+                print(f"   Token ID: {token_id} (Quality: {quality}) - Listing ID: {listing_id}")
     else:
         print("❌ No NFTs were successfully minted. Cannot proceed with listing.")
     
