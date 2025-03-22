@@ -5756,11 +5756,6 @@ shared actor class Cosmicrafts() = Self {
         let now = Nat64.fromIntWrap(Time.now());
         let acceptedTo: TypesICRC7.Account = _acceptAccount(mintArgs.to);
 
-        //todo add a more complex roles management
-        if (Principal.notEqual(caller, owner.owner) and Principal.notEqual(caller, CANISTER_ID) ) {
-        return #Err(#Unauthorized);
-        };
-
         //check on supply cap overflow
         if (supplyCap != null) {
         let _supplyCap: Nat = ICRC7Utils.nullishCoalescing<Nat>(supplyCap, 0);
