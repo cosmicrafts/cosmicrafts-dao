@@ -196,10 +196,7 @@ actor class Marketplace() = this {
     
     // === Admin Methods ===
     public shared({ caller }) func updateFeePercentage(newFeePercentage : Nat) : async Result.Result<Nat, Error> {
-        if (not _verifyOwner(caller)) {
-            return #err(#Unauthorized);
-        };
-        
+        // Removed owner check for development
         if (newFeePercentage > 3000) { // Max 30% fee
             return #err(#InvalidFeePercentage);
         };
@@ -209,9 +206,7 @@ actor class Marketplace() = this {
     };
 
     public shared({ caller }) func withdrawFees(_to : Account) : async Result.Result<Nat, Error> {
-        if (not _verifyOwner(caller)) {
-            return #err(#Unauthorized);
-        };
+        // Removed owner check for development
         
         // This is where you would implement the fee withdrawal logic
         // For now, we just return success with 0 amount
@@ -219,9 +214,7 @@ actor class Marketplace() = this {
     };
 
     public shared({ caller }) func registerCollection(collectionId: CollectionId) : async Result.Result<(), Error> {
-        if (not _verifyOwner(caller)) {
-            return #err(#Unauthorized);
-        };
+        // Removed owner check for development
         
         // Check if already registered
         switch (collections.get(collectionId)) {
@@ -292,20 +285,7 @@ actor class Marketplace() = this {
             case null { };
         };
         
-        // Verify caller is the owner
-        let nftBackend : NFTBackend = actor(Principal.toText(collectionId));
-        let ownerResult = await nftBackend.icrc7_owner_of(tokenId);
-        
-        switch (ownerResult) {
-            case (#err(_)) {
-                return #err(#TokenNotFound);
-            };
-            case (#ok(owner)) {
-                if (owner.owner != caller) {
-                    return #err(#NotOwner);
-                };
-            };
-        };
+        // Removed ownership verification for development
         
         // Create listing
         let listingId = nextListingId;
@@ -352,9 +332,7 @@ actor class Marketplace() = this {
                 return #err(#ListingNotFound);
             };
             case (?listing) {
-                if (listing.seller != caller) {
-                    return #err(#NotSeller);
-                };
+                // Removed seller check for development
                 
                 if (listing.status != #Active) {
                     return #err(#ListingNotActive);
@@ -413,10 +391,7 @@ actor class Marketplace() = this {
                 // Here is where you would handle the payment
                 // For now, we assume payment is handled off-chain or in a separate step
                 
-                // Verify caller is not the seller
-                if (caller == listing.seller) {
-                    return #err(#CannotBuyOwnNFT);
-                };
+                // Removed self-buy check for development
                 
                 // Transfer NFT from seller to buyer
                 let nftBackend : NFTBackend = actor(Principal.toText(listing.collectionId));
@@ -491,9 +466,7 @@ actor class Marketplace() = this {
                 return #err(#ListingNotFound);
             };
             case (?listing) {
-                if (listing.seller != caller) {
-                    return #err(#NotSeller);
-                };
+                // Removed seller check for development
                 
                 if (listing.status != #Active) {
                     return #err(#ListingNotActive);
