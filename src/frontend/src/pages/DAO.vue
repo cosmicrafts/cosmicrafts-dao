@@ -4870,11 +4870,6 @@ export default {
   backface-visibility: hidden;
 }
 
-/* Optimize images with loading attribute */
-img.hero-logo, img.dao-image {
-  loading: lazy;
-}
-
 /* Optimize animations with hardware acceleration */
 .distribution-card:hover, .governance-card:hover, .stat-card:hover, 
 .rights-card:hover, .proposal-card:hover, .multiplier-card:hover {
