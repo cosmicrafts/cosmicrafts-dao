@@ -336,6 +336,7 @@ actor class Marketplace() = this {
         };
     };
     
+    // Helper method to check if token is approved
     private func _isTokenApproved(canisterId: Principal) : Bool {
         for (token in approvedTokens.vals()) {
             if (token == canisterId) {
