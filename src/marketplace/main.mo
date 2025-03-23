@@ -34,8 +34,33 @@ actor class Marketplace() = this {
         icrc7_symbol : shared query () -> async Text;
     };
 
+    // ICRC-8 Types
+    type TokenSpec = Types.TokenSpec;
+    type ICRCStandards = Types.ICRCStandards;
+    type EscrowRecord = Types.EscrowRecord;
+    type AskFeature = Types.AskFeature;
+    type AskStatus = Types.AskStatus;
+    type AskStatusType = Types.AskStatusType;
+    type ManageAskRequest = Types.ManageAskRequest;
+    type ManageAskResponse = Types.ManageAskResponse;
+    type ManageBidRequest = Types.ManageBidRequest;
+    type ManageBidResponse = Types.ManageBidResponse;
+    type BidFeature = Types.BidFeature;
+    type GenericError = Types.GenericError;
+    type AskInfoRequest = Types.AskInfoRequest;
+    type AskInfoResponse = Types.AskInfoResponse;
+    type BalanceRequest = Types.BalanceRequest;
+    type BalanceResult = Types.BalanceResult;
+    type NewAskResult = Types.NewAskResult;
+    type ICRC1TokenSpecDetail = Types.ICRC1TokenSpecDetail;
+    type ICRC7TokenSpecDetail = Types.ICRC7TokenSpecDetail;
+    type EngineMatch = Types.EngineMatch;
+    type TokenSpecResult = Types.TokenSpecResult;
+    type EncumbranceDetail = Types.EncumbranceDetail;
+    type BuyNowReq = Types.BuyNowReq;
+
     // ================ State Variables ================
-    private stable var owner : Principal = Principal.fromText("vam5o-bdiga-izgux-6cjaz-53tck-eezzo-fezki-t2sh6-xefok-dkdx7-pae");
+    private stable var owner : Principal = Principal.fromText("7mwdg-w6cvy-faabk-parwb-e4xuk-vxzcv-33uj2-2izcp-5x2qo-5s4ar-wqe");
     private stable var marketplaceFeePercentage : Nat = 250; // 2.5%
     private stable var nextListingId : ListingId = 1;
     private stable var nextTransactionId : TransactionId = 1;
@@ -81,6 +106,24 @@ actor class Marketplace() = this {
     // Runtime state
     private var listingTickets = HashMap.HashMap<Nat, ListingCreationTicket>(0, Nat.equal, Utils.natHash);
     private stable var nextTicketId : Nat = 1;
+    
+    // ================ ICRC-8 State Variables ================
+    private stable var nextAskId : Nat = 1;
+    private stable var nextEscrowId : Nat = 1;
+    
+    // Stable storage for ICRC-8
+    private stable var asksEntries : [(Nat, AskStatus)] = [];
+    private stable var escrowRecordsEntries : [(Nat, EscrowRecord)] = [];
+    private stable var userAsksEntries : [(Principal, [Nat])] = [];
+    private stable var approvedTokensEntries : [Principal] = [];
+    private stable var askHistoryEntries : [(Nat, AskStatus)] = [];
+    
+    // Runtime state for ICRC-8
+    private var asks = HashMap.HashMap<Nat, AskStatus>(0, Nat.equal, Utils.natHash);
+    private var escrowRecords = HashMap.HashMap<Nat, EscrowRecord>(0, Nat.equal, Utils.natHash);
+    private var userAsks = HashMap.HashMap<Principal, [Nat]>(0, Principal.equal, Principal.hash);
+    private var approvedTokens = Buffer.Buffer<Principal>(0);
+    private var askHistory = HashMap.HashMap<Nat, AskStatus>(0, Nat.equal, Utils.natHash);
 
     // ================ System Functions ================
     system func preupgrade() {
@@ -90,6 +133,13 @@ actor class Marketplace() = this {
         collectionsEntries := Iter.toArray(collections.entries());
         tokenToListingEntries := Iter.toArray(tokenToListing.entries());
         listingTicketsEntries := Iter.toArray(listingTickets.entries());
+        
+        // ICRC-8 entries
+        asksEntries := Iter.toArray(asks.entries());
+        escrowRecordsEntries := Iter.toArray(escrowRecords.entries());
+        userAsksEntries := Iter.toArray(userAsks.entries());
+        approvedTokensEntries := Buffer.toArray(approvedTokens);
+        askHistoryEntries := Iter.toArray(askHistory.entries());
     };
 
     system func postupgrade() {
@@ -137,6 +187,39 @@ actor class Marketplace() = this {
             Utils.natHash
         );
         listingTicketsEntries := [];
+        
+        // ICRC-8 state initialization
+        asks := HashMap.fromIter<Nat, AskStatus>(
+            Iter.fromArray(asksEntries),
+            asksEntries.size(),
+            Nat.equal,
+            Utils.natHash
+        );
+        escrowRecords := HashMap.fromIter<Nat, EscrowRecord>(
+            Iter.fromArray(escrowRecordsEntries),
+            escrowRecordsEntries.size(),
+            Nat.equal,
+            Utils.natHash
+        );
+        userAsks := HashMap.fromIter<Principal, [Nat]>(
+            Iter.fromArray(userAsksEntries),
+            userAsksEntries.size(),
+            Principal.equal,
+            Principal.hash
+        );
+        approvedTokens := Buffer.fromArray<Principal>(approvedTokensEntries);
+        askHistory := HashMap.fromIter<Nat, AskStatus>(
+            Iter.fromArray(askHistoryEntries),
+            askHistoryEntries.size(),
+            Nat.equal,
+            Utils.natHash
+        );
+        
+        asksEntries := [];
+        escrowRecordsEntries := [];
+        userAsksEntries := [];
+        approvedTokensEntries := [];
+        askHistoryEntries := [];
     };
 
     // ================ Private Helper Methods ================
@@ -218,11 +301,584 @@ actor class Marketplace() = this {
         };
     };
 
-    // ================ Public API ================
+    // ================ ICRC-8 Helper Methods ================
+    private func _addEscrowRecord(record: EscrowRecord) : Nat {
+        let escrowId = nextEscrowId;
+        escrowRecords.put(escrowId, record);
+        nextEscrowId += 1;
+        return escrowId;
+    };
     
-    // === Admin Methods ===
-    public shared({ caller }) func updateFeePercentage(newFeePercentage : Nat) : async Result.Result<Nat, Error> {
-        // Removed owner check for development
+    private func _addToUserAsks(principal: Principal, askId: Nat) {
+        let existingAsks = switch (userAsks.get(principal)) {
+            case null { [] };
+            case (?existing) { existing };
+        };
+        let updatedAsks = Array.append<Nat>(existingAsks, [askId]);
+        userAsks.put(principal, updatedAsks);
+    };
+    
+    private func _removeFromUserAsks(principal: Principal, askId: Nat) {
+        let existingAsks = switch (userAsks.get(principal)) {
+            case null { return };
+            case (?existing) { existing };
+        };
+        
+        let updatedAsks = Array.filter<Nat>(
+            existingAsks,
+            func(id: Nat): Bool { id != askId }
+        );
+        
+        if (updatedAsks.size() == 0) {
+            userAsks.delete(principal);
+        } else {
+            userAsks.put(principal, updatedAsks);
+        };
+    };
+    
+    private func _isTokenApproved(canisterId: Principal) : Bool {
+        for (token in approvedTokens.vals()) {
+            if (token == canisterId) {
+                return true;
+            };
+        };
+        return false;
+    };
+    
+    private func _validateAskFeatures(features: [?AskFeature]) : Result.Result<[AskFeature], GenericError> {
+        var hasAskToken = false;
+        var hasBuyNow = false;
+        
+        let validFeatures = Buffer.Buffer<AskFeature>(0);
+        
+        for (feature in features.vals()) {
+            switch(feature) {
+                case (null) { /* Skip null features */ };
+                case (?#ask_token(askTokens)) {
+                    hasAskToken := true;
+                    validFeatures.add(#ask_token(askTokens));
+                };
+                case (?#buy_now(buyNow)) {
+                    hasBuyNow := true;
+                    validFeatures.add(#buy_now(buyNow));
+                };
+                case (?#created_at(timestamp)) {
+                    validFeatures.add(#created_at(timestamp));
+                };
+                case (?#ending(endingType)) {
+                    validFeatures.add(#ending(endingType));
+                };
+                case (?#fee_schema(schema)) {
+                    validFeatures.add(#fee_schema(schema));
+                };
+                case (?#broker(account)) {
+                    validFeatures.add(#broker(account));
+                };
+                case (?#allow_list(accounts)) {
+                    validFeatures.add(#allow_list(accounts));
+                };
+                case (?#start_date(date)) {
+                    validFeatures.add(#start_date(date));
+                };
+                case (?#memo(data)) {
+                    validFeatures.add(#memo(data));
+                };
+                case (?#fee_accounts(accounts)) {
+                    validFeatures.add(#fee_accounts(accounts));
+                };
+                case (?#bid_pays_fees(fees)) {
+                    validFeatures.add(#bid_pays_fees(fees));
+                };
+                case (?#allow_partial) {
+                    validFeatures.add(#allow_partial);
+                };
+                case (?#unsolicited_offer(account)) {
+                    validFeatures.add(#unsolicited_offer(account));
+                };
+                case (?feature) {
+                    validFeatures.add(feature);
+                };
+            };
+        };
+        
+        if (not hasAskToken) {
+            return #err({
+                error_code = 400;
+                message = "Missing required ask_token feature";
+            });
+        };
+        
+        if (not hasBuyNow) {
+            return #err({
+                error_code = 400;
+                message = "Missing required buy_now feature";
+            });
+        };
+        
+        return #ok(Buffer.toArray(validFeatures));
+    };
+    
+    private func _createNewAsk(caller: Principal, askFeatures: [?AskFeature]) : async Result.Result<NewAskResult, GenericError> {
+        // Validate features
+        let validationResult = _validateAskFeatures(askFeatures);
+        switch (validationResult) {
+            case (#err(error)) { return #err(error); };
+            case (#ok(features)) {
+                // Create a new ask
+                let askId = nextAskId;
+                
+        let timestamp = Time.now();
+                let account : Account = { owner = caller; subaccount = null; };
+                
+                let askStatus : AskStatus = {
+                    ask_id = askId;
+                    original_broker_id = null;
+                    current_broker_id = null;
+                    config = features;
+                    auction_info = null;
+                    settlement = null;
+                    allow_list = null;
+                    participants = [account];
+                    settled_at = null;
+                    status = #open;
+                    seller = account;
+                };
+                
+                asks.put(askId, askStatus);
+                _addToUserAsks(caller, askId);
+                
+                nextAskId += 1;
+                
+                return #ok({
+                    ask_id = askId;
+                    escrow_records = [];
+                });
+            };
+        };
+    };
+    
+    private func _endAsk(caller: Principal, askId: Nat) : Result.Result<Nat, GenericError> {
+        switch (asks.get(askId)) {
+            case (null) {
+                return #err({
+                    error_code = 404;
+                    message = "Ask not found";
+                });
+            };
+            case (?askStatus) {
+                if (askStatus.seller.owner != caller) {
+                    return #err({
+                        error_code = 403;
+                        message = "Only the seller can end the ask";
+                    });
+                };
+                
+                if (askStatus.status != #open) {
+                    return #err({
+                        error_code = 400;
+                        message = "Ask is not in open state";
+                    });
+                };
+                
+                // Update ask status
+                let updatedStatus : AskStatus = {
+                    askStatus with
+                    status = #closed;
+                };
+                
+                asks.put(askId, updatedStatus);
+                askHistory.put(askId, updatedStatus);
+                
+                // Remove from active user asks
+                _removeFromUserAsks(caller, askId);
+                
+                // Use a simple transaction ID 
+                let txId = nextAskId; // Reuse nextAskId as txId for simplicity
+                
+                return #ok(txId);
+            };
+        };
+    };
+    
+    // Helper function to create ask features for an NFT listing
+    private func createAskFeatures(
+        collectionId: CollectionId,
+        tokenId: TokenId,
+        price: Nat
+    ) : [?AskFeature] {
+        let timestamp = Time.now();
+        
+        // Create NFT token specification
+        let tokenSpec : TokenSpec = {
+            canister = collectionId;
+            symbol = "NFT"; // This would ideally be fetched from the collection
+            standards = [#ICRC7(?{
+                fee = null;
+                token_id = ?tokenId;
+            })];
+        };
+        
+        // Create buy now token specification (using ICP, but could be configurable)
+        let buyNowReq : BuyNowReq = {
+            token = {
+                canister = Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"); // ICP Ledger
+                symbol = "ICP";
+                standards = [#ICRC1(?{
+                    amount = price;
+                    fee = null;
+                    decimals = 8;
+                })];
+            };
+            amount = price;
+        };
+        
+        // Construct ask features
+        let askFeatures : [?AskFeature] = [
+            ?#ask_token([?tokenSpec]),
+            ?#buy_now([[buyNowReq]]),
+            ?#created_at(Nat64.fromNat(Int.abs(timestamp))),
+            ?#ending(#timeout(7 * 24 * 60 * 60 * 1_000_000_000)), // Default 7 day timeout
+            ?#fee_schema("standard") // Use standard fee schema
+        ];
+        
+        return askFeatures;
+    };
+    
+    // Enhanced function to create ask features with more options
+    private func createAdvancedAskFeatures(
+        collectionId: CollectionId,
+        tokenId: TokenId,
+        price: Nat,
+        broker: ?Account,
+        allowList: ?[Account],
+        startDate: ?Time.Time,
+        ending: ?AskFeature,
+        feeSchema: ?Text,
+        memo: ?Blob
+    ) : [?AskFeature] {
+        let timestamp = Time.now();
+        
+        // Create NFT token specification
+        let tokenSpec : TokenSpec = {
+            canister = collectionId;
+            symbol = "NFT"; // This would ideally be fetched from the collection
+            standards = [#ICRC7(?{
+                fee = null;
+                token_id = ?tokenId;
+            })];
+        };
+        
+        // Create buy now token specification (using ICP, but could be configurable)
+        let buyNowReq : BuyNowReq = {
+            token = {
+                canister = Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"); // ICP Ledger
+                symbol = "ICP";
+                standards = [#ICRC1(?{
+                    amount = price;
+                    fee = null;
+                    decimals = 8;
+                })];
+            };
+            amount = price;
+        };
+        
+        // Initialize the ask features with required elements
+        let features = Buffer.Buffer<(?AskFeature)>(5);
+        
+        // Add required features
+        features.add(?#ask_token([?tokenSpec]));
+        features.add(?#buy_now([[buyNowReq]]));
+        features.add(?#created_at(Nat64.fromNat(Int.abs(timestamp))));
+        
+        // Add optional features if provided
+        switch(broker) {
+            case (null) {};
+            case (?account) {
+                features.add(?#broker(account));
+            };
+        };
+        
+        switch(allowList) {
+            case (null) {};
+            case (?accounts) {
+                features.add(?#allow_list(accounts));
+            };
+        };
+        
+        switch(startDate) {
+            case (null) {};
+            case (?date) {
+                features.add(?#start_date(Nat64.fromNat(Int.abs(date))));
+            };
+        };
+        
+        // Add ending if provided, otherwise default timeout
+        switch(ending) {
+            case (null) {
+                features.add(?#ending(#timeout(7 * 24 * 60 * 60 * 1_000_000_000))); // Default 7 day timeout
+            };
+            case (?end) {
+                features.add(?end);
+            };
+        };
+        
+        // Add fee schema if provided, otherwise default
+        switch(feeSchema) {
+            case (null) {
+                features.add(?#fee_schema("standard"));
+            };
+            case (?schema) {
+                features.add(?#fee_schema(schema));
+            };
+        };
+        
+        // Add memo if provided
+        switch(memo) {
+            case (null) {};
+            case (?data) {
+                features.add(?#memo(data));
+            };
+        };
+        
+        return Buffer.toArray(features);
+    };
+    
+    // ================ Public API ================
+
+    // === ICRC-8 Methods ===
+    
+    public shared({ caller }) func icrc8_ask(requests: [?ManageAskRequest]) : async [(?(ManageAskRequest), ?(ManageAskResponse))] {
+        let results = Buffer.Buffer<(?(ManageAskRequest), ?(ManageAskResponse))>(requests.size());
+        
+        for (request in requests.vals()) {
+            switch (request) {
+                case (null) {
+                    results.add((null, null));
+                };
+                case (?#new_ask(features)) {
+                    let result = await _createNewAsk(caller, features);
+                    switch (result) {
+                        case (#ok(newAskResult)) {
+                            results.add((
+                                ?#new_ask(features), 
+                                ?#new_ask(#Ok(newAskResult))
+                            ));
+                        };
+                    case (#err(error)) {
+                            results.add((
+                                ?#new_ask(features), 
+                                ?#new_ask(#Err(error))
+                            ));
+                        };
+                    };
+                };
+                case (?#end_ask(askId)) {
+                    let result = _endAsk(caller, askId);
+                    switch (result) {
+                        case (#ok(txId)) {
+                            results.add((
+                                ?#end_ask(askId), 
+                                ?#end_ask(#Ok(txId))
+                            ));
+                        };
+                        case (#err(error)) {
+                            results.add((
+                                ?#end_ask(askId), 
+                                ?#end_ask(#Err(error))
+                            ));
+                };
+            };
+        };
+                case (_) {
+                    // Not implemented yet
+                    results.add((
+                        request, 
+                        null
+                    ));
+            };
+        };
+    };
+    
+        return Buffer.toArray(results);
+    };
+    
+    // Helper method to create a bid for an ask
+    private func _createBidForAsk(
+        caller: Principal,
+        askId: Nat,
+        bidFeatures: [?BidFeature]
+    ) : async Result.Result<{escrow: EscrowRecord; result: Nat}, GenericError> {
+        // Check if ask exists and is open
+        switch (asks.get(askId)) {
+            case (null) {
+                return #err({
+                    error_code = 404;
+                    message = "Ask not found";
+                });
+            };
+            
+            case (?askStatus) {
+                if (askStatus.status != #open) {
+                    return #err({
+                        error_code = 400;
+                        message = "Ask is not open for bids";
+                    });
+                };
+                
+                let timestamp = Time.now();
+                let buyer : Account = { owner = caller; subaccount = null };
+                
+                // For now, we'll create a simple escrow record
+                // In a real implementation, you would handle token transfers here
+                
+                let escrowRecord : EscrowRecord = {
+                    type_ = #bid([]);  // Simplified for now
+                    buyer = ?buyer;
+                    seller = askStatus.seller;
+                    ask_id = ?askId;
+                    lock_to_date = null;
+                };
+                
+                // Add escrow record
+                let escrowId = _addEscrowRecord(escrowRecord);
+                
+                // Update ask participants
+                let updatedParticipants = Array.append(askStatus.participants, [buyer]);
+                let updatedStatus : AskStatus = {
+                    askStatus with
+                    participants = updatedParticipants;
+                };
+                
+                asks.put(askId, updatedStatus);
+                
+                // Use a simple transaction ID 
+                let txId = nextEscrowId; // Use nextEscrowId as txId for simplicity
+                
+                return #ok({
+                    escrow = escrowRecord;
+                    result = txId;
+                });
+            };
+        };
+    };
+    
+    // Update the icrc8_bid method to implement the new_bid variant
+    public shared({ caller }) func icrc8_bid(requests: [?ManageBidRequest]) : async [(?(ManageBidRequest), ?(ManageBidResponse))] {
+        let results = Buffer.Buffer<(?(ManageBidRequest), ?(ManageBidResponse))>(requests.size());
+        
+        for (request in requests.vals()) {
+            switch (request) {
+                case (null) {
+                    results.add((null, null));
+                };
+                case (?#new_bid({ ask_id; feature })) {
+                    let result = await _createBidForAsk(caller, ask_id, feature);
+                    switch (result) {
+                        case (#ok(bidResult)) {
+                            results.add((
+                                ?#new_bid({ ask_id; feature }), 
+                                ?#new_bid(#Ok(bidResult))
+                            ));
+                        };
+                        case (#err(error)) {
+                            results.add((
+                                ?#new_bid({ ask_id; feature }), 
+                                ?#new_bid(#Err(error))
+                            ));
+                        };
+                    };
+                };
+                case (?#withdraw_escrow(escrowRecord)) {
+                    // Not implemented yet
+                    results.add((
+                        ?#withdraw_escrow(escrowRecord), 
+                        null
+                    ));
+                };
+                case (?#engine_match(engineMatch)) {
+                    // Not implemented yet
+                    results.add((
+                        ?#engine_match(engineMatch), 
+                        null
+                    ));
+                };
+            };
+        };
+        
+        return Buffer.toArray(results);
+    };
+    
+    public query func icrc8_balance_of(requests: [(Account, ?[?BalanceRequest])]) : async [(Account, [?BalanceResult])] {
+        let results = Buffer.Buffer<(Account, [?BalanceResult])>(requests.size());
+        
+        for ((account, requestOpt) in requests.vals()) {
+            switch (requestOpt) {
+                case (null) { 
+                    results.add((account, [])); 
+                };
+                case (_) {
+                    // Not implemented yet
+                    results.add((account, []));
+                };
+            };
+        };
+        
+        return Buffer.toArray(results);
+    };
+    
+    public query func icrc8_ask_info(requests: [?AskInfoRequest]) : async [(?AskInfoRequest, ?AskInfoResponse)] {
+        let results = Buffer.Buffer<(?AskInfoRequest, ?AskInfoResponse)>(requests.size());
+        
+        for (request in requests.vals()) {
+            switch (request) {
+                case (null) { 
+                    results.add((null, null)); 
+                };
+                case (?#status(askId)) {
+                    switch (asks.get(askId)) {
+                        case (null) {
+                            results.add((?#status(askId), ?#status(null)));
+                        };
+                        case (?askStatus) {
+                            results.add((?#status(askId), ?#status(?askStatus)));
+                        };
+                    };
+                };
+                case (_) {
+                    // Not implemented yet
+                    results.add((request, null));
+            };
+        };
+    };
+    
+        return Buffer.toArray(results);
+    };
+    
+    public composite query func icrc8_approved_tokens() : async ?[Principal] {
+        ?Buffer.toArray(approvedTokens);
+    };
+    
+    // Admin method to register approved tokens
+    public shared({ caller }) func addApprovedToken(token: Principal) : async Result.Result<(), Types.Error> {
+        if (not _verifyOwner(caller)) {
+            return #err(#Unauthorized);
+        };
+        
+        // Check if token is already approved
+        if (_isTokenApproved(token)) {
+            return #ok();
+        };
+        
+        approvedTokens.add(token);
+        return #ok();
+    };
+    
+    // Admin method to update fee percentage
+    public shared({ caller }) func updateFeePercentage(newFeePercentage : Nat) : async Result.Result<Nat, Types.Error> {
+        if (not _verifyOwner(caller)) {
+            return #err(#Unauthorized);
+        };
+        
         if (newFeePercentage > 3000) { // Max 30% fee
             return #err(#InvalidFeePercentage);
         };
@@ -231,414 +887,99 @@ actor class Marketplace() = this {
         return #ok(marketplaceFeePercentage);
     };
 
-    public shared({ caller }) func withdrawFees(_to : Account) : async Result.Result<Nat, Error> {
-        // Removed owner check for development
-        
-        // This is where you would implement the fee withdrawal logic
-        // For now, we just return success with 0 amount
-        return #ok(0);
-    };
-
-    public shared({ caller }) func registerCollection(collectionId: CollectionId) : async Result.Result<(), Error> {
-        // Removed owner check for development
-        
-        // Check if already registered
-        switch (collections.get(collectionId)) {
-            case (?_) { return #err(#CollectionAlreadyRegistered) };
-            case null { };
-        };
-        
-        // Verify it's ICRC7 compliant
-        let isCompliant = await isICRC7Compliant(collectionId);
-        if (not isCompliant) {
-            return #err(#NotICRC7Compliant);
-        };
-        
-        // Get collection metadata
-        let nftCanister : NFTBackend = actor(Principal.toText(collectionId));
-        let name = await nftCanister.icrc7_name();
-        let symbol = await nftCanister.icrc7_symbol();
-        
-        // Add to collections
-        let timestamp = Time.now();
-        let collection : Collection = {
-            id = collectionId;
-            name = name;
-            symbol = symbol;
-            isVerified = true;
-            createdAt = timestamp;
-        };
-        
-        collections.put(collectionId, collection);
-        
-        // Record transaction
-        let _ = _recordTransaction(
-            #CollectionRegistered,
-            0, // No listing ID for collection registration
-            collectionId,
-            0, // No token ID for collection registration
-            caller,
-            null,
-            0, // No price for collection registration
-            timestamp
-        );
-        
-        return #ok();
-    };
-    
-    // === Marketplace Core Methods ===
-    
-    // List an NFT for sale
-    public shared({ caller }) func listNFT(
-        collectionId : CollectionId,
-        tokenId : TokenId,
-        price : Nat
-    ) : async Result.Result<ListingId, Error> {
+    // Simplified createNFTAsk function
+    public shared({ caller }) func createNFTAsk(
+        collectionId: CollectionId,
+        tokenId: TokenId,
+        price: Nat
+    ) : async Result.Result<Nat, Types.Error> {
         if (price == 0) {
             return #err(#InvalidPrice);
         };
         
-        // Check if collection is registered
-        switch (collections.get(collectionId)) {
-            case null { return #err(#CollectionNotRegistered) };
-            case (?_) { };
+        // Check if token is approved
+        if (not _isTokenApproved(collectionId)) {
+            return #err(#TokenSpecNotSupported);
         };
         
-        // Check if token is already listed
-        let tokenKey : TokenKey = { collectionId = collectionId; tokenId = tokenId };
-        switch (tokenToListing.get(tokenKey)) {
-            case (?_) { return #err(#AlreadyListed) };
-            case null { };
-        };
+        // Create ask features for the NFT
+        let askFeatures = createAskFeatures(collectionId, tokenId, price);
         
-        // Removed ownership verification for development
+        // Create the ask
+        let result = await _createNewAsk(caller, askFeatures);
         
-        // Create listing
-        let listingId = nextListingId;
-        let timestamp = Time.now();
-        
-        let listing : Listing = {
-            id = listingId;
-            collectionId = collectionId;
-            tokenId = tokenId;
-            seller = caller;
-            price = price;
-            status = #Active;
-            createdAt = timestamp;
-            updatedAt = timestamp;
-        };
-        
-        listings.put(listingId, listing);
-        tokenToListing.put(tokenKey, listingId);
-        _addToUserListings(caller, listingId);
-        
-        // Record transaction
-        let _ = _recordTransaction(
-            #Listed,
-            listingId,
-            collectionId,
-            tokenId,
-            caller,
-            null,
-            price,
-            timestamp
-        );
-        
-        nextListingId += 1;
-        
-        return #ok(listingId);
-    };
-    
-    // Cancel a listing (only available to the seller)
-    public shared({ caller }) func cancelListing(
-        listingId : ListingId
-    ) : async Result.Result<(), Error> {
-        switch (listings.get(listingId)) {
-            case null {
-                return #err(#ListingNotFound);
+        switch (result) {
+            case (#err(error)) {
+                return #err(#UnsupportedOperation);
             };
-            case (?listing) {
-                // Removed seller check for development
-                
-                if (listing.status != #Active) {
-                    return #err(#ListingNotActive);
-                };
-                
-                // Update listing
-                let updatedListing : Listing = {
-                    id = listing.id;
-                    collectionId = listing.collectionId;
-                    tokenId = listing.tokenId;
-                    seller = listing.seller;
-                    price = listing.price;
-                    status = #Cancelled;
-                    createdAt = listing.createdAt;
-                    updatedAt = Time.now();
-                };
-                
-                listings.put(listingId, updatedListing);
-                let tokenKey : TokenKey = { 
-                    collectionId = listing.collectionId; 
-                    tokenId = listing.tokenId 
-                };
-                tokenToListing.delete(tokenKey);
-                _removeFromUserListings(caller, listingId);
-                
-                // Record transaction
-                let _ = _recordTransaction(
-                    #Cancelled,
-                    listingId,
-                    listing.collectionId,
-                    listing.tokenId,
-                    caller,
-                    null,
-                    listing.price,
-                    Time.now()
-                );
-                
-                return #ok();
+            case (#ok(newAskResult)) {
+                return #ok(newAskResult.ask_id);
             };
         };
     };
     
-    // Buy an NFT (available to anyone with sufficient funds)
-    public shared({ caller }) func buyNFT(
-        listingId : ListingId
-    ) : async Result.Result<TransactionId, Error> {
-        switch (listings.get(listingId)) {
-            case null {
-                return #err(#ListingNotFound);
+    // Simplified buyNFT function
+    public shared({ caller }) func buyNFT(askId: Nat) : async Result.Result<Nat, Types.Error> {
+        // Create an empty feature array
+        let bidFeatures : [?BidFeature] = [];
+        
+        // Create a bid for the ask
+        let result = await _createBidForAsk(caller, askId, bidFeatures);
+        
+        switch (result) {
+            case (#err(error)) {
+                return #err(#UnsupportedOperation);
             };
-            case (?listing) {
-                if (listing.status != #Active) {
-                    return #err(#ListingNotActive);
-                };
+            case (#ok({ escrow; result })) {
+                // In a real implementation, you would handle token transfers here
                 
-                // Here is where you would handle the payment
-                // For now, we assume payment is handled off-chain or in a separate step
-                
-                // In custodial model, marketplace transfers from itself to buyer
-                let nftBackend : NFTBackend = actor(Principal.toText(listing.collectionId));
-                
-                let transferArgs : Types.TransferArgs = {
-                    from = ?{ owner = listing.seller; subaccount = null };
-                    to = { owner = caller; subaccount = null };
-                    token_ids = [listing.tokenId];
-                    memo = null;
-                    created_at_time = ?Nat64.fromNat(Int.abs(Time.now()));
-                    is_atomic = ?true;
-                };
-                
-                let transferResult = await nftBackend.icrc7_transfer(transferArgs);
-                
-                switch (transferResult) {
-                    case (#err(error)) {
-                        return #err(#TransferFailed(error));
+                // Update ask status to closed
+                switch (asks.get(askId)) {
+            case (null) { 
+                        return #err(#ListingNotFound);
                     };
-                    case (#ok(_)) {
-                        // Update listing status to sold
-                        let updatedListing : Listing = {
-                            id = listing.id;
-                            collectionId = listing.collectionId;
-                            tokenId = listing.tokenId;
-                            seller = listing.seller;
-                            price = listing.price;
-                            status = #Sold;
-                            createdAt = listing.createdAt;
-                            updatedAt = Time.now();
+                    case (?askStatus) {
+                        let updatedStatus : AskStatus = {
+                            askStatus with
+                            status = #closed;
                         };
                         
-                        listings.put(listingId, updatedListing);
-                        let tokenKey : TokenKey = { 
-                            collectionId = listing.collectionId; 
-                            tokenId = listing.tokenId 
-                        };
-                        tokenToListing.delete(tokenKey);
-                        _removeFromUserListings(listing.seller, listingId);
+                        asks.put(askId, updatedStatus);
+                        askHistory.put(askId, updatedStatus);
                         
-                        // Record transaction
-                        let transactionId = _recordTransaction(
-                            #Sold,
-                            listingId,
-                            listing.collectionId,
-                            listing.tokenId,
-                            listing.seller,
-                            ?caller,
-                            listing.price,
-                            Time.now()
-                        );
-                        
-                        return #ok(transactionId);
+                        return #ok(result);
                     };
                 };
-            };
-        };
-    };
-    
-    // Update listing price (only available to the seller)
-    public shared({ caller }) func updateListingPrice(
-        listingId : ListingId,
-        newPrice : Nat
-    ) : async Result.Result<(), Error> {
-        if (newPrice == 0) {
-            return #err(#InvalidPrice);
-        };
-        
-        switch (listings.get(listingId)) {
-            case null {
-                return #err(#ListingNotFound);
-            };
-            case (?listing) {
-                // Removed seller check for development
-                
-                if (listing.status != #Active) {
-                    return #err(#ListingNotActive);
-                };
-                
-                // Update listing
-                let updatedListing : Listing = {
-                    id = listing.id;
-                    collectionId = listing.collectionId;
-                    tokenId = listing.tokenId;
-                    seller = listing.seller;
-                    price = newPrice;
-                    status = #Active;
-                    createdAt = listing.createdAt;
-                    updatedAt = Time.now();
-                };
-                
-                listings.put(listingId, updatedListing);
-                
-                // Record transaction
-                let _ = _recordTransaction(
-                    #PriceChanged,
-                    listingId,
-                    listing.collectionId,
-                    listing.tokenId,
-                    caller,
-                    null,
-                    newPrice,
-                    Time.now()
-                );
-                
-                return #ok();
-            };
-        };
-    };
-    
-    // === Query Methods ===
-    
-    // Get all collections
-    public query func getAllCollections() : async [Collection] {
-        return Iter.toArray(collections.vals());
-    };
-    
-    // Get collection by ID
-    public query func getCollection(collectionId : CollectionId) : async ?Collection {
-        return collections.get(collectionId);
-    };
-    
-    // Get all active listings
-    public query func getAllActiveListings() : async [Listing] {
-        let activeListings = Buffer.Buffer<Listing>(0);
-        
-        for ((_, listing) in listings.entries()) {
-            if (listing.status == #Active) {
-                activeListings.add(listing);
-            };
-        };
-        
-        return Buffer.toArray(activeListings);
-    };
-    
-    // Get active listings for a specific collection
-    public query func getActiveListingsByCollection(collectionId : CollectionId) : async [Listing] {
-        let activeListings = Buffer.Buffer<Listing>(0);
-        
-        for ((_, listing) in listings.entries()) {
-            if (listing.status == #Active and listing.collectionId == collectionId) {
-                activeListings.add(listing);
-            };
-        };
-        
-        return Buffer.toArray(activeListings);
-    };
-    
-    // Get specific listing by ID
-    public query func getListing(listingId : ListingId) : async ?Listing {
-        return listings.get(listingId);
-    };
-    
-    // Get all listings by a specific user
-    public query func getListingsBySeller(seller : Principal) : async [Listing] {
-        let sellerListings = Buffer.Buffer<Listing>(0);
-        
-        switch (userListings.get(seller)) {
-            case null { return [] };
-            case (?listingIds) {
-                for (id in listingIds.vals()) {
-                    switch (listings.get(id)) {
-                        case null { };
-                        case (?listing) {
-                            sellerListings.add(listing);
                         };
                     };
                 };
+                
+    // Query to get all active asks
+    public query func getAllActiveAsks(limit: Nat, offset: Nat) : async [AskStatus] {
+        let activeAsks = Buffer.Buffer<AskStatus>(0);
+        
+        for ((_, askStatus) in asks.entries()) {
+            if (askStatus.status == #open) {
+                activeAsks.add(askStatus);
             };
         };
         
-        return Buffer.toArray(sellerListings);
-    };
-    
-    // Get all transactions
-    public query func getTransactionHistory(limit : Nat, offset : Nat) : async [TransactionRecord] {
-        let transactionHistory = Buffer.Buffer<TransactionRecord>(0);
-        let transactionEntries = Iter.toArray(transactions.entries());
-        
-        // Sort by timestamp (newest first)
-        let sortedTransactions = Array.sort<(TransactionId, TransactionRecord)>(
-            transactionEntries,
+        let sortedAsks = Array.sort<AskStatus>(
+            Buffer.toArray(activeAsks),
             func(a, b) {
-                Int.compare(b.1.timestamp, a.1.timestamp)
+                // Sort by ask ID (most recent first)
+                Nat.compare(b.ask_id, a.ask_id)
             }
         );
         
-        let end = Nat.min(offset + limit, sortedTransactions.size());
-        var i = offset;
-        
-        while (i < end) {
-            transactionHistory.add(sortedTransactions[i].1);
-            i += 1;
-        };
-        
-        return Buffer.toArray(transactionHistory);
-    };
-    
-    // Get transactions for a specific user (as buyer or seller)
-    public query func getUserTransactions(user : Principal, limit : Nat, offset : Nat) : async [TransactionRecord] {
-        let userTransactions = Buffer.Buffer<TransactionRecord>(0);
-        
-        for ((_, transaction) in transactions.entries()) {
-            if (transaction.seller == user or transaction.buyer == ?user) {
-                userTransactions.add(transaction);
-            };
-        };
-        
-        let sortedTransactions = Array.sort<TransactionRecord>(
-            Buffer.toArray(userTransactions),
-            func(a, b) {
-                Int.compare(b.timestamp, a.timestamp)
-            }
-        );
-        
-        let end = Nat.min(offset + limit, sortedTransactions.size());
-        let result = if (offset >= sortedTransactions.size()) {
+        let end = Nat.min(offset + limit, sortedAsks.size());
+        let result = if (offset >= sortedAsks.size()) {
             []
         } else {
-            Array.tabulate<TransactionRecord>(
+            Array.tabulate<AskStatus>(
                 end - offset,
                 func(i) {
-                    sortedTransactions[i + offset]
+                    sortedAsks[i + offset]
                 }
             )
         };
@@ -646,31 +987,33 @@ actor class Marketplace() = this {
         return result;
     };
     
-    // Get transactions for a specific collection
-    public query func getCollectionTransactions(collectionId : CollectionId, limit : Nat, offset : Nat) : async [TransactionRecord] {
-        let collectionTransactions = Buffer.Buffer<TransactionRecord>(0);
+    // Query to get ask history for a user
+    public query func getUserAskHistory(user: Principal, limit: Nat, offset: Nat) : async [AskStatus] {
+        let userAccount : Account = { owner = user; subaccount = null };
+        let userAskHistory = Buffer.Buffer<AskStatus>(0);
         
-        for ((_, transaction) in transactions.entries()) {
-            if (transaction.collectionId == collectionId) {
-                collectionTransactions.add(transaction);
+        for ((_, askStatus) in askHistory.entries()) {
+            if (askStatus.seller.owner == user) {
+                userAskHistory.add(askStatus);
             };
         };
         
-        let sortedTransactions = Array.sort<TransactionRecord>(
-            Buffer.toArray(collectionTransactions),
+        let sortedHistory = Array.sort<AskStatus>(
+            Buffer.toArray(userAskHistory),
             func(a, b) {
-                Int.compare(b.timestamp, a.timestamp)
+                // Sort by ask ID (most recent first)
+                Nat.compare(b.ask_id, a.ask_id)
             }
         );
         
-        let end = Nat.min(offset + limit, sortedTransactions.size());
-        let result = if (offset >= sortedTransactions.size()) {
+        let end = Nat.min(offset + limit, sortedHistory.size());
+        let result = if (offset >= sortedHistory.size()) {
             []
         } else {
-            Array.tabulate<TransactionRecord>(
+            Array.tabulate<AskStatus>(
                 end - offset,
                 func(i) {
-                    sortedTransactions[i + offset]
+                    sortedHistory[i + offset]
                 }
             )
         };
@@ -678,253 +1021,270 @@ actor class Marketplace() = this {
         return result;
     };
     
-    // Get listing for a specific token
-    public query func getListingByToken(collectionId : CollectionId, tokenId : TokenId) : async ?Listing {
-        let tokenKey : TokenKey = { collectionId = collectionId; tokenId = tokenId };
-        switch (tokenToListing.get(tokenKey)) {
-            case null { return null };
-            case (?listingId) {
-                return listings.get(listingId);
-            };
-        };
+    // ICRC-8 Metadata
+    public query func icrc8_supported_standards() : async [{name: Text; url: Text}] {
+        return [
+            {name = "ICRC-8"; url = "https://github.com/dfinity/ICRC/issues/8"},
+            {name = "ICRC-7"; url = "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-7/ICRC-7.md"}
+        ];
     };
     
-    // Get marketplace statistics
-    public query func getMarketplaceStats() : async MarketplaceStats {
-        var totalListings = 0;
-        var activeListings = 0;
-        var totalVolume = 0;
-        var totalTransactions = 0;
-        var totalCollections = collections.size();
+    public query func icrc8_metadata() : async [(Text, {#Text : Text; #Blob : Blob; #Nat : Nat; #Int : Int; #Array : [Nat]})] {
+        return [
+            ("icrc8:default_ask_timeout", #Nat(7 * 24 * 60 * 60 * 1_000_000_000)), // 7 days in nanoseconds
+            ("icrc8:default_fee_schema", #Text("standard")),
+            ("icrc8:supports_icrc_2", #Text("false")),
+            ("icrc8:supports_icrc_37", #Text("false")),
+            ("icrc8:supports_icrc_4", #Text("false"))
+        ];
+    };
+    
+    // Query to fetch ICRC-8 marketplace statistics
+    public query func getMarketplaceStats() : async {
+        total_asks: Nat;
+        active_asks: Nat;
+        fee_percentage: Nat;
+        approved_tokens: [Principal];
+    } {
+        var totalAsks = 0;
+        var activeAsks = 0;
         
-        // Count listings
-        for ((_, listing) in listings.entries()) {
-            totalListings += 1;
-            if (listing.status == #Active) {
-                activeListings += 1;
-            };
-        };
-        
-        // Calculate volume and transaction count
-        for ((_, transaction) in transactions.entries()) {
-            if (transaction.transactionType == #Sold) {
-                totalVolume += transaction.price;
-                totalTransactions += 1;
+        for ((_, askStatus) in asks.entries()) {
+            totalAsks += 1;
+            if (askStatus.status == #open) {
+                activeAsks += 1;
             };
         };
         
         return {
-            totalListings = totalListings;
-            activeListings = activeListings;
-            totalVolume = totalVolume;
-            totalTransactions = totalTransactions;
-            totalCollections = totalCollections;
-            feePercentage = marketplaceFeePercentage;
+            total_asks = totalAsks;
+            active_asks = activeAsks;
+            fee_percentage = marketplaceFeePercentage;
+            approved_tokens = Buffer.toArray(approvedTokens);
         };
     };
 
-    // Get the fee percentage
-    public query func getFeePercentage() : async Nat {
-        return marketplaceFeePercentage;
-    };
-    
-    // Get the owner of the marketplace
+    // Add a public query function to get the owner principal
     public query func getOwner() : async Principal {
         return owner;
     };
 
-    // Step 1: Create a listing ticket
-    public shared({ caller }) func createListingTicket(
+    // Add support for creating unsolicited offers
+    public shared({ caller }) func createUnsolicitedOffer(
         collectionId: CollectionId,
         tokenId: TokenId,
-        price: Nat
-    ) : async Result.Result<Nat, Error> {
+        price: Nat,
+        owner: Principal
+    ) : async Result.Result<Nat, Types.Error> {
         if (price == 0) {
             return #err(#InvalidPrice);
         };
         
-        // Check if collection is registered
-        switch (collections.get(collectionId)) {
-            case (null) { return #err(#CollectionNotRegistered) };
-            case (_) { };
+        // Check if token is approved
+        if (not _isTokenApproved(collectionId)) {
+            return #err(#TokenSpecNotSupported);
         };
         
-        // Check if token is already listed
-        let tokenKey : TokenKey = { collectionId = collectionId; tokenId = tokenId };
-        switch (tokenToListing.get(tokenKey)) {
-            case (?_) { return #err(#AlreadyListed) };
-            case (null) { };
+        let timestamp = Time.now();
+        
+        // Create NFT token specification
+        let tokenSpec : TokenSpec = {
+            canister = collectionId;
+            symbol = "NFT"; // This would ideally be fetched from the collection
+            standards = [#ICRC7(?{
+                fee = null;
+                token_id = ?tokenId;
+            })];
         };
         
-        // Create ticket (valid for 10 minutes)
-        let ticketId = nextTicketId;
-        let expirationTime = Time.now() + 10 * 60 * 1_000_000_000; // 10 minutes in nanoseconds
-        
-        let ticket : ListingCreationTicket = {
-            id = ticketId;
-            collectionId = collectionId;
-            tokenId = tokenId;
-            seller = caller;
-            price = price;
-            expires = expirationTime;
-        };
-        
-        listingTickets.put(ticketId, ticket);
-        nextTicketId += 1;
-        
-        return #ok(ticketId);
-    };
-
-    // Step 2: Confirm listing after NFT transfer
-    public shared({ caller }) func confirmListing(
-        ticketId: Nat
-    ) : async Result.Result<ListingId, Error> {
-        switch (listingTickets.get(ticketId)) {
-            case (null) { 
-                return #err(#ListingTicketNotFound);
+        // Create buy now token specification
+        let buyNowReq : BuyNowReq = {
+            token = {
+                canister = Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"); // ICP Ledger
+                symbol = "ICP";
+                standards = [#ICRC1(?{
+                    amount = price;
+                    fee = null;
+                    decimals = 8;
+                })];
             };
-            case (?ticket) {
-                // Check if ticket has expired
-                if (Time.now() > ticket.expires) {
-                    listingTickets.delete(ticketId);
-                    return #err(#ListingTicketExpired);
-                };
-                
-                // Verify caller is the seller
-                if (caller != ticket.seller) {
-                    return #err(#NotSeller);
-                };
-                
-                // Verify NFT is now owned by the marketplace
-                let nftBackend : NFTBackend = actor(Principal.toText(ticket.collectionId));
-                let ownerResult = await nftBackend.icrc7_owner_of(ticket.tokenId);
-                
-                switch (ownerResult) {
-                    case (#err(_)) {
-                        return #err(#TokenNotFound);
-                    };
-                    case (#ok(owner)) {
-                        if (owner.owner != Principal.fromActor(this)) {
-                            return #err(#NFTNotTransferred);
+            amount = price;
+        };
+        
+        // Owner's account
+        let ownerAccount : Account = { owner = owner; subaccount = null };
+        
+        // Create unsolicited offer features
+        let askFeatures : [?AskFeature] = [
+            ?#ask_token([?tokenSpec]),
+            ?#buy_now([[buyNowReq]]),
+            ?#created_at(Nat64.fromNat(Int.abs(timestamp))),
+            ?#unsolicited_offer(ownerAccount),
+            ?#ending(#timeout(7 * 24 * 60 * 60 * 1_000_000_000)), // Default 7 day timeout
+            ?#fee_schema("standard") // Use standard fee schema
+        ];
+        
+        // Create the ask
+        let result = await _createNewAsk(caller, askFeatures);
+        
+        switch (result) {
+            case (#err(error)) {
+                return #err(#UnsupportedOperation);
+            };
+            case (#ok(newAskResult)) {
+                return #ok(newAskResult.ask_id);
                         };
                     };
                 };
                 
-                // Create the actual listing
-                let listingId = nextListingId;
-                let timestamp = Time.now();
-                
-                let listing : Listing = {
-                    id = listingId;
-                    collectionId = ticket.collectionId;
-                    tokenId = ticket.tokenId;
-                    seller = ticket.seller;
-                    price = ticket.price;
-                    status = #Active;
-                    createdAt = timestamp;
-                    updatedAt = timestamp;
-                };
-                
-                // Store listing data
-                listings.put(listingId, listing);
-                let tokenKey : TokenKey = { 
-                    collectionId = ticket.collectionId;
-                    tokenId = ticket.tokenId 
-                };
-                tokenToListing.put(tokenKey, listingId);
-                _addToUserListings(ticket.seller, listingId);
-                
-                // Remove the ticket
-                listingTickets.delete(ticketId);
-                
-                // Record transaction
-                let _ = _recordTransaction(
-                    #Listed,
-                    listingId,
-                    ticket.collectionId,
-                    ticket.tokenId,
-                    ticket.seller,
-                    null,
-                    ticket.price,
-                    timestamp
-                );
-                
-                nextListingId += 1;
-                
-                return #ok(listingId);
+    // Add a new method for advanced ask creation
+    public shared({ caller }) func createAdvancedNFTAsk(
+        collectionId: CollectionId,
+        tokenId: TokenId,
+        price: Nat,
+        params: {
+            broker: ?Principal;
+            allowList: ?[Principal];
+            startDate: ?Time.Time;
+            endDate: ?Time.Time;
+            feeSchema: ?Text;
+            memo: ?Blob;
+        }
+    ) : async Result.Result<Nat, Types.Error> {
+        if (price == 0) {
+            return #err(#InvalidPrice);
+        };
+        
+        // Check if token is approved
+        if (not _isTokenApproved(collectionId)) {
+            return #err(#TokenSpecNotSupported);
+        };
+        
+        // Convert principal to accounts where needed
+        let broker : ?Account = switch(params.broker) {
+            case (null) { null };
+            case (?principal) { ?{ owner = principal; subaccount = null } };
+        };
+        
+        let allowList : ?[Account] = switch(params.allowList) {
+            case (null) { null };
+            case (?principals) {
+                ?Array.map<Principal, Account>(
+                    principals, 
+                    func(p: Principal): Account { { owner = p; subaccount = null } }
+                )
+            };
+        };
+        
+        // Create ending variant if endDate is provided
+        let ending : ?AskFeature = switch(params.endDate) {
+            case (null) { null };
+            case (?date) { ?#ending(#date(Nat64.fromNat(Int.abs(date)))) };
+        };
+        
+        // Create ask features
+        let askFeatures = createAdvancedAskFeatures(
+            collectionId,
+            tokenId,
+            price,
+            broker,
+            allowList,
+            params.startDate,
+            ending,
+            params.feeSchema,
+            params.memo
+        );
+        
+        // Create the ask
+        let result = await _createNewAsk(caller, askFeatures);
+        
+        switch (result) {
+            case (#err(error)) {
+                return #err(#UnsupportedOperation);
+            };
+            case (#ok(newAskResult)) {
+                return #ok(newAskResult.ask_id);
             };
         };
     };
 
-    // New function to cancel a listing ticket
-    public shared({ caller }) func cancelListingTicket(
-        ticketId: Nat
-    ) : async Result.Result<(), Error> {
-        switch (listingTickets.get(ticketId)) {
+    // Add a method to handle ask encumbrance
+    public shared({ caller }) func encumberAsk(
+        askId: Nat,
+        trustee: Principal,
+        expiresAt: Time.Time
+    ) : async Result.Result<(), Types.Error> {
+        // Only the marketplace owner can encumber asks (this should be refined for more precise access control)
+        if (not _verifyOwner(caller)) {
+            return #err(#Unauthorized);
+        };
+        
+        switch (asks.get(askId)) {
             case (null) { 
-                return #err(#ListingTicketNotFound);
+                return #err(#ListingNotFound);
             };
-            case (?ticket) {
-                if (caller != ticket.seller) {
-                    return #err(#NotSeller);
+            case (?askStatus) {
+                if (askStatus.status != #open) {
+                    return #err(#UnsupportedOperation);
                 };
                 
-                listingTickets.delete(ticketId);
+                // Create encumbrance details
+                let encumbranceDetail : Types.EncumbranceDetail = {
+                    trustee = trustee;
+                    expires_at = Nat64.fromNat(Int.abs(expiresAt));
+                };
+                
+                // Update ask status to encumbered
+                let updatedStatus : AskStatus = {
+                    askStatus with
+                    status = #encumbered([encumbranceDetail]);
+                };
+                
+                asks.put(askId, updatedStatus);
+                
                 return #ok();
             };
         };
     };
 
-    // Add ability to withdraw an NFT if listing is cancelled
-    public shared({ caller }) func withdrawNFT(
-        listingId: ListingId
-    ) : async Result.Result<(), Error> {
-        switch (listings.get(listingId)) {
+    // Add a method to unencumber an ask
+    public shared({ caller }) func unencumberAsk(
+        askId: Nat
+    ) : async Result.Result<(), Types.Error> {
+        switch (asks.get(askId)) {
             case (null) {
                 return #err(#ListingNotFound);
             };
-            case (?listing) {
-                if (listing.status != #Cancelled) {
-                    return #err(#ListingNotCancelled);
-                };
-                
-                if (listing.seller != caller) {
-                    return #err(#NotSeller);
-                };
-                
-                // Transfer NFT back to seller
-                let nftBackend : NFTBackend = actor(Principal.toText(listing.collectionId));
-                
-                let transferArgs : Types.TransferArgs = {
-                    spender_subaccount = null;
-                    from = ?{ owner = Principal.fromActor(this); subaccount = null };
-                    to = { owner = caller; subaccount = null };
-                    token_ids = [listing.tokenId];
-                    memo = null;
-                    created_at_time = ?Nat64.fromNat(Int.abs(Time.now()));
-                    is_atomic = ?true;
-                };
-                
-                let transferResult = await nftBackend.icrc7_transfer(transferArgs);
-                
-                switch (transferResult) {
-                    case (#err(error)) {
-                        return #err(#TransferFailed(error));
-                    };
-                    case (#ok(_)) {
-                        // Record withdrawal transaction
-                        let _ = _recordTransaction(
-                            #Withdrawn,
-                            listingId,
-                            listing.collectionId,
-                            listing.tokenId,
-                            caller,
-                            null,
-                            0,
-                            Time.now()
+            case (?askStatus) {
+                switch (askStatus.status) {
+                    case (#encumbered(details)) {
+                        // Check if caller is a trustee of any encumbrance
+                        let isCallerTrustee = Array.find<Types.EncumbranceDetail>(
+                            details,
+                            func(detail: Types.EncumbranceDetail): Bool {
+                                detail.trustee == caller
+                            }
                         );
                         
+                        switch (isCallerTrustee) {
+                            case (null) {
+                                return #err(#Unauthorized);
+                            };
+                            case (_) {
+                                // Update ask status back to open
+                                let updatedStatus : AskStatus = {
+                                    askStatus with
+                                    status = #open;
+                                };
+                                
+                                asks.put(askId, updatedStatus);
+                        
                         return #ok();
+                            };
+                        };
+                    };
+                    case (_) {
+                        return #err(#UnsupportedOperation);
                     };
                 };
             };
