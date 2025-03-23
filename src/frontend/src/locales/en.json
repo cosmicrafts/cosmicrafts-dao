@@ -670,6 +670,73 @@
       }
     }
   },
+  "marketplace": {
+    "title": "NFT Marketplace",
+    "subtitle": "Buy, sell, and trade NFTs on the Internet Computer",
+    "loading": "Loading marketplace data...",
+    "loading_nfts": "Loading your NFTs...",
+    "retry": "Retry",
+    "refresh": "Refresh",
+    "my_nfts_title": "Your NFT Collection",
+    "tabs": {
+      "explore": "Explore",
+      "my_asks": "My Listings",
+      "my_nfts": "My NFTs"
+    },
+    "no_asks_found": "No listings found",
+    "no_nfts_found": "You don't own any NFTs yet",
+    "login_to_view_asks": "Please connect your wallet to view your listings",
+    "login_to_view_nfts": "Please connect your wallet to view your NFTs",
+    "connect_wallet": "Connect Wallet",
+    "create_ask": "Create Listing",
+    "create_first_ask": "Create your first listing",
+    "create_new_ask": "Create New Listing",
+    "list_for_sale": "List For Sale",
+    "buy_now": "Buy Now",
+    "view_details": "View Details",
+    "stats": {
+      "active_asks": "Active Listings",
+      "total_asks": "Total Listings",
+      "fee": "Marketplace Fee",
+      "your_balance": "Your Balance"
+    },
+    "price": "Price",
+    "collection": "Collection",
+    "seller": "Seller",
+    "settled_at": "Settled At",
+    "collection_id": "Collection ID",
+    "token_id": "Token ID",
+    "nft_name": "Name",
+    "price_icp": "Price (ICP)",
+    "enter_collection_id": "Enter collection ID",
+    "enter_token_id": "Enter token ID",
+    "enter_price": "Enter price in ICP",
+    "validation": {
+      "all_fields_required": "All fields are required"
+    },
+    "error": {
+      "create_ask_failed": "Failed to create listing",
+      "insufficient_balance": "Insufficient balance to complete purchase",
+      "nft_not_owned": "You don't own this NFT"
+    },
+    "success": {
+      "ask_created": "Listing created successfully",
+      "purchase_complete": "Purchase completed successfully",
+      "data_refreshed": "Data refreshed successfully"
+    },
+    "ask_details": "Listing Details",
+    "ask_id": "Listing ID",
+    "status": "Status",
+    "token_details": "Token Details",
+    "loading_details": "Loading details...",
+    "login_required": "You need to be logged in to perform this action",
+    "connect": "Connect"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "submit": "Submit"
+  },
   "dashboard": {
     "loading": "Loading your cosmic data...",
     "retry": "Retry",

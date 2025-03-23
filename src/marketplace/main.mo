@@ -62,7 +62,7 @@ actor class Marketplace() = this {
     // ================ State Variables ================
     private stable var owner : Principal = Principal.fromText("7mwdg-w6cvy-faabk-parwb-e4xuk-vxzcv-33uj2-2izcp-5x2qo-5s4ar-wqe");
     private stable var marketplaceFeePercentage : Nat = 250; // 2.5%
-    private stable var nextListingId : ListingId = 1;
+    private stable var _nextListingId : ListingId = 1;
     private stable var nextTransactionId : TransactionId = 1;
     
     // ================ Private Helper Methods ================
@@ -105,7 +105,7 @@ actor class Marketplace() = this {
 
     // Runtime state
     private var listingTickets = HashMap.HashMap<Nat, ListingCreationTicket>(0, Nat.equal, Utils.natHash);
-    private stable var nextTicketId : Nat = 1;
+    private stable var _nextTicketId : Nat = 1;
     
     // ================ ICRC-8 State Variables ================
     private stable var nextAskId : Nat = 1;
@@ -289,7 +289,7 @@ actor class Marketplace() = this {
         return (price * marketplaceFeePercentage) / 10000;
     };
 
-    private func isICRC7Compliant(canisterId: Principal) : async Bool {
+    private func _isICRC7Compliant(canisterId: Principal) : async Bool {
         try {
             let nftCanister : NFTBackend = actor(Principal.toText(canisterId));
             // Call a few methods to verify it follows ICRC7 standard
@@ -303,10 +303,10 @@ actor class Marketplace() = this {
 
     // ================ ICRC-8 Helper Methods ================
     private func _addEscrowRecord(record: EscrowRecord) : Nat {
-        let escrowId = nextEscrowId;
-        escrowRecords.put(escrowId, record);
+        let _escrowId = nextEscrowId;
+        escrowRecords.put(_escrowId, record);
         nextEscrowId += 1;
-        return escrowId;
+        return _escrowId;
     };
     
     private func _addToUserAsks(principal: Principal, askId: Nat) {
@@ -396,8 +396,12 @@ actor class Marketplace() = this {
                 case (?#unsolicited_offer(account)) {
                     validFeatures.add(#unsolicited_offer(account));
                 };
-                case (?feature) {
-                    validFeatures.add(feature);
+                case (_) {
+                    // Handle unrecognized features - if it's a valid feature, add it
+                    switch (feature) {
+                        case (null) { /* Skip null features */ };
+                        case (?feat) { validFeatures.add(feat); };
+                    };
                 };
             };
         };
@@ -428,7 +432,7 @@ actor class Marketplace() = this {
                 // Create a new ask
                 let askId = nextAskId;
                 
-        let timestamp = Time.now();
+        let _timestamp = Time.now();
                 let account : Account = { owner = caller; subaccount = null; };
                 
                 let askStatus : AskStatus = {
@@ -507,7 +511,7 @@ actor class Marketplace() = this {
         tokenId: TokenId,
         price: Nat
     ) : [?AskFeature] {
-        let timestamp = Time.now();
+        let _timestamp = Time.now();
         
         // Create NFT token specification
         let tokenSpec : TokenSpec = {
@@ -537,7 +541,7 @@ actor class Marketplace() = this {
         let askFeatures : [?AskFeature] = [
             ?#ask_token([?tokenSpec]),
             ?#buy_now([[buyNowReq]]),
-            ?#created_at(Nat64.fromNat(Int.abs(timestamp))),
+            ?#created_at(Nat64.fromNat(Int.abs(_timestamp))),
             ?#ending(#timeout(7 * 24 * 60 * 60 * 1_000_000_000)), // Default 7 day timeout
             ?#fee_schema("standard") // Use standard fee schema
         ];
@@ -557,7 +561,7 @@ actor class Marketplace() = this {
         feeSchema: ?Text,
         memo: ?Blob
     ) : [?AskFeature] {
-        let timestamp = Time.now();
+        let _timestamp = Time.now();
         
         // Create NFT token specification
         let tokenSpec : TokenSpec = {
@@ -589,7 +593,7 @@ actor class Marketplace() = this {
         // Add required features
         features.add(?#ask_token([?tokenSpec]));
         features.add(?#buy_now([[buyNowReq]]));
-        features.add(?#created_at(Nat64.fromNat(Int.abs(timestamp))));
+        features.add(?#created_at(Nat64.fromNat(Int.abs(_timestamp))));
         
         // Add optional features if provided
         switch(broker) {
@@ -726,7 +730,7 @@ actor class Marketplace() = this {
                     });
                 };
                 
-                let timestamp = Time.now();
+                let _timestamp = Time.now();
                 let buyer : Account = { owner = caller; subaccount = null };
                 
                 // For now, we'll create a simple escrow record
@@ -910,7 +914,7 @@ actor class Marketplace() = this {
         let result = await _createNewAsk(caller, askFeatures);
         
         switch (result) {
-            case (#err(error)) {
+            case (#err(_error)) {
                 return #err(#UnsupportedOperation);
             };
             case (#ok(newAskResult)) {
@@ -922,21 +926,21 @@ actor class Marketplace() = this {
     // Simplified buyNFT function
     public shared({ caller }) func buyNFT(askId: Nat) : async Result.Result<Nat, Types.Error> {
         // Create an empty feature array
-        let bidFeatures : [?BidFeature] = [];
+        let _bidFeatures : [?BidFeature] = [];
         
         // Create a bid for the ask
-        let result = await _createBidForAsk(caller, askId, bidFeatures);
+        let result = await _createBidForAsk(caller, askId, _bidFeatures);
         
         switch (result) {
-            case (#err(error)) {
+            case (#err(_error)) {
                 return #err(#UnsupportedOperation);
             };
-            case (#ok({ escrow; result })) {
+            case (#ok(bidResult)) {
                 // In a real implementation, you would handle token transfers here
                 
                 // Update ask status to closed
                 switch (asks.get(askId)) {
-            case (null) { 
+                    case (null) { 
                         return #err(#ListingNotFound);
                     };
                     case (?askStatus) {
@@ -948,13 +952,13 @@ actor class Marketplace() = this {
                         asks.put(askId, updatedStatus);
                         askHistory.put(askId, updatedStatus);
                         
-                        return #ok(result);
+                        return #ok(bidResult.result);
                     };
                 };
-                        };
-                    };
-                };
-                
+            };
+        };
+    };
+    
     // Query to get all active asks
     public query func getAllActiveAsks(limit: Nat, offset: Nat) : async [AskStatus] {
         let activeAsks = Buffer.Buffer<AskStatus>(0);
@@ -964,6 +968,8 @@ actor class Marketplace() = this {
                 activeAsks.add(askStatus);
             };
         };
+        
+        let _timestamp = Time.now();
         
         let sortedAsks = Array.sort<AskStatus>(
             Buffer.toArray(activeAsks),
@@ -990,7 +996,7 @@ actor class Marketplace() = this {
     
     // Query to get ask history for a user
     public query func getUserAskHistory(user: Principal, limit: Nat, offset: Nat) : async [AskStatus] {
-        let userAccount : Account = { owner = user; subaccount = null };
+        let _userAccount : Account = { owner = user; subaccount = null };
         let userAskHistory = Buffer.Buffer<AskStatus>(0);
         
         for ((_, askStatus) in askHistory.entries()) {
@@ -1086,7 +1092,7 @@ actor class Marketplace() = this {
             return #err(#TokenSpecNotSupported);
         };
         
-        let timestamp = Time.now();
+        let _timestamp = Time.now();
         
         // Create NFT token specification
         let tokenSpec : TokenSpec = {
@@ -1119,7 +1125,7 @@ actor class Marketplace() = this {
         let askFeatures : [?AskFeature] = [
             ?#ask_token([?tokenSpec]),
             ?#buy_now([[buyNowReq]]),
-            ?#created_at(Nat64.fromNat(Int.abs(timestamp))),
+            ?#created_at(Nat64.fromNat(Int.abs(_timestamp))),
             ?#unsolicited_offer(ownerAccount),
             ?#ending(#timeout(7 * 24 * 60 * 60 * 1_000_000_000)), // Default 7 day timeout
             ?#fee_schema("standard") // Use standard fee schema

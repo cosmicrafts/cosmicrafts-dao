@@ -83,6 +83,10 @@ const scrollToTop = () => {
           </router-link>
         </li>
         
+        <li>
+          <router-link to="/marketplace" @click="closeMenu">{{ t('header.marketplace') }}</router-link>
+        </li>
+        
         <!-- Developer section - commented out for now -->
         <!--
         <li class="dev-section">

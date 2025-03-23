@@ -20,6 +20,8 @@ import Notifications from './pages/Notifications.vue';
 import StyleGuide from './pages/StyleGuide.vue';
 import Contact from './pages/Contact.vue';
 import ThemeGuide from './views/ThemeGuide.vue';
+import Marketplace from './pages/Marketplace.vue';
+import IcpBalanceTest from './components/IcpBalanceTest.vue';
 
 const routes = [
   { path: '/', component: Home, meta: { title: 'header.home' } },
@@ -40,6 +42,8 @@ const routes = [
   { path: '/contact', component: Contact, meta: { title: 'header.contact' } },
   { path: '/style-guide', component: StyleGuide, meta: { title: 'Style Guide' } },
   { path: '/theme-guide', component: ThemeGuide, meta: { title: 'Theme Guide' } },
+  { path: '/marketplace', component: Marketplace, meta: { title: 'header.marketplace' } },
+  { path: '/icp-test', component: IcpBalanceTest, meta: { title: 'ICP Balance Test' } },
   // New catch-all route for usernames/principals
   {
     path: '/:identifier',

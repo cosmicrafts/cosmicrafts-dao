@@ -17,6 +17,8 @@
     "src/icp-minting"
   ],
   "dependencies": {
+    "@dfinity/ledger-icp": "^2.6.11",
+    "@dfinity/principal": "^2.3.0",
     "openai": "^4.86.2"
   }
 }
