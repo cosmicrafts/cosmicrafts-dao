@@ -1,6 +1,6 @@
 <template>
   <div class="icp-balance-test">
-    <h3>ICP Balance Test</h3>
+    <h3>ICP Wallet</h3>
     
     <div class="balance-display">
       <p>Your ICP balance: 
@@ -10,8 +10,6 @@
     </div>
     
     <div class="functions-test">
-      <h4>Test Functions</h4>
-      
       <div class="function-group">
         <button @click="testGetBalance" :disabled="balanceLoading">
           Refresh Balance
@@ -20,6 +18,37 @@
         <div class="test-account">
           <p>Your account ID: <code>{{ accountId || 'Not available' }}</code></p>
           <button @click="copyAccountId" v-if="accountId">Copy Account ID</button>
+        </div>
+      </div>
+      
+      <div class="function-group">
+        <h4>Send ICP</h4>
+        <div class="send-form">
+          <div class="input-group">
+            <label for="recipient">Recipient account ID:</label>
+            <input 
+              type="text" 
+              id="recipient" 
+              v-model="recipient" 
+              placeholder="Enter recipient account ID"
+            />
+          </div>
+          
+          <div class="input-group">
+            <label for="amount">Amount (ICP):</label>
+            <input 
+              type="number" 
+              id="amount" 
+              v-model="amount" 
+              placeholder="0.00000000"
+              step="0.00000001"
+              min="0"
+            />
+          </div>
+          
+          <button @click="sendIcp" :disabled="transferLoading || !isValidTransfer">
+            {{ transferLoading ? 'Sending...' : 'Send ICP' }}
+          </button>
         </div>
       </div>
       
@@ -58,24 +87,44 @@ import { Principal } from '@dfinity/principal';
 const canisterStore = useCanisterStore();
 const authStore = useAuthStore();
 
+// Balance data
 const balance = ref(null);
 const balanceLoading = ref(false);
 const accountId = ref('');
+
+// Principal conversion
 const principalToConvert = ref('');
 const convertedAccountId = ref('');
+
+// Transaction data
+const recipient = ref('');
+const amount = ref('');
+const transferLoading = ref(false);
+
+// Logs
 const logs = ref([]);
 
+// Compute formatted balance with 8 decimal places
 const formattedBalance = computed(() => {
   if (!balance.value) return '0.00000000';
   
   try {
-    return (Number(balance.value.e8s) / 100_000_000).toFixed(8);
+    return canisterStore.formatIcp(balance.value.e8s);
   } catch (e) {
     addLog('Error formatting balance: ' + e.message, 'error');
     return '0.00000000';
   }
 });
 
+// Validate transfer inputs
+const isValidTransfer = computed(() => {
+  return recipient.value && 
+         amount.value && 
+         parseFloat(amount.value) > 0 && 
+         isValidAccountId(recipient.value);
+});
+
+// Initialize component
 onMounted(async () => {
   if (authStore.isAuthenticated()) {
     await testGetBalance();
@@ -85,6 +134,15 @@ onMounted(async () => {
   }
 });
 
+// Check if a string is a valid account ID
+function isValidAccountId(address) {
+  if (!address) return false;
+  
+  // Account IDs are 64-character hex strings
+  return /^[0-9a-fA-F]{64}$/.test(address);
+}
+
+// Get ICP balance
 async function testGetBalance() {
   balanceLoading.value = true;
   
@@ -94,10 +152,18 @@ async function testGetBalance() {
       return;
     }
     
-    const principal = authStore.getPrincipal();
-    addLog(`Getting balance for principal: ${principal}`, 'info');
+    const identity = authStore.getIdentity();
+    if (!identity) {
+      addLog('Cannot get balance: Identity not available', 'error');
+      return;
+    }
     
-    balance.value = await canisterStore.getIcpBalance(principal);
+    const principal = identity.getPrincipal();
+    const principalText = principal.toString();
+    addLog(`Getting balance for principal: ${principalText}`, 'info');
+    
+    // Get balance using principal
+    balance.value = await canisterStore.getIcpBalance(principalText);
     addLog(`Balance retrieved: ${formattedBalance.value} ICP`, 'success');
   } catch (error) {
     addLog(`Error getting balance: ${error.message}`, 'error');
@@ -106,6 +172,7 @@ async function testGetBalance() {
   }
 }
 
+// Get account ID from principal
 function computeAccountId() {
   try {
     if (!authStore.isAuthenticated()) {
@@ -113,14 +180,21 @@ function computeAccountId() {
       return;
     }
     
-    const principal = authStore.getPrincipal();
-    accountId.value = canisterStore.principalToAccountIdentifier(principal);
+    const identity = authStore.getIdentity();
+    if (!identity) {
+      addLog('Cannot compute account ID: Identity not available', 'error');
+      return;
+    }
+    
+    const principal = identity.getPrincipal();
+    accountId.value = canisterStore.principalToAccountIdentifier(principal.toString());
     addLog(`Account ID computed: ${accountId.value}`, 'success');
   } catch (error) {
     addLog(`Error computing account ID: ${error.message}`, 'error');
   }
 }
 
+// Copy account ID to clipboard
 function copyAccountId() {
   if (!accountId.value) return;
   
@@ -133,6 +207,7 @@ function copyAccountId() {
     });
 }
 
+// Convert principal to account ID
 function convertPrincipal() {
   try {
     const principal = principalToConvert.value.trim();
@@ -152,6 +227,49 @@ function convertPrincipal() {
   }
 }
 
+// Send ICP to another account
+async function sendIcp() {
+  if (!isValidTransfer.value) {
+    addLog('Invalid transfer details', 'error');
+    return;
+  }
+  
+  transferLoading.value = true;
+  
+  try {
+    if (!authStore.isAuthenticated()) {
+      addLog('Cannot send ICP: User not authenticated', 'error');
+      return;
+    }
+    
+    // Convert amount from ICP to e8s using the store helper function
+    const amountE8s = canisterStore.icpToE8s(amount.value);
+    
+    // Send the transaction
+    const result = await canisterStore.transferIcp(
+      recipient.value,
+      amountE8s
+    );
+    
+    if (result.success) {
+      addLog(`Successfully sent ${amount.value} ICP to ${recipient.value}`, 'success');
+      addLog(`Transaction confirmed with block height: ${result.blockHeight}`, 'success');
+      
+      // Clear form and refresh balance
+      recipient.value = '';
+      amount.value = '';
+      await testGetBalance();
+    } else {
+      addLog(`Transfer failed: ${result.error || 'Unknown error'}`, 'error');
+    }
+  } catch (error) {
+    addLog(`Error sending ICP: ${error.message}`, 'error');
+  } finally {
+    transferLoading.value = false;
+  }
+}
+
+// Add log entry
 function addLog(message, type = 'info') {
   const now = new Date();
   const timeStr = now.toTimeString().split(' ')[0];
@@ -224,6 +342,24 @@ h4 {
 .test-account {
   margin-top: 15px;
   word-break: break-all;
+}
+
+.send-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-group label {
+  color: #b8c2cc;
+  font-size: 0.9em;
 }
 
 button {

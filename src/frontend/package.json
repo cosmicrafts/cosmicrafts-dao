@@ -34,6 +34,7 @@
     "@dfinity/ledger-icp": "^2.0.0",
     "@dfinity/nns": "^0.15.0",
     "@dfinity/principal": "^0.15.6",
+    "@fortawesome/fontawesome-free": "^6.7.2",
     "@heroicons/vue": "^2.2.0",
     "@solana/web3.js": "^1.98.0",
     "@vueuse/core": "^13.0.0",

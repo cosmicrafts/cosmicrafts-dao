@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useLanguageStore } from '@/stores/language';
 import { createI18n } from 'vue-i18n';
 import './style.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import en from '@/locales/en.json';
 import es from '@/locales/es.json';
 import fr from '@/locales/fr.json';
