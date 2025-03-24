@@ -85,7 +85,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import MarkdownRenderer from '@/components/MarkdownRenderer.vue';
+import MarkdownRenderer from '@/components/core/MarkdownRenderer.vue';
 
 // Track if markdown has been rendered
 const isRendered = ref(false);

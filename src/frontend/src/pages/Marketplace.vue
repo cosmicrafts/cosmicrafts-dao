@@ -3,11 +3,13 @@
 import { ref, onMounted, computed } from 'vue';
 import { useMarketplaceStore } from '@/stores/marketplace';
 import { useAuthStore } from '@/stores/auth';
-import CosmicButton from '@/components/CosmicButton.vue';
-import CosmicCard from '@/components/CosmicCard.vue';
 import { useI18n } from 'vue-i18n';
 import { useModalStore } from '@/stores/modal';
-import Login from '@/components/Login.vue';
+import Login from '@/components/user/LoginForm.vue';
+import { storeToRefs } from 'pinia';
+import CosmicButton from '@/components/ui/buttons/BaseButton.vue';
+import CosmicCard from '@/components/ui/cards/BaseCard.vue';
+import NFTCard from '@/components/ui/cards/NFTCard.vue';
 
 const { t } = useI18n();
 const marketplaceStore = useMarketplaceStore();

@@ -7,7 +7,7 @@ import DAO from './pages/DAO.vue';
 import Whitepaper from './pages/Whitepaper.vue';
 import Dashboard from './pages/Dashboard.vue';
 import Games from './pages/Games.vue';
-import Login from './components/Login.vue';
+import Login from './components/user/LoginForm.vue';
 import Profile from './pages/Profile.vue';
 import Error from './pages/Error.vue';
 import Game from './pages/Game.vue';

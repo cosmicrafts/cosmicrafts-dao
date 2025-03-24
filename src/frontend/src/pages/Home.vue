@@ -8,9 +8,9 @@
 </template>
 
 <script setup>
-import HeroSection from '@/components/HeroSection.vue';
-import Lore from '@/components/Lore.vue';
-import Lore2 from '@/components/Lore2.vue';
+import HeroSection from '@/components/layout/HeroSection.vue';
+import Lore from '@/components/game/interactive/Lore.vue';
+import Lore2 from '@/components/game/interactive/Lore2.vue';
 
 const handleCtaClick = (action) => {
   console.log(`CTA button clicked with action: ${action}`);

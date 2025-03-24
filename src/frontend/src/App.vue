@@ -2,11 +2,11 @@
 <script setup>
 import { computed, ref, onMounted, onUnmounted, watch, provide } from 'vue';
 import { useRoute } from 'vue-router';
-import Header from './components/Header.vue';
-import Footer from './components/Footer.vue';
-import Modal from '@/components/Modal.vue'; 
-import Chat from "@/components/Chat.vue";
-import EscMenu from "@/components/EscMenu.vue";
+import Header from './components/layout/Header.vue';
+import Footer from './components/layout/Footer.vue';
+import Modal from '@/components/core/modals/BaseModal.vue'; 
+import Chat from "@/components/core/Chat.vue";
+import EscMenu from "@/components/navigation/menus/EscMenu.vue";
 import vScrollToTop from '@/directives/scrollToTop';
 
 const route = useRoute();

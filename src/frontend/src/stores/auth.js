@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { mnemonicToSeedSync, generateMnemonic, validateMnemonic } from 'bip39';
 import { Ed25519KeyIdentity } from '@dfinity/identity';
 import { AuthClient } from '@dfinity/auth-client';
-import Registration from '@/components/Registration.vue';
+import Registration from '@/components/forms/RegistrationForm.vue';
 import { useCanisterStore } from './canister.js';
 import { useModalStore } from '@/stores/modal';
 import nacl from 'tweetnacl';

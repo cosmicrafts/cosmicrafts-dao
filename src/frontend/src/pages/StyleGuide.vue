@@ -396,8 +396,8 @@
 </template>
 
 <script setup>
-import CosmicButton from '@/components/CosmicButton.vue';
-import CosmicCard from '@/components/CosmicCard.vue';
+import CosmicButton from '@/components/ui/buttons/BaseButton.vue';
+import CosmicCard from '@/components/ui/cards/BaseCard.vue';
 </script>
 
 <style scoped>

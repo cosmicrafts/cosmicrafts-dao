@@ -520,8 +520,8 @@ import avatar12 from '@/assets/avatars/Avatar_12.webp';
 import { Principal } from '@dfinity/principal';
 import { useProfileStore } from '../stores/profile';
 import { useNftsStore } from '../stores/nfts';
-import NFTCard from '@/components/NFTCard.vue';
-import CosmicButton from '@/components/CosmicButton.vue';
+import NFTCard from '@/components/ui/cards/NFTCard.vue';
+import CosmicButton from '@/components/ui/buttons/BaseButton.vue';
 
 const authStore = useAuthStore();
 const statsStore = useStatisticsStore();

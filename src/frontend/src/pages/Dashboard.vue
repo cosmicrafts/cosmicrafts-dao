@@ -505,7 +505,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import { useModalStore } from '@/stores/modal';
 import { useI18n } from 'vue-i18n';
-import Login from '@/components/Login.vue';
+import Login from '@/components/user/LoginForm.vue';
 import { useCanisterStore } from '@/stores/canister';
 
 // Import avatars
