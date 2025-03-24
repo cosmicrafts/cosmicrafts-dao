@@ -24,13 +24,37 @@
       <div class="function-group">
         <h4>Send ICP</h4>
         <div class="send-form">
+          <div class="input-group recipient-type">
+            <label>Recipient Type:</label>
+            <div class="radio-options">
+              <label>
+                <input 
+                  type="radio" 
+                  name="recipientType" 
+                  value="accountId" 
+                  v-model="recipientType"
+                />
+                Account ID
+              </label>
+              <label>
+                <input 
+                  type="radio" 
+                  name="recipientType" 
+                  value="principal" 
+                  v-model="recipientType"
+                />
+                Principal ID
+              </label>
+            </div>
+          </div>
+          
           <div class="input-group">
-            <label for="recipient">Recipient account ID:</label>
+            <label for="recipient">{{ recipientType === 'accountId' ? 'Recipient account ID:' : 'Recipient principal ID:' }}</label>
             <input 
               type="text" 
               id="recipient" 
               v-model="recipient" 
-              placeholder="Enter recipient account ID"
+              :placeholder="recipientType === 'accountId' ? 'Enter recipient account ID' : 'Enter recipient principal ID'"
             />
           </div>
           
@@ -100,6 +124,7 @@ const convertedAccountId = ref('');
 const recipient = ref('');
 const amount = ref('');
 const transferLoading = ref(false);
+const recipientType = ref('accountId');
 
 // Logs
 const logs = ref([]);
@@ -118,10 +143,15 @@ const formattedBalance = computed(() => {
 
 // Validate transfer inputs
 const isValidTransfer = computed(() => {
-  return recipient.value && 
-         amount.value && 
-         parseFloat(amount.value) > 0 && 
-         isValidAccountId(recipient.value);
+  if (!recipient.value || !amount.value || parseFloat(amount.value) <= 0) {
+    return false;
+  }
+  
+  if (recipientType.value === 'accountId') {
+    return isValidAccountId(recipient.value);
+  } else {
+    return isValidPrincipal(recipient.value);
+  }
 });
 
 // Initialize component
@@ -140,6 +170,19 @@ function isValidAccountId(address) {
   
   // Account IDs are 64-character hex strings
   return /^[0-9a-fA-F]{64}$/.test(address);
+}
+
+// Check if a string is a valid principal ID
+function isValidPrincipal(principal) {
+  if (!principal) return false;
+  
+  try {
+    // Try to parse it as a principal
+    Principal.fromText(principal);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
 // Get ICP balance
@@ -443,5 +486,25 @@ code {
 
 .log-message.error {
   color: #f44336;
+}
+
+.radio-options {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.radio-options label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.recipient-type {
+  background-color: #1e1e30;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
 }
 </style> 

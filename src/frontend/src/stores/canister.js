@@ -176,22 +176,42 @@ export const useCanisterStore = defineStore('canister', {
     
     /**
      * Sends ICP to another account
-     * @param {string} toAccountId - Recipient account ID (hex string)
+     * @param {string} recipient - Recipient account ID (hex string) or principal ID
      * @param {bigint} amountE8s - Amount to send in e8s
      * @param {Array<number>} [fromSubAccount] - Optional subaccount to send from
      * @param {bigint} [memo=0n] - Optional memo for the transaction
      * @returns {Promise<{ success: boolean, blockHeight?: bigint, error?: string }>}
      */
-    async transferIcp(toAccountId, amountE8s, fromSubAccount = undefined, memo = BigInt(0)) {
+    async transferIcp(recipient, amountE8s, fromSubAccount = undefined, memo = BigInt(0)) {
       try {
         const ledger = await this.get('ledger');
         if (!ledger) {
           throw new Error('Ledger canister not initialized');
         }
         
-        // Validate the recipient account
-        if (!/^[0-9a-fA-F]{64}$/.test(toAccountId)) {
-          throw new Error('Invalid recipient account ID format');
+        let toAccountId;
+        
+        // Determine if the recipient is a principal or account ID
+        const isAccountId = /^[0-9a-fA-F]{64}$/.test(recipient);
+        const isPrincipal = !isAccountId && recipient.includes('-');
+        
+        if (isAccountId) {
+          // The recipient is already an account ID
+          toAccountId = recipient;
+          console.log('Using provided account ID for transfer:', toAccountId);
+        } else if (isPrincipal) {
+          // The recipient is a principal, convert to account ID
+          try {
+            toAccountId = this.principalToAccountIdentifier(recipient);
+            console.log('Converted principal to account ID for transfer:', {
+              principal: recipient,
+              accountId: toAccountId
+            });
+          } catch (error) {
+            throw new Error(`Invalid principal format: ${error.message}`);
+          }
+        } else {
+          throw new Error('Invalid recipient format: must be a valid account ID or principal');
         }
         
         // Convert hex account ID to bytes
@@ -202,6 +222,12 @@ export const useCanisterStore = defineStore('canister', {
         
         // Prepare from_subaccount argument
         const fromSubaccountArg = fromSubAccount ? [Array.from(fromSubAccount)] : [];
+        
+        console.log('Sending ICP transfer:', {
+          to: toAccountId,
+          amount: amountE8s.toString(),
+          fee: ICP_TRANSFER_FEE.toString()
+        });
         
         // Direct transfer call using the Actor interface
         const result = await ledger.transfer({
@@ -215,10 +241,16 @@ export const useCanisterStore = defineStore('canister', {
         
         // Handle the Candid variant response
         if ('Err' in result) {
+          console.error('Transfer error:', result.Err);
           throw new Error(`Transfer failed: ${JSON.stringify(result.Err)}`);
         }
         
-        return { success: true, blockHeight: result.Ok };
+        console.log('Transfer successful:', {
+          blockHeight: result.Ok.toString(),
+          to: toAccountId
+        });
+        
+        return { success: true, blockHeight: result.Ok, recipient: toAccountId };
       } catch (error) {
         console.error('Failed to transfer ICP:', error);
         return { success: false, error: error.message };
