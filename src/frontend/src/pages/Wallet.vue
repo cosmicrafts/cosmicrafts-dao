@@ -58,11 +58,11 @@
       <div class="token-assets cosmic-panel">
         <div class="assets-header">
           <h3>Assets</h3>
-          <span class="asset-count">{{ cachedTokens.length || 0 }} tokens</span>
+          <span class="asset-count">{{ supportedTokens.length || cachedTokens.length || 0 }} tokens</span>
         </div>
         <div class="assets-list">
           <!-- Skeleton loading placeholders when no tokens loaded yet -->
-          <div v-if="!cachedTokens.length" v-for="n in 2" :key="`skeleton-${n}`" class="asset-item skeleton">
+          <div v-if="!supportedTokens.length && !cachedTokens.length" v-for="n in 2" :key="`skeleton-${n}`" class="asset-item skeleton">
             <div class="asset-icon skeleton-circle"></div>
             <div class="asset-details">
               <div class="skeleton-line"></div>
@@ -74,7 +74,7 @@
           <!-- Real token data once loaded -->
           <div 
             v-else
-            v-for="token in cachedTokens" 
+            v-for="token in (supportedTokens.length ? supportedTokens : cachedTokens)" 
             :key="token.symbol"
             :class="['asset-item', { active: currentTokenSymbol === token.symbol }]"
             @click="changeToken(token.symbol)"
@@ -282,6 +282,9 @@ export default {
     const currentTokenSymbol = ref('ICP');
     const currentFormattedBalance = ref('0.00');
 
+    // Use computed property to access token store's supported tokens
+    const supportedTokens = computed(() => tokenStore.supportedTokens || []);
+
     // UI state variables
     const loadingPhases = ref([]);
     const balanceLoading = ref(false);
@@ -325,8 +328,23 @@ export default {
       nextTick(() => {
         // Throttle initialization calls to allow UI to finish rendering
         setTimeout(() => initializeUserIds().catch(e => console.error("User ID init error:", e)), 250);
-        setTimeout(() => initializeTokenStore().catch(e => console.error("Token store init error:", e)), 500);
-        setTimeout(() => fetchAllBalances().catch(e => console.error("Balance fetch error:", e)), 750);
+        
+        // Initialize token store FIRST, before other operations
+        setTimeout(() => {
+          if (tokenStore) {
+            tokenStore.initialize().then(() => {
+              // After store is initialized, update local cache
+              cachedTokens.value = tokenStore.supportedTokens || [];
+              console.log("Token store initialized with", cachedTokens.value.length, "tokens");
+              
+              // IMPORTANT: Now trigger background blockchain data fetch
+              setTimeout(() => {
+                refreshAllBalancesInBackground().catch(e => console.error("Initial balance fetch error:", e));
+              }, 200);
+            })
+            .catch(e => console.error("Token store init error:", e));
+          }
+        }, 500);
         
         // Set up periodic refresh in background
         setInterval(() => {
@@ -336,6 +354,65 @@ export default {
         }, 60000); // Check every minute
       });
     });
+    
+    // New method to refresh all balances in background
+    async function refreshAllBalancesInBackground() {
+      updateLoadingPhase('Updating balances from blockchain...');
+      
+      try {
+        if (!authStore.isAuthenticated() || !tokenStore) {
+          removeLoadingPhase('Updating balances from blockchain...');
+          return;
+        }
+        
+        // First update tokens list from token store
+        cachedTokens.value = tokenStore.supportedTokens || [];
+        
+        // Load balances for all tokens in parallel
+        addLog(`Fetching live balances for ${cachedTokens.value.length} tokens...`, 'info');
+        
+        // Process each token asynchronously but don't wait for all to complete
+        const fetchPromises = cachedTokens.value.map(token => {
+          return tokenStore.getBalance(token.symbol)
+            .then(balance => {
+              // Update the local cache when each balance arrives
+              tokenBalances.value[token.symbol] = balance;
+              
+              // Update formatted balance if this is the current token
+              if (token.symbol === currentTokenSymbol.value) {
+                updateCurrentFormattedBalance();
+              }
+              
+              return { symbol: token.symbol, success: true };
+            })
+            .catch(error => {
+              console.error(`Error fetching ${token.symbol} balance:`, error);
+              return { symbol: token.symbol, success: false, error: error.message };
+            });
+        });
+        
+        // Wait for all balance fetches to complete
+        const results = await Promise.allSettled(fetchPromises);
+        
+        // Count success/failures for logging
+        const successCount = results.filter(r => r.status === 'fulfilled' && r.value?.success).length;
+        const failureCount = results.length - successCount;
+        
+        // Save balances to local storage
+        saveWalletDataToLocalStorage();
+        
+        if (failureCount > 0) {
+          addLog(`Updated ${successCount} token balances (${failureCount} failed)`, 'warning');
+        } else {
+          addLog(`All ${successCount} token balances updated from blockchain`, 'success');
+        }
+      } catch (error) {
+        console.error('Error in refreshAllBalancesInBackground:', error);
+        addLog(`Error fetching token balances: ${error.message}`, 'error');
+      } finally {
+        removeLoadingPhase('Updating balances from blockchain...');
+      }
+    }
 
     // Load all cached data immediately on mount - GUARANTEED non-blocking
     function loadAllCachedData() {
@@ -476,17 +553,17 @@ export default {
       
       try {
         // Skip if auth store not ready
-        if (!authStore.value || !authStore.value.isAuthenticated()) {
+        if (!authStore || !authStore.isAuthenticated()) {
           removeLoadingPhase('Loading user IDs...');
           return;
         }
         
         // Try to get from the token store if available
-        if (tokenStore.value?.principalId && tokenStore.value?.accountId) {
+        if (tokenStore?.principalId && tokenStore?.accountId) {
           // Update cached IDs
           cachedIds.value = {
-            principal: tokenStore.value.principalId,
-            account: tokenStore.value.accountId
+            principal: tokenStore.principalId,
+            account: tokenStore.accountId
           };
           
           // Save to cache
@@ -499,7 +576,7 @@ export default {
         }
         
         // If not available, initialize directly
-        const identity = authStore.value.getIdentity();
+        const identity = authStore.getIdentity();
         if (identity) {
           const principal = identity.getPrincipal().toString();
           
@@ -532,37 +609,6 @@ export default {
         console.error('Error initializing user IDs:', error);
       } finally {
         removeLoadingPhase('Loading user IDs...');
-      }
-    }
-
-    // Asynchronously initialize token store
-    async function initializeTokenStore() {
-      updateLoadingPhase('Loading tokens...');
-      
-      try {
-        if (!tokenStore.value) {
-          removeLoadingPhase('Loading tokens...');
-          return;
-        }
-        
-        // Initialize token store and get supported tokens
-        await tokenStore.value.initialize();
-        
-        // Update cached tokens
-        if (tokenStore.value.supportedTokens && tokenStore.value.supportedTokens.length > 0) {
-          // Create safe copies with BigInt values converted to strings
-          cachedTokens.value = tokenStore.value.supportedTokens;
-          
-          // Save to cache
-          saveWalletDataToLocalStorage();
-          
-          addLog(`Loaded ${cachedTokens.value.length} tokens`, 'success', false);
-        }
-      } catch (error) {
-        console.error('Failed to initialize token store:', error);
-        addLog('Error loading tokens, using cached data', 'warning');
-      } finally {
-        removeLoadingPhase('Loading tokens...');
       }
     }
 
@@ -617,87 +663,19 @@ export default {
       }
     }
 
-    // Fetch all token balances in parallel
-    async function fetchAllBalances() {
-      updateLoadingPhase('Updating balances...');
-      
-      try {
-        if (!tokenStore.value || !authStore.value?.isAuthenticated()) {
-          removeLoadingPhase('Updating balances...');
-          return;
-        }
-        
-        // Skip if no tokens
-        if (!cachedTokens.value || cachedTokens.value.length === 0) {
-          removeLoadingPhase('Updating balances...');
-          return;
-        }
-        
-        // Process balances in parallel with timeouts
-        const fetchPromises = cachedTokens.value.map(async (token) => {
-          try {
-            // Use AbortController for timeout
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 10000);
-            
-            const balance = await fetchTokenBalance(token.symbol, true);
-            clearTimeout(timeoutId);
-            
-            return { symbol: token.symbol, success: true, balance };
-          } catch (error) {
-            console.error(`Error fetching ${token.symbol} balance:`, error);
-            return { symbol: token.symbol, success: false, error: error.message };
-          }
-        });
-        
-        // Wait for all balance fetches to complete
-        const results = await Promise.allSettled(fetchPromises);
-        
-        // Count success/failures for logging
-        const successCount = results.filter(r => r.status === 'fulfilled' && r.value.success).length;
-        const failureCount = results.filter(r => r.status === 'fulfilled').length - successCount;
-        
-        // Update last refresh time
-        try {
-          localStorage.setItem(WALLET_LAST_REFRESH_KEY, Date.now().toString());
-        } catch (e) {}
-        
-        // Save updated balances to localStorage
-        try {
-          saveWalletDataToLocalStorage();
-        } catch (error) {
-          console.error('Error saving wallet data:', error);
-        }
-        
-        // Update current formatted balance
-        updateCurrentFormattedBalance();
-        
-        if (failureCount > 0) {
-          addLog(`Updated ${successCount} token balances (${failureCount} failed)`, 'warning');
-        } else {
-          addLog(`All ${successCount} token balances updated successfully`, 'success');
-        }
-      } catch (error) {
-        console.error('Error in fetchAllBalances:', error);
-        addLog(`Error fetching token balances: ${error.message}`, 'error');
-      } finally {
-        removeLoadingPhase('Updating balances...');
-      }
-    }
-
     // Fetch balance for a single token (async)
     async function fetchTokenBalance(symbol, silent = false) {
       if (!silent) balanceLoading.value = true;
       
       try {
         // Skip if token store not available
-        if (!tokenStore.value) {
+        if (!tokenStore) {
           if (!silent) balanceLoading.value = false;
           return null;
         }
         
-        // Use token store
-        const balance = await tokenStore.value.getBalance(symbol);
+        // Use token store to get balance from blockchain
+        const balance = await tokenStore.getBalance(symbol);
         
         // Convert to BigInt if it's not already one
         if (typeof balance === 'string') {
@@ -780,9 +758,9 @@ export default {
       updateCurrentFormattedBalance();
       
       // Try to update token store if available
-      if (tokenStore.value) {
+      if (tokenStore) {
         setTimeout(() => {
-          tokenStore.value.changeToken(symbol)
+          tokenStore.changeToken(symbol)
             .catch(e => console.error('Error changing token:', e));
         }, 0);
       }
@@ -822,7 +800,7 @@ export default {
       }
       
       // Ensure token store is ready
-      if (!tokenStore.value) {
+      if (!tokenStore) {
         addLog('Token store not yet initialized', 'error');
         return;
       }
@@ -833,7 +811,7 @@ export default {
         const canisterId = newTokenCanisterId.value.trim();
         addLog(`Adding token with canister ID: ${canisterId}`, 'info');
         
-        const newToken = await tokenStore.value.addToken(canisterId);
+        const newToken = await tokenStore.addToken(canisterId);
         
         // Update cached tokens
         if (!cachedTokens.value.find(t => t.symbol === newToken.symbol)) {
@@ -864,8 +842,8 @@ export default {
     // Copy address to clipboard
     function copyAddress() {
       const textToCopy = principalMode.value 
-        ? (tokenStore.value?.principalId || cachedIds.value.principal) 
-        : (tokenStore.value?.accountId || cachedIds.value.account);
+        ? (tokenStore?.principalId || cachedIds.value.principal) 
+        : (tokenStore?.accountId || cachedIds.value.account);
         
       if (!textToCopy) return;
       
@@ -906,7 +884,7 @@ export default {
       }
       
       // Ensure token store is ready
-      if (!tokenStore.value) {
+      if (!tokenStore) {
         addLog('Token store not yet initialized', 'error');
         return;
       }
@@ -916,7 +894,7 @@ export default {
       try {
         addLog(`Sending ${amount.value} ${currentTokenSymbol.value} to ${recipient.value}...`, 'info');
         
-        const result = await tokenStore.value.transferTokens(recipient.value, amount.value);
+        const result = await tokenStore.transferTokens(recipient.value, amount.value);
         
         if (result.success) {
           const confirmationId = result.blockHeight || result.blockIndex;
@@ -1029,6 +1007,9 @@ export default {
       currentTokenSymbol,
       currentFormattedBalance,
       
+      // Computed properties from token store
+      supportedTokens,
+      
       // Store references
       authStore,
       tokenStore,
@@ -1037,10 +1018,9 @@ export default {
       updateCurrentFormattedBalance,
       getCachedTokenBalance,
       initializeUserIds,
-      initializeTokenStore,
+      refreshAllBalancesInBackground,
       shouldRefresh,
       saveWalletDataToLocalStorage,
-      fetchAllBalances,
       fetchTokenBalance,
       refreshBalance,
       updateLoadingPhase,
