@@ -7,16 +7,8 @@ import MarkdownRenderer from './MarkdownRenderer.vue';
 import { useAuthStore } from '../stores/auth';
 import { useLanguageStore, languages } from '../stores/language';
 
-// Add FontAwesome script to make sure icons work
-const addFontAwesome = () => {
-  if (!document.getElementById('font-awesome-script')) {
-    const script = document.createElement('script');
-    script.id = 'font-awesome-script';
-    script.src = 'https://kit.fontawesome.com/a076d05399.js';
-    script.crossOrigin = 'anonymous';
-    document.head.appendChild(script);
-  }
-};
+// FontAwesome is imported globally in main.js from the local npm package
+// No need to load it via CDN which was causing CORS issues
 
 // Replace OpenAI client with OpenRouter base URL
 const API_BASE_URL = 'https://openrouter.ai/api/v1';
@@ -346,9 +338,6 @@ onMounted(() => {
       }, 100); // Small delay to ensure the styles were applied
     }
   });
-  
-  // Add FontAwesome for the buttons
-  addFontAwesome();
   
   // Add global event listeners
   document.addEventListener('keydown', handleKeyDown);

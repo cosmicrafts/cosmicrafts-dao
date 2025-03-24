@@ -63,6 +63,10 @@ const icpLedgerIDL = ({ IDL }) => {
   });
 };
 
+// Cache keys
+const CANISTER_CACHE_KEY = 'cosmicrafts-canister-cache';
+const CANISTER_LAST_REFRESH_KEY = 'cosmicrafts-canister-last-refresh';
+
 // Store token canisters and state
 let canisters = {
   cosmicrafts: null,
@@ -74,6 +78,7 @@ let canisters = {
 };
 let currentIdentity = null;
 let initializing = false;
+let lastInitialized = 0;
 
 const MANUAL_ENV = 'ic'; // 'ic' for IC, 'local' for local development
 const isLocal = MANUAL_ENV === 'local';
@@ -95,60 +100,195 @@ export const useCanisterStore = defineStore('canister', {
       ledger: 'ryjl3-tyaaa-aaaaa-aaaba-cai', // ICP ledger canister ID
     },
     agent: null,
-    supportedTokens: [], // Will be populated dynamically after initialization
+    supportedTokens: [
+      // Default ICP token info to ensure UI renders immediately
+      {
+        symbol: 'ICP',
+        name: 'Internet Computer Protocol',
+        standard: 'icp',
+        decimals: 8,
+        canisterId: 'ryjl3-tyaaa-aaaaa-aaaba-cai',
+        fee: '10000',
+      }
+    ], 
     currentToken: 'ICP',
   }),
 
   actions: {
+    /**
+     * Initialize agents with non-blocking pattern
+     */
     async initializeAgents() {
-      const authStore = useAuthStore();
-      const identity = authStore.getIdentity();
-
-      if (identity !== currentIdentity || !canisters.cosmicrafts || !canisters.roadmap || !canisters.marketplace) {
-        console.log('Initializing HttpAgent...');
-        currentIdentity = identity; // Update identity
-        initializing = true;
-
-        const agent = new HttpAgent({ identity, host });
-        this.agent = agent;
-
-        // Fetch root key for local development
-        if (isLocal) {
-          console.log('Fetching root key for local development...');
-          await agent.fetchRootKey();
+      try {
+        const authStore = useAuthStore();
+        const identity = authStore.getIdentity();
+        
+        // If no identity, cannot initialize
+        if (!identity) {
+          console.warn('No identity available, cannot initialize agents');
+          return false;
         }
-
-        // Initialize token service to ensure tokens are loaded
-        await tokenService.initialize(identity, host);
-        this.supportedTokens = tokenService.getSupportedTokens();
-
-        // ✅ Initialize all canisters and log their creation
+        
+        // Skip if already initialized recently and identity is the same
+        if (
+          currentIdentity === identity && 
+          Date.now() - lastInitialized < 5 * 60 * 1000 &&
+          canisters.cosmicrafts
+        ) {
+          console.log('Agents already initialized and recent, using existing instances');
+          return true;
+        }
+        
+        // If another initialization is already in progress, wait for it to complete
+        if (initializing) {
+          console.log('Initialization already in progress, waiting...');
+          let attempts = 0;
+          while (initializing && attempts < 5) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            attempts++;
+          }
+          if (initializing) {
+            console.warn('Timed out waiting for initialization');
+            return false;
+          } else {
+            return true;
+          }
+        }
+        
+        // Set identity and start initializing
+        currentIdentity = identity;
+        initializing = true;
+        
+        // Load cached data in a microtask to avoid blocking the main thread
+        Promise.resolve().then(() => this.loadCachedCanisterConfig());
+        
+        // Start background initialization
+        setTimeout(() => {
+          this.backgroundInitialize(identity)
+            .catch(error => console.error('Error in background initialization:', error))
+            .finally(() => {
+              initializing = false;
+            });
+        }, 100);
+        
+        return true;
+      } catch (error) {
+        console.error('Error initializing agents:', error);
+        initializing = false;
+        return false;
+      }
+    },
+    
+    /**
+     * Load cached canister config
+     */
+    loadCachedCanisterConfig() {
+      try {
+        const cachedData = localStorage.getItem(CANISTER_CACHE_KEY);
+        if (cachedData) {
+          this.supportedTokens = JSON.parse(cachedData).tokens || [];
+          console.log('Loaded cached canister config with', this.supportedTokens.length, 'tokens');
+        }
+        
+        // Also load tokens from TokenService cache (which might be more recent)
+        try {
+          const tokensFromService = tokenService.getSupportedTokens();
+          if (Array.isArray(tokensFromService) && tokensFromService.length > 0) {
+            this.supportedTokens = tokensFromService;
+          }
+        } catch (tokenError) {
+          console.warn('Error loading tokens from TokenService:', tokenError);
+        }
+      } catch (error) {
+        console.error('Error loading cached canister config:', error);
+        // Ensure we have a valid array
+        if (!Array.isArray(this.supportedTokens)) {
+          this.supportedTokens = [];
+        }
+      }
+    },
+    
+    /**
+     * Save canister config to cache
+     */
+    saveCachedCanisterConfig() {
+      try {
+        localStorage.setItem(CANISTER_CACHE_KEY, JSON.stringify({
+          tokens: this.supportedTokens,
+          lastUpdated: Date.now()
+        }));
+        localStorage.setItem(CANISTER_LAST_REFRESH_KEY, Date.now().toString());
+      } catch (error) {
+        console.error('Error saving canister config to cache:', error);
+      }
+    },
+    
+    /**
+     * Perform background initialization
+     */
+    async backgroundInitialize(identity) {
+      console.log('Initializing HttpAgent in background...');
+      
+      // Create agent
+      const agent = new HttpAgent({ identity, host });
+      this.agent = agent;
+      
+      // Fetch root key for local development
+      if (isLocal) {
+        console.log('Fetching root key for local development...');
+        await agent.fetchRootKey();
+      }
+      
+      // Initialize token service to ensure tokens are loaded
+      await tokenService.initialize(identity, host);
+      
+      // Get tokens and handle potential errors
+      try {
+        const tokens = tokenService.getSupportedTokens();
+        if (Array.isArray(tokens) && tokens.length > 0) {
+          this.supportedTokens = tokens;
+        }
+      } catch (tokenError) {
+        console.warn('Error getting tokens from TokenService:', tokenError);
+      }
+      
+      // Initialize all canisters with error handling for each
+      try {
         canisters.cosmicrafts = createActorBackend(this.canisterIds.cosmicrafts, { agent });
-        
+      } catch (error) {
+        console.error('Error creating cosmicrafts actor:', error);
+      }
+      
+      try {
         canisters.roadmap = createActorRoadmap(this.canisterIds.roadmap, { agent });
-        
-        // Initialize marketplace canister
+      } catch (error) {
+        console.error('Error creating roadmap actor:', error);
+      }
+      
+      try {
         console.log(`Creating actor for marketplace with ID: ${this.canisterIds.marketplace}`);
         canisters.marketplace = createActorMarketplace(this.canisterIds.marketplace, { agent });
-        console.log(`Marketplace actor created:`, canisters.marketplace);
-        
-        // Initialize ICP ledger canister using direct Actor interface
-        try {
-          console.log(`Creating ICP Ledger direct actor with ID: ${this.canisterIds.ledger}`);
-          canisters.ledger = Actor.createActor(icpLedgerIDL, {
-            agent,
-            canisterId: this.canisterIds.ledger,
-          });
-          console.log(`Direct ledger actor created successfully`);
-        } catch (error) {
-          console.error('Failed to initialize ledger canister:', error);
-        }
-        
-        // Initialize token ledgers using TokenService
-        // (TokenService already does this during initialize)
-        
-        initializing = false;
+      } catch (error) {
+        console.error('Error creating marketplace actor:', error);
       }
+      
+      // Initialize ICP ledger canister using direct Actor interface
+      try {
+        console.log(`Creating ICP Ledger direct actor with ID: ${this.canisterIds.ledger}`);
+        canisters.ledger = Actor.createActor(icpLedgerIDL, {
+          agent,
+          canisterId: this.canisterIds.ledger,
+        });
+      } catch (error) {
+        console.error('Failed to initialize ledger canister:', error);
+      }
+      
+      // Save updated data to cache
+      this.saveCachedCanisterConfig();
+      
+      // Update initialization timestamp
+      lastInitialized = Date.now();
+      console.log('Background initialization completed successfully');
     },
     
     /**
@@ -158,7 +298,7 @@ export const useCanisterStore = defineStore('canister', {
      */
     async getTokenBalance(symbol = 'ICP') {
       try {
-        // Wait for agent and tokens to initialize if not already
+        // Ensure we have some agents initialized
         await this.initializeAgents();
         
         // Get user principal
@@ -188,6 +328,9 @@ export const useCanisterStore = defineStore('canister', {
      */
     async transferTokens(recipient, amount, tokenSymbol = 'ICP') {
       try {
+        // Ensure we have agent initialized
+        await this.initializeAgents();
+        
         // Use TokenService for transfers
         return tokenService.transfer(recipient, amount, tokenSymbol);
       } catch (error) {
@@ -258,18 +401,40 @@ export const useCanisterStore = defineStore('canister', {
       return this.tokenToSmallestUnit(icp, 'ICP');
     },
 
+    /**
+     * Get a canister actor - will initialize if needed
+     * @param {string} canisterName - Name of the canister
+     * @returns {Promise<Object>} - Canister actor
+     */
     async get(canisterName) {
-      // Initialize if not already done
+      // Initialize if needed and return right away with cached instance if available
       if (!canisters[canisterName]) {
         await this.initializeAgents();
       }
 
-      // Wait for initialization to complete
-      while (initializing) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+      // If we have a canister, return it immediately
+      if (canisters[canisterName]) {
+        return canisters[canisterName];
       }
-
-      return canisters[canisterName];
+      
+      // If still initializing, wait for it
+      if (initializing) {
+        console.log(`Waiting for ${canisterName} canister to initialize...`);
+        let attempts = 0;
+        while (initializing && attempts < 50) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          attempts++;
+          
+          // If canister becomes available while waiting, return it
+          if (canisters[canisterName]) {
+            return canisters[canisterName];
+          }
+        }
+      }
+      
+      // If we get here, the canister is still not available
+      console.warn(`Canister ${canisterName} not available after waiting`);
+      return null;
     },
   },
 });

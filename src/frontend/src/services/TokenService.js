@@ -7,6 +7,12 @@ import { Principal } from '@dfinity/principal';
 const ICP_LEDGER_CANISTER_ID = 'ryjl3-tyaaa-aaaaa-aaaba-cai';
 const COSMIC_TOKEN_CANISTER_ID = 'opcce-byaaa-aaaak-qcgda-cai'; // Replace with your token's canister ID
 
+// Cache keys
+const TOKEN_CACHE_KEY = 'cosmicrafts-token-cache';
+const TOKEN_CONFIGS_KEY = 'cosmicrafts-token-configs';
+const TOKEN_BALANCES_KEY = 'cosmicrafts-token-balances';
+const TOKEN_LAST_REFRESH_KEY = 'cosmicrafts-token-last-refresh';
+
 class TokenService {
   constructor() {
     this.agent = null;
@@ -14,70 +20,228 @@ class TokenService {
     this.tokenLedgers = new Map();
     this.tokenConfigs = new Map();
     this.supportedTokens = [];
+    this.initialized = false;
+    this.initializing = false;
+    this.lastRefresh = 0;
+    
+    // Set up default ICP token immediately to avoid UI delays
+    const defaultIcp = {
+      symbol: 'ICP',
+      name: 'Internet Computer Protocol',
+      standard: 'icp',
+      decimals: 8,
+      canisterId: ICP_LEDGER_CANISTER_ID,
+      fee: '10000' // Store as string for serialization
+    };
+    
+    this.supportedTokens = [defaultIcp];
+    this.tokenConfigs.set('ICP', {
+      ...defaultIcp,
+      fee: BigInt(defaultIcp.fee)
+    });
+    
+    // Load cache in a microtask to avoid blocking the main thread
+    // This prevents CSS loading delays while still maintaining cached data
+    Promise.resolve().then(() => this.loadCachedData());
   }
 
   /**
-   * Initialize the token service
+   * Load cached data immediately (synchronous)
+   */
+  loadCachedData() {
+    try {
+      // Load token configs
+      const cachedConfigs = localStorage.getItem(TOKEN_CONFIGS_KEY);
+      if (cachedConfigs) {
+        const configs = JSON.parse(cachedConfigs);
+        
+        // Convert fee from string to BigInt
+        configs.forEach(config => {
+          this.tokenConfigs.set(config.symbol, {
+            ...config,
+            fee: BigInt(config.fee || '0')
+          });
+        });
+      }
+      
+      // Load supported tokens
+      const cachedTokens = localStorage.getItem(TOKEN_CACHE_KEY);
+      if (cachedTokens) {
+        try {
+          const parsedTokens = JSON.parse(cachedTokens);
+          if (Array.isArray(parsedTokens)) {
+            this.supportedTokens = parsedTokens;
+          } else {
+            console.warn('Cached tokens is not an array, resetting');
+            this.supportedTokens = [];
+          }
+        } catch (e) {
+          console.error('Error parsing cached tokens:', e);
+          this.supportedTokens = [];
+        }
+      }
+      
+      // Load last refresh time
+      const lastRefresh = localStorage.getItem(TOKEN_LAST_REFRESH_KEY);
+      if (lastRefresh) {
+        this.lastRefresh = parseInt(lastRefresh, 10);
+      }
+      
+      console.log('TokenService: Loaded cached data with', 
+                 Array.isArray(this.supportedTokens) ? this.supportedTokens.length : 0, 
+                 'tokens');
+    } catch (error) {
+      console.error('Failed to load cached data:', error);
+      // Ensure supportedTokens is an array
+      this.supportedTokens = [];
+    }
+  }
+  
+  /**
+   * Save current state to cache
+   */
+  saveToCache() {
+    try {
+      // Ensure supportedTokens is an array before saving
+      if (!Array.isArray(this.supportedTokens)) {
+        this.supportedTokens = [];
+      }
+      
+      // Save token configs (convert BigInt to string)
+      const configsToSave = Array.from(this.tokenConfigs.values()).map(config => ({
+        ...config,
+        fee: typeof config.fee === 'bigint' ? config.fee.toString() : config.fee
+      }));
+      
+      localStorage.setItem(TOKEN_CONFIGS_KEY, JSON.stringify(configsToSave));
+      
+      // Save supported tokens (already should be serializable)
+      localStorage.setItem(TOKEN_CACHE_KEY, JSON.stringify(this.supportedTokens));
+      
+      // Save last refresh time
+      localStorage.setItem(TOKEN_LAST_REFRESH_KEY, this.lastRefresh.toString());
+    } catch (error) {
+      console.error('Failed to save to cache:', error);
+    }
+  }
+
+  /**
+   * Initialize the token service - NON-BLOCKING
    * @param {Identity} identity - User identity
    * @param {string} host - Host URL
    */
   async initialize(identity, host = 'https://ic0.app') {
-    console.log('Initializing TokenService...');
-    
-    // Create agent with identity
-    this.agent = new HttpAgent({ identity, host });
-    
-    if (host.includes('127.0.0.1') || host.includes('localhost')) {
-      await this.agent.fetchRootKey();
+    // Return immediately - we already have cached data
+    if (this.initializing) {
+      console.log('TokenService already initializing, skipping duplicate call');
+      return this;
     }
     
-    // Initialize tokens
-    await this.initializeTokens();
+    // Start initializing in the background
+    this.initializing = true;
+    
+    // Check if we need a refresh
+    const shouldRefresh = Date.now() - this.lastRefresh > 5 * 60 * 1000; // 5 minutes
+    
+    if (shouldRefresh) {
+      // Do initialization in the background
+      setTimeout(() => {
+        this.doInitialize(identity, host)
+          .catch(e => console.warn('Background token initialization error:', e));
+      }, 100);
+    } else {
+      console.log('TokenService: Using cached data, refresh not needed');
+    }
     
     return this;
+  }
+  
+  /**
+   * Actual initialization logic - happens in background
+   */
+  async doInitialize(identity, host) {
+    try {
+      console.log('Initializing TokenService...');
+      
+      // Create agent with identity
+      this.agent = new HttpAgent({ identity, host });
+      
+      if (host.includes('127.0.0.1') || host.includes('localhost')) {
+        await this.agent.fetchRootKey();
+      }
+      
+      // Initialize tokens
+      await this.initializeTokens();
+      
+      // Update cache
+      this.lastRefresh = Date.now();
+      this.saveToCache();
+      
+      this.initialized = true;
+      this.initializing = false;
+      
+      console.log('TokenService initialized successfully with', this.supportedTokens.length, 'tokens');
+    } catch (error) {
+      console.error('Error in TokenService initialization:', error);
+      this.initializing = false;
+    }
   }
   
   /**
    * Initialize default tokens
    */
   async initializeTokens() {
-    this.supportedTokens = [];
-    this.tokenConfigs.clear();
-    this.tokenLedgers.clear();
-    
     try {
+      // Ensure supportedTokens is an array
+      if (!Array.isArray(this.supportedTokens)) {
+        this.supportedTokens = [];
+      }
+      
       // Initialize ICP
       console.log('Initializing ICP token...');
       const icpConfig = await this.initializeIcpToken();
-      this.supportedTokens.push(icpConfig);
+      
+      // Find existing ICP in supportedTokens
+      const existingIcpIndex = this.supportedTokens.findIndex(t => t.symbol === 'ICP');
+      if (existingIcpIndex >= 0) {
+        // Update existing token
+        this.supportedTokens[existingIcpIndex] = {
+          ...icpConfig,
+          fee: icpConfig.fee.toString()
+        };
+      } else {
+        // Add new token
+        this.supportedTokens.push({
+          ...icpConfig,
+          fee: icpConfig.fee.toString()
+        });
+      }
       
       // Initialize COSMIC token
       try {
         console.log('Initializing COSMIC token...');
         const cosmicConfig = await this.initializeIcrcToken(COSMIC_TOKEN_CANISTER_ID);
-        this.supportedTokens.push(cosmicConfig);
+        
+        // Find existing COSMIC token
+        const existingIndex = this.supportedTokens.findIndex(t => t.canisterId === COSMIC_TOKEN_CANISTER_ID);
+        if (existingIndex >= 0) {
+          // Update existing token
+          this.supportedTokens[existingIndex] = {
+            ...cosmicConfig,
+            fee: cosmicConfig.fee.toString()
+          };
+        } else {
+          // Add new token
+          this.supportedTokens.push({
+            ...cosmicConfig,
+            fee: cosmicConfig.fee.toString()
+          });
+        }
       } catch (error) {
         console.error('Failed to initialize COSMIC token:', error);
       }
-      
-      console.log(`Initialized ${this.supportedTokens.length} tokens:`, this.supportedTokens);
     } catch (error) {
       console.error('Failed to initialize tokens:', error);
-      
-      // Add a fallback ICP token if initialization fails
-      if (this.supportedTokens.length === 0) {
-        const fallbackIcp = {
-          symbol: 'ICP',
-          name: 'Internet Computer Protocol',
-          standard: 'icp',
-          decimals: 8,
-          canisterId: ICP_LEDGER_CANISTER_ID,
-          fee: BigInt(10000)
-        };
-        
-        this.supportedTokens.push(fallbackIcp);
-        this.tokenConfigs.set('ICP', fallbackIcp);
-      }
     }
   }
   
@@ -138,8 +302,6 @@ class TokenService {
         if (!tokenInfo) {
           throw new Error('Failed to map token metadata');
         }
-        
-        console.log('Metadata successfully mapped:', tokenInfo);
       } catch (metadataError) {
         console.warn('Error with metadata mapping:', metadataError);
         
@@ -164,13 +326,11 @@ class TokenService {
           };
           
           tokenInfo = {
-            symbol: findValue('icrc1:symbol'),
-            name: findValue('icrc1:name'),
-            decimals: Number(findValue('icrc1:decimals')),
+            symbol: findValue('icrc1:symbol') || 'UNKNOWN',
+            name: findValue('icrc1:name') || 'Unknown Token',
+            decimals: Number(findValue('icrc1:decimals')) || 8,
             logo: findValue('icrc1:logo')
           };
-          
-          console.log('Manually parsed metadata:', tokenInfo);
         } catch (fallbackError) {
           console.error('Failed to parse metadata manually:', fallbackError);
           throw fallbackError;
@@ -220,9 +380,22 @@ class TokenService {
         return existing;
       }
       
+      // Make sure we're initialized
+      if (!this.agent) {
+        throw new Error('TokenService not initialized yet');
+      }
+      
       // Initialize as ICRC token
       const tokenConfig = await this.initializeIcrcToken(canisterId);
-      this.supportedTokens.push(tokenConfig);
+      
+      // Add to supported tokens list (with string fee for serialization)
+      this.supportedTokens.push({
+        ...tokenConfig,
+        fee: tokenConfig.fee.toString()
+      });
+      
+      // Update cache
+      this.saveToCache();
       
       return tokenConfig;
     } catch (error) {
@@ -237,17 +410,79 @@ class TokenService {
    * @param {string} symbol - Token symbol
    */
   async getBalance(principalId, symbol = 'ICP') {
-    const principal = Principal.fromText(principalId);
     const tokenConfig = this.tokenConfigs.get(symbol);
     
     if (!tokenConfig) {
       throw new Error(`Token ${symbol} not supported`);
     }
     
-    if (tokenConfig.standard === 'icp') {
-      return this.getIcpBalance(principal);
-    } else {
-      return this.getIcrcBalance(principal, tokenConfig.canisterId);
+    // Try to get from cache first
+    const cachedBalances = localStorage.getItem(TOKEN_BALANCES_KEY);
+    let cachedBalance;
+    
+    if (cachedBalances) {
+      try {
+        const balances = JSON.parse(cachedBalances);
+        const key = `${principalId}_${symbol}`;
+        if (balances[key]) {
+          cachedBalance = BigInt(balances[key]);
+        }
+      } catch (e) {
+        console.warn('Error parsing cached balances:', e);
+      }
+    }
+    
+    // If agent is not initialized or initializing, return cached balance
+    if (!this.agent || !this.initialized) {
+      if (cachedBalance) {
+        console.log(`Using cached balance for ${symbol}: ${cachedBalance}`);
+        
+        // Try to initialize in background if needed
+        if (!this.initializing && !this.initialized) {
+          console.log('Triggering background initialization from getBalance');
+          setTimeout(() => {
+            this.initialize()
+              .catch(e => console.warn('Error in background initialization:', e));
+          }, 0);
+        }
+        
+        return cachedBalance;
+      }
+      
+      // No cached balance, return 0 for now
+      return BigInt(0);
+    }
+    
+    // Get live balance
+    try {
+      const principal = Principal.fromText(principalId);
+      let balance;
+      
+      if (tokenConfig.standard === 'icp') {
+        balance = await this.getIcpBalance(principal);
+      } else {
+        balance = await this.getIcrcBalance(principal, tokenConfig.canisterId);
+      }
+      
+      // Update cache
+      const cachedBalances = localStorage.getItem(TOKEN_BALANCES_KEY);
+      let balances = {};
+      
+      if (cachedBalances) {
+        try {
+          balances = JSON.parse(cachedBalances);
+        } catch (e) {}
+      }
+      
+      balances[`${principalId}_${symbol}`] = balance.toString();
+      localStorage.setItem(TOKEN_BALANCES_KEY, JSON.stringify(balances));
+      
+      return balance;
+    } catch (error) {
+      console.error(`Error getting ${symbol} balance:`, error);
+      
+      // Return cached balance if available, otherwise 0
+      return cachedBalance || BigInt(0);
     }
   }
   
@@ -257,6 +492,10 @@ class TokenService {
    */
   async getIcpBalance(principal) {
     try {
+      if (!this.icpLedger) {
+        throw new Error('ICP ledger not initialized');
+      }
+      
       // Create account identifier from principal
       const accountIdentifier = AccountIdentifier.fromPrincipal({ principal });
       
@@ -303,6 +542,10 @@ class TokenService {
    */
   async transferIcp(to, amount) {
     try {
+      if (!this.icpLedger) {
+        throw new Error('ICP ledger not initialized');
+      }
+      
       let accountIdentifier;
       
       if (typeof to === 'string') {
@@ -391,6 +634,11 @@ class TokenService {
    * @param {string} symbol - Token symbol
    */
   async transfer(to, amount, symbol = 'ICP') {
+    // Make sure we're initialized
+    if (!this.initialized && !this.initializing) {
+      await this.initialize();
+    }
+    
     const tokenConfig = this.tokenConfigs.get(symbol);
     
     if (!tokenConfig) {
@@ -451,7 +699,24 @@ class TokenService {
    * Get list of supported tokens
    */
   getSupportedTokens() {
-    return [...this.supportedTokens];
+    // Ensure we return an array even if supportedTokens isn't initialized properly
+    return Array.isArray(this.supportedTokens) ? [...this.supportedTokens] : [];
+  }
+
+  /**
+   * Get account ID from a principal
+   * @param {string} principalId - Principal in text format
+   * @returns {string} Account ID in hex format
+   */
+  getPrincipalAccountId(principalId) {
+    try {
+      const principal = Principal.fromText(principalId);
+      const accountIdentifier = AccountIdentifier.fromPrincipal({ principal });
+      return accountIdentifier.toHex();
+    } catch (error) {
+      console.error('Error converting principal to account ID:', error);
+      throw error;
+    }
   }
 }
 
