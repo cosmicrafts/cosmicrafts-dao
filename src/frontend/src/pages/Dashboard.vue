@@ -17,7 +17,11 @@
 
     <!-- Dashboard Content -->
     <div v-else class="dashboard-content">
-      <!-- Dashboard Header -->
+      <!-- 
+        STICKY FEATURE: Personal Identity
+        Avatar and welcome message create a personalized experience that
+        makes users feel recognized and valued.
+      -->
       <div class="dashboard-header">
         <div class="welcome-container">
           <div class="welcome-avatar" :data-level="player?.level || 1">
@@ -44,6 +48,10 @@
                 <span class="user-stat-value">{{ player?.title || 'Recruit' }}</span>
               </div>
             </div>
+            <!-- 
+              STICKY FEATURE: Web3 Identity
+              Blockchain principal ID creates a bridge between social and web3 identities.
+            -->
             <div class="principal-container">
               <span class="principal-label">{{ t('dashboard.principal') }}</span>
               <span class="principal-value">{{ formattedPrincipal }}</span>
@@ -56,15 +64,19 @@
         </div>
       </div>
 
-      <!-- Tab Navigation -->
+      <!-- 
+        STICKY FEATURE: Multi-faceted Engagement
+        Tabs offer diverse ways to engage with the platform,
+        catering to different user motivations.
+      -->
       <div class="dashboard-tabs">
         <button 
           class="tab-button" 
-          :class="{ active: activeTab === 'overview' }"
-          @click="setActiveTab('overview')"
+          :class="{ active: activeTab === 'analytics' }"
+          @click="setActiveTab('analytics')"
         >
-          <i class="fas fa-home"></i>
-          <span>{{ t('dashboard.tabs.overview') }}</span>
+          <i class="fas fa-chart-line"></i>
+          <span>{{ t('dashboard.tabs.analytics') }}</span>
         </button>
         <button 
           class="tab-button" 
@@ -94,137 +106,163 @@
 
       <!-- Tab Content -->
       <div class="tab-content">
-        <!-- Overview Tab -->
-        <div v-if="activeTab === 'overview'" class="tab-panel">
+        <!-- Analytics Tab -->
+        <div v-if="activeTab === 'analytics'" class="tab-panel">
+          <!-- 
+            STICKY FEATURE: Achievement Metrics
+            Stats and performance metrics quantify success and progress,
+            creating a sense of accomplishment and investment.
+          -->
           <div class="stats-grid">
-            <!-- Player Card -->
-            <div class="stat-card player-card">
-              <div class="player-avatar">
-                <img 
-                  :src="getAvatarUrl(avatarId)"
-                  :alt="username"
-                  @error="$event.target.src = avatar1"
-                >
+            <!-- Engagement Analytics Card -->
+            <div class="stat-card engagement-card">
+              <div class="card-icon">
+                <i class="fas fa-chart-bar"></i>
               </div>
-              <div class="player-info">
-                <h3>{{ username }}</h3>
-                <div class="player-stats">
-                  <div class="stat">
-                    <span class="label">{{ t('dashboard.stats.level') }}</span>
-                    <span class="value">{{ player?.level || 1 }}</span>
+              <div class="card-content">
+                <h3>{{ t('dashboard.cards.engagement.title') }}</h3>
+                <div class="stat-value">{{ engagementStats.postCount }}</div>
+                <p>{{ t('dashboard.cards.engagement.posts') }}</p>
+                <div class="stat-detail-row">
+                  <div class="stat-detail">
+                    <span class="detail-icon">❤️</span>
+                    <span class="detail-value">{{ engagementStats.totalLikes }}</span>
+                    <span class="detail-label">{{ t('dashboard.cards.engagement.likes') }}</span>
                   </div>
-                  <div class="stat">
-                    <span class="label">{{ t('dashboard.stats.multiplier') }}</span>
-                    <span class="value">{{ formatMultiplier(playerMultiplier) }}x</span>
-                  </div>
-                  <div class="stat">
-                    <span class="label">{{ t('dashboard.stats.rank') }}</span>
-                    <span class="value">{{ player?.title || 'Recruit' }}</span>
+                  <div class="stat-detail">
+                    <span class="detail-icon">💬</span>
+                    <span class="detail-value">{{ engagementStats.totalComments }}</span>
+                    <span class="detail-label">{{ t('dashboard.cards.engagement.comments') }}</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Referral Code Card -->
-            <div class="stat-card" @click="setActiveTab('referrals')">
+            <!-- Post Reach Analytics Card -->
+            <div class="stat-card reach-card">
               <div class="card-icon">
-                <i class="fas fa-link"></i>
+                <i class="fas fa-bullseye"></i>
               </div>
               <div class="card-content">
-                <h3>{{ t('dashboard.cards.referralCode.title') }}</h3>
-                <div class="stat-value code-value">{{ formattedReferralCode }}</div>
-                <p>{{ t('dashboard.cards.referralCode.shareToEarn') }}</p>
+                <h3>{{ t('dashboard.cards.reach.title') }}</h3>
+                <div class="stat-value">{{ engagementStats.totalViews }}</div>
+                <p>{{ t('dashboard.cards.reach.views') }}</p>
+                <div class="chart-container">
+                  <div class="chart-bar" v-for="(item, i) in reachData" :key="i">
+                    <div class="bar-fill" :style="{ height: `${item.value}%` }"></div>
+                    <div class="bar-label">{{ item.label }}</div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- Network Card -->
-            <div class="stat-card" @click="setActiveTab('referrals')">
+            <!-- Content Performance Card -->
+            <div class="stat-card performance-card">
+              <div class="card-icon">
+                <i class="fas fa-rocket"></i>
+              </div>
+              <div class="card-content">
+                <h3>{{ t('dashboard.cards.performance.title') }}</h3>
+                <div class="performance-metric">
+                  <div class="metric-label">{{ t('dashboard.cards.performance.bestPost') }}</div>
+                  <div class="metric-value">{{ topPost.likes }} {{ t('dashboard.cards.performance.likes') }}</div>
+                  <div class="post-preview">
+                    <p class="post-preview-text">{{ truncateText(topPost.content, 60) }}</p>
+                  </div>
+                </div>
+                <div class="performance-metric">
+                  <div class="metric-label">{{ t('dashboard.cards.performance.engagement') }}</div>
+                  <div class="metric-value">{{ engagementStats.engagementRate }}%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Network Growth Card -->
+            <div class="stat-card network-card">
               <div class="card-icon">
                 <i class="fas fa-project-diagram"></i>
               </div>
               <div class="card-content">
                 <h3>{{ t('dashboard.cards.network.title') }}</h3>
-                <div class="stat-value">{{ totalReferralCount }}</div>
-                <p>{{ t('dashboard.cards.network.totalReferrals') }}</p>
-              </div>
-            </div>
-
-            <!-- Rewards Card -->
-            <div class="stat-card" @click="setActiveTab('rewards')">
-              <div class="card-icon">
-                <i class="fas fa-gift"></i>
-              </div>
-              <div class="card-content">
-                <h3>{{ t('dashboard.cards.multiplierBonus.title') }}</h3>
-                <div class="stat-value bonus-value">{{ calculateBonusPercentage(playerMultiplier) }}%</div>
-                <p>{{ t('dashboard.cards.multiplierBonus.explanation') }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Referral Tiers Summary -->
-          <div class="tiers-section">
-            <h3>{{ t('dashboard.referrals.referralTiers') }}</h3>
-            <div class="tiers-grid">
-              <div class="tier-card direct-tier">
-                <div class="tier-icon">
-                  <i class="fas fa-users"></i>
-                </div>
-                <div class="tier-content">
-                  <h4>{{ t('dashboard.referrals.directReferrals') }}</h4>
-                  <div class="tier-count">{{ directReferrals.length }}</div>
-                  <div class="tier-info">
-                    <div class="tier-bonus">{{ t(`dashboard.referrals.bonusLabels.direct.tier${getDirectTier(directReferrals.length)}`) }}</div>
+                <div class="stat-value">{{ networkStats.totalFollowers }}</div>
+                <p>{{ t('dashboard.cards.network.followers') }}</p>
+                <div class="chart-container">
+                  <div class="trend-chart">
+                    <div class="trend-point" v-for="(point, i) in growthData" :key="i"
+                      :style="{ bottom: `${point}%`, left: `${i * (100 / (growthData.length - 1))}%` }">
+                    </div>
+                    <div class="trend-line"></div>
                   </div>
-                </div>
-              </div>
-              
-              <div class="tier-card indirect-tier">
-                <div class="tier-icon">
-                  <i class="fas fa-project-diagram"></i>
-                </div>
-                <div class="tier-content">
-                  <h4>{{ t('dashboard.referrals.indirectReferrals') }}</h4>
-                  <div class="tier-count">{{ indirectReferrals.length }}</div>
-                  <div class="tier-info">
-                    <div class="tier-bonus">{{ t(`dashboard.referrals.bonusLabels.indirect.tier${getIndirectTier(indirectReferrals.length)}`) }}</div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="tier-card beyond-tier">
-                <div class="tier-icon">
-                  <i class="fas fa-network-wired"></i>
-                </div>
-                <div class="tier-content">
-                  <h4>{{ t('dashboard.referrals.beyondReferrals') }}</h4>
-                  <div class="tier-count">{{ beyondReferrals.length }}</div>
-                  <div class="tier-info">
-                    <div class="tier-bonus">{{ t(`dashboard.referrals.bonusLabels.beyond.tier${getBeyondTier(beyondReferrals.length)}`) }}</div>
+                  <div class="trend-labels">
+                    <span>{{ networkStats.followerGrowth >= 0 ? '+' : '' }}{{ networkStats.followerGrowth }}</span>
+                    <span>{{ t('dashboard.cards.network.lastMonth') }}</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Recent Referrals -->
+          <!-- 
+            STICKY FEATURE: Activity Timeline
+            Recent activity shows platform engagement, creating FOMO
+            and encouraging further interactions.
+          -->
           <div class="activity-section">
-            <h3>{{ t('dashboard.referrals.recentReferrals') }}</h3>
-            <div class="activity-list" v-if="totalReferralCount > 0">
-              <div class="activity-item" v-for="(referral, index) in getRecentReferrals(5)" :key="index">
-                <div class="referral-avatar">
-                  <img :src="getAvatarUrl(1)" :alt="referral.id">
+            <h3>{{ t('dashboard.recentActivity') }}</h3>
+            <div class="activity-filter">
+              <button 
+                v-for="filter in ['all', 'posts', 'likes', 'comments']" 
+                :key="filter"
+                :class="{ active: activityFilter === filter }"
+                @click="activityFilter = filter"
+                class="filter-btn"
+              >
+                {{ t(`dashboard.activity.filter.${filter}`) }}
+              </button>
+            </div>
+            <div class="activity-timeline">
+              <div v-for="(activity, index) in filteredActivities" :key="index" class="activity-item">
+                <div class="activity-icon" :class="activity.type">
+                  <i :class="getActivityIcon(activity.type)"></i>
                 </div>
-                <div class="activity-details">
-                  <p class="activity-text">{{ formatReferralUsername(referral.id) }}</p>
-                  <p class="activity-type">{{ t(`dashboard.referrals.referralTypes.${referral.type.toLowerCase()}`) }}</p>
+                <div class="activity-content">
+                  <div class="activity-text" v-html="formatActivityText(activity)"></div>
+                  <div class="activity-time">{{ formatActivityTime(activity.timestamp) }}</div>
+                </div>
+                <div class="activity-action">
+                  <button class="view-btn" @click="navigateToPost(activity.target.id)">
+                    <i class="fas fa-external-link-alt"></i>
+                  </button>
                 </div>
               </div>
+              <div v-if="filteredActivities.length === 0" class="empty-activity">
+                <i class="fas fa-history empty-icon"></i>
+                <p>{{ t('dashboard.activity.empty') }}</p>
+              </div>
             </div>
-            <div class="empty-state" v-else>
-              <i class="fas fa-user-plus empty-icon"></i>
-              <p>{{ t('dashboard.referrals.noReferrals') }}</p>
-              <p>{{ t('dashboard.referrals.shareYourCode') }}</p>
+            <div v-if="filteredActivities.length > 0" class="load-more-container">
+              <button class="load-more-btn" @click="loadMoreActivities">
+                {{ t('dashboard.loadMore') }}
+              </button>
+            </div>
+          </div>
+
+          <!-- 
+            STICKY FEATURE: Growth Guidance
+            Tips provide clear next steps for users to improve, keeping them engaged.
+          -->
+          <div class="tips-section">
+            <h3>{{ t('dashboard.growthTips.title') }}</h3>
+            <div class="tips-grid">
+              <div class="tip-card" v-for="(tip, index) in growthTips" :key="index">
+                <div class="tip-icon">
+                  <i :class="tip.icon"></i>
+                </div>
+                <div class="tip-content">
+                  <h4>{{ tip.title }}</h4>
+                  <p>{{ tip.description }}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -248,7 +286,10 @@
 
           <!-- Referral Content -->
           <div v-else class="referral-content">
-            <!-- Referral Code Card -->
+            <!-- 
+              STICKY FEATURE: Network Building (Virality)
+              Referral codes create viral growth loops by incentivizing users to invite others.
+            -->
             <div class="referral-code-card">
               <h3>{{ t('dashboard.yourReferralCode') }}</h3>
               <p>{{ t('dashboard.shareCodeSubtext') }}</p>
@@ -260,6 +301,10 @@
                 </button>
               </div>
               
+              <!-- 
+                STICKY FEATURE: Cross-Platform Sharing
+                Social share buttons make it easy to spread referrals across other platforms.
+              -->
               <div class="social-share">
                 <button class="social-button" @click="shareReferralCode('twitter')">
                   <i class="fab fa-twitter"></i>
@@ -276,7 +321,10 @@
               </div>
             </div>
 
-            <!-- Referral Stats -->
+            <!-- 
+              STICKY FEATURE: Reward Incentives
+              Multiplier and referral stats create motivation to build network for rewards.
+            -->
             <div class="referral-stats-grid">
               <!-- Multiplier Card -->
               <div class="stat-card multiplier-card">
@@ -327,7 +375,10 @@
               </div>
             </div>
 
-            <!-- Referral Tree -->
+            <!-- 
+              STICKY FEATURE: Network Visualization
+              Referral tree visualization creates pride in network growth.
+            -->
             <div class="referral-tree-section">
               <h3>{{ t('dashboard.referralTree') }}</h3>
               <div class="referral-tree">
@@ -361,7 +412,10 @@
               </div>
             </div>
 
-            <!-- Referral Lists -->
+            <!-- 
+              STICKY FEATURE: Community Growth
+              Referral lists showcase the user's impact on platform growth.
+            -->
             <div class="referral-lists">
               <!-- Direct Referrals -->
               <div class="referral-section" v-if="directReferrals.length">
@@ -421,7 +475,10 @@
           </div>
         </div>
 
-        <!-- Rewards Tab -->
+        <!-- 
+          STICKY FEATURE: Future Engagement Hooks
+          Coming soon sections create anticipation for future features.
+        -->
         <div v-if="activeTab === 'rewards'" class="tab-panel">
           <div class="coming-soon">
             <i class="fas fa-trophy"></i>
@@ -430,7 +487,6 @@
           </div>
         </div>
 
-        <!-- Settings Tab -->
         <div v-if="activeTab === 'settings'" class="tab-panel">
           <div class="coming-soon">
             <i class="fas fa-tools"></i>
@@ -485,7 +541,7 @@ const isLoading = ref(true);
 const error = ref(null);
 
 // Dashboard state
-const activeTab = ref('overview');
+const activeTab = ref('analytics');
 const activeReferralTab = ref('direct');
 
 // Referral state
@@ -502,6 +558,109 @@ const playerMultiplier = ref(1.0);
 
 // Principal ID utilities
 const copySuccess = ref(false);
+
+// Add social media engagement stats (mock data for now)
+const engagementStats = ref({
+  postCount: 42,
+  totalLikes: 384,
+  totalComments: 128,
+  totalViews: 2547,
+  engagementRate: 8.2
+});
+
+// Network stats
+const networkStats = ref({
+  totalFollowers: 156,
+  followerGrowth: 23,
+  following: 89
+});
+
+// Top performing post
+const topPost = ref({
+  id: 'post1',
+  content: 'Just discovered an amazing new strategy in #CosmicCrafts that boosted my resource collection by 200%!',
+  likes: 54,
+  comments: 12
+});
+
+// Chart data
+const reachData = ref([
+  { label: 'Mon', value: 45 },
+  { label: 'Tue', value: 60 },
+  { label: 'Wed', value: 75 },
+  { label: 'Thu', value: 65 },
+  { label: 'Fri', value: 85 },
+  { label: 'Sat', value: 90 },
+  { label: 'Sun', value: 70 }
+]);
+
+const growthData = ref([20, 25, 30, 35, 45, 50, 65]);
+
+// Activity data
+const activityFilter = ref('all');
+const userActivities = ref([
+  {
+    id: 'act1',
+    type: 'post',
+    timestamp: Date.now() - 2 * 3600000,
+    actor: { id: 'self', name: 'You' },
+    target: { id: 'post1', content: 'Just hit level 100 in the game! #Milestone' }
+  },
+  {
+    id: 'act2',
+    type: 'like',
+    timestamp: Date.now() - 5 * 3600000,
+    actor: { id: 'user1', name: 'CosmicChampion' },
+    target: { id: 'post1', content: 'Just hit level 100 in the game! #Milestone' }
+  },
+  {
+    id: 'act3',
+    type: 'comment',
+    timestamp: Date.now() - 8 * 3600000,
+    actor: { id: 'user2', name: 'GalacticWarrior' },
+    target: { id: 'post1', content: 'Just hit level 100 in the game! #Milestone' },
+    data: { comment: 'Congratulations! That\'s impressive!' }
+  },
+  {
+    id: 'act4',
+    type: 'post',
+    timestamp: Date.now() - 24 * 3600000,
+    actor: { id: 'self', name: 'You' },
+    target: { id: 'post2', content: 'Looking for team members for the upcoming tournament!' }
+  },
+  {
+    id: 'act5',
+    type: 'comment',
+    timestamp: Date.now() - 30 * 3600000,
+    actor: { id: 'user3', name: 'StarDestroyer' },
+    target: { id: 'post2', content: 'Looking for team members for the upcoming tournament!' },
+    data: { comment: 'I\'d like to join! My character is level as well.' }
+  }
+]);
+
+// Growth tips
+const growthTips = ref([
+  {
+    icon: 'fas fa-calendar-day',
+    title: t('dashboard.growthTips.consistency'),
+    description: t('dashboard.growthTips.consistencyDesc')
+  },
+  {
+    icon: 'fas fa-hashtag',
+    title: t('dashboard.growthTips.hashtags'),
+    description: t('dashboard.growthTips.hashtagsDesc')
+  },
+  {
+    icon: 'fas fa-comment-dots',
+    title: t('dashboard.growthTips.engage'),
+    description: t('dashboard.growthTips.engageDesc')
+  },
+  {
+    icon: 'fas fa-users',
+    title: t('dashboard.growthTips.collaborate'),
+    description: t('dashboard.growthTips.collaborateDesc')
+  }
+]);
 
 // Computed properties
 const isAuthenticated = computed(() => authStore.isAuthenticated());
@@ -782,6 +941,111 @@ const getBeyondTier = (count) => {
   if (count <= 100) return '2';
   return '3';
 };
+
+// Computed for filtered activities
+const filteredActivities = computed(() => {
+  if (activityFilter.value === 'all') {
+    return userActivities.value;
+  }
+  return userActivities.value.filter(activity => activity.type === activityFilter.value);
+});
+
+// Helper methods
+const truncateText = (text, maxLength) => {
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
+};
+
+const getActivityIcon = (type) => {
+  switch (type) {
+    case 'post': return 'fas fa-pen';
+    case 'like': return 'fas fa-heart';
+    case 'comment': return 'fas fa-comment';
+    case 'follow': return 'fas fa-user-plus';
+    default: return 'fas fa-star';
+  }
+};
+
+const formatActivityText = (activity) => {
+  const actorName = `<span class="actor-name">${activity.actor.name}</span>`;
+  
+  switch (activity.type) {
+    case 'post':
+      if (activity.actor.id === 'self') {
+        return `${t('dashboard.activity.youPosted')} "${truncateText(activity.target.content, 40)}"`;
+      }
+      return `${actorName} ${t('dashboard.activity.posted')} "${truncateText(activity.target.content, 40)}"`;
+    
+    case 'like':
+      if (activity.actor.id === 'self') {
+        return `${t('dashboard.activity.youLiked')} "${truncateText(activity.target.content, 40)}"`;
+      }
+      return `${actorName} ${t('dashboard.activity.liked')} "${truncateText(activity.target.content, 40)}"`;
+    
+    case 'comment':
+      if (activity.actor.id === 'self') {
+        return `${t('dashboard.activity.youCommented')} "${truncateText(activity.data.comment, 40)}" ${t('dashboard.activity.on')} "${truncateText(activity.target.content, 30)}"`;
+      }
+      return `${actorName} ${t('dashboard.activity.commented')} "${truncateText(activity.data.comment, 40)}" ${t('dashboard.activity.on')} "${truncateText(activity.target.content, 30)}"`;
+    
+    default:
+      return `${actorName} ${t('dashboard.activity.interacted')} "${truncateText(activity.target.content, 40)}"`;
+  }
+};
+
+const formatActivityTime = (timestamp) => {
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diffMs = now - date;
+  
+  // Convert to seconds, minutes, hours, and days
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHrs = Math.floor(diffMin / 60);
+  const diffDays = Math.floor(diffHrs / 24);
+  
+  if (diffSec < 60) {
+    return t('dashboard.time.justNow');
+  } else if (diffMin < 60) {
+    return `${diffMin}${t('dashboard.time.min')}`;
+  } else if (diffHrs < 24) {
+    return `${diffHrs}${t('dashboard.time.hr')}`;
+  } else if (diffDays < 7) {
+    return `${diffDays}${t('dashboard.time.day')}`;
+  } else {
+    return date.toLocaleDateString();
+  }
+};
+
+const loadMoreActivities = () => {
+  // TODO: Implement loading more activities from the backend
+  // For now, just add a few more mock activities
+  userActivities.value.push(
+    {
+      id: 'act' + (userActivities.value.length + 1),
+      type: 'like',
+      timestamp: Date.now() - (48 + Math.random() * 24) * 3600000,
+      actor: { id: 'user4', name: 'CosmicVoyager' },
+      target: { id: 'post3', content: 'Found a secret Easter egg in the game!' }
+    },
+    {
+      id: 'act' + (userActivities.value.length + 2),
+      type: 'comment',
+      timestamp: Date.now() - (72 + Math.random() * 24) * 3600000,
+      actor: { id: 'user5', name: 'NebulaHunter' },
+      target: { id: 'post4', content: 'What\'s your favorite spaceship build?' },
+      data: { comment: 'I prefer speed over defense!' }
+    }
+  );
+};
+
+const navigateToPost = (postId) => {
+  // TODO: Implement navigation to the post
+  console.log('Navigating to post:', postId);
+  // For now, navigate to the feed
+  router.push('/feed');
+};
 </script>
 
 <style scoped>
@@ -815,1328 +1079,545 @@ const getBeyondTier = (count) => {
   opacity: 0.15;
 }
 
-.top-left-glow {
-  top: -10%;
-  left: -10%;
-  width: 50vw;
-  height: 50vw;
-  background: radial-gradient(circle, rgba(15, 154, 255, 0.4) 0%, rgba(15, 154, 255, 0) 70%);
-}
-
-.bottom-right-glow {
-  bottom: -10%;
-  right: -10%;
-  width: 60vw;
-  height: 60vw;
-  background: radial-gradient(circle, rgba(155, 89, 182, 0.3) 0%, rgba(155, 89, 182, 0) 70%);
-}
-
-.floating-elements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.floating-element {
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  opacity: 0.1;
-  transform: translateZ(var(--depth)) rotate(var(--rotation));
-  animation: float 15s infinite ease-in-out;
-  animation-delay: var(--delay);
-}
-
-.element-particles {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.element-particles span {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(15, 154, 255, 0.8), 0 0 20px rgba(15, 154, 255, 0.4);
-}
-
-.element-particles span:nth-child(1) {
-  top: 20%;
-  left: 20%;
-  animation: twinkle 4s infinite ease-in-out;
-}
-
-.element-particles span:nth-child(2) {
-  top: 60%;
-  left: 80%;
-  animation: twinkle 6s infinite ease-in-out;
-  animation-delay: 1s;
-}
-
-.element-particles span:nth-child(3) {
-  top: 80%;
-  left: 40%;
-  animation: twinkle 5s infinite ease-in-out;
-  animation-delay: 2s;
-}
-
-.element-particles span:nth-child(4) {
-  top: 30%;
-  left: 60%;
-  animation: twinkle 7s infinite ease-in-out;
-  animation-delay: 3s;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) translateZ(var(--depth)) rotate(var(--rotation));
-  }
-  50% {
-    transform: translateY(-20px) translateZ(var(--depth)) rotate(calc(var(--rotation) + 5deg));
-  }
-}
-
-@keyframes twinkle {
-  0%, 100% {
-    opacity: 0.2;
-    transform: scale(0.8);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
-
-/* Dashboard Content - make sure it's above the background */
-.dashboard-content {
-  position: relative;
-  z-index: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem 3rem;
-}
-
-/* Loading and Error States */
-.loading-container,
-.error-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  gap: 2rem;
-}
-
-.cosmic-loader {
-  width: 4rem;
-  height: 4rem;
-  border: 4px solid rgba(0, 140, 255, 0.2);
-  border-radius: 50%;
-  border-top-color: var(--cosmic-blue, #0f9aff);
-  animation: spin 1s infinite ease-in-out;
-}
-
-.error-icon {
-  font-size: 3rem;
-  color: var(--cosmic-red, #ff3a5e);
-  margin-bottom: 1rem;
-}
-
-/* Dashboard Header */
-.dashboard-header {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  border-radius: 12px;
-  background: var(--cosmic-glass-bg, rgba(25, 35, 45, 0.6));
-  border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.1));
-  box-shadow: var(--cosmic-shadow-sm, 0 4px 6px rgba(0, 0, 0, 0.1));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.welcome-container {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.welcome-avatar {
-  position: relative;
-  width: 4.5rem;
-  height: 4.5rem;
-  flex-shrink: 0;
-}
-
-.welcome-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 2px solid var(--cosmic-blue-light, #61c8ff);
-  box-shadow: var(--cosmic-glow-blue-sm, 0 0 8px rgba(15, 154, 255, 0.4));
-}
-
-.welcome-avatar::after {
-  content: attr(data-level);
-  position: absolute;
-  bottom: -0.5rem;
-  right: -0.5rem;
-  background: linear-gradient(135deg, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  color: white;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.welcome-info {
-  flex: 1;
-}
-
-.welcome-message h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(to right, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  display: inline-block;
-}
-
-.welcome-message p {
-  color: var(--cosmic-text-secondary, #bdc3c7);
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.user-stats {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 0.75rem;
-}
-
-.user-stat {
-  display: flex;
-  flex-direction: column;
-}
-
-.user-stat-label {
-  font-size: 0.75rem;
-  color: var(--cosmic-text-secondary, #bdc3c7);
-  margin-bottom: 0.25rem;
-}
-
-.user-stat-value {
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.multiplier-value {
-  color: var(--cosmic-green, #00c853);
-}
-
-.principal-container {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  max-width: fit-content;
-}
-
-.principal-label {
-  font-size: 0.75rem;
-  color: var(--cosmic-text-secondary, #bdc3c7);
-}
-
-.principal-value {
-  font-family: monospace;
-  font-size: 0.85rem;
-  color: var(--cosmic-blue-light, #61c8ff);
-}
-
-.copy-principal-btn {
-  background: rgba(15, 154, 255, 0.1);
-  border: 1px solid rgba(15, 154, 255, 0.2);
-  color: var(--cosmic-blue, #0f9aff);
-  border-radius: 4px;
-  width: 1.75rem;
-  height: 1.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.copy-principal-btn:hover {
-  background: rgba(15, 154, 255, 0.2);
-}
-
-.copy-success {
-  position: absolute;
-  background: var(--cosmic-green, #00c853);
-  color: white;
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  top: -2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  animation: fadeInOut 2s ease-in-out;
-}
-
-@keyframes fadeInOut {
-  0%, 100% { opacity: 0; }
-  20%, 80% { opacity: 1; }
-}
-
 /* Tab Navigation */
 .dashboard-tabs {
   display: flex;
+  justify-content: flex-start;
   margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   overflow-x: auto;
-  scrollbar-width: none; /* Hide scrollbar for Firefox */
-  background: var(--cosmic-glass-bg, rgba(25, 35, 45, 0.6));
-  border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.1));
-  border-radius: 12px;
-  padding: 0.5rem;
-  box-shadow: var(--cosmic-shadow-sm, 0 4px 6px rgba(0, 0, 0, 0.1));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.dashboard-tabs::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for Chrome/Safari */
+  padding-bottom: 0.5rem;
 }
 
 .tab-button {
-  padding: 0.75rem 1.5rem;
-  background: transparent;
-  border: none;
-  color: var(--cosmic-text-secondary, #bdc3c7);
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  background: transparent;
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.7));
+  border: none;
+  border-radius: 0.5rem 0.5rem 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  white-space: nowrap;
 }
 
-.tab-button i {
-  font-size: 1rem;
+.tab-button:hover {
+  color: var(--cosmic-accent, #0f9aff);
 }
 
 .tab-button.active {
-  color: var(--cosmic-blue, #0f9aff);
-  background: rgba(15, 154, 255, 0.1);
+  color: var(--cosmic-accent, #0f9aff);
+  border-bottom: 3px solid var(--cosmic-accent, #0f9aff);
+  font-weight: 600;
 }
 
-.tab-button:hover:not(.active) {
-  color: var(--cosmic-text-primary, #ffffff);
-  background: rgba(255, 255, 255, 0.05);
+.tab-button i {
+  font-size: 1.1rem;
 }
 
-/* Tab Content */
-.tab-panel {
-  animation: fadeIn 0.3s ease-in-out;
-  background: var(--cosmic-glass-bg, rgba(25, 35, 45, 0.6));
-  border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.1));
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: var(--cosmic-shadow-sm, 0 4px 6px rgba(0, 0, 0, 0.1));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Stats Grid */
+/* Analytics Tab */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .stat-card {
-  background: rgba(25, 35, 45, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
   padding: 1.5rem;
   display: flex;
-  flex-direction: column;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-}
-
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .stat-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15), 0 0 8px rgba(15, 154, 255, 0.4);
-  border-color: rgba(15, 154, 255, 0.3);
-}
-
-.stat-card:hover::before {
-  opacity: 1;
-}
-
-.player-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.player-avatar {
-  width: 4rem;
-  height: 4rem;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 2px solid var(--cosmic-blue-light, #61c8ff);
-  box-shadow: 0 0 8px rgba(15, 154, 255, 0.4);
-  flex-shrink: 0;
-}
-
-.player-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.player-info {
-  flex: 1;
-}
-
-.player-info h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.75rem;
-  font-weight: 700;
-  background: linear-gradient(to right, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.player-stats {
-  display: flex;
-  gap: 1rem;
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
-}
-
-.stat .label {
-  font-size: 0.7rem;
-  color: var(--cosmic-text-secondary, #bdc3c7);
-  margin-bottom: 0.25rem;
-}
-
-.stat .value {
-  font-size: 1rem;
-  font-weight: 700;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 3rem;
   height: 3rem;
-  border-radius: 10px;
-  background: linear-gradient(135deg, rgba(15, 154, 255, 0.15), rgba(155, 89, 182, 0.15));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: var(--cosmic-blue, #0f9aff);
-  margin-bottom: 1rem;
-}
-
-.card-content h3 {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-}
-
-.stat-value {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(to right, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  display: inline-block;
-}
-
-.code-value {
-  font-family: monospace;
-  letter-spacing: 1px;
-}
-
-.bonus-value {
-  background: linear-gradient(135deg, #00ff87, #60efff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.card-content p {
-  font-size: 0.8rem;
-  color: var(--cosmic-text-secondary, #bdc3c7);
-  margin-bottom: 0.75rem;
-}
-
-.progress-bar {
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-top: 0.5rem;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  border-radius: 3px;
-  transition: width 0.5s ease;
-}
-
-/* Activity Section */
-.activity-section, 
-.referral-list-section,
-.tiers-section {
-  background: rgba(25, 35, 45, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 154, 255, 0.15);
   border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.activity-section h3,
-.referral-list-section h3,
-.tiers-section h3 {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-  position: relative;
-  padding-bottom: 0.75rem;
-}
-
-.activity-section h3::after,
-.referral-list-section h3::after,
-.tiers-section h3::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 50px;
-  height: 3px;
-  background: linear-gradient(90deg, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  border-radius: 3px;
-}
-
-.activity-list,
-.referral-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.activity-item,
-.referral-item {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
-}
-
-.activity-item:hover,
-.referral-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(15, 154, 255, 0.2);
-  transform: translateX(5px);
-}
-
-.activity-icon,
-.referral-avatar {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-right: 1rem;
-  flex-shrink: 0;
+  color: var(--cosmic-accent, #0f9aff);
+  font-size: 1.3rem;
 }
 
-.activity-icon {
-  background: linear-gradient(135deg, rgba(15, 154, 255, 0.15), rgba(155, 89, 182, 0.15));
-  color: var(--cosmic-blue, #0f9aff);
-  font-size: 1rem;
-}
-
-.referral-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid rgba(15, 154, 255, 0.3);
-}
-
-.activity-details,
-.referral-details {
+.card-content {
   flex: 1;
 }
 
-.activity-text,
-.referral-username {
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
-  font-weight: 500;
+.card-content h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: var(--cosmic-text-primary, #ffffff);
 }
 
-.activity-time,
-.referral-date {
-  font-size: 0.8rem;
-  color: var(--cosmic-text-secondary, #bdc3c7);
-}
-
-.activity-type,
-.referral-type {
-  font-size: 0.75rem;
-  color: var(--cosmic-blue, #0f9aff);
-  background: rgba(15, 154, 255, 0.1);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  display: inline-block;
-  margin-top: 0.25rem;
-}
-
-.activity-points,
-.referral-points {
+.stat-value {
+  font-size: 2.2rem;
   font-weight: 700;
-  color: var(--cosmic-blue, #0f9aff);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  background: rgba(15, 154, 255, 0.1);
+  margin: 0.3rem 0;
+  background: linear-gradient(to right, #0f9aff, #9b59b6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
 }
 
-/* Tiers Grid */
-.tiers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+.card-content p {
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.7));
+  margin: 0.3rem 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* Post reach chart */
+.chart-container {
+  display: flex;
+  height: 80px;
+  align-items: flex-end;
+  gap: 0.3rem;
+  margin-top: 1rem;
+}
+
+.chart-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.bar-fill {
+  width: 100%;
+  background: linear-gradient(to top, rgba(15, 154, 255, 0.7), rgba(155, 89, 182, 0.7));
+  border-radius: 3px;
+  transition: height 0.5s ease;
+}
+
+.bar-label {
+  font-size: 0.65rem;
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.5));
+  margin-top: 0.3rem;
+}
+
+/* Performance metrics */
+.performance-metric {
+  margin-bottom: 1rem;
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.7));
+  margin-bottom: 0.3rem;
+}
+
+.metric-value {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--cosmic-text-primary, #ffffff);
+}
+
+.post-preview {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+  padding: 0.7rem;
+  margin-top: 0.5rem;
+}
+
+.post-preview-text {
+  font-size: 0.85rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+}
+
+/* Stat details row */
+.stat-detail-row {
+  display: flex;
   gap: 1rem;
+  margin-top: 0.8rem;
 }
 
-.tier-card {
+.stat-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.detail-icon {
+  font-size: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.detail-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cosmic-text-primary, #ffffff);
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.6));
+}
+
+/* Network growth trend chart */
+.trend-chart {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin-top: 1rem;
+}
+
+.trend-point {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: rgba(15, 154, 255, 0.8);
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.trend-line {
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(to right, rgba(15, 154, 255, 0.5), rgba(155, 89, 182, 0.5));
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.trend-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.6));
+}
+
+/* Activity section */
+.activity-section {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.activity-section h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.activity-filter {
+  display: flex;
+  margin-bottom: 1.2rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.7));
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.filter-btn.active {
+  background: rgba(15, 154, 255, 0.15);
+  color: var(--cosmic-accent, #0f9aff);
+  border-color: rgba(15, 154, 255, 0.3);
+}
+
+.activity-timeline {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.tier-card:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.direct-tier:hover {
-  border-color: rgba(0, 255, 135, 0.3);
-  box-shadow: 0 5px 15px rgba(0, 255, 135, 0.1);
-}
-
-.indirect-tier:hover {
-  border-color: rgba(96, 239, 255, 0.3);
-  box-shadow: 0 5px 15px rgba(96, 239, 255, 0.1);
-}
-
-.beyond-tier:hover {
-  border-color: rgba(155, 89, 182, 0.3);
-  box-shadow: 0 5px 15px rgba(155, 89, 182, 0.1);
-}
-
-.tier-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 8px;
+.activity-item {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0.5rem;
-}
-
-.direct-tier .tier-icon {
-  background: rgba(0, 255, 135, 0.1);
-  color: #00ff87;
-}
-
-.indirect-tier .tier-icon {
-  background: rgba(96, 239, 255, 0.1);
-  color: #60efff;
-}
-
-.beyond-tier .tier-icon {
-  background: rgba(155, 89, 182, 0.1);
-  color: #9b59b6;
-}
-
-.tier-content h4 {
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.tier-count {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.direct-tier .tier-count {
-  color: #00ff87;
-}
-
-.indirect-tier .tier-count {
-  color: #60efff;
-}
-
-.beyond-tier .tier-count {
-  color: #9b59b6;
-}
-
-.tier-bonus {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.direct-tier .tier-bonus {
-  background: rgba(0, 255, 135, 0.1);
-  color: #00ff87;
-}
-
-.indirect-tier .tier-bonus {
-  background: rgba(96, 239, 255, 0.1);
-  color: #60efff;
-}
-
-.beyond-tier .tier-bonus {
-  background: rgba(155, 89, 182, 0.1);
-  color: #9b59b6;
-}
-
-/* Referral Code Card */
-.referral-code-card {
-  background: rgba(25, 35, 45, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-.referral-code-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at top right, rgba(15, 154, 255, 0.1), transparent 70%);
-  pointer-events: none;
-}
-
-.referral-code-card h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.75rem;
-  font-weight: 600;
-  background: linear-gradient(to right, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  display: inline-block;
-}
-
-.referral-code-card p {
-  color: var(--cosmic-text-secondary, #bdc3c7);
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.referral-code-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  gap: 1rem;
-}
-
-.referral-code {
-  background: rgba(0, 0, 0, 0.2);
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-family: monospace;
-  font-size: 1.2rem;
-  letter-spacing: 2px;
-  color: var(--cosmic-blue-light, #61c8ff);
-  border: 1px solid rgba(15, 154, 255, 0.2);
-  position: relative;
-  overflow: hidden;
-}
-
-.referral-code::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: rotate(30deg);
-  animation: shimmer 3s infinite;
-  pointer-events: none;
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%) rotate(30deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(30deg);
-  }
-}
-
-.copy-button {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 8px;
-  background: rgba(15, 154, 255, 0.1);
-  border: 1px solid rgba(15, 154, 255, 0.2);
-  color: var(--cosmic-blue, #0f9aff);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.copy-button:hover {
-  background: rgba(15, 154, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-.social-share {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.social-button {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--cosmic-text-secondary, #bdc3c7);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.social-button:hover {
-  background: rgba(15, 154, 255, 0.1);
-  color: var(--cosmic-blue, #0f9aff);
-  transform: translateY(-2px);
-  border-color: rgba(15, 154, 255, 0.2);
-}
-
-/* Empty States */
-.empty-state {
-  text-align: center;
-  padding: 3rem 2rem;
-  color: var(--cosmic-text-secondary, #bdc3c7);
+  align-items: flex-start;
+  padding: 1rem;
   background: rgba(255, 255, 255, 0.02);
-  border-radius: 12px;
-  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 0.8rem;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.activity-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.activity-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-right: 1rem;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.activity-icon.post {
+  background: rgba(15, 154, 255, 0.15);
+  color: #0f9aff;
+}
+
+.activity-icon.like {
+  background: rgba(233, 30, 99, 0.15);
+  color: #e91e63;
+}
+
+.activity-icon.comment {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+}
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.actor-name {
+  font-weight: 600;
+  color: var(--cosmic-text-primary, #ffffff);
+}
+
+.activity-time {
+  font-size: 0.8rem;
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.5));
+  margin-top: 0.5rem;
+}
+
+.activity-action {
+  margin-left: 0.5rem;
+}
+
+.view-btn {
+  background: transparent;
+  border: none;
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.5));
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.3rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.view-btn:hover {
+  color: var(--cosmic-accent, #0f9aff);
+  background: rgba(15, 154, 255, 0.1);
+}
+
+.empty-activity {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.5));
 }
 
 .empty-icon {
-  font-size: 3rem;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.load-more-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.7));
+  padding: 0.7rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.load-more-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Growth tips section */
+.tips-section {
+  margin-bottom: 2rem;
+}
+
+.tips-section h3 {
+  margin-top: 0;
   margin-bottom: 1.5rem;
-  opacity: 0.5;
-  background: linear-gradient(135deg, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-size: 1.3rem;
+  font-weight: 600;
 }
 
-.empty-state p {
-  margin-bottom: 0.5rem;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
 }
 
-.empty-state p:last-child {
-  font-weight: 500;
-  color: var(--cosmic-blue-light, #61c8ff);
+.tip-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
 }
 
-/* Coming Soon */
+.tip-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-3px);
+}
+
+.tip-icon {
+  width: 2.8rem;
+  height: 2.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 154, 255, 0.1);
+  border-radius: 0.8rem;
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  color: var(--cosmic-accent, #0f9aff);
+  flex-shrink: 0;
+}
+
+.tip-content {
+  flex: 1;
+}
+
+.tip-content h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.tip-content p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.7));
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-tabs {
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+  
+  .tab-button {
+    flex-shrink: 0;
+  }
+  
+  .tips-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Coming soon placeholder */
 .coming-soon {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 2rem;
+  min-height: 300px;
   text-align: center;
-  background: rgba(25, 35, 45, 0.4);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-.coming-soon::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, rgba(15, 154, 255, 0.05), transparent 70%);
-  pointer-events: none;
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.7));
 }
 
 .coming-soon i {
-  font-size: 3.5rem;
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  opacity: 0.8;
-  animation: pulse 3s infinite ease-in-out;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  opacity: 0.2;
 }
 
 .coming-soon h3 {
-  font-size: 1.75rem;
+  font-size: 1.8rem;
   margin-bottom: 1rem;
-  font-weight: 600;
-  background: linear-gradient(to right, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 .coming-soon p {
-  color: var(--cosmic-text-secondary, #bdc3c7);
-  max-width: 500px;
-  margin: 0 auto;
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 1.1rem;
+  max-width: 400px;
 }
 
-/* Loading and Error States */
-.loading-container,
-.error-container,
-.loading-state,
-.error-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  gap: 2rem;
-  text-align: center;
+/* 
+  ENHANCEMENT OPPORTUNITY: 
+  Add animations to make metrics feel more alive and engaging
+*/
+
+@keyframes stat-fill {
+  from { width: 0; }
+  to { width: 100%; }
 }
 
-.loading-state,
-.error-state {
-  min-height: 300px;
+.stat-progress {
+  animation: stat-fill 1s ease-out forwards;
 }
 
-.cosmic-loader {
-  width: 4rem;
-  height: 4rem;
-  border: 4px solid rgba(0, 140, 255, 0.2);
-  border-radius: 50%;
-  border-top-color: var(--cosmic-blue, #0f9aff);
-  animation: spin 1s infinite ease-in-out;
-  position: relative;
+/* ENHANCEMENT OPPORTUNITY:
+   Add subtle hover effects for interactive cards */
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.09);
 }
 
-.cosmic-loader::before,
-.cosmic-loader::after {
-  content: '';
-  position: absolute;
-  top: -15px;
-  left: -15px;
-  right: -15px;
-  bottom: -15px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  border-top-color: rgba(155, 89, 182, 0.5);
-  animation: spin 1.5s infinite ease-in-out reverse;
+/* ENHANCEMENT OPPORTUNITY:
+   Add pulsing animation for the referral code to draw attention */
+@keyframes pulse-border {
+  0% { box-shadow: 0 0 0 0 rgba(15, 154, 255, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(15, 154, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(15, 154, 255, 0); }
 }
 
-.cosmic-loader::after {
-  top: -8px;
-  left: -8px;
-  right: -8px;
-  bottom: -8px;
-  border-top-color: rgba(15, 154, 255, 0.3);
-  animation: spin 2s infinite ease-in-out;
-}
-
-.error-icon {
-  font-size: 3rem;
-  color: var(--cosmic-red, #ff3a5e);
-  margin-bottom: 1rem;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .dashboard-page {
-    padding-top: 4rem;
-  }
-
-  .welcome-container {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .welcome-avatar {
-    margin: 0 auto 1rem;
-  }
-
-  .welcome-message h1 {
-    font-size: 1.5rem;
-  }
-
-  .user-stats {
-    justify-content: center;
-  }
-
-  .principal-container {
-    margin: 1rem auto 0;
-  }
-
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .tab-button {
-    padding: 0.75rem 1rem;
-  }
-
-  .tab-button span {
-    display: none;
-  }
-
-  .tab-button i {
-    font-size: 1.25rem;
-  }
-
-  .referral-code {
-    font-size: 1rem;
-    padding: 0.75rem 1rem;
-  }
-
-  .tiers-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .tier-card {
-    flex-direction: row;
-    align-items: center;
-  }
-  
-  .tier-content {
-    flex: 1;
-  }
-
-  .referral-stats-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .referral-item {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .referral-avatar {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 1rem;
-  }
-
-  .tree-level {
-    gap: 1rem;
-  }
-
-  .node-content {
-    min-width: 150px;
-    padding: 0.75rem;
-  }
-
-  .node-avatar {
-    width: 36px;
-    height: 36px;
-  }
-
-  .coming-soon i {
-    font-size: 2.5rem;
-  }
-
-  .coming-soon h3 {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .dashboard-tabs {
-    justify-content: space-between;
-  }
-
-  .tab-button {
-    padding: 0.75rem;
-    flex: 1;
-    justify-content: center;
-  }
-
-  .referral-code-container {
-    flex-direction: column;
-  }
-
-  .referral-code {
-    width: 100%;
-  }
-
-  .social-share {
-    flex-wrap: wrap;
-  }
-}
-
-/* Referral Content */
-.referral-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.referral-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
-
-.referral-section {
-  background: rgba(25, 35, 45, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.referral-section h3 {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-  position: relative;
-  padding-bottom: 0.75rem;
-}
-
-.referral-section h3::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 50px;
-  height: 3px;
-  background: linear-gradient(90deg, var(--cosmic-blue, #0f9aff), var(--cosmic-purple, #9b59b6));
-  border-radius: 3px;
-}
-
-.referral-lists {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* Referral Tree */
-.referral-tree-section {
-  background: rgba(25, 35, 45, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.referral-tree {
-  padding: 2rem 1rem;
-  overflow-x: auto;
-}
-
-.tree-node {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-}
-
-.tree-level {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.node-content {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  min-width: 200px;
-  border: 1px solid rgba(15, 154, 255, 0.2);
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.node-content:hover {
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateY(-3px);
-}
-
-.node-content::before {
-  content: '';
-  position: absolute;
-  top: -1rem;
-  left: 50%;
-  width: 2px;
-  height: 1rem;
-  background: rgba(15, 154, 255, 0.2);
-  transform: translateX(-50%);
-}
-
-.root > .node-content {
-  background: rgba(15, 154, 255, 0.1);
-  border-color: rgba(15, 154, 255, 0.4);
-}
-
-.root > .node-content::before {
-  display: none;
-}
-
-.node-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 2px solid var(--cosmic-blue-light, #61c8ff);
-  box-shadow: 0 0 8px rgba(15, 154, 255, 0.4);
-}
-
-.node-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.node-info {
-  flex: 1;
-}
-
-.node-name {
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.node-type {
-  font-size: 0.8rem;
-  color: var(--cosmic-blue, #0f9aff);
-  background: rgba(15, 154, 255, 0.1);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  display: inline-block;
-}
-
-/* Multiplier Card */
-.multiplier-card .stat-value {
-  font-size: 2.5rem;
-  background: linear-gradient(135deg, #00ff87, #60efff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.referral-code {
+  animation: pulse-border 2s infinite;
 }
 </style>

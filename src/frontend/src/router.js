@@ -22,12 +22,15 @@ import Contact from './pages/Contact.vue';
 import ThemeGuide from './views/ThemeGuide.vue';
 import Marketplace from './pages/Marketplace.vue';
 import Wallet from './pages/Wallet.vue';
+import Timeline from './pages/Timeline.vue';
 
 const routes = [
   { path: '/', component: Home, meta: { title: 'header.home' } },
+  { path: '/feed', component: Timeline, meta: { title: 'header.feed', requiresAuth: true } },
+  { path: '/explore', component: Timeline, meta: { title: 'header.explore', requiresAuth: true } },
   { path: '/dao', component: DAO, meta: { title: 'header.dao' } },
   { path: '/whitepaper', component: Whitepaper, meta: { title: 'header.whitepaper' } },
-  { path: '/dashboard', component: Dashboard, meta: { title: 'header.dashboard' } },
+  { path: '/dashboard', component: Dashboard, meta: { title: 'header.dashboard', requiresAuth: true } },
   { path: '/games', component: Games, meta: { title: 'header.games' } },
   { path: '/login', component: Login, meta: { title: 'header.login' } },
   { path: '/game', component: Game, meta: { title: 'header.game' } },

@@ -528,10 +528,8 @@ async getPlayerByPrincipal(principal) {
       }
     },
     redirectToHome() {
-      const modalStore = useModalStore(); // Access the modal store
-      console.log('Redirecting to home or dashboard modal...');
-      //modalStore.closeModal(); // Close the current modal
-      //modalStore.openModal('DashboardModal'); // Optionally, open the dashboard or another modal
+      // Redirect to feed for a social media experience
+      window.location.href = '/feed';
     },
     redirectToRegistration() {
       const modalStore = useModalStore(); // Access modal store

@@ -22,7 +22,7 @@
     <!-- Mobile Navigation -->
     <div class="mobile-nav">
       <div class="nav-item" 
-           v-for="tab in ['profile', 'stats', 'collection', 'social']" 
+           v-for="tab in ['profile', 'posts', 'stats', 'collection', 'social']" 
            :key="tab"
            :class="{ 'active': activeTab === tab }"
            @click="setActiveTab(tab)">
@@ -306,6 +306,132 @@
               <div class="friend-info">
                 <span class="friend-name">{{ friend.username }}</span>
                 <span class="friend-status" :class="friend.status">{{ $t(`profilePage.friendStatus.${friend.status}`) }}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Add a new Posts Section after the Hero Section -->
+        <section class="content-section posts-section" v-if="activeTab === 'posts'">
+          <div class="bg-surface cosmic-flex-between">
+            <h2 class="title-medium text-gradient">{{ $t('profilePage.posts') }}</h2>
+          </div>
+          
+          <!-- Create Post (only if own profile) -->
+          <div class="post-creation-box" v-if="showEditControls">
+            <div class="post-avatar">
+              <img :src="playerAvatar" alt="Player Avatar" class="avatar">
+            </div>
+            <div class="post-input-container">
+              <textarea 
+                class="post-input" 
+                :placeholder="$t('profilePage.createPostPlaceholder')"
+                v-model="newPostContent"
+                rows="2"
+              ></textarea>
+              <div class="post-actions">
+                <div class="post-attachments">
+                  <button class="attachment-btn">
+                    <span class="attachment-icon">🖼️</span>
+                  </button>
+                  <button class="attachment-btn">
+                    <span class="attachment-icon">🔗</span>
+                  </button>
+                </div>
+                <button 
+                  class="post-submit-btn cosmic-button" 
+                  :disabled="!newPostContent.trim()" 
+                  @click="createPost"
+                >
+                  {{ $t('profilePage.post') }}
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Posts List -->
+          <div class="posts-feed">
+            <div v-if="userPosts.length === 0" class="empty-posts">
+              <div class="empty-icon">📝</div>
+              <p v-if="isOwnProfile">{{ $t('profilePage.emptyPostsSelf') }}</p>
+              <p v-else>{{ $t('profilePage.emptyPostsOther', { username: player.username }) }}</p>
+            </div>
+            
+            <div v-for="post in userPosts" :key="post.id" class="post-card">
+              <div class="post-header">
+                <div class="post-avatar">
+                  <img :src="playerAvatar" :alt="player.username">
+                </div>
+                <div class="post-author-info">
+                  <div class="post-author">
+                    <span class="author-name">{{ player.username }}</span>
+                    <span class="author-level">Lvl {{ player.level }}</span>
+                  </div>
+                  <div class="post-meta">
+                    <span class="post-time">{{ formatPostTime(post.createdAt) }}</span>
+                  </div>
+                </div>
+                <div class="post-menu" v-if="showEditControls">
+                  <button class="menu-btn" @click="deletePost(post.id)">
+                    <span class="menu-icon">❌</span>
+                  </button>
+                </div>
+              </div>
+              <div class="post-content">
+                <p class="post-text">{{ post.content }}</p>
+                <div v-if="post.media" class="post-media">
+                  <img :src="post.media" :alt="post.content" class="post-image">
+                </div>
+              </div>
+              <div class="post-actions">
+                <button class="action-btn" @click="likePost(post.id)">
+                  <span class="action-icon" :class="{ 'active': post.liked }">❤️</span>
+                  <span class="action-count">{{ post.likes }}</span>
+                </button>
+                <button class="action-btn" @click="commentOnPost(post.id)">
+                  <span class="action-icon">💬</span>
+                  <span class="action-count">{{ post.comments.length }}</span>
+                </button>
+                <button class="action-btn" @click="repostPost(post.id)">
+                  <span class="action-icon">🔄</span>
+                  <span class="action-count">{{ post.reposts }}</span>
+                </button>
+              </div>
+              
+              <!-- Comments Section (when expanded) -->
+              <div v-if="post.showComments" class="comments-section">
+                <div v-for="comment in post.comments" :key="comment.id" class="comment">
+                  <div class="comment-avatar">
+                    <img :src="getAvatarSrc(comment.authorAvatar)" :alt="comment.authorName">
+                  </div>
+                  <div class="comment-content">
+                    <div class="comment-author">{{ comment.authorName }}</div>
+                    <div class="comment-text">{{ comment.text }}</div>
+                    <div class="comment-time">{{ formatPostTime(comment.createdAt) }}</div>
+                  </div>
+                </div>
+                
+                <!-- Add Comment -->
+                <div class="add-comment" v-if="authStore.isAuthenticated()">
+                  <div class="comment-avatar">
+                    <img :src="getAvatarSrc(authStore.player?.avatar)" :alt="authStore.player?.username">
+                  </div>
+                  <div class="comment-input-container">
+                    <textarea 
+                      class="comment-input" 
+                      :placeholder="$t('profilePage.writeComment')"
+                      v-model="post.newComment"
+                      rows="1"
+                    ></textarea>
+                    <button 
+                      class="comment-submit" 
+                      :disabled="!post.newComment?.trim()"
+                      @click="addComment(post.id)"
+                    >
+                      {{ $t('profilePage.submit') }}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1127,6 +1253,7 @@ const processAchievements = (categories) => {
 const getTabIcon = (tab) => {
   const icons = {
     profile: '👤',
+    posts: '📝',
     stats: '📊',
     collection: '🎮',
     social: '👥'
@@ -1428,6 +1555,9 @@ const setActiveTab = (tab) => {
       targetElement = document.querySelector('.achievements-section') || 
                      document.querySelector('.friends-section');
       break;
+    case 'posts':
+      targetElement = document.querySelector('.posts-section');
+      break;
   }
   
   if (targetElement) {
@@ -1437,6 +1567,201 @@ const setActiveTab = (tab) => {
     window.scrollTo({ top: y, behavior: 'smooth' });
   }
 };
+
+// Add state for posts
+const userPosts = ref([]);
+const newPostContent = ref('');
+
+// Add functions for posts 
+const formatPostTime = (timestamp) => {
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diffMs = now - date;
+  
+  // Convert to seconds, minutes, hours, and days
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHrs = Math.floor(diffMin / 60);
+  const diffDays = Math.floor(diffHrs / 24);
+  
+  if (diffSec < 60) {
+    return 'Just now';
+  } else if (diffMin < 60) {
+    return `${diffMin}m`;
+  } else if (diffHrs < 24) {
+    return `${diffHrs}h`;
+  } else if (diffDays < 7) {
+    return `${diffDays}d`;
+  } else {
+    return date.toLocaleDateString();
+  }
+};
+
+const getAvatarSrc = (avatarId) => {
+  const index = (Number(avatarId || 1) - 1) % avatarSrcArray.length;
+  return avatarSrcArray[index] || avatar1;
+};
+
+const createPost = async () => {
+  if (!newPostContent.value.trim()) return;
+  
+  try {
+    // TODO: Implement actual post creation on blockchain
+    console.log('Creating post:', newPostContent.value);
+    
+    // Add post to local state for immediate feedback
+    const newPost = {
+      id: `local-${Date.now()}`,
+      content: newPostContent.value,
+      author: {
+        id: authStore.getIdentity()?.getPrincipal().toString() || 'unknown',
+        username: username.value,
+        avatar: avatarId.value
+      },
+      likes: 0,
+      reposts: 0,
+      createdAt: new Date().toISOString(),
+      liked: false,
+      showComments: false,
+      comments: [],
+      newComment: ''
+    };
+    
+    userPosts.value.unshift(newPost);
+    newPostContent.value = '';
+    
+    // Toast or notification would go here
+  } catch (err) {
+    console.error('Error creating post:', err);
+    // Show error message
+  }
+};
+
+const fetchUserPosts = async () => {
+  try {
+    // TODO: Implement actual fetch from blockchain
+    console.log('Fetching posts for user:', player.value.username);
+    
+    // Generate mock posts for now
+    const mockPosts = [];
+    const postCount = isOwnProfile.value ? 5 : Math.floor(Math.random() * 8);
+    
+    for (let i = 0; i < postCount; i++) {
+      const hasMedia = Math.random() > 0.6;
+      const post = {
+        id: `post-${i}-${Date.now()}`,
+        content: getMockPostContent(i),
+        likes: Math.floor(Math.random() * 50),
+        reposts: Math.floor(Math.random() * 10),
+        createdAt: new Date(Date.now() - i * 86400000 * Math.random() * 5).toISOString(),
+        liked: Math.random() > 0.7,
+        showComments: false,
+        comments: generateMockComments(Math.floor(Math.random() * 3)),
+        newComment: '',
+        media: hasMedia ? `https://picsum.photos/500/300?random=${i}` : null
+      };
+      mockPosts.push(post);
+    }
+    
+    userPosts.value = mockPosts;
+  } catch (err) {
+    console.error('Error fetching user posts:', err);
+  }
+};
+
+const getMockPostContent = (index) => {
+  const contents = [
+    'Just upgraded my cosmic ship with the latest quantum drives! #SpaceExploration',
+    'Looking for alliance members for the upcoming tournament. DM if interested! #CosmicCrafts',
+    'Check out this rare NFT I just acquired from the Celestial Collection 🌟',
+    'The view from the Andromeda quadrant today is breathtaking...',
+    'Just defeated the legendary StarWyrm boss! Who else has done it? #GameAchievement',
+    'Tips for new players: Always upgrade your energy nodes first. Trust me on this one.',
+    'Finally reached level 50! The grind was real but totally worth it. #LevelUp',
+    'Trading some rare resources. Message me with offers. #CosmicEconomy'
+  ];
+  
+  return contents[index % contents.length];
+};
+
+const generateMockComments = (count) => {
+  const comments = [];
+  const commentTexts = [
+    'Great post!',
+    'Totally agree with this!',
+    'Can you share more details?',
+    'This is amazing!',
+    'I had a similar experience',
+    'Looking forward to more content like this',
+    'Thanks for sharing!'
+  ];
+  
+  for (let i = 0; i < count; i++) {
+    comments.push({
+      id: `comment-${i}-${Date.now()}`,
+      authorName: ['CosmicFan', 'GalaxyRider', 'NebulaNomad', 'StarChild', 'VoidWanderer'][Math.floor(Math.random() * 5)],
+      authorAvatar: Math.floor(Math.random() * 12) + 1,
+      text: commentTexts[Math.floor(Math.random() * commentTexts.length)],
+      createdAt: new Date(Date.now() - Math.random() * 3600000 * 24).toISOString()
+    });
+  }
+  
+  return comments;
+};
+
+const likePost = (postId) => {
+  // TODO: Implement actual like functionality on blockchain
+  const post = userPosts.value.find(p => p.id === postId);
+  if (post) {
+    post.liked = !post.liked;
+    post.likes += post.liked ? 1 : -1;
+  }
+};
+
+const commentOnPost = (postId) => {
+  const post = userPosts.value.find(p => p.id === postId);
+  if (post) {
+    post.showComments = !post.showComments;
+  }
+};
+
+const addComment = (postId) => {
+  const post = userPosts.value.find(p => p.id === postId);
+  if (post && post.newComment?.trim()) {
+    // TODO: Implement actual comment submission on blockchain
+    
+    post.comments.push({
+      id: `comment-new-${Date.now()}`,
+      authorName: authStore.player?.username || 'You',
+      authorAvatar: authStore.player?.avatar || 1,
+      text: post.newComment,
+      createdAt: new Date().toISOString()
+    });
+    
+    post.newComment = '';
+  }
+};
+
+const repostPost = (postId) => {
+  // TODO: Implement actual repost functionality on blockchain
+  const post = userPosts.value.find(p => p.id === postId);
+  if (post) {
+    post.reposts++;
+    // Show success notification
+  }
+};
+
+const deletePost = (postId) => {
+  // TODO: Implement actual delete functionality on blockchain
+  if (confirm('Are you sure you want to delete this post?')) {
+    userPosts.value = userPosts.value.filter(p => p.id !== postId);
+    // Show success notification
+  }
+};
+
+// Add to onMounted
+// Fetch user posts
+fetchUserPosts();
 </script>
 
 <style scoped>
@@ -2361,5 +2686,393 @@ const setActiveTab = (tab) => {
       grid-template-columns: 1fr;
     }
   }
+}
+
+/* Post Section Styles */
+.posts-section {
+  margin-bottom: 2rem;
+}
+
+.post-creation-box {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(25, 35, 45, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.post-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.post-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-input-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  font-size: 16px;
+  padding: 8px 0;
+  resize: none;
+  outline: none;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.post-attachments {
+  display: flex;
+  gap: 12px;
+}
+
+.attachment-btn {
+  background: transparent;
+  color: var(--color-primary);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.attachment-btn:hover {
+  background-color: rgba(15, 154, 255, 0.1);
+}
+
+.attachment-icon {
+  font-size: 18px;
+}
+
+.post-submit-btn {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.post-submit-btn:hover {
+  background-color: #0d86da;
+}
+
+.post-submit-btn:disabled {
+  background-color: #525252;
+  cursor: not-allowed;
+}
+
+/* Posts Feed */
+.posts-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.post-card {
+  background: rgba(25, 35, 45, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.post-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+}
+
+.post-author-info {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.post-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.author-name {
+  font-weight: 600;
+}
+
+.author-level {
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  background: rgba(15, 154, 255, 0.1);
+  color: var(--color-primary);
+  border-radius: 4px;
+}
+
+.post-meta {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+}
+
+.post-menu {
+  display: flex;
+  align-items: center;
+}
+
+.menu-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.menu-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+}
+
+.menu-icon {
+  font-size: 14px;
+}
+
+.post-content {
+  padding: 0 16px 16px 16px;
+}
+
+.post-text {
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.post-media {
+  margin-top: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.post-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.post-actions {
+  display: flex;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+}
+
+.action-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.action-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+.action-icon.active {
+  color: #e74c3c;
+}
+
+.action-count {
+  font-size: 0.9rem;
+}
+
+/* Comments Section */
+.comments-section {
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comment {
+  display: flex;
+  gap: 12px;
+}
+
+.comment-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.comment-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment-content {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.comment-author {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.comment-text {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.comment-time {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.add-comment {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.comment-input-container {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+}
+
+.comment-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  color: var(--color-text-primary);
+  padding: 8px 16px;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+}
+
+.comment-submit {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0 16px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.comment-submit:disabled {
+  background-color: #525252;
+  cursor: not-allowed;
+}
+
+.empty-posts {
+  text-align: center;
+  padding: 48px 24px;
+  background: rgba(25, 35, 45, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: var(--color-text-secondary);
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+/* 
+  ENHANCEMENT OPPORTUNITY: 
+  Add micro-interactions to make the profile feel more responsive and alive
+*/
+
+@keyframes badge-pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 217, 255, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 0 10px rgba(0, 217, 255, 0.6); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 217, 255, 0.4); }
+}
+
+.level-badge {
+  animation: badge-pulse 3s infinite ease-in-out;
+}
+
+/* ENHANCEMENT OPPORTUNITY:
+   Add hover effects for interactive elements to improve UX */
+.achievement-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.achievement-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ENHANCEMENT OPPORTUNITY:
+   Add smooth transitions for tab switching */
+.content-section {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.content-section.entering {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.content-section.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
