@@ -43,7 +43,7 @@ const routes = [
   { path: '/style-guide', component: StyleGuide, meta: { title: 'Style Guide' } },
   { path: '/theme-guide', component: ThemeGuide, meta: { title: 'Theme Guide' } },
   { path: '/marketplace', component: Marketplace, meta: { title: 'header.marketplace' } },
-  { path: '/wallet', component: Wallet, meta: { title: 'Wallet' } },
+  { path: '/wallet', component: Wallet, meta: { title: 'Wallet', requiresAuth: true } },
   // New catch-all route for usernames/principals
   {
     path: '/:identifier',

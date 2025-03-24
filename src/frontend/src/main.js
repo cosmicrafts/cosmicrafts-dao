@@ -1,12 +1,15 @@
+// Import styles first to ensure they load before components
+import './style.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+// Import core Vue dependencies
 import { createApp, watch } from 'vue';
 import App from './App.vue';
 import router from './router';
 import { createPinia } from 'pinia';
-import { useAuthStore } from '@/stores/auth';
-import { useLanguageStore } from '@/stores/language';
+
+// Import translations
 import { createI18n } from 'vue-i18n';
-import './style.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import en from '@/locales/en.json';
 import es from '@/locales/es.json';
 import fr from '@/locales/fr.json';
@@ -21,33 +24,22 @@ import zh from '@/locales/zh.json';
 import tr from '@/locales/tr.json';
 import { registerSW } from 'virtual:pwa-register';
 
+// Create i18n instance
 const i18n = createI18n({
   legacy: false,
   locale: 'en',
   fallbackLocale: 'en',
   messages: {
-    en,
-    es,
-    fr,
-    de,
-    pt,
-    ru,
-    ar,
-    vi,
-    ko,
-    ja,
-    zh,
-    tr,
+    en, es, fr, de, pt, ru, ar, vi, ko, ja, zh, tr,
   },
 });
 
+// Create Vue app and Pinia store
 const app = createApp(App);
 const pinia = createPinia();
 app.use(pinia);
 
-const authStore = useAuthStore();
-const languageStore = useLanguageStore();
-
+// Register service worker
 const updateSW = registerSW({
   onNeedRefresh() {
     if (confirm("New version available. Reload to update?")) {
@@ -59,29 +51,76 @@ const updateSW = registerSW({
   },
 });
 
-// Load stored state and language
-const hasUserData = await authStore.loadStateFromLocalStorage();
-
-if (!hasUserData) {
-  console.log('No user data found in local storage. Detecting language...');
-  const detectedLanguage = await languageStore.detectLanguage();
-  languageStore.setLanguage(detectedLanguage || 'en');
-} else {
-  console.log('User data found in local storage. Skipping language detection.');
-  // If user data is found, load the language from the store
-  await languageStore.loadLanguage();
-}
-
-// Watch for changes in the current language and update i18n
-watch(
-  () => languageStore.currentLanguage,
-  (newLang) => {
-    i18n.global.locale.value = newLang;
-    console.log(`i18n locale updated to: ${newLang}`);
-  },
-  { immediate: true }
-);
-
+// Bootstrap the application - First mount the app, then load user data
+// This ensures the UI is visible immediately before data loading
 app.use(i18n);
 app.use(router);
 app.mount('#app');
+
+// Parallel loading of user data tasks - fully non-blocking architecture
+const loadUserData = () => {
+  console.log("Loading user data in background...");
+  
+  // Pre-fetch both imports concurrently but don't await - start them immediately
+  const authStoreImport = import('@/stores/auth');
+  const languageStoreImport = import('@/stores/language');
+  
+  // Load auth in the background
+  authStoreImport.then(({ useAuthStore }) => {
+    const authStore = useAuthStore();
+    
+    // Load auth data independently - doesn't block anything else
+    authStore.loadStateFromLocalStorage().then(hasUserData => {
+      // Authentication data loaded - no waiting or callbacks
+      console.log(hasUserData ? 'User authenticated' : 'No user data found');
+    }).catch(err => {
+      console.warn('Auth data loading error:', err);
+    });
+  }).catch(err => {
+    console.warn('Auth store import error:', err);
+  });
+  
+  // Load language in parallel - completely independent from auth
+  languageStoreImport.then(({ useLanguageStore }) => {
+    const languageStore = useLanguageStore();
+    
+    // Load language independently
+    languageStore.loadLanguage().then(() => {
+      // Update i18n when language is ready
+      watch(
+        () => languageStore.currentLanguage,
+        (newLang) => {
+          i18n.global.locale.value = newLang;
+          console.log(`i18n locale updated to: ${newLang}`);
+        },
+        { immediate: true }
+      );
+    }).catch(err => {
+      console.warn('Language data loading error:', err);
+      // Fallback to browser language detection on error
+      languageStore.detectLanguage().then(detectedLang => {
+        languageStore.setLanguage(detectedLang || 'en');
+      });
+    });
+  }).catch(err => {
+    console.warn('Language store import error:', err);
+  });
+  
+  // Pre-load other stores that might be needed soon in parallel
+  // This happens concurrently with auth and language loading
+  Promise.all([
+    // Pre-fetch token store module (but don't initialize yet)
+    import('@/stores/token'),
+    // Wait a bit before loading the canister store to spread the load
+    new Promise(resolve => setTimeout(() => 
+      import('@/stores/canister').then(resolve), 
+      300
+    ))
+  ]).catch(err => {
+    console.warn('Error pre-loading stores:', err);
+  });
+};
+
+// Start loading immediately but give the UI rendering thread priority
+// by pushing this to the end of the event queue
+setTimeout(loadUserData, 0);

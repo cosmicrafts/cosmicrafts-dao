@@ -66,7 +66,10 @@
           <ul>
             <li class="principal-item">
               <div class="principal-id-display">
-                <span class="principal-label">{{ t('header.principalId') }}</span>
+                <div class="principal-header">
+                  <img src="@/assets/icons/icp.svg" alt="ICP Logo" class="principal-icon" />
+                  <span class="principal-label">Principal ID</span>
+                </div>
                 <div class="principal-value-container">
                   <span class="principal-value">{{ formatPrincipal(getPrincipalString) }}</span>
                   <button @click.stop="copyPrincipal" class="copy-button">
@@ -76,8 +79,19 @@
                 </div>
               </div>
             </li>
-            <li @click="goToDashboard">{{ t('header.dashboard') }}</li>
-            <li @click="logout">{{ t('header.signout') }}</li>
+            <li class="menu-divider"></li>
+            <li @click="goToDashboard">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>{{ t('header.dashboard') }}</span>
+            </li>
+            <li @click="goToWallet">
+              <i class="fas fa-wallet"></i>
+              <span>Wallet</span>
+            </li>
+            <li @click="logout" class="logout-item">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>{{ t('header.signout') }}</span>
+            </li>
           </ul>
         </div>
       </div>
@@ -211,6 +225,12 @@ const logout = async () => {
 // Navigation handlers
 const goToDashboard = () => {
   router.push('/dashboard');
+  isDropdownVisible.value = false; // Close dropdown after navigation
+};
+
+// Navigation to wallet
+const goToWallet = () => {
+  router.push('/wallet');
   isDropdownVisible.value = false; // Close dropdown after navigation
 };
 
@@ -479,10 +499,12 @@ header:hover {
   background: var(--cosmic-glass-bg-darker);
   border: var(--cosmic-glass-border-blue);
   border-radius: var(--cosmic-radius-md);
-  box-shadow: var(--cosmic-shadow-md);
-  padding: 1rem 0;
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-xs);
+  padding: 0;
   z-index: var(--cosmic-z-dropdown);
-  min-width: 140px;
+  min-width: 220px;
+  backdrop-filter: var(--cosmic-glass-blur);
+  overflow: hidden;
 }
 
 .dropdown-menu ul {
@@ -492,57 +514,90 @@ header:hover {
 }
 
 .dropdown-menu li {
-  font-weight: 700;
-  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
   color: var(--cosmic-text-primary);
   cursor: pointer;
   transition: all var(--cosmic-transition-fast);
+  gap: 0.75rem;
 }
 
 .dropdown-menu li:hover {
   background-color: rgba(15, 185, 253, 0.1);
   color: var(--cosmic-blue);
-  text-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.dropdown-menu li:hover i {
+  color: var(--cosmic-blue);
+}
+
+.dropdown-menu li i {
+  font-size: 1rem;
+  width: 1.25rem;
+  text-align: center;
+  color: var(--cosmic-text-secondary);
+  transition: color var(--cosmic-transition-fast);
 }
 
 .principal-item {
-  padding: 0.5rem !important;
+  padding: 0.75rem 1rem !important;
   cursor: default !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0.5rem !important;
+  background-color: rgba(15, 185, 253, 0.05);
+  border-bottom: 1px solid rgba(15, 185, 253, 0.15);
 }
 
 .principal-item:hover {
-  background-color: transparent !important;
+  background-color: rgba(15, 185, 253, 0.08) !important;
   color: var(--cosmic-text-primary) !important;
-  text-shadow: none !important;
 }
 
 .principal-id-display {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.principal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.principal-icon {
+  width: 1.25rem;
+  height: auto;
 }
 
 .principal-label {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--cosmic-text-secondary);
-  display: block;
-  margin-bottom: 0.2rem;
+  font-weight: 500;
 }
 
 .principal-value-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
-  background: var(--cosmic-glass-bg-darker);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: var(--cosmic-radius-sm);
-  padding: 0.35rem 0.5rem;
+  padding: 0.5rem 0.5rem;
   font-size: 0.9rem;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .principal-value {
   font-family: 'Fira Code', monospace;
-  font-weight: normal;
+  font-weight: 400;
   color: var(--cosmic-text-primary);
+  font-size: 0.85rem;
 }
 
 .copy-button {
@@ -552,7 +607,7 @@ header:hover {
   color: var(--cosmic-text-secondary);
   cursor: pointer;
   transition: color var(--cosmic-transition-fast);
-  padding: 0.2rem;
+  padding: 0.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -577,6 +632,34 @@ header:hover {
   white-space: nowrap;
   pointer-events: none;
   animation: fadeInOut 2s ease-in-out;
+}
+
+.menu-divider {
+  height: 1px;
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: default !important;
+}
+
+.menu-divider:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.logout-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-item i {
+  color: rgba(255, 100, 100, 0.7);
+}
+
+.logout-item:hover {
+  color: rgba(255, 100, 100, 1);
+}
+
+.logout-item:hover i {
+  color: rgba(255, 100, 100, 1);
 }
 
 @keyframes fadeInOut {
@@ -667,6 +750,22 @@ header:hover {
   .player-avatar {
     width: 40px;
     height: 40px;
+  }
+  
+  .dropdown-menu {
+    right: -10px; /* Adjust position for mobile */
+    min-width: 260px; /* Wider dropdown on mobile for better touch targets */
+  }
+  
+  .dropdown-menu li {
+    padding: 0.85rem 1rem; /* Larger touch targets */
+  }
+  
+  .principal-value {
+    font-size: 0.75rem; /* Smaller font for principal ID on mobile */
+    max-width: 160px; /* Limit width to prevent overflow */
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
