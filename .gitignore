@@ -26,3 +26,4 @@ dist/
 .env
 .env.local
 .mops
+/src/frontend/oisy-wallet
