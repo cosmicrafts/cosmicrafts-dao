@@ -5,7 +5,7 @@ import { Principal } from '@dfinity/principal';
 
 // Constants
 const ICP_LEDGER_CANISTER_ID = 'ryjl3-tyaaa-aaaaa-aaaba-cai';
-const COSMIC_TOKEN_CANISTER_ID = 'opcce-byaaa-aaaak-qcgda-cai'; // Replace with your token's canister ID
+const STARDUST_TOKEN_CANISTER_ID = 'opcce-byaaa-aaaak-qcgda-cai'; // Replace with your token's canister ID
 
 // Cache keys
 const TOKEN_CACHE_KEY = 'cosmicrafts-token-cache';
@@ -24,20 +24,32 @@ class TokenService {
     this.initializing = false;
     this.lastRefresh = 0;
     
-    // Set up default ICP token immediately to avoid UI delays
-    const defaultIcp = {
-      symbol: 'ICP',
-      name: 'Internet Computer Protocol',
-      standard: 'icp',
-      decimals: 8,
-      canisterId: ICP_LEDGER_CANISTER_ID,
-      fee: '10000' // Store as string for serialization
-    };
+    // Set up default tokens immediately to avoid UI delays
+    const defaultTokens = [
+      {
+        symbol: 'ICP',
+        name: 'Internet Computer Protocol',
+        standard: 'icp',
+        decimals: 8,
+        canisterId: ICP_LEDGER_CANISTER_ID,
+        fee: '10000' // Store as string for serialization
+      },
+      {
+        symbol: 'STDs',
+        name: 'Stardust',
+        standard: 'icrc1',
+        decimals: 8,
+        canisterId: STARDUST_TOKEN_CANISTER_ID,
+        fee: '10000' // Store as string for serialization
+      }
+    ];
     
-    this.supportedTokens = [defaultIcp];
-    this.tokenConfigs.set('ICP', {
-      ...defaultIcp,
-      fee: BigInt(defaultIcp.fee)
+    this.supportedTokens = defaultTokens;
+    defaultTokens.forEach(token => {
+      this.tokenConfigs.set(token.symbol, {
+        ...token,
+        fee: BigInt(token.fee)
+      });
     });
     
     // Use queueMicrotask instead of Promise.resolve().then() for better browser compatibility
@@ -224,39 +236,39 @@ class TokenService {
    */
   async initializeCosmicToken() {
     try {
-      console.log('Initializing COSMIC token in background...');
+      console.log('Initializing Stardust token in background...');
       
       // Use Promise.race with a timeout to prevent hanging
-      const cosmicConfig = await Promise.race([
-        this.initializeIcrcToken(COSMIC_TOKEN_CANISTER_ID),
+      const stardustConfig = await Promise.race([
+        this.initializeIcrcToken(STARDUST_TOKEN_CANISTER_ID),
         new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('COSMIC token initialization timed out')), 10000)
+          setTimeout(() => reject(new Error('Stardust token initialization timed out')), 10000)
         )
       ]);
       
-      // Find existing COSMIC token
-      const existingIndex = this.supportedTokens.findIndex(t => t.canisterId === COSMIC_TOKEN_CANISTER_ID);
+      // Find existing Stardust token
+      const existingIndex = this.supportedTokens.findIndex(t => t.canisterId === STARDUST_TOKEN_CANISTER_ID);
       if (existingIndex >= 0) {
         // Update existing token
         this.supportedTokens[existingIndex] = {
-          ...cosmicConfig,
-          fee: cosmicConfig.fee.toString()
+          ...stardustConfig,
+          fee: stardustConfig.fee.toString()
         };
       } else {
         // Add new token
         this.supportedTokens.push({
-          ...cosmicConfig,
-          fee: cosmicConfig.fee.toString()
+          ...stardustConfig,
+          fee: stardustConfig.fee.toString()
         });
       }
       
       // Save updated tokens list
       this.saveToCache();
       
-      console.log('COSMIC token loaded successfully');
-      return cosmicConfig;
+      console.log('Stardust token loaded successfully');
+      return stardustConfig;
     } catch (error) {
-      console.error('Failed to initialize COSMIC token:', error);
+      console.error('Failed to initialize Stardust token:', error);
       // No need to throw - this is a background operation
       return null;
     }
@@ -295,10 +307,10 @@ class TokenService {
       // Mark as initialized after ICP is ready
       this.initialized = true;
       
-      // Initialize COSMIC token in background
+      // Initialize Stardust token in background
       setTimeout(() => {
         this.initializeCosmicToken().catch(err => 
-          console.warn('COSMIC token background initialization error:', err)
+          console.warn('Stardust token background initialization error:', err)
         );
       }, 100);
     } catch (error) {
@@ -408,8 +420,8 @@ class TokenService {
           console.error('Failed to parse metadata manually, using defaults:', fallbackError);
           // Use defaults instead of failing
           tokenInfo = {
-            symbol: canisterId === COSMIC_TOKEN_CANISTER_ID ? 'COSMIC' : 'UNKNOWN',
-            name: canisterId === COSMIC_TOKEN_CANISTER_ID ? 'Cosmic Token' : 'Unknown Token',
+            symbol: canisterId === STARDUST_TOKEN_CANISTER_ID ? 'STDs' : 'UNKNOWN',
+            name: canisterId === STARDUST_TOKEN_CANISTER_ID ? 'STARDUST' : 'Unknown Token',
             decimals: 8,
             logo: null
           };
@@ -448,17 +460,17 @@ class TokenService {
     } catch (error) {
       console.error(`Failed to initialize ICRC token ${canisterId}:`, error);
       // For known tokens, use default values instead of failing
-      if (canisterId === COSMIC_TOKEN_CANISTER_ID) {
+      if (canisterId === STARDUST_TOKEN_CANISTER_ID) {
         const defaultConfig = {
-          symbol: 'COSMIC',
-          name: 'Cosmic Token',
+          symbol: 'STDs',
+          name: 'Stardust',
           standard: 'icrc1',
           decimals: 8,
           canisterId,
           fee: BigInt(10000),
           logo: null
         };
-        this.tokenConfigs.set('COSMIC', defaultConfig);
+        this.tokenConfigs.set('STDs', defaultConfig);
         return defaultConfig;
       }
       throw error;

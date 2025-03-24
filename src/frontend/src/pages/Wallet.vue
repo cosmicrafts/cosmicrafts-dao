@@ -5,40 +5,97 @@
       <!-- Wallet Header with Account Info -->
       <div class="wallet-header cosmic-panel">
         <div class="account-info">
-          <div class="account-address">
-            <div class="address-label">
-              <span>{{ principalMode ? 'Principal ID' : 'Account ID' }}</span>
-              <button class="address-toggle" @click="principalMode = !principalMode">
-                <span>Show {{ principalMode ? 'Account ID' : 'Principal ID' }}</span>
-              </button>
+          <div class="address-label">
+            <span>{{ principalMode ? 'Principal ID' : 'Account ID' }}</span>
+            <button class="address-toggle" @click="principalMode = !principalMode">
+              <span>Show {{ principalMode ? 'Account ID' : 'Principal ID' }}</span>
+            </button>
+          </div>
+          <div class="address-value">
+            <span v-if="cachedIds.principal || tokenStore.principalId">{{ principalMode ? (tokenStore.principalId || cachedIds.principal) : (tokenStore.accountId || cachedIds.account) }}</span>
+            <span v-else class="skeleton-text">••••••••••••••••••••••••••••••••</span>
+            <button class="icon-button" @click="copyAddress()">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Token Grid -->
+      <div class="token-grid cosmic-panel">
+        <div class="token-grid-header">
+          <h3>Your Assets</h3>
+          <button class="icon-button refresh-button" @click="refreshAllBalancesInBackground" :disabled="balanceLoading">
+            <i class="fas fa-sync-alt" :class="{ 'rotating': balanceLoading }"></i>
+          </button>
+        </div>
+        
+        <!-- Loading state -->
+        <div v-if="!supportedTokens.length && !cachedTokens.length" class="token-grid-items skeleton-grid">
+          <div v-for="n in 2" :key="`skeleton-${n}`" class="token-card skeleton">
+            <div class="token-icon-container skeleton-circle"></div>
+            <div class="token-details">
+              <div class="skeleton-line"></div>
+              <div class="skeleton-line short"></div>
             </div>
-            <div class="address-value">
-              <span v-if="cachedIds.principal || tokenStore.principalId">{{ principalMode ? (tokenStore.principalId || cachedIds.principal) : (tokenStore.accountId || cachedIds.account) }}</span>
-              <span v-else class="skeleton-text">••••••••••••••••••••••••••••••••</span>
-              <button class="icon-button" @click="copyAddress()">
-                <i class="fas fa-copy"></i>
-              </button>
+          </div>
+        </div>
+        
+        <!-- Token cards -->
+        <div v-else class="token-grid-items">
+          <!-- ICP Token Card -->
+          <div 
+            :class="['token-card', { active: currentTokenSymbol === 'ICP' }]"
+            @click="changeToken('ICP')"
+          >
+            <div class="token-icon-container">
+              <img src="../assets/icons/icp.svg" alt="ICP" class="token-img" />
+            </div>
+            <div class="token-details">
+              <div class="token-symbol-name">{{ getTokenMetadata('ICP').name }}</div>
+              <div class="token-balance">
+                {{ getTokenBalance('ICP') }}
+              </div>
+            </div>
+          </div>
+          
+          <!-- Stardust Token Card -->
+          <div 
+            :class="['token-card', { active: currentTokenSymbol === 'STDs' }]"
+            @click="changeToken('STDs')"
+          >
+            <div class="token-icon-container cosmic-container">
+              <i class="fas fa-star cosmic-icon"></i>
+            </div>
+            <div class="token-details">
+              <div class="token-symbol-name">{{ getTokenMetadata('STDs').name }}</div>
+              <div class="token-balance">
+                {{ getTokenBalance('STDs') }}
+              </div>
+            </div>
+          </div>
+          
+          <!-- Other Tokens -->
+          <div 
+            v-for="token in (supportedTokens.length ? supportedTokens : cachedTokens).filter(t => t.symbol !== 'ICP' && t.symbol !== 'STDs')" 
+            :key="token.symbol"
+            :class="['token-card', { active: currentTokenSymbol === token.symbol }]"
+            @click="changeToken(token.symbol)"
+          >
+            <div class="token-icon-container">
+              <i :class="getTokenIcon(token.symbol)"></i>
+            </div>
+            <div class="token-details">
+              <div class="token-symbol-name">{{ getTokenMetadata(token.symbol).name }}</div>
+              <div class="token-balance">
+                {{ getTokenBalance(token.symbol) }}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Main Balance Card -->
-      <div class="main-balance-card cosmic-panel">
-        <div class="balance-header">
-          <h3>{{ currentTokenSymbol || 'Token' }} Balance</h3>
-          <button class="icon-button refresh-button" @click="refreshBalance" :disabled="balanceLoading">
-            <i class="fas fa-sync-alt" :class="{ 'rotating': balanceLoading }"></i>
-          </button>
-        </div>
-        <div class="balance-amount">
-          <span v-if="balanceLoading" class="loading-indicator">Loading...</span>
-          <span v-else class="amount">{{ currentFormattedBalance }}</span>
-          <span class="token-symbol">{{ currentTokenSymbol || 'ICP' }}</span>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
+      <!-- Wallet actions -->
       <div class="wallet-actions cosmic-panel">
         <button class="cosmic-button cosmic-button-primary action-button" @click="showSendForm = !showSendForm">
           <i class="fas fa-paper-plane"></i>
@@ -54,44 +111,57 @@
         </button>
       </div>
 
-      <!-- Token Assets List -->
-      <div class="token-assets cosmic-panel">
-        <div class="assets-header">
-          <h3>Assets</h3>
-          <span class="asset-count">{{ supportedTokens.length || cachedTokens.length || 0 }} tokens</span>
-        </div>
-        <div class="assets-list">
-          <!-- Skeleton loading placeholders when no tokens loaded yet -->
-          <div v-if="!supportedTokens.length && !cachedTokens.length" v-for="n in 2" :key="`skeleton-${n}`" class="asset-item skeleton">
-            <div class="asset-icon skeleton-circle"></div>
-            <div class="asset-details">
-              <div class="skeleton-line"></div>
-              <div class="skeleton-line short"></div>
-            </div>
-            <div class="asset-balance skeleton-line short"></div>
-          </div>
-          
-          <!-- Real token data once loaded -->
+      <!-- NFT Collection Section -->
+      <section v-if="showNFTSection" class="nft-collection cosmic-panel content-section collection-section">
+        <h2>NFT Collection</h2>
+        <div class="collection-tabs">
           <div 
-            v-else
-            v-for="token in (supportedTokens.length ? supportedTokens : cachedTokens)" 
-            :key="token.symbol"
-            :class="['asset-item', { active: currentTokenSymbol === token.symbol }]"
-            @click="changeToken(token.symbol)"
+            v-for="category in nftCategories" 
+            :key="category.type"
+            class="tab"
+            :class="{ 'active': activeCollection === category.type }"
+            @click="activeCollection = category.type"
           >
-            <div class="asset-icon">
-              <i :class="getTokenIcon(token.symbol)"></i>
-            </div>
-            <div class="asset-details">
-              <div class="asset-name">{{ token.name }}</div>
-              <div class="asset-symbol">{{ token.symbol }}</div>
-            </div>
-            <div class="asset-balance">
-              {{ getCachedTokenBalance(token.symbol) }}
+            <span class="tab-icon">{{ getCategoryIcon(category.type) }}</span>
+            {{ category.title }}
+            <span v-if="category.isLoading" class="loading-indicator">⟳</span>
+          </div>
+        </div>
+        <div class="collection-grid">
+          <div v-for="category in nftCategories" :key="category.type">
+            <div class="nft-grid" v-if="activeCollection === category.type">
+              <template v-if="category.isLoading">
+                <div class="nft-card skeleton" v-for="i in 6" :key="i">
+                  <div class="nft-image skeleton-image"></div>
+                  <div class="nft-info">
+                    <span class="nft-name skeleton-text"></span>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div 
+                  v-for="nft in category.items" 
+                  :key="nft.id"
+                  class="nft-card-wrapper"
+                >
+                  <NFTCard :nft="nft" />
+                  
+                  <!-- Add Open Chest button for chest-type NFTs -->
+                  <div v-if="nft.metadata.category === 'chests'" class="chest-actions">
+                    <button @click="openChest(nft)" class="open-chest-btn">
+                      <span class="chest-icon">🔓</span>
+                      Open Chest
+                    </button>
+                  </div>
+                </div>
+                <p v-if="category.items.length === 0" class="empty-message">
+                  No {{ category.title.toLowerCase() }} found in your collection
+                </p>
+              </template>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- Receive Modal -->
       <div v-if="showReceive" class="receive-container cosmic-panel">
@@ -177,17 +247,19 @@
             />
           </div>
           
-          <div class="input-group">
-            <label for="amount">Amount ({{ currentTokenSymbol }}):</label>
-            <input 
-              type="number" 
-              id="amount" 
-              v-model="amount" 
-              placeholder="0.00000000"
-              step="0.00000001"
-              min="0"
+          <div class="form-group">
+            <label for="amount">Amount</label>
+            <input
+              type="number"
+              id="amount"
+              v-model="transferAmount"
+              placeholder="Enter amount"
               class="cosmic-input"
-            />
+              :disabled="isSending"
+              min="0"
+              step="any"
+            >
+            <small class="info-text">{{ formattedTransactionFee }}</small>
           </div>
           
           <button 
@@ -255,6 +327,64 @@
         <div class="loading-spinner-small"></div>
         <span>{{ loadingPhases[0] }}</span>
       </div>
+
+      <!-- Chest Opening Modal -->
+      <div v-if="isOpeningChest" class="chest-modal-overlay" @click.self="closeChestDialog">
+        <div class="chest-modal">
+          <!-- Error state -->
+          <div v-if="openingError" class="chest-error">
+            <h3>Failed to Open Chest</h3>
+            <p>{{ openingError }}</p>
+            <button @click="closeChestDialog" class="cosmic-button cosmic-button-secondary">Close</button>
+          </div>
+          
+          <!-- Opening Animation -->
+          <div v-else-if="openingStage === 1" class="chest-opening-animation">
+            <h3>Opening {{ selectedChest?.name || 'Chest' }}...</h3>
+            <div class="chest-animation">
+              <div class="chest-glow"></div>
+              <img :src="selectedChest?.image" alt="Chest" class="chest-image pulse" />
+              <div class="particles-container">
+                <div class="particle" v-for="i in 20" :key="`particle-${i}`"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Rewards Display -->
+          <div v-else-if="openingStage === 2" class="chest-rewards">
+            <h3>Your Rewards</h3>
+            <div class="rewards-list">
+              <div 
+                v-for="(reward, index) in chestRewards" 
+                :key="`reward-${index}`"
+                class="reward-item"
+                :class="{ 'revealed': reward.revealed, [getRewardRarityClass(reward.rarity)]: true }"
+                @animationend="revealReward(index + 1)"
+              >
+                <div class="reward-icon" :class="{'stardust-icon': reward.type === 'currency' && reward.name === 'Stardust'}">
+                  <span v-if="reward.type === 'currency' && reward.name === 'Stardust'" class="cosmic-star">★</span>
+                  <span v-else>{{ getRewardTypeIcon(reward.type) }}</span>
+                </div>
+                <div class="reward-details">
+                  <div class="reward-name">{{ reward.name }}</div>
+                  <div class="reward-type">{{ reward.type === 'currency' ? 'COSMIC Token' : reward.type }}</div>
+                </div>
+                <div v-if="reward.quantity > 1" class="reward-quantity">
+                  x{{ reward.quantity }}
+                </div>
+              </div>
+              
+              <div v-if="chestRewards.length === 0" class="no-rewards">
+                <p>No rewards found in this chest</p>
+              </div>
+            </div>
+            
+            <button @click="closeChestDialog" class="cosmic-button cosmic-button-primary close-rewards">
+              Collect Rewards
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -266,24 +396,169 @@ import { useAuthStore } from '../stores/auth.js';
 import { useTokenStore } from '../stores/token.js';
 import { Principal } from '@dfinity/principal';
 import QRCodeVue3 from 'qrcode-vue3';
+import { useNftsStore } from '../stores/nfts.js';
+import { useCanisterStore } from '../stores/canister.js';
+import NFTCard from '../components/NFTCard.vue';
 
 // Define component outside setup to allow for async imports
 export default {
-  components: { QRCodeVue3 },
+  components: { QRCodeVue3, NFTCard },
   setup() {
     // Get stores
     const authStore = useAuthStore();
     const tokenStore = useTokenStore();
+    const nftsStore = useNftsStore();
+    const canisterStore = useCanisterStore();
 
     // Cached data
     const cachedIds = ref({ principal: '', account: '' });
     const cachedTokens = ref([]);
-    const tokenBalances = ref({});
+    const tokenBalances = ref({}); // Initialize as empty object
     const currentTokenSymbol = ref('ICP');
     const currentFormattedBalance = ref('0.00');
+    const transferAmount = ref('');
+    const errorMessage = ref('');
+    const successMessage = ref('');
+    const isSending = ref(false);
+    const isLoggedIn = computed(() => authStore.isAuthenticated());
+
+    // Get token metadata including decimals and fee from token configs
+    function getTokenMetadata(symbol) {
+      // First try to get from token store directly
+      if (tokenStore?.service?.tokenConfigs) {
+        const tokenConfig = tokenStore.service.tokenConfigs.get(symbol);
+        if (tokenConfig) {
+          return {
+            decimals: tokenConfig.decimals || 8,
+            fee: tokenConfig.fee || BigInt(10000),
+            name: tokenConfig.name || symbol,
+            standard: tokenConfig.standard || 'unknown'
+          };
+        }
+      }
+      
+      // Then try the cached tokens from token store
+      const tokenFromStore = supportedTokens.value.find(t => t.symbol === symbol);
+      if (tokenFromStore) {
+        return {
+          decimals: tokenFromStore.decimals || 8,
+          fee: BigInt(tokenFromStore.fee || '10000'),
+          name: tokenFromStore.name || symbol,
+          standard: tokenFromStore.standard || 'unknown'
+        };
+      }
+      
+      // Finally try our local cached tokens
+      const tokenFromCache = cachedTokens.value.find(t => t.symbol === symbol);
+      if (tokenFromCache) {
+        return {
+          decimals: tokenFromCache.decimals || 8,
+          fee: BigInt(tokenFromCache.fee || '10000'),
+          name: tokenFromCache.name || symbol,
+          standard: tokenFromCache.standard || 'unknown'
+        };
+      }
+      
+      // Default fallback
+      return {
+        decimals: 8,
+        fee: BigInt(10000),
+        name: symbol,
+        standard: 'unknown'
+      };
+    }
+    
+    // Format balance directly from BigInt to string with proper formatting
+    function formatBalance(balanceAmount, decimals = 8) {
+      try {
+        if (!balanceAmount) return '0';
+        
+        // Get actual decimals from token metadata if not provided
+        if (typeof decimals !== 'number' || decimals < 0) {
+          console.warn(`Invalid decimals: ${decimals}, using default 8`);
+          decimals = 8;
+        }
+        
+        const divisor = 10n ** BigInt(decimals);
+        
+        // Convert to string first to avoid floating point issues
+        const wholePart = balanceAmount / divisor;
+        const fractionalPart = balanceAmount % divisor;
+        
+        // Format with padding zeros
+        let fractionalStr = fractionalPart.toString().padStart(decimals, '0');
+        
+        // Trim trailing zeros but keep at least 2 decimal places
+        const trimmedFractional = fractionalStr.replace(/0+$/, '');
+        fractionalStr = trimmedFractional.length > 0 ? trimmedFractional : '00';
+        
+        // Ensure at least 2 decimal places
+        if (fractionalStr.length < 2) {
+          fractionalStr = fractionalStr.padEnd(2, '0');
+        }
+        
+        // Format with commas for thousands
+        const wholeFormatted = new Intl.NumberFormat().format(Number(wholePart));
+        
+        // For small amounts that round to zero, show at least the first significant digit
+        if (wholePart === 0n && fractionalPart > 0n) {
+          let significantDigits = '';
+          for (let i = 0; i < fractionalStr.length; i++) {
+            significantDigits += fractionalStr[i];
+            if (fractionalStr[i] !== '0') {
+              // Found first non-zero digit
+              break;
+            }
+          }
+          // Keep up to 4 more digits after the first significant digit
+          const displayDigits = significantDigits.length + 4;
+          return `${wholeFormatted}.${fractionalStr.substring(0, displayDigits)}`;
+        }
+        
+        // For normal amounts, show whole part and first few decimal places
+        return `${wholeFormatted}.${fractionalStr.substring(0, Math.min(fractionalStr.length, 8))}`;
+      } catch (error) {
+        console.error('Error formatting balance:', error);
+        return '0';
+      }
+    }
 
     // Use computed property to access token store's supported tokens
     const supportedTokens = computed(() => tokenStore.supportedTokens || []);
+
+    // Token Grid display function to directly get token balance display
+    function getTokenBalance(symbol, fallbackDecimals = 8) {
+      try {
+        const balance = tokenBalances.value?.[symbol] || BigInt(0);
+        // Get the proper decimals from metadata
+        const metadata = getTokenMetadata(symbol);
+        return formatBalance(balance, metadata.decimals);
+      } catch (error) {
+        console.error(`Error getting balance for ${symbol}:`, error);
+        return '0';
+      }
+    }
+    
+    // NFT data
+    const nftCategories = ref([
+      { type: 'all', title: 'All NFTs', items: [], isLoading: false },
+      { type: 'characters', title: 'Characters', items: [], isLoading: false },
+      { type: 'units', title: 'Units', items: [], isLoading: false },
+      { type: 'avatars', title: 'Avatars', items: [], isLoading: false },
+      { type: 'trophies', title: 'Trophies', items: [], isLoading: false },
+      { type: 'chests', title: 'Chests', items: [], isLoading: false }
+    ]);
+    const activeCollection = ref('all');
+    const showNFTSection = ref(false);
+    const fetchNFTs = ref(true);
+    const selectedNft = ref(null); // Added this for NFT selection
+    
+    // Chest opening state
+    const isOpeningChest = ref(false);
+    const selectedChest = ref(null);
+    const chestRewards = ref([]);
+    const openingStage = ref(0); // 0: not started, 1: opening, 2: showing rewards
+    const openingError = ref(null);
 
     // UI state variables
     const loadingPhases = ref([]);
@@ -295,11 +570,11 @@ export default {
     const showReceive = ref(false);
     const showFullLog = ref(false);
     const principalMode = ref(false);
+    const showTokenSelector = ref(false); // Added this for token selection UI
 
     // Form inputs
     const newTokenCanisterId = ref('');
     const recipient = ref('');
-    const amount = ref('');
     const recipientType = ref('accountId');
     const logs = ref([]);
 
@@ -321,40 +596,497 @@ export default {
       // Immediately load all cached data for instant UI - this must be synchronous
       loadAllCachedData();
       
+      // Make sure token balances object is initialized with empty values
+      tokenBalances.value = tokenBalances.value || {};
+      tokenBalances.value['ICP'] = tokenBalances.value['ICP'] || BigInt(0);
+      tokenBalances.value['STDs'] = tokenBalances.value['STDs'] || BigInt(0);
+      
       // Log UI ready immediately
       addLog('UI ready', 'success');
       
-      // DEFER all blockchain operations to after UI is rendered
-      nextTick(() => {
-        // Throttle initialization calls to allow UI to finish rendering
-        setTimeout(() => initializeUserIds().catch(e => console.error("User ID init error:", e)), 250);
-        
-        // Initialize token store FIRST, before other operations
-        setTimeout(() => {
-          if (tokenStore) {
-            tokenStore.initialize().then(() => {
-              // After store is initialized, update local cache
+      // Wait briefly to allow the UI to render before initiating async operations
+      setTimeout(() => {
+        // Initialize token store
+        if (tokenStore) {
+          tokenStore.initialize()
+            .then(() => {
               cachedTokens.value = tokenStore.supportedTokens || [];
               console.log("Token store initialized with", cachedTokens.value.length, "tokens");
               
-              // IMPORTANT: Now trigger background blockchain data fetch
-              setTimeout(() => {
-                refreshAllBalancesInBackground().catch(e => console.error("Initial balance fetch error:", e));
-              }, 200);
+              // Initialize user IDs
+              return initializeUserIds();
             })
-            .catch(e => console.error("Token store init error:", e));
-          }
-        }, 500);
-        
-        // Set up periodic refresh in background
-        setInterval(() => {
-          if (shouldRefresh()) {
-            refreshBalance(true).catch(e => console.error("Refresh error:", e));
-          }
-        }, 60000); // Check every minute
-      });
+            .then(() => {
+              // Now safely load balances in the background
+              return loadTokenBalances();
+            })
+            .then(() => {
+              // Also fetch NFTs in the background
+              if (fetchNFTs.value) {
+                fetchUserNFTs().catch(e => console.error("NFT fetch error:", e));
+              }
+            })
+            .catch(e => console.error("Initialization error:", e));
+        }
+      }, 200);
+      
+      // Set up periodic refresh in background
+      setInterval(() => {
+        if (shouldRefresh()) {
+          loadTokenBalances().catch(e => console.error("Refresh error:", e));
+        }
+      }, 60000); // Check every minute
     });
     
+    // Load token balances safely
+    async function loadTokenBalances() {
+      console.log("Loading token balances...");
+      
+      try {
+        // Fetch ICP balance first
+        try {
+          const icpBalance = await tokenStore.getBalance('ICP');
+          console.log("ICP balance:", icpBalance.toString());
+          tokenBalances.value['ICP'] = icpBalance;
+        } catch (icpError) {
+          console.error("Error loading ICP balance:", icpError);
+        }
+        
+        // Then fetch Stardust balance
+        try {
+          const stardustBalance = await tokenStore.getBalance('STDs');
+          console.log("Stardust balance:", stardustBalance.toString());
+          tokenBalances.value['STDs'] = stardustBalance;
+        } catch (stardustError) {
+          console.error("Error loading Stardust balance:", stardustError);
+        }
+        
+        // Save to cache regardless of individual errors
+        saveWalletDataToLocalStorage();
+        
+        console.log("Token balances loading completed");
+        return true;
+      } catch (error) {
+        console.error("Fatal error loading token balances:", error);
+        return false;
+      }
+    }
+    
+    // Fetch NFTs for the current user
+    async function fetchUserNFTs() {
+      try {
+        if (!authStore.isAuthenticated()) {
+          console.log("User not authenticated, skipping NFT fetch");
+          return;
+        }
+        
+        updateLoadingPhase('Loading NFTs...');
+        addLog('Fetching your NFT collection...', 'info');
+        
+        // Get the user's principal
+        const identity = authStore.getIdentity();
+        if (!identity) {
+          throw new Error("Identity not available");
+        }
+        
+        const principal = identity.getPrincipal();
+        const principalText = principal.toString();
+        
+        // Get cosmicrafts canister
+        const cosmicrafts = await canisterStore.get("cosmicrafts");
+        if (!cosmicrafts) {
+          throw new Error("Cosmicrafts canister not initialized");
+        }
+        
+        // Mark the category as loading
+        const category = nftCategories.value.find(c => c.type === activeCollection.value);
+        if (category) {
+          category.isLoading = true;
+        }
+        
+        // Use the same approach as Profile.vue for fetching NFTs
+        try {
+          const nfts = await cosmicrafts.getNFTs(principal);
+          const processedNfts = JSON.parse(
+            JSON.stringify(nfts || [], (key, value) => 
+              typeof value === 'bigint' ? value.toString() : value
+            )
+          );
+          
+          if (processedNfts?.length > 0) {
+            const categorizedNfts = processNFTs(processedNfts);
+            
+            // Clear existing items for all categories
+            nftCategories.value.forEach(cat => {
+              cat.items = [];
+            });
+            
+            // Distribute NFTs to their respective categories
+            categorizedNfts.forEach(nft => {
+              const nftCategory = nft.metadata.category?.toLowerCase() || 'characters';
+              
+              // Add to specific category
+              const categoryObj = nftCategories.value.find(c => c.type === nftCategory);
+              if (categoryObj) {
+                categoryObj.items.push(nft);
+              }
+              
+              // Add to "all" category
+              const allCategory = nftCategories.value.find(c => c.type === 'all');
+              if (allCategory) {
+                allCategory.items.push(nft);
+              }
+            });
+            
+            // Show the section if we have NFTs
+            showNFTSection.value = true;
+          }
+        } catch (error) {
+          console.error('Error fetching NFTs:', error);
+          addLog(`Error fetching NFTs: ${error.message}`, 'error');
+        }
+        
+        addLog(`NFT collection loaded successfully`, 'success');
+      } catch (error) {
+        console.error('Error in fetchUserNFTs:', error);
+        addLog(`Error fetching NFTs: ${error.message}`, 'error');
+      } finally {
+        // Mark all categories as not loading
+        nftCategories.value.forEach(category => {
+          category.isLoading = false;
+        });
+        
+        removeLoadingPhase('Loading NFTs...');
+      }
+    }
+    
+    // Process NFTs - directly copied from Profile.vue
+    function processNFTs(nfts) {
+      console.log('Processing NFTs:', nfts);
+      
+      return nfts.map(nft => {
+        try {
+          // Extract id and metadata from array format
+          const [id, rawMetadata] = nft;
+          
+          // The metadata structure is: metadata.metadata.general
+          const metadata = rawMetadata.metadata || {};
+          const general = metadata.general || {};
+          const basic = metadata.basic || [];
+          const category = metadata.category || {};
+          
+          // Determine category
+          let categoryType = 'unknown';
+          if (category) {
+            if ('Avatar' in category) categoryType = 'avatars';
+            else if ('Trophy' in category) categoryType = 'trophies';
+            else if ('Chest' in category) categoryType = 'chests';
+            else if ('Unit' in category) categoryType = 'units';
+          }
+
+          // Get the image path based on the NFT name for chests
+          const getImagePath = (name, category) => {
+            if (category === 'chests') {
+              const nameToPath = {
+                'Cosmic Cache': '/assets/webp/cosmic-cache.webp',
+                'Stellar Box': '/assets/webp/stellar-box.webp',
+                'Nebula Cube': '/assets/webp/nebula-cube.webp',
+                'Galactic Crate': '/assets/webp/galactic-crate.webp',
+                'Astral Vault': '/assets/webp/astral-vault.webp',
+                'Celestial Locker': '/assets/webp/celestial-locker.webp',
+                'Quantum Chest': '/assets/webp/quantum-chest.webp',
+                'Ethereal Metacube': '/assets/webp/ethereal-metacube.webp'
+              };
+              const resolvedPath = nameToPath[name] || '/assets/webp/cosmic-cache.webp';
+              return resolvedPath;
+            }
+            
+            // Fallback to category-based images
+            let fallbackPath;
+            switch(category) {
+              case 'avatars':
+                fallbackPath = '/assets/webp/avatar.webp';
+                break;
+              case 'units':
+                fallbackPath = '/assets/webp/unit.webp';
+                break;
+              case 'trophies':
+                fallbackPath = '/assets/webp/trophy.webp';
+                break;
+              default:
+                fallbackPath = '/assets/webp/nft.webp';
+            }
+            return fallbackPath;
+          };
+
+          // Process faction if it exists (it's an array with a single object)
+          let faction = null;
+          if (general.faction && Array.isArray(general.faction) && general.faction.length > 0) {
+            const factionObj = general.faction[0];
+            if ('Cosmicon' in factionObj) faction = 'cosmicon';
+            else if ('Spade' in factionObj) faction = 'spade';
+            else if ('Arch' in factionObj) faction = 'arch';
+            else if ('Celestial' in factionObj) faction = 'celestial';
+            else if ('Webe' in factionObj) faction = 'webe';
+            else if ('Neutral' in factionObj) faction = 'neutral';
+            else if ('Spirat' in factionObj) faction = 'spirat';
+          }
+
+          // Process rarity (it's an array with a single value)
+          const rarity = general.rarity && Array.isArray(general.rarity) 
+            ? general.rarity[0] 
+            : 1;
+
+          // Get basic stats
+          const level = basic.length > 0 ? basic[0].level || 1 : 1;
+          const damage = basic.length > 0 ? basic[0].damage || 0 : 0;
+          const health = basic.length > 0 ? basic[0].health || 0 : 0;
+
+          // Process skills
+          const skills = metadata.skills || [];
+          const processedSkills = skills.map(skill => {
+            if ('CriticalStrike' in skill) return 'critical-strike';
+            if ('Shield' in skill) return 'shield';
+            if ('Evasion' in skill) return 'evasion';
+            return null;
+          }).filter(Boolean);
+
+          // Process soul data if it exists
+          const soulData = metadata.soul || [];
+          const soul = soulData.length > 0 ? {
+            gamesPlayed: soulData[0].gamesPlayed || 0,
+            totalDamageDealt: soulData[0].totalDamageDealt || 0,
+            birth: soulData[0].birth || Date.now(),
+            totalKills: soulData[0].totalKills || 0,
+            combatExperience: soulData[0].combatExperience || 0
+          } : null;
+
+          const name = general.name || 'Unknown NFT';
+          const imagePath = getImagePath(name, categoryType);
+
+          // Construct the final NFT object
+          const processedNFT = {
+            id: id?.toString() || 'unknown',
+            name,
+            description: general.description || '',
+            image: imagePath,
+            metadata: {
+              category: categoryType,
+              faction,
+              rarity,
+              level,
+              damage,
+              health,
+              skills: processedSkills,
+              soul
+            }
+          };
+
+          return processedNFT;
+        } catch (error) {
+          console.error('Error processing NFT:', error, 'NFT data:', nft);
+          return {
+            id: 'error',
+            name: 'Error Loading NFT',
+            description: 'Failed to load NFT data',
+            image: '/assets/webp/nft.webp',
+            metadata: {
+              category: 'unknown',
+              rarity: 1,
+              level: 1
+            }
+          };
+        }
+      });
+    }
+    
+    // Start chest opening process
+    async function openChest(chest) {
+      if (isOpeningChest.value) return; // Prevent multiple simultaneous chest openings
+      
+      try {
+        // Set up state for opening
+        isOpeningChest.value = true;
+        selectedChest.value = chest;
+        openingStage.value = 1;
+        openingError.value = null;
+        chestRewards.value = [];
+        
+        addLog(`Opening ${chest.name} chest...`, 'info');
+        
+        // Get the cosmicrafts canister
+        const cosmicrafts = await canisterStore.get("cosmicrafts");
+        if (!cosmicrafts) {
+          throw new Error("Cosmicrafts canister not initialized");
+        }
+        
+        // Call the openChest function with the chest ID
+        const chestId = chest.id;
+        const result = await cosmicrafts.openChest(BigInt(chestId));
+        
+        console.log('Chest opening result:', result);
+        
+        if (!result) {
+          throw new Error("Failed to open chest: No response from canister");
+        }
+        
+        // Process the rewards
+        const processedRewards = processRewards(result);
+        chestRewards.value = processedRewards;
+        
+        // Move to rewards stage after a short delay for animation
+        setTimeout(() => {
+          openingStage.value = 2;
+        }, 2000);
+        
+        addLog(`Successfully opened ${chest.name} chest!`, 'success');
+        
+        // Refresh NFTs in the background after opening
+        setTimeout(() => {
+          fetchUserNFTs().catch(e => console.error("Error refreshing NFTs after chest opening:", e));
+        }, 3000);
+      } catch (error) {
+        console.error('Error opening chest:', error);
+        openingError.value = error.message;
+        addLog(`Error opening chest: ${error.message}`, 'error');
+      }
+    }
+    
+    // Process the rewards from the canister
+    function processRewards(rewardsData) {
+      try {
+        // The result is an array where first element is success boolean and second is the reward JSON string
+        if (!Array.isArray(rewardsData) || rewardsData.length !== 2) {
+          return [];
+        }
+
+        const [success, rewardJson] = rewardsData;
+        if (!success) return [];
+
+        try {
+          const reward = JSON.parse(rewardJson);
+          
+          // For Stardust token rewards
+          if (reward.token === "Stardust") {
+            return [{
+              id: reward.transaction_id?.toString() || 'unknown',
+              type: 'currency',
+              name: 'Stardust',
+              description: 'Stardust Token',
+              image: '/assets/webp/cosmic-token.webp',
+              rarity: 3, // Make it rare since it's the game currency
+              quantity: reward.amount || 0,
+              revealed: true,
+              symbol: 'STDs' // Use STDs symbol for token reference
+            }];
+          }
+          
+          return [];
+        } catch (parseError) {
+          console.error('Error parsing reward JSON:', parseError);
+          return [];
+        }
+      } catch (error) {
+        console.error('Error processing rewards:', error);
+        return [];
+      }
+    }
+
+    // Close the chest opening dialog and handle cleanup
+    async function closeChestDialog() {
+      try {
+        if (selectedChest.value) {
+          // Remove the opened chest from memory
+          const chestCategory = nftCategories.value.find(c => c.type === 'chests');
+          if (chestCategory) {
+            chestCategory.items = chestCategory.items.filter(item => item.id !== selectedChest.value.id);
+          }
+          
+          // Also remove from 'all' category
+          const allCategory = nftCategories.value.find(c => c.type === 'all');
+          if (allCategory) {
+            allCategory.items = allCategory.items.filter(item => item.id !== selectedChest.value.id);
+          }
+
+          // If we got Stardust rewards, handle them properly
+          const stardustRewards = chestRewards.value.filter(r => r.name === 'Stardust');
+          if (stardustRewards.length > 0) {
+            // Get the total amount received
+            const totalAmount = stardustRewards.reduce((sum, reward) => sum + reward.quantity, 0);
+            
+            // Add a log entry showing the amount received
+            addLog(`Received ${totalAmount} Stardust tokens!`, 'success');
+            
+            // Immediately update both token balances
+            await fetchTokenBalance('ICP');
+            await fetchTokenBalance('STDs');
+            
+            // Force update UI
+            currentTokenSymbol.value = 'STDs';
+            updateCurrentFormattedBalance();
+            
+            // Save to cache after updating
+            saveWalletDataToLocalStorage();
+          }
+        }
+      } catch (error) {
+        console.error('Error in closeChestDialog:', error);
+      } finally {
+        // Reset state
+        isOpeningChest.value = false;
+        selectedChest.value = null;
+        openingStage.value = 0;
+        openingError.value = null;
+        chestRewards.value = [];
+      }
+    }
+    
+    // Reveal a reward (for animation sequencing)
+    function revealReward(index) {
+      if (index < chestRewards.value.length) {
+        chestRewards.value[index].revealed = true;
+      }
+    }
+    
+    // Get a CSS class for reward rarity display
+    function getRewardRarityClass(rarity) {
+      const classes = {
+        1: 'common',
+        2: 'uncommon',
+        3: 'rare',
+        4: 'epic',
+        5: 'legendary'
+      };
+      return classes[rarity] || 'common';
+    }
+    
+    // Get reward type icon
+    function getRewardTypeIcon(type) {
+      const icons = {
+        'character': '🦸',
+        'unit': '⚔️',
+        'avatar': '🎭',
+        'trophy': '🏆',
+        'currency': '💰',
+        'resource': '🔹',
+        'xp': '⭐'
+      };
+      return icons[type] || '🎁';
+    }
+
+    // Get icon for NFT category
+    function getCategoryIcon(type) {
+      const icons = {
+        all: '🎯',
+        characters: '🦸',
+        units: '⚔️',
+        avatars: '🎭',
+        trophies: '🏆',
+        chests: '📦'
+      };
+      return icons[type] || '📦';
+    }
+
     // New method to refresh all balances in background
     async function refreshAllBalancesInBackground() {
       updateLoadingPhase('Updating balances from blockchain...');
@@ -495,24 +1227,30 @@ export default {
     // Update current formatted balance
     function updateCurrentFormattedBalance() {
       try {
-        const symbol = currentTokenSymbol.value;
-        currentFormattedBalance.value = getCachedTokenBalance(symbol);
-      } catch (e) {
+        if (!currentTokenSymbol.value) return;
+        
+        const balance = tokenBalances.value[currentTokenSymbol.value] || BigInt(0);
+        const metadata = getTokenMetadata(currentTokenSymbol.value);
+        currentFormattedBalance.value = formatBalance(balance, metadata.decimals);
+      } catch (error) {
+        console.error('Error updating formatted balance:', error);
         currentFormattedBalance.value = '0.00';
       }
     }
 
     // Get formatted token balance from cache 
     function getCachedTokenBalance(symbol) {
+      // Don't trigger auto-fetching - causes infinite loops
       if (!tokenBalances.value[symbol]) {
-        return '0.00';
+        return '0';
       }
       
       // Try to format ourselves
       try {
         // Find token decimals from the token list
-        const token = cachedTokens.value.find(t => t.symbol === symbol);
-        if (!token) return '0.00';
+        const token = cachedTokens.value.find(t => t.symbol === symbol) || 
+                     supportedTokens.value.find(t => t.symbol === symbol);
+        if (!token) return '0';
         
         const decimals = token.decimals || 8; // Default to 8 decimals if not specified
         const divisor = 10 ** decimals;
@@ -539,11 +1277,11 @@ export default {
         // Add thousands separators for better readability
         return numericValue.toLocaleString(undefined, { 
           minimumFractionDigits: 2,
-          maximumFractionDigits: 8
+          maximumFractionDigits: decimals
         });
       } catch (error) {
         console.error('Error formatting cached token amount:', error);
-        return '0.00';
+        return '0';
       }
     }
 
@@ -674,8 +1412,11 @@ export default {
           return null;
         }
         
+        console.log(`Fetching ${symbol} balance...`);
+        
         // Use token store to get balance from blockchain
         const balance = await tokenStore.getBalance(symbol);
+        console.log(`Balance fetched for ${symbol}:`, balance.toString());
         
         // Convert to BigInt if it's not already one
         if (typeof balance === 'string') {
@@ -692,6 +1433,7 @@ export default {
         // Save to cache
         saveWalletDataToLocalStorage();
         
+        if (!silent) addLog(`${symbol} balance updated`, 'success', true);
         return balance;
       } catch (error) {
         console.error(`Error fetching ${symbol} balance:`, error);
@@ -738,10 +1480,9 @@ export default {
     function getTokenIcon(symbol) {
       const iconMap = {
         'ICP': 'fas fa-globe',
-        'COSMIC': 'fas fa-star',
+        'STDs': 'fas fa-star', // For Stardust token
         'BTC': 'fab fa-bitcoin',
-        'ETH': 'fab fa-ethereum',
-        'STDs': 'fas fa-star' // For Stardust token
+        'ETH': 'fab fa-ethereum'
       };
       
       return iconMap[symbol] || 'fas fa-coins';
@@ -858,7 +1599,7 @@ export default {
     
     // Validate transfer inputs
     const isValidTransfer = computed(() => {
-      if (!recipient.value || !amount.value || parseFloat(amount.value) <= 0) {
+      if (!recipient.value || !transferAmount.value || parseFloat(transferAmount.value) <= 0) {
         return false;
       }
       
@@ -876,46 +1617,68 @@ export default {
       }
     });
     
-    // Send tokens to another account
+    // Send tokens to another wallet
     async function sendTokens() {
-      if (!isValidTransfer.value) {
-        addLog('Invalid transfer details', 'error');
+      if (!isLoggedIn.value) {
+        addLog('You must be logged in to send tokens', 'error');
         return;
       }
       
-      // Ensure token store is ready
-      if (!tokenStore) {
-        addLog('Token store not yet initialized', 'error');
+      if (!isValidTransfer.value) {
+        addLog('Invalid transfer details', 'error');
         return;
       }
       
       transferLoading.value = true;
       
       try {
-        addLog(`Sending ${amount.value} ${currentTokenSymbol.value} to ${recipient.value}...`, 'info');
+        // Get token metadata including fee
+        const tokenMetadata = getTokenMetadata(currentTokenSymbol.value);
         
-        const result = await tokenStore.transferTokens(recipient.value, amount.value);
+        // Format amount to proper decimals based on token
+        const amountToSend = parseFloat(transferAmount.value);
+        if (isNaN(amountToSend) || amountToSend <= 0) {
+          addLog('Please enter a valid amount', 'error');
+          transferLoading.value = false;
+          return;
+        }
         
-        if (result.success) {
-          const confirmationId = result.blockHeight || result.blockIndex;
+        // Convert from human-readable to token format with correct decimals
+        const decimals = tokenMetadata.decimals;
+        const rawAmount = BigInt(Math.floor(amountToSend * (10 ** decimals)));
+        
+        // Check if we have enough balance (including fee)
+        const currentBalance = tokenBalances.value[currentTokenSymbol.value] || BigInt(0);
+        const fee = tokenMetadata.fee || BigInt(10000);
+        
+        if (currentBalance < (rawAmount + fee)) {
+          addLog(`Not enough balance. Need ${formatBalance(rawAmount + fee, decimals)} ${currentTokenSymbol.value} (including fee)`, 'error');
+          transferLoading.value = false;
+          return;
+        }
+        
+        addLog(`Sending ${transferAmount.value} ${currentTokenSymbol.value} to ${recipient.value}...`, 'info');
+        
+        // Send tokens using TokenStore service
+        const result = await tokenStore.transferTokens(recipient.value.trim(), amountToSend, currentTokenSymbol.value);
+        
+        if (result && result.success) {
+          addLog(`Successfully sent ${transferAmount.value} ${currentTokenSymbol.value}!`, 'success');
           
-          addLog(`Successfully sent ${amount.value} ${currentTokenSymbol.value} to ${recipient.value}`, 'success');
-          addLog(`Transaction confirmed with ${confirmationId ? `ID: ${confirmationId}` : 'success'}`, 'success');
+          // Update the balance after transfer
+          await fetchTokenBalance(currentTokenSymbol.value);
+          updateCurrentFormattedBalance();
           
-          // Refresh balance after sending - do it async
-          setTimeout(() => {
-            refreshBalance().catch(e => console.error('Refresh error:', e));
-          }, 0);
-          
-          // Clear form and hide it
+          // Clear fields
+          transferAmount.value = '';
           recipient.value = '';
-          amount.value = '';
           showSendForm.value = false;
         } else {
-          addLog(`Transfer failed: ${result.error || 'Unknown error'}`, 'error');
+          addLog(`Transfer failed: ${result?.error || 'Unknown error'}`, 'error');
         }
       } catch (error) {
-        addLog(`Error sending ${currentTokenSymbol.value}: ${error.message}`, 'error');
+        console.error('Error sending tokens:', error);
+        addLog(`Error: ${error.message || 'Unknown error'}`, 'error');
       } finally {
         transferLoading.value = false;
       }
@@ -942,30 +1705,39 @@ export default {
       }
     }
     
-    // Add log entry
-    function addLog(message, type = 'info', showActivity = true) {
-      const now = new Date();
-      const timeStr = now.toTimeString().split(' ')[0];
-      
-      logs.value.unshift({
-        time: timeStr,
-        message,
-        type
-      });
-      
-      // Keep logs limited to recent entries
-      if (logs.value.length > 20) {
-        logs.value = logs.value.slice(0, 20);
+    // Add log entry - make it more resilient to prevent infinite loops
+    function addLog(message, type = 'info', silent = false) {
+      if (silent) {
+        // Just log to console but don't update UI state to prevent re-renders
+        console.log(`[Wallet] ${message}`);
+        return;
       }
-      
-      // Save logs to localStorage
+
       try {
-        localStorage.setItem(WALLET_LOGS_KEY, JSON.stringify(logs.value));
-      } catch (e) {}
-      
-      // Also show in console
-      if (showActivity) {
+        const now = new Date();
+        const timeStr = now.toTimeString().split(' ')[0];
+        
+        logs.value.unshift({
+          time: timeStr,
+          message,
+          type
+        });
+        
+        // Keep logs limited to recent entries
+        if (logs.value.length > 20) {
+          logs.value = logs.value.slice(0, 20);
+        }
+        
+        // Save logs to localStorage
+        try {
+          localStorage.setItem(WALLET_LOGS_KEY, JSON.stringify(logs.value));
+        } catch (e) {}
+        
+        // Also show in console
         console.log(`[Wallet ${timeStr}] ${message}`);
+      } catch (error) {
+        // Fail silently to prevent UI errors
+        console.error("Error adding log:", error);
       }
     }
     
@@ -980,63 +1752,111 @@ export default {
       } catch (e) {}
     });
     
+    // Compute transfer fee for current token
+    const currentTokenFee = computed(() => {
+      if (!currentTokenSymbol.value) return '0';
+      try {
+        const metadata = getTokenMetadata(currentTokenSymbol.value);
+        return formatBalance(metadata.fee, metadata.decimals);
+      } catch (error) {
+        console.error('Error calculating token fee:', error);
+        return '0';
+      }
+    });
+    
+    // Format transaction fee for display
+    const formattedTransactionFee = computed(() => {
+      return `Transfer fee: ${currentTokenFee.value} ${currentTokenSymbol.value}`;
+    });
+
+    // Add a simple clearLogs function before the return statement
+    function clearLogs() {
+      logs.value = [];
+      try {
+        localStorage.setItem(WALLET_LOGS_KEY, JSON.stringify([]));
+      } catch (e) {
+        console.error('Error clearing logs:', e);
+      }
+    }
+
     // Return all the data and functions the template needs
     return {
+      // Stores
+      tokenStore,
+      authStore,
+      nftsStore,
+      canisterStore,
+      
+      // State properties
+      tokenBalances,
+      supportedTokens,
+      cachedTokens,
+      currentTokenSymbol,
+      currentFormattedBalance,
+      recipient,
+      transferAmount,
+      errorMessage,
+      successMessage,
+      isSending,
+      isLoggedIn,
+      logs,
+      nftCategories,
+      selectedNft,
+      selectedChest,
+      chestRewards,
+      isOpeningChest,
+      openingStage,
+      openingError,
+      showTokenSelector,
       // UI state
-      loadingPhases,
-      balanceLoading,
-      addTokenLoading,
-      transferLoading,
       showSendForm,
       showAddToken,
       showReceive,
       showFullLog,
       principalMode,
-      
-      // Form inputs
-      newTokenCanisterId,
-      recipient,
-      amount,
       recipientType,
-      logs,
-      
-      // Cached data
+      balanceLoading,
+      addTokenLoading,
+      transferLoading,
+      newTokenCanisterId,
+      loadingPhases,
+      activeCollection,
+      showNFTSection,
       cachedIds,
-      cachedTokens,
-      tokenBalances,
-      currentTokenSymbol,
-      currentFormattedBalance,
       
-      // Computed properties from token store
-      supportedTokens,
-      
-      // Store references
-      authStore,
-      tokenStore,
-      
-      // Methods
-      updateCurrentFormattedBalance,
-      getCachedTokenBalance,
-      initializeUserIds,
-      refreshAllBalancesInBackground,
-      shouldRefresh,
+      // Functions
+      changeToken,
+      getTokenIcon,
+      getTokenMetadata,
+      formatBalance,
+      getTokenBalance,
       saveWalletDataToLocalStorage,
       fetchTokenBalance,
-      refreshBalance,
+      loadTokenBalances,
+      sendTokens,
+      addLog,
+      clearLogs,
+      processRewards,
+      openChest,
+      closeChestDialog,
+      copyAddress,
+      getCategoryIcon,
       updateLoadingPhase,
       removeLoadingPhase,
-      getTokenIcon,
-      changeToken,
+      refreshAllBalancesInBackground,
+      fetchUserNFTs,
+      getRewardRarityClass,
+      getRewardTypeIcon,
+      revealReward,
       addCustomToken,
-      copyAddress,
-      sendTokens,
       isValidAccountId,
       isValidPrincipal,
-      addLog,
       
       // Computed properties
       isValidCanisterId,
-      isValidTransfer
+      isValidTransfer,
+      currentTokenFee,
+      formattedTransactionFee
     };
   }
 };
@@ -1198,6 +2018,7 @@ export default {
 .balance-amount {
   font-size: 2.5rem;
   font-weight: 700;
+  margin-bottom: 16px;
 }
 
 .token-symbol {
@@ -1206,12 +2027,72 @@ export default {
   opacity: 0.8;
 }
 
+/* Token selector */
+.token-selector {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.token-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  border-radius: var(--radius-medium);
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 80px;
+  height: 80px;
+}
+
+.token-option:hover {
+  background: rgba(15, 185, 253, 0.1);
+  transform: translateY(-2px);
+}
+
+.token-option.active {
+  background: rgba(15, 185, 253, 0.2);
+  box-shadow: 0 0 15px rgba(15, 185, 253, 0.3);
+  border: 1px solid rgba(15, 185, 253, 0.4);
+}
+
+.token-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.token-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.token-icon i {
+  font-size: 24px;
+  color: var(--color-primary);
+}
+
+.token-name {
+  font-size: 0.8rem;
+  text-align: center;
+}
+
 /* Wallet actions */
 .wallet-actions {
   display: flex;
   justify-content: space-around;
   padding: 16px;
   background: var(--cosmic-panel-bg);
+  border-radius: var(--radius-medium);
+  margin-top: 16px;
 }
 
 .action-button {
@@ -1220,11 +2101,12 @@ export default {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px;
+  padding: 15px;
   flex: 1;
   margin: 0 8px;
   max-width: 120px;
   background: linear-gradient(to bottom, var(--color-primary), var(--color-primary-dark));
+  border-radius: var(--radius-medium);
 }
 
 .action-button i {
@@ -1232,20 +2114,20 @@ export default {
   margin-bottom: 4px;
 }
 
-/* Token assets list */
-.token-assets {
+/* Token overview panel */
+.token-overview {
   padding: 16px;
   background: var(--cosmic-panel-bg);
 }
 
-.assets-header {
+.overview-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
 }
 
-.assets-header h3 {
+.overview-header h3 {
   margin: 0;
   font-size: 1.2rem;
   font-weight: 600;
@@ -1292,24 +2174,14 @@ export default {
   margin-right: 12px;
   font-size: 1.2rem;
   color: var(--color-primary);
+  overflow: hidden;
 }
 
-.asset-details {
-  flex: 1;
-}
-
-.asset-name {
-  font-weight: 600;
-}
-
-.asset-symbol {
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
-}
-
-.asset-balance {
-  font-weight: 600;
-  text-align: right;
+.token-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
 }
 
 /* Forms */
@@ -1599,5 +2471,723 @@ export default {
   border-radius: 50%;
   border-top: 2px solid var(--color-primary);
   animation: spin 1s linear infinite;
+}
+
+/* NFT Collection Styles - Copied from Profile.vue */
+.content-section {
+  background: var(--color-surface-primary);
+  border-radius: var(--radius-large);
+  padding: var(--space-xl);
+  backdrop-filter: blur(10px);
+  border: var(--border-thin);
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: hidden;
+  margin-top: 16px;
+}
+
+.content-section h2 {
+  color: var(--color-primary);
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-xl);
+  text-shadow: var(--shadow-glow-primary);
+  word-break: break-word;
+}
+
+.collection-tabs {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  overflow-x: auto;
+  padding-bottom: var(--space-sm);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.collection-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface-tertiary);
+  border-radius: var(--radius-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-slow);
+  flex-shrink: 0;
+}
+
+.tab:hover {
+  background: rgba(0, 217, 255, 0.1);
+}
+
+.tab.active {
+  background: var(--gradient-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow-primary);
+}
+
+.tab-icon {
+  margin-right: 6px;
+}
+
+.loading-indicator {
+  display: inline-block;
+  animation: spin 2s infinite linear;
+  margin-left: 6px;
+}
+
+.nft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-lg);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.empty-message {
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--color-text-tertiary);
+  font-style: italic;
+  grid-column: 1 / -1;
+}
+
+.nft-card.skeleton {
+  background: var(--color-surface-tertiary);
+  padding: var(--space-md);
+  border-radius: var(--radius-medium);
+  backdrop-filter: blur(10px);
+  border: var(--border-thin);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.skeleton-image {
+  aspect-ratio: 1;
+  width: 100%;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.05) 25%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(255, 255, 255, 0.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-small);
+  margin-bottom: var(--space-sm);
+}
+
+.skeleton-text {
+  height: 16px;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.05) 25%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(255, 255, 255, 0.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-small);
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .nft-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .content-section {
+    padding: var(--space-lg);
+  }
+  
+  .nft-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+  
+  .tab {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .nft-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+  
+  .content-section {
+    padding: var(--space-md);
+  }
+}
+
+/* NFT Card Wrapper for Open Chest Button */
+.nft-card-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.chest-actions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-bottom-left-radius: var(--radius-medium);
+  border-bottom-right-radius: var(--radius-medium);
+}
+
+.nft-card-wrapper:hover .chest-actions {
+  opacity: 1;
+}
+
+.open-chest-btn {
+  background: var(--gradient-accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-medium);
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.open-chest-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.chest-icon {
+  font-size: 1.2em;
+}
+
+/* Chest Opening Modal */
+.chest-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.chest-modal {
+  background: var(--color-surface-primary);
+  border-radius: var(--radius-large);
+  box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 30px;
+  border: var(--border-thin);
+  animation: modalAppear 0.4s ease forwards;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.chest-error {
+  text-align: center;
+  padding: 20px;
+}
+
+.chest-error h3 {
+  color: var(--color-error);
+  margin-bottom: 15px;
+}
+
+/* Chest Opening Animation */
+.chest-opening-animation {
+  text-align: center;
+  padding: 20px;
+}
+
+.chest-opening-animation h3 {
+  color: var(--color-primary);
+  margin-bottom: 30px;
+  animation: pulse 1.5s infinite alternate;
+}
+
+.chest-animation {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 30px;
+}
+
+.chest-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 217, 255, 0.5) 0%, rgba(255, 186, 0, 0.2) 50%, transparent 80%);
+  animation: glow 2s infinite alternate;
+  z-index: 1;
+}
+
+.chest-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 2;
+}
+
+.pulse {
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  to {
+    transform: scale(1.05);
+    filter: brightness(1.3);
+  }
+}
+
+@keyframes glow {
+  from {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.particles-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.particles-container .particle:nth-child(odd) {
+  background: gold;
+}
+
+.particles-container .particle:nth-child(3n) {
+  background: white;
+}
+
+.particles-container .particle:nth-child(1) { animation: particle1 2s infinite; }
+.particles-container .particle:nth-child(2) { animation: particle2 2.2s infinite; }
+.particles-container .particle:nth-child(3) { animation: particle3 1.8s infinite; }
+.particles-container .particle:nth-child(4) { animation: particle4 2.5s infinite; }
+.particles-container .particle:nth-child(5) { animation: particle5 1.9s infinite; }
+.particles-container .particle:nth-child(6) { animation: particle6 2.3s infinite; }
+.particles-container .particle:nth-child(7) { animation: particle7 2.1s infinite; }
+.particles-container .particle:nth-child(8) { animation: particle8 1.7s infinite; }
+.particles-container .particle:nth-child(9) { animation: particle9 2.4s infinite; }
+.particles-container .particle:nth-child(10) { animation: particle10 2.6s infinite; }
+
+@keyframes particle1 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(-50px, -50px); opacity: 0; }
+}
+
+@keyframes particle2 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(50px, -60px); opacity: 0; }
+}
+
+@keyframes particle3 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(30px, 70px); opacity: 0; }
+}
+
+@keyframes particle4 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(-40px, 60px); opacity: 0; }
+}
+
+@keyframes particle5 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(-70px, 0px); opacity: 0; }
+}
+
+@keyframes particle6 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(70px, 10px); opacity: 0; }
+}
+
+@keyframes particle7 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(0px, -80px); opacity: 0; }
+}
+
+@keyframes particle8 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(0px, 80px); opacity: 0; }
+}
+
+@keyframes particle9 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(-60px, 30px); opacity: 0; }
+}
+
+@keyframes particle10 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(60px, -30px); opacity: 0; }
+}
+
+/* Rewards Display */
+.chest-rewards {
+  text-align: center;
+}
+
+.chest-rewards h3 {
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px var(--color-primary);
+}
+
+.rewards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-medium);
+  opacity: 0;
+  transform: translateY(20px);
+  border-left: 4px solid transparent;
+}
+
+.reward-item.revealed {
+  animation: revealReward 0.5s forwards;
+}
+
+@keyframes revealReward {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reward-icon {
+  font-size: 2em;
+  margin-right: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Stardust token special styling */
+.stardust-icon {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(200, 150, 255, 0.3));
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.cosmic-star {
+  font-size: 1.5em;
+  color: gold;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+  animation: starPulse 2s infinite alternate;
+}
+
+@keyframes starPulse {
+  from {
+    transform: scale(1);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+  }
+  to {
+    transform: scale(1.2);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 1);
+  }
+}
+
+.reward-details {
+  flex: 1;
+  text-align: left;
+}
+
+.reward-name {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.reward-type {
+  font-size: 0.9em;
+  color: var(--color-text-tertiary);
+  text-transform: capitalize;
+}
+
+.reward-quantity {
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px 10px;
+  border-radius: var(--radius-medium);
+}
+
+.close-rewards {
+  padding: 12px 30px;
+  margin-top: 20px;
+}
+
+.no-rewards {
+  padding: 30px;
+  color: var(--color-text-tertiary);
+  font-style: italic;
+}
+
+/* Reward rarity colors */
+.reward-item.common {
+  border-left-color: #9e9e9e;
+}
+
+.reward-item.uncommon {
+  border-left-color: #4caf50;
+}
+
+.reward-item.rare {
+  border-left-color: #2196f3;
+  box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+}
+
+.reward-item.epic {
+  border-left-color: #9c27b0;
+  box-shadow: 0 0 15px rgba(156, 39, 176, 0.4);
+}
+
+.reward-item.legendary {
+  border-left-color: #ffc107;
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+  animation: legendaryGlow 2s infinite alternate !important;
+}
+
+@keyframes legendaryGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(255, 193, 7, 0.8);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .chest-modal {
+    width: 95%;
+    padding: 20px;
+  }
+  
+  .chest-animation {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .reward-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  .chest-modal {
+    padding: 15px;
+  }
+  
+  .reward-item {
+    padding: 10px;
+  }
+  
+  .reward-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1.2em;
+    margin-right: 10px;
+  }
+  
+  .reward-name {
+    font-size: 0.9em;
+  }
+  
+  .reward-type {
+    font-size: 0.8em;
+  }
+}
+
+/* Main Token Grid */
+.token-grid {
+  padding: 24px;
+  background: var(--cosmic-panel-bg);
+  border-radius: var(--radius-medium);
+}
+
+.token-grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.token-grid-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.token-grid-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.token-card {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-medium);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.token-card:hover {
+  background: rgba(15, 185, 253, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.token-card.active {
+  background: rgba(15, 185, 253, 0.15);
+  border: 1px solid rgba(15, 185, 253, 0.3);
+  box-shadow: 0 0 15px rgba(15, 185, 253, 0.2);
+}
+
+.token-icon-container {
+  width: 42px;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.cosmic-container {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(200, 150, 255, 0.2));
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.cosmic-icon {
+  color: gold;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.6);
+  font-size: 1.5rem;
+}
+
+.token-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+}
+
+.token-details {
+  flex: 1;
+}
+
+.token-symbol-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+  color: var(--color-text-primary);
+}
+
+.token-balance {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
 }
 </style> 
