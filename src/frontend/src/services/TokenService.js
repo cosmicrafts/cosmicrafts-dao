@@ -40,9 +40,8 @@ class TokenService {
       fee: BigInt(defaultIcp.fee)
     });
     
-    // Load cache in a microtask to avoid blocking the main thread
-    // This prevents CSS loading delays while still maintaining cached data
-    Promise.resolve().then(() => this.loadCachedData());
+    // Use queueMicrotask instead of Promise.resolve().then() for better browser compatibility
+    queueMicrotask(() => this.loadCachedData());
   }
 
   /**
@@ -144,11 +143,11 @@ class TokenService {
     const shouldRefresh = Date.now() - this.lastRefresh > 5 * 60 * 1000; // 5 minutes
     
     if (shouldRefresh) {
-      // Do initialization in the background
-      setTimeout(() => {
+      // Use queueMicrotask instead of setTimeout for better performance
+      queueMicrotask(() => {
         this.doInitialize(identity, host)
           .catch(e => console.warn('Background token initialization error:', e));
-      }, 100);
+      });
     } else {
       console.log('TokenService: Using cached data, refresh not needed');
     }
@@ -170,20 +169,96 @@ class TokenService {
         await this.agent.fetchRootKey();
       }
       
-      // Initialize tokens
-      await this.initializeTokens();
+      // First initialize only ICP (fast path)
+      await this.initializeIcpToken().then(icpConfig => {
+        // Find existing ICP in supportedTokens
+        const existingIcpIndex = this.supportedTokens.findIndex(t => t.symbol === 'ICP');
+        if (existingIcpIndex >= 0) {
+          // Update existing token
+          this.supportedTokens[existingIcpIndex] = {
+            ...icpConfig,
+            fee: icpConfig.fee.toString()
+          };
+        } else {
+          // Add new token
+          this.supportedTokens.push({
+            ...icpConfig,
+            fee: icpConfig.fee.toString()
+          });
+        }
+        
+        // Mark as initialized after ICP is ready
+        this.initialized = true;
+        console.log('TokenService fast path initialized with ICP token');
+        
+        // Save cache early so UI can use it
+        this.saveToCache();
+      });
+      
+      // Then load COSMIC token asynchronously without waiting
+      setTimeout(() => {
+        this.initializeCosmicToken().catch(err => 
+          console.warn('COSMIC token initialization error:', err)
+        );
+      }, 100);
       
       // Update cache
       this.lastRefresh = Date.now();
       this.saveToCache();
       
-      this.initialized = true;
+      // Already marked as initialized after ICP is ready
       this.initializing = false;
-      
-      console.log('TokenService initialized successfully with', this.supportedTokens.length, 'tokens');
     } catch (error) {
       console.error('Error in TokenService initialization:', error);
       this.initializing = false;
+      
+      // Even if there's an error, set initialized to true if we have at least ICP
+      if (this.tokenConfigs.has('ICP')) {
+        this.initialized = true;
+      }
+    }
+  }
+  
+  /**
+   * Initialize COSMIC token with timeout protection
+   */
+  async initializeCosmicToken() {
+    try {
+      console.log('Initializing COSMIC token in background...');
+      
+      // Use Promise.race with a timeout to prevent hanging
+      const cosmicConfig = await Promise.race([
+        this.initializeIcrcToken(COSMIC_TOKEN_CANISTER_ID),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('COSMIC token initialization timed out')), 10000)
+        )
+      ]);
+      
+      // Find existing COSMIC token
+      const existingIndex = this.supportedTokens.findIndex(t => t.canisterId === COSMIC_TOKEN_CANISTER_ID);
+      if (existingIndex >= 0) {
+        // Update existing token
+        this.supportedTokens[existingIndex] = {
+          ...cosmicConfig,
+          fee: cosmicConfig.fee.toString()
+        };
+      } else {
+        // Add new token
+        this.supportedTokens.push({
+          ...cosmicConfig,
+          fee: cosmicConfig.fee.toString()
+        });
+      }
+      
+      // Save updated tokens list
+      this.saveToCache();
+      
+      console.log('COSMIC token loaded successfully');
+      return cosmicConfig;
+    } catch (error) {
+      console.error('Failed to initialize COSMIC token:', error);
+      // No need to throw - this is a background operation
+      return null;
     }
   }
   
@@ -217,29 +292,15 @@ class TokenService {
         });
       }
       
-      // Initialize COSMIC token
-      try {
-        console.log('Initializing COSMIC token...');
-        const cosmicConfig = await this.initializeIcrcToken(COSMIC_TOKEN_CANISTER_ID);
-        
-        // Find existing COSMIC token
-        const existingIndex = this.supportedTokens.findIndex(t => t.canisterId === COSMIC_TOKEN_CANISTER_ID);
-        if (existingIndex >= 0) {
-          // Update existing token
-          this.supportedTokens[existingIndex] = {
-            ...cosmicConfig,
-            fee: cosmicConfig.fee.toString()
-          };
-        } else {
-          // Add new token
-          this.supportedTokens.push({
-            ...cosmicConfig,
-            fee: cosmicConfig.fee.toString()
-          });
-        }
-      } catch (error) {
-        console.error('Failed to initialize COSMIC token:', error);
-      }
+      // Mark as initialized after ICP is ready
+      this.initialized = true;
+      
+      // Initialize COSMIC token in background
+      setTimeout(() => {
+        this.initializeCosmicToken().catch(err => 
+          console.warn('COSMIC token background initialization error:', err)
+        );
+      }, 100);
     } catch (error) {
       console.error('Failed to initialize tokens:', error);
     }
@@ -290,11 +351,17 @@ class TokenService {
       let tokenInfo;
       let fee;
       
+      // Set a timeout for the metadata fetch
+      const metadataPromise = Promise.race([
+        icrcLedger.metadata({ certified: true }),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Metadata fetch timed out')), 5000)
+        )
+      ]);
+      
       // Method 1: Use the official metadata method
       try {
-        const metadataResponse = await icrcLedger.metadata({
-          certified: true
-        });
+        const metadataResponse = await metadataPromise;
         
         // Use the official mapper function from the library
         tokenInfo = mapTokenMetadata(metadataResponse);
@@ -307,9 +374,15 @@ class TokenService {
         
         // Method 2: Parse metadata manually as fallback
         try {
-          const metadata = await icrcLedger.metadata({
-            certified: true
-          });
+          // Set a timeout for the metadata fetch
+          const fallbackMetadataPromise = Promise.race([
+            icrcLedger.metadata({ certified: true }),
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Fallback metadata fetch timed out')), 5000)
+            )
+          ]);
+          
+          const metadata = await fallbackMetadataPromise;
           
           // Extract values manually
           const findValue = (key) => {
@@ -332,16 +405,27 @@ class TokenService {
             logo: findValue('icrc1:logo')
           };
         } catch (fallbackError) {
-          console.error('Failed to parse metadata manually:', fallbackError);
-          throw fallbackError;
+          console.error('Failed to parse metadata manually, using defaults:', fallbackError);
+          // Use defaults instead of failing
+          tokenInfo = {
+            symbol: canisterId === COSMIC_TOKEN_CANISTER_ID ? 'COSMIC' : 'UNKNOWN',
+            name: canisterId === COSMIC_TOKEN_CANISTER_ID ? 'Cosmic Token' : 'Unknown Token',
+            decimals: 8,
+            logo: null
+          };
         }
       }
       
-      // Get fee
+      // Get fee with timeout
       try {
-        fee = await icrcLedger.transactionFee({
-          certified: true
-        });
+        const feePromise = Promise.race([
+          icrcLedger.transactionFee({ certified: true }),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Fee fetch timed out')), 5000)
+          )
+        ]);
+        
+        fee = await feePromise;
       } catch (feeError) {
         console.warn('Error fetching transfer fee, using default:', feeError);
         fee = BigInt(10000); // Default fee
@@ -363,6 +447,20 @@ class TokenService {
       return tokenConfig;
     } catch (error) {
       console.error(`Failed to initialize ICRC token ${canisterId}:`, error);
+      // For known tokens, use default values instead of failing
+      if (canisterId === COSMIC_TOKEN_CANISTER_ID) {
+        const defaultConfig = {
+          symbol: 'COSMIC',
+          name: 'Cosmic Token',
+          standard: 'icrc1',
+          decimals: 8,
+          canisterId,
+          fee: BigInt(10000),
+          logo: null
+        };
+        this.tokenConfigs.set('COSMIC', defaultConfig);
+        return defaultConfig;
+      }
       throw error;
     }
   }

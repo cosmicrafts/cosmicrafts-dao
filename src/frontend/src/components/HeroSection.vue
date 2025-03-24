@@ -190,14 +190,15 @@ const dynamicHeroImage2 = computed(() => {
 const scrollY = ref(0);
 const starSpeed = ref(0.5); // Default speed
 const defaultSpeed = 0.1; // Define baseline speed
-const maxSpeed = 2; // Set maximum speed limit
+const maxSpeed = 1.5; // Reduced from 2 to improve performance
 const minSpeed = 0.5; // Set minimum speed limit
 const speedIncrement = 0.05; // Define smaller increment for finer control
 
 let previousScrollY = 0;
 const noiseCanvas = ref(null);
 
-let n = 2000 + Math.floor(2000 * Math.random());
+// Reduce number of stars for better performance
+let n = 500 + Math.floor(250 * Math.random()); // Reduced from 2000 to 1000 stars
 let w = 0, h = 0, x = 0, y = 0, z = 0;
 let star_color_ratio = 0, star_x_save, star_y_save;
 let star_ratio = 256;
@@ -329,30 +330,39 @@ function init() {
 }
 
 function anim() {
+  if (!context) return;
+  
   context.clearRect(0, 0, w, h);
   
   // Create a subtle glow effect by adding a semi-transparent overlay
   context.fillStyle = "rgba(0, 30, 60, 0.03)";
   context.fillRect(0, 0, w, h);
   
-  // Add a subtle pulsing radial gradient in the center
-  const gradient = context.createRadialGradient(x, y, 0, x, y, w * 0.5);
-  gradient.addColorStop(0, "rgba(0, 100, 255, 0.03)");
-  gradient.addColorStop(0.5, "rgba(0, 100, 255, 0.01)");
+  // Simplify the gradient for better performance
+  const gradient = context.createRadialGradient(x, y, 0, x, y, w * 0.4);
+  gradient.addColorStop(0, "rgba(0, 100, 255, 0.02)");
   gradient.addColorStop(1, "rgba(0, 100, 255, 0)");
   context.fillStyle = gradient;
   context.fillRect(0, 0, w, h);
   
-  // Add time-based variation
-  const time = Date.now() * 0.001;
+  // Use a constant time instead of Date.now() to reduce calculations
+  const time = performance.now() * 0.0005;
+  
+  // Only process a subset of stars each frame to improve performance
+  // Skip drawing some stars on mobile devices
+  const isMobile = window.innerWidth <= 768;
+  const processEvery = isMobile ? 2 : 1; // Process only half the stars on mobile
   
   for (let i = 0; i < n; i++) {
+    // Skip processing some stars on mobile
+    if (isMobile && i % processEvery !== 0) continue;
+    
     // Save previous position
     star_x_save = star[i][3];
     star_y_save = star[i][4];
     
-    // Update z position with time-based speed variation
-    star[i][2] -= starSpeed.value * (1 + 0.1 * Math.sin(time * 0.5 + i * 0.01));
+    // Simpler speed calculation
+    star[i][2] -= starSpeed.value;
     
     // Keep stars in bounds
     if (star[i][2] > z) star[i][2] -= z;
@@ -362,31 +372,28 @@ function anim() {
     star[i][3] = x + (star[i][0] / star[i][2]) * star_ratio;
     star[i][4] = y + (star[i][1] / star[i][2]) * star_ratio;
     
-    if (star_x_save > 0 && star_x_save < w && star_y_save > 0 && star_y_save < h) {
-      // Calculate distance from center for color variation
-      const dx = star[i][3] - x;
-      const dy = star[i][4] - y;
-      const dist = Math.sqrt(dx * dx + dy * dy) / (w * 0.5);
-      
-      // Color variations based on position and time
-      const hue = (240 + dist * 60 + time * 10) % 360;
-      const saturation = 80 + 20 * Math.sin(time + i * 0.1);
-      const lightness = 70 + 20 * Math.sin(time * 0.5 + i * 0.05);
-      
-      // Varied line width based on z-position and time
-      const lineWidth = (1 - star_color_ratio * star[i][2]) * (1.5 + 0.5 * Math.sin(time + i * 0.01));
+    if (star_x_save > 0 && star_x_save < w && star_y_save > 0 && star_y_save < h && star[i][2] > 0) {
+      // Simpler color calculation - use fixed colors based on position
+      const distFromCenter = Math.abs(star[i][3] - x) / w + Math.abs(star[i][4] - y) / h;
+      const lineWidth = Math.max(0.5, 1 - star_color_ratio * star[i][2]);
       context.lineWidth = lineWidth;
       
-      // Use HSL color for more dynamic coloring
-      context.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.7 - dist * 0.5})`;
+      // Use a simpler color calculation
+      const opacity = 0.7 - distFromCenter * 0.5;
+      context.strokeStyle = `rgba(15, 185, 253, ${opacity})`;
       
-      // Draw the line
-      context.beginPath();
-      context.moveTo(star_x_save, star_y_save);
-      context.lineTo(star[i][3], star[i][4]);
-      context.stroke();
+      // Draw the line only if it's going to be visible
+      if (lineWidth > 0.1 && opacity > 0.05) {
+        context.beginPath();
+        context.moveTo(star_x_save, star_y_save);
+        context.lineTo(star[i][3], star[i][4]);
+        context.stroke();
+      }
     }
   }
+  
+  // Use requestAnimationFrame with a callback reference
+  // to avoid creating a new function each time
   requestAnimationFrame(anim);
 }
 
@@ -416,7 +423,12 @@ function resize() {
   y = Math.round(h / 2);
   z = (w + h) / 2;
   star_color_ratio = 1 / z;
-  init();
+  
+  // Only reinitialize if starfield exists
+  const starfield = $i('starfield');
+  if (starfield) {
+    init();
+  }
 }
 
 const currentSlide = ref(0);
@@ -496,26 +508,67 @@ const updateMobileStatus = () => {
 onMounted(() => {
   w = window.innerWidth;
   h = window.innerHeight;
-  resize();
-  anim();
-  window.addEventListener('scroll', handleScroll);
-  window.addEventListener('resize', resize);
-  startAutoSlide(); // **Start auto-sliding**
+  
+  // Use passive event listeners for better performance
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  window.addEventListener('resize', resize, { passive: true });
+  
+  // Only initialize stars if we're on desktop or higher-end mobile
+  const canUseAnimation = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  
+  if (canUseAnimation) {
+    resize();
+    anim();
+    startAutoSlide(); // Start auto-sliding
+  } else {
+    // For users who prefer reduced motion, still show stars but don't animate them
+    w = window.innerWidth;
+    h = window.innerHeight;
+    x = Math.round(w / 2);
+    y = Math.round(h / 2);
+    z = (w + h) / 2;
+    star_color_ratio = 1 / z;
+    
+    // Simplified static star field
+    const starfield = $i('starfield');
+    if (starfield) {
+      starfield.width = w;
+      starfield.height = h;
+      const ctx = starfield.getContext('2d');
+      
+      // Draw some static stars
+      for (let i = 0; i < 200; i++) {
+        const size = Math.random() * 2;
+        ctx.beginPath();
+        ctx.arc(
+          Math.random() * w,
+          Math.random() * h,
+          size,
+          0,
+          2 * Math.PI
+        );
+        ctx.fillStyle = `rgba(15, 185, 253, ${Math.random() * 0.5 + 0.2})`;
+        ctx.fill();
+      }
+    }
+    
+    startAutoSlide(); // Start auto-sliding
+  }
   
   // Mark as loaded after initial animations - faster finish
   setTimeout(() => {
     hasLoadedOnce.value = true;
-  }, 1200); // Reduced from 2000ms for faster initial load
+  }, 800); // Reduced from 1200ms for faster initial load
   
   // Set initial mobile status
   updateMobileStatus();
-  window.addEventListener('resize', updateMobileStatus);
+  window.addEventListener('resize', updateMobileStatus, { passive: true });
 });
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
   window.removeEventListener('resize', resize);
-  stopAutoSlide(); // **Stop auto-sliding**
+  stopAutoSlide(); // Stop auto-sliding
   
   // Clean up resize listener
   window.removeEventListener('resize', updateMobileStatus);

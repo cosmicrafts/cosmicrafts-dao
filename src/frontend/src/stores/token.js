@@ -3,27 +3,8 @@ import { Principal } from '@dfinity/principal';
 import { useAuthStore } from './auth.js';
 import { useCanisterStore } from './canister.js';
 import { AccountIdentifier } from '@dfinity/ledger-icp';
-// DO NOT IMPORT TOKEN SERVICE HERE
-
-// Simple placeholder that does nothing but return defaults
-const dummyService = {
-  formatAmount: (amount, symbol) => "0.00",
-  getSupportedTokens: () => [],
-  getBalance: async () => BigInt(0),
-  addToken: async () => ({ symbol: 'UNKNOWN', name: 'Unknown Token' }),
-  transfer: async () => ({ success: false, error: 'Service not ready' }),
-  toTokenAmount: (amount) => BigInt(0),
-  initialize: async () => {},
-  getPrincipalAccountId: (principal) => {
-    try {
-      return AccountIdentifier.fromPrincipal({ 
-        principal: Principal.fromText(principal) 
-      }).toHex();
-    } catch (e) {
-      return '';
-    }
-  }
-};
+// Import TokenService directly instead of using dynamic import
+import { tokenService } from '../services/TokenService.js';
 
 // Cache key
 const TOKEN_CACHE_KEY = 'cosmicrafts-token-cache';
@@ -38,7 +19,8 @@ export const useTokenStore = defineStore('token', {
     principalId: null,
     initialized: false,
     serviceReady: false,
-    service: dummyService
+    // Use the real service directly instead of a dummy
+    service: tokenService
   }),
   
   getters: {
@@ -93,8 +75,8 @@ export const useTokenStore = defineStore('token', {
       this.initialized = true;
       this.loading = false;
       
-      // Load cached data in a microtask to prevent blocking the main thread
-      Promise.resolve().then(() => this.quickInitFromCache());
+      // Load cached data immediately via microtask
+      queueMicrotask(() => this.quickInitFromCache());
       
       // Load service in the background AFTER UI is rendered
       setTimeout(() => {
@@ -111,18 +93,18 @@ export const useTokenStore = defineStore('token', {
      */
     async loadServiceAndData() {
       try {
-        console.log('Loading TokenService in background...');
+        console.log('Loading TokenService data in background...');
         
-        // Dynamically import the service
-        const { tokenService } = await import('../services/TokenService.js');
-        this.service = tokenService;
+        // TokenService is now directly imported, not dynamically
+        // We just need to ensure it's initialized
+        this.serviceReady = true;
         
         // Now load live data
         this.loadLiveData();
         
-        console.log('TokenService loaded successfully');
+        console.log('TokenService data loaded successfully');
       } catch (error) {
-        console.error('Failed to load TokenService:', error);
+        console.error('Failed to load TokenService data:', error);
       }
     },
     

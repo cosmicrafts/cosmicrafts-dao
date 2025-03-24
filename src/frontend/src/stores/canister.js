@@ -240,16 +240,17 @@ export const useCanisterStore = defineStore('canister', {
       }
       
       // Initialize token service to ensure tokens are loaded
-      await tokenService.initialize(identity, host);
-      
-      // Get tokens and handle potential errors
+      // Pass our newly created agent to the token service
       try {
+        await tokenService.initialize(identity, host);
+      
+        // Get tokens and handle potential errors
         const tokens = tokenService.getSupportedTokens();
         if (Array.isArray(tokens) && tokens.length > 0) {
           this.supportedTokens = tokens;
         }
       } catch (tokenError) {
-        console.warn('Error getting tokens from TokenService:', tokenError);
+        console.warn('Error initializing TokenService:', tokenError);
       }
       
       // Initialize all canisters with error handling for each
@@ -310,6 +311,15 @@ export const useCanisterStore = defineStore('canister', {
         }
         
         const principalId = identity.getPrincipal().toString();
+        
+        // Check if tokenService is initialized, if not, initialize it
+        if (!tokenService.initialized && !tokenService.initializing) {
+          try {
+            await tokenService.initialize(identity, host);
+          } catch (e) {
+            console.warn('Error initializing tokenService:', e);
+          }
+        }
         
         // Use TokenService to get the balance
         return tokenService.getBalance(principalId, symbol);
