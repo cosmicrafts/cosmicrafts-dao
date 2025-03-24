@@ -21,7 +21,7 @@ import StyleGuide from './pages/StyleGuide.vue';
 import Contact from './pages/Contact.vue';
 import ThemeGuide from './views/ThemeGuide.vue';
 import Marketplace from './pages/Marketplace.vue';
-import IcpBalanceTest from './components/IcpBalanceTest.vue';
+import Wallet from './pages/Wallet.vue';
 
 const routes = [
   { path: '/', component: Home, meta: { title: 'header.home' } },
@@ -43,7 +43,7 @@ const routes = [
   { path: '/style-guide', component: StyleGuide, meta: { title: 'Style Guide' } },
   { path: '/theme-guide', component: ThemeGuide, meta: { title: 'Theme Guide' } },
   { path: '/marketplace', component: Marketplace, meta: { title: 'header.marketplace' } },
-  { path: '/icp-test', component: IcpBalanceTest, meta: { title: 'ICP Balance Test' } },
+  { path: '/wallet', component: Wallet, meta: { title: 'Wallet' } },
   // New catch-all route for usernames/principals
   {
     path: '/:identifier',

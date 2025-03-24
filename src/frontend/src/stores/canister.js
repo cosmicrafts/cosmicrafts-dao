@@ -7,44 +7,70 @@ import { createActor as createActorMarketplace, canisterId as marketplaceCaniste
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 import { Principal } from '@dfinity/principal';
 import { IDL } from '@dfinity/candid';
+import { IcrcLedgerCanister } from '@dfinity/ledger-icrc';
 import useAuthStore from './auth.js';
+// Import token service instead of token constants
+import { tokenService } from '../services/TokenService.js';
 
-// ICP ledger interface definition
+// ICP ledger IDL definition - moved from tokens.js
 const icpLedgerIDL = ({ IDL }) => {
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
-  const Duration = IDL.Record({ 'secs': IDL.Nat64, 'nanos': IDL.Nat32 });
-  const Timestamp = IDL.Record({ 'timestamp_nanos': IDL.Nat64 });
-  const Tokens = IDL.Record({ 'e8s': IDL.Nat64 });
+  const AccountBalanceArgs = IDL.Record({ account: AccountIdentifier });
+  const Tokens = IDL.Record({ e8s: IDL.Nat64 });
+  const Transaction = IDL.Record({
+    memo: IDL.Nat64,
+    created_at_time: IDL.Record({
+      timestamp_nanos: IDL.Nat64,
+    }),
+    transfer: IDL.Variant({
+      Burn: IDL.Record({
+        from: AccountIdentifier,
+        amount: Tokens,
+      }),
+      Mint: IDL.Record({
+        to: AccountIdentifier,
+        amount: Tokens,
+      }),
+      Send: IDL.Record({
+        from: AccountIdentifier,
+        to: AccountIdentifier,
+        amount: Tokens,
+      }),
+    }),
+  });
   const TransferArgs = IDL.Record({
-    'to': AccountIdentifier,
-    'fee': Tokens,
-    'memo': IDL.Nat64,
-    'from_subaccount': IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'created_at_time': IDL.Opt(Timestamp),
-    'amount': Tokens,
+    to: AccountIdentifier,
+    fee: Tokens,
+    memo: IDL.Nat64,
+    from_subaccount: IDL.Opt(IDL.Vec(IDL.Nat8)),
+    created_at_time: IDL.Opt(IDL.Record({ timestamp_nanos: IDL.Nat64 })),
+    amount: Tokens,
   });
   const TransferError = IDL.Variant({
-    'TxTooOld': IDL.Record({ 'allowed_window_nanos': IDL.Nat64 }),
-    'BadFee': IDL.Record({ 'expected_fee': Tokens }),
-    'TxDuplicate': IDL.Record({ 'duplicate_of': IDL.Nat64 }),
-    'TxCreatedInFuture': IDL.Null,
-    'InsufficientFunds': IDL.Record({ 'balance': Tokens }),
+    TxTooOld: IDL.Record({ allowed_window_nanos: IDL.Nat64 }),
+    BadFee: IDL.Record({ expected_fee: Tokens }),
+    TxDuplicate: IDL.Record({ duplicate_of: IDL.Nat64 }),
+    TxCreatedInFuture: IDL.Null,
+    InsufficientFunds: IDL.Record({ balance: Tokens }),
   });
   const TransferResult = IDL.Variant({
-    'Ok': IDL.Nat64,
-    'Err': TransferError,
+    Ok: IDL.Nat64,
+    Err: TransferError,
   });
   return IDL.Service({
-    'account_balance': IDL.Func([IDL.Record({ 'account': AccountIdentifier })], [Tokens], ['query']),
-    'transfer': IDL.Func([TransferArgs], [TransferResult], []),
+    account_balance: IDL.Func([AccountBalanceArgs], [Tokens], ['query']),
+    transfer: IDL.Func([TransferArgs], [TransferResult], []),
   });
 };
 
+// Store token canisters and state
 let canisters = {
   cosmicrafts: null,
   roadmap: null,
   marketplace: null,
   ledger: null,
+  // Storage for token canisters
+  tokenLedgers: {},
 };
 let currentIdentity = null;
 let initializing = false;
@@ -69,6 +95,8 @@ export const useCanisterStore = defineStore('canister', {
       ledger: 'ryjl3-tyaaa-aaaaa-aaaba-cai', // ICP ledger canister ID
     },
     agent: null,
+    supportedTokens: [], // Will be populated dynamically after initialization
+    currentToken: 'ICP',
   }),
 
   actions: {
@@ -89,6 +117,10 @@ export const useCanisterStore = defineStore('canister', {
           console.log('Fetching root key for local development...');
           await agent.fetchRootKey();
         }
+
+        // Initialize token service to ensure tokens are loaded
+        await tokenService.initialize(identity, host);
+        this.supportedTokens = tokenService.getSupportedTokens();
 
         // ✅ Initialize all canisters and log their creation
         canisters.cosmicrafts = createActorBackend(this.canisterIds.cosmicrafts, { agent });
@@ -111,148 +143,55 @@ export const useCanisterStore = defineStore('canister', {
         } catch (error) {
           console.error('Failed to initialize ledger canister:', error);
         }
-
+        
+        // Initialize token ledgers using TokenService
+        // (TokenService already does this during initialize)
+        
         initializing = false;
       }
     },
     
     /**
-     * Gets ICP balance for a principal or account identifier
-     * @param {string} principal - Principal ID string or Account Identifier hex
-     * @returns {Promise<{ e8s: bigint }>} Balance in e8s
+     * Get balance for a token
+     * @param {string} symbol - Token symbol (default: 'ICP')
+     * @returns {Promise<BigInt>} - Token balance
      */
-    async getIcpBalance(principal) {
+    async getTokenBalance(symbol = 'ICP') {
       try {
-        // Get the ledger canister
-        const ledger = await this.get('ledger');
-        if (!ledger) {
-          console.error('Ledger canister not initialized');
-          return { e8s: BigInt(0) };
+        // Wait for agent and tokens to initialize if not already
+        await this.initializeAgents();
+        
+        // Get user principal
+        const authStore = useAuthStore();
+        const identity = authStore.getIdentity();
+        if (!identity) {
+          console.warn('No identity found, user may not be authenticated');
+          return BigInt(0);
         }
         
-        let accountBytes;
+        const principalId = identity.getPrincipal().toString();
         
-        try {
-          // Check if input is an account identifier (64 char hex string)
-          if (/^[0-9a-fA-F]{64}$/.test(principal)) {
-            // Convert hex string to bytes
-            accountBytes = new Uint8Array(32);
-            for (let i = 0; i < 32; i++) {
-              accountBytes[i] = parseInt(principal.substring(i * 2, i * 2 + 2), 16);
-            }
-          } else {
-            // Convert principal to account identifier
-            const principalObj = Principal.fromText(principal);
-            const accountIdentifier = AccountIdentifier.fromPrincipal({
-              principal: principalObj,
-              subaccount: undefined
-            });
-            accountBytes = accountIdentifier.bytes;
-          }
-        } catch (error) {
-          console.error('Error creating account identifier:', error);
-          return { e8s: BigInt(0) };
-        }
-        
-        if (!accountBytes) {
-          console.error('Failed to get account identifier bytes');
-          return { e8s: BigInt(0) };
-        }
-        
-        console.log('Using account bytes for direct ledger call:', accountBytes);
-        
-        // Use the direct ledger interface with account parameter
-        const balance = await ledger.account_balance({
-          account: Array.from(accountBytes) // Convert Uint8Array to regular array for Candid
-        });
-        
-        console.log('Balance received:', balance);
-        return balance;
+        // Use TokenService to get the balance
+        return tokenService.getBalance(principalId, symbol);
       } catch (error) {
-        console.error('Failed to get ICP balance:', error);
-        return { e8s: BigInt(0) };
+        console.error(`Failed to get ${symbol} balance: ${error.message}`);
+        return BigInt(0);
       }
     },
     
     /**
-     * Sends ICP to another account
+     * Sends tokens to another account (supports both ICP and ICRC-1 tokens)
      * @param {string} recipient - Recipient account ID (hex string) or principal ID
-     * @param {bigint} amountE8s - Amount to send in e8s
-     * @param {Array<number>} [fromSubAccount] - Optional subaccount to send from
-     * @param {bigint} [memo=0n] - Optional memo for the transaction
-     * @returns {Promise<{ success: boolean, blockHeight?: bigint, error?: string }>}
+     * @param {bigint} amount - Amount to send in token's smallest unit (e8s for ICP)
+     * @param {string} [tokenSymbol='ICP'] - Token symbol to send
+     * @returns {Promise<{ success: boolean, blockHeight?: bigint, blockIndex?: bigint, error?: string }>}
      */
-    async transferIcp(recipient, amountE8s, fromSubAccount = undefined, memo = BigInt(0)) {
+    async transferTokens(recipient, amount, tokenSymbol = 'ICP') {
       try {
-        const ledger = await this.get('ledger');
-        if (!ledger) {
-          throw new Error('Ledger canister not initialized');
-        }
-        
-        let toAccountId;
-        
-        // Determine if the recipient is a principal or account ID
-        const isAccountId = /^[0-9a-fA-F]{64}$/.test(recipient);
-        const isPrincipal = !isAccountId && recipient.includes('-');
-        
-        if (isAccountId) {
-          // The recipient is already an account ID
-          toAccountId = recipient;
-          console.log('Using provided account ID for transfer:', toAccountId);
-        } else if (isPrincipal) {
-          // The recipient is a principal, convert to account ID
-          try {
-            toAccountId = this.principalToAccountIdentifier(recipient);
-            console.log('Converted principal to account ID for transfer:', {
-              principal: recipient,
-              accountId: toAccountId
-            });
-          } catch (error) {
-            throw new Error(`Invalid principal format: ${error.message}`);
-          }
-        } else {
-          throw new Error('Invalid recipient format: must be a valid account ID or principal');
-        }
-        
-        // Convert hex account ID to bytes
-        const toAccountBytes = new Uint8Array(32);
-        for (let i = 0; i < 32; i++) {
-          toAccountBytes[i] = parseInt(toAccountId.substring(i * 2, i * 2 + 2), 16);
-        }
-        
-        // Prepare from_subaccount argument
-        const fromSubaccountArg = fromSubAccount ? [Array.from(fromSubAccount)] : [];
-        
-        console.log('Sending ICP transfer:', {
-          to: toAccountId,
-          amount: amountE8s.toString(),
-          fee: ICP_TRANSFER_FEE.toString()
-        });
-        
-        // Direct transfer call using the Actor interface
-        const result = await ledger.transfer({
-          to: Array.from(toAccountBytes),
-          fee: { e8s: ICP_TRANSFER_FEE },
-          memo,
-          from_subaccount: fromSubaccountArg,
-          created_at_time: [],
-          amount: { e8s: amountE8s }
-        });
-        
-        // Handle the Candid variant response
-        if ('Err' in result) {
-          console.error('Transfer error:', result.Err);
-          throw new Error(`Transfer failed: ${JSON.stringify(result.Err)}`);
-        }
-        
-        console.log('Transfer successful:', {
-          blockHeight: result.Ok.toString(),
-          to: toAccountId
-        });
-        
-        return { success: true, blockHeight: result.Ok, recipient: toAccountId };
+        // Use TokenService for transfers
+        return tokenService.transfer(recipient, amount, tokenSymbol);
       } catch (error) {
-        console.error('Failed to transfer ICP:', error);
+        console.error(`Failed to transfer ${tokenSymbol}:`, error);
         return { success: false, error: error.message };
       }
     },
@@ -282,18 +221,32 @@ export const useCanisterStore = defineStore('canister', {
     },
     
     /**
+     * Formats token amount for display
+     * @param {bigint} amount - Amount in token's smallest unit
+     * @param {string} tokenSymbol - Token symbol
+     * @returns {string} Formatted token amount with correct decimal places
+     */
+    formatTokenAmount(amount, tokenSymbol) {
+      return tokenService.formatAmount(amount, tokenSymbol);
+    },
+    
+    /**
      * Formats ICP amount for display (converts e8s to ICP with 8 decimals)
      * @param {bigint} e8s - Amount in e8s
      * @returns {string} Formatted ICP amount with 8 decimal places
      */
     formatIcp(e8s) {
-      try {
-        const value = Number(e8s) / Number(ICP_DECIMALS);
-        return value.toFixed(8);
-      } catch (error) {
-        console.error('Error formatting ICP:', error);
-        return '0.00000000';
-      }
+      return this.formatTokenAmount(e8s, 'ICP');
+    },
+    
+    /**
+     * Converts token amount to smallest unit
+     * @param {number|string} amount - Amount in human-readable format
+     * @param {string} tokenSymbol - Token symbol
+     * @returns {bigint} Amount in token's smallest unit
+     */
+    tokenToSmallestUnit(amount, tokenSymbol) {
+      return tokenService.toTokenAmount(amount, tokenSymbol);
     },
     
     /**
@@ -302,13 +255,7 @@ export const useCanisterStore = defineStore('canister', {
      * @returns {bigint} Amount in e8s
      */
     icpToE8s(icp) {
-      try {
-        const icpValue = typeof icp === 'string' ? parseFloat(icp) : icp;
-        return BigInt(Math.round(icpValue * Number(ICP_DECIMALS)));
-      } catch (error) {
-        console.error('Error converting ICP to e8s:', error);
-        return BigInt(0);
-      }
+      return this.tokenToSmallestUnit(icp, 'ICP');
     },
 
     async get(canisterName) {

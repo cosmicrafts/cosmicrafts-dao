@@ -1,19 +1,20 @@
 <template>
-  <div class="icp-balance-test">
+  <div class="wallet-component">
     <h3>Cosmicrafts Wallet</h3>
     
-    <div v-if="tokensLoading" class="loading-container">
+    <div v-if="tokenStore.loading" class="loading-container">
       <p class="loading-indicator">Initializing tokens... This may take a moment as we dynamically fetch token metadata from the blockchain.</p>
       <div class="loading-spinner"></div>
+      <p v-if="loadingMessage" class="loading-status">{{ loadingMessage }}</p>
     </div>
     
     <div v-else>
       <!-- Token selection tabs -->
       <div class="token-tabs">
         <button 
-          v-for="token in supportedTokens" 
+          v-for="token in tokenStore.supportedTokens" 
           :key="token.symbol"
-          :class="['token-tab', { active: selectedToken === token.symbol }]"
+          :class="['token-tab', { active: tokenStore.currentToken === token.symbol }]"
           @click="changeToken(token.symbol)"
         >
           {{ token.symbol }}
@@ -21,9 +22,9 @@
       </div>
       
       <div class="balance-display">
-        <p>Your {{ selectedToken }} balance: 
+        <p>Your {{ tokenStore.currentToken }} balance: 
           <span v-if="balanceLoading" class="loading-indicator">Loading...</span>
-          <span v-else class="balance-amount">{{ formattedBalance }} {{ selectedToken }}</span>
+          <span v-else class="balance-amount">{{ tokenStore.formattedBalance }} {{ tokenStore.currentToken }}</span>
         </p>
       </div>
       
@@ -51,18 +52,18 @@
         </div>
         
         <div class="function-group">
-          <button @click="testGetBalance" :disabled="balanceLoading">
+          <button @click="refreshBalance" :disabled="balanceLoading">
             Refresh Balance
           </button>
           
           <div class="test-account">
-            <p>Your account ID: <code>{{ accountId || 'Not available' }}</code></p>
-            <button @click="copyAccountId" v-if="accountId">Copy Account ID</button>
+            <p>Your account ID: <code>{{ tokenStore.accountId || 'Not available' }}</code></p>
+            <button @click="copyAccountId" v-if="tokenStore.accountId">Copy Account ID</button>
           </div>
         </div>
         
         <div class="function-group">
-          <h4>Send {{ selectedToken }}</h4>
+          <h4>Send {{ tokenStore.currentToken }}</h4>
           <div class="send-form">
             <div class="input-group recipient-type">
               <label>Recipient Type:</label>
@@ -73,6 +74,7 @@
                     name="recipientType" 
                     value="accountId" 
                     v-model="recipientType"
+                    :disabled="tokenStore.currentToken !== 'ICP'"
                   />
                   Account ID
                 </label>
@@ -99,7 +101,7 @@
             </div>
             
             <div class="input-group">
-              <label for="amount">Amount ({{ selectedToken }}):</label>
+              <label for="amount">Amount ({{ tokenStore.currentToken }}):</label>
               <input 
                 type="number" 
                 id="amount" 
@@ -111,7 +113,7 @@
             </div>
             
             <button @click="sendTokens" :disabled="transferLoading || !isValidTransfer">
-              {{ transferLoading ? 'Sending...' : `Send ${selectedToken}` }}
+              {{ transferLoading ? 'Sending...' : `Send ${tokenStore.currentToken}` }}
             </button>
           </div>
         </div>
@@ -145,113 +147,64 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { useCanisterStore } from '../stores/canister.js';
 import { useAuthStore } from '../stores/auth.js';
+import { useTokenStore } from '../stores/token.js';
 import { Principal } from '@dfinity/principal';
-import { SUPPORTED_TOKENS, tokenFactory, tokensInitialized } from '../constants/tokens.js';
 
-const canisterStore = useCanisterStore();
+// Get stores
 const authStore = useAuthStore();
+const tokenStore = useTokenStore();
 
-// Tokens data
-const supportedTokens = ref([]);
-const selectedToken = ref('');
-const tokensLoading = ref(true);
-
-// Balance data
-const balance = ref(null);
+// UI state variables
+const loadingMessage = ref('');
 const balanceLoading = ref(false);
-const accountId = ref('');
-
-// Add token data
-const newTokenCanisterId = ref('');
 const addTokenLoading = ref(false);
+const transferLoading = ref(false);
 
-// Principal conversion
-const principalToConvert = ref('');
-const convertedAccountId = ref('');
-
-// Transaction data
+// Form inputs
+const newTokenCanisterId = ref('');
 const recipient = ref('');
 const amount = ref('');
-const transferLoading = ref(false);
 const recipientType = ref('accountId');
+const principalToConvert = ref('');
+const convertedAccountId = ref('');
 
 // Logs
 const logs = ref([]);
 
-// Initialize tokens and component
+// Initialize component
 onMounted(async () => {
-  // First load the tokens
-  tokensLoading.value = true;
-  addLog('Initializing tokens...', 'info');
+  addLog('Initializing wallet...', 'info');
   
   try {
-    // Wait for tokens to be initialized
-    await tokensInitialized;
-    supportedTokens.value = [...SUPPORTED_TOKENS];
-    
-    // Set default selected token to ICP
-    if (supportedTokens.value.length > 0) {
-      // Find ICP or use the first token
-      const icpToken = supportedTokens.value.find(t => t.symbol === 'ICP');
-      selectedToken.value = icpToken ? icpToken.symbol : supportedTokens.value[0].symbol;
-      addLog(`Tokens initialized, ${supportedTokens.value.length} tokens loaded`, 'success');
-    } else {
-      // Handle the case where no tokens were loaded, default to ICP
-      addLog('No tokens available from initialization, using default ICP token', 'warning');
-      
-      // Create a basic ICP token as fallback
-      const defaultIcpToken = {
-        symbol: 'ICP',
-        name: 'Internet Computer Protocol',
-        standard: 'icp',
-        decimals: 8,
-        canisterId: 'ryjl3-tyaaa-aaaaa-aaaba-cai',
-        fee: BigInt(10000)
-      };
-      
-      supportedTokens.value = [defaultIcpToken];
-      selectedToken.value = 'ICP';
+    if (!authStore.isAuthenticated()) {
+      addLog('User not authenticated', 'warning');
+      return;
     }
+    
+    loadingMessage.value = 'Initializing token store...';
+    await tokenStore.initialize();
+    
+    addLog(`Tokens initialized, ${tokenStore.supportedTokens.length} tokens loaded`, 'success');
   } catch (error) {
-    addLog(`Failed to initialize tokens: ${error.message}`, 'error');
-    
-    // Provide a default token even on error
-    addLog('Using default ICP token as fallback', 'info');
-    const defaultIcpToken = {
-      symbol: 'ICP',
-      name: 'Internet Computer Protocol',
-      standard: 'icp',
-      decimals: 8,
-      canisterId: 'ryjl3-tyaaa-aaaaa-aaaba-cai',
-      fee: BigInt(10000)
-    };
-    
-    supportedTokens.value = [defaultIcpToken];
-    selectedToken.value = 'ICP';
-  } finally {
-    tokensLoading.value = false;
-  }
-  
-  // Then check authentication and get balance
-  if (authStore.isAuthenticated()) {
-    try {
-      await testGetBalance();
-      computeAccountId();
-    } catch (error) {
-      addLog(`Error during initialization: ${error.message}`, 'error');
-    }
-  } else {
-    addLog('User not authenticated', 'warning');
+    loadingMessage.value = `Initialization error: ${error.message}`;
+    addLog(`Initialization error: ${error.message}`, 'error');
   }
 });
 
 // Change active token
-function changeToken(symbol) {
-  selectedToken.value = symbol;
-  balance.value = null;
-  testGetBalance();
+async function changeToken(symbol) {
+  addLog(`Changing to ${symbol} token...`, 'info');
+  balanceLoading.value = true;
+  
+  try {
+    await tokenStore.changeToken(symbol);
+    addLog(`Now using ${symbol} token`, 'success');
+  } catch (error) {
+    addLog(`Error changing token: ${error.message}`, 'error');
+  } finally {
+    balanceLoading.value = false;
+  }
 }
 
 // Validate canister ID input
@@ -279,11 +232,7 @@ async function addCustomToken() {
     const canisterId = newTokenCanisterId.value.trim();
     addLog(`Adding token with canister ID: ${canisterId}`, 'info');
     
-    // Use the token factory to create and add the token
-    const newToken = await tokenFactory.addToken(canisterId);
-    
-    // Update the reactive token list
-    supportedTokens.value = [...SUPPORTED_TOKENS];
+    const newToken = await tokenStore.addToken(canisterId);
     
     addLog(`Successfully added ${newToken.symbol} token`, 'success');
     
@@ -299,102 +248,26 @@ async function addCustomToken() {
   }
 }
 
-// Compute formatted balance with correct decimal places
-const formattedBalance = computed(() => {
-  if (!balance.value) return '0.00000000';
-  
-  try {
-    const token = selectedToken.value;
-    
-    if (token === 'ICP') {
-      return canisterStore.formatIcp(balance.value.e8s);
-    } else {
-      return canisterStore.formatTokenAmount(balance.value, token);
-    }
-  } catch (e) {
-    addLog('Error formatting balance: ' + e.message, 'error');
-    return '0.00000000';
-  }
-});
-
-// Validate transfer inputs
-const isValidTransfer = computed(() => {
-  if (!recipient.value || !amount.value || parseFloat(amount.value) <= 0) {
-    return false;
-  }
-  
-  // For ICP, allow both account ID and principal ID
-  if (selectedToken.value === 'ICP') {
-    if (recipientType.value === 'accountId') {
-      return isValidAccountId(recipient.value);
-    } else {
-      return isValidPrincipal(recipient.value);
-    }
-  } 
-  // For ICRC-1 tokens, only allow principal IDs
-  else {
-    // If user selected account ID but we're sending ICRC-1 tokens, we need to check if it's actually a principal
-    return isValidPrincipal(recipient.value);
-  }
-});
-
-// Get token balance
-async function testGetBalance() {
+// Refresh the current token balance
+async function refreshBalance() {
   balanceLoading.value = true;
   
   try {
-    if (!authStore.isAuthenticated()) {
-      addLog('Cannot get balance: User not authenticated', 'error');
-      return;
-    }
-    
-    const identity = authStore.getIdentity();
-    if (!identity) {
-      addLog('Cannot get balance: Identity not available', 'error');
-      return;
-    }
-    
-    const principal = identity.getPrincipal();
-    const principalText = principal.toString();
-    addLog(`Getting ${selectedToken.value} balance for principal: ${principalText}`, 'info');
-    
-    // Get balance using principal and selected token
-    balance.value = await canisterStore.getTokenBalance(principalText, selectedToken.value);
-    addLog(`Balance retrieved: ${formattedBalance.value} ${selectedToken.value}`, 'success');
+    addLog(`Refreshing ${tokenStore.currentToken} balance...`, 'info');
+    await tokenStore.refreshBalance();
+    addLog(`Balance updated: ${tokenStore.formattedBalance} ${tokenStore.currentToken}`, 'success');
   } catch (error) {
-    addLog(`Error getting balance: ${error.message}`, 'error');
+    addLog(`Error refreshing balance: ${error.message}`, 'error');
   } finally {
     balanceLoading.value = false;
   }
 }
 
-// Get account ID from principal
-function computeAccountId() {
-  try {
-    if (!authStore.isAuthenticated()) {
-      addLog('Cannot compute account ID: User not authenticated', 'error');
-      return;
-    }
-    
-    const identity = authStore.getIdentity();
-    if (!identity) {
-      addLog('Cannot compute account ID: Identity not available', 'error');
-      return;
-    }
-    
-    const principal = identity.getPrincipal();
-    accountId.value = canisterStore.principalToAccountIdentifier(principal.toString());
-    addLog(`Account ID computed: ${accountId.value}`, 'success');
-  } catch (error) {
-    addLog(`Error computing account ID: ${error.message}`, 'error');
-  }
-}
-
 // Copy account ID to clipboard
 function copyAccountId() {
-  if (!accountId.value) return;
+  if (!tokenStore.accountId) return;
   
-  navigator.clipboard.writeText(accountId.value)
+  navigator.clipboard.writeText(tokenStore.accountId)
     .then(() => {
       addLog('Account ID copied to clipboard!', 'success');
     })
@@ -416,12 +289,32 @@ function convertPrincipal() {
       return;
     }
     
-    convertedAccountId.value = canisterStore.principalToAccountIdentifier(principal);
+    convertedAccountId.value = tokenStore.principalToAccountId(principal);
     addLog(`Principal converted to account ID: ${convertedAccountId.value}`, 'success');
   } catch (error) {
     addLog(`Conversion error: ${error.message}`, 'error');
   }
 }
+
+// Validate transfer inputs
+const isValidTransfer = computed(() => {
+  if (!recipient.value || !amount.value || parseFloat(amount.value) <= 0) {
+    return false;
+  }
+  
+  // For ICP, allow both account ID and principal ID
+  if (tokenStore.currentToken === 'ICP') {
+    if (recipientType.value === 'accountId') {
+      return isValidAccountId(recipient.value);
+    } else {
+      return isValidPrincipal(recipient.value);
+    }
+  } 
+  // For ICRC-1 tokens, only allow principal IDs
+  else {
+    return isValidPrincipal(recipient.value);
+  }
+});
 
 // Send tokens to another account
 async function sendTokens() {
@@ -433,36 +326,24 @@ async function sendTokens() {
   transferLoading.value = true;
   
   try {
-    if (!authStore.isAuthenticated()) {
-      addLog(`Cannot send ${selectedToken.value}: User not authenticated`, 'error');
-      return;
-    }
+    addLog(`Sending ${amount.value} ${tokenStore.currentToken} to ${recipient.value}...`, 'info');
     
-    // Convert amount from human-readable to smallest units
-    const amountInSmallestUnit = canisterStore.tokenToSmallestUnit(amount.value, selectedToken.value);
-    
-    // Send the transaction
-    const result = await canisterStore.transferTokens(
-      recipient.value,
-      amountInSmallestUnit,
-      selectedToken.value
-    );
+    const result = await tokenStore.transferTokens(recipient.value, amount.value);
     
     if (result.success) {
       const confirmationId = result.blockHeight || result.blockIndex;
       
-      addLog(`Successfully sent ${amount.value} ${selectedToken.value} to ${recipient.value}`, 'success');
+      addLog(`Successfully sent ${amount.value} ${tokenStore.currentToken} to ${recipient.value}`, 'success');
       addLog(`Transaction confirmed with ${confirmationId ? `ID: ${confirmationId}` : 'success'}`, 'success');
       
-      // Clear form and refresh balance
+      // Clear form
       recipient.value = '';
       amount.value = '';
-      await testGetBalance();
     } else {
       addLog(`Transfer failed: ${result.error || 'Unknown error'}`, 'error');
     }
   } catch (error) {
-    addLog(`Error sending ${selectedToken.value}: ${error.message}`, 'error');
+    addLog(`Error sending ${tokenStore.currentToken}: ${error.message}`, 'error');
   } finally {
     transferLoading.value = false;
   }
@@ -508,7 +389,7 @@ function addLog(message, type = 'info') {
 </script>
 
 <style scoped>
-.icp-balance-test {
+.wallet-component {
   background-color: #1a1a2e;
   border-radius: 8px;
   padding: 20px;
@@ -728,6 +609,13 @@ code {
   border-radius: 50%;
   border-top: 4px solid #3b82f6;
   animation: spin 1s linear infinite;
+}
+
+.loading-status {
+  margin-top: 10px;
+  color: #b8c2cc;
+  font-style: italic;
+  text-align: center;
 }
 
 @keyframes spin {
