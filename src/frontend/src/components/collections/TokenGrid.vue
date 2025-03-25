@@ -89,17 +89,50 @@ async function loadBalances() {
     
     // Default tokens to show
     const tokenSymbols = ['ICP', 'STDs', 'COSMIC'];
+    let allSymbols = [...tokenSymbols];
     
-    // Get additional tokens from token store
-    const additionalTokens = await tokenStore.getAddedTokens();
-    const allSymbols = [...new Set([...tokenSymbols, ...additionalTokens])];
+    // Try to get additional tokens from token store
+    try {
+      if (typeof tokenStore.getAddedTokens === 'function') {
+        const additionalTokens = await tokenStore.getAddedTokens();
+        allSymbols = [...new Set([...tokenSymbols, ...additionalTokens])];
+      } else {
+        console.log('getAddedTokens method not available, using default tokens only');
+      }
+    } catch (tokenError) {
+      console.warn('Error getting additional tokens:', tokenError);
+      // Continue with default tokens
+    }
     
     // Fetch balances for each token
     const tokenData = await Promise.all(
       allSymbols.map(async (symbol) => {
         try {
           const balance = await tokenStore.getBalance(symbol);
-          const tokenMetadata = await tokenStore.getTokenMetadata(symbol);
+          
+          // Get token metadata if the method exists
+          let tokenMetadata;
+          try {
+            if (typeof tokenStore.getTokenMetadata === 'function') {
+              tokenMetadata = await tokenStore.getTokenMetadata(symbol);
+            } else {
+              // Fallback if method doesn't exist
+              tokenMetadata = {
+                name: symbol,
+                symbol: symbol,
+                decimals: 8,
+                icon: `/assets/icons/tokens/${symbol.toLowerCase()}.png`
+              };
+            }
+          } catch (metadataError) {
+            console.warn(`Error getting metadata for ${symbol}:`, metadataError);
+            tokenMetadata = {
+              name: symbol,
+              symbol: symbol,
+              decimals: 8,
+              icon: `/assets/icons/tokens/${symbol.toLowerCase()}.png`
+            };
+          }
           
           // Cache balance for later use
           balancesMap.value[symbol] = balance;

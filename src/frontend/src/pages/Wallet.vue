@@ -167,10 +167,26 @@ export default {
         loadingMessage.value = 'Initializing wallet...';
         
         try {
-          await tokenStore.initialize();
-          addLog('Wallet initialized successfully', 'success');
+          // Set a timeout for token initialization to prevent UI from hanging
+          const tokenInitPromise = Promise.race([
+            tokenStore.initialize(),
+            new Promise((resolve) => {
+              // After 10 seconds, continue anyway but show a warning
+              setTimeout(() => {
+                addLog('Token initialization is taking longer than expected. Using cached data.', 'warning');
+                resolve(false);
+              }, 10000);
+            })
+          ]);
+          
+          const success = await tokenInitPromise;
+          if (success !== false) {
+            addLog('Wallet initialized successfully', 'success');
+          }
         } catch (error) {
-          addLog(`Error initializing wallet: ${error.message}`, 'error');
+          console.error('Token initialization error:', error);
+          addLog(`Wallet initialization error: ${error.message}. Using cached data.`, 'error');
+          // Continue with the app anyway - the TokenService has fallbacks
         } finally {
           loading.value = false;
         }

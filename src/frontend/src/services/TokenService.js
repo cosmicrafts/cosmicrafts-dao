@@ -5,7 +5,7 @@ import { Principal } from '@dfinity/principal';
 
 // Constants
 const ICP_LEDGER_CANISTER_ID = 'ryjl3-tyaaa-aaaaa-aaaba-cai';
-const STARDUST_TOKEN_CANISTER_ID = 'opcce-byaaa-aaaak-qcgda-cai'; // Replace with your token's canister ID
+const STARDUST_TOKEN_CANISTER_ID = 'opcce-byaaa-aaaak-qcgda-cai';
 
 // Cache keys
 const TOKEN_CACHE_KEY = 'cosmicrafts-token-cache';
@@ -171,6 +171,16 @@ class TokenService {
    * Actual initialization logic - happens in background
    */
   async doInitialize(identity, host) {
+    // Create an overall timeout for the initialization process
+    const initTimeout = setTimeout(() => {
+      console.warn('TokenService initialization timed out, using defaults');
+      // Set up at least the default ICP token
+      this._setupDefaultTokens();
+      this.initialized = true;
+      this.initializing = false;
+      this.saveToCache();
+    }, 45000); // 45 second overall timeout
+
     try {
       console.log('Initializing TokenService...');
       
@@ -220,14 +230,84 @@ class TokenService {
       
       // Already marked as initialized after ICP is ready
       this.initializing = false;
+
+      // Clear the timeout since initialization succeeded
+      clearTimeout(initTimeout);
     } catch (error) {
       console.error('Error in TokenService initialization:', error);
+      
+      // Set up default tokens on error
+      this._setupDefaultTokens();
+      
       this.initializing = false;
       
       // Even if there's an error, set initialized to true if we have at least ICP
       if (this.tokenConfigs.has('ICP')) {
         this.initialized = true;
       }
+
+      // Clear the timeout since we've handled the error
+      clearTimeout(initTimeout);
+    }
+  }
+  
+  /**
+   * Setup default tokens in case of network errors or timeouts
+   * @private
+   */
+  _setupDefaultTokens() {
+    console.log('Setting up default tokens due to initialization issues');
+    
+    // Set up default ICP token
+    const icpConfig = {
+      symbol: 'ICP',
+      name: 'Internet Computer Protocol',
+      standard: 'icp',
+      decimals: 8,
+      canisterId: ICP_LEDGER_CANISTER_ID,
+      fee: BigInt(10000)
+    };
+    
+    this.tokenConfigs.set('ICP', icpConfig);
+    
+    // Add ICP to supported tokens if not already there
+    const existingIcpIndex = this.supportedTokens.findIndex(t => t.symbol === 'ICP');
+    if (existingIcpIndex >= 0) {
+      this.supportedTokens[existingIcpIndex] = {
+        ...icpConfig,
+        fee: icpConfig.fee.toString()
+      };
+    } else {
+      this.supportedTokens.push({
+        ...icpConfig,
+        fee: icpConfig.fee.toString()
+      });
+    }
+    
+    // Set up default Stardust token
+    const stardustConfig = {
+      symbol: 'STDs',
+      name: 'Stardust',
+      standard: 'icrc1',
+      decimals: 8,
+      canisterId: STARDUST_TOKEN_CANISTER_ID,
+      fee: BigInt(10000)
+    };
+    
+    this.tokenConfigs.set('STDs', stardustConfig);
+    
+    // Add Stardust to supported tokens if not already there
+    const existingStardustIndex = this.supportedTokens.findIndex(t => t.symbol === 'STDs');
+    if (existingStardustIndex >= 0) {
+      this.supportedTokens[existingStardustIndex] = {
+        ...stardustConfig,
+        fee: stardustConfig.fee.toString()
+      };
+    } else {
+      this.supportedTokens.push({
+        ...stardustConfig,
+        fee: stardustConfig.fee.toString()
+      });
     }
   }
   
@@ -239,10 +319,11 @@ class TokenService {
       console.log('Initializing Stardust token in background...');
       
       // Use Promise.race with a timeout to prevent hanging
+      // Increased timeout from 10s to 30s
       const stardustConfig = await Promise.race([
         this.initializeIcrcToken(STARDUST_TOKEN_CANISTER_ID),
         new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Stardust token initialization timed out')), 10000)
+          setTimeout(() => reject(new Error('Stardust token initialization timed out')), 30000)
         )
       ]);
       
@@ -269,8 +350,40 @@ class TokenService {
       return stardustConfig;
     } catch (error) {
       console.error('Failed to initialize Stardust token:', error);
+      
+      // Use default config on failure
+      const defaultConfig = {
+        symbol: 'STDs',
+        name: 'Stardust',
+        standard: 'icrc1',
+        decimals: 8,
+        canisterId: STARDUST_TOKEN_CANISTER_ID,
+        fee: BigInt(10000),
+        logo: null
+      };
+      
+      // Make sure default config is in token configs
+      this.tokenConfigs.set('STDs', defaultConfig);
+      
+      // Update supported tokens with default config
+      const existingIndex = this.supportedTokens.findIndex(t => t.canisterId === STARDUST_TOKEN_CANISTER_ID);
+      if (existingIndex >= 0) {
+        this.supportedTokens[existingIndex] = {
+          ...defaultConfig,
+          fee: defaultConfig.fee.toString()
+        };
+      } else {
+        this.supportedTokens.push({
+          ...defaultConfig,
+          fee: defaultConfig.fee.toString()
+        });
+      }
+      
+      // Save cache with default values to avoid repeated failures
+      this.saveToCache();
+      
       // No need to throw - this is a background operation
-      return null;
+      return defaultConfig;
     }
   }
   
@@ -348,133 +461,153 @@ class TokenService {
    * @param {string} canisterId 
    */
   async initializeIcrcToken(canisterId) {
-    try {
-      // Create ICRC ledger
-      const icrcLedger = IcrcLedgerCanister.create({
-        agent: this.agent,
-        canisterId
-      });
+    // Track retry attempts
+    let attempts = 0;
+    const maxAttempts = 2;
+    
+    const attemptInitialization = async () => {
+      attempts++;
+      console.log(`Initializing ICRC token ${canisterId} (attempt ${attempts}/${maxAttempts})...`);
       
-      this.tokenLedgers.set(canisterId, icrcLedger);
-      
-      // Query metadata to get token information
-      console.log(`Fetching metadata for ${canisterId}...`);
-      
-      let tokenInfo;
-      let fee;
-      
-      // Set a timeout for the metadata fetch
-      const metadataPromise = Promise.race([
-        icrcLedger.metadata({ certified: true }),
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Metadata fetch timed out')), 5000)
-        )
-      ]);
-      
-      // Method 1: Use the official metadata method
       try {
-        const metadataResponse = await metadataPromise;
+        // Create ICRC ledger
+        const icrcLedger = IcrcLedgerCanister.create({
+          agent: this.agent,
+          canisterId
+        });
         
-        // Use the official mapper function from the library
-        tokenInfo = mapTokenMetadata(metadataResponse);
+        this.tokenLedgers.set(canisterId, icrcLedger);
         
-        if (!tokenInfo) {
-          throw new Error('Failed to map token metadata');
-        }
-      } catch (metadataError) {
-        console.warn('Error with metadata mapping:', metadataError);
+        // Query metadata to get token information
+        console.log(`Fetching metadata for ${canisterId}...`);
         
-        // Method 2: Parse metadata manually as fallback
-        try {
-          // Set a timeout for the metadata fetch
-          const fallbackMetadataPromise = Promise.race([
-            icrcLedger.metadata({ certified: true }),
-            new Promise((_, reject) => 
-              setTimeout(() => reject(new Error('Fallback metadata fetch timed out')), 5000)
-            )
-          ]);
-          
-          const metadata = await fallbackMetadataPromise;
-          
-          // Extract values manually
-          const findValue = (key) => {
-            const entry = metadata.find(([k]) => k === key);
-            if (!entry) return null;
-            
-            const [, value] = entry;
-            if (typeof value === 'object') {
-              if ('Text' in value) return value.Text;
-              if ('Nat' in value) return BigInt(value.Nat);
-              if ('Int' in value) return BigInt(value.Int);
-            }
-            return value;
-          };
-          
-          tokenInfo = {
-            symbol: findValue('icrc1:symbol') || 'UNKNOWN',
-            name: findValue('icrc1:name') || 'Unknown Token',
-            decimals: Number(findValue('icrc1:decimals')) || 8,
-            logo: findValue('icrc1:logo')
-          };
-        } catch (fallbackError) {
-          console.error('Failed to parse metadata manually, using defaults:', fallbackError);
-          // Use defaults instead of failing
-          tokenInfo = {
-            symbol: canisterId === STARDUST_TOKEN_CANISTER_ID ? 'STDs' : 'UNKNOWN',
-            name: canisterId === STARDUST_TOKEN_CANISTER_ID ? 'STARDUST' : 'Unknown Token',
-            decimals: 8,
-            logo: null
-          };
-        }
-      }
-      
-      // Get fee with timeout
-      try {
-        const feePromise = Promise.race([
-          icrcLedger.transactionFee({ certified: true }),
+        let tokenInfo;
+        let fee;
+        
+        // Set a timeout for the metadata fetch - increased from 5s to 15s
+        const metadataPromise = Promise.race([
+          icrcLedger.metadata({ certified: true }),
           new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Fee fetch timed out')), 5000)
+            setTimeout(() => reject(new Error('Metadata fetch timed out')), 15000)
           )
         ]);
         
-        fee = await feePromise;
-      } catch (feeError) {
-        console.warn('Error fetching transfer fee, using default:', feeError);
-        fee = BigInt(10000); // Default fee
-      }
-      
-      // Create token config
-      const tokenConfig = {
-        symbol: tokenInfo.symbol,
-        name: tokenInfo.name,
-        standard: 'icrc1',
-        decimals: tokenInfo.decimals,
-        canisterId,
-        fee,
-        logo: tokenInfo.logo
-      };
-      
-      this.tokenConfigs.set(tokenInfo.symbol, tokenConfig);
-      
-      return tokenConfig;
-    } catch (error) {
-      console.error(`Failed to initialize ICRC token ${canisterId}:`, error);
-      // For known tokens, use default values instead of failing
-      if (canisterId === STARDUST_TOKEN_CANISTER_ID) {
-        const defaultConfig = {
-          symbol: 'STDs',
-          name: 'Stardust',
+        // Method 1: Use the official metadata method
+        try {
+          const metadataResponse = await metadataPromise;
+          
+          // Use the official mapper function from the library
+          tokenInfo = mapTokenMetadata(metadataResponse);
+          
+          if (!tokenInfo) {
+            throw new Error('Failed to map token metadata');
+          }
+        } catch (metadataError) {
+          console.warn('Error with metadata mapping:', metadataError);
+          
+          // Method 2: Parse metadata manually as fallback
+          try {
+            // Set a timeout for the metadata fetch - increased from 5s to 15s
+            const fallbackMetadataPromise = Promise.race([
+              icrcLedger.metadata({ certified: false }), // Try with non-certified query for faster response
+              new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Fallback metadata fetch timed out')), 15000)
+              )
+            ]);
+            
+            const metadata = await fallbackMetadataPromise;
+            
+            // Extract values manually
+            const findValue = (key) => {
+              const entry = metadata.find(([k]) => k === key);
+              if (!entry) return null;
+              
+              const [, value] = entry;
+              if (typeof value === 'object') {
+                if ('Text' in value) return value.Text;
+                if ('Nat' in value) return BigInt(value.Nat);
+                if ('Int' in value) return BigInt(value.Int);
+              }
+              return value;
+            };
+            
+            tokenInfo = {
+              symbol: findValue('icrc1:symbol') || 'UNKNOWN',
+              name: findValue('icrc1:name') || 'Unknown Token',
+              decimals: Number(findValue('icrc1:decimals')) || 8,
+              logo: findValue('icrc1:logo')
+            };
+          } catch (fallbackError) {
+            console.error('Failed to parse metadata manually, using defaults:', fallbackError);
+            // Use defaults instead of failing
+            tokenInfo = {
+              symbol: canisterId === STARDUST_TOKEN_CANISTER_ID ? 'STDs' : 'UNKNOWN',
+              name: canisterId === STARDUST_TOKEN_CANISTER_ID ? 'STARDUST' : 'Unknown Token',
+              decimals: 8,
+              logo: null
+            };
+          }
+        }
+        
+        // Get fee with timeout - increased from 5s to 15s
+        try {
+          const feePromise = Promise.race([
+            icrcLedger.transactionFee({ certified: false }), // Try with non-certified query for faster response
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Fee fetch timed out')), 15000)
+            )
+          ]);
+          
+          fee = await feePromise;
+        } catch (feeError) {
+          console.warn('Error fetching transfer fee, using default:', feeError);
+          fee = BigInt(10000); // Default fee
+        }
+        
+        // Create token config
+        const tokenConfig = {
+          symbol: tokenInfo.symbol,
+          name: tokenInfo.name,
           standard: 'icrc1',
-          decimals: 8,
+          decimals: tokenInfo.decimals,
           canisterId,
-          fee: BigInt(10000),
-          logo: null
+          fee,
+          logo: tokenInfo.logo
         };
-        this.tokenConfigs.set('STDs', defaultConfig);
-        return defaultConfig;
+        
+        this.tokenConfigs.set(tokenInfo.symbol, tokenConfig);
+        console.log(`Successfully initialized ${tokenInfo.symbol} token`);
+        
+        return tokenConfig;
+      } catch (error) {
+        console.error(`Failed to initialize ICRC token ${canisterId} (attempt ${attempts}):`, error);
+        
+        // Retry if we haven't reached max attempts
+        if (attempts < maxAttempts) {
+          console.log(`Retrying initialization for ${canisterId}...`);
+          return attemptInitialization();
+        }
+        
+        // For known tokens, use default values instead of failing
+        if (canisterId === STARDUST_TOKEN_CANISTER_ID) {
+          console.log('Using default config for Stardust token after repeated failures');
+          const defaultConfig = {
+            symbol: 'STDs',
+            name: 'Stardust',
+            standard: 'icrc1',
+            decimals: 8,
+            canisterId,
+            fee: BigInt(10000),
+            logo: null
+          };
+          this.tokenConfigs.set('STDs', defaultConfig);
+          return defaultConfig;
+        }
+        throw error;
       }
-      throw error;
-    }
+    };
+    
+    return attemptInitialization();
   }
   
   /**

@@ -1,0 +1,82 @@
+{
+  "wallet": {
+    "title": "Portefeuille",
+    "subtitle": "Gérez vos jetons et vos actifs",
+    "principalId": "ID Principal",
+    "accountId": "ID de Compte",
+    "showPrincipalId": "Afficher l'ID Principal",
+    "showAccountId": "Afficher l'ID de Compte",
+    "tokens": "Jetons",
+    "loadingTokens": "Chargement des jetons...",
+    "noTokens": "Aucun jeton trouvé",
+    "addToken": "Ajouter un Jeton",
+    "addTokenTooltip": "Ajouter un jeton personnalisé",
+    "level": "Niveau",
+    "balance": "Solde",
+    "max": "Max",
+
+    "actions": "Actions",
+    "send": "Envoyer",
+    "sendTooltip": "Envoyer des jetons à un autre compte",
+    "sendTokens": "Envoyer des Jetons",
+    "sending": "Envoi en cours...",
+    "receive": "Recevoir",
+    "receiveTooltip": "Recevoir des jetons d'autres personnes",
+    "receiveTokens": "Recevoir des Jetons",
+    "receiveDescription": "Partagez votre adresse pour recevoir des jetons",
+    "scanToSend": "Scannez pour envoyer des jetons",
+    "receiveTokensNotice": "Assurez-vous que l'expéditeur utilise le bon réseau. N'envoyez que des jetons pris en charge par ce portefeuille.",
+    "yourAddress": "Votre adresse",
+    "swap": "Échanger",
+    "swapTooltip": "Échanger entre différents jetons",
+    "stake": "Staker",
+    "stakeTooltip": "Staker des jetons pour gagner des récompenses",
+
+    "recipient": "Destinataire",
+    "enterRecipient": "Entrez l'adresse du destinataire",
+    "amount": "Montant",
+    "enterAmount": "Entrez le montant",
+    "memo": "Mémo",
+    "optional": "optionnel",
+    "enterMemo": "Entrez un mémo ou un message (optionnel)",
+    "transactionFee": "Frais de Transaction",
+
+    "token": "Jeton",
+    "tokenId": "ID du Jeton",
+    "enterTokenId": "Entrez l'ID du canister du jeton",
+    "tokenIdHint": "L'ID du canister du jeton que vous souhaitez ajouter",
+    "tokenStandard": "Standard du Jeton",
+    "tokenName": "Nom du Jeton",
+    "tokenSymbol": "Symbole du Jeton",
+    "tokenDecimals": "Décimales du Jeton",
+    "showAdvanced": "Afficher les Options Avancées",
+    "hideAdvanced": "Masquer les Options Avancées",
+
+    "nftCollection": "Collection de NFTs",
+    "loadingNfts": "Chargement des NFTs...",
+    "noNfts": "Aucun NFT trouvé",
+    "openChest": "Ouvrir",
+    "openingChest": "Ouverture du Coffre",
+    "chestRewards": "Vos Récompenses",
+    "noRewardsFound": "Aucune récompense trouvée",
+    "tapToReveal": "Appuyez pour révéler",
+
+    "activityLog": "Journal d'Activité",
+    "clearLogs": "Effacer le Journal",
+    "noLogs": "Aucune activité à afficher",
+
+    "copy": "Copier",
+    "comingSoon": "Bientôt Disponible",
+
+    "closeDialog": "Fermer",
+
+    "loading": "Chargement...",
+    "error": "Erreur"
+  },
+  "common": {
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "submit": "Soumettre",
+    "loading": "Chargement..."
+  }
+} 

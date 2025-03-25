@@ -430,6 +430,67 @@ export const useTokenStore = defineStore('token', {
         console.error('Failed to convert principal to account ID:', error);
         throw error;
       }
+    },
+    
+    /**
+     * Get list of added tokens beyond defaults
+     * @returns {Array} List of token symbols
+     */
+    async getAddedTokens() {
+      try {
+        // If tokens are available, return all tokens except the default ones
+        if (this.tokens && this.tokens.length > 0) {
+          // Default tokens are ICP and STDs
+          const defaultTokens = ['ICP', 'STDs'];
+          return this.tokens
+            .filter(token => !defaultTokens.includes(token.symbol))
+            .map(token => token.symbol);
+        }
+        return [];
+      } catch (error) {
+        console.error('Failed to get added tokens:', error);
+        return [];
+      }
+    },
+    
+    /**
+     * Get token metadata for a specific symbol
+     * @param {string} symbol - Token symbol
+     * @returns {Object} Token metadata
+     */
+    async getTokenMetadata(symbol) {
+      try {
+        // Find token in the tokens list
+        const token = this.tokens.find(t => t.symbol === symbol);
+        if (token) {
+          return {
+            name: token.name || symbol,
+            symbol: token.symbol,
+            decimals: token.decimals || 8,
+            canisterId: token.canisterId,
+            price: token.price || null,
+            icon: token.icon || `/assets/icons/tokens/${symbol.toLowerCase()}.png`
+          };
+        }
+        
+        // If not found, return basic data
+        return {
+          name: symbol,
+          symbol: symbol,
+          decimals: 8,
+          price: null,
+          icon: `/assets/icons/tokens/${symbol.toLowerCase()}.png`
+        };
+      } catch (error) {
+        console.error(`Failed to get metadata for ${symbol}:`, error);
+        return {
+          name: symbol,
+          symbol: symbol,
+          decimals: 8,
+          price: null,
+          icon: `/assets/icons/tokens/${symbol.toLowerCase()}.png`
+        };
+      }
     }
   }
 });
