@@ -37,34 +37,6 @@ const currentMessage = ref<string>("");
 const isThinking = ref<boolean>(false);
 const thinkingContent = ref<string>("");
 
-// Array of fun cosmic phrases
-const cosmicPhrases = [
-  "Summoning stardust...",
-  "Warping reality...",
-  "Consulting cosmic oracles...",
-  "Bending spacetime...",
-  "Channeling nebula energy...",
-  "Aligning with the stars...",
-  "Harnessing void magic...",
-  "Calculating quantum probabilities...",
-  "Initiating wormhole sequence...",
-  "Spinning galactic webs...",
-  "Distilling cosmic wisdom...",
-  "Decoding stellar signals...",
-  "Interfacing with the void...",
-  "Brewing cosmic tea...",
-  "Unfolding dimensional layers..."
-];
-
-// Current cosmic phrase
-const cosmicPhrase = ref(cosmicPhrases[0]);
-
-// Function to select a random cosmic phrase
-const selectRandomPhrase = () => {
-  const randomIndex = Math.floor(Math.random() * cosmicPhrases.length);
-  cosmicPhrase.value = cosmicPhrases[randomIndex];
-};
-
 const chatWindow = ref<HTMLElement | null>(null);
 const chatToggle = ref<HTMLElement | null>(null); // Reference to the chat toggle button
 const isDragging = ref<boolean>(false);
@@ -516,7 +488,6 @@ const sendPrompt = async (): Promise<void> => {
   try {
     loading.value = true;
     currentMessage.value = "";
-    selectRandomPhrase(); // Select a new random phrase when loading starts
 
     // ✅ Fetch structured memory & inject it
     const userId = (authStore.player as any)?.username || "guest";
@@ -1336,8 +1307,8 @@ const formatMessage = (text: string): string => {
       // Get the full text for the data-value to preserve the entire option
       const fullText = title + (description ? ': ' + description : '');
       
-      // Generate a button with the appropriate content and icon
-      const buttonHtml = `<button class="cta-button response-option-btn" data-value="${fullText}">
+      // Generate a button with the appropriate content and icon - COMPACT VERSION
+      const buttonHtml = `<button class="cta-button response-option-btn compact-btn" data-value="${fullText}">
         <i class="fas fa-info-circle"></i>
         ${title}
         ${description ? `<span class="option-description">${description}</span>` : ''}
@@ -1357,8 +1328,8 @@ const formatMessage = (text: string): string => {
       // Get the full text for the data-value
       const fullText = `${optionCode} (${description})`;
       
-      // Generate a button for this option
-      const buttonHtml = `<button class="cta-button response-option-btn inline-option" data-value="${fullText}">
+      // Generate a button for this option - COMPACT VERSION
+      const buttonHtml = `<button class="cta-button response-option-btn inline-option compact-btn" data-value="${fullText}">
         <i class="fas fa-code"></i>
         ${optionCode}
         <span class="option-description">(${description})</span>
@@ -1375,8 +1346,8 @@ const formatMessage = (text: string): string => {
       const fullPhrase = askMatch[1];
       const value = fullPhrase;
       
-      // Generate a button for this action
-      const buttonHtml = `<button class="cta-button whitepaper-btn response-option-btn action-btn" data-value="${value}">
+      // Generate a button for this action - COMPACT VERSION
+      const buttonHtml = `<button class="cta-button whitepaper-btn response-option-btn action-btn compact-btn" data-value="${value}">
         <i class="fas fa-question-circle"></i>
         ${fullPhrase}
       </button>`;
@@ -1387,13 +1358,12 @@ const formatMessage = (text: string): string => {
     }
   }
   
-  // PHASE 2: Handle specialized patterns that might not be bullet points
-  
+  // Continue with other pattern replacements - all with COMPACT VERSION
   // TYPE PATTERN: Match "Type X for Y" where X is a code and Y is a description
   const typePattern = /Type\s+([A-Z]{1,3})\s+for\s+([^.]+)/gi;
   processedText = processedText.replace(typePattern, (match, code, description) => {
     const fullText = `${code} for ${description.trim()}`;
-    return `<button class="cta-button response-option-btn inline-option" data-value="${fullText}">
+    return `<button class="cta-button response-option-btn inline-option compact-btn" data-value="${fullText}">
       <i class="fas fa-keyboard"></i>
       ${code}
       <span class="option-description">(${description.trim()})</span>
@@ -1404,15 +1374,14 @@ const formatMessage = (text: string): string => {
   const codePattern = /\b([A-Z]{2})\b\s*\(([^)]+)\)/g;
   processedText = processedText.replace(codePattern, (match, code, description) => {
     const fullText = `${code} (${description.trim()})`;
-    return `<button class="cta-button response-option-btn inline-option" data-value="${fullText}">
+    return `<button class="cta-button response-option-btn inline-option compact-btn" data-value="${fullText}">
       <i class="fas fa-tag"></i>
       ${code}
       <span class="option-description">(${description.trim()})</span>
     </button>`;
   });
   
-  // PHASE 3: Look for sentence-based patterns after periods
-  // This new pattern helps find button-worthy content after periods
+  // PHASE 3: Look for sentence-based patterns after periods - COMPACT VERSION
   const sentencePattern = /\.(?:\s+)([A-Z][^.!?:]+?(?::[^.!?]+|[^.!?]*?\([^)]+\)))/g;
   processedText = processedText.replace(sentencePattern, (match, sentenceContent) => {
     // Check if this looks like a "Feature: Description" pattern
@@ -1422,7 +1391,7 @@ const formatMessage = (text: string): string => {
       const description = featureMatch[2].trim();
       const fullText = `${feature}: ${description}`;
       
-      return `. <button class="cta-button response-option-btn" data-value="${fullText}">
+      return `. <button class="cta-button response-option-btn compact-btn" data-value="${fullText}">
         <i class="fas fa-star"></i>
         ${feature}
         <span class="option-description">${description}</span>
@@ -1436,7 +1405,7 @@ const formatMessage = (text: string): string => {
       const description = optionMatch[2].trim();
       const fullText = `${code} (${description})`;
       
-      return `. <button class="cta-button response-option-btn inline-option" data-value="${fullText}">
+      return `. <button class="cta-button response-option-btn inline-option compact-btn" data-value="${fullText}">
         <i class="fas fa-code"></i>
         ${code}
         <span class="option-description">(${description})</span>
@@ -1446,8 +1415,7 @@ const formatMessage = (text: string): string => {
     return match; // Return unchanged if no patterns match
   });
   
-  // PHASE 4: Format remaining text with markdown-style formatting
-  
+  // Rest of the function remains the same...  
   // Convert markdown-style bold
   let formatted = processedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   
@@ -1713,30 +1681,26 @@ const formatTimestamp = (date: Date): string => {
       <div class="input-area">
         <div class="input-wrapper">
             <!-- Input Field -->
-<div
-  ref="chatInput"
-  class="chat-input"
-  contenteditable="true"
-  @input="updatePrompt"
-  @keydown.enter.prevent="sendPrompt"
-  role="textbox"
-></div>
+            <div
+              ref="chatInput"
+              class="chat-input"
+              contenteditable="true"
+              @input="updatePrompt"
+              @keydown.enter.prevent="sendPrompt"
+              role="textbox"
+            ></div>
 
-            <!-- Cosmic Thinking Indicator -->
-            <div v-if="loading" class="thinking-indicator">
-              <div class="dot-flashing"></div>
-              <span class="thinking-text">{{ cosmicPhrase }}</span>
-            </div>
+            <!-- Remove Cosmic Thinking Indicator -->
         </div>
         <div class="emoji-button-wrapper">
           <button class="emoji-button" @click.stop="showEmojiPicker = !showEmojiPicker">
-        <FaceSmileIcon class="icon" />
-      </button>
+            <FaceSmileIcon class="icon" />
+          </button>
         </div>
         <button class="send-icon" @click="sendPrompt" :disabled="loading">
             <PaperAirplaneIcon class="icon" />
         </button>
-        </div>
+      </div>
       
       <!-- Add Clear Chat Button -->
       <div class="clear-chat-container">
@@ -1818,6 +1782,44 @@ const formatTimestamp = (date: Date): string => {
   box-shadow: 0 4px 16px rgba(0, 208, 255, 0.896);
 }
 
+/* ✅ Clean up all animation related components */
+.dot-flashing, 
+.dot-typing, 
+.thinking-glow, 
+.thinking-indicator {
+  display: none;
+}
+
+/* Keep only the reasoning display for completed messages */
+.thinking-content {
+  border-left: 2px solid #858585;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+  opacity: 0.65;
+  font-weight: 300;
+}
+
+.thinking-label {
+  color: #858585;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.thinking-text {
+  font-style: italic;
+  color: #a0a0a0;
+  font-weight: 300;
+}
+
+/* ✅ Input Wrapper */
+.input-wrapper {
+  flex: 1; /* ✅ Ensures input takes up remaining space */
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
 /* ✅ Chat Window */
 .chat-window {
   position: fixed;
@@ -1875,20 +1877,18 @@ const formatTimestamp = (date: Date): string => {
 }
 
 .header-avatar {
-  width: 32px;
-  height: 32px;
+  width: 24px !important;
+  height: 24px !important;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(15, 185, 253, 0.4);
+  border: 1px solid rgba(15, 185, 253, 0.4) !important;
   box-shadow: 0 0 5px rgba(15, 185, 253, 0.25);
-  transition: all 0.3s ease;
 }
 
 .header-title span {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
 }
 
 /* Header Controls Container */
@@ -2102,98 +2102,19 @@ const formatTimestamp = (date: Date): string => {
 
 /* ✅ Thinking Indicator (Icon + Text) */
 .thinking-indicator {
-  position: absolute;
-  bottom: calc(100% + 10px); /* Position above the input */
-  right: 10px; /* Align to right side */
-  transform: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: linear-gradient(135deg, rgba(30, 64, 97, 0.6), rgba(59, 130, 246, 0.3));
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4), inset 0 0 8px rgba(59, 130, 246, 0.2);
-  backdrop-filter: blur(8px);
-  pointer-events: none;
-  z-index: 10;
-  animation: pulseIn 0.3s ease-out forwards, float 3s ease-in-out infinite;
-  opacity: 0;
-}
-
-@keyframes pulseIn {
-  0% { opacity: 0; transform: scale(0.95); }
-  70% { opacity: 1; transform: scale(1.05); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
-  100% { transform: translateY(0px); }
+  display: none; /* Hide it instead of removing completely to prevent any errors */
 }
 
 /* ✅ Replace Dot Flashing with Cosmic Particle Animation */
 .dot-flashing {
-  position: relative;
-  width: 20px;
-  height: 20px;
-  background: transparent;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: cosmic-spin 3s linear infinite;
-}
-
-.dot-flashing::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: conic-gradient(transparent, rgba(59, 130, 246, 0.8), transparent);
-  animation: cosmic-pulse 1.5s ease infinite;
-}
-
-.dot-flashing::after {
-  content: "";
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: #3b82f6;
-  border-radius: 50%;
-  box-shadow: 0 0 10px 2px rgba(59, 130, 246, 0.8);
-  animation: cosmic-glow 2s ease alternate infinite;
-}
-
-@keyframes cosmic-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes cosmic-pulse {
-  0%, 100% { opacity: 0.3; transform: scale(0.85); }
-  50% { opacity: 1; transform: scale(1.1); }
-}
-
-@keyframes cosmic-glow {
-  0% { box-shadow: 0 0 5px 1px rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.7); }
-  100% { box-shadow: 0 0 15px 3px rgba(59, 130, 246, 0.8); background: rgba(59, 130, 246, 1); }
+  display: none; /* Hide it instead of removing completely */
 }
 
 /* ✅ Thinking Text */
 .thinking-text {
-  color: rgba(255, 255, 255, 0.95);
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  position: relative;
-  padding-right: 3px;
-  overflow: hidden;
-  animation: shimmering-text 2s linear infinite, phrase-change 0.5s ease-out;
-  white-space: nowrap;
-  text-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+  font-style: italic;
+  color: #a0a0a0;
+  font-weight: 300;
 }
 
 @keyframes phrase-change {
@@ -2215,16 +2136,6 @@ const formatTimestamp = (date: Date): string => {
   100% { color: rgba(255, 255, 255, 0.8); text-shadow: 0 0 5px rgba(59, 130, 246, 0.1); }
 }
 
-.thinking-text::after {
-  content: "...";
-  position: absolute;
-  overflow: hidden;
-  display: inline-block;
-  vertical-align: bottom;
-  animation: ellipsis-dot 1.2s steps(4) infinite;
-  width: 0px;
-}
-
 @keyframes ellipsis-dot {
   to {
     width: 1.25em;
@@ -2233,26 +2144,8 @@ const formatTimestamp = (date: Date): string => {
 
 /* ✅ Three-Dot Typing Animation */
 .dot-typing {
-  position: absolute;
-  left: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 1rem;
+  display: none; /* Hide it instead of removing */
 }
-
-.dot-typing span {
-  width: 5px;
-  height: 5px;
-  margin: 0 3px;
-  background-color: #3b82f6;
-  border-radius: 50%;
-  animation: typingDots 1.4s infinite ease-in-out;
-}
-
-.dot-typing span:nth-child(1) { animation-delay: 0s; }
-.dot-typing span:nth-child(2) { animation-delay: 0.2s; }
-.dot-typing span:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes typingDots {
   0%, 100% { opacity: 0.3; transform: scale(1); }
@@ -2261,18 +2154,13 @@ const formatTimestamp = (date: Date): string => {
 
 /* ✅ Glowing Text Effect */
 .thinking-glow {
-  position: absolute;
-  color: rgba(59, 130, 246, 0.8);
-  font-weight: bold;
-  text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
-  animation: glowPulse 1.5s infinite alternate ease-in-out;
+  display: none; /* Hide it instead of removing */
 }
 
 @keyframes glowPulse {
   0% { opacity: 0.5; text-shadow: 0 0 4px rgba(59, 130, 246, 0.3); }
   100% { opacity: 1; text-shadow: 0 0 12px rgba(59, 130, 246, 0.8); }
 }
-
 
 /* ✅ Scrollbar - Webkit (Chrome, Edge, Safari) */
 .messages::-webkit-scrollbar {
@@ -2537,6 +2425,12 @@ const formatTimestamp = (date: Date): string => {
   box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.3);
 }
 
+/* Hide all animation components */
+.thinking-indicator, .dot-flashing, .dot-typing, .thinking-glow {
+  display: none;
+}
+
+/* Message reasoning styling */
 .thinking-content {
   border-left: 2px solid #858585;
   padding-left: 1rem;
@@ -2582,24 +2476,15 @@ const formatTimestamp = (date: Date): string => {
 
 /* Add this style to ensure v-html content inherits styles */
 .bubble :deep(.thinking-content) {
-  border-left: 2px solid #858585;
-  padding-left: 1rem;
-  margin-bottom: 1rem;
-  opacity: 0.65;
-  font-weight: 300;
+  /* Duplicate styles - removing */
 }
 
 .bubble :deep(.thinking-label) {
-  color: #858585;
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+  /* Duplicate styles - removing */
 }
 
 .bubble :deep(.thinking-text) {
-  font-style: italic;
-  color: #a0a0a0;
-  font-weight: 300;
+  /* Duplicate styles - removing */
 }
 
 /* Clear Chat Button Styles */
@@ -2708,36 +2593,37 @@ const formatTimestamp = (date: Date): string => {
   width: 100%;
 }
 
-/* Styling to match DAO.vue's beautiful cta-buttons */
+/* Styling to match DAO.vue's beautiful cta-buttons - SMALLER BUTTON VERSION */
 .cta-button,
 .bubble .message-text button.cta-button,
 .formatted-message button.cta-button {
   position: relative;
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
-  gap: 0.75rem;
-  padding: 1.1rem 1.5rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  text-align: center;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-align: left;
   color: #f0f9ff !important;
   background: linear-gradient(to bottom, 
     rgba(74, 144, 226, 0.95) 0%, 
     rgba(38, 79, 137, 0.95) 100%) !important;
-  border: 2px solid rgba(79, 174, 255, 0.7) !important;
-  border-radius: 8px !important;
+  border: 1px solid rgba(79, 174, 255, 0.7) !important;
+  border-radius: 6px !important;
   box-shadow: 
-    inset 0 2px 4px rgba(255, 255, 255, 0.2),
-    0 10px 25px rgba(79, 174, 255, 0.4) !important;
-  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    inset 0 1px 2px rgba(255, 255, 255, 0.2),
+    0 4px 12px rgba(79, 174, 255, 0.4) !important;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   cursor: pointer !important;
   text-decoration: none;
   overflow: hidden;
   z-index: 5;
   transform-style: preserve-3d;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   width: auto;
   max-width: 100%;
   -webkit-appearance: none;
@@ -2750,49 +2636,115 @@ const formatTimestamp = (date: Date): string => {
   pointer-events: auto !important;
 }
 
-/* Button active state for visual feedback */
-.button-active,
-.cta-button.button-active,
-.formatted-message button.cta-button.button-active {
-  transform: translateY(2px) scale(0.98) !important;
-  opacity: 0.9;
-  transition: all 0.1s ease-in-out !important;
-  box-shadow: 
-    inset 0 2px 4px rgba(0, 0, 0, 0.1),
-    0 5px 15px rgba(79, 174, 255, 0.3) !important;
-}
-
-/* Enhanced click target area */
-.formatted-message button.cta-button::after {
+.cta-button::before,
+.bubble .message-text button.cta-button::before,
+.formatted-message button.cta-button::before {
   content: '';
   position: absolute;
-  top: -5px;
-  left: -5px;
-  right: -5px;
-  bottom: -5px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(255, 255, 255, 0) 100%);
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform 0.6s ease;
   z-index: -1;
 }
 
-/* Fix for mobile touch events */
-@media (max-width: 768px) {
-  .formatted-message button.cta-button,
-  .cta-button {
-    padding: 1.2rem 1.5rem;  /* Larger touch target on mobile */
-    margin-bottom: 1rem;     /* More space between buttons */
+.cta-button i,
+.bubble .message-text button.cta-button i,
+.formatted-message button.cta-button i {
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  margin-right: 0.4rem;
+  float: left;
+}
+
+.cta-button:hover,
+.bubble .message-text button.cta-button:hover,
+.formatted-message button.cta-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  background: linear-gradient(to bottom, 
+    rgba(61, 146, 243, 0.95) 0%, 
+    rgba(40, 122, 237, 0.95) 100%) !important;
+  box-shadow: 
+    inset 0 2px 5px rgba(146, 217, 255, 0.9),
+    0 8px 15px rgba(30, 184, 255, 0.5) !important;
+  color: #ffffff !important;
+}
+
+/* Style for option descriptions */
+.option-description,
+.bubble .message-text button .option-description,
+.formatted-message button .option-description {
+  color: rgba(220, 240, 255, 0.8) !important;
+  font-size: 0.7rem;
+  margin-top: 0.15rem;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: normal;
+  display: block;
+  line-height: 1.2;
+  width: 100%;
+  text-align: left;
+}
+
+/* When in inline mode (horizontal layout), display differently */
+.cta-button.inline-option,
+.bubble .message-text button.cta-button.inline-option,
+.formatted-message button.cta-button.inline-option {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0.2rem 0.3rem 0.2rem 0;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.75rem;
+}
+
+.cta-button.inline-option .option-description,
+.bubble .message-text button.cta-button.inline-option .option-description,
+.formatted-message button.cta-button.inline-option .option-description {
+  display: inline;
+  font-size: 0.65rem;
+  margin-top: 0;
+  margin-left: 0.25rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .cta-button,
+  .bubble .message-text button.cta-button,
+  .formatted-message button.cta-button {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.8rem;
+    width: 100%;
   }
   
-  /* Additional mobile touch improvements */
-  .messages {
-    padding: 1.25rem;  /* More space for touch */
+  .option-description,
+  .bubble .message-text button .option-description,
+  .formatted-message button .option-description {
+    font-size: 0.65rem;
   }
   
-  /* Add a more visible active state for mobile */
-  .button-active,
-  .cta-button.button-active,
-  .formatted-message button.cta-button.button-active {
-    background: linear-gradient(to bottom, 
-      rgba(61, 146, 243, 0.95) 0%, 
-      rgba(40, 122, 237, 0.95) 100%) !important;
+  .cta-button.inline-option,
+  .bubble .message-text button.cta-button.inline-option,
+  .formatted-message button.cta-button.inline-option {
+    width: auto;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.7rem;
+    margin-right: 0.3rem;
+  }
+  
+  .cta-button i,
+  .bubble .message-text button.cta-button i,
+  .formatted-message button.cta-button i {
+    font-size: 0.75rem;
   }
 }
 
@@ -3196,5 +3148,164 @@ const formatTimestamp = (date: Date): string => {
   .message-timestamp {
     font-size: 0.65rem;
   }
+}
+
+/* Button active state for visual feedback */
+.button-active,
+.cta-button.button-active,
+.formatted-message button.cta-button.button-active {
+  transform: translateY(2px) scale(0.98) !important;
+  opacity: 0.9;
+  transition: all 0.1s ease-in-out !important;
+  box-shadow: 
+    inset 0 1px 3px rgba(0, 0, 0, 0.1),
+    0 3px 8px rgba(79, 174, 255, 0.3) !important;
+}
+
+/* Enhanced click target area */
+.formatted-message button.cta-button::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  z-index: -1;
+}
+
+/* Fix buttons - create a NEW compact button version that overrides other styles */
+.formatted-message .cta-button,
+.message-text .cta-button,
+.bubble .cta-button {
+  /* Reset all existing button styles */
+  all: revert;
+  
+  /* Set new compact styles */
+  position: relative !important;
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  padding: 0.5rem 0.7rem !important;
+  margin: 0.3rem 0 !important;
+  border-radius: 6px !important;
+  font-family: inherit !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  background: linear-gradient(to bottom, 
+    rgba(74, 144, 226, 0.95) 0%, 
+    rgba(38, 79, 137, 0.95) 100%) !important;
+  border: 1px solid rgba(79, 174, 255, 0.7) !important;
+  color: white !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.2s ease !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  z-index: 10 !important;
+}
+
+.formatted-message .cta-button .option-description,
+.message-text .cta-button .option-description,
+.bubble .cta-button .option-description {
+  font-size: 0.7rem !important;
+  font-weight: normal !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  margin-top: 0.3rem !important;
+  width: 100% !important;
+}
+
+.formatted-message .cta-button i,
+.message-text .cta-button i,
+.bubble .cta-button i {
+  font-size: 0.8rem !important;
+  margin-right: 0.4rem !important;
+}
+
+.formatted-message .cta-button:hover,
+.message-text .cta-button:hover,
+.bubble .cta-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.formatted-message .cta-button.inline-option,
+.message-text .cta-button.inline-option,
+.bubble .cta-button.inline-option {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  width: auto !important;
+  padding: 0.3rem 0.5rem !important;
+  margin: 0.2rem 0.2rem 0.2rem 0 !important;
+}
+
+.formatted-message .cta-button.inline-option .option-description,
+.message-text .cta-button.inline-option .option-description,
+.bubble .cta-button.inline-option .option-description {
+  margin-top: 0 !important;
+  margin-left: 0.2rem !important;
+  font-size: 0.65rem !important;
+}
+
+/* Specific styles for compact buttons with high specificity */
+.formatted-message button.cta-button.compact-btn,
+.message-text button.cta-button.compact-btn,
+.bubble button.cta-button.compact-btn {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  padding: 5px 8px !important;
+  margin-bottom: 4px !important;
+  font-size: 0.75rem !important;
+  line-height: 1.2 !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(79, 174, 255, 0.7) !important;
+  width: 100% !important;
+  text-align: left !important;
+  background: linear-gradient(to bottom, 
+    rgba(74, 144, 226, 0.85) 0%, 
+    rgba(38, 79, 137, 0.85) 100%) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.formatted-message button.cta-button.compact-btn i,
+.message-text button.cta-button.compact-btn i,
+.bubble button.cta-button.compact-btn i {
+  font-size: 0.7rem !important;
+  margin-right: 4px !important;
+}
+
+.formatted-message button.cta-button.compact-btn .option-description,
+.message-text button.cta-button.compact-btn .option-description,
+.bubble button.cta-button.compact-btn .option-description {
+  font-size: 0.6rem !important;
+  font-weight: normal !important;
+  margin-top: 3px !important;
+  margin-left: 0 !important;
+  line-height: 1.1 !important;
+  width: 100% !important;
+  text-align: left !important;
+  display: block !important;
+}
+
+.formatted-message button.cta-button.compact-btn.inline-option,
+.message-text button.cta-button.compact-btn.inline-option,
+.bubble button.cta-button.compact-btn.inline-option {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  padding: 3px 6px !important;
+  margin: 2px 3px 2px 0 !important;
+  width: auto !important;
+}
+
+.formatted-message button.cta-button.compact-btn.inline-option .option-description,
+.message-text button.cta-button.compact-btn.inline-option .option-description, 
+.bubble button.cta-button.compact-btn.inline-option .option-description {
+  display: inline !important;
+  margin-top: 0 !important;
+  margin-left: 3px !important;
+  font-size: 0.55rem !important;
 }
 </style>
