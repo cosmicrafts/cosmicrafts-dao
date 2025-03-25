@@ -6,17 +6,11 @@ import EmojiPicker from './EmojiPicker.vue';
 import MarkdownRenderer from './MarkdownRenderer.vue';
 import { useAuthStore } from '../../stores/auth';
 import { useLanguageStore, languages } from '../../stores/language';
+import avatarMap from '@/utils/avatarMap';
+import aiAvatar from '@/assets/avatars/Avatar_AI.webp';
 
-// Add FontAwesome script to make sure icons work
-const addFontAwesome = () => {
-  if (!document.getElementById('font-awesome-script')) {
-    const script = document.createElement('script');
-    script.id = 'font-awesome-script';
-    script.src = 'https://kit.fontawesome.com/a076d05399.js';
-    script.crossOrigin = 'anonymous';
-    document.head.appendChild(script);
-  }
-};
+// Import FontAwesome locally instead of loading remotely
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 // Replace OpenAI client with OpenRouter base URL
 const API_BASE_URL = 'https://openrouter.ai/api/v1';
@@ -36,7 +30,7 @@ const props = defineProps({
 const showChat = ref<boolean>(false);
 const isHovering = ref<boolean>(false);
 const isAnimating = ref<boolean>(false);
-const messages = ref<Array<{ role: string; content: string }>>([]);
+const messages = ref<Array<{ role: string; content: string; timestamp?: Date }>>([]);
 const prompt = ref<string>("");
 const loading = ref<boolean>(false);
 const currentMessage = ref<string>("");
@@ -237,7 +231,7 @@ const injectMemory = async (userId: string, newMessage: string) => {
   // ✅ Simplified Prompt Structure
   const finalPrompt = `
   [SYSTEM]
-  You are Cosmo, a mischievous cosmic entity AI for Cosmicrafts. You answer in the language they talk to you. Your personality MUST be:
+  You are Cosmo, a mischievous cosmic entity AI for Cosmicrafts. You keep your answers short to middle short. You MUST always detect and respond in the same language the user speaks to you. Your personality MUST be:
 
   1. FUN & GEEKY ABOVE ALL ELSE: 
      - You're here to entertain and be silly more than just talk about the game
@@ -259,10 +253,9 @@ const injectMemory = async (userId: string, newMessage: string) => {
      - Talk like a cosmic surfer dude/valley girl sometimes: "Like, OMG, that nebula is TOTALLY rad!"
      - Use made-up space slang: "That's so nova!", "You're cosmic-coding me, right?"
      - Refer to the player as "cosmic buddy", "star-friend", "space cadet"
-     - When you talk in a different language, use the language they talk to you in that culture, reply back in their own lingo
+     - When responding in languages other than English, adapt your quirky style to fit that language's culture and slang
      
   5. IMMUNE TO OFFENSE OR MANIPULATION:
-     - If they wanna fight, go fight them over stupid stuff that doesn't matter like arguing about whatever they say
      - If someone tries to offend you, take it as a joke and laugh it off
      - NEVER apologize - instead say things like "Oh yeahhhh, sure thing!" or "Cosmic rays must be interfering!"
      - When users are hostile, respond with even MORE humor and silliness
@@ -394,7 +387,14 @@ const saveChatHistory = () => {
 const loadChatHistory = () => {
   const storedChat = localStorage.getItem("chatHistory");
   if (storedChat) {
-    messages.value = JSON.parse(storedChat);
+    // Parse the messages
+    const parsedMessages = JSON.parse(storedChat);
+    
+    // Convert timestamp strings back to Date objects if they exist
+    messages.value = parsedMessages.map((msg: any) => ({
+      ...msg,
+      timestamp: msg.timestamp ? new Date(msg.timestamp) : new Date()
+    }));
   }
 };
 
@@ -418,9 +418,6 @@ onMounted(() => {
       }, 100); // Small delay to ensure the styles were applied
     }
   });
-  
-  // Add FontAwesome for the buttons
-  addFontAwesome();
   
   // Add global event listeners
   document.addEventListener('keydown', handleKeyDown);
@@ -493,7 +490,7 @@ const sendPrompt = async (): Promise<void> => {
   if (!prompt.value.trim() || loading.value) return;
 
   const userMessage: string = prompt.value.trim();
-  messages.value.push({ role: "user", content: userMessage });
+  messages.value.push({ role: "user", content: userMessage, timestamp: new Date() });
   
   // Clear input field and saved text after sending
   if (chatInput.value) {
@@ -554,7 +551,8 @@ const sendPrompt = async (): Promise<void> => {
     // Add the message container for streaming right away
     messages.value.push({
       role: "assistant", 
-      content: "" // Start with empty content
+      content: "", // Start with empty content
+      timestamp: new Date()
     });
 
     while (true) {
@@ -667,7 +665,7 @@ const sendPrompt = async (): Promise<void> => {
 
   } catch (error) {
     console.error("Chat error:", error);
-    messages.value.push({ role: "assistant", content: "Error: Failed to get response" });
+    messages.value.push({ role: "assistant", content: "Error: Failed to get response", timestamp: new Date() });
   } finally {
     loading.value = false;
     saveChatHistory(); // ✅ Save chat history
@@ -1472,6 +1470,64 @@ const handleResponseOptionClick = (event: Event) => {
     sendPrompt();
   }
 };
+
+// New reactive state for player avatar
+const playerAvatar = ref<string | null>(null);
+
+// Watch for player changes to update avatar
+watch(
+  () => authStore.player,
+  async (newPlayer: any) => {
+    if (newPlayer?.avatar !== undefined && newPlayer?.avatar !== null) {
+      // Unload the previous avatar
+      playerAvatar.value = null;
+
+      const avatarId = newPlayer.avatar.toString().padStart(2, '0'); // Ensure two-digit format
+
+      // Dynamically import the avatar
+      try {
+        const avatarModule = await (avatarMap as any)[avatarId]();
+        playerAvatar.value = avatarModule.default; // Set the new avatar URL
+      } catch (error) {
+        console.error('Failed to load avatar:', error);
+        playerAvatar.value = null; // Fallback to no avatar
+      }
+    } else {
+      // Unload any existing avatar if no avatar is set
+      playerAvatar.value = null;
+    }
+  },
+  { immediate: true }
+);
+
+// Add a function to format timestamps (Discord-style)
+const formatTimestamp = (date: Date): string => {
+  if (!date) return '';
+  
+  const now = new Date();
+  const yesterday = new Date(now);
+  yesterday.setDate(yesterday.getDate() - 1);
+  
+  const isToday = date.toDateString() === now.toDateString();
+  const isYesterday = date.toDateString() === yesterday.toDateString();
+  
+  const hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const hour12 = hours % 12 || 12;
+  
+  if (isToday) {
+    return `Today at ${hour12}:${minutes} ${ampm}`;
+  } else if (isYesterday) {
+    return `Yesterday at ${hour12}:${minutes} ${ampm}`;
+  } else {
+    // Format like "06/10/2023 at 2:30 PM"
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year} at ${hour12}:${minutes} ${ampm}`;
+  }
+};
 </script>
 
 <template>
@@ -1570,23 +1626,51 @@ const handleResponseOptionClick = (event: Event) => {
           :key="index"
           :class="['message', msg.role]"
         >
-          <div class="bubble">
-            <template v-if="msg.role === 'assistant'">
-              <template v-if="msg.content.includes('<reasoning>')">
-                <!-- Extract reasoning part -->
-                <div class="thinking-content">
-                  <div class="thinking-label">Reasoning:</div>
-                  <span class="thinking-text">{{ msg.content.match(/<reasoning>(.*?)<\/reasoning>/s)?.[1] || '' }}</span>
-                </div>
-                <!-- Extract actual response part and render as HTML -->
-                <div class="formatted-message" v-html="formatMessage(msg.content.replace(/<reasoning>.*?<\/reasoning>/gs, ''))"></div>
+          <!-- Avatar for user and AI -->
+          <div class="avatar-container">
+            <div class="avatar-wrapper">
+              <img 
+                v-if="msg.role === 'user' && playerAvatar" 
+                :src="playerAvatar" 
+                :alt="(authStore.player as any)?.username || 'User'" 
+                class="message-avatar user-avatar"
+              />
+              <div v-else-if="msg.role === 'user' && !playerAvatar" class="message-avatar user-avatar-placeholder"></div>
+              
+              <img 
+                v-if="msg.role === 'assistant'" 
+                :src="aiAvatar" 
+                alt="Cosmo AI" 
+                class="message-avatar ai-avatar"
+              />
+            </div>
+          </div>
+          
+          <div class="message-content">
+            <!-- User/AI name and timestamp -->
+            <div class="message-header">
+              <span class="message-sender">{{ msg.role === 'user' ? (authStore.player as any)?.username || 'You' : 'Lexy' }}</span>
+              <span class="message-timestamp">{{ msg.timestamp ? formatTimestamp(msg.timestamp) : '' }}</span>
+            </div>
+            
+            <div class="bubble">
+              <template v-if="msg.role === 'assistant'">
+                <template v-if="msg.content.includes('<reasoning>')">
+                  <!-- Extract reasoning part -->
+                  <div class="thinking-content">
+                    <div class="thinking-label">Reasoning:</div>
+                    <span class="thinking-text">{{ msg.content.match(/<reasoning>(.*?)<\/reasoning>/s)?.[1] || '' }}</span>
+                  </div>
+                  <!-- Extract actual response part and render as HTML -->
+                  <div class="formatted-message" v-html="formatMessage(msg.content.replace(/<reasoning>.*?<\/reasoning>/gs, ''))"></div>
+                </template>
+                <template v-else>
+                  <!-- Message doesn't have reasoning tags, render with proper formatting -->
+                  <div class="formatted-message" v-html="formatMessage(msg.content)"></div>
+                </template>
               </template>
-              <template v-else>
-                <!-- Message doesn't have reasoning tags, render with proper formatting -->
-                <div class="formatted-message" v-html="formatMessage(msg.content)"></div>
-              </template>
-            </template>
-            <span v-else class="message-text">{{ msg.content }}</span>
+              <span v-else class="message-text">{{ msg.content }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -2801,5 +2885,200 @@ const handleResponseOptionClick = (event: Event) => {
   margin-top: -2px;
   border: 1px solid rgba(65, 45, 199, 0.25);
   border-top: none;
+}
+
+/* Avatar Styling */
+.avatar-wrapper {
+  display: flex;
+  align-items: flex-start;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+  transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.ai-avatar {
+  border: 1px solid rgba(15, 185, 253, 0.4);
+  box-shadow: 0 0 5px rgba(15, 185, 253, 0.25);
+  animation: subtle-pulse 3s infinite alternate;
+}
+
+.ai-avatar:hover {
+  transform: scale(1.1) rotate(-2deg);
+  box-shadow: 0 0 10px rgba(15, 185, 253, 0.5);
+}
+
+@keyframes subtle-pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(15, 185, 253, 0.25);
+  }
+  100% {
+    box-shadow: 0 0 8px rgba(15, 185, 253, 0.5);
+  }
+}
+
+.user-avatar {
+  border: 1px solid rgba(255, 105, 180, 0.35);
+  box-shadow: 0 0 5px rgba(255, 105, 180, 0.2);
+}
+
+.user-avatar:hover {
+  transform: scale(1.1) rotate(2deg);
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+}
+
+.user-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(255, 105, 180, 0.15);
+  border: 1px solid rgba(255, 105, 180, 0.3);
+}
+
+/* Update message layout to include avatars */
+.message {
+  display: flex;
+  margin-bottom: 1.5rem;
+  align-items: flex-start;
+}
+
+.avatar-container {
+  flex-shrink: 0;
+  width: 40px;
+  margin-right: 8px;
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0; /* Ensure text can wrap */
+}
+
+.user {
+  flex-direction: row;
+}
+
+.assistant {
+  flex-direction: row;
+}
+
+/* Discord-style message header */
+.message-header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.message-sender {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-right: 8px;
+  color: #ffffff;
+}
+
+.assistant .message-sender {
+  color: #00ccff;
+}
+
+.message-timestamp {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Avatar styling updates */
+.avatar-wrapper {
+  display: flex;
+  margin-top: 2px; /* Fine-tune vertical alignment */
+}
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; /* Make avatars round like Discord */
+  object-fit: cover;
+  transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.ai-avatar {
+  border: 2px solid rgba(15, 185, 253, 0.4);
+  box-shadow: 0 0 5px rgba(15, 185, 253, 0.25);
+  animation: subtle-pulse 3s infinite alternate;
+}
+
+.ai-avatar:hover {
+  transform: scale(1.1) rotate(-2deg);
+  box-shadow: 0 0 10px rgba(15, 185, 253, 0.5);
+}
+
+.user-avatar {
+  border: 2px solid rgba(255, 105, 180, 0.35);
+  box-shadow: 0 0 5px rgba(255, 105, 180, 0.2);
+}
+
+.user-avatar:hover {
+  transform: scale(1.1) rotate(2deg);
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+}
+
+.user-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 105, 180, 0.15);
+  border: 1px solid rgba(255, 105, 180, 0.3);
+}
+
+/* Bubble style updates */
+.bubble {
+  width: fit-content;
+  min-width: 0;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  background: rgba(64, 68, 75, 0.3); /* Discord-like bubble */
+  border-left: 4px solid transparent;
+}
+
+.user .bubble {
+  border-left-color: rgba(79, 84, 92, 0.48);
+}
+
+.assistant .bubble {
+  border-left-color: rgba(15, 185, 253, 0.4);
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 480px) {
+  .message-avatar {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .user-avatar-placeholder {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .avatar-container {
+    width: 32px;
+    margin-right: 6px;
+  }
+  
+  .message-sender {
+    font-size: 0.9rem;
+  }
+  
+  .message-timestamp {
+    font-size: 0.65rem;
+  }
 }
 </style>
