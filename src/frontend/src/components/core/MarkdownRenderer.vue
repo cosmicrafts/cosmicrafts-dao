@@ -240,10 +240,10 @@ export default {
               if (src.endsWith('.svg')) {
                 imagePath = new URL(`../assets/icons/${src}`, import.meta.url).href;
               } else if (src.endsWith('.webp')) {
-                imagePath = new URL(`../assets/webp/${src}`, import.meta.url).href;
+                imagePath = new URL(`../../assets/webp/${src}`, import.meta.url).href;
               } else {
                 // Try .webp extension if no extension is specified
-                imagePath = new URL(`../assets/webp/${src}.webp`, import.meta.url).href;
+                imagePath = new URL(`../../assets/webp/${src}.webp`, import.meta.url).href;
               }
             }
 
