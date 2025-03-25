@@ -103,7 +103,7 @@
   import { useLanguageStore } from '@/stores/language';
   import { useI18n } from 'vue-i18n';
   import AvatarSelector from '@/components/user/AvatarSelector.vue';
-  import LoadingScreen from '@/components/LoadingScreen.vue';
+  import LoadingScreen from '@/components/media/LoadingScreen.vue';
 
   export default {
     components: {

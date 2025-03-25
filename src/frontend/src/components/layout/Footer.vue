@@ -1,7 +1,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
 import { useLanguageStore } from '@/stores/language'; // Import languageStore
-import LanguageSelector from '@/components/LanguageSelector.vue';
+import LanguageSelector from '@/components/navigation/LanguageSelector.vue';
 import { ref } from 'vue';
 
 // Access languageStore and i18n

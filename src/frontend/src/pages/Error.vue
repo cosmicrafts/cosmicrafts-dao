@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import Starfield from "@/components/Starfield.vue";
+import Starfield from "@/components/media/Starfield.vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from 'vue-router';
 

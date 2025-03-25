@@ -471,7 +471,7 @@ import heroImage2KR from '@/assets/icons/logo-kr.svg';
 import heroImage2JP from '@/assets/icons/logo-jp.svg';
 import heroImage2RU from '@/assets/icons/logo-ru.svg';
 import heroImage2AR from '@/assets/icons/logo-ar.svg';
-import Proposals from '@/components/Proposals.vue';
+import Proposals from '@/components/feedback/Proposals.vue';
 
 export default {
   name: "DAOPage",

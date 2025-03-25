@@ -112,11 +112,11 @@ import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import MobileMenu from '@/components/MobileMenu.vue';
-import LanguageSelector from '@/components/LanguageSelector.vue'
+import MobileMenu from '@/components/navigation/MobileMenu.vue';
+import LanguageSelector from '@/components/navigation/LanguageSelector.vue'
 import { useModalStore } from '@/stores/modal';
-import Login from '@/components/Login.vue';
-import NotificationIcon from '@/components/NotificationIcon.vue';
+import Login from '@/components/user/LoginForm.vue';
+import NotificationIcon from '@/components/user/NotificationIcon.vue';
 import defaultLogo from '@/assets/icons/logo.svg';
 import logoCN from '@/assets/icons/logo-cn.svg';
 import logoKR from '@/assets/icons/logo-kr.svg';

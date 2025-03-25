@@ -1,12 +1,7 @@
 <template>
   <section class="hero">
-    <!-- Background Canvas for Stars -->
-    <canvas
-      id="starfield"
-      ref="starfield"
-      class="noise-canvas"
-      :style="{ top: `${scrollY * 0.5}px` }"
-    ></canvas>
+    <!-- Background Canvas for Stars - Move to the first child with proper styling -->
+    <Starfield class="hero-starfield" />
 
     <!-- Slide Wrapper -->
     <div v-if="slides[currentSlide]" :key="currentSlide" class="slide">
@@ -144,6 +139,7 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import Starfield from '@/components/media/Starfield.vue';
 import logo1 from '@/assets/webp/adventures.webp';
 import heroImage1 from '@/assets/webp/hero.webp';
 import logo2 from '@/assets/icons/DAO-1.svg';
@@ -186,25 +182,7 @@ const dynamicHeroImage2 = computed(() => {
   return heroImageMap[locale.value] || heroImageMap.default;
 });
 
-
 const scrollY = ref(0);
-const starSpeed = ref(0.5); // Default speed
-const defaultSpeed = 0.1; // Define baseline speed
-const maxSpeed = 1.5; // Reduced from 2 to improve performance
-const minSpeed = 0.5; // Set minimum speed limit
-const speedIncrement = 0.05; // Define smaller increment for finer control
-
-let previousScrollY = 0;
-const noiseCanvas = ref(null);
-
-// Reduce number of stars for better performance
-let n = 500 + Math.floor(250 * Math.random()); // Reduced from 2000 to 1000 stars
-let w = 0, h = 0, x = 0, y = 0, z = 0;
-let star_color_ratio = 0, star_x_save, star_y_save;
-let star_ratio = 256;
-let star = new Array(n);
-let context;
-let opacity = 0.1;
 
 // **Add the slides data**
 const slides = ref([
@@ -303,132 +281,9 @@ function $i(id) {
   return document.getElementById(id);
 }
 
-function init() {
-  for (let i = 0; i < n; i++) {
-    star[i] = new Array(5);
-    
-    // Create a more 3D distribution of stars
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(Math.random() * 2 - 1);
-    const radius = z * (0.1 + 0.9 * Math.random());
-    
-    star[i][0] = radius * Math.sin(phi) * Math.cos(theta);
-    star[i][1] = radius * Math.sin(phi) * Math.sin(theta);
-    star[i][2] = radius * Math.cos(phi);
-    
-    // Add color and size properties
-    star[i][3] = 0; // x position
-    star[i][4] = 0; // y position
-    star[i][5] = 0.5 + Math.random() * 0.5; // size variation
-  }
-  const starfield = $i('starfield');
-  starfield.width = w;
-  starfield.height = h;
-  context = starfield.getContext('2d');
-  context.strokeStyle = 'rgb(255,255,255)';
-  context.globalCompositeOperation = 'lighten';
-}
-
-function anim() {
-  if (!context) return;
-  
-  context.clearRect(0, 0, w, h);
-  
-  // Create a subtle glow effect by adding a semi-transparent overlay
-  context.fillStyle = "rgba(0, 30, 60, 0.03)";
-  context.fillRect(0, 0, w, h);
-  
-  // Simplify the gradient for better performance
-  const gradient = context.createRadialGradient(x, y, 0, x, y, w * 0.4);
-  gradient.addColorStop(0, "rgba(0, 100, 255, 0.02)");
-  gradient.addColorStop(1, "rgba(0, 100, 255, 0)");
-  context.fillStyle = gradient;
-  context.fillRect(0, 0, w, h);
-  
-  // Use a constant time instead of Date.now() to reduce calculations
-  const time = performance.now() * 0.0005;
-  
-  // Only process a subset of stars each frame to improve performance
-  // Skip drawing some stars on mobile devices
-  const isMobile = window.innerWidth <= 768;
-  const processEvery = isMobile ? 2 : 1; // Process only half the stars on mobile
-  
-  for (let i = 0; i < n; i++) {
-    // Skip processing some stars on mobile
-    if (isMobile && i % processEvery !== 0) continue;
-    
-    // Save previous position
-    star_x_save = star[i][3];
-    star_y_save = star[i][4];
-    
-    // Simpler speed calculation
-    star[i][2] -= starSpeed.value;
-    
-    // Keep stars in bounds
-    if (star[i][2] > z) star[i][2] -= z;
-    if (star[i][2] < 0) star[i][2] += z;
-    
-    // Calculate new screen position
-    star[i][3] = x + (star[i][0] / star[i][2]) * star_ratio;
-    star[i][4] = y + (star[i][1] / star[i][2]) * star_ratio;
-    
-    if (star_x_save > 0 && star_x_save < w && star_y_save > 0 && star_y_save < h && star[i][2] > 0) {
-      // Simpler color calculation - use fixed colors based on position
-      const distFromCenter = Math.abs(star[i][3] - x) / w + Math.abs(star[i][4] - y) / h;
-      const lineWidth = Math.max(0.5, 1 - star_color_ratio * star[i][2]);
-      context.lineWidth = lineWidth;
-      
-      // Use a simpler color calculation
-      const opacity = 0.7 - distFromCenter * 0.5;
-      context.strokeStyle = `rgba(15, 185, 253, ${opacity})`;
-      
-      // Draw the line only if it's going to be visible
-      if (lineWidth > 0.1 && opacity > 0.05) {
-        context.beginPath();
-        context.moveTo(star_x_save, star_y_save);
-        context.lineTo(star[i][3], star[i][4]);
-        context.stroke();
-      }
-    }
-  }
-  
-  // Use requestAnimationFrame with a callback reference
-  // to avoid creating a new function each time
-  requestAnimationFrame(anim);
-}
-
+// Simplified handleScroll for parallax effects only
 function handleScroll() {
-  const currentScrollY = window.scrollY;
-
-  // Update scrollY for parallax effect
-  scrollY.value = currentScrollY;
-
-  // Adjust speed based on scroll direction
-  if (currentScrollY > previousScrollY) {
-    // Scrolling down - increase speed but cap it at maxSpeed
-    starSpeed.value = Math.min(starSpeed.value + speedIncrement, maxSpeed);
-  } else if (currentScrollY < previousScrollY) {
-    // Scrolling up - decrease speed but don't go below minSpeed
-    starSpeed.value = Math.max(starSpeed.value - speedIncrement, minSpeed);
-  }
-
-  // Update previous scroll position
-  previousScrollY = currentScrollY;
-}
-
-function resize() {
-  w = window.innerWidth;
-  h = window.innerHeight;
-  x = Math.round(w / 2);
-  y = Math.round(h / 2);
-  z = (w + h) / 2;
-  star_color_ratio = 1 / z;
-  
-  // Only reinitialize if starfield exists
-  const starfield = $i('starfield');
-  if (starfield) {
-    init();
-  }
+  scrollY.value = window.scrollY;
 }
 
 const currentSlide = ref(0);
@@ -506,54 +361,11 @@ const updateMobileStatus = () => {
 };
 
 onMounted(() => {
-  w = window.innerWidth;
-  h = window.innerHeight;
-  
-  // Use passive event listeners for better performance
+  // Add event listeners
   window.addEventListener('scroll', handleScroll, { passive: true });
-  window.addEventListener('resize', resize, { passive: true });
-  
-  // Only initialize stars if we're on desktop or higher-end mobile
-  const canUseAnimation = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  
-  if (canUseAnimation) {
-    resize();
-    anim();
-    startAutoSlide(); // Start auto-sliding
-  } else {
-    // For users who prefer reduced motion, still show stars but don't animate them
-    w = window.innerWidth;
-    h = window.innerHeight;
-    x = Math.round(w / 2);
-    y = Math.round(h / 2);
-    z = (w + h) / 2;
-    star_color_ratio = 1 / z;
-    
-    // Simplified static star field
-    const starfield = $i('starfield');
-    if (starfield) {
-      starfield.width = w;
-      starfield.height = h;
-      const ctx = starfield.getContext('2d');
-      
-      // Draw some static stars
-      for (let i = 0; i < 200; i++) {
-        const size = Math.random() * 2;
-        ctx.beginPath();
-        ctx.arc(
-          Math.random() * w,
-          Math.random() * h,
-          size,
-          0,
-          2 * Math.PI
-        );
-        ctx.fillStyle = `rgba(15, 185, 253, ${Math.random() * 0.5 + 0.2})`;
-        ctx.fill();
-      }
-    }
-    
-    startAutoSlide(); // Start auto-sliding
-  }
+
+  // Start auto-sliding
+  startAutoSlide();
   
   // Mark as loaded after initial animations - faster finish
   setTimeout(() => {
@@ -567,7 +379,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
-  window.removeEventListener('resize', resize);
   stopAutoSlide(); // Stop auto-sliding
   
   // Clean up resize listener
@@ -580,8 +391,8 @@ onUnmounted(() => {
 });
 </script>
 
-
 <style scoped>
+/* Core layout styles */
 .hero {
   position: relative;
   height: 100vh;
@@ -591,45 +402,22 @@ onUnmounted(() => {
   color: var(--cosmic-text-primary);
   overflow: hidden;
   background: radial-gradient(circle at 30% 30%, var(--cosmic-bg-dark), var(--cosmic-bg-darkest) 70%);
-  /* Add initial state for page entry animation */
   opacity: 0;
-  animation: revealPage 0.5s cubic-bezier(0.19, 1, 0.22, 1) 0.1s forwards; /* Faster animation */
+  animation: revealPage 0.5s cubic-bezier(0.19, 1, 0.22, 1) 0.1s forwards;
   perspective: 1000px;
 }
 
-/* Page reveal animation */
-@keyframes revealPage {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.noise-canvas {
+/* Starfield positioning */
+.hero-starfield {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
-  /* Add starfield intro animation */
-  opacity: 0;
-  animation: starfieldReveal 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.2s forwards; /* Faster animation */
+  z-index: 1;
 }
 
-@keyframes starfieldReveal {
-  0% {
-    opacity: 0;
-    filter: blur(4px) brightness(0.7);
-  }
-  100% {
-    opacity: 1;
-    filter: blur(0) brightness(1);
-  }
-}
-
+/* Main content container */
 .hero-content {
   position: relative;
   display: flex;
@@ -637,41 +425,14 @@ onUnmounted(() => {
   align-items: center;
   text-align: center;
   z-index: 5;
-  /* Add transform origin for content expansion */
   transform-origin: center center;
   transform-style: preserve-3d;
   transition: transform 0.5s ease-out;
-}
-
-/* Add a subtle hover effect to the hero content */
-.slide:hover .hero-content {
-  transform: translateZ(20px) rotateX(2deg);
-}
-
-/* Initial page load animation for hero content */
-.hero-content {
-  animation: contentReveal 0.5s cubic-bezier(0.19, 1, 0.22, 1) 0.3s forwards; /* Faster animation */
   opacity: 0;
+  animation: contentReveal 0.5s cubic-bezier(0.19, 1, 0.22, 1) 0.3s forwards;
 }
 
-@keyframes contentReveal {
-  0% {
-    opacity: 0;
-    transform: scale(0.95) translateZ(-30px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateZ(0);
-  }
-}
-
-/* Initial page load state for hero image (separated from slide transitions) */
-.hero-image.initial-load {
-  animation: heroImageEntry 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0.4s forwards !important; /* Faster animation */
-  opacity: 0;
-  transform: translateY(30px) scale(0.9) translateZ(-10px);
-}
-
+/* Hero image */
 .hero-image {
   max-width: 22rem;
   margin-top: -4rem;
@@ -682,75 +443,17 @@ onUnmounted(() => {
   transition: transform var(--cosmic-transition-medium), filter var(--cosmic-transition-medium);
 }
 
-.hero-image:hover {
-  filter: drop-shadow(0px 0px 50px rgba(0, 217, 255, 0.45));
-  transform: translateZ(30px) scale(1.05);
-}
-
-@keyframes heroImageEntry {
-  0% {
-    opacity: 0;
-    transform: translateY(30px) scale(0.9) translateZ(-30px);
-    filter: drop-shadow(0px 0px 0px rgba(0, 183, 255, 0));
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(-5px) scale(1.02) translateZ(20px);
-    filter: drop-shadow(0px 0px 50px rgba(0, 183, 255, 0.4));
-  }
-  100% {
-    opacity: 0.95;
-    transform: translateY(0) scale(1) translateZ(0);
-    filter: drop-shadow(0px 0px 36px rgba(0, 183, 255, 0.25));
-  }
-}
-
-/* Initial page load state for hero logo (separated from slide transitions) */
-.hero-logo.initial-load {
-  animation: heroLogoEntry 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0.5s forwards !important; /* Faster animation */
-  opacity: 0;
-  transform: translateY(-30px) scale(0.8) translateZ(-20px);
-}
-
+/* Logo styling */
 .hero-logo {
-  max-width: 18rem; /* Increased from 16rem */
-  margin-top: -11rem; /* Changed from -11rem to move it lower */
+  max-width: 18rem;
+  margin-top: -11rem;
   z-index: 3;
   filter: drop-shadow(0px 0px 36px rgba(0, 183, 255, 0.25));
   transform-style: preserve-3d;
   transition: transform var(--cosmic-transition-medium), filter var(--cosmic-transition-medium);
 }
 
-.hero-logo:hover {
-  filter: drop-shadow(0px 0px 40px rgba(0, 183, 255, 0.55));
-  transform: translateZ(40px) scale(1.03) rotateY(5deg);
-}
-
-@keyframes heroLogoEntry {
-  0% {
-    opacity: 0;
-    transform: translateY(-30px) scale(0.8) translateZ(-50px);
-    filter: drop-shadow(0px 0px 0px rgba(0, 183, 255, 0));
-  }
-  70% {
-    opacity: 1;
-    transform: translateY(5px) scale(1.05) translateZ(30px);
-    filter: drop-shadow(0px 0px 50px rgba(0, 183, 255, 0.5));
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1) translateZ(0);
-    filter: drop-shadow(0px 0px 36px rgba(0, 183, 255, 0.25));
-  }
-}
-
-/* Initial page load state for hero title (separated from slide transitions) */
-.hero-title.initial-load {
-  animation: titleEntry 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards !important; /* Faster animation */
-  opacity: 0;
-  transform: translateY(20px) translateZ(-30px);
-}
-
+/* Hero title */
 .hero-title {
   font-size: 2rem;
   font-weight: bold;
@@ -766,38 +469,7 @@ onUnmounted(() => {
   transform-style: preserve-3d;
 }
 
-.hero-title:hover {
-  text-shadow: var(--cosmic-glow-blue-md);
-  transform: translateZ(25px);
-}
-
-
-
-@keyframes titleEntry {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) translateZ(-30px);
-    text-shadow: 0px 0px 0px rgba(0, 174, 255, 0);
-  }
-  70% {
-    opacity: 1;
-    transform: translateY(-5px) translateZ(20px);
-    text-shadow: 0px 0px 50px rgba(0, 174, 255, 0.8);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) translateZ(0);
-    text-shadow: 0px 0px 36px rgba(0, 174, 255, 0.507);
-  }
-}
-
-/* Initial page load state for CTA panel (only animates on page load) */
-.cta-panel.initial-load {
-  animation: ctaPanelEntry 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards; /* Faster animation */
-  opacity: 0;
-  transform: translateY(100%) translateZ(-50px);
-}
-
+/* CTA panel */
 .cta-panel {
   position: absolute;
   bottom: 0;
@@ -813,24 +485,14 @@ onUnmounted(() => {
   border-top: var(--cosmic-glass-border-blue);
   z-index: 6;
   box-sizing: border-box;
-  opacity: 1; /* Ensure it's visible by default after initial animation */
   transform-style: preserve-3d;
-  transform: translateZ(0);
   transition: all var(--cosmic-transition-medium);
   box-shadow: 
     0 -10px 30px rgba(0, 0, 0, 0.25),
     0 -1px 10px rgba(0, 140, 255, 0.15);
-  overflow: hidden;
 }
 
-.cta-panel:hover {
-  border-top: 1px solid rgba(15, 185, 253, 0.3);
-  box-shadow: 
-    0 -10px 30px rgba(0, 0, 0, 0.3),
-    0 -1px 15px rgba(0, 140, 255, 0.25);
-}
-
-/* CTA Buttons */
+/* CTA buttons container */
 .cta-buttons {
   display: flex;
   gap: 1.2rem;
@@ -838,59 +500,7 @@ onUnmounted(() => {
   z-index: 2;
 }
 
-/* Initial page load state for buttons (only animates on page load) */
-.cosmic-button.initial-load:nth-child(1) {
-  animation: buttonEntry 0.3s cubic-bezier(0.23, 1, 0.32, 1) 0.7s forwards; /* Faster animation */
-  opacity: 0;
-  transform: translateY(20px) translateZ(-20px);
-}
-
-.cosmic-button.initial-load:nth-child(2) {
-  animation: buttonEntry 0.3s cubic-bezier(0.23, 1, 0.32, 1) 0.8s forwards; /* Faster animation */
-  opacity: 0;
-  transform: translateY(20px) translateZ(-20px);
-}
-
-/* Button animations and effects are now defined in cosmic-theme.css */
-
-@keyframes floatParticles {
-  0% {
-    transform: translateX(0) translateY(0);
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(20px) translateY(-5px);
-    opacity: 0.5;
-  }
-}
-
-@keyframes pulseGlow {
-  0% {
-    opacity: 0.5;
-    transform: scale(0.9);
-    filter: blur(5px);
-  }
-  100% {
-    opacity: 0.8;
-    transform: scale(1.1);
-    filter: blur(10px);
-  }
-}
-
-@keyframes buttonEntry {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) translateZ(-30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) translateZ(0);
-  }
-}
-
+/* Social media links */
 .social-links {
   display: flex;
   gap: 1rem;
@@ -898,589 +508,256 @@ onUnmounted(() => {
   justify-content: center;
 }
 
-/* Initial page load state for social links (only animates on page load) */
-.social-links .cosmic-social-icon.initial-load:nth-child(1) {
-  animation: socialIconEntry 0.25s cubic-bezier(0.23, 1, 0.32, 1) 0.8s forwards; /* Faster animation */
-  opacity: 0;
-  transform: scale(0.7);
-}
-
-.social-links .cosmic-social-icon.initial-load:nth-child(2) {
-  animation: socialIconEntry 0.25s cubic-bezier(0.23, 1, 0.32, 1) 0.85s forwards; /* Faster animation */
-  opacity: 0;
-  transform: scale(0.7);
-}
-
-.social-links .cosmic-social-icon.initial-load:nth-child(3) {
-  animation: socialIconEntry 0.25s cubic-bezier(0.23, 1, 0.32, 1) 0.9s forwards; /* Faster animation */
-  opacity: 0;
-  transform: scale(0.7);
-}
-
-.social-links .cosmic-social-icon.initial-load:nth-child(4) {
-  animation: socialIconEntry 0.25s cubic-bezier(0.23, 1, 0.32, 1) 0.95s forwards; /* Faster animation */
-  opacity: 0;
-  transform: scale(0.7);
-}
-
-.social-links .cosmic-social-icon.initial-load:nth-child(5) {
-  animation: socialIconEntry 0.25s cubic-bezier(0.23, 1, 0.32, 1) 1.0s forwards; /* Faster animation */
-  opacity: 0;
-  transform: scale(0.7);
-}
-
-@keyframes socialIconEntry {
-  0% {
-    opacity: 0;
-    transform: translateY(15px) scale(0.8);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Social icon styles are now defined in cosmic-theme.css */
-.social-links .cosmic-social-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-}
-
-.social-links .cosmic-social-icon img {
-  width: 1.2rem;
-  height: 1.2rem;
-}
-
-/* **Navigation Controls** */
-/* Initial page load state for nav controls (only animates on page load) */
-.nav-controls.initial-load {
-  animation: navControlsEntry 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0.7s forwards; /* Faster animation */
-  opacity: 0;
-}
-
+/* Navigation controls */
 .nav-controls {
   position: absolute;
-  top: 45%; /* Changed from 50% to 45% to move up */
+  top: 45%;
   width: 100%;
   display: flex;
   justify-content: space-between;
   z-index: 7;
   transform: translateY(-50%);
-  opacity: 1; /* Ensure it's visible by default after initial animation */
-  pointer-events: none; /* Make container transparent to clicks */
+  pointer-events: none;
+}
+
+/* Slide indicators */
+.slide-indicators {
+  position: absolute;
+  bottom: calc(80px + 2rem);
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  z-index: 6;
+}
+
+.slide-indicators span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.slide-indicators span.active {
+  background: var(--cosmic-blue-light);
+  box-shadow: 0 0 8px var(--cosmic-blue-glow);
+}
+
+/* Referral notification */
+.referral-notification {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  background: var(--cosmic-glass-bg);
+  backdrop-filter: var(--cosmic-glass-blur);
+  border: 1px solid rgba(0, 183, 255, 0.3);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  max-width: 400px;
+  animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+.notification-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 183, 255, 0.2);
+  color: var(--cosmic-blue-light);
+  margin-right: 1rem;
+  font-style: normal;
+}
+
+.notification-text {
+  flex: 1;
+}
+
+.notification-title {
+  font-weight: bold;
+  margin: 0 0 0.25rem;
+  color: var(--cosmic-text-primary);
+}
+
+.notification-message {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--cosmic-text-secondary);
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: var(--cosmic-text-secondary);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.notification-close:hover {
+  color: var(--cosmic-text-primary);
+}
+
+/* Animation keyframes */
+@keyframes revealPage {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes contentReveal {
+  0% { opacity: 0; transform: scale(0.95) translateZ(-30px); }
+  100% { opacity: 1; transform: scale(1) translateZ(0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutLeft {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-30px); opacity: 0; }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(30px); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Animations for slide transitions */
+.hero-image.enter-animation-next { animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.hero-image.leave-animation-next { animation: slideOutLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.hero-image.enter-animation-prev { animation: slideInLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.hero-image.leave-animation-prev { animation: slideOutRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.hero-logo.enter-animation { animation: fadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.hero-logo.leave-animation { animation: fadeOut 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.hero-title.enter-animation { animation: fadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.hero-title.leave-animation { animation: fadeOut 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+
+/* Initial load animations */
+.hero-image.initial-load { animation: heroImageEntry 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0.4s forwards !important; opacity: 0; transform: translateY(30px) scale(0.9) translateZ(-10px); }
+.hero-logo.initial-load { animation: heroLogoEntry 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0.5s forwards !important; opacity: 0; transform: translateY(-30px) scale(0.8) translateZ(-20px); }
+.hero-title.initial-load { animation: titleEntry 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards !important; opacity: 0; transform: translateY(20px) translateZ(-30px); }
+.cta-panel.initial-load { animation: ctaPanelEntry 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards; opacity: 0; transform: translateY(100%) translateZ(-50px); }
+.nav-controls.initial-load { animation: navControlsEntry 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0.7s forwards; opacity: 0; }
+
+@keyframes heroImageEntry {
+  0% { opacity: 0; transform: translateY(30px) scale(0.9) translateZ(-30px); filter: drop-shadow(0px 0px 0px rgba(0, 183, 255, 0)); }
+  60% { opacity: 1; transform: translateY(-5px) scale(1.02) translateZ(20px); filter: drop-shadow(0px 0px 50px rgba(0, 183, 255, 0.4)); }
+  100% { opacity: 0.95; transform: translateY(0) scale(1) translateZ(0); filter: drop-shadow(0px 0px 36px rgba(0, 183, 255, 0.25)); }
+}
+
+@keyframes heroLogoEntry {
+  0% { opacity: 0; transform: translateY(-30px) scale(0.8) translateZ(-50px); filter: drop-shadow(0px 0px 0px rgba(0, 183, 255, 0)); }
+  70% { opacity: 1; transform: translateY(5px) scale(1.05) translateZ(30px); filter: drop-shadow(0px 0px 50px rgba(0, 183, 255, 0.5)); }
+  100% { opacity: 1; transform: translateY(0) scale(1) translateZ(0); filter: drop-shadow(0px 0px 36px rgba(0, 183, 255, 0.25)); }
+}
+
+@keyframes titleEntry {
+  0% { opacity: 0; transform: translateY(20px) translateZ(-30px); text-shadow: 0px 0px 0px rgba(0, 174, 255, 0); }
+  70% { opacity: 1; transform: translateY(-5px) translateZ(20px); text-shadow: 0px 0px 50px rgba(0, 174, 255, 0.8); }
+  100% { opacity: 1; transform: translateY(0) translateZ(0); text-shadow: 0px 0px 36px rgba(0, 174, 255, 0.507); }
+}
+
+@keyframes ctaPanelEntry {
+  0% { opacity: 0; transform: translateY(100%) translateZ(-50px); }
+  100% { opacity: 1; transform: translateY(0) translateZ(0); }
 }
 
 @keyframes navControlsEntry {
-  0% {
-    opacity: 0;
-    transform: translateY(-50%) scale(0.9);
-    filter: blur(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(-50%) scale(1);
-    filter: blur(0);
-  }
+  0% { opacity: 0; transform: translateY(-50%) scale(0.9); filter: blur(10px); }
+  100% { opacity: 1; transform: translateY(-50%) scale(1); filter: blur(0); }
 }
 
-/* Responsive styles for nav controls */
-@media (max-width: 1024px) {
-  .hero-image {
-    max-width: 24rem;
-    margin-top: -8rem;
-  }
-
-  .hero-logo {
-    max-width: 18rem; /* Increased from 16rem */
-    margin-top: -11rem; /* Adjusted for responsive view */
-  }
-
-  /* Slightly smaller hero title text */
-  .hero-title {
-    font-size: 2rem;
-    padding: 0 1rem;
-    margin-top: -2rem;
-  }
-  
-  /* Slightly smaller navigation buttons */
-  .nav-controls .cosmic-nav-arrow {
-    width: 2.75rem;
-    height: 4.5rem;
-    font-size: 1.3rem;
-    margin: 0 1rem;
-  }
-}
-
-/* Mobile optimizations */
+/* Mobile styles */
 @media (max-width: 768px) {
-  /* Optimize animations for mobile - use transform instead of opacity for better performance */
-  .hero-image.enter-animation-next,
-  .hero-image.enter-animation-prev,
-  .hero-image.leave-animation-next,
-  .hero-image.leave-animation-prev {
-    animation-duration: 0.25s; /* Even faster on mobile */
-    will-change: transform, opacity; /* Hint for browser optimization */
-  }
-  
-  .hero-logo.enter-animation,
-  .hero-logo.leave-animation,
-  .hero-title.enter-animation,
-  .hero-title.leave-animation {
-    animation-duration: 0.25s; /* Even faster on mobile */
-    will-change: transform, opacity; /* Hint for browser optimization */
-  }
-  
-  /* Use hardware acceleration for all animations */
-  .hero-image, .hero-logo, .hero-title, .cta-panel, .nav-controls, .slide-indicators {
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    perspective: 1000px;
-  }
-  
-  /* Reduce animation complexity on mobile */
-  @keyframes heroImageEntry {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes heroLogoEntry {
-    0% {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Optimize slide transitions for mobile */
-  @keyframes slideInRight {
-    from {
-      transform: translateX(20px); /* Smaller distance on mobile */
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  
-  @keyframes slideOutLeft {
-    from {
-      transform: translateX(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateX(-20px); /* Smaller distance on mobile */
-      opacity: 0;
-    }
-  }
-  
-  @keyframes slideInLeft {
-    from {
-      transform: translateX(-20px); /* Smaller distance on mobile */
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  
-  @keyframes slideOutRight {
-    from {
-      transform: translateX(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateX(20px); /* Smaller distance on mobile */
-      opacity: 0;
-    }
-  }
-  
-  /* Existing mobile styles */
   .hero-image {
-    max-width: 18rem; /* Reduced from 24rem */
+    max-width: 18rem;
     margin-top: -8rem;
   }
 
   .hero-logo {
-    max-width: 8rem; /* Increased from 12rem */
-    margin-top: -7rem; /* Adjusted for mobile */
+    max-width: 8rem;
+    margin-top: -7rem;
   }
 
-  /* Specific style for the DAO slide (index 1) */
-  :deep(.slide:nth-child(2) .hero-image) {
-    max-width: 16rem; /* Even smaller for the DAO SVG */
-  }
-  
-  :deep(.slide:nth-child(2) .hero-logo) {
-    max-width: 10rem; /* Increased from 8rem */
-  }
-  
-  /* Stack CTA panel items in rows */
-  .cta-panel {
-    flex-direction: column;
-    gap: .25rem; /* Reduced from .5rem */
-    padding: 0.8rem 1rem; /* Reduced from 1.2rem 1rem */
-  }
-
-  /* Slide indicator adjustments for mobile */
-  .slide-indicators {
-    margin-top: 1rem;
-  }
-  
-  .slide-indicators span {
-    width: 16px;
-    height: 16px;
-    margin: 0 4px;
-  }
-
-  /* Each button takes full width in its row */
-  .cta-buttons {
-    flex-direction: column;
-    width: 88%;
-    gap: 0.5rem; /* Reduced from 0.8rem */
-    margin-bottom: .25rem; /* Reduced from .5rem */
-  }
-
-  /* Smaller hero title text */
   .hero-title {
-    font-size: 0.9rem; /* Reduced from 1rem */
+    font-size: 0.9rem;
     margin-top: -.5rem;
     padding: 0 1rem;
     line-height: 1.3;
   }
-  
-  /* Compact nav buttons */
-  .nav-controls .cosmic-nav-arrow {
-    width: 2.25rem;
-    height: 3.75rem;
-    font-size: 1.1rem;
-    margin: 0 0.5rem;
-  }
-  
-  /* Mobile-optimized animations */
-  .hero-image:hover, 
-  .hero-logo:hover, 
-  .hero-title:hover {
-    transform: none; /* Disable hover effects on mobile */
-  }
-  
-  .slide:hover .hero-content {
-    transform: none; /* Disable hover effect */
-  }
 
-  /* Move nav controls up on mobile */
-  .nav-controls {
-    top: 40%; /* Move even higher on mobile */
-  }
-
-  /* Stack CTA panel items in rows */
   .cta-panel {
     flex-direction: column;
-    gap: .25rem; /* Reduced from .5rem */
-    padding: 0.8rem 1rem; /* Reduced from 1.2rem 1rem */
+    gap: .25rem;
+    padding: 0.8rem 1rem;
   }
 
-  /* Each button takes full width in its row */
   .cta-buttons {
     flex-direction: column;
     width: 88%;
-    gap: 0.5rem; /* Reduced from 0.8rem */
-    margin-bottom: .25rem; /* Reduced from .5rem */
-  }
-  
-  /* Smaller social icons for mobile */
-  .social-links {
-    gap: 0.5rem; /* Reduced from 1rem */
-  }
-  
-  .social-links .cosmic-social-icon {
-    width: 2rem; /* Reduced from 2.5rem */
-    height: 2rem; /* Reduced from 2.5rem */
-  }
-  
-  .social-links .cosmic-social-icon img {
-    width: 1rem; /* Reduced from 1.2rem */
-    height: 1rem; /* Reduced from 1.2rem */
-  }
-}
-
-/* Add even smaller sizes for very small devices */
-@media (max-width: 480px) {
-  /* Optimize animations for very small devices */
-  .hero-image.enter-animation-next,
-  .hero-image.enter-animation-prev,
-  .hero-image.leave-animation-next,
-  .hero-image.leave-animation-prev {
-    animation-duration: 0.2s; /* Ultra fast on small devices */
-  }
-  
-  /* Reduce animation distance for smoother transitions */
-  @keyframes slideInRight {
-    from { transform: translateX(15px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  
-  @keyframes slideOutLeft {
-    from { transform: translateX(0); opacity: 1; }
-    to { transform: translateX(-15px); opacity: 0; }
-  }
-  
-  @keyframes slideInLeft {
-    from { transform: translateX(-15px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  
-  @keyframes slideOutRight {
-    from { transform: translateX(0); opacity: 1; }
-    to { transform: translateX(15px); opacity: 0; }
+    gap: 0.5rem;
+    margin-bottom: .25rem;
   }
 
-  .hero-image {
-    margin-top: -7rem;
-    max-width: 15rem;
-  }
-  
-  .hero-logo {
-    max-width: 12rem; /* Increased from 8rem */
-    margin-top: -6rem; /* Adjusted for very small screens */
-  }
-  
-  :deep(.slide:nth-child(2) .hero-image) {
-    max-width: 14rem;
-  }
-  
-  :deep(.slide:nth-child(2) .hero-logo) {
-    max-width: 8rem; /* Increased from 7rem */
-  }
-  
-  .hero-title {
-    font-size: 0.8rem;
-    padding: 0.4rem 1rem;
-  }
-  
-  /* Further compact nav buttons */
-  .nav-controls .cosmic-nav-arrow {
-    width: 1.75rem;
-    height: 3rem;
-    font-size: 0.9rem;
-    margin: 0 0.3rem;
-  }
-  
-  /* Even smaller indicators */
-  .slide-indicators span {
-    width: 12px;
-    height: 12px;
-  }
-  
-  /* Add glassmorphism to the title for better readability */
-  .hero-title::before {
-    background: rgba(0, 20, 40, 0.4);
-    backdrop-filter: blur(4px);
-  }
-  
-  /* Optimize CTA panel for very small screens */
-  .cta-panel {
-    padding: 0.6rem 0.8rem; /* Reduced from 1rem 0.8rem */
-  }
-  
-  .cta-buttons {
-    width: 95%;
-    gap: 0.4rem; /* Reduced from previous value */
-  }
-  
-  .cosmic-button {
-    padding: 0.5rem 1.2rem; /* Reduced vertical padding from 0.6rem */
-    font-size: 0.85rem;
-  }
-
-  /* Move nav controls up even more on small devices */
   .nav-controls {
-    top: 35%;
+    top: 40%;
   }
 
-  /* Even smaller social icons */
-  .social-links .cosmic-social-icon {
-    width: 1.75rem;
-    height: 1.75rem;
-  }
-  
-  .social-links .cosmic-social-icon img {
-    width: 0.9rem;
-    height: 0.9rem;
-  }
-}
-
-/* Media query for landscape orientation on mobile */
-@media (max-height: 480px) and (orientation: landscape) {
-  /* Optimize animations for landscape */
-  .hero-image.enter-animation-next,
-  .hero-image.enter-animation-prev,
-  .hero-image.leave-animation-next,
-  .hero-image.leave-animation-prev {
-    animation-duration: 0.2s; /* Ultra fast on landscape */
-  }
-  
-  /* Reduce vertical animation distance */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes fadeOut {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(-5px); }
-  }
-
-  .hero-image {
-    max-width: 12rem;
-    margin-top: -3rem;
-  }
-  
-  .hero-logo {
-    max-width: 8rem;
-    margin-top: -3.5rem;
-  }
-  
-  .hero-title {
-    font-size: 0.8rem;
-    margin-top: -0.5rem;
-  }
-  
-  .cta-panel {
-    flex-direction: row;
-    padding: 0.5rem 0.8rem; /* Reduced from 0.8rem */
-  }
-  
-  .cta-buttons {
-    flex-direction: row;
-    width: auto;
-    gap: 0.8rem;
-    margin-bottom: 0;
-  }
-  
-  .nav-controls .cosmic-nav-arrow {
-    width: 2rem;
-    height: 3rem;
-    font-size: 0.9rem;
-  }
-  
   .social-links {
-    display: none; /* Hide social links in landscape for space */
+    gap: 0.5rem;
+  }
+
+  .social-links .cosmic-social-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .social-links .cosmic-social-icon img {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .referral-notification.mobile {
+    width: 90%;
+    right: 5%;
+    left: 5%;
+    max-width: none;
   }
 }
-
-/* Add slide transition animations - optimized for performance */
-.hero-image.enter-animation-next {
-  animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.hero-image.leave-animation-next {
-  animation: slideOutLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.hero-image.enter-animation-prev {
-  animation: slideInLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.hero-image.leave-animation-prev {
-  animation: slideOutRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-/* Optimized slide animations */
-@keyframes slideInRight {
-  from {
-    transform: translateX(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideOutLeft {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(-30px);
-    opacity: 0;
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    transform: translateX(-30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideOutRight {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(30px);
-    opacity: 0;
-  }
-}
-
-/* Add slide transition animations for logo */
-.hero-logo.enter-animation {
-  animation: fadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.hero-logo.leave-animation {
-  animation: fadeOut 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-/* Add slide transition animations for title */
-.hero-title.enter-animation {
-  animation: fadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.hero-title.leave-animation {
-  animation: fadeOut 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-/* Optimized fade animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-}
-
-/* Additional responsive styles */
 </style>

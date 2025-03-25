@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import MarkdownRenderer from "@/components/MarkdownRenderer.vue";
+import MarkdownRenderer from "@/components/core/MarkdownRenderer.vue";
 
 export default {
   components: {

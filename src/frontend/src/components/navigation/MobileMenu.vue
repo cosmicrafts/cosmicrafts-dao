@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useLanguageStore } from '@/stores/language';
-import LanguageSelector from '@/components/LanguageSelector.vue';
+import LanguageSelector from '@/components/navigation/LanguageSelector.vue';
 
 // Import logos explicitly for each language
 import defaultLogo from '@/assets/icons/logo.svg';

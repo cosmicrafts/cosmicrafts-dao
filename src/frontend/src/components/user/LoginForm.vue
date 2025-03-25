@@ -5,7 +5,6 @@ import { useAuthStore } from '@/stores/auth';
 import { useModalStore } from '@/stores/modal';
 import { useI18n } from 'vue-i18n';
 import LoadingScreen from '@/components/media/LoadingScreen.vue';
-
 const authStore = useAuthStore();
 const modalStore = useModalStore();
 const { t } = useI18n();
@@ -35,7 +34,7 @@ const onGoogleClick = () => {
 };
 
 const openAccountRecoveryModal = async () => {
-  const AccountRecovery = (await import('@/components/AccountRecovery.vue')).default;
+  const AccountRecovery = (await import('@/components/user/AccountRecovery.vue')).default;
   modalStore.openModal(AccountRecovery);
 };
 

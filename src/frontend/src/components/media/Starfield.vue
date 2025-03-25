@@ -49,12 +49,18 @@
    starfield.width = w;
    starfield.height = h;
    context = starfield.getContext('2d');
-   context.strokeStyle = 'rgb(255,255,255)';
+   context.strokeStyle = 'rgb(180, 220, 255)'; // Brighter blue-white color
+   context.globalAlpha = 0.8; // Increase global opacity
  }
  
  // Animation function
  function anim() {
    context.clearRect(0, 0, w, h);
+   
+   // Add a subtle glow effect
+   context.fillStyle = "rgba(0, 30, 60, 0.1)";
+   context.fillRect(0, 0, w, h);
+   
    for (let i = 0; i < n; i++) {
      star_x_save = star[i][3];
      star_y_save = star[i][4];
@@ -69,7 +75,9 @@
        star_y_save > 0 &&
        star_y_save < h
      ) {
-       context.lineWidth = (1 - star_color_ratio * star[i][2]) * 1;
+       const brightness = 1 - star_color_ratio * star[i][2] * 0.8;
+       context.lineWidth = brightness * 2; // Increase line width for visibility
+       context.strokeStyle = `rgba(180, 220, 255, ${brightness})`; // Dynamic opacity based on depth
        context.beginPath();
        context.moveTo(star_x_save, star_y_save);
        context.lineTo(star[i][3], star[i][4]);
@@ -91,7 +99,7 @@
      // Scrolling down - increase speed but cap it at maxSpeed
      starSpeed.value = Math.min(starSpeed.value + speedIncrement, maxSpeed);
    } else if (currentScrollY < previousScrollY) {
-     // Scrolling up - decrease speed but don’t go below minSpeed
+     // Scrolling up - decrease speed but don't go below minSpeed
      starSpeed.value = Math.max(starSpeed.value - speedIncrement, minSpeed);
    }
  
@@ -127,10 +135,15 @@
  </script>
 <style scoped>
 .starry-background {
-  position: relative;
-  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   background: radial-gradient(circle, rgb(12, 24, 46), rgb(25, 24, 24));
+  z-index: 0; /* Ensure it stays in the background */
+  pointer-events: none; /* Allow clicking through to elements below */
 }
 
 .noise-canvas {
@@ -140,6 +153,7 @@
   width: 100%;
   height: 100%;
   z-index: 0;
+  pointer-events: none; /* Allow interaction with elements below */
 }
 </style>
     
