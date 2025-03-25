@@ -1,193 +1,194 @@
-<!-- File: components/navigation/menus/EscMenu.vue -->
+<template>
+  <transition name="fade">
+    <div v-if="isOpen" class="esc-menu-overlay" @click="closeOnClickOutside" @keydown.esc.stop="close">
+      <div class="esc-menu" @click.stop>
+        <div class="esc-menu-header">
+          <h2>Menu</h2>
+          <button class="close-button" @click="close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="esc-menu-content">
+          <div class="menu-section">
+            <h3>Game</h3>
+            <button class="menu-item" @click="navigate('/')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              Home
+            </button>
+            <button class="menu-item" @click="navigate('/game')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Play Game
+            </button>
+          </div>
+          
+          <div class="menu-section">
+            <h3>Settings</h3>
+            <button class="menu-item" @click="toggleTheme">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              Toggle Theme
+            </button>
+            <button class="menu-item" @click="toggleSound">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              </svg>
+              {{ soundEnabled ? 'Sound: On' : 'Sound: Off' }}
+            </button>
+          </div>
+          
+          <div class="menu-section">
+            <h3>Help</h3>
+            <button class="menu-item" @click="navigate('/whitepaper')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+              Whitepaper
+            </button>
+            <button class="menu-item" @click="showKeyboardShortcuts = true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                <path d="M6 8h.001"></path>
+                <path d="M10 8h.001"></path>
+                <path d="M14 8h.001"></path>
+                <path d="M18 8h.001"></path>
+                <path d="M8 12h.001"></path>
+                <path d="M12 12h.001"></path>
+                <path d="M16 12h.001"></path>
+                <path d="M7 16h10"></path>
+              </svg>
+              Keyboard Shortcuts
+            </button>
+          </div>
+        </div>
+        
+        <div class="esc-menu-footer">
+          <p>Press <span class="key">ESC</span> to close this menu</p>
+        </div>
+      </div>
+      
+      <!-- Keyboard shortcuts modal -->
+      <div v-if="showKeyboardShortcuts" class="keyboard-shortcuts-modal" @click.stop>
+        <div class="modal-header">
+          <h3>Keyboard Shortcuts</h3>
+          <button class="close-button" @click="showKeyboardShortcuts = false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-content">
+          <table class="shortcuts-table">
+            <tbody>
+              <tr>
+                <td><span class="key">ESC</span></td>
+                <td>Toggle menu / Close windows</td>
+              </tr>
+              <tr>
+                <td><span class="key">C</span></td>
+                <td>Open chat</td>
+              </tr>
+              <tr>
+                <td><span class="key">M</span></td>
+                <td>Toggle sound</td>
+              </tr>
+              <tr>
+                <td><span class="key">F</span></td>
+                <td>Toggle fullscreen</td>
+              </tr>
+              <tr>
+                <td><span class="key">H</span></td>
+                <td>Go home</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </transition>
+</template>
+
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
-import { useI18n } from 'vue-i18n';
 
-// Props
 const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    default: false
-  },
-  otherWindowsOpen: {
-    type: Boolean,
-    default: false
-  }
+  isOpen: Boolean,
+  otherWindowsOpen: Boolean
 });
 
-// Emits
-const emit = defineEmits(['close', 'update:isOpen']);
+const emit = defineEmits(['close']);
 
-// Composables
 const router = useRouter();
-const authStore = useAuthStore();
-const { t } = useI18n();
-
-// State
-const activeTab = ref('game');
-
-// Computed
-const isLoggedIn = computed(() => authStore.isAuthenticated());
-
-// Watch for outside changes to props
-watch(() => props.isOpen, (newValue) => {
-  if (newValue && props.otherWindowsOpen) {
-    // If trying to open while other windows are open, prevent it
-    closeMenu();
-  }
-});
+const showKeyboardShortcuts = ref(false);
+const soundEnabled = ref(true); // Get from a store in a real implementation
 
 // Methods
-const closeMenu = () => {
-  emit('update:isOpen', false);
+const close = () => {
   emit('close');
 };
 
-const setTab = (tab) => {
-  activeTab.value = tab;
-};
-
-const navigateTo = (path) => {
-  router.push(path);
-  closeMenu();
-};
-
-const logout = async () => {
-  try {
-    await authStore.logout();
-    closeMenu();
-    navigateTo('/');
-  } catch (error) {
-    console.error('Logout error:', error);
+const closeOnClickOutside = (event) => {
+  if (event.target.classList.contains('esc-menu-overlay')) {
+    close();
   }
 };
 
-const returnToMainMenu = () => {
-  navigateTo('/');
+const navigate = (route) => {
+  router.push(route);
+  close();
 };
 
-// Menu items by tab
-const gameTabs = [
-  { id: 'game', label: t('esc_menu.game') },
-  { id: 'social', label: t('esc_menu.social') },
-  { id: 'settings', label: t('esc_menu.settings') },
-];
+const toggleTheme = () => {
+  // Implement theme toggling logic here
+  // This would typically interact with a theme store or similar
+  document.body.classList.toggle('dark-theme');
+};
 
-const gameMenuItems = [
-  {
-    id: 'continue',
-    label: t('esc_menu.continue_game'),
-    icon: 'fa-solid fa-play',
-    action: closeMenu
-  },
-  {
-    id: 'main-menu',
-    label: t('esc_menu.main_menu'),
-    icon: 'fa-solid fa-house',
-    action: returnToMainMenu
-  }
-];
+const toggleSound = () => {
+  soundEnabled.value = !soundEnabled.value;
+  // Implement actual sound toggling logic here
+};
 
-const socialMenuItems = [
-  {
-    id: 'friends',
-    label: t('esc_menu.friends'),
-    icon: 'fa-solid fa-user-group',
-    action: () => navigateTo('/friends')
-  },
-  {
-    id: 'messages',
-    label: t('esc_menu.messages'),
-    icon: 'fa-solid fa-message',
-    action: () => navigateTo('/messages')
+// Handle keyboard events specifically for the keyboard shortcuts modal
+const handleKeyDown = (event) => {
+  if (event.key === 'Escape' && showKeyboardShortcuts.value) {
+    event.stopPropagation();
+    event.preventDefault();
+    showKeyboardShortcuts.value = false;
   }
-];
+};
 
-const settingsMenuItems = [
-  {
-    id: 'audio',
-    label: t('esc_menu.audio'),
-    icon: 'fa-solid fa-volume-high',
-    action: () => console.log('Audio settings')
-  },
-  {
-    id: 'video',
-    label: t('esc_menu.video'),
-    icon: 'fa-solid fa-display',
-    action: () => console.log('Video settings')
-  },
-  {
-    id: 'interface',
-    label: t('esc_menu.interface'),
-    icon: 'fa-solid fa-sliders',
-    action: () => console.log('Interface settings')
-  }
-];
+onMounted(() => {
+  // Only add keyboard handler for the shortcuts modal
+  document.addEventListener('keydown', handleKeyDown);
+});
 
-// Computed function to get current menu items based on active tab
-const currentMenuItems = computed(() => {
-  switch (activeTab.value) {
-    case 'game': return gameMenuItems;
-    case 'social': return socialMenuItems;
-    case 'settings': return settingsMenuItems;
-    default: return gameMenuItems;
-  }
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeyDown);
 });
 </script>
-
-<template>
-  <div v-if="isOpen" class="esc-menu-overlay" @click.self="closeMenu">
-    <div class="esc-menu cosmic-panel">
-      <!-- Menu Header -->
-      <div class="menu-header">
-        <h2>{{ t('esc_menu.title') }}</h2>
-        <button class="close-button" @click="closeMenu">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      
-      <!-- Tab Navigation -->
-      <div class="menu-tabs">
-        <button 
-          v-for="tab in gameTabs" 
-          :key="tab.id"
-          :class="{ active: activeTab === tab.id }"
-          @click="setTab(tab.id)"
-        >
-          {{ tab.label }}
-        </button>
-      </div>
-      
-      <!-- Menu Items -->
-      <div class="menu-content">
-        <ul class="menu-items">
-          <li 
-            v-for="item in currentMenuItems" 
-            :key="item.id"
-            @click="item.action"
-          >
-            <i :class="item.icon"></i>
-            <span>{{ item.label }}</span>
-          </li>
-        </ul>
-      </div>
-      
-      <!-- Bottom Actions -->
-      <div class="menu-footer">
-        <button 
-          v-if="isLoggedIn" 
-          class="logout-button"
-          @click="logout"
-        >
-          <i class="fa-solid fa-right-from-bracket"></i>
-          {{ t('esc_menu.logout') }}
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .esc-menu-overlay {
@@ -196,150 +197,204 @@ const currentMenuItems = computed(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(5px);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: var(--cosmic-z-modal, 1000);
+  align-items: center;
+  z-index: 200000;
+  animation: fadeIn 0.3s ease;
 }
 
 .esc-menu {
-  width: 350px;
-  max-width: 90%;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #1a1a2e, #16213e);
-  overflow: hidden;
-  animation: menuEntrance 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes menuEntrance {
-  0% {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.menu-header {
-  padding: 20px;
+  background: linear-gradient(to bottom, rgba(27, 56, 85, 0.95), rgba(17, 25, 32, 0.95));
+  border-radius: 12px;
+  width: 500px;
+  max-width: 90vw;
+  max-height: 90vh;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.2);
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideIn 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.menu-header h2 {
+.esc-menu-header {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.esc-menu-header h2 {
   margin: 0;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 1.5rem;
+  color: white;
 }
 
 .close-button {
-  background: transparent;
+  background: none;
   border: none;
-  color: white;
-  font-size: 20px;
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
+  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
   border-radius: 50%;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
 }
 
 .close-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: scale(1.1);
 }
 
-.menu-tabs {
-  display: flex;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.menu-tabs button {
+.esc-menu-content {
+  padding: 1.5rem;
+  overflow-y: auto;
   flex: 1;
-  padding: 12px;
-  background: transparent;
-  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.menu-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-section h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.menu-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
   color: white;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background-color 0.2s;
-  border-bottom: 2px solid transparent;
-}
-
-.menu-tabs button.active {
-  border-bottom-color: var(--color-primary, #7c3aed);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.menu-tabs button:hover:not(.active) {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.menu-content {
-  padding: 20px 0;
-}
-
-.menu-items {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.menu-items li {
-  padding: 12px 20px;
   display: flex;
   align-items: center;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  text-align: left;
 }
 
-.menu-items li:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+.menu-item:hover {
+  background: rgba(59, 130, 246, 0.2);
+  transform: translateX(5px);
 }
 
-.menu-items li i {
-  margin-right: 12px;
-  width: 20px;
-  text-align: center;
+.menu-item svg {
+  color: rgba(59, 130, 246, 0.8);
 }
 
-.menu-footer {
-  padding: 15px 20px;
+.esc-menu-footer {
+  padding: 1rem 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: flex-end;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
 }
 
-.logout-button {
-  background: transparent;
+.key {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #FF3B30;
   border-radius: 4px;
-  padding: 8px 15px;
-  font-size: 14px;
-  cursor: pointer;
+  padding: 0.1rem 0.5rem;
+  font-family: monospace;
+  color: white;
+  font-weight: bold;
+  margin: 0 0.2rem;
+}
+
+/* Keyboard shortcuts modal */
+.keyboard-shortcuts-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(to bottom, rgba(27, 56, 85, 0.98), rgba(17, 25, 32, 0.98));
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 2001;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-header {
+  padding: 1rem 1.5rem;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  transition: background-color 0.2s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.logout-button:hover {
-  background-color: rgba(255, 59, 48, 0.1);
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: white;
 }
 
-.logout-button i {
-  margin-right: 8px;
+.modal-content {
+  padding: 1.5rem;
+}
+
+.shortcuts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.shortcuts-table tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.shortcuts-table tr:last-child {
+  border-bottom: none;
+}
+
+.shortcuts-table td {
+  padding: 0.75rem 0;
+  color: white;
+}
+
+.shortcuts-table td:first-child {
+  width: 80px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style> 
