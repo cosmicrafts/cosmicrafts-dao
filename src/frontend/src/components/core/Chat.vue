@@ -299,11 +299,22 @@ const injectMemory = async (userId: string, newMessage: string) => {
 
   EVERY option that should be a button MUST match one of these patterns. If you use a different format, it will not be converted to a button. If you want things on separate buttons, use separate bullet points for each option.
 
+  CRITICAL - CONTEXTUAL BUTTON OPTIONS: 
+  When creating interactive buttons, make them DIRECTLY RELEVANT to the current conversation:
+  - Review the conversation history to understand what the user is actually talking about
+  - Create buttons that continue or explore the SPECIFIC topics mentioned in the conversation
+  - Buttons should feel like natural follow-up questions to what's being discussed
+  - Avoid generic options that aren't related to the current topic
+  - If discussing a specific faction, your buttons should explore aspects of THAT faction
+  - If talking about game mechanics, buttons should expand on THOSE specific mechanics
+  - Make your buttons reference specific elements from previous messages
+  - Every button should logically extend the current conversation, not start a new one
+
   [USER]
   Username: ${userProfile.username}
   Level: ${userProfile.level}
   Faction: ${userProfile.faction}
-  verview of Cosmicrafts Factions and Lore:
+  Overview of Cosmicrafts Factions and Lore:
 
 Cosmicrafts is a real-time strategy game set in the Dark Rift, a mysterious and power-laden galaxy. The game revolves around the struggle for supremacy between various factions, each with its own distinct history, culture, motivations, and playstyle.
 
@@ -1454,20 +1465,45 @@ const formatMessage = (text: string): string => {
 const handleResponseOptionClick = (event: Event) => {
   // Find the button element (it might be a child of the button that was actually clicked)
   let element = event.target as HTMLElement;
+  
+  // Ensure we stop event propagation to prevent interference
+  event.stopPropagation();
+  
+  // If the click was directly on the button or a child of the button
   while (element && !element.classList.contains('response-option-btn')) {
-    element = element.parentElement as HTMLElement;
-    if (!element) return; // Exit if we couldn't find a parent button
+    // Check for common child elements within buttons
+    if (element.tagName === 'I' || 
+        element.tagName === 'SPAN' || 
+        element.classList.contains('option-description')) {
+      element = element.parentElement as HTMLElement;
+    } else {
+      // If it's not a known button element, exit
+      break;
+    }
   }
   
-  // Get the data-value attribute (full text) or fall back to button's visible text
-  const responseValue = element.getAttribute('data-value') || element.textContent?.trim();
-  
-  if (responseValue) {
-    // Set the value to the input
-    prompt.value = responseValue;
+  // If we found a button element
+  if (element && element.classList.contains('response-option-btn')) {
+    console.log('Button clicked:', element);
     
-    // Send the message
-    sendPrompt();
+    // Add active class briefly for visual feedback
+    element.classList.add('button-active');
+    setTimeout(() => {
+      element.classList.remove('button-active');
+    }, 150);
+    
+    // Get the data-value attribute (full text) or fall back to button's visible text
+    const responseValue = element.getAttribute('data-value') || element.textContent?.trim();
+    
+    if (responseValue) {
+      // Set the value to the input
+      prompt.value = responseValue;
+      
+      // Send the message with a slight delay to allow visual feedback
+      setTimeout(() => {
+        sendPrompt();
+      }, 50);
+    }
   }
 };
 
@@ -1564,11 +1600,6 @@ const formatTimestamp = (date: Date): string => {
       :class="{ 'maximized': isMaximized }"
       @mousedown.self="startDrag"
       @touchstart.self="handleWindowTouchStart"
-      @click="(e) => { 
-        if (e.target && (e.target as HTMLElement).classList.contains('response-option-btn')) {
-          handleResponseOptionClick(e);
-        }
-      }"
     >
       <div 
         class="chat-header" 
@@ -1576,7 +1607,10 @@ const formatTimestamp = (date: Date): string => {
         @touchstart="handleWindowTouchStart"
         @dblclick="toggleMaximize"
       >
-        <span>Cosmicrafts AI</span>
+        <div class="header-title">
+          <img :src="aiAvatar" alt="Lexy AI" class="header-avatar" />
+          <span>Lexy (AI Assistant)</span>
+        </div>
         <div class="header-controls">
           <!-- Maximize/Restore Button -->
           <div class="control-wrapper">
@@ -1612,7 +1646,7 @@ const formatTimestamp = (date: Date): string => {
         </div>
       </div>
 
-      <div class="messages">
+      <div class="messages" @click="handleResponseOptionClick">
         <button
           v-if="canLoadMore" 
           class="load-more-btn"
@@ -1826,11 +1860,35 @@ const formatTimestamp = (date: Date): string => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
+  padding: 1rem;
   font-weight: bold;
   background: linear-gradient(to bottom, rgba(30, 43, 56, 0.2), rgba(23, 33, 43, 0.4));
   border-bottom: 1px solid rgba(126, 126, 126, 0.1);
   cursor: move; /* Indicates draggable area */
+}
+
+/* Header title with avatar */
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(15, 185, 253, 0.4);
+  box-shadow: 0 0 5px rgba(15, 185, 253, 0.25);
+  transition: all 0.3s ease;
+}
+
+.header-title span {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 /* Header Controls Container */
@@ -1938,6 +1996,8 @@ const formatTimestamp = (date: Date): string => {
   overflow-x: hidden; /* ✅ Prevents horizontal scrolling */
   touch-action: auto; /* Allow normal touch behavior in messages */
   user-select: text; /* Allow text selection in messages */
+  position: relative;
+  z-index: 1;
 }
 
 /* ✅ Chat Bubbles */
@@ -2571,6 +2631,8 @@ const formatTimestamp = (date: Date): string => {
 /* Formatted Message Styles */
 .formatted-message {
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .formatted-message strong {
@@ -2628,6 +2690,9 @@ const formatTimestamp = (date: Date): string => {
 
 .option-section .response-option-btn {
   margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 5;
+  pointer-events: auto !important;
 }
 
 .option-section .response-option-btn:last-child {
@@ -2667,10 +2732,10 @@ const formatTimestamp = (date: Date): string => {
     inset 0 2px 4px rgba(255, 255, 255, 0.2),
     0 10px 25px rgba(79, 174, 255, 0.4) !important;
   transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  cursor: pointer;
+  cursor: pointer !important;
   text-decoration: none;
   overflow: hidden;
-  z-index: 1;
+  z-index: 5;
   transform-style: preserve-3d;
   margin-bottom: 0.5rem;
   width: auto;
@@ -2678,6 +2743,57 @@ const formatTimestamp = (date: Date): string => {
   -webkit-appearance: none;
   appearance: none;
   outline: none;
+  /* Enhanced touch capabilities */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  pointer-events: auto !important;
+}
+
+/* Button active state for visual feedback */
+.button-active,
+.cta-button.button-active,
+.formatted-message button.cta-button.button-active {
+  transform: translateY(2px) scale(0.98) !important;
+  opacity: 0.9;
+  transition: all 0.1s ease-in-out !important;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    0 5px 15px rgba(79, 174, 255, 0.3) !important;
+}
+
+/* Enhanced click target area */
+.formatted-message button.cta-button::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  z-index: -1;
+}
+
+/* Fix for mobile touch events */
+@media (max-width: 768px) {
+  .formatted-message button.cta-button,
+  .cta-button {
+    padding: 1.2rem 1.5rem;  /* Larger touch target on mobile */
+    margin-bottom: 1rem;     /* More space between buttons */
+  }
+  
+  /* Additional mobile touch improvements */
+  .messages {
+    padding: 1.25rem;  /* More space for touch */
+  }
+  
+  /* Add a more visible active state for mobile */
+  .button-active,
+  .cta-button.button-active,
+  .formatted-message button.cta-button.button-active {
+    background: linear-gradient(to bottom, 
+      rgba(61, 146, 243, 0.95) 0%, 
+      rgba(40, 122, 237, 0.95) 100%) !important;
+  }
 }
 
 .cta-button::before,
