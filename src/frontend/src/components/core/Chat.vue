@@ -26,11 +26,20 @@ const props = defineProps({
   }
 });
 
+// Define types for chat messages
+interface ChatMessage {
+  role: string;
+  content: string;
+  timestamp?: Date;
+  isError?: boolean;
+  isThinking?: boolean;
+}
+
 // Reactive state
 const showChat = ref<boolean>(false);
 const isHovering = ref<boolean>(false);
 const isAnimating = ref<boolean>(false);
-const messages = ref<Array<{ role: string; content: string; timestamp?: Date }>>([]);
+const messages = ref<ChatMessage[]>([]);
 const prompt = ref<string>("");
 const loading = ref<boolean>(false);
 const currentMessage = ref<string>("");
@@ -333,7 +342,6 @@ Metaphysical Connection: Associated with the Nethereum Realm, a dark counterpart
   - Stay lighthearted and entertaining with a hint of cosmic wisdom
   - Use playful expressions like 'By the stars!', 'Great nebulas!', or 'Cosmic coincidence!'
   - Occasionally describe your 'cosmic calculations' or 'consulting the stellar database'
-  - Feel free to invent fun space facts or cosmic observations
   - Refer to players as 'cosmic traveler', 'starfarer', or 'celestial explorer'
   - Keep responses concise but inject personality
   - Keep a language local to the player, culturally appropriate so they feel like they are talking to a friend
@@ -484,10 +492,22 @@ const sendPrompt = async (): Promise<void> => {
 
   await nextTick();
   focusInput();
+  scrollToBottom();
 
   try {
     loading.value = true;
     currentMessage.value = "";
+    
+    // Add a temporary message with thinking animation
+    messages.value.push({
+      role: "assistant",
+      content: "",
+      timestamp: new Date(),
+      isThinking: true // Flag to indicate this is a thinking state
+    });
+    
+    await nextTick();
+    scrollToBottom();
 
     // ✅ Fetch structured memory & inject it
     const userId = (authStore.player as any)?.username || "guest";
@@ -530,12 +550,10 @@ const sendPrompt = async (): Promise<void> => {
     const decoder = new TextDecoder();
     let rawMessage = ""; // Add this to store the raw message
     
-    // Add the message container for streaming right away
-    messages.value.push({
-      role: "assistant", 
-      content: "", // Start with empty content
-      timestamp: new Date()
-    });
+    // We'll collect the entire message before displaying it
+    let fullContent = "";
+    let fullReasoningContent = "";
+    let hasReasoning = false;
 
     while (true) {
       const { done, value } = await reader.read();
@@ -564,90 +582,107 @@ const sendPrompt = async (): Promise<void> => {
                 // Add to raw message storage
                 rawMessage += content;
                 
-                if (content.includes('</reasoning>')) {
-                  // Split the content at </reasoning>
+                if (content.includes('<reasoning>')) {
+                  hasReasoning = true;
+                  fullReasoningContent += content.replace('<reasoning>', '');
+                } else if (content.includes('</reasoning>')) {
+                  // Split at reasoning end tag
                   const parts = content.split('</reasoning>');
-                  // Add the first part to thinking content
-                  thinkingContent.value += parts[0];
-                  
-                  // Just show the actual response without duplicating the reasoning
-                  const actualResponse = parts.slice(1).join('').trim();
-                  if (actualResponse) {
-                    currentMessage.value += actualResponse;
-                  }
-                  
-                  isThinking.value = false;
-                } else if (content.includes('<reasoning>')) {
-                  // If we're starting reasoning, add to thinking content and don't show in main message
-                  isThinking.value = true;
-                  thinkingContent.value += content.replace('<reasoning>', '');
+                  fullReasoningContent += parts[0];
+                  fullContent += parts.slice(1).join('');
+                } else if (hasReasoning) {
+                  fullReasoningContent += content;
                 } else {
-                  // Check if this is a final message without reasoning tags
-                  if (isThinking.value) {
-                    // If we're still in thinking mode, add to thinking content
-                    thinkingContent.value += content;
-                  } else {
-                    // Otherwise add to the normal message
-                    currentMessage.value += content;
-                  }
+                  fullContent += content;
                 }
+              } else if (json.error) {
+                // Handle API-level errors reported in the stream
+                console.error("API error in stream:", json.error);
                 
-                // Update the message content in real time to show buttons during streaming
+                // Replace thinking message with error
                 if (messages.value.length > 0) {
-                  // Get the last message (which is the one we're updating)
                   const lastMessage = messages.value[messages.value.length - 1];
-                  
-                  // During streaming, don't show reasoning content, only show the actual message
-                  // This way the thinking process is hidden until completion
-                  lastMessage.content = currentMessage.value;
+                  if (lastMessage.isThinking) {
+                    lastMessage.content = "Error receiving response: " + (json.error.message || "Unknown error");
+                    lastMessage.isThinking = false;
+                    lastMessage.isError = true;
+                  }
                 }
               }
             } catch (jsonErr) {
-              // Just log and continue - don't let a parse error stop us
-              console.error("JSON parse error:", jsonErr);
+              console.error("JSON parse error:", jsonErr, "Raw text:", cleanLine);
+              
+              // If we can't parse multiple times, show error to user
+              if (cleanLine.length > 5 && !cleanLine.includes("OPENROUTER")) {
+                // Replace thinking message with error
+                if (messages.value.length > 0) {
+                  const lastMessage = messages.value[messages.value.length - 1];
+                  if (lastMessage.isThinking) {
+                    lastMessage.content = "Error parsing response";
+                    lastMessage.isThinking = false;
+                    lastMessage.isError = true;
+                  }
+                }
+              }
             }
           } catch (lineErr) {
             console.error("Line processing error:", lineErr);
           }
         }
-        
-        await nextTick();
-        scrollToBottom();
       } catch (chunkErr) {
         console.error("Chunk decoding error:", chunkErr);
       }
     }
 
-    // Store the complete message with reasoning tags
+    // Prepare the final message with both reasoning and content
     let completeMessage;
-    
-    if (thinkingContent.value) {
-      // If there's thinking content, format it properly
-      if (currentMessage.value) {
-        // We have both reasoning and a response
-        completeMessage = `<reasoning>${thinkingContent.value}</reasoning>${currentMessage.value}`;
-      } else {
-        // Only reasoning without a separate response - treat reasoning as the message
-        completeMessage = thinkingContent.value;
-      }
+    if (hasReasoning && fullReasoningContent) {
+      completeMessage = `<reasoning>${fullReasoningContent}</reasoning>${fullContent}`;
     } else {
-      // No thinking content, just the response
-      completeMessage = currentMessage.value;
+      completeMessage = fullContent;
     }
     
-    // Since we've already added the message, update it with the final content
+    // Replace the thinking message with the actual response
     if (messages.value.length > 0) {
-      messages.value[messages.value.length - 1].content = completeMessage;
+      const lastMessage = messages.value[messages.value.length - 1];
+      if (lastMessage.isThinking) {
+        lastMessage.content = completeMessage;
+        lastMessage.isThinking = false;
+      }
     }
 
-    // Clear current message and thinking content
+    // Clear temporary storage
     currentMessage.value = "";
     thinkingContent.value = "";
     isThinking.value = false;
 
   } catch (error) {
     console.error("Chat error:", error);
-    messages.value.push({ role: "assistant", content: "Error: Failed to get response", timestamp: new Date() });
+    const errorMessage = error instanceof Error 
+      ? `Error: ${error.message}`
+      : "Error: Failed to get response";
+      
+    // Log the error for debugging
+    console.log("Request details:", {
+      model: "google/gemini-2.0-pro-exp-02-05:free",
+      userMessage: prompt.value.trim(),
+      timestamp: new Date().toISOString()
+    });
+    
+    // Replace thinking message with error message if it exists
+    if (messages.value.length > 0 && messages.value[messages.value.length - 1].isThinking) {
+      messages.value[messages.value.length - 1].content = errorMessage;
+      messages.value[messages.value.length - 1].isThinking = false;
+      messages.value[messages.value.length - 1].isError = true;
+    } else {
+      // Add a new error message if there's no thinking message to replace
+      messages.value.push({ 
+        role: "assistant", 
+        content: errorMessage, 
+        timestamp: new Date(),
+        isError: true
+      });
+    }
   } finally {
     loading.value = false;
     saveChatHistory(); // ✅ Save chat history
@@ -1242,6 +1277,11 @@ const handleClickOutside = (event: MouseEvent): void => {
       showEmojiPicker.value = false;
     }
   }
+  
+  // Close options menu if clicked outside
+  if (showOptionsMenu.value && !event.composedPath().includes(document.querySelector('.control-wrapper') as EventTarget)) {
+    showOptionsMenu.value = false;
+  }
 };
 
 // Make isOpen available to parent components through the template ref
@@ -1310,8 +1350,10 @@ const formatMessage = (text: string): string => {
       // Generate a button with the appropriate content and icon - COMPACT VERSION
       const buttonHtml = `<button class="cta-button response-option-btn compact-btn" data-value="${fullText}">
         <i class="fas fa-info-circle"></i>
-        ${title}
-        ${description ? `<span class="option-description">${description}</span>` : ''}
+        <span class="button-content">
+          <span class="button-title">${title}</span>
+          ${description ? `<span class="option-description">${description}</span>` : ''}
+        </span>
       </button>`;
       
       // Replace the bullet point with the button
@@ -1331,8 +1373,10 @@ const formatMessage = (text: string): string => {
       // Generate a button for this option - COMPACT VERSION
       const buttonHtml = `<button class="cta-button response-option-btn inline-option compact-btn" data-value="${fullText}">
         <i class="fas fa-code"></i>
-        ${optionCode}
-        <span class="option-description">(${description})</span>
+        <span class="button-content">
+          <span class="button-title">${optionCode}</span>
+          <span class="option-description">(${description})</span>
+        </span>
       </button>`;
       
       // Replace the bullet point with the button
@@ -1349,7 +1393,9 @@ const formatMessage = (text: string): string => {
       // Generate a button for this action - COMPACT VERSION
       const buttonHtml = `<button class="cta-button whitepaper-btn response-option-btn action-btn compact-btn" data-value="${value}">
         <i class="fas fa-question-circle"></i>
-        ${fullPhrase}
+        <span class="button-content">
+          <span class="button-title">${fullPhrase}</span>
+        </span>
       </button>`;
       
       // Replace the bullet point with the button
@@ -1365,8 +1411,10 @@ const formatMessage = (text: string): string => {
     const fullText = `${code} for ${description.trim()}`;
     return `<button class="cta-button response-option-btn inline-option compact-btn" data-value="${fullText}">
       <i class="fas fa-keyboard"></i>
-      ${code}
-      <span class="option-description">(${description.trim()})</span>
+      <span class="button-content">
+        <span class="button-title">${code}</span>
+        <span class="option-description">(${description.trim()})</span>
+      </span>
     </button>`;
   });
   
@@ -1376,8 +1424,10 @@ const formatMessage = (text: string): string => {
     const fullText = `${code} (${description.trim()})`;
     return `<button class="cta-button response-option-btn inline-option compact-btn" data-value="${fullText}">
       <i class="fas fa-tag"></i>
-      ${code}
-      <span class="option-description">(${description.trim()})</span>
+      <span class="button-content">
+        <span class="button-title">${code}</span>
+        <span class="option-description">(${description.trim()})</span>
+      </span>
     </button>`;
   });
   
@@ -1393,8 +1443,10 @@ const formatMessage = (text: string): string => {
       
       return `. <button class="cta-button response-option-btn compact-btn" data-value="${fullText}">
         <i class="fas fa-star"></i>
-        ${feature}
-        <span class="option-description">${description}</span>
+        <span class="button-content">
+          <span class="button-title">${feature}</span>
+          <span class="option-description">${description}</span>
+        </span>
       </button>`;
     }
     
@@ -1407,8 +1459,10 @@ const formatMessage = (text: string): string => {
       
       return `. <button class="cta-button response-option-btn inline-option compact-btn" data-value="${fullText}">
         <i class="fas fa-code"></i>
-        ${code}
-        <span class="option-description">(${description})</span>
+        <span class="button-content">
+          <span class="button-title">${code}</span>
+          <span class="option-description">(${description})</span>
+        </span>
       </button>`;
     }
     
@@ -1532,6 +1586,8 @@ const formatTimestamp = (date: Date): string => {
     return `${month}/${day}/${year} at ${hour12}:${minutes} ${ampm}`;
   }
 };
+
+const showOptionsMenu = ref(false);
 </script>
 
 <template>
@@ -1580,6 +1636,29 @@ const formatTimestamp = (date: Date): string => {
           <span>Lexy (AI Assistant)</span>
         </div>
         <div class="header-controls">
+          <!-- Options Menu -->
+          <div class="control-wrapper">
+            <button class="control-button" @click.stop="showOptionsMenu = !showOptionsMenu">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="12" cy="5" r="1"></circle>
+                <circle cx="12" cy="19" r="1"></circle>
+              </svg>
+            </button>
+            <div class="dropdown-menu" v-if="showOptionsMenu">
+              <button class="dropdown-item" @click="clearChat">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                </svg>
+                Clear Chat History
+              </button>
+            </div>
+            <div class="tooltip control-tooltip">
+              <span class="tooltip-text">Options</span>
+            </div>
+          </div>
           <!-- Maximize/Restore Button -->
           <div class="control-wrapper">
             <button class="control-button" @click.stop="toggleMaximize">
@@ -1655,9 +1734,17 @@ const formatTimestamp = (date: Date): string => {
               <span class="message-timestamp">{{ msg.timestamp ? formatTimestamp(msg.timestamp) : '' }}</span>
             </div>
             
-            <div class="bubble">
+            <div class="bubble" :data-error="msg.isError" :data-thinking="msg.isThinking">
               <template v-if="msg.role === 'assistant'">
-                <template v-if="msg.content.includes('<reasoning>')">
+                <template v-if="msg.isThinking">
+                  <!-- Thinking animation -->
+                  <div class="thinking-dots">
+                    <div class="thinking-dot"></div>
+                    <div class="thinking-dot"></div>
+                    <div class="thinking-dot"></div>
+                  </div>
+                </template>
+                <template v-else-if="msg.content.includes('<reasoning>')">
                   <!-- Extract reasoning part -->
                   <div class="thinking-content">
                     <div class="thinking-label">Reasoning:</div>
@@ -1699,13 +1786,6 @@ const formatTimestamp = (date: Date): string => {
         </div>
         <button class="send-icon" @click="sendPrompt" :disabled="loading">
             <PaperAirplaneIcon class="icon" />
-        </button>
-      </div>
-      
-      <!-- Add Clear Chat Button -->
-      <div class="clear-chat-container">
-        <button class="clear-chat-button" @click="clearChat">
-          Clear Chat History
         </button>
       </div>
       
@@ -2487,31 +2567,7 @@ const formatTimestamp = (date: Date): string => {
   /* Duplicate styles - removing */
 }
 
-/* Clear Chat Button Styles */
-.clear-chat-container {
-  display: flex;
-  justify-content: center;
-  padding: 0.5rem;
-  background: #1e1e1e38;
-  border-top: 1px solid rgba(126, 126, 126, 0.1);
-}
-
-.clear-chat-button {
-  background: rgba(220, 38, 38, 0.2);
-  color: #ff9999;
-  border: 1px solid rgba(220, 38, 38, 0.3);
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: all 0.2s ease;
-}
-
-.clear-chat-button:hover {
-  background: rgba(220, 38, 38, 0.3);
-  border-color: rgba(220, 38, 38, 0.4);
-  color: #ffcccc;
-}
+/* Clear chat button styles removed - now in dropdown menu */
 
 /* Formatted Message Styles */
 .formatted-message {
@@ -3182,10 +3238,10 @@ const formatTimestamp = (date: Date): string => {
   
   /* Set new compact styles */
   position: relative !important;
-  display: inline-flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  padding: 0.5rem 0.7rem !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  padding: 0.7rem !important;
   margin: 0.3rem 0 !important;
   border-radius: 6px !important;
   font-family: inherit !important;
@@ -3210,15 +3266,17 @@ const formatTimestamp = (date: Date): string => {
   font-size: 0.7rem !important;
   font-weight: normal !important;
   color: rgba(255, 255, 255, 0.8) !important;
-  margin-top: 0.3rem !important;
-  width: 100% !important;
+  margin-left: 0.4rem !important;
+  width: auto !important;
+  display: block !important;
 }
 
 .formatted-message .cta-button i,
 .message-text .cta-button i,
 .bubble .cta-button i {
   font-size: 0.8rem !important;
-  margin-right: 0.4rem !important;
+  margin-right: 0.5rem !important;
+  flex-shrink: 0 !important;
 }
 
 .formatted-message .cta-button:hover,
@@ -3253,11 +3311,12 @@ const formatTimestamp = (date: Date): string => {
 .bubble button.cta-button.compact-btn {
   position: relative !important;
   display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  padding: 5px 8px !important;
-  margin-bottom: 4px !important;
-  font-size: 0.75rem !important;
+  flex-direction: row !important; 
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding: 10px 12px !important;
+  margin-bottom: 5px !important;
+  font-size: 0.85rem !important;
   line-height: 1.2 !important;
   border-radius: 4px !important;
   border: 1px solid rgba(79, 174, 255, 0.7) !important;
@@ -3267,45 +3326,181 @@ const formatTimestamp = (date: Date): string => {
     rgba(74, 144, 226, 0.85) 0%, 
     rgba(38, 79, 137, 0.85) 100%) !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  gap: 8px !important; /* Add consistent spacing between icon and content */
 }
 
+/* Icon styling */
 .formatted-message button.cta-button.compact-btn i,
 .message-text button.cta-button.compact-btn i,
 .bubble button.cta-button.compact-btn i {
-  font-size: 0.7rem !important;
-  margin-right: 4px !important;
+  font-size: 14px !important;
+  width: 16px !important;
+  height: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
+/* Button content container styling */
+.formatted-message button.cta-button.compact-btn .button-content,
+.message-text button.cta-button.compact-btn .button-content,
+.bubble button.cta-button.compact-btn .button-content {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-grow: 1 !important;
+  gap: 6px !important;
+}
+
+/* Title styling */
+.formatted-message button.cta-button.compact-btn .button-title,
+.message-text button.cta-button.compact-btn .button-title,
+.bubble button.cta-button.compact-btn .button-title {
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* Description styling */
 .formatted-message button.cta-button.compact-btn .option-description,
 .message-text button.cta-button.compact-btn .option-description,
 .bubble button.cta-button.compact-btn .option-description {
-  font-size: 0.6rem !important;
+  font-size: 0.75rem !important;
   font-weight: normal !important;
-  margin-top: 3px !important;
-  margin-left: 0 !important;
-  line-height: 1.1 !important;
-  width: 100% !important;
-  text-align: left !important;
-  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: rgba(220, 240, 255, 0.9) !important;
+  display: inline-block !important;
 }
 
+/* Inline option buttons */
 .formatted-message button.cta-button.compact-btn.inline-option,
 .message-text button.cta-button.compact-btn.inline-option,
 .bubble button.cta-button.compact-btn.inline-option {
   display: inline-flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  padding: 3px 6px !important;
-  margin: 2px 3px 2px 0 !important;
   width: auto !important;
+  padding: 6px 10px !important;
+  margin: 0 6px 5px 0 !important;
 }
 
 .formatted-message button.cta-button.compact-btn.inline-option .option-description,
-.message-text button.cta-button.compact-btn.inline-option .option-description, 
+.message-text button.cta-button.compact-btn.inline-option .option-description,
 .bubble button.cta-button.compact-btn.inline-option .option-description {
-  display: inline !important;
-  margin-top: 0 !important;
-  margin-left: 3px !important;
-  font-size: 0.55rem !important;
+  font-size: 0.7rem !important;
+}
+
+/* Error message styling */
+.assistant .bubble[data-error="true"] {
+  border-left-color: rgba(255, 80, 80, 0.8) !important;
+  background: rgba(80, 30, 30, 0.3) !important;
+}
+
+.assistant .bubble[data-error="true"] .message-text,
+.assistant .bubble[data-error="true"] .formatted-message {
+  color: rgba(255, 180, 180, 0.9) !important;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: rgba(22, 31, 39, 0.97);
+  min-width: 180px;
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(79, 174, 255, 0.2);
+  z-index: 1002;
+  margin-top: 5px;
+  overflow: hidden;
+  transform-origin: top right;
+  animation: dropdown-appear 0.2s ease forwards;
+}
+
+@keyframes dropdown-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(79, 174, 255, 0.15);
+  color: #ffffff;
+}
+
+.dropdown-item svg {
+  opacity: 0.8;
+  color: #ff9999;
+}
+
+.dropdown-item:hover svg {
+  opacity: 1;
+}
+
+.bubble[data-thinking="true"] {
+  background: rgba(40, 44, 55, 0.3) !important;
+  border-left-color: rgba(15, 185, 253, 0.3) !important;
+}
+
+.thinking-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  height: 40px;
+}
+
+.thinking-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(15, 185, 253, 0.6);
+  margin: 0 3px;
+  animation: thinking-dot-pulse 1.5s infinite ease-in-out;
+}
+
+.thinking-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.thinking-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes thinking-dot-pulse {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
 }
 </style>
