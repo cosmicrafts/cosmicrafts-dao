@@ -39,6 +39,17 @@
       </button>
     </div>
 
+    <!-- Length Warning -->
+    <div v-if="isInvalidLength && seedRevealed" class="warning-box special-warning">
+      <div class="warning-icon">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <div class="warning-content">
+        <h3>{{ $t('wallet.seedLengthWarning') || 'Unusual Seed Phrase Length' }}</h3>
+        <p>{{ $t('wallet.seedLengthWarningText') || 'Your seed phrase appears to be longer than the standard 12 words. Only the first 12 words are shown here.' }}</p>
+      </div>
+    </div>
+
     <!-- Seed Phrase Display -->
     <div class="seed-display" v-if="seedRevealed">
       <!-- Seed Phrase Grid -->
@@ -160,16 +171,30 @@ const seedRevealed = ref(false);
 const showAddressDetails = ref(false);
 const copyButtonText = ref('Copy to Clipboard');
 const copiedTimeout = ref(null);
+const isInvalidLength = ref(false);
 
 // Get seed phrase from props or auth store
 const currentSeedPhrase = computed(() => {
   return props.seedPhrase || authStore.seedPhrase;
 });
 
-// Split seed phrase into array of words
+// Split seed phrase into array of words - enforce 12-word limit for display
 const seedWords = computed(() => {
   if (!currentSeedPhrase.value) return Array(12).fill('');
-  return currentSeedPhrase.value.split(' ');
+  
+  // Split the seed phrase into words
+  const words = currentSeedPhrase.value.split(' ');
+  
+  // Check if we have more than 12 words (unexpected)
+  if (words.length > 12) {
+    console.warn('Seed phrase has more than 12 words:', words.length);
+    isInvalidLength.value = true;
+    // Take only the first 12 words for display
+    return words.slice(0, 12);
+  }
+  
+  isInvalidLength.value = false;
+  return words;
 });
 
 // Get principal ID
@@ -208,6 +233,13 @@ const truncatedAccountId = computed(() => {
 const truncatedPublicKey = computed(() => {
   if (!publicKey.value) return '';
   return publicKey.value.slice(0, 8) + '...' + publicKey.value.slice(-8);
+});
+
+// Validate seed phrase format
+const seedPhraseValid = computed(() => {
+  if (!currentSeedPhrase.value) return false;
+  const wordCount = currentSeedPhrase.value.trim().split(/\s+/).length;
+  return wordCount === 12;
 });
 
 // Methods
@@ -329,6 +361,19 @@ onMounted(() => {
   gap: 1rem;
 }
 
+.warning-box.special-warning {
+  background: rgba(255, 75, 75, 0.1);
+  border-color: rgba(255, 75, 75, 0.3);
+}
+
+.warning-box.special-warning .warning-icon {
+  color: rgba(255, 75, 75, 0.9);
+}
+
+.warning-box.special-warning h3 {
+  color: rgba(255, 75, 75, 0.9);
+}
+
 .warning-icon {
   color: var(--cosmic-orange);
   font-size: 1.5rem;
@@ -352,6 +397,12 @@ onMounted(() => {
 
 .warning-content li {
   margin-bottom: 0.25rem;
+}
+
+.warning-content p {
+  margin: 0;
+  color: var(--cosmic-text-secondary);
+  font-size: 0.85rem;
 }
 
 .reveal-section {

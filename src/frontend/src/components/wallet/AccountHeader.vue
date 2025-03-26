@@ -20,6 +20,9 @@
           <div class="menu-header">
             <span>My Accounts</span>
             <div class="menu-actions">
+              <button class="menu-action" @click.stop="showRecoverAccountDialog" title="Recover Account">
+                <i class="fas fa-undo"></i>
+              </button>
               <button class="menu-action" @click.stop="showImportAccountDialog" title="Import Account">
                 <i class="fas fa-download"></i>
               </button>
@@ -51,7 +54,6 @@
                   <i class="fas fa-check"></i>
                 </span>
                 <button 
-                  v-if="addresses.length > 1"
                   class="account-action-button rename-btn"
                   @click.stop="openRenameDialog(index)" 
                   title="Rename Account"
@@ -68,6 +70,12 @@
                 </button>
               </div>
             </div>
+          </div>
+          <div class="menu-footer">
+            <button class="menu-action-full backup-btn" @click.stop="showSeedPhrase" title="Backup Recovery Phrase">
+              <i class="fas fa-key"></i>
+              <span>View Recovery Phrase</span>
+            </button>
           </div>
         </div>
       </div>
@@ -236,16 +244,61 @@
       </div>
     </div>
   </div>
+  
+  <!-- Recover Account Dialog -->
+  <div v-if="showRecoverDialog" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Recover Account</h3>
+        <button class="modal-close" @click="showRecoverDialog = false">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="recovery-seed">Recovery Phrase (12 words)</label>
+          <textarea 
+            id="recovery-seed"
+            v-model="recoverySeedPhrase" 
+            placeholder="Enter your 12-word recovery phrase"
+            class="form-textarea"
+            rows="4"
+          ></textarea>
+        </div>
+        
+        <div v-if="recoveryError" class="error-message">
+          {{ recoveryError }}
+        </div>
+        
+        <div class="help-text">
+          <p>Enter your 12-word seed phrase to recover your account. Make sure to enter the words in the exact same order as they were shown.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="button-secondary" @click="showRecoverDialog = false">Cancel</button>
+        <button 
+          class="button-primary" 
+          @click="handleRecoverAccount"
+          :disabled="!isRecoveryPhraseValid || isRecovering"
+        >
+          <span v-if="!isRecovering">Recover</span>
+          <span v-else class="button-spinner"></span>
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import { ref, computed, onMounted, watch } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useTokenStore } from '@/stores/token';
+import { useModalStore } from '@/stores/modal';
 import NetworkSelector from './NetworkSelector.vue';
 import CurrencySelector from './CurrencySelector.vue';
 import { getNetworkIcon } from '@/utils/IconService';
 import { validateMnemonic } from 'bip39';
+import AccountRecovery from '@/components/user/AccountRecovery.vue';
 
 export default {
   name: 'AccountHeader',
@@ -259,10 +312,11 @@ export default {
       default: 'USD'
     }
   },
-  emits: ['action', 'currency-changed', 'network-changed', 'account-changed'],
+  emits: ['action', 'currency-changed', 'network-changed', 'account-changed', 'copy-success', 'copy-error'],
   setup(props, { emit }) {
     const authStore = useAuthStore();
     const tokenStore = useTokenStore();
+    const modalStore = useModalStore();
     
     // IDs from the authentication store
     const principalId = ref('');
@@ -339,10 +393,10 @@ export default {
     const copyToClipboard = async (text, type) => {
       try {
         await navigator.clipboard.writeText(text);
-        emit('copy-success', { type });
+        emit('copy-success', { success: true, type });
       } catch (error) {
         console.error('Failed to copy:', error);
-        emit('copy-error', { error: error.message });
+        emit('copy-error', { success: false, type, error: error.message });
       }
     };
     
@@ -396,7 +450,7 @@ export default {
           // Emit event
           emit('account-changed', { 
             index,
-            address: currentAddress
+            account: currentAddress
           });
         }
       } catch (error) {
@@ -466,6 +520,25 @@ export default {
     const showImportDialog = ref(false);
     const importSeedPhrase = ref('');
     const importAccountName = ref('');
+    const showRecoverDialog = ref(false);
+    const recoverySeedPhrase = ref('');
+    const recoveryError = ref('');
+    const isRecovering = ref(false);
+    
+    // Add a computed property to validate the recovery phrase
+    const isRecoveryPhraseValid = computed(() => {
+      if (!recoverySeedPhrase.value) return false;
+      
+      const words = recoverySeedPhrase.value.trim().split(/\s+/);
+      
+      // Check if we have exactly 12 words
+      if (words.length !== 12) {
+        return false;
+      }
+      
+      // Check if each word is valid (basic check)
+      return validateMnemonic(recoverySeedPhrase.value);
+    });
     
     // Open rename dialog
     const openRenameDialog = (index) => {
@@ -554,6 +627,66 @@ export default {
           // Here you would typically show an error message to the user
         }
       }
+    };
+    
+    // Show recover account dialog
+    const showRecoverAccountDialog = () => {
+      recoverySeedPhrase.value = '';
+      showRecoverDialog.value = true;
+    };
+    
+    // Handle recover account
+    const handleRecoverAccount = async () => {
+      if (!recoverySeedPhrase.value.trim()) {
+        recoveryError.value = 'Please enter a recovery phrase';
+        return;
+      }
+      
+      const words = recoverySeedPhrase.value.trim().split(/\s+/);
+      
+      // Check word count
+      if (words.length !== 12) {
+        recoveryError.value = `Invalid word count: ${words.length}. Expected 12 words.`;
+        return;
+      }
+      
+      // Validate the seed phrase
+      if (!validateMnemonic(recoverySeedPhrase.value.trim())) {
+        recoveryError.value = 'Invalid recovery phrase. One or more words are not in the wordlist.';
+        return;
+      }
+      
+      try {
+        isRecovering.value = true;
+        recoveryError.value = '';
+        showRecoverDialog.value = false;
+        
+        // Use the auth store's recover account method
+        await authStore.recoverAccount(recoverySeedPhrase.value.trim());
+        
+        // Check if we have addresses, if not generate one
+        if (!authStore.derivedAddresses || authStore.derivedAddresses.length === 0) {
+          await authStore.generateNewAddress();
+        }
+        
+        // Update the UI with the new account data
+        await loadAccountData();
+        
+        // Reset the recovery phrase
+        recoverySeedPhrase.value = '';
+      } catch (error) {
+        console.error('Error recovering account:', error);
+        recoveryError.value = error.message || 'Recovery failed. Please try again.';
+        showRecoverDialog.value = true;
+      } finally {
+        isRecovering.value = false;
+      }
+    };
+    
+    // Show seed phrase
+    const showSeedPhrase = () => {
+      authStore.showSeedPhrase();
+      showAccountMenu.value = false;
     };
     
     // Load account data from the auth store
@@ -788,7 +921,17 @@ export default {
       handleImportAccount,
       loadAccountData,
       fetchBalanceData,
-      getAddressAvatar
+      getAddressAvatar,
+      
+      // New methods for recovery and seed phrase management
+      showSeedPhrase,
+      showRecoverDialog,
+      recoverySeedPhrase,
+      showRecoverAccountDialog,
+      handleRecoverAccount,
+      recoveryError,
+      isRecovering,
+      isRecoveryPhraseValid
     };
   }
 };
@@ -1523,5 +1666,58 @@ export default {
   .account-action-button {
     opacity: 1;
   }
+}
+
+/* Add these new styles for the recovery UI */
+.menu-footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.backup-btn {
+  background: rgba(15, 185, 253, 0.1);
+  color: var(--cosmic-blue, #0FB9FD);
+}
+
+.backup-btn:hover {
+  background: rgba(15, 185, 253, 0.15);
+  border-color: rgba(15, 185, 253, 0.3);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: monospace;
+}
+
+.error-message {
+  color: #ff4b4b;
+  background: rgba(255, 75, 75, 0.1);
+  border: 1px solid rgba(255, 75, 75, 0.2);
+  border-radius: var(--cosmic-radius-sm, 8px);
+  padding: 0.75rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.help-text {
+  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.7));
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+.button-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style> 

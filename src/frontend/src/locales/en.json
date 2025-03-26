@@ -14,8 +14,17 @@
     "invalidSeedLength": "The seed phrase must contain exactly 12 words.",
     "guestLoginError": "Whoops, something went wrong!",
     "recoverySuccess": "Account recovery successful!",
-    "recovering": "Recovering..."
-    
+    "recovering": "Recovering...",
+    "checksumWarning": "All words are valid, but they don't create a valid recovery phrase. Please check the word order.",
+    "seedPhraseInput": "Seed Phrase",
+    "recoverWithSeedPhrase": "Recover with Seed Phrase",
+    "backToLogin": "Back to Login",
+    "invalidWords": "Some words are not in the BIP39 dictionary. Please check for typos.",
+    "invalidChecksum": "Invalid seed phrase checksum. These words don't form a valid recovery phrase.",
+    "invalidWordCount": "Invalid word count: {count}. Expected 12 words.",
+    "tooManyWords": "Too many words. Using the first 12 words.",
+    "tooFewWords": "Not enough words. Please fill in the remaining fields.",
+    "recoveryFailed": "Account recovery failed. Please check your seed phrase and try again."
   },
   "wallet": {
     "title": "Wallet",

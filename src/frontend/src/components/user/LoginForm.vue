@@ -5,16 +5,20 @@ import { useAuthStore } from '@/stores/auth';
 import { useModalStore } from '@/stores/modal';
 import { useI18n } from 'vue-i18n';
 import LoadingScreen from '@/components/media/LoadingScreen.vue';
+import AccountRecovery from '@/components/user/AccountRecovery.vue';
+
 const authStore = useAuthStore();
 const modalStore = useModalStore();
 const { t } = useI18n();
 
 const loading = ref(false);
+const errorMessage = ref(null);
+const showRecoverySection = ref(false);
 
+// Common post-login processing
 const handleAfterLogin = async () => {
   // Ensure addresses are initialized for the current account
   if (!authStore.derivedAddresses || authStore.derivedAddresses.length === 0) {
-    console.log('Initializing addresses for the current account');
     try {
       // Generate the first address if none exists
       await authStore.generateNewAddress();
@@ -23,35 +27,49 @@ const handleAfterLogin = async () => {
     }
   }
   
-  modalStore.closeModal(); // Close the modal immediately
+  // Save state to ensure persistence
+  authStore.saveStateToLocalStorage();
+  
+  // Close the login modal
+  modalStore.closeModal();
 };
 
-const handleGuestLogin = async () => {
+// Unified login method handler to ensure consistent behavior
+const handleLogin = async (loginMethod, ...args) => {
   loading.value = true;
+  errorMessage.value = null;
+  
   try {
-    const { username } = await authStore.createGuestAccount();
-    console.log(`Guest account created`);
+    console.log(`Starting login process with method: ${loginMethod.name}`);
+    const result = await loginMethod(...args);
+    console.log('Login method completed successfully', result);
+    
+    // Ensure we have addresses - this needs to happen AFTER authentication is complete
     await handleAfterLogin();
   } catch (error) {
-    console.error('Error during guest login:', error);
-    alert('Failed to create a guest account. Please try again.');
+    console.error('Login failed:', error);
+    errorMessage.value = error.message || 'Login failed. Please try again.';
   } finally {
     loading.value = false;
   }
+};
+
+const handleGuestLogin = async () => {
+  await handleLogin(authStore.createGuestAccount);
 };
 
 const onGoogleClick = () => {
   window.google.accounts.id.prompt();
 };
 
-const openAccountRecoveryModal = async () => {
-  const AccountRecovery = (await import('@/components/user/AccountRecovery.vue')).default;
-  modalStore.openModal(AccountRecovery);
+const openAccountRecoveryModal = () => {
+  // Switch to directly showing the recovery section in the modal
+  showRecoverySection.value = true;
 };
 
 // Main authentication methods (buttons with text)
 const mainMethods = [
-{
+  {
     logo: new URL('@/assets/icons/wouid_icon.svg', import.meta.url).href,
     text: t('login.guestAccount'),
     onClick: handleGuestLogin,
@@ -59,51 +77,95 @@ const mainMethods = [
   {
     logo: new URL('@/assets/icons/icp.svg', import.meta.url).href,
     text: t('login.internetIdentity'),
-    onClick: async () => {
-      await authStore.loginWithInternetIdentity();
-      await handleAfterLogin();
-    },
+    onClick: () => handleLogin(authStore.loginWithInternetIdentity.bind(authStore)),
   },
   {
     logo: new URL('@/assets/icons/google_logo.svg', import.meta.url).href,
     text: t('login.google'),
     onClick: onGoogleClick,
   },
-
 ];
+
+// For Metamask specifically, we need to handle the login flow differently
+const handleMetaMaskLogin = async () => {
+  loading.value = true;
+  errorMessage.value = null;
+  
+  try {
+    console.log('Starting MetaMask login process');
+    // Use a specific timeout for MetaMask as it can take longer
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('MetaMask login timed out. Please try again.')), 30000)
+    );
+    
+    const loginPromise = authStore.loginWithMetaMask();
+    
+    // Race the login against the timeout
+    const result = await Promise.race([loginPromise, timeoutPromise]);
+    console.log('MetaMask login completed successfully', result);
+    
+    // Call handleAfterLogin to properly handle post-login actions including modal closing
+    await handleAfterLogin();
+  } catch (error) {
+    console.error('MetaMask login failed:', error);
+    errorMessage.value = error.message || 'MetaMask login failed. Please try again.';
+  } finally {
+    loading.value = false;
+  }
+};
 
 // Secondary methods (icon-only buttons)
 const secondaryMethods = [
   {
     logo: new URL('@/assets/icons/metaMask_icon.svg', import.meta.url).href,
-    onClick: async () => {
-      await authStore.loginWithMetaMask();
-      await handleAfterLogin();
-    },
+    title: 'MetaMask',
+    onClick: handleMetaMaskLogin, // Use the special handler for MetaMask
   },
   {
     logo: new URL('@/assets/icons/Phantom_icon.svg', import.meta.url).href,
-    onClick: async () => {
-      await authStore.loginWithPhantom();
-      await handleAfterLogin();
-    },
+    title: 'Phantom',
+    onClick: () => handleLogin(authStore.loginWithPhantom.bind(authStore)),
   },
   {
     logo: new URL('@/assets/icons/nfid.svg', import.meta.url).href,
-    onClick: async () => {
-      await authStore.loginWithNFID();
-      await handleAfterLogin();
-    },
+    title: 'NFID',
+    onClick: () => handleLogin(authStore.loginWithNFID.bind(authStore)),
   },
   {
-    logo: new URL('@/assets/icons/plug.svg', import.meta.url).href, // Replace with Plug icon URL
-    onClick: async () => {
-      await authStore.loginWithPlug();
-      await handleAfterLogin();
-    }
+    logo: new URL('@/assets/icons/plug.svg', import.meta.url).href,
+    title: 'Plug Wallet',
+    onClick: () => handleLogin(authStore.loginWithPlug.bind(authStore)),
   },
-  
 ];
+
+// Back to login from recovery section
+const backToLogin = () => {
+  showRecoverySection.value = false;
+};
+
+// Initialize Google Sign-In on mount
+onMounted(() => {
+  // This can be expanded if needed for Google Sign-In initialization
+  
+  // Initialize Google login callback to handle successful login
+  if (window.google && window.google.accounts) {
+    window.google.accounts.id.initialize({
+      callback: async (response) => {
+        try {
+          loading.value = true;
+          await authStore.loginWithGoogle(response);
+          // Ensure modal closes after Google login
+          await handleAfterLogin();
+        } catch (error) {
+          console.error('Google login failed:', error);
+          errorMessage.value = error.message || 'Google login failed. Please try again.';
+        } finally {
+          loading.value = false;
+        }
+      }
+    });
+  }
+});
 </script>
 
 <template>
@@ -124,9 +186,18 @@ const secondaryMethods = [
       ]"
     />
 
-    <div class="login-panel" v-if="!loading">
+    <!-- Account Recovery Section -->
+    <AccountRecovery v-if="showRecoverySection" />
+    
+    <!-- Login Options Section -->
+    <div class="login-panel" v-if="!loading && !showRecoverySection">
       <img src="@/assets/icons/cosmicrafts.svg" class="full-logo" alt="Cosmicrafts Logo" />
-      <label class="cosmic-label-connect">{{ t('login.connectWith') }}</label>
+      <label class="cosmic-label-connect">{{ $t('login.connectWith') }}</label>
+
+      <!-- Error Message -->
+      <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
 
       <!-- Main Buttons -->
       <div class="main-buttons">
@@ -151,19 +222,33 @@ const secondaryMethods = [
           v-for="method in secondaryMethods"
           :key="method.logo"
           @click="method.onClick"
-          :aria-label="'Login with secondary method'"
+          :aria-label="'Login with ' + method.title"
+          :title="method.title"
         >
-          <img :src="method.logo" class="icon" />
+          <img :src="method.logo" class="icon" :alt="method.title" />
         </div>
+      </div>
+
+      <!-- Recovery Button -->
+      <div class="recovery-section">
+        <button class="recovery-button" @click="openAccountRecoveryModal">
+          <i class="fas fa-key"></i>
+          <span>{{ $t('login.recoverWithSeedPhrase') || 'Recover with Seed Phrase' }}</span>
+        </button>
       </div>
 
       <!-- Clarification Message -->
       <div class="clarification-message">
-        <p>
-          {{ t('login.signInClarification') }}
-          <a class="recovery-link" @click="openAccountRecoveryModal">{{ t('login.accountRecovery') }}</a>
-        </p>
+        <p>{{ $t('login.signInClarification') }}</p>
       </div>
+    </div>
+    
+    <!-- Back Button (when in recovery mode) -->
+    <div v-if="showRecoverySection" class="back-button-container">
+      <button class="back-button" @click="backToLogin">
+        <i class="fas fa-arrow-left"></i>
+        <span>{{ $t('login.backToLogin') || 'Back to Login' }}</span>
+      </button>
     </div>
   </div>
 </template>
@@ -229,6 +314,8 @@ const secondaryMethods = [
 
 .icon-btn:hover {
   background: linear-gradient(135deg, rgba(40, 45, 55, 0.635), rgba(50, 60, 70, 0.612));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .icon {
@@ -246,10 +333,13 @@ const secondaryMethods = [
   border: 0.25px solid rgba(255, 255, 255, 0.157);
   padding: 0 2vh;
   margin-top: 1vh;
+  transition: all 0.2s ease;
 }
 
 .btn-div:hover {
   background: linear-gradient(135deg, rgba(40, 45, 55, 0.635), rgba(50, 60, 70, 0.612));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .button-account-icon {
@@ -271,22 +361,99 @@ const secondaryMethods = [
   font-weight: 500;
 }
 
+.recovery-section {
+  margin-top: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.recovery-button {
+  padding: 0.75rem 1.25rem;
+  background: rgba(15, 185, 253, 0.1);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  border-radius: 8px;
+  color: rgba(15, 185, 253, 0.9);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.recovery-button:hover {
+  background: rgba(15, 185, 253, 0.15);
+  border-color: rgba(15, 185, 253, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(15, 185, 253, 0.15);
+}
+
+.recovery-button i {
+  font-size: 0.9rem;
+}
+
 .clarification-message {
   text-align: center;
   font-size: 1.2vh;
   color: #c3c3c3;
-  margin-bottom: -1vh;
+  margin-top: 1.5vh;
 }
 
-.recovery-link {
-  color: #00b3ff; /* Blue color for the link */
-  font-weight: bold;
-  text-decoration: underline;
-  cursor: pointer; /* Make the cursor indicate a clickable link */
+/* Add error message style */
+.error-message {
+  background: rgba(255, 75, 75, 0.2);
+  color: #ff4b4b;
+  border: 1px solid rgba(255, 75, 75, 0.3);
+  padding: 0.5rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+  max-width: 80%;
 }
 
-.recovery-link:hover {
-  color: #61c8ff; /* Slightly darker blue on hover */
+/* Back button styling */
+.back-button-container {
+  margin-top: 1rem;
 }
 
+.back-button {
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.back-button i {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .main-buttons {
+    width: 90%;
+  }
+  
+  .btn-div {
+    width: 100%;
+  }
+  
+  .recovery-button {
+    width: 90%;
+    justify-content: center;
+  }
+}
 </style>

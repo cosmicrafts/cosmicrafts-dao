@@ -92,10 +92,11 @@ export function formatId(id, startChars = 6, endChars = 4) {
 
 /**
  * Generate a random seed phrase
- * @returns {string} - BIP39 mnemonic seed phrase
+ * @returns {string} - BIP39 mnemonic seed phrase (12 words)
  */
 export function generateSeedPhrase() {
-  return generateMnemonic();
+  // Explicitly use 128 bits for 12-word seed phrases
+  return generateMnemonic(128); // 128 bits = 12 words
 }
 
 /**
@@ -104,5 +105,79 @@ export function generateSeedPhrase() {
  * @returns {boolean} - Whether the seed phrase is valid
  */
 export function validateSeedPhrase(seedPhrase) {
-  return validateMnemonic(seedPhrase);
+  if (!seedPhrase) return false;
+  
+  // Validate the seed phrase
+  const isValid = validateMnemonic(seedPhrase);
+  
+  // Check if it's 12 words (preferred)
+  const words = seedPhrase.trim().split(/\s+/);
+  const is12Words = words.length === 12;
+  
+  // Return true only if both valid and 12 words
+  return isValid && is12Words;
+}
+
+/**
+ * Count words in a seed phrase and check if it's a valid length
+ * @param {string} seedPhrase - Seed phrase to check
+ * @returns {object} - Validation result with wordCount and isValidLength
+ */
+export function validateSeedPhraseLength(seedPhrase) {
+  if (!seedPhrase || typeof seedPhrase !== 'string') {
+    return { wordCount: 0, isValidLength: false };
+  }
+  
+  const words = seedPhrase.trim().split(/\s+/);
+  const wordCount = words.length;
+  
+  // Check if word count is valid (12, 15, 18, 21, or 24 words)
+  const validLengths = [12, 15, 18, 21, 24];
+  const isValidLength = validLengths.includes(wordCount);
+  
+  return { wordCount, isValidLength };
+}
+
+/**
+ * Find invalid words in a seed phrase
+ * @param {string} seedPhrase - Seed phrase to check
+ * @returns {object} - Validation results with invalid words and their positions
+ */
+export function findInvalidSeedPhraseWords(seedPhrase) {
+  if (!seedPhrase || typeof seedPhrase !== 'string') {
+    return { isValid: false, invalidWords: [] };
+  }
+  
+  const words = seedPhrase.trim().split(/\s+/);
+  const invalidWords = [];
+  
+  words.forEach((word, index) => {
+    if (!word) return; // Skip empty words
+    
+    // Check if the word is in the BIP39 word list
+    if (!validateWord(word.toLowerCase())) {
+      invalidWords.push({ word, position: index + 1 });
+    }
+  });
+  
+  return {
+    isValid: invalidWords.length === 0,
+    invalidWords
+  };
+}
+
+/**
+ * Check if a word is in the BIP39 word list
+ * @param {string} word - Word to check
+ * @returns {boolean} - Whether the word is in the BIP39 word list
+ */
+export function validateWord(word) {
+  // Get the English word list
+  const wordlist = mnemonicToSeedSync.wordlists?.english;
+  
+  if (!wordlist) {
+    throw new Error('BIP39 word list not available');
+  }
+  
+  return wordlist.includes(word.toLowerCase());
 } 

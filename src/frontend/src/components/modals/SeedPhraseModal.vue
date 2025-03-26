@@ -9,7 +9,7 @@
     
     <div class="modal-content">
       <SeedPhraseManager 
-        :seed-phrase="seedPhrase"
+        :seed-phrase="normalizedSeedPhrase"
         :principal-id-param="principalId"
         :public-key-hex="publicKey"
       />
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useModalStore } from '@/stores/modal';
 import SeedPhraseManager from '@/components/user/SeedPhraseManager.vue';
 
@@ -48,6 +48,25 @@ const props = defineProps({
 });
 
 const modalStore = useModalStore();
+const seedPhraseWarning = ref('');
+
+// Normalize the seed phrase to ensure we're always showing 12 words
+const normalizedSeedPhrase = computed(() => {
+  if (!props.seedPhrase) return '';
+  
+  const words = props.seedPhrase.trim().split(/\s+/);
+  
+  // Check if seed phrase is too long
+  if (words.length > 12) {
+    console.warn(`Seed phrase contains ${words.length} words, expected 12`);
+    seedPhraseWarning.value = `Note: Your seed phrase is ${words.length} words long. Only the first 12 words are used for account recovery.`;
+    return words.slice(0, 12).join(' ');
+  }
+  
+  // If the phrase is the right length, use it as is
+  seedPhraseWarning.value = '';
+  return props.seedPhrase;
+});
 
 // Methods
 const closeModal = () => {
@@ -125,6 +144,16 @@ onMounted(() => {
   padding: 1.5rem;
   max-height: calc(90vh - 80px);
   overflow-y: auto;
+}
+
+.warning-text {
+  color: var(--cosmic-orange);
+  background: rgba(255, 145, 0, 0.1);
+  border: 1px solid rgba(255, 145, 0, 0.2);
+  border-radius: var(--cosmic-radius-sm);
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 
 .modal-actions {
