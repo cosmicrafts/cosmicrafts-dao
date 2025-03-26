@@ -68,6 +68,33 @@ app.mount('#app');
     // Initialize identity immediately so it's available for all canister calls
     const initialized = authStore.initializeIdentityFromCache();
     console.log(`Identity immediate initialization: ${initialized ? 'successful' : 'not needed'}`);
+    
+    // If identity was initialized, also initialize canisters immediately
+    if (initialized) {
+      try {
+        const { useCanisterStore } = await import('@/stores/canister');
+        const canisterStore = useCanisterStore();
+        
+        // Initialize canister store immediately to ensure it's ready for API calls
+        const canisterInitialized = canisterStore.initializeImmediately();
+        console.log(`Canister immediate initialization: ${canisterInitialized ? 'successful' : 'failed'}`);
+        
+        // If we have a player and language, restore language immediately 
+        if (authStore.player?.language) {
+          try {
+            const { useLanguageStore } = await import('@/stores/language');
+            const languageStore = useLanguageStore();
+            const language = authStore.player.language;
+            languageStore.setLanguage(language);
+            console.log(`Language immediately restored to: ${language}`);
+          } catch (langError) {
+            console.warn('Error initializing language immediately:', langError);
+          }
+        }
+      } catch (canisterError) {
+        console.warn('Error initializing canisters immediately:', canisterError);
+      }
+    }
   } catch (err) {
     console.warn('Error during immediate identity initialization:', err);
   }

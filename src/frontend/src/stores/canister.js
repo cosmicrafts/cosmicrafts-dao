@@ -223,10 +223,21 @@ export const useCanisterStore = defineStore('canister', {
      */
     saveCachedCanisterConfig() {
       try {
-        localStorage.setItem(CANISTER_CACHE_KEY, JSON.stringify({
+        const cacheData = {
           tokens: this.supportedTokens,
           lastUpdated: Date.now()
-        }));
+        };
+        
+        // Also include canister existence status for better recovery
+        const canisterStatus = {};
+        for (const key in canisters) {
+          if (typeof key === 'string' && key !== 'tokenLedgers') {
+            canisterStatus[key] = !!canisters[key]; // Store boolean representing if canister exists
+          }
+        }
+        cacheData.canisterStatus = canisterStatus;
+        
+        localStorage.setItem(CANISTER_CACHE_KEY, JSON.stringify(cacheData));
         localStorage.setItem(CANISTER_LAST_REFRESH_KEY, Date.now().toString());
       } catch (error) {
         console.error('Error saving canister config to cache:', error);
@@ -469,6 +480,55 @@ export const useCanisterStore = defineStore('canister', {
       // If we get here, the canister is still not available
       console.warn(`Canister ${canisterName} not available after waiting`);
       return null;
+    },
+
+    /**
+     * Perform an immediate identity check and initialization
+     * This is used at application startup to ensure identity is ready right away
+     */
+    initializeImmediately() {
+      const authStore = useAuthStore();
+      const identity = authStore.getIdentity();
+      
+      if (!identity) {
+        console.log('No identity available for immediate initialization');
+        return false;
+      }
+      
+      console.log('Performing immediate canister initialization');
+      
+      // Set identity and initialization flag
+      currentIdentity = identity;
+      initializing = true;
+      
+      // Create agent synchronously
+      try {
+        const agent = new HttpAgent({ identity, host });
+        this.agent = agent;
+        
+        // Initialize most important canister immediately
+        try {
+          canisters.cosmicrafts = createActorBackend(this.canisterIds.cosmicrafts, { agent });
+          console.log('Cosmicrafts canister initialized immediately');
+        } catch (err) {
+          console.error('Failed to initialize cosmicrafts canister:', err);
+        }
+        
+        // Start the rest of initialization in the background
+        setTimeout(() => {
+          this.backgroundInitialize(identity)
+            .catch(error => console.error('Error in background initialization:', error))
+            .finally(() => {
+              initializing = false;
+            });
+        }, 0);
+        
+        return true;
+      } catch (error) {
+        console.error('Error in immediate initialization:', error);
+        initializing = false;
+        return false;
+      }
     },
   },
 });

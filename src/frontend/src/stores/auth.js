@@ -369,6 +369,12 @@ export const useAuthStore = defineStore('auth', {
         return this.registered;
       }
 
+      // If we already have player data in memory and are authenticated, use it
+      if (this.player && this.authenticated && this.registered) {
+        console.log('Using cached player data from memory');
+        return true;
+      }
+
       this.isCheckingPlayer = true;
 
       try {
@@ -378,6 +384,14 @@ export const useAuthStore = defineStore('auth', {
 
         if (!cosmicrafts) {
           console.error('Canister not initialized');
+          
+          // If we have player data from localStorage but canister failed, still return true
+          if (this.player && this.authenticated) {
+            console.log('Using cached player data since canister is unavailable');
+            this.registered = true;
+            return true;
+          }
+          
           return false;
         }
 
@@ -392,17 +406,31 @@ export const useAuthStore = defineStore('auth', {
 
           // Update language dynamically
           this.updateLanguageFromPlayer();
+          
+          // Save fresh data to localStorage
+          this.saveStateToLocalStorage();
         } else {
           this.registered = false;
           this.$patch((state) => {
             state.player = null;
           });
+          
+          // Update localStorage to reflect player not registered
+          this.saveStateToLocalStorage();
         }
 
         console.log('Player registered status:', this.registered);
         return this.registered;
       } catch (error) {
         console.error('Error in isPlayerRegistered:', error);
+        
+        // If we have cached player data, still use it on error
+        if (this.player && this.authenticated) {
+          console.log('Using cached player data after API error');
+          this.registered = true;
+          return true;
+        }
+        
         this.registered = false;
         this.$patch((state) => {
           state.player = null;
@@ -733,6 +761,23 @@ export const useAuthStore = defineStore('auth', {
           identity = Ed25519KeyIdentity.fromKeyPair(keyPair.publicKey, keyPair.secretKey);
           
           console.log('Identity initialized synchronously on app start');
+          
+          // Restore full auth state immediately
+          this.authenticated = true;
+          this.seedPhrase = parsed.seedPhrase;
+          
+          // Restore derived addresses if available
+          if (Array.isArray(parsed.derivedAddresses) && parsed.derivedAddresses.length > 0) {
+            this.derivedAddresses = parsed.derivedAddresses;
+            this.currentAddressIndex = parsed.currentAddressIndex || 0;
+          }
+          
+          // Restore player data if available
+          if (parsed.player) {
+            this.player = parsed.player;
+            this.registered = true;
+          }
+          
           return true;
         } catch (e) {
           console.error('Failed to initialize identity synchronously:', e);
