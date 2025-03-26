@@ -7,63 +7,38 @@
     
     <!-- Token list with tokens -->
     <div v-else class="token-list">
-      <!-- Manage tokens button -->
-      <div class="token-list-header">
-        <h3>Your Assets</h3>
-        <div class="token-list-actions">
-          <button 
-            class="icon-button"
-            @click="handleToggleZeroBalances"
-            :class="{ 'active': showZeroBalances }"
-          >
-            <span class="icon">
-              <i class="fas fa-eye"></i>
-            </span>
-            <span class="text">{{ showZeroBalances ? 'Hide Zero' : 'Show All' }}</span>
-          </button>
-          
-          <button class="icon-button" @click="$emit('add-token')">
-            <span class="icon">
-              <i class="fas fa-plus"></i>
-            </span>
-            <span class="text">Add Token</span>
-          </button>
-          
-          <button class="icon-button" @click="$emit('manage-tokens')">
-            <span class="icon">
-              <i class="fas fa-sliders-h"></i>
-            </span>
-            <span class="text">Manage</span>
-          </button>
-        </div>
-      </div>
+      <!-- List header with actions -->
+      <TokenListHeader
+        :title="title"
+        :show-zero-balances="showZeroBalances"
+        @toggle-zero-balances="handleToggleZeroBalances"
+        @add-token="$emit('add-token')"
+        @manage-tokens="$emit('manage-tokens')"
+      />
       
       <!-- List of tokens -->
       <div class="tokens-wrapper">
-        <TransitionGroup name="token-item">
+        <TransitionGroup name="token-list" tag="div">
           <TokenItem
             v-for="token in visibleTokens"
             :key="token.symbol"
             :token="token"
             :selected="token.symbol === selectedToken"
             :currency="selectedCurrency"
+            :show-buy-action="enableBuyTokens"
             @click="selectToken(token.symbol)"
+            @send="$emit('send', $event)"
+            @receive="$emit('receive', $event)"
+            @swap="$emit('swap', $event)"
+            @buy="$emit('buy', $event)"
           />
         </TransitionGroup>
         
         <!-- Empty state -->
-        <div v-if="visibleTokens.length === 0" class="empty-state">
-          <div class="empty-icon">
-            <i class="fas fa-coins"></i>
-          </div>
-          <p>No tokens found</p>
-          <button 
-            class="button-secondary"
-            @click="$emit('add-token')"
-          >
-            Add Token
-          </button>
-        </div>
+        <TokenEmptyState 
+          v-if="visibleTokens.length === 0"
+          @add-token="$emit('add-token')"
+        />
       </div>
     </div>
   </div>
@@ -74,14 +49,22 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useTokenStore } from '@/stores/token';
 import TokenItem from './TokenItem.vue';
 import TokenListSkeleton from './TokenListSkeleton.vue';
+import TokenListHeader from './TokenListHeader.vue';
+import TokenEmptyState from './TokenEmptyState.vue';
 
 export default {
   name: 'TokenList',
   components: {
     TokenItem,
-    TokenListSkeleton
+    TokenListSkeleton,
+    TokenListHeader,
+    TokenEmptyState
   },
   props: {
+    title: {
+      type: String,
+      default: 'Your Assets'
+    },
     currency: {
       type: String,
       default: 'USD'
@@ -96,9 +79,13 @@ export default {
         id: 'icp',
         name: 'Internet Computer'
       })
+    },
+    enableBuyTokens: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['select-token', 'add-token', 'manage-tokens'],
+  emits: ['select-token', 'add-token', 'manage-tokens', 'send', 'receive', 'swap', 'buy'],
   setup(props, { emit }) {
     const tokenStore = useTokenStore();
     const loading = ref(true);
@@ -172,62 +159,11 @@ export default {
 <style scoped>
 .token-list-container {
   width: 100%;
-  border-radius: var(--cosmic-radius-lg);
+  border-radius: var(--cosmic-radius-lg, 12px);
   overflow: hidden;
-  background: var(--cosmic-glass-bg);
-  backdrop-filter: var(--cosmic-glass-blur);
-  border: var(--cosmic-glass-border);
-}
-
-.token-list-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  border-bottom: var(--cosmic-glass-border);
-}
-
-.token-list-header h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--cosmic-text-primary);
-  margin: 0;
-}
-
-.token-list-actions {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.icon-button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--cosmic-radius-sm);
-  background: rgba(15, 185, 253, 0.05);
-  border: 1px solid rgba(15, 185, 253, 0.1);
-  color: var(--cosmic-text-primary);
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.icon-button:hover {
-  background: rgba(15, 185, 253, 0.1);
-  border-color: rgba(15, 185, 253, 0.2);
-  transform: translateY(-1px);
-}
-
-.icon-button.active {
-  background: rgba(15, 185, 253, 0.15);
-  border-color: rgba(15, 185, 253, 0.3);
-}
-
-.icon-button .icon {
-  font-size: 0.9rem;
-  opacity: 0.8;
+  background: var(--cosmic-glass-bg, rgba(30, 43, 56, 0.65));
+  backdrop-filter: var(--cosmic-glass-blur, blur(8px));
+  border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
 }
 
 .tokens-wrapper {
@@ -236,60 +172,19 @@ export default {
   padding: 1rem;
 }
 
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 1rem;
-  color: var(--cosmic-text-tertiary);
-}
-
-.empty-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
-}
-
-.empty-state p {
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
-}
-
-.button-secondary {
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--cosmic-radius-md);
-  background: var(--cosmic-gradient-blue-alpha);
-  color: white;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.button-secondary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--cosmic-glow-blue-sm);
-}
-
-/* Animation for tokens */
-.token-item-enter-active,
-.token-item-leave-active {
+/* Animation for token list items */
+.token-list-enter-active,
+.token-list-leave-active {
   transition: all 0.3s ease;
 }
 
-.token-item-enter-from,
-.token-item-leave-to {
+.token-list-enter-from {
   opacity: 0;
   transform: translateY(20px);
 }
 
-.token-item-move {
-  transition: transform 0.5s ease;
-}
-
-/* Loading state */
-.token-list-loading {
-  padding: 1rem;
+.token-list-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
 }
 </style>

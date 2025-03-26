@@ -607,7 +607,7 @@ export default {
         });
         
         // Fetch NFTs via the store
-        const nfts = await nftsStore.fetchUserNFTs();
+        const nfts = await nftsStore.fetchNFTs();
         
         if (nfts && nfts.length > 0) {
           // Clear existing items

@@ -2,7 +2,7 @@
   <div class="network-selector">
     <div class="selected-network" @click="toggleNetworkMenu">
       <div class="network-icon" :class="selectedNetwork.id">
-        <img :src="selectedNetwork.icon" :alt="selectedNetwork.name">
+        <img :src="getNetworkIcon(selectedNetwork.id)" :alt="selectedNetwork.name">
       </div>
       <span class="network-name">{{ selectedNetwork.name }}</span>
       <i class="fas fa-chevron-down"></i>
@@ -25,7 +25,7 @@
           @click="selectNetwork(network)"
         >
           <div class="network-icon" :class="network.id">
-            <img :src="network.icon" :alt="network.name">
+            <img :src="getNetworkIcon(network.id)" :alt="network.name">
           </div>
           <div class="network-info">
             <span class="network-name">{{ network.name }}</span>
@@ -55,25 +55,21 @@ export default {
       {
         id: 'icp',
         name: 'Internet Computer',
-        icon: getNetworkIcon('icp'),
         status: 'mainnet'
       },
       {
         id: 'eth',
         name: 'Ethereum',
-        icon: getNetworkIcon('ethereum'),
         status: 'mainnet'
       },
       {
         id: 'sol',
         name: 'Solana',
-        icon: getNetworkIcon('solana'),
         status: 'mainnet'
       },
       {
         id: 'icp-testnet',
         name: 'ICP Testnet',
-        icon: getNetworkIcon('icp'),
         status: 'testnet'
       }
     ]);
@@ -134,7 +130,8 @@ export default {
       availableNetworks,
       selectedNetwork,
       toggleNetworkMenu,
-      selectNetwork
+      selectNetwork,
+      getNetworkIcon
     };
   }
 };

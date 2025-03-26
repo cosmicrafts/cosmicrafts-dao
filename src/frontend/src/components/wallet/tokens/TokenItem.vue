@@ -4,50 +4,51 @@
     :class="{ 'selected': selected }"
     @click="$emit('click')"
   >
-    <div class="token-icon">
-      <img :src="token.logo" :alt="token.name" />
-    </div>
+    <TokenIcon 
+      :symbol="token.symbol" 
+      :icon-src="token.logo" 
+      :alt="token.name" 
+    />
     
-    <div class="token-info">
-      <div class="token-name-row">
-        <span class="token-symbol">{{ token.symbol }}</span>
-        <span class="token-name">{{ token.name }}</span>
-      </div>
-      
-      <div class="token-standard">
-        <span class="token-network">{{ token.standard }}</span>
-      </div>
-    </div>
+    <TokenInfo 
+      :symbol="token.symbol"
+      :name="token.name"
+      :standard="token.standard"
+      :network="token.network"
+    />
     
-    <div class="token-balance">
-      <div class="token-amount">
-        {{ formatTokenAmount(token.balance, token.decimals) }} {{ token.symbol }}
-      </div>
-      
-      <div class="token-value">
-        {{ formatFiatValue(token.valueUsd, currency) }}
-      </div>
-    </div>
+    <TokenBalanceDisplay 
+      :amount="token.balance"
+      :symbol="token.symbol"
+      :value-usd="token.valueUsd"
+      :decimals="token.decimals"
+      :currency="currency"
+    />
     
-    <div class="token-actions">
-      <button class="action-button" @click.stop="$emit('send', token)">
-        <i class="fas fa-arrow-up"></i>
-      </button>
-      
-      <button class="action-button" @click.stop="$emit('receive', token)">
-        <i class="fas fa-arrow-down"></i>
-      </button>
-      
-      <button class="action-button" @click.stop="$emit('swap', token)">
-        <i class="fas fa-exchange-alt"></i>
-      </button>
-    </div>
+    <TokenItemActions
+      :show-buy="showBuyAction"
+      @send="$emit('send', token)"
+      @receive="$emit('receive', token)"
+      @swap="$emit('swap', token)"
+      @buy="$emit('buy', token)"
+    />
   </div>
 </template>
 
 <script>
+import TokenIcon from './TokenIcon.vue';
+import TokenInfo from './TokenInfo.vue';
+import TokenBalanceDisplay from './TokenBalanceDisplay.vue';
+import TokenItemActions from './TokenItemActions.vue';
+
 export default {
   name: 'TokenItem',
+  components: {
+    TokenIcon,
+    TokenInfo,
+    TokenBalanceDisplay,
+    TokenItemActions
+  },
   props: {
     token: {
       type: Object,
@@ -60,60 +61,13 @@ export default {
     currency: {
       type: String,
       default: 'USD'
+    },
+    showBuyAction: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['click', 'send', 'receive', 'swap'],
-  setup() {
-    function formatTokenAmount(amount, decimals) {
-      // Handle BigInt and convert to display format
-      if (typeof amount === 'bigint') {
-        const divisor = BigInt(10) ** BigInt(decimals);
-        const integerPart = amount / divisor;
-        const fractionalPart = amount % divisor;
-        
-        let formatted = integerPart.toString();
-        
-        if (fractionalPart > 0) {
-          // Convert fractional part to string with leading zeros
-          let fractionalStr = fractionalPart.toString().padStart(decimals, '0');
-          
-          // Trim trailing zeros
-          while (fractionalStr.endsWith('0')) {
-            fractionalStr = fractionalStr.slice(0, -1);
-          }
-          
-          if (fractionalStr.length > 0) {
-            // Only show first 4 decimal places
-            formatted += '.' + fractionalStr.slice(0, 4);
-          }
-        }
-        
-        return formatted;
-      }
-      
-      return '0';
-    }
-    
-    function formatFiatValue(value, currencyCode) {
-      if (typeof value !== 'number') {
-        return '—';
-      }
-      
-      const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: currencyCode,
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-      
-      return formatter.format(value);
-    }
-    
-    return {
-      formatTokenAmount,
-      formatFiatValue
-    };
-  }
+  emits: ['click', 'send', 'receive', 'swap', 'buy']
 };
 </script>
 
@@ -122,7 +76,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 1rem;
-  border-radius: var(--cosmic-radius-md);
+  border-radius: var(--cosmic-radius-md, 8px);
   background: rgba(30, 43, 56, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.05);
   margin-bottom: 0.75rem;
@@ -136,7 +90,7 @@ export default {
   background: rgba(30, 43, 56, 0.6);
   border-color: rgba(15, 185, 253, 0.15);
   transform: translateY(-2px);
-  box-shadow: var(--cosmic-shadow-sm);
+  box-shadow: var(--cosmic-shadow-sm, 0 4px 8px rgba(0, 0, 0, 0.15));
 }
 
 .token-item.selected {
@@ -158,109 +112,5 @@ export default {
 
 .token-item:hover::before {
   opacity: 1;
-}
-
-.token-icon {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-right: 1rem;
-  background: rgba(15, 185, 253, 0.05);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--cosmic-shadow-sm);
-}
-
-.token-icon img {
-  width: 2.25rem;
-  height: 2.25rem;
-  object-fit: contain;
-}
-
-.token-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.token-name-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.25rem;
-}
-
-.token-symbol {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--cosmic-text-primary);
-  margin-right: 0.5rem;
-}
-
-.token-name {
-  font-size: 0.9rem;
-  color: var(--cosmic-text-tertiary);
-}
-
-.token-standard {
-  font-size: 0.8rem;
-  color: var(--cosmic-text-tertiary);
-}
-
-.token-balance {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-right: 1.5rem;
-}
-
-.token-amount {
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--cosmic-text-primary);
-  margin-bottom: 0.25rem;
-}
-
-.token-value {
-  font-size: 0.9rem;
-  color: var(--cosmic-text-tertiary);
-}
-
-.token-actions {
-  display: flex;
-  gap: 0.5rem;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.token-item:hover .token-actions {
-  opacity: 1;
-}
-
-.action-button {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 185, 253, 0.1);
-  border: 1px solid rgba(15, 185, 253, 0.2);
-  color: var(--cosmic-blue);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.action-button:hover {
-  background: rgba(15, 185, 253, 0.2);
-  border-color: rgba(15, 185, 253, 0.3);
-  transform: translateY(-2px);
-  box-shadow: var(--cosmic-glow-blue-sm);
-}
-
-.action-button i {
-  font-size: 0.8rem;
 }
 </style>
