@@ -153,116 +153,152 @@
         </div>
       </div>
       
-      <!-- Token List Component -->
-      <div class="token-list-container">
-        <!-- Loading state -->
-        <div v-if="loading" class="token-list-loading">
-          <div v-for="n in 4" :key="n" class="skeleton-item">
-            <div class="skeleton-icon"></div>
-            <div class="skeleton-content">
-              <div class="skeleton-line skeleton-title"></div>
-              <div class="skeleton-line skeleton-subtitle"></div>
+      <!-- Your Assets Section with Tabs -->
+      <div class="assets-container">
+        <!-- Assets Header with Tabs -->
+        <div class="assets-header">
+          <h3>Your Assets</h3>
+          <div class="asset-tabs">
+            <button 
+              class="asset-tab-button" 
+              :class="{'active': activeAssetTab === 'tokens'}"
+              @click="activeAssetTab = 'tokens'"
+            >
+              <span class="tab-icon"><i class="fas fa-coins"></i></span>
+              <span class="tab-text">Tokens</span>
+            </button>
+            <button 
+              class="asset-tab-button" 
+              :class="{'active': activeAssetTab === 'nfts'}"
+              @click="activeAssetTab = 'nfts'"
+            >
+              <span class="tab-icon"><i class="fas fa-image"></i></span>
+              <span class="tab-text">NFTs</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Token List Tab -->
+        <div v-if="activeAssetTab === 'tokens'" class="asset-tab-content">
+          <div class="token-list-container">
+            <!-- Loading state -->
+            <div v-if="loading" class="token-list-loading">
+              <div v-for="n in 4" :key="n" class="skeleton-item">
+                <div class="skeleton-icon"></div>
+                <div class="skeleton-content">
+                  <div class="skeleton-line skeleton-title"></div>
+                  <div class="skeleton-line skeleton-subtitle"></div>
+                </div>
+                <div class="skeleton-amount">
+                  <div class="skeleton-line skeleton-balance"></div>
+                  <div class="skeleton-line skeleton-value"></div>
+                </div>
+              </div>
             </div>
-            <div class="skeleton-amount">
-              <div class="skeleton-line skeleton-balance"></div>
-              <div class="skeleton-line skeleton-value"></div>
+            
+            <!-- Token list when loaded -->
+            <div v-else class="token-list">
+              <!-- Token list header with actions -->
+              <div class="token-list-header">
+                <div class="token-list-actions">
+                  <button 
+                    class="icon-button"
+                    @click="toggleShowZeroBalances"
+                  >
+                    <span class="icon">
+                      <i class="fas fa-eye"></i>
+                    </span>
+                    <span class="text">{{ showZeroBalances ? 'Hide Zero' : 'Show All' }}</span>
+                  </button>
+                  
+                  <button class="icon-button" @click="showAddTokenForm">
+                    <span class="icon">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="text">Add Token</span>
+                  </button>
+                  
+                  <button class="icon-button" @click="showManageTokensForm">
+                    <span class="icon">
+                      <i class="fas fa-sliders-h"></i>
+                    </span>
+                    <span class="text">Manage</span>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Token items -->
+              <div class="tokens-wrapper">
+                <div v-for="token in filteredTokens" :key="token.symbol" 
+                     class="token-item" 
+                     :class="{'selected': token.symbol === currentTokenSymbol}"
+                     @click="handleTokenSelection(token)"
+                >
+                  <div class="token-icon">
+                    <img :src="getTokenIcon(token.symbol)" :alt="token.name" />
+                  </div>
+                  
+                  <div class="token-info">
+                    <div class="token-name-row">
+                      <span class="token-symbol">{{ token.symbol }}</span>
+                      <span class="token-name">{{ token.name }}</span>
+                    </div>
+                    
+                    <div class="token-standard">
+                      <span class="token-network">{{ token.standard }}</span>
+                    </div>
+                  </div>
+                  
+                  <div class="token-balance">
+                    <div class="token-amount">
+                      {{ formatTokenAmount(getTokenBalance(token.symbol), token.decimals) }} {{ token.symbol }}
+                    </div>
+                    
+                    <div class="token-value">
+                      {{ formatFiatValue(token.valueUsd, preferredCurrency) }}
+                    </div>
+                  </div>
+                  
+                  <div class="token-actions">
+                    <button class="action-button" @click.stop="() => handleWalletAction('send')">
+                      <i class="fas fa-arrow-up"></i>
+                    </button>
+                    
+                    <button class="action-button" @click.stop="() => handleWalletAction('receive')">
+                      <i class="fas fa-arrow-down"></i>
+                    </button>
+                    
+                    <button class="action-button" @click.stop="() => handleWalletAction('swap')">
+                      <i class="fas fa-exchange-alt"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                <!-- Empty state -->
+                <div v-if="filteredTokens.length === 0" class="empty-state">
+                  <div class="empty-icon">
+                    <i class="fas fa-coins"></i>
+                  </div>
+                  <p>No tokens found</p>
+                  <button 
+                    class="button-secondary"
+                    @click="showAddTokenForm"
+                  >
+                    Add Token
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         
-        <!-- Token list when loaded -->
-        <div v-else class="token-list">
-          <!-- Token list header with actions -->
-          <div class="token-list-header">
-            <h3>Your Assets</h3>
-            <div class="token-list-actions">
-              <button 
-                class="icon-button"
-                @click="toggleShowZeroBalances"
-              >
-                <span class="icon">
-                  <i class="fas fa-eye"></i>
-                </span>
-                <span class="text">{{ showZeroBalances ? 'Hide Zero' : 'Show All' }}</span>
-              </button>
-              
-              <button class="icon-button" @click="showAddTokenForm">
-                <span class="icon">
-                  <i class="fas fa-plus"></i>
-                </span>
-                <span class="text">Add Token</span>
-              </button>
-              
-              <button class="icon-button" @click="showManageTokensForm">
-                <span class="icon">
-                  <i class="fas fa-sliders-h"></i>
-                </span>
-                <span class="text">Manage</span>
-              </button>
-            </div>
-          </div>
-          
-          <!-- Token items -->
-          <div class="tokens-wrapper">
-            <div v-for="token in filteredTokens" :key="token.symbol" 
-                 class="token-item" 
-                 :class="{'selected': token.symbol === currentTokenSymbol}"
-                 @click="handleTokenSelection(token)"
-            >
-              <div class="token-icon">
-                <img :src="getTokenIcon(token.symbol)" :alt="token.name" />
-              </div>
-              
-              <div class="token-info">
-                <div class="token-name-row">
-                  <span class="token-symbol">{{ token.symbol }}</span>
-                  <span class="token-name">{{ token.name }}</span>
-                </div>
-                
-                <div class="token-standard">
-                  <span class="token-network">{{ token.standard }}</span>
-                </div>
-              </div>
-              
-              <div class="token-balance">
-                <div class="token-amount">
-                  {{ formatTokenAmount(getTokenBalance(token.symbol), token.decimals) }} {{ token.symbol }}
-                </div>
-                
-                <div class="token-value">
-                  {{ formatFiatValue(token.valueUsd, preferredCurrency) }}
-                </div>
-              </div>
-              
-              <div class="token-actions">
-                <button class="action-button" @click.stop="() => handleWalletAction('send')">
-                  <i class="fas fa-arrow-up"></i>
-                </button>
-                
-                <button class="action-button" @click.stop="() => handleWalletAction('receive')">
-                  <i class="fas fa-arrow-down"></i>
-                </button>
-                
-                <button class="action-button" @click.stop="() => handleWalletAction('swap')">
-                  <i class="fas fa-exchange-alt"></i>
-                </button>
-              </div>
-            </div>
-            
-            <!-- Empty state -->
-            <div v-if="filteredTokens.length === 0" class="empty-state">
-              <div class="empty-icon">
-                <i class="fas fa-coins"></i>
-              </div>
-              <p>No tokens found</p>
-              <button 
-                class="button-secondary"
-                @click="showAddTokenForm"
-              >
-                Add Token
-              </button>
-            </div>
-          </div>
+        <!-- NFT Tab -->
+        <div v-if="activeAssetTab === 'nfts'" class="asset-tab-content">
+          <NFTCollection
+            :categories="nftCategories"
+            v-model="activeCollection"
+            @open-chest="openChest"
+          />
         </div>
       </div>
       
@@ -301,14 +337,6 @@
         v-if="activeForm === 'buy'"
         @close="activeForm = null"
         @purchase-complete="handlePurchaseComplete"
-      />
-      
-      <!-- NFT Collection (only show if user has NFTs) -->
-      <NFTCollection
-        v-if="showNFTSection"
-        :categories="nftCategories"
-        v-model="activeCollection"
-        @open-chest="openChest"
       />
       
       <!-- Chest Opening Modal (moved chest logic to its own component) -->
@@ -399,6 +427,9 @@ export default {
     ]);
     const activeCollection = ref('all');
     const showNFTSection = ref(false);
+    
+    // Asset tabs state
+    const activeAssetTab = ref('tokens');
     
     // Chest opening state
     const isOpeningChest = ref(false);
@@ -631,15 +662,20 @@ export default {
             }
           });
           
-          showNFTSection.value = true;
           addLog(`NFT collection loaded successfully`, 'success');
         } else {
-          showNFTSection.value = false;
+          // Just log the message, but still show the NFT section
           addLog('No NFTs found in your collection', 'info');
         }
+        
+        // Always show NFT section, even when no NFTs are found
+        showNFTSection.value = true;
       } catch (error) {
         console.error('Error in fetchUserNFTs:', error);
         addLog(`Error fetching NFTs: ${error.message}`, 'error');
+        
+        // Still show NFT section, even on error
+        showNFTSection.value = true;
       } finally {
         // Set all categories to not loading
         nftCategories.value.forEach(category => {
@@ -1067,6 +1103,7 @@ export default {
       showNetworksMenu,
       showCurrenciesMenu,
       showZeroBalances,
+      activeAssetTab,
       
       // Methods
       handleWalletAction,
@@ -1855,6 +1892,96 @@ export default {
   
   .accounts-menu {
     width: 100%;
+  }
+}
+
+/* Add CSS for Asset Tabs */
+.assets-container {
+  width: 100%;
+  border-radius: var(--cosmic-radius-lg, 12px);
+  overflow: hidden;
+  background: var(--cosmic-glass-bg, rgba(30, 43, 56, 0.65));
+  backdrop-filter: var(--cosmic-glass-blur, blur(8px));
+  border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+  margin-bottom: 1rem;
+}
+
+.assets-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+}
+
+.assets-header h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #ffffff);
+  margin: 0;
+}
+
+.asset-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.asset-tab-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  border-radius: var(--cosmic-radius-md, 8px);
+  color: var(--color-text-tertiary, rgba(255, 255, 255, 0.7));
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.asset-tab-button:hover {
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.2);
+  color: var(--color-text-primary, #ffffff);
+}
+
+.asset-tab-button.active {
+  background: rgba(15, 185, 253, 0.15);
+  border-color: rgba(15, 185, 253, 0.3);
+  color: var(--color-text-primary, #ffffff);
+}
+
+.tab-icon {
+  font-size: 0.9rem;
+}
+
+.asset-tab-content {
+  padding: 0;
+}
+
+/* Remove the border and background from the token-list-container since it's now inside the assets container */
+.token-list-container {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+/* Responsive styles for asset tabs */
+@media (max-width: 768px) {
+  .assets-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .asset-tabs {
+    width: 100%;
+  }
+  
+  .asset-tab-button {
+    flex: 1;
+    justify-content: center;
   }
 }
 </style> 
