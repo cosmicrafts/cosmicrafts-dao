@@ -88,10 +88,14 @@
   /* Z-index Layers */
   --cosmic-z-background: -1;
   --cosmic-z-default: 1;
+  --cosmic-z-token-list: 5;
+  --cosmic-z-account-header: 10;
   --cosmic-z-header: 12;
-  --cosmic-z-dropdown: 20;
-  --cosmic-z-modal: 30;
-  --cosmic-z-tooltip: 40;
+  --cosmic-z-backdrop: 999;
+  --cosmic-z-dropdown: 1000;
+  --cosmic-z-modal: 1500;
+  --cosmic-z-tooltip: 2000;
+  --cosmic-z-notification: 2500;
 }
 
 /* ===== Glassy Components ===== */

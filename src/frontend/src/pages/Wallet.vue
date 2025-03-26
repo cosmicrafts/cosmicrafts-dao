@@ -1144,17 +1144,29 @@ export default {
 </script>
 
 <style scoped>
+/* Add CSS variables for z-index hierarchy */
+:root {
+  --z-index-base: 1;
+  --z-index-token-list: 5;
+  --z-index-account-header: 10;
+  --z-index-dropdown-menu: 1000;
+  --z-index-modal: 1500;
+  --z-index-notification: 2000;
+}
+
 .cosmic-wallet-container {
   max-width: 800px;
   margin: 0 auto;
   padding-top: 7rem; /* Account for the header with a bit extra */
   color: var(--color-text-primary, #ffffff);
+  position: relative;
 }
 
 .cosmic-wallet {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
 }
 
 /* Account Header Styles */
@@ -1169,6 +1181,7 @@ export default {
   margin-bottom: 1rem;
   position: relative;
   backdrop-filter: var(--cosmic-glass-blur, blur(8px));
+  z-index: 100; /* Higher than assets container */
 }
 
 .account-selector {
@@ -1249,7 +1262,7 @@ export default {
   border-radius: var(--cosmic-radius-md, 8px);
   border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
   box-shadow: var(--cosmic-shadow-md, 0 8px 16px rgba(0, 0, 0, 0.2));
-  z-index: 10;
+  z-index: 1000; /* Very high z-index */
   overflow: hidden;
   backdrop-filter: var(--cosmic-glass-blur, blur(8px));
 }
@@ -1421,7 +1434,7 @@ export default {
   border-radius: var(--cosmic-radius-md, 8px);
   border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
   box-shadow: var(--cosmic-shadow-md, 0 8px 16px rgba(0, 0, 0, 0.2));
-  z-index: 10;
+  z-index: 1000; /* Very high z-index */
   overflow: hidden;
   backdrop-filter: var(--cosmic-glass-blur, blur(8px));
 }
@@ -1515,7 +1528,7 @@ export default {
   border-radius: var(--cosmic-radius-md, 8px);
   border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
   box-shadow: var(--cosmic-shadow-md, 0 8px 16px rgba(0, 0, 0, 0.2));
-  z-index: 10;
+  z-index: 1000; /* Very high z-index */
   overflow: hidden;
   backdrop-filter: var(--cosmic-glass-blur, blur(8px));
 }
@@ -1904,6 +1917,8 @@ export default {
   backdrop-filter: var(--cosmic-glass-blur, blur(8px));
   border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
   margin-bottom: 1rem;
+  position: relative;
+  z-index: 1; /* Lowest z-index */
 }
 
 .assets-header {

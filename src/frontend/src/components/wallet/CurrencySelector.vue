@@ -147,6 +147,16 @@ export default {
 </script>
 
 <style scoped>
+/* Z-index variables */
+:root {
+  --z-index-base: 1;
+  --z-index-token-list: 5;
+  --z-index-account-header: 10;
+  --z-index-dropdown-menu: 1000;
+  --z-index-backdrop: 999;
+  --z-index-modal: 1500;
+}
+
 .currency-selector {
   position: relative;
 }
@@ -191,7 +201,7 @@ export default {
   box-shadow: var(--cosmic-shadow-md);
   backdrop-filter: var(--cosmic-glass-blur);
   border: var(--cosmic-glass-border-blue);
-  z-index: 20;
+  z-index: var(--z-index-dropdown-menu);
   overflow: hidden;
 }
 

@@ -40,25 +40,32 @@
       <CurrencySelector @currency-changed="handleCurrencyChange" />
     </div>
     
-    <!-- Account ID info -->
+    <!-- Account ID info with toggle for mobile -->
     <div class="account-id-info">
-      <div class="id-section">
-        <div class="id-label">Principal ID</div>
-        <div class="id-value">
-          <span class="id-text">{{ formatId(principalId) }}</span>
-          <button class="copy-btn" @click="copyToClipboard(principalId, 'principal')">
-            <i class="fas fa-copy"></i>
-          </button>
-        </div>
+      <div class="id-toggle" @click="toggleIdSection">
+        <span>Account IDs</span>
+        <i :class="['fas', idSectionExpanded ? 'fa-chevron-up' : 'fa-chevron-down']"></i>
       </div>
       
-      <div class="id-section">
-        <div class="id-label">Account ID</div>
-        <div class="id-value">
-          <span class="id-text">{{ formatId(accountId) }}</span>
-          <button class="copy-btn" @click="copyToClipboard(accountId, 'account')">
-            <i class="fas fa-copy"></i>
-          </button>
+      <div class="id-sections" :class="{ 'expanded': idSectionExpanded }">
+        <div class="id-section">
+          <div class="id-label">Principal ID</div>
+          <div class="id-value">
+            <span class="id-text">{{ formatId(principalId) }}</span>
+            <button class="copy-btn" @click="copyToClipboard(principalId, 'principal')">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="id-section">
+          <div class="id-label">Account ID</div>
+          <div class="id-value">
+            <span class="id-text">{{ formatId(accountId) }}</span>
+            <button class="copy-btn" @click="copyToClipboard(accountId, 'account')">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -95,6 +102,13 @@
       </button>
     </div>
   </div>
+  
+  <!-- Backdrop overlay for mobile -->
+  <div 
+    v-if="showAccountMenu" 
+    class="menu-backdrop"
+    @click="toggleAccountMenu"
+  ></div>
 </template>
 
 <script>
@@ -208,6 +222,13 @@ export default {
     // Methods
     const toggleAccountMenu = () => {
       showAccountMenu.value = !showAccountMenu.value;
+      
+      // If opening menu on mobile, prevent body scrolling
+      if (showAccountMenu.value && window.innerWidth <= 480) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
     };
     
     const selectAccount = (index) => {
@@ -379,11 +400,16 @@ export default {
     
     // Initial setup
     onMounted(() => {
-      document.addEventListener('click', (event) => {
-        if (showAccountMenu.value && !event.target.closest('.account-selector')) {
+      const handleClickOutside = (event) => {
+        if (showAccountMenu.value && 
+            !event.target.closest('.account-selector') && 
+            !event.target.closest('.account-menu')) {
           showAccountMenu.value = false;
+          document.body.style.overflow = '';
         }
-      });
+      };
+      
+      document.addEventListener('click', handleClickOutside);
       
       // Load principal & account IDs from auth store
       if (authStore.isAuthenticated()) {
@@ -408,7 +434,8 @@ export default {
       // Clean up on component unmount
       return () => {
         clearInterval(intervalId);
-        document.removeEventListener('click', () => {});
+        document.removeEventListener('click', handleClickOutside);
+        document.body.style.overflow = ''; // Reset overflow if component unmounts
       };
     });
     
@@ -421,6 +448,16 @@ export default {
         }
       }
     );
+    
+    // Add to setup function
+    const idSectionExpanded = ref(true);
+
+    const toggleIdSection = () => {
+      // Only toggle on mobile
+      if (window.innerWidth <= 480) {
+        idSectionExpanded.value = !idSectionExpanded.value;
+      }
+    };
     
     return {
       accounts,
@@ -448,13 +485,25 @@ export default {
       handleAction,
       handleCurrencyChange,
       handleNetworkChange,
-      getNetworkIcon
+      getNetworkIcon,
+      idSectionExpanded,
+      toggleIdSection
     };
   }
 };
 </script>
 
 <style scoped>
+/* Z-index variables */
+:root {
+  --z-index-base: 1;
+  --z-index-token-list: 5;
+  --z-index-account-header: 10;
+  --z-index-dropdown-menu: 1000;
+  --z-index-backdrop: 999;
+  --z-index-modal: 1500;
+}
+
 .account-header {
   background: var(--cosmic-glass-bg-darker);
   border-radius: var(--cosmic-radius-lg);
@@ -465,7 +514,7 @@ export default {
   width: 100%;
   box-shadow: var(--cosmic-shadow-sm);
   border: var(--cosmic-glass-border-blue);
-  z-index: 100;
+  z-index: var(--z-index-account-header);
 }
 
 .header-top {
@@ -525,12 +574,14 @@ export default {
   top: 100%;
   left: 0;
   width: 100%;
+  max-height: 60vh;
+  overflow-y: auto;
   background: var(--cosmic-glass-bg-darker);
   border-radius: var(--cosmic-radius-md);
   box-shadow: var(--cosmic-shadow-md);
   backdrop-filter: var(--cosmic-glass-blur);
   border: var(--cosmic-glass-border-blue);
-  z-index: 30;
+  z-index: var(--z-index-dropdown-menu);
   padding: 0.5rem;
   margin-top: 0.5rem;
 }
@@ -581,6 +632,27 @@ export default {
   padding: 0.75rem 1rem;
 }
 
+.id-toggle {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  transition: color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.id-toggle:active {
+  color: var(--cosmic-blue);
+}
+
+.id-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .id-section {
   display: flex;
   flex-direction: column;
@@ -615,11 +687,17 @@ export default {
   justify-content: center;
   border-radius: 50%;
   transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .copy-btn:hover {
   color: var(--cosmic-blue);
   background-color: rgba(15, 185, 253, 0.1);
+}
+
+.copy-btn:active {
+  transform: scale(0.95);
+  background-color: rgba(15, 185, 253, 0.2);
 }
 
 /* Balance styling */
@@ -668,12 +746,19 @@ export default {
   padding: 0.75rem 0;
   cursor: pointer;
   transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent; /* Remove highlight on touch */
 }
 
 .action-button:hover {
   background-color: rgba(15, 185, 253, 0.1);
   transform: translateY(-2px);
   box-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.action-button:active {
+  background-color: rgba(15, 185, 253, 0.15);
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .action-button i {
@@ -719,5 +804,155 @@ export default {
   .main-balance {
     font-size: 2rem;
   }
+}
+
+/* Add enhanced mobile styles for smaller screens */
+@media (max-width: 480px) {
+  .account-header {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .header-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .account-selector {
+    margin: 0;
+    width: 100%;
+  }
+  
+  .account-label {
+    justify-content: space-between;
+    padding: 0.75rem;
+  }
+  
+  .id-toggle {
+    display: flex;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--cosmic-text-secondary);
+  }
+  
+  .id-toggle:active {
+    opacity: 0.7;
+  }
+  
+  .id-sections {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+  }
+  
+  .id-sections.expanded {
+    max-height: 200px;
+    opacity: 1;
+  }
+  
+  .id-section {
+    margin-top: 0.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .id-value {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+    background-color: rgba(15, 185, 253, 0.05);
+    padding: 0.5rem;
+    border-radius: var(--cosmic-radius-sm);
+  }
+  
+  .id-text {
+    max-width: 85%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .copy-btn {
+    background-color: rgba(15, 185, 253, 0.1);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+  }
+  
+  .copy-btn:active {
+    transform: scale(0.9);
+  }
+  
+  .main-balance {
+    font-size: 1.75rem;
+  }
+  
+  .balance-change {
+    font-size: 0.8rem;
+  }
+  
+  .action-buttons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  
+  .action-button {
+    padding: 1rem 0;
+    touch-action: manipulation; /* Improves touch response */
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .action-button:active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(15, 185, 253, 0.15);
+    opacity: 0.5;
+    border-radius: var(--cosmic-radius-md);
+    pointer-events: none;
+  }
+  
+  .account-menu {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 75vh;
+    margin-top: 0;
+    border-radius: var(--cosmic-radius-md) var(--cosmic-radius-md) 0 0;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .menu-header {
+    padding: 0.75rem;
+  }
+  
+  .account-option {
+    padding: 0.85rem 0.75rem;
+  }
+  
+  .menu-backdrop {
+    display: block;
+  }
+}
+
+.menu-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-index-backdrop);
+  cursor: pointer;
 }
 </style> 

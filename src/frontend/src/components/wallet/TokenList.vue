@@ -1,5 +1,5 @@
 <template>
-  <div class="token-list">
+  <div class="token-list-container">
     <div v-if="isLoading" class="loading-state">
       <div class="loading-spinner"></div>
       <span>Loading tokens...</span>
@@ -294,9 +294,15 @@ export default {
 </script>
 
 <style scoped>
-.token-list {
+.token-list-container {
   width: 100%;
-  margin-top: 1rem;
+  border-radius: var(--cosmic-radius-lg, 12px);
+  overflow: hidden;
+  background: var(--cosmic-glass-bg, rgba(30, 43, 56, 0.65));
+  backdrop-filter: var(--cosmic-glass-blur, blur(8px));
+  border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+  position: relative;
+  z-index: 5; /* Lower z-index than the account menu */
 }
 
 .token-item {
