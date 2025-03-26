@@ -1,126 +1,137 @@
 <template>
-  <div v-if="isVisible" class="chest-modal-backdrop" @click="$emit('close')">
-    <div class="chest-modal-container" @click.stop>
-      <!-- Header -->
-      <div class="chest-modal-header">
-        <h3>{{ chest ? chest.name : $t('wallet.openingChest') }}</h3>
-        <button class="close-button" @click="$emit('close')">
-          <i class="fas fa-times"></i>
-        </button>
+  <div v-if="isVisible" class="chest-modal-backdrop" @click.self="closeModal">
+    <div class="chest-modal">
+      <!-- Stage 1: Opening Animation -->
+      <div v-if="stage === 1" class="chest-opening-stage">
+        <div class="chest-container">
+          <img :src="chest.image" alt="Chest" class="chest-image pulse-glow" />
+          <div class="chest-name">{{ chest.name }}</div>
+          <div class="opening-text">Opening chest...</div>
+          <div class="magic-particles"></div>
+        </div>
       </div>
       
-      <!-- Content -->
-      <div class="chest-modal-content">
-        <!-- Stage 1: Opening Animation -->
-        <div v-if="stage === 1" class="chest-opening-animation">
-          <div class="chest-image">
-            <img :src="chest?.image" :alt="chest?.name" />
-          </div>
-          <div class="opening-text">{{ $t('wallet.openingChest') }}</div>
-          <div class="opening-spinner"></div>
-        </div>
+      <!-- Stage 2: Rewards Display -->
+      <div v-if="stage === 2" class="rewards-stage">
+        <h2 class="rewards-title">Chest Rewards</h2>
         
-        <!-- Stage 2: Rewards Display -->
-        <div v-else-if="stage === 2" class="chest-rewards">
-          <h4>{{ $t('wallet.chestRewards') }}</h4>
-          
-          <div v-if="rewards.length === 0" class="no-rewards">
-            {{ $t('wallet.noRewardsFound') }}
-          </div>
-          
-          <div v-else class="rewards-grid">
-            <div 
-              v-for="(reward, index) in rewards" 
-              :key="index"
-              class="reward-card"
-              :class="{ revealed: reward.revealed }"
-              @click="$emit('reveal-reward', index)"
-            >
-              <div class="reward-front">
-                <div class="reward-image">
-                  <img :src="reward.image" :alt="reward.name" />
+        <div class="rewards-container">
+          <div 
+            v-for="(reward, index) in rewards" 
+            :key="index"
+            class="reward-item"
+            :class="{ revealed: reward.revealed }"
+            @click="revealReward(index)"
+          >
+            <div class="reward-card-front">
+              <div class="tap-to-reveal">Tap to reveal</div>
+            </div>
+            <div class="reward-card-back">
+              <img :src="reward.image" :alt="reward.name" class="reward-image" />
+              <div class="reward-details">
+                <div class="reward-name">{{ reward.name }}</div>
+                <div v-if="reward.quantity" class="reward-quantity">
+                  × {{ reward.quantity }}
                 </div>
-                <div class="reward-info">
-                  <div class="reward-name">{{ reward.name }}</div>
-                  <div v-if="reward.quantity > 1" class="reward-quantity">x{{ reward.quantity }}</div>
-                  <div v-if="reward.rarity" class="reward-rarity" :class="'rarity-' + reward.rarity">
-                    {{ getRarityLabel(reward.rarity) }}
-                  </div>
-                </div>
-              </div>
-              
-              <div class="reward-back">
-                <div class="tap-to-reveal">
-                  {{ $t('wallet.tapToReveal') }}
+                <div class="reward-rarity" :class="`rarity-${reward.rarity || 1}`">
+                  {{ getRarityName(reward.rarity || 1) }}
                 </div>
               </div>
             </div>
           </div>
-          
-          <div class="chest-action-buttons">
-            <button class="close-chest-button" @click="$emit('close')">
-              {{ $t('wallet.closeDialog') }}
-            </button>
-          </div>
         </div>
         
-        <!-- Error State -->
-        <div v-else-if="error" class="chest-error">
-          <div class="error-icon">
-            <i class="fas fa-exclamation-triangle"></i>
-          </div>
-          <div class="error-message">{{ error }}</div>
-          <button class="close-chest-button" @click="$emit('close')">
-            {{ $t('wallet.closeDialog') }}
-          </button>
+        <button class="close-button" @click="closeModal">Continue</button>
+      </div>
+      
+      <!-- Error State -->
+      <div v-if="error" class="error-state">
+        <div class="error-icon">
+          <i class="fas fa-exclamation-triangle"></i>
         </div>
+        <div class="error-message">{{ error }}</div>
+        <button class="close-button" @click="closeModal">Close</button>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-// Define props
-const props = defineProps({
-  isVisible: {
-    type: Boolean,
-    default: false
+<script>
+import { watch } from 'vue';
+
+export default {
+  name: 'ChestOpeningModal',
+  props: {
+    isVisible: {
+      type: Boolean,
+      default: false
+    },
+    chest: {
+      type: Object,
+      default: () => null
+    },
+    rewards: {
+      type: Array,
+      default: () => []
+    },
+    stage: {
+      type: Number,
+      default: 0
+    },
+    error: {
+      type: String,
+      default: null
+    }
   },
-  chest: {
-    type: Object,
-    default: null
-  },
-  rewards: {
-    type: Array,
-    default: () => []
-  },
-  stage: {
-    type: Number,
-    default: 1
-  },
-  error: {
-    type: String,
-    default: null
+  emits: ['close', 'reveal-reward'],
+  setup(props, { emit }) {
+    // Auto-reveal rewards after a delay
+    watch(
+      () => props.stage,
+      (newStage) => {
+        if (newStage === 2 && props.rewards.length > 0) {
+          // Auto-reveal the rewards one by one with delays
+          props.rewards.forEach((_, index) => {
+            setTimeout(() => {
+              emit('reveal-reward', index);
+            }, 1000 + index * 500); // Start after 1s, then 0.5s between reveals
+          });
+        }
+      }
+    );
+    
+    // Get rarity name based on rarity level
+    const getRarityName = (rarity) => {
+      const rarityNames = {
+        1: 'Common',
+        2: 'Uncommon',
+        3: 'Rare',
+        4: 'Epic',
+        5: 'Legendary',
+        6: 'Mythic'
+      };
+      return rarityNames[rarity] || 'Common';
+    };
+    
+    // Reveal a specific reward
+    const revealReward = (index) => {
+      if (props.rewards[index] && !props.rewards[index].revealed) {
+        emit('reveal-reward', index);
+      }
+    };
+    
+    // Close the modal
+    const closeModal = () => {
+      emit('close');
+    };
+    
+    return {
+      getRarityName,
+      revealReward,
+      closeModal
+    };
   }
-});
-
-// Define emits
-const emit = defineEmits(['close', 'reveal-reward']);
-
-// Get rarity label from numeric value
-function getRarityLabel(rarity) {
-  const rarityMap = {
-    1: 'Common',
-    2: 'Uncommon',
-    3: 'Rare',
-    4: 'Epic',
-    5: 'Legendary',
-    6: 'Mythic',
-    7: 'Divine'
-  };
-  
-  return rarityMap[rarity] || 'Common';
-}
+};
 </script>
 
 <style scoped>
@@ -131,308 +142,362 @@ function getRarityLabel(rarity) {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 9999;
-  backdrop-filter: blur(5px);
+  justify-content: center;
+  z-index: 1000;
 }
 
-.chest-modal-container {
+.chest-modal {
+  background: var(--cosmic-glass-bg-darker);
+  border-radius: var(--cosmic-radius-lg);
+  box-shadow: var(--cosmic-shadow-lg), var(--cosmic-glow-blue-md);
+  max-width: 600px;
   width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  background: var(--color-bg-secondary, #16213e);
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--color-border-highlight, rgba(255, 255, 255, 0.2));
+  min-height: 400px;
+  padding: 2rem;
+  position: relative;
+  border: var(--cosmic-glass-border-blue);
+  backdrop-filter: var(--cosmic-glass-blur);
+  overflow: hidden;
+}
+
+/* Opening Stage */
+.chest-opening-stage {
   display: flex;
   flex-direction: column;
-}
-
-.chest-modal-header {
-  padding: 16px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.1));
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.chest-modal-header h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: var(--color-text-primary, #ffffff);
-}
-
-.close-button {
-  background: none;
-  border: none;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.7));
-  cursor: pointer;
-  font-size: 1.2rem;
-  padding: 4px;
-  display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s;
+  height: 100%;
+  text-align: center;
 }
 
-.close-button:hover {
-  color: var(--color-text-primary, #ffffff);
-}
-
-.chest-modal-content {
-  padding: 20px;
-  flex: 1;
-}
-
-/* Opening Animation */
-.chest-opening-animation {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  padding: 30px 0;
+.chest-container {
+  position: relative;
 }
 
 .chest-image {
   width: 150px;
   height: 150px;
-  animation: pulse 2s infinite;
+  object-fit: contain;
+  margin-bottom: 1rem;
 }
 
-.chest-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.pulse-glow {
+  animation: pulse-glow 2s infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% {
+    filter: drop-shadow(0 0 5px rgba(15, 185, 253, 0.5));
+    transform: scale(1);
+  }
+  100% {
+    filter: drop-shadow(0 0 20px rgba(15, 185, 253, 0.8));
+    transform: scale(1.05);
+  }
+}
+
+.chest-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--cosmic-text-primary);
 }
 
 .opening-text {
-  font-size: 1.2rem;
-  color: var(--color-text-primary, #ffffff);
-  text-align: center;
+  font-size: 1rem;
+  color: var(--cosmic-text-secondary);
+  margin-bottom: 1rem;
+  animation: fade 1s infinite alternate;
 }
 
-.opening-spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--color-accent, #4169e1);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+@keyframes fade {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
 }
 
-/* Rewards Display */
-.chest-rewards {
+.magic-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: 
+    radial-gradient(circle at 20% 35%, rgba(15, 185, 253, 0.4) 0%, transparent 10%),
+    radial-gradient(circle at 80% 25%, rgba(255, 145, 0, 0.3) 0%, transparent 15%),
+    radial-gradient(circle at 40% 80%, rgba(157, 53, 191, 0.3) 0%, transparent 12%),
+    radial-gradient(circle at 65% 60%, rgba(15, 185, 253, 0.4) 0%, transparent 8%);
+  filter: blur(3px);
+  opacity: 0.7;
+  animation: particles-float 8s infinite ease-in-out;
+}
+
+@keyframes particles-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.7;
+  }
+  25% {
+    transform: translateY(-10px) translateX(5px) scale(1.1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(0) translateX(-8px) scale(0.95);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateY(8px) translateX(3px) scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+/* Rewards Stage */
+.rewards-stage {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-.chest-rewards h4 {
-  font-size: 1.1rem;
-  margin: 0;
-  color: var(--color-text-primary, #ffffff);
+  align-items: center;
   text-align: center;
 }
 
-.no-rewards {
-  padding: 30px 0;
-  text-align: center;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.7));
+.rewards-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: var(--cosmic-text-primary);
 }
 
-.rewards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 16px;
-  margin: 20px 0;
+.rewards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
-.reward-card {
-  position: relative;
-  height: 160px;
+.reward-item {
+  width: 150px;
+  height: 200px;
   perspective: 1000px;
   cursor: pointer;
+  position: relative;
+  transition: transform 0.3s;
 }
 
-.reward-front, .reward-back {
+.reward-item:hover {
+  transform: translateY(-5px);
+}
+
+.reward-card-front,
+.reward-card-back {
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  transition: transform 0.6s;
-  border-radius: 8px;
+  border-radius: var(--cosmic-radius-md);
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
   overflow: hidden;
 }
 
-.reward-front {
-  background: var(--color-bg-tertiary, rgba(0, 0, 0, 0.2));
-  border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.1));
-  transform: rotateY(180deg);
-  display: flex;
-  flex-direction: column;
-}
-
-.reward-back {
-  background: linear-gradient(135deg, #4a69bd, #1e3799);
-  border: 1px solid var(--color-accent, #4169e1);
+.reward-card-front {
+  background: linear-gradient(135deg, rgba(15, 185, 253, 0.1) 0%, rgba(157, 53, 191, 0.1) 100%);
+  border: 2px solid rgba(15, 185, 253, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: rotateY(0deg);
+  transform: rotateY(0);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.reward-card.revealed .reward-front {
-  transform: rotateY(0deg);
+.reward-card-back {
+  background: var(--cosmic-glass-bg);
+  border: 2px solid rgba(15, 185, 253, 0.3);
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.reward-card.revealed .reward-back {
+.reward-item.revealed .reward-card-front {
   transform: rotateY(180deg);
 }
 
-.reward-image {
-  height: 100px;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.reward-image img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.reward-info {
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.3);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 4px;
-}
-
-.reward-name {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-text-primary, #ffffff);
-}
-
-.reward-quantity {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--color-text-primary, #ffffff);
-}
-
-.reward-rarity {
-  font-size: 0.7rem;
-  font-weight: 600;
+.reward-item.revealed .reward-card-back {
+  transform: rotateY(0);
 }
 
 .tap-to-reveal {
   font-size: 0.9rem;
   font-weight: 600;
-  color: white;
-  text-align: center;
-  padding: 0 10px;
-}
-
-.chest-action-buttons {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.close-chest-button {
-  padding: 10px 20px;
-  background: var(--color-accent, #4169e1);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.close-chest-button:hover {
-  background-color: var(--color-accent-hover, #5a7ae2);
-}
-
-/* Error State */
-.chest-error {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  padding: 30px 0;
-}
-
-.error-icon {
-  font-size: 3rem;
-  color: var(--color-error, #ef4444);
-}
-
-.error-message {
-  text-align: center;
-  color: var(--color-text-primary, #ffffff);
-  max-width: 300px;
-}
-
-/* Rarity Colors */
-.rarity-1 {
-  color: #8E8E8E; /* Common */
-}
-
-.rarity-2 {
-  color: #69D32C; /* Uncommon */
-}
-
-.rarity-3 {
-  color: #3689FF; /* Rare */
-}
-
-.rarity-4 {
-  color: #A82CFF; /* Epic */
-}
-
-.rarity-5 {
-  color: #FF9426; /* Legendary */
-}
-
-.rarity-6 {
-  color: #FF4776; /* Mythic */
-}
-
-.rarity-7 {
-  color: #FFD700; /* Divine */
-}
-
-/* Animations */
-@keyframes spin {
-  to { transform: rotate(360deg); }
+  color: var(--cosmic-blue);
+  animation: pulse 1.5s infinite alternate;
 }
 
 @keyframes pulse {
-  0% {
-    transform: scale(1);
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+.reward-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.reward-name {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  color: var(--cosmic-text-primary);
+}
+
+.reward-quantity {
+  color: var(--cosmic-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.reward-rarity {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.rarity-1 {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.rarity-2 {
+  color: #38b000;
+  background-color: rgba(56, 176, 0, 0.1);
+}
+
+.rarity-3 {
+  color: #3a86ff;
+  background-color: rgba(58, 134, 255, 0.1);
+}
+
+.rarity-4 {
+  color: #8338ec;
+  background-color: rgba(131, 56, 236, 0.1);
+}
+
+.rarity-5 {
+  color: #ff9e00;
+  background-color: rgba(255, 158, 0, 0.1);
+}
+
+.rarity-6 {
+  color: #ff006e;
+  background-color: rgba(255, 0, 110, 0.1);
+}
+
+/* Error State */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+.error-icon {
+  color: #ff4b4b;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  color: var(--cosmic-text-secondary);
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  max-width: 80%;
+}
+
+/* Common Button Styles */
+.close-button {
+  padding: 0.75rem 2rem;
+  background-color: rgba(15, 185, 253, 0.1);
+  color: var(--cosmic-blue);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  border-radius: var(--cosmic-radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.close-button:hover {
+  background-color: rgba(15, 185, 253, 0.15);
+  transform: translateY(-2px);
+  box-shadow: var(--cosmic-glow-blue-sm);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .chest-modal {
+    padding: 1.5rem;
+    width: 95%;
   }
-  50% {
-    transform: scale(1.05);
+  
+  .rewards-container {
+    gap: 0.75rem;
   }
-  100% {
-    transform: scale(1);
+  
+  .reward-item {
+    width: 130px;
+    height: 180px;
+  }
+  
+  .reward-image {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .reward-name {
+    font-size: 0.9rem;
+  }
+  
+  .chest-image {
+    width: 120px;
+    height: 120px;
   }
 }
 
 @media (max-width: 480px) {
-  .rewards-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .chest-modal {
+    padding: 1rem;
+  }
+  
+  .reward-item {
+    width: 110px;
+    height: 160px;
+  }
+  
+  .reward-image {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .reward-name {
+    font-size: 0.8rem;
+  }
+  
+  .chest-image {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .rewards-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
   }
 }
 </style> 

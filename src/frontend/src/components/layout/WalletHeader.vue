@@ -1,7 +1,7 @@
 <template>
   <div class="wallet-header cosmic-panel">
     <div class="wallet-title">
-      <h1>{{ $t('wallet.title') }}</h1>
+      <h1 class="cosmic-title">{{ $t('wallet.title') }}</h1>
       <div class="wallet-subtitle">{{ $t('wallet.subtitle') }}</div>
     </div>
 
@@ -10,7 +10,7 @@
         <div class="id-label">
           <span>{{ principalMode ? $t('wallet.principalId') : $t('wallet.accountId') }}</span>
           <button 
-            class="mode-toggle" 
+            class="mode-toggle cosmic-button-minimal" 
             @click="$emit('update:modelValue', !principalMode)"
             :title="principalMode ? $t('wallet.showAccountId') : $t('wallet.showPrincipalId')"
           >
@@ -76,12 +76,35 @@ function copyId() {
 
 <style scoped>
 .wallet-header {
-  border-radius: 12px;
-  background: var(--color-bg-secondary, #16213e);
-  padding: 24px;
+  border-radius: var(--cosmic-radius-lg);
+  background: var(--cosmic-glass-bg);
+  backdrop-filter: var(--cosmic-glass-blur);
+  border: var(--cosmic-glass-border-blue);
+  padding: 28px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  box-shadow: var(--cosmic-shadow-md);
+  transition: all var(--cosmic-transition-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--cosmic-gradient-panel);
+  opacity: 0.4;
+  z-index: -1;
+}
+
+.wallet-header:hover {
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
 }
 
 .wallet-title {
@@ -89,52 +112,79 @@ function copyId() {
 }
 
 .wallet-title h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-text-primary, #ffffff);
+  font-size: 1.8rem;
+  font-weight: 800;
   margin: 0;
+  background: var(--cosmic-gradient-blue);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: var(--cosmic-glow-blue-sm);
+  letter-spacing: -0.5px;
+  position: relative;
+}
+
+.wallet-title h1::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--cosmic-blue), transparent);
+  border-radius: 3px;
+  box-shadow: var(--cosmic-glow-blue-sm);
 }
 
 .wallet-subtitle {
-  font-size: 0.875rem;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.7));
-  margin-top: 4px;
+  font-size: 0.95rem;
+  color: var(--cosmic-text-secondary);
+  margin-top: 14px;
 }
 
 .wallet-ids {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .id-container {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
 .id-label {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.875rem;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.7));
+  font-size: 0.95rem;
+  color: var(--cosmic-text-secondary);
+  font-weight: 500;
 }
 
 .id-value {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
-  background: var(--color-bg-tertiary, rgba(0, 0, 0, 0.2));
-  border-radius: 8px;
-  border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.1));
+  padding: 12px 16px;
+  background: var(--cosmic-glass-bg-darker);
+  border-radius: var(--cosmic-radius-md);
+  border: 1px solid rgba(15, 185, 253, 0.15);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all var(--cosmic-transition-medium);
+}
+
+.id-value:hover {
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), var(--cosmic-glow-blue-sm);
 }
 
 .id-text {
   flex: 1;
   font-family: monospace;
-  font-size: 0.875rem;
-  color: var(--color-text-primary, #ffffff);
+  font-size: 0.95rem;
+  color: var(--cosmic-text-primary);
+  text-shadow: 0 0 2px rgba(15, 185, 253, 0.2);
 }
 
 .truncate {
@@ -144,25 +194,40 @@ function copyId() {
 }
 
 .mode-toggle, .copy-button {
-  background: none;
-  border: none;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.7));
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  border-radius: var(--cosmic-radius-sm);
+  color: var(--cosmic-text-secondary);
   cursor: pointer;
-  padding: 4px 8px;
-  transition: color 0.2s ease;
+  padding: 6px 10px;
+  transition: all var(--cosmic-transition-fast);
 }
 
 .mode-toggle:hover, .copy-button:hover {
-  color: var(--color-text-primary, #ffffff);
+  color: var(--cosmic-blue);
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-glow-blue-sm);
+  transform: translateY(-1px);
+}
+
+.copy-button:active, .mode-toggle:active {
+  transform: translateY(1px);
+  box-shadow: none;
 }
 
 @media (max-width: 768px) {
   .wallet-header {
-    padding: 16px;
+    padding: 20px;
   }
   
   .wallet-title h1 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
+  }
+  
+  .wallet-subtitle {
+    font-size: 0.9rem;
+    margin-top: 10px;
   }
 }
 </style> 

@@ -1,43 +1,29 @@
 <template>
   <div class="cosmic-wallet-container">
     <div class="cosmic-wallet">
-      <!-- Wallet Header with Account Info -->
-      <WalletHeader 
-        :principal-id="principalId"
-        :account-id="accountId"
-        v-model="principalMode"
-        @copy="handleCopy"
-      />
-
-      <!-- Main Token Grid -->
-      <TokenGrid 
-        :principal-id="principalId"
-        v-model="currentTokenSymbol"
-        @balances-updated="updateBalances"
-      />
-
-      <!-- Wallet actions -->
-      <WalletActions @action="handleAction" />
-
-      <!-- NFT Collection -->
-      <NFTCollection
-        v-if="showNFTSection"
-        :categories="nftCategories"
-        v-model="activeCollection"
-        @open-chest="openChest"
+      <!-- New Account Header Component -->
+      <AccountHeader
+        :default-currency="preferredCurrency"
+        @action="handleWalletAction"
+        @currency-changed="handleCurrencyChange"
+        @network-changed="handleNetworkChange"
+        @account-changed="handleAccountChange"
+        @copy-success="handleCopySuccess"
+        @copy-error="handleCopyError"
       />
       
-      <!-- Chest Opening Modal -->
-      <ChestOpeningModal
-        :is-visible="isOpeningChest"
-        :chest="selectedChest"
-        :rewards="chestRewards"
-        :stage="openingStage"
-        :error="openingError"
-        @close="closeChestDialog"
-        @reveal-reward="revealReward"
+      <!-- Token List Component -->
+      <TokenList 
+        :currency="preferredCurrency"
+        :selected-account="currentAccountIndex"
+        :current-network="currentNetwork"
+        @select-token="handleTokenSelection"
+        @add-token="showAddTokenForm"
+        @manage-tokens="showManageTokensForm"
       />
-
+      
+      <!-- Wallet UI Components - Render based on active action -->
+      
       <!-- Send Token Form -->
       <SendTokenForm 
         v-if="activeForm === 'send'"
@@ -65,6 +51,39 @@
         @token-added="handleTokenAdded"
       />
       
+      <!-- Swap Token Form -->
+      <SwapTokenForm
+        v-if="activeForm === 'swap'"
+        @close="activeForm = null"
+        @swap-complete="handleSwapComplete"
+      />
+      
+      <!-- Buy Token Form -->
+      <BuyTokenForm
+        v-if="activeForm === 'buy'"
+        @close="activeForm = null"
+        @purchase-complete="handlePurchaseComplete"
+      />
+      
+      <!-- NFT Collection (only show if user has NFTs) -->
+      <NFTCollection
+        v-if="showNFTSection"
+        :categories="nftCategories"
+        v-model="activeCollection"
+        @open-chest="openChest"
+      />
+      
+      <!-- Chest Opening Modal (moved chest logic to its own component) -->
+      <ChestOpeningModal
+        :is-visible="isOpeningChest"
+        :chest="selectedChest"
+        :rewards="chestRewards"
+        :stage="openingStage"
+        :error="openingError"
+        @close="closeChestDialog"
+        @reveal-reward="revealReward"
+      />
+      
       <!-- Activity Log -->
       <ActivityLog :logs="logs" />
       
@@ -79,31 +98,32 @@ import { ref, computed, onMounted } from 'vue';
 import { useAuthStore } from '../stores/auth.js';
 import { useTokenStore } from '../stores/token.js';
 import { useNftsStore } from '../stores/nfts.js';
-import { useCanisterStore } from '../stores/canister.js';
 import { Principal } from '@dfinity/principal';
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 
-// Import components with updated paths
-import WalletHeader from '../components/layout/WalletHeader.vue';
-import TokenGrid from '../components/collections/TokenGrid.vue';
-import WalletActions from '../components/actions/WalletActions.vue';
+// Import components
+import AccountHeader from '../components/wallet/AccountHeader.vue';
+import TokenList from '../components/wallet/TokenList.vue';
+import SendTokenForm from '../components/forms/SendTokenForm.vue';
+import ReceiveTokenInfo from '../components/forms/ReceiveTokenInfo.vue';
+import AddTokenForm from '../components/forms/AddTokenForm.vue';
+import SwapTokenForm from '../components/forms/SwapTokenForm.vue';
+import BuyTokenForm from '../components/forms/BuyTokenForm.vue';
 import ActivityLog from '../components/feedback/ActivityLog.vue';
 import LoadingIndicator from '../components/feedback/LoadingIndicator.vue';
 import NFTCollection from '../components/collections/NFTCollection.vue';
 import ChestOpeningModal from '../components/modals/ChestOpeningModal.vue';
-import SendTokenForm from '../components/forms/SendTokenForm.vue';
-import ReceiveTokenInfo from '../components/forms/ReceiveTokenInfo.vue';
-import AddTokenForm from '../components/forms/AddTokenForm.vue';
 
 export default {
   name: 'Wallet',
   components: {
-    WalletHeader,
-    TokenGrid,
-    WalletActions,
+    AccountHeader,
+    TokenList,
     SendTokenForm,
     ReceiveTokenInfo,
     AddTokenForm,
+    SwapTokenForm,
+    BuyTokenForm,
     ActivityLog,
     LoadingIndicator,
     NFTCollection,
@@ -114,8 +134,7 @@ export default {
     const authStore = useAuthStore();
     const tokenStore = useTokenStore();
     const nftsStore = useNftsStore();
-    const canisterStore = useCanisterStore();
-
+    
     // State variables
     const principalId = ref('');
     const accountId = ref('');
@@ -126,6 +145,12 @@ export default {
     const loadingMessage = ref('');
     const tokenBalances = ref({});
     const logs = ref([]);
+    const currentAccountIndex = ref(0);
+    const preferredCurrency = ref('USD');
+    const currentNetwork = ref({
+      id: 'icp',
+      name: 'Internet Computer'
+    });
     
     // NFT data
     const nftCategories = ref([
@@ -167,26 +192,11 @@ export default {
         loadingMessage.value = 'Initializing wallet...';
         
         try {
-          // Set a timeout for token initialization to prevent UI from hanging
-          const tokenInitPromise = Promise.race([
-            tokenStore.initialize(),
-            new Promise((resolve) => {
-              // After 10 seconds, continue anyway but show a warning
-              setTimeout(() => {
-                addLog('Token initialization is taking longer than expected. Using cached data.', 'warning');
-                resolve(false);
-              }, 10000);
-            })
-          ]);
-          
-          const success = await tokenInitPromise;
-          if (success !== false) {
-            addLog('Wallet initialized successfully', 'success');
-          }
+          await tokenStore.initialize();
+          addLog('Wallet initialized successfully', 'success');
         } catch (error) {
           console.error('Token initialization error:', error);
           addLog(`Wallet initialization error: ${error.message}. Using cached data.`, 'error');
-          // Continue with the app anyway - the TokenService has fallbacks
         } finally {
           loading.value = false;
         }
@@ -221,7 +231,30 @@ export default {
       }
     }
     
-    // Fetch NFTs for the current user
+    // Handle wallet actions (receive, send, swap, buy)
+    function handleWalletAction(action) {
+      activeForm.value = action;
+      addLog(`Opening ${action} interface`, 'info');
+    }
+    
+    // Handle token selection
+    function handleTokenSelection(token) {
+      currentTokenSymbol.value = token.symbol;
+      addLog(`Selected ${token.name} token`, 'info');
+    }
+    
+    // Show Add Token Form
+    function showAddTokenForm() {
+      activeForm.value = 'add-token';
+    }
+    
+    // Show Manage Tokens Form
+    function showManageTokensForm() {
+      // This could be implemented in the future
+      addLog('Token management coming soon', 'info');
+    }
+    
+    // Fetch user NFTs
     async function fetchUserNFTs() {
       try {
         if (!authStore.isAuthenticated()) {
@@ -233,73 +266,47 @@ export default {
         loadingMessage.value = 'Loading NFTs...';
         addLog('Fetching your NFT collection...', 'info');
         
-        // Get the user's principal
-        const identity = authStore.getIdentity();
-        if (!identity) {
-          throw new Error("Identity not available");
-        }
-        
-        const principal = identity.getPrincipal();
-        
-        // Get cosmicrafts canister
-        const cosmicrafts = await canisterStore.get("cosmicrafts");
-        if (!cosmicrafts) {
-          throw new Error("Cosmicrafts canister not initialized");
-        }
-        
-        // Mark all categories as loading
+        // Set all categories to loading state
         nftCategories.value.forEach(category => {
           category.isLoading = true;
         });
         
-        // Fetch NFTs from canister
-        try {
-          const nfts = await cosmicrafts.getNFTs(principal);
-          const processedNfts = JSON.parse(
-            JSON.stringify(nfts || [], (key, value) => 
-              typeof value === 'bigint' ? value.toString() : value
-            )
-          );
-          
-          if (processedNfts?.length > 0) {
-            const categorizedNfts = processNFTs(processedNfts);
-            
-            // Clear existing items for all categories
-            nftCategories.value.forEach(cat => {
-              cat.items = [];
-            });
-            
-            // Distribute NFTs to their respective categories
-            categorizedNfts.forEach(nft => {
-              const nftCategory = nft.metadata.category?.toLowerCase() || 'characters';
-              
-              // Add to specific category
-              const categoryObj = nftCategories.value.find(c => c.type === nftCategory);
-              if (categoryObj) {
-                categoryObj.items.push(nft);
-              }
-              
-              // Add to "all" category
-              const allCategory = nftCategories.value.find(c => c.type === 'all');
-              if (allCategory) {
-                allCategory.items.push(nft);
-              }
-            });
-            
-            // Show the section if we have NFTs
-            showNFTSection.value = true;
-          }
-        } catch (error) {
-          console.error('Error fetching NFTs:', error);
-          addLog(`Error fetching NFTs: ${error.message}`, 'error');
-        }
+        // Fetch NFTs via the store
+        const nfts = await nftsStore.fetchUserNFTs();
         
-        addLog(`NFT collection loaded successfully`, 'success');
+        if (nfts && nfts.length > 0) {
+          // Clear existing items
+          nftCategories.value.forEach(cat => {
+            cat.items = [];
+          });
+          
+          // Distribute NFTs to categories
+          nfts.forEach(nft => {
+            // Add to specific category
+            const category = nft.metadata.category?.toLowerCase() || 'characters';
+            const categoryObj = nftCategories.value.find(c => c.type === category);
+            if (categoryObj) {
+              categoryObj.items.push(nft);
+            }
+            
+            // Add to "all" category
+            const allCategory = nftCategories.value.find(c => c.type === 'all');
+            if (allCategory) {
+              allCategory.items.push(nft);
+            }
+          });
+          
+          showNFTSection.value = true;
+          addLog(`NFT collection loaded successfully`, 'success');
+        } else {
+          showNFTSection.value = false;
+          addLog('No NFTs found in your collection', 'info');
+        }
       } catch (error) {
         console.error('Error in fetchUserNFTs:', error);
         addLog(`Error fetching NFTs: ${error.message}`, 'error');
       } finally {
-        // Mark all categories as not loading
+        // Set all categories to not loading
         nftCategories.value.forEach(category => {
           category.isLoading = false;
         });
@@ -308,147 +315,9 @@ export default {
       }
     }
     
-    // Process NFTs
-    function processNFTs(nfts) {
-      return nfts.map(nft => {
-        try {
-          // Extract id and metadata from array format
-          const [id, rawMetadata] = nft;
-          
-          // The metadata structure is: metadata.metadata.general
-          const metadata = rawMetadata.metadata || {};
-          const general = metadata.general || {};
-          const basic = metadata.basic || [];
-          const category = metadata.category || {};
-          
-          // Determine category
-          let categoryType = 'unknown';
-          if (category) {
-            if ('Avatar' in category) categoryType = 'avatars';
-            else if ('Trophy' in category) categoryType = 'trophies';
-            else if ('Chest' in category) categoryType = 'chests';
-            else if ('Unit' in category) categoryType = 'units';
-          }
-
-          // Get the image path based on the NFT name for chests
-          const getImagePath = (name, category) => {
-            if (category === 'chests') {
-              const nameToPath = {
-                'Cosmic Cache': '/assets/webp/cosmic-cache.webp',
-                'Stellar Box': '/assets/webp/stellar-box.webp',
-                'Nebula Cube': '/assets/webp/nebula-cube.webp',
-                'Galactic Crate': '/assets/webp/galactic-crate.webp',
-                'Astral Vault': '/assets/webp/astral-vault.webp',
-                'Celestial Locker': '/assets/webp/celestial-locker.webp',
-                'Quantum Chest': '/assets/webp/quantum-chest.webp',
-                'Ethereal Metacube': '/assets/webp/ethereal-metacube.webp'
-              };
-              const resolvedPath = nameToPath[name] || '/assets/webp/cosmic-cache.webp';
-              return resolvedPath;
-            }
-            
-            // Fallback to category-based images
-            let fallbackPath;
-            switch(category) {
-              case 'avatars':
-                fallbackPath = '/assets/webp/avatar.webp';
-                break;
-              case 'units':
-                fallbackPath = '/assets/webp/unit.webp';
-                break;
-              case 'trophies':
-                fallbackPath = '/assets/webp/trophy.webp';
-                break;
-              default:
-                fallbackPath = '/assets/webp/nft.webp';
-            }
-            return fallbackPath;
-          };
-
-          // Process faction if it exists (it's an array with a single object)
-          let faction = null;
-          if (general.faction && Array.isArray(general.faction) && general.faction.length > 0) {
-            const factionObj = general.faction[0];
-            if ('Cosmicon' in factionObj) faction = 'cosmicon';
-            else if ('Spade' in factionObj) faction = 'spade';
-            else if ('Arch' in factionObj) faction = 'arch';
-            else if ('Celestial' in factionObj) faction = 'celestial';
-            else if ('Webe' in factionObj) faction = 'webe';
-            else if ('Neutral' in factionObj) faction = 'neutral';
-            else if ('Spirat' in factionObj) faction = 'spirat';
-          }
-
-          // Process rarity (it's an array with a single value)
-          const rarity = general.rarity && Array.isArray(general.rarity) 
-            ? general.rarity[0] 
-            : 1;
-
-          // Get basic stats
-          const level = basic.length > 0 ? basic[0].level || 1 : 1;
-          const damage = basic.length > 0 ? basic[0].damage || 0 : 0;
-          const health = basic.length > 0 ? basic[0].health || 0 : 0;
-
-          // Process skills
-          const skills = metadata.skills || [];
-          const processedSkills = skills.map(skill => {
-            if ('CriticalStrike' in skill) return 'critical-strike';
-            if ('Shield' in skill) return 'shield';
-            if ('Evasion' in skill) return 'evasion';
-            return null;
-          }).filter(Boolean);
-
-          // Process soul data if it exists
-          const soulData = metadata.soul || [];
-          const soul = soulData.length > 0 ? {
-            gamesPlayed: soulData[0].gamesPlayed || 0,
-            totalDamageDealt: soulData[0].totalDamageDealt || 0,
-            birth: soulData[0].birth || Date.now(),
-            totalKills: soulData[0].totalKills || 0,
-            combatExperience: soulData[0].combatExperience || 0
-          } : null;
-
-          const name = general.name || 'Unknown NFT';
-          const imagePath = getImagePath(name, categoryType);
-
-          // Construct the final NFT object
-          const processedNFT = {
-            id: id?.toString() || 'unknown',
-            name,
-            description: general.description || '',
-            image: imagePath,
-            metadata: {
-              category: categoryType,
-              faction,
-              rarity,
-              level,
-              damage,
-              health,
-              skills: processedSkills,
-              soul
-            }
-          };
-
-          return processedNFT;
-        } catch (error) {
-          console.error('Error processing NFT:', error, 'NFT data:', nft);
-          return {
-            id: 'error',
-            name: 'Error Loading NFT',
-            description: 'Failed to load NFT data',
-            image: '/assets/webp/nft.webp',
-            metadata: {
-              category: 'unknown',
-              rarity: 1,
-              level: 1
-            }
-          };
-        }
-      });
-    }
-    
-    // Start chest opening process
+    // Open chest
     async function openChest(chest) {
-      if (isOpeningChest.value) return; // Prevent multiple simultaneous chest openings
+      if (isOpeningChest.value) return;
       
       try {
         // Set up state for opening
@@ -460,32 +329,19 @@ export default {
         
         addLog(`Opening ${chest.name} chest...`, 'info');
         
-        // Get the cosmicrafts canister
-        const cosmicrafts = await canisterStore.get("cosmicrafts");
-        if (!cosmicrafts) {
-          throw new Error("Cosmicrafts canister not initialized");
+        // Get rewards from NFT store
+        const rewards = await nftsStore.openChest(chest.id);
+        
+        if (rewards && rewards.length > 0) {
+          chestRewards.value = rewards;
+          setTimeout(() => {
+            openingStage.value = 2;
+          }, 2000);
+          
+          addLog(`Successfully opened ${chest.name} chest!`, 'success');
+        } else {
+          throw new Error("No rewards received from chest opening");
         }
-        
-        // Call the openChest function with the chest ID
-        const chestId = chest.id;
-        const result = await cosmicrafts.openChest(BigInt(chestId));
-        
-        console.log('Chest opening result:', result);
-        
-        if (!result) {
-          throw new Error("Failed to open chest: No response from canister");
-        }
-        
-        // Process the rewards
-        const processedRewards = processRewards(result);
-        chestRewards.value = processedRewards;
-        
-        // Move to rewards stage after a short delay for animation
-        setTimeout(() => {
-          openingStage.value = 2;
-        }, 2000);
-        
-        addLog(`Successfully opened ${chest.name} chest!`, 'success');
       } catch (error) {
         console.error('Error opening chest:', error);
         openingError.value = error.message;
@@ -493,51 +349,11 @@ export default {
       }
     }
     
-    // Process the rewards from the canister
-    function processRewards(rewardsData) {
-      try {
-        // The result is an array where first element is success boolean and second is the reward JSON string
-        if (!Array.isArray(rewardsData) || rewardsData.length !== 2) {
-          return [];
-        }
-
-        const [success, rewardJson] = rewardsData;
-        if (!success) return [];
-
-        try {
-          const reward = JSON.parse(rewardJson);
-          
-          // For Stardust token rewards
-          if (reward.token === "Stardust") {
-            return [{
-              id: reward.transaction_id?.toString() || 'unknown',
-              type: 'currency',
-              name: 'Stardust',
-              description: 'Stardust Token',
-              image: '/assets/webp/cosmic-token.webp',
-              rarity: 3, // Make it rare since it's the game currency
-              quantity: reward.amount || 0,
-              revealed: true,
-              symbol: 'STDs' // Use STDs symbol for token reference
-            }];
-          }
-          
-          return [];
-        } catch (parseError) {
-          console.error('Error parsing reward JSON:', parseError);
-          return [];
-        }
-      } catch (error) {
-        console.error('Error processing rewards:', error);
-        return [];
-      }
-    }
-
-    // Close the chest opening dialog and handle cleanup
-    async function closeChestDialog() {
+    // Close chest dialog
+    function closeChestDialog() {
       try {
         if (selectedChest.value) {
-          // Remove the opened chest from memory
+          // Remove the opened chest from categories
           const chestCategory = nftCategories.value.find(c => c.type === 'chests');
           if (chestCategory) {
             chestCategory.items = chestCategory.items.filter(item => item.id !== selectedChest.value.id);
@@ -549,18 +365,16 @@ export default {
             allCategory.items = allCategory.items.filter(item => item.id !== selectedChest.value.id);
           }
 
-          // If we got Stardust rewards, handle them properly
+          // Handle Stardust rewards
           const stardustRewards = chestRewards.value.filter(r => r.name === 'Stardust');
           if (stardustRewards.length > 0) {
             // Get the total amount received
             const totalAmount = stardustRewards.reduce((sum, reward) => sum + reward.quantity, 0);
-            
-            // Add a log entry showing the amount received
             addLog(`Received ${totalAmount} Stardust tokens!`, 'success');
             
-            // Refresh both token balances
-            await refreshTokenBalance('STDs');
-            await refreshTokenBalance('ICP');
+            // Refresh token balances
+            refreshTokenBalance('STDs');
+            refreshTokenBalance('ICP');
           }
         }
       } catch (error) {
@@ -575,33 +389,37 @@ export default {
       }
     }
     
-    // Reveal a reward (for animation sequencing)
+    // Reveal rewards (for animation sequencing)
     function revealReward(index) {
       if (index < chestRewards.value.length) {
         chestRewards.value[index].revealed = true;
       }
     }
     
-    // Update token balances from TokenGrid component
-    function updateBalances(balances) {
-      tokenBalances.value = { ...balances };
-    }
-    
-    // Get token balance for a specific symbol
+    // Get token balance
     function getTokenBalance(symbol) {
       return tokenBalances.value[symbol] || BigInt(0);
     }
     
-    // Handle wallet actions
-    function handleAction(action) {
-      activeForm.value = action;
+    // Refresh token balance (used by chest opening, etc.)
+    async function refreshTokenBalance(symbol) {
+      try {
+        if (!tokenStore || !tokenStore.initialized) return;
+        
+        const balance = await tokenStore.getBalance(symbol);
+        tokenBalances.value[symbol] = balance;
+        
+        return balance;
+      } catch (e) {
+        console.error(`Error refreshing ${symbol} balance:`, e);
+      }
     }
     
     // Handle copy event
     function handleCopy({ success, type, error }) {
       if (success) {
         addLog(`${type === 'principal' ? 'Principal' : 'Account'} ID copied to clipboard`, 'success');
-        } else {
+      } else {
         addLog(`Failed to copy: ${error}`, 'error');
       }
     }
@@ -611,7 +429,8 @@ export default {
       if (success) {
         addLog(`Successfully sent ${amount} ${symbol} to ${recipient}`, 'success');
         activeForm.value = null;
-        } else {
+        refreshTokenBalance(symbol);
+      } else {
         addLog(`Transfer failed: ${error}`, 'error');
       }
     }
@@ -622,44 +441,54 @@ export default {
         addLog(`Successfully added ${symbol} token`, 'success');
         currentTokenSymbol.value = symbol;
         activeForm.value = null;
-        } else {
+        refreshTokenBalance(symbol);
+      } else {
         addLog(`Failed to add token: ${error}`, 'error');
       }
     }
     
-    // Refresh token balance (used by chest opening, etc.)
-    async function refreshTokenBalance(symbol) {
-      try {
-        if (!tokenStore || !tokenStore.initialized) return;
-        
-        const balance = await tokenStore.getBalance(symbol);
-          tokenBalances.value[symbol] = balance;
-        
-        return balance;
-      } catch (e) {
-        console.error(`Error refreshing ${symbol} balance:`, e);
+    // Handle swap complete event
+    function handleSwapComplete({ success, fromAmount, fromSymbol, toAmount, toSymbol, error }) {
+      if (success) {
+        addLog(`Successfully swapped ${fromAmount} ${fromSymbol} to ${toAmount} ${toSymbol}`, 'success');
+        activeForm.value = null;
+        refreshTokenBalance(fromSymbol);
+        refreshTokenBalance(toSymbol);
+      } else {
+        addLog(`Swap failed: ${error}`, 'error');
+      }
+    }
+    
+    // Handle purchase complete event
+    function handlePurchaseComplete({ success, amount, symbol, error }) {
+      if (success) {
+        addLog(`Successfully purchased ${amount} ${symbol}`, 'success');
+        activeForm.value = null;
+        refreshTokenBalance(symbol);
+      } else {
+        addLog(`Purchase failed: ${error}`, 'error');
       }
     }
     
     // Add log entry
     function addLog(message, type = 'info') {
-        const now = new Date();
-        const timeStr = now.toTimeString().split(' ')[0];
-        
-        logs.value.unshift({
-          time: timeStr,
-          message,
-          type
-        });
-        
-        // Keep logs limited to recent entries
-        if (logs.value.length > 20) {
-          logs.value = logs.value.slice(0, 20);
-        }
-        
-        // Save logs to localStorage
-        try {
-          localStorage.setItem(WALLET_LOGS_KEY, JSON.stringify(logs.value));
+      const now = new Date();
+      const timeStr = now.toTimeString().split(' ')[0];
+      
+      logs.value.unshift({
+        time: timeStr,
+        message,
+        type
+      });
+      
+      // Keep logs limited to recent entries
+      if (logs.value.length > 20) {
+        logs.value = logs.value.slice(0, 20);
+      }
+      
+      // Save logs to localStorage
+      try {
+        localStorage.setItem(WALLET_LOGS_KEY, JSON.stringify(logs.value));
       } catch (e) {
         console.error('Error saving logs:', e);
       }
@@ -680,6 +509,29 @@ export default {
           if (parsedUiState.currentToken) {
             currentTokenSymbol.value = parsedUiState.currentToken;
           }
+          
+          if (parsedUiState.currency) {
+            preferredCurrency = parsedUiState.currency;
+          }
+          
+          if (parsedUiState.accountIndex !== undefined) {
+            currentAccountIndex.value = parsedUiState.accountIndex;
+          }
+          
+          if (parsedUiState.networkId) {
+            currentNetwork.value = { 
+              id: parsedUiState.networkId,
+              name: parsedUiState.networkId === 'icp' 
+                ? 'Internet Computer' 
+                : parsedUiState.networkId === 'eth' 
+                  ? 'Ethereum' 
+                  : parsedUiState.networkId === 'sol' 
+                    ? 'Solana' 
+                    : parsedUiState.networkId === 'icp-testnet'
+                      ? 'ICP Testnet'
+                      : 'Unknown Network'
+            };
+          }
         }
       } catch (error) {
         console.error('Error loading UI state:', error);
@@ -691,7 +543,10 @@ export default {
       try {
         const uiState = {
           principalMode: principalMode.value,
-          currentToken: currentTokenSymbol.value
+          currentToken: currentTokenSymbol.value,
+          currency: preferredCurrency,
+          accountIndex: currentAccountIndex.value,
+          networkId: currentNetwork.value.id
         };
         
         localStorage.setItem(UI_STATE_KEY, JSON.stringify(uiState));
@@ -709,6 +564,72 @@ export default {
         }
       } catch (error) {
         console.error('Error loading logs:', error);
+      }
+    }
+    
+    // Handle currency change
+    function handleCurrencyChange(newCurrency) {
+      preferredCurrency = newCurrency.code;
+      addLog(`Currency changed to ${newCurrency.name}`, 'info');
+      saveUIState();
+    }
+    
+    // Handle network change
+    function handleNetworkChange(network) {
+      currentNetwork.value = network;
+      addLog(`Network changed to ${network.name}`, 'info');
+      
+      // Refresh token list and balances when network changes
+      if (tokenStore.initialized) {
+        refreshTokenBalances();
+      }
+      
+      // Refresh NFTs if on ICP network
+      if (network.id.startsWith('icp')) {
+        fetchUserNFTs().catch(e => console.error("NFT fetch error:", e));
+      } else {
+        // Hide NFT section for non-ICP networks for now
+        showNFTSection.value = false;
+      }
+      
+      saveUIState();
+    }
+    
+    // Handle account change
+    function handleAccountChange({ index, account }) {
+      currentAccountIndex.value = index;
+      addLog(`Switched to ${account.name}`, 'info');
+      saveUIState();
+    }
+    
+    // Handle copy success/error events
+    function handleCopySuccess({ type }) {
+      addLog(`${type === 'principal' ? 'Principal' : 'Account'} ID copied to clipboard`, 'success');
+    }
+    
+    function handleCopyError({ error }) {
+      addLog(`Failed to copy: ${error}`, 'error');
+    }
+    
+    // Refresh all token balances
+    async function refreshTokenBalances() {
+      try {
+        if (!tokenStore || !tokenStore.initialized) return;
+        
+        loading.value = true;
+        loadingMessage.value = 'Refreshing balances...';
+        
+        const tokens = tokenStore.getSupportedTokens();
+        for (const symbol of tokens) {
+          await refreshTokenBalance(symbol);
+        }
+        
+        addLog('Token balances refreshed', 'success');
+      } catch (error) {
+        console.error('Error refreshing balances:', error);
+        addLog(`Error refreshing balances: ${error.message}`, 'error');
+      } finally {
+        loading.value = false;
       }
     }
     
@@ -731,18 +652,31 @@ export default {
       chestRewards,
       openingStage,
       openingError,
+      currentAccountIndex,
+      preferredCurrency,
+      currentNetwork,
       
       // Methods
-      handleAction,
+      handleWalletAction,
+      handleTokenSelection,
       handleCopy,
       handleTransferComplete,
       handleTokenAdded,
-      updateBalances,
+      handleSwapComplete,
+      handlePurchaseComplete,
+      showAddTokenForm,
+      showManageTokensForm,
       getTokenBalance,
       addLog,
       openChest,
       closeChestDialog,
-      revealReward
+      revealReward,
+      handleCurrencyChange,
+      handleNetworkChange,
+      handleAccountChange,
+      handleCopySuccess,
+      handleCopyError,
+      refreshTokenBalances
     };
   }
 };

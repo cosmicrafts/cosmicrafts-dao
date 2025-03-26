@@ -529,11 +529,11 @@ const sendPrompt = async (): Promise<void> => {
         'X-Title': 'Cosmicrafts Game'
       },
       body: JSON.stringify({
-        model: "google/gemini-2.0-pro-exp-02-05:free",
+        model: "mistralai/mistral-small-3.1-24b-instruct",
         messages: chatMessages,
-        temperature: 0.7,
-        top_p: 0.7,
-        max_tokens: 500,
+        temperature: 0.95,
+        top_p: 0.1,
+        max_tokens: 400,
         stream: true
       })
     });

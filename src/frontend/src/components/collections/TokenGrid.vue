@@ -59,7 +59,7 @@ const emit = defineEmits(['update:modelValue', 'balances-updated', 'add-token'])
 
 const tokenStore = useTokenStore();
 const tokens = ref([]);
-const loading = ref(true);
+const loading = ref(false);
 const balancesMap = ref({});
 
 // Format balance with appropriate decimal places
@@ -85,9 +85,7 @@ async function loadBalances() {
   if (!props.principalId) return;
   
   try {
-    loading.value = true;
-    
-    // Default tokens to show
+    // Start with default tokens to show
     const tokenSymbols = ['ICP', 'STDs', 'COSMIC'];
     let allSymbols = [...tokenSymbols];
     
@@ -104,71 +102,196 @@ async function loadBalances() {
       // Continue with default tokens
     }
     
-    // Fetch balances for each token
-    const tokenData = await Promise.all(
-      allSymbols.map(async (symbol) => {
+    // First get cached data immediately without waiting
+    const cachedTokens = [];
+    let hasLoadedFromCache = false;
+    
+    for (const symbol of allSymbols) {
+      try {
+        // Get cached balance if available
+        const cachedBalance = tokenStore.balances?.[symbol] || BigInt(0);
+        
+        // Get token metadata 
+        let tokenMetadata = {
+          name: symbol,
+          symbol: symbol,
+          decimals: 8,
+          icon: `/assets/icons/tokens/${symbol.toLowerCase()}.png`
+        };
+        
         try {
-          const balance = await tokenStore.getBalance(symbol);
-          
-          // Get token metadata if the method exists
-          let tokenMetadata;
-          try {
-            if (typeof tokenStore.getTokenMetadata === 'function') {
-              tokenMetadata = await tokenStore.getTokenMetadata(symbol);
-            } else {
-              // Fallback if method doesn't exist
-              tokenMetadata = {
-                name: symbol,
-                symbol: symbol,
-                decimals: 8,
-                icon: `/assets/icons/tokens/${symbol.toLowerCase()}.png`
-              };
+          if (typeof tokenStore.getTokenMetadata === 'function') {
+            const metadata = await tokenStore.getTokenMetadata(symbol);
+            if (metadata) {
+              tokenMetadata = metadata;
             }
-          } catch (metadataError) {
-            console.warn(`Error getting metadata for ${symbol}:`, metadataError);
-            tokenMetadata = {
-              name: symbol,
-              symbol: symbol,
-              decimals: 8,
-              icon: `/assets/icons/tokens/${symbol.toLowerCase()}.png`
-            };
           }
-          
-          // Cache balance for later use
-          balancesMap.value[symbol] = balance;
-          
-          // Return token data with balance
-          return {
-            name: tokenMetadata?.name || symbol,
-            symbol: symbol,
-            icon: tokenMetadata?.icon || `/assets/icons/tokens/${symbol.toLowerCase()}.png`,
-            balance: balance,
-            usdValue: tokenMetadata?.price ? Number(balance) * tokenMetadata.price / 1e8 : null
-          };
-        } catch (error) {
-          console.error(`Error loading balance for ${symbol}:`, error);
-          return null;
+        } catch (metadataError) {
+          console.warn(`Error getting metadata for ${symbol}:`, metadataError);
         }
-      })
-    );
+        
+        // Cache balance for later use
+        balancesMap.value[symbol] = cachedBalance;
+        
+        // Add to cached tokens
+        cachedTokens.push({
+          name: tokenMetadata?.name || symbol,
+          symbol: symbol,
+          icon: tokenMetadata?.icon || `/assets/icons/tokens/${symbol.toLowerCase()}.png`,
+          balance: cachedBalance,
+          usdValue: tokenMetadata?.price ? Number(cachedBalance) * tokenMetadata.price / 1e8 : null
+        });
+        
+        hasLoadedFromCache = true;
+      } catch (error) {
+        console.warn(`Error loading cached data for ${symbol}:`, error);
+      }
+    }
     
-    // Filter out any tokens that failed to load
-    tokens.value = tokenData.filter(t => t !== null);
+    // If we have cached data, show it immediately
+    if (hasLoadedFromCache && cachedTokens.length > 0) {
+      tokens.value = cachedTokens;
+      loading.value = false;
+      
+      // Emit balances updated event with the map of balances
+      emit('balances-updated', balancesMap.value);
+    }
     
-    // Emit balances updated event with the map of balances
-    emit('balances-updated', balancesMap.value);
+    // Now fetch live balances in the background
+    setTimeout(async () => {
+      try {
+        // Fetch balances for each token
+        const tokenData = await Promise.all(
+          allSymbols.map(async (symbol) => {
+            try {
+              const balance = await tokenStore.getBalance(symbol);
+              
+              // Get token metadata if the method exists
+              let tokenMetadata;
+              try {
+                if (typeof tokenStore.getTokenMetadata === 'function') {
+                  tokenMetadata = await tokenStore.getTokenMetadata(symbol);
+                } else {
+                  // Fallback if method doesn't exist
+                  tokenMetadata = {
+                    name: symbol,
+                    symbol: symbol,
+                    decimals: 8,
+                    icon: `/assets/icons/tokens/${symbol.toLowerCase()}.png`
+                  };
+                }
+              } catch (metadataError) {
+                console.warn(`Error getting metadata for ${symbol}:`, metadataError);
+                tokenMetadata = {
+                  name: symbol,
+                  symbol: symbol,
+                  decimals: 8,
+                  icon: `/assets/icons/tokens/${symbol.toLowerCase()}.png`
+                };
+              }
+              
+              // Cache balance for later use
+              balancesMap.value[symbol] = balance;
+              
+              // Return token data with balance
+              return {
+                name: tokenMetadata?.name || symbol,
+                symbol: symbol,
+                icon: tokenMetadata?.icon || `/assets/icons/tokens/${symbol.toLowerCase()}.png`,
+                balance: balance,
+                usdValue: tokenMetadata?.price ? Number(balance) * tokenMetadata.price / 1e8 : null
+              };
+            } catch (error) {
+              console.error(`Error loading balance for ${symbol}:`, error);
+              return null;
+            }
+          })
+        );
+        
+        // Filter out any tokens that failed to load
+        const newTokens = tokenData.filter(t => t !== null);
+        if (newTokens.length > 0) {
+          tokens.value = newTokens;
+        }
+        
+        // Emit balances updated event with the map of balances
+        emit('balances-updated', balancesMap.value);
+      } catch (error) {
+        console.error('Error loading live token balances:', error);
+      } finally {
+        loading.value = false;
+      }
+    }, 100);
     
   } catch (error) {
     console.error('Error loading token balances:', error);
     tokens.value = [];
-  } finally {
     loading.value = false;
   }
 }
 
 // Load balances on mount
-onMounted(async () => {
-  await loadBalances();
+onMounted(() => {
+  // Get cached balances from the token store 
+  const cachedBalances = {};
+  
+  // Try to get ICP balance
+  try {
+    if (tokenStore.balances && tokenStore.balances.ICP) {
+      cachedBalances.ICP = tokenStore.balances.ICP;
+      balancesMap.value.ICP = tokenStore.balances.ICP;
+      console.log('Using cached ICP balance:', cachedBalances.ICP.toString());
+    }
+  } catch (e) {
+    console.warn('Error accessing cached ICP balance:', e);
+  }
+  
+  // Try to get STDs balance
+  try {
+    if (tokenStore.balances && tokenStore.balances.STDs) {
+      cachedBalances.STDs = tokenStore.balances.STDs;
+      balancesMap.value.STDs = tokenStore.balances.STDs;
+      console.log('Using cached STDs balance:', cachedBalances.STDs.toString());
+    }
+  } catch (e) {
+    console.warn('Error accessing cached STDs balance:', e);
+  }
+  
+  // Get balance display function
+  const formatTokenBalance = (symbol) => {
+    if (cachedBalances[symbol]) {
+      return formatBalance(cachedBalances[symbol]);
+    }
+    return '0.00';
+  };
+
+  // Show default tokens immediately
+  const defaultTokens = [
+    {
+      name: 'Internet Computer Protocol',
+      symbol: 'ICP',
+      icon: '/assets/icons/tokens/icp.png',
+      balance: cachedBalances.ICP || BigInt(0),
+      usdValue: null,
+      displayBalance: formatTokenBalance('ICP')
+    },
+    {
+      name: 'Stardust',
+      symbol: 'STDs',
+      icon: '/assets/icons/tokens/stds.png',
+      balance: cachedBalances.STDs || BigInt(0),
+      usdValue: null,
+      displayBalance: formatTokenBalance('STDs')
+    }
+  ];
+  
+  tokens.value = defaultTokens;
+  
+  // Emit initial balances
+  emit('balances-updated', balancesMap.value);
+  
+  // Then load full data
+  loadBalances();
 });
 
 // Watch for principal ID changes to reload balances

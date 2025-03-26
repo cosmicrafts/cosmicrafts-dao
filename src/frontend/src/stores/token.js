@@ -6,8 +6,9 @@ import { AccountIdentifier } from '@dfinity/ledger-icp';
 // Import TokenService directly instead of using dynamic import
 import { tokenService } from '../services/TokenService.js';
 
-// Cache key
+// Cache keys
 const TOKEN_CACHE_KEY = 'cosmicrafts-token-cache';
+const BALANCES_CACHE_KEY = 'cosmicrafts-token-balances';
 
 export const useTokenStore = defineStore('token', {
   state: () => ({
@@ -57,7 +58,7 @@ export const useTokenStore = defineStore('token', {
      * Initialize the token store
      */
     async initialize() {
-      if (this.initialized) return;
+      if (this.initialized) return true;
       
       console.log('TokenStore initializing - cached data only');
       
@@ -69,21 +70,29 @@ export const useTokenStore = defineStore('token', {
         decimals: 8,
         canisterId: 'ryjl3-tyaaa-aaaaa-aaaba-cai',
         fee: '10000'
+      },
+      {
+        symbol: 'STDs',
+        name: 'Stardust',
+        standard: 'icrc1',
+        decimals: 8,
+        canisterId: 'opcce-byaaa-aaaak-qcgda-cai',
+        fee: '10000'
       }];
       
-      // Mark as initialized immediately - we'll load the service later
+      // Immediately load cached data (synchronously)
+      this.quickInitFromCache();
+      
+      // Mark as initialized immediately - we'll load the service in background
       this.initialized = true;
       this.loading = false;
-      
-      // Load cached data immediately via microtask
-      queueMicrotask(() => this.quickInitFromCache());
       
       // Load service in the background AFTER UI is rendered
       setTimeout(() => {
         this.loadServiceAndData().catch(e => 
           console.warn('Background token loading error:', e)
         );
-      }, 500); // Half-second delay to ensure UI is rendered
+      }, 10); // Reduced delay to ensure faster background loading
       
       return true;
     },
@@ -97,6 +106,17 @@ export const useTokenStore = defineStore('token', {
         
         // TokenService is now directly imported, not dynamically
         // We just need to ensure it's initialized
+        const authStore = useAuthStore();
+        const identity = authStore.getIdentity();
+        
+        // Try regular initialization first
+        await this.service.initialize(identity)
+          .catch(e => {
+            console.warn('TokenService initialization error, using trusted initialization:', e);
+            // Force initialization even if blockchain connection fails
+            this.service.forceTrustedInitialization(identity);
+          });
+        
         this.serviceReady = true;
         
         // Now load live data
@@ -105,6 +125,14 @@ export const useTokenStore = defineStore('token', {
         console.log('TokenService data loaded successfully');
       } catch (error) {
         console.error('Failed to load TokenService data:', error);
+        
+        // Fallback: ensure service is ready by forcing initialization
+        if (!this.serviceReady) {
+          const authStore = useAuthStore();
+          const identity = authStore.getIdentity();
+          this.service.forceTrustedInitialization(identity);
+          this.serviceReady = true;
+        }
       }
     },
     
@@ -113,16 +141,39 @@ export const useTokenStore = defineStore('token', {
      */
     quickInitFromCache() {
       try {
+        // Always ensure we have default tokens regardless of authentication
+        const defaultTokens = [
+          {
+            symbol: 'ICP',
+            name: 'Internet Computer Protocol',
+            standard: 'icp',
+            decimals: 8,
+            canisterId: 'ryjl3-tyaaa-aaaaa-aaaba-cai',
+            fee: '10000'
+          },
+          {
+            symbol: 'STDs',
+            name: 'Stardust',
+            standard: 'icrc1',
+            decimals: 8,
+            canisterId: 'opcce-byaaa-aaaak-qcgda-cai',
+            fee: '10000'
+          }
+        ];
+
+        // Set tokens to defaults immediately - will be overridden by cache if available
+        this.tokens = [...defaultTokens];
+        
         const authStore = useAuthStore();
         if (!authStore.isAuthenticated()) {
-          console.log('TokenStore: User not authenticated');
-          return false;
+          console.log('TokenStore: User not authenticated, using defaults');
+          return true; // Return true since we have default tokens
         }
         
         const identity = authStore.getIdentity();
         if (!identity) {
-          console.log('TokenStore: Identity not available');
-          return false;
+          console.log('TokenStore: Identity not available, using defaults');
+          return true; // Return true since we have default tokens
         }
         
         // Get principal and account IDs immediately
@@ -131,38 +182,38 @@ export const useTokenStore = defineStore('token', {
         this.accountId = AccountIdentifier.fromPrincipal({ principal }).toHex();
         
         // Load cached data
-        this.loadFromCache();
+        const loadedFromCache = this.loadFromCache();
         
-        // Set default tokens while waiting for real data
-        if (this.tokens.length === 0) {
-          this.tokens = [
-            {
-              symbol: 'ICP',
-              name: 'Internet Computer Protocol',
-              standard: 'icp',
-              decimals: 8,
-              canisterId: 'ryjl3-tyaaa-aaaaa-aaaba-cai',
-              fee: '10000'
-            }
-          ];
+        // Set default tokens if we couldn't load from cache or if tokens array is empty
+        if (!loadedFromCache || this.tokens.length === 0) {
+          this.tokens = [...defaultTokens];
         }
         
         return true;
       } catch (error) {
         console.error('Failed to load cached token data:', error);
         
-        // Still add default token
+        // Always ensure we have default tokens on error
         this.tokens = [
           {
             symbol: 'ICP',
             name: 'Internet Computer Protocol', 
             standard: 'icp',
             decimals: 8,
+            canisterId: 'ryjl3-tyaaa-aaaaa-aaaba-cai',
+            fee: '10000'
+          },
+          {
+            symbol: 'STDs',
+            name: 'Stardust',
+            standard: 'icrc1',
+            decimals: 8,
+            canisterId: 'opcce-byaaa-aaaak-qcgda-cai',
             fee: '10000'
           }
         ];
         
-        return false;
+        return true; // Return true since we have default tokens
       }
     },
     
@@ -205,35 +256,74 @@ export const useTokenStore = defineStore('token', {
      */
     loadFromCache() {
       try {
-        const cachedData = localStorage.getItem(TOKEN_CACHE_KEY);
-        if (!cachedData) return false;
+        let hasLoaded = false;
         
-        const data = JSON.parse(cachedData);
-        
-        // Restore tokens list
-        if (data.tokens) {
-          this.tokens = data.tokens;
-        }
-        
-        // Restore balances (convert string to BigInt)
-        if (data.balances) {
-          const convertedBalances = {};
-          for (const token in data.balances) {
-            try {
-              convertedBalances[token] = BigInt(data.balances[token]);
-            } catch (e) {
-              convertedBalances[token] = BigInt(0);
+        // First try to load balances from dedicated cache
+        const cachedBalancesData = localStorage.getItem(BALANCES_CACHE_KEY);
+        if (cachedBalancesData) {
+          try {
+            const balancesData = JSON.parse(cachedBalancesData);
+            const authStore = useAuthStore();
+            const principalId = authStore.getIdentity()?.getPrincipal().toString();
+            
+            if (principalId) {
+              // Convert balances with principal prefix to simple token map
+              const convertedBalances = {};
+              Object.keys(balancesData).forEach(key => {
+                if (key.startsWith(`${principalId}_`)) {
+                  const token = key.split('_')[1];
+                  try {
+                    convertedBalances[token] = BigInt(balancesData[key]);
+                    console.log(`Loaded cached balance for ${token}: ${convertedBalances[token]}`);
+                  } catch (e) {
+                    console.warn(`Error converting balance for ${token}:`, e);
+                  }
+                }
+              });
+              
+              if (Object.keys(convertedBalances).length > 0) {
+                this.balances = convertedBalances;
+                hasLoaded = true;
+              }
             }
+          } catch (e) {
+            console.error('Error parsing cached balances data:', e);
           }
-          this.balances = convertedBalances;
         }
         
-        // Restore current token
-        if (data.currentToken) {
-          this.currentToken = data.currentToken;
+        // Then load token data from general cache
+        const cachedData = localStorage.getItem(TOKEN_CACHE_KEY);
+        if (cachedData) {
+          const data = JSON.parse(cachedData);
+          
+          // Restore tokens list
+          if (data.tokens) {
+            this.tokens = data.tokens;
+            hasLoaded = true;
+          }
+          
+          // Restore balances from general cache if we haven't loaded from dedicated cache
+          if (!hasLoaded && data.balances) {
+            const convertedBalances = {};
+            for (const token in data.balances) {
+              try {
+                convertedBalances[token] = BigInt(data.balances[token]);
+              } catch (e) {
+                convertedBalances[token] = BigInt(0);
+              }
+            }
+            this.balances = convertedBalances;
+            hasLoaded = true;
+          }
+          
+          // Restore current token
+          if (data.currentToken) {
+            this.currentToken = data.currentToken;
+            hasLoaded = true;
+          }
         }
         
-        return true;
+        return hasLoaded;
       } catch (error) {
         console.error('Error loading from cache:', error);
         return false;
@@ -257,6 +347,7 @@ export const useTokenStore = defineStore('token', {
           fee: typeof token.fee === 'bigint' ? token.fee.toString() : (token.fee || '0')
         }));
         
+        // Save token data
         const dataToStore = {
           tokens: tokensToStore,
           balances: balancesToStore,
@@ -265,6 +356,35 @@ export const useTokenStore = defineStore('token', {
         };
         
         localStorage.setItem(TOKEN_CACHE_KEY, JSON.stringify(dataToStore));
+        
+        // Also save balances in the principal-prefixed format
+        // This allows TokenService to use the same cached balances
+        if (this.principalId) {
+          const authStore = useAuthStore();
+          const principalId = authStore.getIdentity()?.getPrincipal().toString();
+          
+          if (principalId) {
+            // Get existing balances first
+            const existingBalancesStr = localStorage.getItem(BALANCES_CACHE_KEY);
+            let existingBalances = {};
+            
+            try {
+              if (existingBalancesStr) {
+                existingBalances = JSON.parse(existingBalancesStr);
+              }
+            } catch (e) {
+              console.warn('Error parsing existing balances, starting fresh:', e);
+            }
+            
+            // Update with current balances
+            for (const token in this.balances) {
+              existingBalances[`${principalId}_${token}`] = this.balances[token].toString();
+            }
+            
+            // Save back to cache
+            localStorage.setItem(BALANCES_CACHE_KEY, JSON.stringify(existingBalances));
+          }
+        }
       } catch (error) {
         console.error('Error saving to cache:', error);
       }
@@ -289,62 +409,143 @@ export const useTokenStore = defineStore('token', {
     },
     
     /**
-     * Get the balance for the current token
+     * Refresh token balance for current token
      */
     async refreshBalance() {
+      if (!this.serviceReady || !this.principalId) {
+        return false;
+      }
+      
       try {
-        if (!this.serviceReady) return BigInt(0);
+        this.loading = true;
         
-        const authStore = useAuthStore();
-        const identity = authStore.getIdentity();
+        // Start with current token
+        const symbol = this.currentToken;
         
-        if (!identity) return BigInt(0);
+        // Non-blocking approach: get balance in background
+        this.getBalance(symbol)
+          .then(balance => {
+            // Update balance once retrieved
+            this.balances[symbol] = balance;
+            this.saveToCache();
+          })
+          .catch(error => {
+            console.error(`Error refreshing ${symbol} balance:`, error);
+          })
+          .finally(() => {
+            this.loading = false;
+          });
         
-        const principalId = identity.getPrincipal().toString();
-        const balance = await this.service.getBalance(principalId, this.currentToken);
-        
-        // Update balance in state
-        this.balances[this.currentToken] = balance;
-        
-        // Save to cache
-        this.saveToCache();
-        
-        return balance;
+        return true;
       } catch (error) {
-        console.error(`Failed to get balance for ${this.currentToken}:`, error);
-        return BigInt(0);
+        console.error('Error refreshing balance:', error);
+        this.loading = false;
+        return false;
       }
     },
     
     /**
      * Get balance for a specific token
      * @param {string} symbol - Token symbol
+     * @param {string} [principalId] - Optional specific principal ID to use (otherwise uses authenticated user)
+     * @returns {BigInt} Token balance
      */
-    async getBalance(symbol) {
+    async getBalance(symbol, principalId = null) {
       try {
-        // If service not ready, return cached balance or 0
+        console.log(`[TokenStore] Getting balance for ${symbol}${principalId ? ` (principal: ${principalId})` : ''}`);
+        
+        // If service not ready, try to force initialization
         if (!this.serviceReady) {
-          return this.balances[symbol] || BigInt(0);
+          console.log(`[TokenStore] Service not ready, attempting force initialization`);
+          const authStore = useAuthStore();
+          const identity = authStore.getIdentity();
+          
+          if (identity) {
+            this.service.forceTrustedInitialization(identity);
+            this.serviceReady = true;
+          } else {
+            console.log(`[TokenStore] Service not ready and no identity available, returning cached balance for ${symbol}`);
+            return this.balances[symbol] || BigInt(0);
+          }
         }
         
         const authStore = useAuthStore();
-        const identity = authStore.getIdentity();
         
-        if (!identity) return BigInt(0);
+        let principal = principalId;
+        if (!principalId) {
+          // Use authenticated user's principal
+          if (!authStore.isAuthenticated()) {
+            console.warn('[TokenStore] User not authenticated, returning cached balance');
+            return this.balances[symbol] || BigInt(0);
+          }
+          
+          const identity = authStore.getIdentity();
+          if (!identity) {
+            console.warn('[TokenStore] Identity not available, returning cached balance');
+            return this.balances[symbol] || BigInt(0);
+          }
+          
+          principal = identity.getPrincipal().toString();
+        }
         
-        const principalId = identity.getPrincipal().toString();
-        const balance = await this.service.getBalance(principalId, symbol);
+        // Retry logic with max 3 attempts
+        let attempts = 0;
+        const maxAttempts = 3;
+        let lastError;
+        let renewedAgent = false;
         
-        // Update balance in state
-        this.balances[symbol] = balance;
+        while (attempts < maxAttempts) {
+          try {
+            attempts++;
+            console.log(`[TokenStore] Fetching ${symbol} balance from blockchain for principal ${principal} (attempt ${attempts}/${maxAttempts})`);
+            
+            const balance = await this.service.getBalance(principal, symbol);
+            console.log(`[TokenStore] Received ${symbol} balance from blockchain: ${balance.toString()}`);
+            
+            // Update balance in state
+            this.balances[symbol] = balance;
+            
+            // Save to cache
+            this.saveToCache();
+            
+            return balance;
+          } catch (err) {
+            lastError = err;
+            console.warn(`[TokenStore] Balance fetch attempt ${attempts} failed:`, err);
+            
+            // If we've had multiple failures and haven't renewed the agent yet, try that
+            if (attempts === 2 && !renewedAgent) {
+              console.log(`[TokenStore] Attempting to renew agent after multiple failures`);
+              const identity = authStore.getIdentity();
+              if (identity) {
+                renewedAgent = this.service.renewAgentConnection(identity);
+                // Give a slightly longer delay after renewal
+                await new Promise(resolve => setTimeout(resolve, 500));
+              }
+            } else if (attempts < maxAttempts) {
+              // Wait briefly before retry (increasing delay with each attempt)
+              await new Promise(resolve => setTimeout(resolve, attempts * 100));
+            }
+          }
+        }
         
-        // Save to cache
-        this.saveToCache();
-        
-        return balance;
+        // If all attempts failed, throw the last error to fallback to cache
+        throw lastError;
       } catch (error) {
-        console.error(`Failed to get balance for ${symbol}:`, error);
-        return this.balances[symbol] || BigInt(0);
+        console.error(`[TokenStore] Failed to get balance for ${symbol} after multiple attempts:`, error);
+        
+        // Log the stack trace for debugging
+        console.error(`[TokenStore] Stack trace:`, error.stack);
+        
+        // If we have a cached balance, return it
+        if (this.balances[symbol]) {
+          console.log(`[TokenStore] Returning cached balance: ${this.balances[symbol].toString()}`);
+          return this.balances[symbol];
+        }
+        
+        // Otherwise return 0
+        console.log(`[TokenStore] No cached balance available, returning 0`);
+        return BigInt(0);
       }
     },
     
