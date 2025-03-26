@@ -54,7 +54,7 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue';
-import AccountHeader from './components/wallet/account/AccountHeader.vue';
+import AccountHeader from './components/wallet/AccountHeader.vue';
 import TokenList from './components/wallet/tokens/TokenList.vue';
 
 export default {

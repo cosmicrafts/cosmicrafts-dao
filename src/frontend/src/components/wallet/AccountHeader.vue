@@ -465,6 +465,7 @@ export default {
   width: 100%;
   box-shadow: var(--cosmic-shadow-sm);
   border: var(--cosmic-glass-border-blue);
+  z-index: 100;
 }
 
 .header-top {

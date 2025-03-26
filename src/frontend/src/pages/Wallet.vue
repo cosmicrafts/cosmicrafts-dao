@@ -322,9 +322,6 @@
         @reveal-reward="revealReward"
       />
       
-      <!-- Activity Log -->
-      <ActivityLog :logs="logs" />
-      
       <!-- Loading Indicator -->
       <LoadingIndicator v-if="loading" :message="loadingMessage" />
     </div>
