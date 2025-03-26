@@ -3,32 +3,52 @@
  * This allows us to change icon locations without modifying components
  */
 
+// Import all icons
+import icpIcon from '@/assets/icons/icp.svg';
+import ethereumIcon from '@/assets/icons/ethereum.svg';
+import solanaIcon from '@/assets/icons/solana.svg';
+import bitcoinIcon from '@/assets/icons/bitcoin.svg';
+import usdtIcon from '@/assets/icons/usdt.svg';
+import usdcIcon from '@/assets/icons/usdc.svg';
+import creditCardIcon from '@/assets/icons/credit-card.svg';
+import cosmicIcon from '@/assets/icons/cosmicrafts.svg';
+import applePayIcon from '@/assets/icons/apple-pay.svg';
+import googlePayIcon from '@/assets/icons/google-pay.svg';
+import stripeIcon from '@/assets/icons/stripe.svg';
+import placeholderAvatarIcon from '@/assets/avatars/Avatar_01.webp';
+
 // Icon path mappings
 const ICON_PATHS = {
   // Network icons
-  'network:icp': require('@/assets/icons/icp.svg'),
-  'network:ethereum': require('@/assets/icons/ethereum.svg'),
-  'network:solana': require('@/assets/icons/solana.svg'),
+  'network:icp': icpIcon,
+  'network:ethereum': ethereumIcon,
+  'network:solana': solanaIcon,
   
   // Token icons
-  'token:icp': require('@/assets/icons/icp.svg'),
-  'token:eth': require('@/assets/icons/ethereum.svg'),
-  'token:sol': require('@/assets/icons/solana.svg'),
-  'token:btc': require('@/assets/icons/bitcoin.svg'),
-  'token:usdt': require('@/assets/icons/usdt.svg'),
-  'token:usdc': require('@/assets/icons/usdc.svg'),
-  'token:stds': require('@/assets/icons/credit-card.svg'),
-  'token:cosmic': require('@/assets/icons/cosmicrafts.svg'),
+  'token:icp': icpIcon,
+  'token:eth': ethereumIcon,
+  'token:cketh': ethereumIcon,
+  'token:sol': solanaIcon,
+  'token:btc': bitcoinIcon,
+  'token:ckbtc': bitcoinIcon,
+  'token:usdt': usdtIcon,
+  'token:usdc': usdcIcon,
+  'token:stds': creditCardIcon,
+  'token:cosmic': cosmicIcon,
   
   // Payment method icons
-  'payment:credit-card': require('@/assets/icons/credit-card.svg'),
-  'payment:apple-pay': require('@/assets/icons/apple-pay.svg'),
-  'payment:google-pay': require('@/assets/icons/google-pay.svg'),
-  'payment:stripe': require('@/assets/icons/stripe.svg'),
+  'payment:credit-card': creditCardIcon,
+  'payment:apple-pay': applePayIcon,
+  'payment:google-pay': googlePayIcon,
+  'payment:stripe': stripeIcon,
+  
+  // Avatar and user icons
+  'avatar:placeholder': placeholderAvatarIcon,
   
   // Default icons
-  'default:token': require('@/assets/icons/icp.svg'),
-  'default:network': require('@/assets/icons/icp.svg'),
+  'default:token': icpIcon,
+  'default:network': icpIcon,
+  'default:avatar': placeholderAvatarIcon,
 };
 
 /**
@@ -83,9 +103,19 @@ export function getPaymentIcon(method) {
   return getIconPath(`payment:${method.toLowerCase()}`);
 }
 
+/**
+ * Get avatar icon path
+ * @param {string} type - The avatar type (e.g., 'placeholder', specific avatar ID)
+ * @returns {string} The path to the avatar icon
+ */
+export function getAvatarIcon(type = 'placeholder') {
+  return getIconPath(`avatar:${type.toLowerCase()}`);
+}
+
 export default {
   getIconPath,
   getNetworkIcon,
   getTokenIcon,
-  getPaymentIcon
+  getPaymentIcon,
+  getAvatarIcon
 }; 

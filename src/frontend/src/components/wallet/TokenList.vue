@@ -49,7 +49,7 @@
 <script>
 import { ref, computed, onMounted, watch } from 'vue';
 import { useTokenStore } from '@/stores/token';
-import { getTokenIcon } from '@/utils/iconUtils';
+import { getTokenIcon } from '@/utils/IconService';
 
 export default {
   name: 'TokenList',

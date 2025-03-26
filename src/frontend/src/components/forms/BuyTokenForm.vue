@@ -134,7 +134,7 @@
 
 <script>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import { getTokenIcon, getPaymentIcon } from '@/utils/iconUtils';
+import { getTokenIcon, getPaymentIcon } from '@/utils/IconService';
 
 export default {
   name: 'BuyTokenForm',

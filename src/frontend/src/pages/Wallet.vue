@@ -1,30 +1,272 @@
 <template>
   <div class="cosmic-wallet-container">
     <div class="cosmic-wallet">
-      <!-- New Account Header Component -->
-      <AccountHeader
-        :default-currency="preferredCurrency"
-        @action="handleWalletAction"
-        @currency-changed="handleCurrencyChange"
-        @network-changed="handleNetworkChange"
-        @account-changed="handleAccountChange"
-        @copy-success="handleCopySuccess"
-        @copy-error="handleCopyError"
-      />
+      <!-- Account Header - combines account selection, network selection, and currency preferences -->
+      <div class="wallet-account-header">
+        <div class="account-selector">
+          <div class="selected-account" @click="toggleAccountsMenu">
+            <div class="account-avatar">
+              <!-- Use a placeholder or avatar if available -->
+              <img :src="placeholderAvatar" alt="Account Avatar" />
+            </div>
+            
+            <div class="account-details">
+              <span class="account-name">{{ accounts[currentAccountIndex]?.name || 'My Account' }}</span>
+              <span class="account-id">{{ formatPrincipalId(principalId) }}</span>
+            </div>
+            
+            <div class="account-toggle">
+              <i class="fas fa-chevron-down" :class="{'rotate-180': showAccountsMenu}"></i>
+            </div>
+          </div>
+          
+          <!-- Accounts dropdown menu -->
+          <div v-if="showAccountsMenu" class="accounts-menu">
+            <div class="accounts-menu-header">
+              <span>Select Account</span>
+              <button class="menu-action" @click="handleWalletAction('create-account')">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            
+            <div class="accounts-list">
+              <!-- We would populate this with actual accounts -->
+              <div 
+                class="account-option" 
+                :class="{'selected': currentAccountIndex === 0}"
+                @click="handleAccountChange({index: 0, account: {name: 'Main Account'}})"
+              >
+                <div class="account-avatar small">
+                  <img :src="placeholderAvatar" alt="Account Avatar" />
+                </div>
+                <div class="account-details">
+                  <span class="account-name">Main Account</span>
+                  <span class="account-id">{{ formatPrincipalId(principalId) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="account-actions">
+          <!-- Network Selector Dropdown -->
+          <div class="network-selector">
+            <div class="selected-network" @click="toggleNetworksMenu">
+              <div class="network-icon">
+                <img :src="getNetworkIcon(currentNetwork.id)" :alt="currentNetwork.name" />
+              </div>
+              <div class="network-name">{{ currentNetwork.name }}</div>
+              <div class="network-toggle">
+                <i class="fas fa-chevron-down" :class="{'rotate-180': showNetworksMenu}"></i>
+              </div>
+            </div>
+            
+            <!-- Networks dropdown menu -->
+            <div v-if="showNetworksMenu" class="networks-menu">
+              <div class="networks-menu-header">
+                <span>Select Network</span>
+              </div>
+              <div class="networks-list">
+                <div 
+                  class="network-option" 
+                  :class="{'selected': currentNetwork.id === 'icp'}"
+                  @click="handleNetworkChange({id: 'icp', name: 'Internet Computer'})"
+                >
+                  <div class="network-icon small">
+                    <img :src="getNetworkIcon('icp')" alt="ICP" />
+                  </div>
+                  <div class="network-name">Internet Computer</div>
+                </div>
+                <div 
+                  class="network-option" 
+                  :class="{'selected': currentNetwork.id === 'eth'}"
+                  @click="handleNetworkChange({id: 'eth', name: 'Ethereum'})"
+                >
+                  <div class="network-icon small">
+                    <img :src="getNetworkIcon('ethereum')" alt="ETH" />
+                  </div>
+                  <div class="network-name">Ethereum</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Currency Selector -->
+          <div class="currency-selector">
+            <div class="selected-currency" @click="toggleCurrenciesMenu">
+              <span class="currency-code">{{ preferredCurrency }}</span>
+              <div class="currency-toggle">
+                <i class="fas fa-chevron-down" :class="{'rotate-180': showCurrenciesMenu}"></i>
+              </div>
+            </div>
+            
+            <!-- Currency dropdown menu -->
+            <div v-if="showCurrenciesMenu" class="currencies-menu">
+              <div class="currencies-menu-header">
+                <span>Select Currency</span>
+              </div>
+              <div class="currencies-list">
+                <div 
+                  class="currency-option" 
+                  :class="{'selected': preferredCurrency === 'USD'}"
+                  @click="handleCurrencyChange({code: 'USD', name: 'US Dollar'})"
+                >
+                  <div class="currency-flag">🇺🇸</div>
+                  <div class="currency-details">
+                    <span class="currency-code">USD</span>
+                    <span class="currency-name">US Dollar</span>
+                  </div>
+                </div>
+                <div 
+                  class="currency-option" 
+                  :class="{'selected': preferredCurrency === 'EUR'}"
+                  @click="handleCurrencyChange({code: 'EUR', name: 'Euro'})"
+                >
+                  <div class="currency-flag">🇪🇺</div>
+                  <div class="currency-details">
+                    <span class="currency-code">EUR</span>
+                    <span class="currency-name">Euro</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button 
+              class="action-button" 
+              @click="copyIdentifier"
+              :title="principalMode ? 'Copy Principal ID' : 'Copy Account ID'"
+            >
+              <i class="fas fa-copy"></i>
+            </button>
+            
+            <button 
+              class="action-button" 
+              @click="toggleIdentifierType"
+              :title="principalMode ? 'Switch to Account ID' : 'Switch to Principal ID'"
+            >
+              <i class="fas fa-exchange-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
       
       <!-- Token List Component -->
-      <TokenList 
-        :currency="preferredCurrency"
-        :selected-account="currentAccountIndex"
-        :current-network="currentNetwork"
-        @select-token="handleTokenSelection"
-        @add-token="showAddTokenForm"
-        @manage-tokens="showManageTokensForm"
-      />
+      <div class="token-list-container">
+        <!-- Loading state -->
+        <div v-if="loading" class="token-list-loading">
+          <div v-for="n in 4" :key="n" class="skeleton-item">
+            <div class="skeleton-icon"></div>
+            <div class="skeleton-content">
+              <div class="skeleton-line skeleton-title"></div>
+              <div class="skeleton-line skeleton-subtitle"></div>
+            </div>
+            <div class="skeleton-amount">
+              <div class="skeleton-line skeleton-balance"></div>
+              <div class="skeleton-line skeleton-value"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Token list when loaded -->
+        <div v-else class="token-list">
+          <!-- Token list header with actions -->
+          <div class="token-list-header">
+            <h3>Your Assets</h3>
+            <div class="token-list-actions">
+              <button 
+                class="icon-button"
+                @click="toggleShowZeroBalances"
+              >
+                <span class="icon">
+                  <i class="fas fa-eye"></i>
+                </span>
+                <span class="text">{{ showZeroBalances ? 'Hide Zero' : 'Show All' }}</span>
+              </button>
+              
+              <button class="icon-button" @click="showAddTokenForm">
+                <span class="icon">
+                  <i class="fas fa-plus"></i>
+                </span>
+                <span class="text">Add Token</span>
+              </button>
+              
+              <button class="icon-button" @click="showManageTokensForm">
+                <span class="icon">
+                  <i class="fas fa-sliders-h"></i>
+                </span>
+                <span class="text">Manage</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Token items -->
+          <div class="tokens-wrapper">
+            <div v-for="token in filteredTokens" :key="token.symbol" 
+                 class="token-item" 
+                 :class="{'selected': token.symbol === currentTokenSymbol}"
+                 @click="handleTokenSelection(token)"
+            >
+              <div class="token-icon">
+                <img :src="getTokenIcon(token.symbol)" :alt="token.name" />
+              </div>
+              
+              <div class="token-info">
+                <div class="token-name-row">
+                  <span class="token-symbol">{{ token.symbol }}</span>
+                  <span class="token-name">{{ token.name }}</span>
+                </div>
+                
+                <div class="token-standard">
+                  <span class="token-network">{{ token.standard }}</span>
+                </div>
+              </div>
+              
+              <div class="token-balance">
+                <div class="token-amount">
+                  {{ formatTokenAmount(getTokenBalance(token.symbol), token.decimals) }} {{ token.symbol }}
+                </div>
+                
+                <div class="token-value">
+                  {{ formatFiatValue(token.valueUsd, preferredCurrency) }}
+                </div>
+              </div>
+              
+              <div class="token-actions">
+                <button class="action-button" @click.stop="() => handleWalletAction('send')">
+                  <i class="fas fa-arrow-up"></i>
+                </button>
+                
+                <button class="action-button" @click.stop="() => handleWalletAction('receive')">
+                  <i class="fas fa-arrow-down"></i>
+                </button>
+                
+                <button class="action-button" @click.stop="() => handleWalletAction('swap')">
+                  <i class="fas fa-exchange-alt"></i>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Empty state -->
+            <div v-if="filteredTokens.length === 0" class="empty-state">
+              <div class="empty-icon">
+                <i class="fas fa-coins"></i>
+              </div>
+              <p>No tokens found</p>
+              <button 
+                class="button-secondary"
+                @click="showAddTokenForm"
+              >
+                Add Token
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       
-      <!-- Wallet UI Components - Render based on active action -->
-      
-      <!-- Send Token Form -->
+      <!-- Keep the existing forms -->
       <SendTokenForm 
         v-if="activeForm === 'send'"
         :token-symbol="currentTokenSymbol"
@@ -34,7 +276,6 @@
         @transfer-complete="handleTransferComplete"
       />
       
-      <!-- Receive Token -->
       <ReceiveTokenInfo
         v-if="activeForm === 'receive'"
         :principal-id="principalId"
@@ -44,21 +285,18 @@
         @copy="handleCopy"
       />
       
-      <!-- Add Token Form -->
       <AddTokenForm
         v-if="activeForm === 'add-token'"
         @close="activeForm = null"
         @token-added="handleTokenAdded"
       />
       
-      <!-- Swap Token Form -->
       <SwapTokenForm
         v-if="activeForm === 'swap'"
         @close="activeForm = null"
         @swap-complete="handleSwapComplete"
       />
       
-      <!-- Buy Token Form -->
       <BuyTokenForm
         v-if="activeForm === 'buy'"
         @close="activeForm = null"
@@ -94,7 +332,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useAuthStore } from '../stores/auth.js';
 import { useTokenStore } from '../stores/token.js';
 import { useNftsStore } from '../stores/nfts.js';
@@ -113,6 +351,7 @@ import ActivityLog from '../components/feedback/ActivityLog.vue';
 import LoadingIndicator from '../components/feedback/LoadingIndicator.vue';
 import NFTCollection from '../components/collections/NFTCollection.vue';
 import ChestOpeningModal from '../components/modals/ChestOpeningModal.vue';
+import { getAvatarIcon, getNetworkIcon, getTokenIcon } from '@/utils/IconService';
 
 export default {
   name: 'Wallet',
@@ -135,7 +374,7 @@ export default {
     const tokenStore = useTokenStore();
     const nftsStore = useNftsStore();
     
-    // State variables
+    // State variables from original implementation
     const principalId = ref('');
     const accountId = ref('');
     const currentTokenSymbol = ref('ICP');
@@ -174,6 +413,78 @@ export default {
     // UI State Storage Keys
     const UI_STATE_KEY = 'cosmicrafts-wallet-ui-state';
     const WALLET_LOGS_KEY = 'cosmicrafts-wallet-logs';
+    
+    // New state variables for modular UI
+    const showAccountsMenu = ref(false);
+    const showNetworksMenu = ref(false);
+    const showCurrenciesMenu = ref(false);
+    const showZeroBalances = ref(true);
+    
+    // Dummy accounts data
+    const accounts = ref([
+      {
+        id: '1',
+        name: 'Main Account',
+        principalId: 'abc123def456ghi789jkl',
+        accountId: '0x1234567890abcdef1234567890abcdef12345678',
+        avatar: null
+      },
+      {
+        id: '2',
+        name: 'Game Account',
+        principalId: 'mno123pqr456stu789vwx',
+        accountId: '0xabcdef1234567890abcdef1234567890abcdef12',
+        avatar: null
+      }
+    ]);
+    
+    // Dummy tokens data - in a real app, this would come from tokenStore
+    const tokens = ref([
+      {
+        symbol: 'ICP',
+        name: 'Internet Computer',
+        decimals: 8,
+        standard: 'ICRC-1',
+        canisterId: 'ryjl3-tyaaa-aaaaa-aaaba-cai',
+        valueUsd: 13.5
+      },
+      {
+        symbol: 'ckBTC',
+        name: 'Chain Key Bitcoin',
+        decimals: 8,
+        standard: 'ICRC-1',
+        canisterId: 'mxzaz-hqaaa-aaaar-qaada-cai',
+        valueUsd: 66000
+      },
+      {
+        symbol: 'ckETH',
+        name: 'Chain Key Ethereum',
+        decimals: 18,
+        standard: 'ICRC-1',
+        canisterId: 'ss2fx-dyaaa-aaaar-qacoq-cai',
+        valueUsd: 3500
+      },
+      {
+        symbol: 'STDs',
+        name: 'Stardust',
+        decimals: 8,
+        standard: 'ICRC-1',
+        canisterId: 'stdst-waaaa-aaaaq-aacia-cai',
+        valueUsd: 0.01
+      }
+    ]);
+    
+    // Filtered tokens based on balance settings
+    const filteredTokens = computed(() => {
+      if (showZeroBalances.value) {
+        return tokens.value;
+      } else {
+        return tokens.value.filter(token => {
+          const balance = tokenBalances.value[token.symbol] || BigInt(0);
+          return balance > BigInt(0);
+        });
+      }
+    });
     
     // Initialize the wallet
     onMounted(async () => {
@@ -229,6 +540,33 @@ export default {
         console.error('Error initializing user IDs:', error);
         addLog(`Error loading user IDs: ${error.message}`, 'error');
       }
+    }
+    
+    // Toggle UI dropdowns
+    function toggleAccountsMenu() {
+      showAccountsMenu.value = !showAccountsMenu.value;
+      showNetworksMenu.value = false;
+      showCurrenciesMenu.value = false;
+    }
+    
+    function toggleNetworksMenu() {
+      showNetworksMenu.value = !showNetworksMenu.value;
+      showAccountsMenu.value = false;
+      showCurrenciesMenu.value = false;
+    }
+    
+    function toggleCurrenciesMenu() {
+      showCurrenciesMenu.value = !showCurrenciesMenu.value;
+      showAccountsMenu.value = false;
+      showNetworksMenu.value = false;
+    }
+    
+    function toggleShowZeroBalances() {
+      showZeroBalances.value = !showZeroBalances.value;
+    }
+    
+    function toggleIdentifierType() {
+      principalMode.value = !principalMode.value;
     }
     
     // Handle wallet actions (receive, send, swap, buy)
@@ -396,6 +734,73 @@ export default {
       }
     }
     
+    // Format principal ID for display
+    function formatPrincipalId(id) {
+      if (!id) return '';
+      
+      // Show first 5 and last 5 characters
+      return `${id.substring(0, 5)}...${id.substring(id.length - 5)}`;
+    }
+    
+    // Format token amount for display
+    function formatTokenAmount(amount, decimals) {
+      // Handle BigInt and convert to display format
+      if (typeof amount === 'bigint') {
+        const divisor = BigInt(10) ** BigInt(decimals);
+        const integerPart = amount / divisor;
+        const fractionalPart = amount % divisor;
+        
+        let formatted = integerPart.toString();
+        
+        if (fractionalPart > 0) {
+          // Convert fractional part to string with leading zeros
+          let fractionalStr = fractionalPart.toString().padStart(decimals, '0');
+          
+          // Trim trailing zeros
+          while (fractionalStr.endsWith('0')) {
+            fractionalStr = fractionalStr.slice(0, -1);
+          }
+          
+          if (fractionalStr.length > 0) {
+            // Only show first 4 decimal places
+            formatted += '.' + fractionalStr.slice(0, 4);
+          }
+        }
+        
+        return formatted;
+      }
+      
+      return '0';
+    }
+    
+    // Format fiat value for display
+    function formatFiatValue(value, currencyCode) {
+      if (typeof value !== 'number') {
+        return '—';
+      }
+      
+      const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currencyCode,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+      
+      return formatter.format(value);
+    }
+    
+    // Copy identifier to clipboard
+    async function copyIdentifier() {
+      try {
+        const textToCopy = principalMode.value ? principalId.value : accountId.value;
+        await navigator.clipboard.writeText(textToCopy);
+        addLog(`${principalMode.value ? 'Principal' : 'Account'} ID copied to clipboard`, 'success');
+      } catch (error) {
+        console.error('Failed to copy:', error);
+        addLog(`Failed to copy: ${error.message}`, 'error');
+      }
+    }
+    
     // Get token balance
     function getTokenBalance(symbol) {
       return tokenBalances.value[symbol] || BigInt(0);
@@ -511,7 +916,7 @@ export default {
           }
           
           if (parsedUiState.currency) {
-            preferredCurrency = parsedUiState.currency;
+            preferredCurrency.value = parsedUiState.currency;
           }
           
           if (parsedUiState.accountIndex !== undefined) {
@@ -532,6 +937,10 @@ export default {
                       : 'Unknown Network'
             };
           }
+          
+          if (parsedUiState.showZeroBalances !== undefined) {
+            showZeroBalances.value = parsedUiState.showZeroBalances;
+          }
         }
       } catch (error) {
         console.error('Error loading UI state:', error);
@@ -544,9 +953,10 @@ export default {
         const uiState = {
           principalMode: principalMode.value,
           currentToken: currentTokenSymbol.value,
-          currency: preferredCurrency,
+          currency: preferredCurrency.value,
           accountIndex: currentAccountIndex.value,
-          networkId: currentNetwork.value.id
+          networkId: currentNetwork.value.id,
+          showZeroBalances: showZeroBalances.value
         };
         
         localStorage.setItem(UI_STATE_KEY, JSON.stringify(uiState));
@@ -569,7 +979,7 @@ export default {
     
     // Handle currency change
     function handleCurrencyChange(newCurrency) {
-      preferredCurrency = newCurrency.code;
+      preferredCurrency.value = newCurrency.code;
       addLog(`Currency changed to ${newCurrency.name}`, 'info');
       saveUIState();
     }
@@ -602,15 +1012,6 @@ export default {
       saveUIState();
     }
     
-    // Handle copy success/error events
-    function handleCopySuccess({ type }) {
-      addLog(`${type === 'principal' ? 'Principal' : 'Account'} ID copied to clipboard`, 'success');
-    }
-    
-    function handleCopyError({ error }) {
-      addLog(`Failed to copy: ${error}`, 'error');
-    }
-    
     // Refresh all token balances
     async function refreshTokenBalances() {
       try {
@@ -619,8 +1020,8 @@ export default {
         loading.value = true;
         loadingMessage.value = 'Refreshing balances...';
         
-        const tokens = tokenStore.getSupportedTokens();
-        for (const symbol of tokens) {
+        const tokenSymbols = tokens.value.map(t => t.symbol);
+        for (const symbol of tokenSymbols) {
           await refreshTokenBalance(symbol);
         }
         
@@ -632,6 +1033,11 @@ export default {
         loading.value = false;
       }
     }
+    
+    // Watch for token store changes
+    watch(() => tokenStore.balances, (newBalances) => {
+      tokenBalances.value = newBalances;
+    });
     
     return {
       // State
@@ -655,6 +1061,15 @@ export default {
       currentAccountIndex,
       preferredCurrency,
       currentNetwork,
+      accounts,
+      tokens,
+      filteredTokens,
+      
+      // UI state
+      showAccountsMenu,
+      showNetworksMenu,
+      showCurrenciesMenu,
+      showZeroBalances,
       
       // Methods
       handleWalletAction,
@@ -674,9 +1089,21 @@ export default {
       handleCurrencyChange,
       handleNetworkChange,
       handleAccountChange,
-      handleCopySuccess,
-      handleCopyError,
-      refreshTokenBalances
+      refreshTokenBalances,
+      
+      // UI methods
+      toggleAccountsMenu,
+      toggleNetworksMenu,
+      toggleCurrenciesMenu,
+      toggleShowZeroBalances,
+      toggleIdentifierType,
+      formatPrincipalId,
+      formatTokenAmount,
+      formatFiatValue,
+      getNetworkIcon,
+      copyIdentifier,
+      placeholderAvatar: getAvatarIcon('placeholder'),
+      getTokenIcon
     };
   }
 };
@@ -696,10 +1123,741 @@ export default {
   gap: 16px;
 }
 
+/* Account Header Styles */
+.wallet-account-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--cosmic-glass-bg, rgba(30, 43, 56, 0.65));
+  border-radius: var(--cosmic-radius-lg, 12px);
+  border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+  margin-bottom: 1rem;
+  position: relative;
+  backdrop-filter: var(--cosmic-glass-blur, blur(8px));
+}
+
+.account-selector {
+  position: relative;
+}
+
+.selected-account {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  border-radius: var(--cosmic-radius-md, 8px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.selected-account:hover {
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.2);
+}
+
+.account-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(15, 185, 253, 0.9) 0%, rgba(77, 207, 255, 0.9) 50%, rgba(0, 157, 223, 0.9) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+  overflow: hidden;
+}
+
+.account-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.account-avatar.small {
+  width: 2rem;
+  height: 2rem;
+}
+
+.account-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.account-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-text-primary, #ffffff);
+}
+
+.account-id {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary, rgba(255, 255, 255, 0.7));
+}
+
+.account-toggle {
+  margin-left: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary, rgba(255, 255, 255, 0.7));
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.accounts-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  width: 280px;
+  background: var(--cosmic-glass-bg-darker, rgba(23, 33, 43, 0.75));
+  border-radius: var(--cosmic-radius-md, 8px);
+  border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+  box-shadow: var(--cosmic-shadow-md, 0 8px 16px rgba(0, 0, 0, 0.2));
+  z-index: 10;
+  overflow: hidden;
+  backdrop-filter: var(--cosmic-glass-blur, blur(8px));
+}
+
+.accounts-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+  font-weight: 700;
+}
+
+.accounts-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.account-option {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.account-option:hover {
+  background: rgba(15, 185, 253, 0.1);
+}
+
+.account-option.selected {
+  background: rgba(15, 185, 253, 0.2);
+}
+
+.accounts-menu-footer {
+  padding: 0.75rem 1rem;
+  border-top: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+}
+
+.menu-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(15, 185, 253, 0.1);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  color: var(--cosmic-blue, #0FB9FD);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.menu-action:hover {
+  background: rgba(15, 185, 253, 0.2);
+  border-color: rgba(15, 185, 253, 0.3);
+}
+
+.menu-action-full {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: var(--cosmic-radius-sm, 6px);
+  background: rgba(255, 75, 75, 0.1);
+  border: 1px solid rgba(255, 75, 75, 0.2);
+  color: var(--cosmic-danger, #FF4B4B);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.menu-action-full:hover {
+  background: rgba(255, 75, 75, 0.2);
+  border-color: rgba(255, 75, 75, 0.3);
+}
+
+.account-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-button {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  color: var(--color-text-primary, #ffffff);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.2);
+  color: var(--cosmic-blue, #0FB9FD);
+}
+
+/* Network Selector Styles */
+.network-selector {
+  position: relative;
+}
+
+.selected-network {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  border-radius: var(--cosmic-radius-md, 8px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.selected-network:hover {
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.2);
+}
+
+.network-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cosmic-glass-bg, rgba(30, 43, 56, 0.65));
+}
+
+.network-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.network-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-secondary, rgba(255, 255, 255, 0.85));
+}
+
+.network-toggle {
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary, rgba(255, 255, 255, 0.7));
+  display: flex;
+  align-items: center;
+}
+
+.networks-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 220px;
+  background: var(--cosmic-glass-bg-darker, rgba(23, 33, 43, 0.75));
+  border-radius: var(--cosmic-radius-md, 8px);
+  border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+  box-shadow: var(--cosmic-shadow-md, 0 8px 16px rgba(0, 0, 0, 0.2));
+  z-index: 10;
+  overflow: hidden;
+  backdrop-filter: var(--cosmic-glass-blur, blur(8px));
+}
+
+.networks-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.networks-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.network-option {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.network-option:hover {
+  background: rgba(15, 185, 253, 0.1);
+}
+
+.network-option.selected {
+  background: rgba(15, 185, 253, 0.2);
+}
+
+.network-icon.small {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.75rem;
+}
+
+.network-badge {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.4rem;
+  background: rgba(15, 185, 253, 0.1);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  border-radius: var(--cosmic-radius-sm, 6px);
+  margin-left: auto;
+  color: var(--cosmic-blue, #0FB9FD);
+}
+
+/* Currency Selector Styles */
+.currency-selector {
+  position: relative;
+}
+
+.selected-currency {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  border-radius: var(--cosmic-radius-md, 8px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.selected-currency:hover {
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.2);
+}
+
+.currency-code {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary, rgba(255, 255, 255, 0.85));
+}
+
+.currency-toggle {
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary, rgba(255, 255, 255, 0.7));
+}
+
+.currencies-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 220px;
+  background: var(--cosmic-glass-bg-darker, rgba(23, 33, 43, 0.75));
+  border-radius: var(--cosmic-radius-md, 8px);
+  border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+  box-shadow: var(--cosmic-shadow-md, 0 8px 16px rgba(0, 0, 0, 0.2));
+  z-index: 10;
+  overflow: hidden;
+  backdrop-filter: var(--cosmic-glass-blur, blur(8px));
+}
+
+.currencies-menu-header {
+  padding: 0.75rem 1rem;
+  border-bottom: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.currencies-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.currency-option {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.currency-option:hover {
+  background: rgba(15, 185, 253, 0.1);
+}
+
+.currency-option.selected {
+  background: rgba(15, 185, 253, 0.2);
+}
+
+.currency-flag {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.currency-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.currency-name {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary, rgba(255, 255, 255, 0.7));
+}
+
+/* Token List Styles */
+.token-list-container {
+  width: 100%;
+  border-radius: var(--cosmic-radius-lg, 12px);
+  overflow: hidden;
+  background: var(--cosmic-glass-bg, rgba(30, 43, 56, 0.65));
+  backdrop-filter: var(--cosmic-glass-blur, blur(8px));
+  border: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+}
+
+.token-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: var(--cosmic-glass-border, 1px solid rgba(255, 255, 255, 0.12));
+}
+
+.token-list-header h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #ffffff);
+  margin: 0;
+}
+
+.token-list-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--cosmic-radius-sm, 6px);
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  color: var(--color-text-primary, #ffffff);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-button:hover {
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.2);
+  transform: translateY(-1px);
+}
+
+.icon-button.active {
+  background: rgba(15, 185, 253, 0.15);
+  border-color: rgba(15, 185, 253, 0.3);
+}
+
+.icon-button .icon {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.tokens-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.token-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: var(--cosmic-radius-md, 8px);
+  background: rgba(30, 43, 56, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.token-item:hover {
+  background: rgba(30, 43, 56, 0.6);
+  border-color: rgba(15, 185, 253, 0.15);
+  transform: translateY(-2px);
+  box-shadow: var(--cosmic-shadow-sm, 0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+.token-item.selected {
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.3);
+}
+
+.token-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(15, 185, 253, 0.1) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.token-item:hover::before {
+  opacity: 1;
+}
+
+.token-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 1rem;
+  background: rgba(15, 185, 253, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--cosmic-shadow-sm, 0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+.token-icon img {
+  width: 2.25rem;
+  height: 2.25rem;
+  object-fit: contain;
+}
+
+.token-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.token-name-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.token-symbol {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-text-primary, #ffffff);
+  margin-right: 0.5rem;
+}
+
+.token-name {
+  font-size: 0.9rem;
+  color: var(--color-text-tertiary, rgba(255, 255, 255, 0.7));
+}
+
+.token-standard {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary, rgba(255, 255, 255, 0.7));
+}
+
+.token-balance {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 1.5rem;
+}
+
+.token-amount {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-text-primary, #ffffff);
+  margin-bottom: 0.25rem;
+}
+
+.token-value {
+  font-size: 0.9rem;
+  color: var(--color-text-tertiary, rgba(255, 255, 255, 0.7));
+}
+
+.token-actions {
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.token-item:hover .token-actions {
+  opacity: 1;
+}
+
+/* Skeleton Loading */
+.token-list-loading {
+  padding: 1rem;
+}
+
+.skeleton-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: var(--cosmic-radius-md, 8px);
+  background: rgba(30, 43, 56, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.skeleton-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  margin-right: 1rem;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(255, 255, 255, 0.05) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-content {
+  flex: 1;
+}
+
+.skeleton-line {
+  height: 0.9rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(255, 255, 255, 0.05) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--cosmic-radius-sm, 6px);
+}
+
+.skeleton-title {
+  width: 30%;
+  height: 1.1rem;
+}
+
+.skeleton-subtitle {
+  width: 50%;
+  height: 0.8rem;
+}
+
+.skeleton-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 1.5rem;
+}
+
+.skeleton-balance {
+  width: 6rem;
+  height: 1rem;
+}
+
+.skeleton-value {
+  width: 4rem;
+  height: 0.8rem;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  color: var(--color-text-tertiary, rgba(255, 255, 255, 0.7));
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.button-secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--cosmic-radius-md, 8px);
+  background: linear-gradient(135deg, rgba(15, 185, 253, 0.9) 0%, rgba(77, 207, 255, 0.9) 50%, rgba(0, 157, 223, 0.9) 100%);
+  color: white;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(15, 185, 253, 0.35);
+}
+
+/* Responsive styles */
 @media (max-width: 768px) {
   .cosmic-wallet-container {
     margin: 10px;
     padding-top: 7rem; /* Account for the header with a bit extra */
+  }
+  
+  .wallet-account-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .account-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .accounts-menu {
+    width: 100%;
   }
 }
 </style> 

@@ -42,7 +42,7 @@
 
 <script>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { getNetworkIcon } from '@/utils/iconUtils';
+import { getNetworkIcon } from '@/utils/IconService';
 
 export default {
   name: 'NetworkSelector',

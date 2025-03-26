@@ -103,7 +103,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useTokenStore } from '@/stores/token';
 import NetworkSelector from './NetworkSelector.vue';
 import CurrencySelector from './CurrencySelector.vue';
-import { getNetworkIcon } from '@/utils/iconUtils';
+import { getNetworkIcon } from '@/utils/IconService';
 
 export default {
   name: 'AccountHeader',

@@ -143,7 +143,7 @@
 <script>
 import { ref, computed, onMounted } from 'vue';
 import { useTokenStore } from '../../stores/token';
-import { getTokenIcon } from '@/utils/iconUtils';
+import { getTokenIcon } from '@/utils/IconService';
 
 export default {
   name: 'SwapTokenForm',
