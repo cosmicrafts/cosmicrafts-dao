@@ -135,6 +135,11 @@
           <section v-if="activeTab === 'achievements'" class="dashboard-section achievements-section">
             <AchievementsSection />
           </section>
+          
+          <!-- Stats Section -->
+          <section v-if="activeTab === 'stats'" class="dashboard-section stats-section">
+            <StatsSection />
+          </section>
               </div>
 
         <!-- Right column - NFTs and Quick Actions -->
@@ -227,6 +232,7 @@ import NFTCard from '@/components/ui/cards/NFTCard.vue';
 import ReferralsSection from '@/components/referrals/ReferralsSection.vue';
 import MissionsSection from '@/components/missions/MissionsSection.vue';
 import AchievementsSection from '@/components/achievements';
+import StatsSection from '@/components/stats';
 
 // Router
 const router = useRouter();
