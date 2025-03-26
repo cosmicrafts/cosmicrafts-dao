@@ -39,6 +39,17 @@
             {{ getReadyToClaimCount(tab.id) }}
           </div>
         </button>
+        
+        <!-- Add refresh button -->
+        <button 
+          @click="refreshMissions"
+          class="tab-button refresh-button"
+          :class="{ 'refreshing': isRefreshing }"
+          :disabled="isLoading || isRefreshing"
+        >
+          <i class="fas fa-sync-alt"></i>
+          <span>Refresh</span>
+        </button>
       </div>
       
       <!-- Daily Missions Tab -->
@@ -91,22 +102,6 @@
         </template>
       </div>
       
-      <!-- Achievements Tab -->
-      <div v-if="activeTab === 'achievements'" class="missions-tab-content">
-        <div v-if="!missions.achievements.length" class="empty-missions">
-          <i class="fas fa-trophy"></i>
-          <p>No achievements available at the moment. Check back later!</p>
-        </div>
-        <template v-else>
-          <AchievementCard 
-            v-for="achievement in missions.achievements" 
-            :key="achievement.id"
-            :achievement="achievement"
-            @claim="claimAchievement"
-          />
-        </template>
-      </div>
-      
       <!-- Personal Missions Tab -->
       <div v-if="activeTab === 'personal'" class="missions-tab-content">
         <div v-if="!missions.personal.length" class="empty-missions">
@@ -127,23 +122,24 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useCanisterStore } from '@/stores/canister';
 import MissionCard from './MissionCard.vue';
 import FreeChestCard from './FreeChestCard.vue';
-import AchievementCard from './AchievementCard.vue';
 
 // State
 const isLoading = ref(true);
+const isRefreshing = ref(false);
 const errorMessage = ref('');
 const activeTab = ref('daily');
+const autoRefreshInterval = ref(null);
+const lastRefreshTime = ref(Date.now());
 
 // Mission tabs
 const tabs = [
   { id: 'daily', label: 'Daily', icon: 'fas fa-sun' },
   { id: 'weekly', label: 'Weekly', icon: 'fas fa-calendar-week' },
   { id: 'chests', label: 'Free Chests', icon: 'fas fa-box-open' },
-  { id: 'achievements', label: 'Achievements', icon: 'fas fa-trophy' },
   { id: 'personal', label: 'Personal', icon: 'fas fa-user-astronaut' }
 ];
 
@@ -152,7 +148,6 @@ const missions = ref({
   daily: [],
   weekly: [],
   freeChests: [],
-  achievements: [],
   personal: []
 });
 
@@ -161,7 +156,6 @@ const readyToClaimCounts = ref({
   daily: 0,
   weekly: 0,
   chests: 0,
-  achievements: 0,
   personal: 0
 });
 
@@ -231,32 +225,6 @@ const claimChest = async (chestId) => {
   }
 };
 
-// Claim an achievement reward
-const claimAchievement = async (achievementId) => {
-  console.log(`Claiming achievement: ${achievementId}`);
-  
-  try {
-    const canister = useCanisterStore();
-    const backend = await canister.get('cosmicrafts');
-    
-    if (!backend) {
-      throw new Error("Backend canister not initialized");
-    }
-    
-    const result = await backend.claimIndividualAchievementReward(achievementId);
-    console.log("Achievement claim result:", result);
-    
-    // Refresh missions data after claiming
-    fetchAllMissions();
-    
-    // Show success notification
-    alert("Achievement reward claimed successfully!");
-  } catch (error) {
-    console.error("Error claiming achievement:", error);
-    alert("Failed to claim achievement reward. Please try again.");
-  }
-};
-
 // Update a mission's status after claiming
 const updateMissionStatus = (missionId, claimed) => {
   // Update in all mission categories
@@ -277,7 +245,6 @@ const calculateReadyToClaimCounts = () => {
     daily: missions.value.daily.filter(m => m.progress >= m.total && !m.finished).length,
     weekly: missions.value.weekly.filter(m => m.progress >= m.total && !m.finished).length,
     chests: missions.value.freeChests.filter(chest => !chest.finished && (new Date(Number(chest.expiration))).getTime() <= Date.now()).length,
-    achievements: missions.value.achievements.filter(a => a.progress >= a.total && !a.claimed).length,
     personal: missions.value.personal.filter(m => m.progress >= m.total && !m.finished).length
   };
   
@@ -294,7 +261,6 @@ const fetchAllMissions = async () => {
   missions.value.daily = [];
   missions.value.weekly = [];
   missions.value.freeChests = [];
-  missions.value.achievements = [];
   missions.value.personal = [];
   
   try {
@@ -307,6 +273,10 @@ const fetchAllMissions = async () => {
       console.error("Backend canister not initialized");
       throw new Error("Could not connect to backend. Please try again later.");
     }
+    
+    // Start background update of user missions to ensure they're renewed
+    // This runs in parallel with fetching current missions
+    let missionUpdatePromise = updateUserMissions(backend);
     
     // Fetch general missions (daily, weekly, free chests)
     console.log("Fetching general missions...");
@@ -330,17 +300,17 @@ const fetchAllMissions = async () => {
       processUserMissions(userMissionsResult);
     }
     
-    // Fetch achievements
-    console.log("Fetching user achievements...");
-    const achievementsResult = await backend.getUserAchievementsStructureByCaller();
-    console.log("Achievements response:", achievementsResult);
-    
-    if (achievementsResult) {
-      processAchievements(achievementsResult);
-    }
-    
     // Calculate missions ready to claim
     calculateReadyToClaimCounts();
+    
+    // Wait for the background mission update to complete
+    try {
+      const updateResult = await missionUpdatePromise;
+      console.log("Background mission update result:", updateResult);
+    } catch (updateError) {
+      console.warn("Background mission update failed:", updateError);
+      // Don't fail the main mission loading if the update fails
+    }
     
     console.log("All missions data loaded successfully");
   } catch (error) {
@@ -354,6 +324,34 @@ const fetchAllMissions = async () => {
     }
   } finally {
     isLoading.value = false;
+  }
+};
+
+// Helper function to update user missions in the background
+const updateUserMissions = async (backend) => {
+  try {
+    console.log("Updating user missions in background...");
+    
+    // Get the current user's principal ID from the canister store
+    const canister = useCanisterStore();
+    const principal = canister.principal;
+    
+    if (!principal) {
+      console.warn("No principal ID found, cannot update user missions");
+      return { success: false, message: "No principal ID found", missionId: 0 };
+    }
+    
+    console.log(`Updating missions for principal: ${principal}`);
+    
+    // Call createUserMission with the current user's principal ID
+    const [success, message, missionId] = await backend.createUserMission(principal);
+    
+    console.log(`Mission update result: success=${success}, message=${message}, missionId=${missionId}`);
+    
+    return { success, message, missionId };
+  } catch (error) {
+    console.error("Error updating user missions:", error);
+    throw error;
   }
 };
 
@@ -433,29 +431,6 @@ const processUserMissions = (userMissions) => {
   console.log(`After processing user missions: ${missions.value.daily.length} daily, ${missions.value.weekly.length} weekly, ${missions.value.freeChests.length} free chests, ${missions.value.personal.length} personal`);
 };
 
-// Process achievements from the response
-const processAchievements = (achievements) => {
-  console.log("Processing achievements...");
-  
-  // Reset achievements array
-  missions.value.achievements = [];
-  
-  // Process each achievement
-  achievements.forEach(achievement => {
-    // Convert BigInt to regular number for easier handling
-    const parsedAchievement = {
-      ...achievement,
-      progress: Number(achievement.progress),
-      total: Number(achievement.target),
-      claimed: achievement.claimed 
-    };
-    
-    missions.value.achievements.push(parsedAchievement);
-  });
-  
-  console.log(`Processed: ${missions.value.achievements.length} achievements`);
-};
-
 // Generate mock mission data for development/testing
 const generateMockMissions = () => {
   console.log("Generating mock missions data");
@@ -529,30 +504,6 @@ const generateMockMissions = () => {
     }
   ];
   
-  // Mock achievements
-  missions.value.achievements = [
-    {
-      id: "mock-achievement-1",
-      name: "First Victory",
-      achievementType: "Combat",
-      description: "Win your first game",
-      progress: 1,
-      total: 1,
-      reward: { type: "Stardust", amount: 100 },
-      claimed: true
-    },
-    {
-      id: "mock-achievement-2",
-      name: "Veteran Player",
-      achievementType: "Account",
-      description: "Play 50 games",
-      progress: 32,
-      total: 50,
-      reward: { type: "Title", titleId: "veteran" },
-      claimed: false
-    }
-  ];
-  
   // Mock personal missions
   missions.value.personal = [
     {
@@ -575,10 +526,58 @@ const generateMockMissions = () => {
   console.log("Mock mission data generated:", missions.value);
 };
 
+// Refresh missions with visual indicator
+const refreshMissions = async () => {
+  if (isRefreshing.value || isLoading.value) return;
+  
+  isRefreshing.value = true;
+  
+  try {
+    await fetchAllMissions();
+    lastRefreshTime.value = Date.now();
+  } catch (error) {
+    console.error("Error refreshing missions:", error);
+  } finally {
+    isRefreshing.value = false;
+  }
+};
+
+// Auto-refresh missions every 5 minutes
+const setupAutoRefresh = () => {
+  // Clear any existing interval
+  if (autoRefreshInterval.value) {
+    clearInterval(autoRefreshInterval.value);
+  }
+  
+  // Define 5 minutes in milliseconds
+  const fiveMinutes = 5 * 60 * 1000;
+  
+  // Set up new interval - refresh every 5 minutes
+  autoRefreshInterval.value = setInterval(() => {
+    // Only auto-refresh if it's been at least 5 minutes since last manual refresh
+    const now = Date.now();
+    
+    if (now - lastRefreshTime.value >= fiveMinutes) {
+      console.log("Auto-refreshing missions...");
+      refreshMissions();
+    }
+  }, fiveMinutes);
+};
+
 // Initialize on component mount
 onMounted(() => {
   console.log("MissionsSection component mounted");
-  fetchAllMissions();
+  fetchAllMissions().then(() => {
+    // Set up auto-refresh after initial load
+    setupAutoRefresh();
+  });
+});
+
+// Clean up on component unmount
+onUnmounted(() => {
+  if (autoRefreshInterval.value) {
+    clearInterval(autoRefreshInterval.value);
+  }
 });
 </script>
 
@@ -769,6 +768,30 @@ onMounted(() => {
   
   .chests-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Add styles for the refresh button */
+.refresh-button {
+  margin-left: auto;
+  min-width: auto !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.refresh-button i {
+  transition: transform 0.5s ease;
+}
+
+.refresh-button.refreshing i {
+  animation: rotating 1s linear infinite;
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 </style> 

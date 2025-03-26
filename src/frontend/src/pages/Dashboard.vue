@@ -126,9 +126,14 @@
                 </div>
           </section>
 
-          <!-- Missions Section (New Tab) -->
+          <!-- Missions Section -->
           <section v-if="activeTab === 'missions'" class="dashboard-section missions-section">
             <MissionsSection />
+          </section>
+
+          <!-- Achievements Section (New Tab) -->
+          <section v-if="activeTab === 'achievements'" class="dashboard-section achievements-section">
+            <AchievementsSection />
           </section>
               </div>
 
@@ -221,6 +226,7 @@ import TokenCard from '@/components/tokens/TokenCard.vue';
 import NFTCard from '@/components/ui/cards/NFTCard.vue';
 import ReferralsSection from '@/components/referrals/ReferralsSection.vue';
 import MissionsSection from '@/components/missions/MissionsSection.vue';
+import AchievementsSection from '@/components/achievements';
 
 // Router
 const router = useRouter();
@@ -244,6 +250,7 @@ const tabs = [
   { id: 'overview', label: 'Overview', icon: 'fas fa-columns' },
   { id: 'referrals', label: 'Referrals', icon: 'fas fa-users' },
   { id: 'missions', label: 'Missions', icon: 'fas fa-tasks' },
+  { id: 'achievements', label: 'Achievements', icon: 'fas fa-trophy' },
   { id: 'stats', label: 'Stats', icon: 'fas fa-chart-bar' }
 ];
 
