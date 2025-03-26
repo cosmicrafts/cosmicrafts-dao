@@ -83,9 +83,28 @@ const emits = defineEmits(['claim']);
 const isLoading = ref(false);
 const errorMessage = ref(null);
 
+// Define hasProperty once at the top level
+const hasProperty = (obj, prop) => {
+  return obj && typeof obj === 'object' && prop in obj;
+};
+
+// Helper function to safely convert BigInt values to numbers
+const safeBigIntValue = (value) => {
+  if (typeof value === 'bigint') {
+    return Number(value);
+  }
+  if (typeof value === 'object' && value !== null && typeof value.valueOf === 'function') {
+    const valueOf = value.valueOf();
+    if (typeof valueOf === 'bigint') {
+      return Number(valueOf);
+    }
+  }
+  return value;
+};
+
 // Computed properties
 const isCompleted = computed(() => {
-  const progressMet = props.mission.progress >= props.mission.total;
+  const progressMet = safeBigIntValue(props.mission.progress) >= safeBigIntValue(props.mission.total);
   const explicitlyFinished = props.mission.finished === true;
   const explicitlyClaimed = props.mission.claimed === true;
   
@@ -98,12 +117,16 @@ const isCompleted = computed(() => {
 });
 
 const progressPercent = computed(() => {
-  return Math.min(100, Math.round((props.mission.progress / props.mission.total) * 100));
+  const progress = safeBigIntValue(props.mission.progress);
+  const total = safeBigIntValue(props.mission.total);
+  
+  if (total === 0) return 0;
+  return Math.min(100, Math.round((progress / total) * 100));
 });
 
 const timeRemaining = computed(() => {
   const now = Math.floor(Date.now() / 1000); // Current time in seconds
-  let expirationTime = Number(props.mission.expiration);
+  let expirationTime = safeBigIntValue(props.mission.expiration);
   
   // Log the raw expiration value for debugging
   console.log(`Raw expiration value for mission ${props.mission.id_mission || 'unknown'}: ${expirationTime}`);
@@ -117,12 +140,11 @@ const timeRemaining = computed(() => {
     return 'No expiration';
   }
   
-  // For blockchain timestamps, some systems use nanoseconds - check for extremely large values
-  // and prevent unrealistic "X months left" displays
+  // Convert nanoseconds to seconds if the value is extremely large
   if (expirationTime > 9999999999) {
-    // This is way beyond a reasonable Unix timestamp in seconds
-    // Either use a very large time format or just say "Long time"
-    return 'Long time left';
+    // It's likely nanoseconds or another very large unit - convert to seconds (approx)
+    expirationTime = Math.floor(expirationTime / 1000000000);
+    console.log(`Converted expiration to seconds: ${expirationTime}`);
   }
   
   // Calculate time remaining in seconds
@@ -170,11 +192,11 @@ const missionCategoryClass = computed(() => {
     return 'default';
   }
   
-  if (category.Daily) return 'daily';
-  if (category.Weekly) return 'weekly';
-  if (category.Hourly) return 'hourly';
-  if (category.Free) return 'free';
-  if (category.Achievement) return 'achievement';
+  if (hasProperty(category, 'Daily')) return 'daily';
+  if (hasProperty(category, 'Weekly')) return 'weekly';
+  if (hasProperty(category, 'Hourly')) return 'hourly';
+  if (hasProperty(category, 'Free')) return 'free';
+  if (hasProperty(category, 'Achievement')) return 'achievement';
   
   // For debugging
   console.log("Unknown category format:", category);
@@ -183,8 +205,8 @@ const missionCategoryClass = computed(() => {
 
 const rewardTypeClass = computed(() => {
   const type = props.mission.reward_type;
-  if (type.Stardust) return 'stardust';
-  if (type.Chest) return 'chest';
+  if (hasProperty(type, 'Stardust')) return 'stardust';
+  if (hasProperty(type, 'Chest')) return 'chest';
   return 'default';
 });
 
@@ -195,19 +217,19 @@ const missionIcon = computed(() => {
     return 'fas fa-tasks';
   }
   
-  if (category.Daily) return 'fas fa-sun';
-  if (category.Weekly) return 'fas fa-calendar-week';
-  if (category.Hourly) return 'fas fa-hourglass-half';
-  if (category.Free) return 'fas fa-gift';
-  if (category.Achievement) return 'fas fa-trophy';
+  if (hasProperty(category, 'Daily')) return 'fas fa-sun';
+  if (hasProperty(category, 'Weekly')) return 'fas fa-calendar-week';
+  if (hasProperty(category, 'Hourly')) return 'fas fa-hourglass-half';
+  if (hasProperty(category, 'Free')) return 'fas fa-gift';
+  if (hasProperty(category, 'Achievement')) return 'fas fa-trophy';
   
   // Try to pick a good default icon based on mission type
   const type = props.mission.missionType;
   if (type) {
-    if (type.GamesCompleted || type.GamesWon) return 'fas fa-gamepad';
-    if (type.DamageDealt || type.DamageTaken) return 'fas fa-bolt';
-    if (type.Kills) return 'fas fa-skull';
-    if (type.EnergyUsed) return 'fas fa-battery-half';
+    if (hasProperty(type, 'GamesCompleted') || hasProperty(type, 'GamesWon')) return 'fas fa-gamepad';
+    if (hasProperty(type, 'DamageDealt') || hasProperty(type, 'DamageTaken')) return 'fas fa-bolt';
+    if (hasProperty(type, 'Kills')) return 'fas fa-skull';
+    if (hasProperty(type, 'EnergyUsed')) return 'fas fa-battery-half';
   }
   
   return 'fas fa-tasks';
@@ -215,8 +237,8 @@ const missionIcon = computed(() => {
 
 const rewardIcon = computed(() => {
   const type = props.mission.reward_type;
-  if (type.Stardust) return 'fas fa-star';
-  if (type.Chest) return 'fas fa-box-open';
+  if (hasProperty(type, 'Stardust')) return 'fas fa-star';
+  if (hasProperty(type, 'Chest')) return 'fas fa-box-open';
   return 'fas fa-gift';
 });
 
@@ -225,28 +247,33 @@ const missionTitle = computed(() => {
   const type = props.mission.missionType;
   
   if (!type) {
-    console.log("Mission with no type:", props.mission);
+    console.log("Mission with no type:", JSON.stringify(props.mission, (_, v) => 
+      typeof v === 'bigint' ? v.toString() : v));
     return 'Mission';
   }
   
   // Map mission type to better titles that match MissionOptions.mo templates
-  if (type.UnitsDeployed) return 'Deploy NFTs';
-  if (type.DamageDealt) return 'Deal Damage';
-  if (type.DamageTaken) return 'Take Damage';
-  if (type.XPEarned) return 'Earn XP';
-  if (type.Kills) return 'Destroy Enemies';
-  if (type.FactionPlayed) return 'Play with Faction';
-  if (type.GamesCompleted) return 'Complete Games';
-  if (type.EnergyUsed) return 'Use Energy';
-  if (type.GamesWon) return 'Win Games';
-  if (type.GameModePlayed) return 'Play Game Mode';
+  if (hasProperty(type, 'UnitsDeployed')) return 'Deploy NFTs';
+  if (hasProperty(type, 'DamageDealt')) return 'Deal Damage';
+  if (hasProperty(type, 'DamageTaken')) return 'Take Damage';
+  if (hasProperty(type, 'XPEarned')) return 'Earn XP';
+  if (hasProperty(type, 'Kills')) return 'Destroy Enemies';
+  if (hasProperty(type, 'FactionPlayed')) return 'Play with Faction';
+  if (hasProperty(type, 'GamesCompleted')) return 'Complete Games';
+  if (hasProperty(type, 'EnergyUsed')) return 'Use Energy';
+  if (hasProperty(type, 'GamesWon')) return 'Win Games';
+  if (hasProperty(type, 'GameModePlayed')) return 'Play Game Mode';
   
   // For any other mission types, try to format the type name
-  const typeKeys = Object.keys(type);
-  if (typeKeys.length > 0) {
-    // Convert camelCase to words with spaces (e.g., "GameModePlayed" -> "Game Mode Played")
-    const title = typeKeys[0].replace(/([A-Z])/g, ' $1').trim();
-    return title.charAt(0).toUpperCase() + title.slice(1);
+  try {
+    const typeKeys = Object.keys(type);
+    if (typeKeys.length > 0) {
+      // Convert camelCase to words with spaces (e.g., "GameModePlayed" -> "Game Mode Played")
+      const title = typeKeys[0].replace(/([A-Z])/g, ' $1').trim();
+      return title.charAt(0).toUpperCase() + title.slice(1);
+    }
+  } catch (error) {
+    console.error("Error processing mission type:", error);
   }
   
   // If we can't determine the type, log for debugging
@@ -257,23 +284,23 @@ const missionTitle = computed(() => {
 const missionDescription = computed(() => {
   // Generate description based on mission type
   const type = props.mission.missionType;
-  const total = props.mission.total;
+  const total = safeBigIntValue(props.mission.total);
   
   if (!type) {
     return `Complete mission objective: ${total}`;
   }
   
   // These descriptions match the templates in MissionOptions.mo
-  if (type.UnitsDeployed) return `Deploy ${total} NFTs in battles`;
-  if (type.DamageDealt) return `Deal ${total} damage to enemies`;
-  if (type.DamageTaken) return `Take ${total} damage from enemies`;
-  if (type.XPEarned) return `Earn ${total} XP from battles`;
-  if (type.Kills) return `Destroy ${total} enemies in battle`;
-  if (type.FactionPlayed) return `Play ${total} games with any faction`;
-  if (type.GamesCompleted) return `Complete ${total} games`;
-  if (type.EnergyUsed) return `Use ${total} energy in battles`;
-  if (type.GamesWon) return `Win ${total} games`;
-  if (type.GameModePlayed) return `Play ${total} games in any game mode`;
+  if (hasProperty(type, 'UnitsDeployed')) return `Deploy ${total} NFTs in battles`;
+  if (hasProperty(type, 'DamageDealt')) return `Deal ${total} damage to enemies`;
+  if (hasProperty(type, 'DamageTaken')) return `Take ${total} damage from enemies`;
+  if (hasProperty(type, 'XPEarned')) return `Earn ${total} XP from battles`;
+  if (hasProperty(type, 'Kills')) return `Destroy ${total} enemies in battle`;
+  if (hasProperty(type, 'FactionPlayed')) return `Play ${total} games with any faction`;
+  if (hasProperty(type, 'GamesCompleted')) return `Complete ${total} games`;
+  if (hasProperty(type, 'EnergyUsed')) return `Use ${total} energy in battles`;
+  if (hasProperty(type, 'GamesWon')) return `Win ${total} games`;
+  if (hasProperty(type, 'GameModePlayed')) return `Play ${total} games in any game mode`;
   
   // For debugging, show what mission type we got
   console.log("Unknown mission type:", type);
@@ -287,21 +314,25 @@ const formatCategory = (category) => {
     return 'Mission';
   }
   
-  if (category.Daily) return 'Daily Mission';
-  if (category.Weekly) return 'Weekly Mission';
-  if (category.Hourly) return 'Hourly Mission';
-  if (category.Free) return 'Free Mission';
-  if (category.Achievement) return 'Achievement';
+  if (hasProperty(category, 'Daily')) return 'Daily Mission';
+  if (hasProperty(category, 'Weekly')) return 'Weekly Mission';
+  if (hasProperty(category, 'Hourly')) return 'Hourly Mission';
+  if (hasProperty(category, 'Free')) return 'Free Mission';
+  if (hasProperty(category, 'Achievement')) return 'Achievement';
   
   // For debugging, log what category we got
   console.log("Unknown mission category:", category);
   
   // Try to intelligently get the category name
-  const keys = Object.keys(category);
-  if (keys.length > 0) {
-    // Convert camelCase to words with spaces and capitalize first letter
-    const formatted = keys[0].replace(/([A-Z])/g, ' $1').trim();
-    return formatted.charAt(0).toUpperCase() + formatted.slice(1) + ' Mission';
+  try {
+    const keys = Object.keys(category);
+    if (keys.length > 0) {
+      // Convert camelCase to words with spaces and capitalize first letter
+      const formatted = keys[0].replace(/([A-Z])/g, ' $1').trim();
+      return formatted.charAt(0).toUpperCase() + formatted.slice(1) + ' Mission';
+    }
+  } catch (error) {
+    console.error("Error processing mission category:", error);
   }
   
   return 'Mission';
@@ -313,16 +344,20 @@ const formatRewardType = (type) => {
     return 'Reward';
   }
   
-  if (type.Stardust) return 'Stardust';
-  if (type.Chest) return 'Chest';
-  if (type.XP) return 'Experience';
+  if (hasProperty(type, 'Stardust')) return 'Stardust';
+  if (hasProperty(type, 'Chest')) return 'Chest';
+  if (hasProperty(type, 'XP')) return 'Experience';
   
   // Try to intelligently get the reward type name
-  const keys = Object.keys(type);
-  if (keys.length > 0) {
-    // Convert camelCase to words with spaces and capitalize first letter
-    const formatted = keys[0].replace(/([A-Z])/g, ' $1').trim();
-    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+  try {
+    const keys = Object.keys(type);
+    if (keys.length > 0) {
+      // Convert camelCase to words with spaces and capitalize first letter
+      const formatted = keys[0].replace(/([A-Z])/g, ' $1').trim();
+      return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+    }
+  } catch (error) {
+    console.error("Error processing reward type:", error);
   }
   
   console.log("Unknown reward type:", type);
