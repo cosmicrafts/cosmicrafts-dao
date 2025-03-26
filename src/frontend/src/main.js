@@ -57,6 +57,22 @@ app.use(i18n);
 app.use(router);
 app.mount('#app');
 
+// Add immediate identity initialization
+// This needs to happen BEFORE any data loading to ensure canister calls can work
+(async function initializeAuth() {
+  try {
+    // Import auth store synchronously first
+    const { useAuthStore } = await import('@/stores/auth');
+    const authStore = useAuthStore();
+    
+    // Initialize identity immediately so it's available for all canister calls
+    const initialized = authStore.initializeIdentityFromCache();
+    console.log(`Identity immediate initialization: ${initialized ? 'successful' : 'not needed'}`);
+  } catch (err) {
+    console.warn('Error during immediate identity initialization:', err);
+  }
+})();
+
 // Parallel loading of user data tasks - fully non-blocking architecture
 const loadUserData = () => {
   console.log("Loading user data in background...");
@@ -69,13 +85,20 @@ const loadUserData = () => {
   authStoreImport.then(({ useAuthStore }) => {
     const authStore = useAuthStore();
     
-    // Load auth data independently - doesn't block anything else
-    authStore.loadStateFromLocalStorage().then(hasUserData => {
-      // Authentication data loaded - no waiting or callbacks
-      console.log(hasUserData ? 'User authenticated' : 'No user data found');
-    }).catch(err => {
-      console.warn('Auth data loading error:', err);
-    });
+    // Wrap in try-catch to ensure errors don't break the app
+    try {
+      // Load auth data independently - doesn't block anything else
+      authStore.loadStateFromLocalStorage().then(hasUserData => {
+        // Authentication data loaded - no waiting or callbacks
+        console.log(hasUserData ? 'User authenticated' : 'No user data found');
+      }).catch(err => {
+        console.warn('Auth data loading error:', err);
+        // Continue app operation even if auth fails
+      });
+    } catch (criticalError) {
+      console.error('Critical auth store initialization error:', criticalError);
+      // App can still function without auth data
+    }
   }).catch(err => {
     console.warn('Auth store import error:', err);
   });

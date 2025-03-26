@@ -104,6 +104,9 @@
   import { useI18n } from 'vue-i18n';
   import AvatarSelector from '@/components/user/AvatarSelector.vue';
   import LoadingScreen from '@/components/media/LoadingScreen.vue';
+  
+  // Import function for key derivation
+  import { deriveKeysFromSeedPhrase } from '@/utils/cryptoUtils';
 
   export default {
     components: {
@@ -178,7 +181,28 @@
               registerResult.value = t('register.successMessage', {
                 username: playerData[0]?.username || t('register.newPlayer'),
               });
+              
+              // Make sure we properly update the auth store
               await authStore.isPlayerRegistered();
+              
+              // Then make sure addresses are properly initialized
+              if (!authStore.derivedAddresses || authStore.derivedAddresses.length === 0) {
+                // Initialize the first derived address if it doesn't exist yet
+                const keyPair = deriveKeysFromSeedPhrase(authStore.seedPhrase);
+                const identity = authStore.getIdentity();
+                
+                if (identity) {
+                  authStore.derivedAddresses = [{
+                    index: 0,
+                    principalId: identity.getPrincipal().toText(),
+                    publicKey: Buffer.from(keyPair.publicKey).toString('hex'),
+                    name: 'Main Account'
+                  }];
+                  authStore.currentAddressIndex = 0;
+                  authStore.saveStateToLocalStorage();
+                }
+              }
+              
               modalStore.closeModal();
               router.push('/');
             } else {

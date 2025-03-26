@@ -1,6 +1,6 @@
 // File: /stores/auth.js
 import { defineStore } from 'pinia';
-import { mnemonicToSeedSync, generateMnemonic, validateMnemonic } from 'bip39';
+import { validateMnemonic, generateMnemonic } from 'bip39';
 import { Ed25519KeyIdentity } from '@dfinity/identity';
 import { AuthClient } from '@dfinity/auth-client';
 import Registration from '@/components/forms/RegistrationForm.vue';
@@ -9,10 +9,18 @@ import { useModalStore } from '@/stores/modal';
 import nacl from 'tweetnacl';
 import MetaMaskService from '@/services/MetaMaskService';
 import PhantomService from '@/services/PhantomService';
+import SeedPhraseModal from '@/components/modals/SeedPhraseModal.vue';
 import { useLanguageStore } from '@/stores/language';
-
 import * as bip39 from 'bip39';
 import { generateName } from '@/utils/namegen';
+
+// Import crypto utility functions
+import { 
+  deriveKeysFromSeedPhrase, 
+  createIdentityFromKeyPair, 
+  deriveAddressFromSeedPhrase,
+  calculateAccountId
+} from '@/utils/cryptoUtils';
 
 let identity = null;
 
@@ -25,14 +33,6 @@ function generateSeedPhrase(input) {
   });
 }
 
-function deriveKeysFromSeedPhrase(seedPhrase) {
-  const seed = mnemonicToSeedSync(seedPhrase).slice(0, 32);
-  return nacl.sign.keyPair.fromSeed(seed);
-}
-
-function createIdentityFromKeyPair(keyPair) {
-  return Ed25519KeyIdentity.fromKeyPair(keyPair.publicKey, keyPair.secretKey);
-}
 const languageMapping = {
   vi: 'vi',
   en: 'en',
@@ -54,49 +54,167 @@ export const useAuthStore = defineStore('auth', {
     registered: false,
     player: null,
     seedPhrase: '',
+    // Derive multiple addresses from one seed phrase
+    derivedAddresses: [],
+    currentAddressIndex: 0,
+    isCheckingPlayer: false,
   }),
+  
+  getters: {
+    // Get the current active derived address
+    currentAddress: (state) => {
+      if (state.derivedAddresses.length > state.currentAddressIndex) {
+        return state.derivedAddresses[state.currentAddressIndex];
+      }
+      return null;
+    },
+    
+    // Get public key of current identity
+    currentPublicKey: (state) => {
+      const currentId = state.getIdentity();
+      if (!currentId) return '';
+      
+      try {
+        // Try to extract public key if available
+        return '';  // Implement extraction if needed
+      } catch (e) {
+        console.error('Error extracting public key:', e);
+        return '';
+      }
+    },
+    
+    // Check if the user has a seed phrase
+    hasSeedPhrase: (state) => {
+      return !!state.seedPhrase && state.seedPhrase.trim() !== '';
+    }
+  },
+  
   actions: {
     // In auth.js, update getPlayerByPrincipal
-async getPlayerByPrincipal(principal) {
-  try {
-    const canister = useCanisterStore();
-    const cosmicrafts = await canister.get('cosmicrafts');
-    
-    if (!cosmicrafts) {
-      throw new Error('Canister not initialized');
-    }
+    async getPlayerByPrincipal(principal) {
+      try {
+        const canister = useCanisterStore();
+        const cosmicrafts = await canister.get('cosmicrafts');
+        
+        if (!cosmicrafts) {
+          throw new Error('Canister not initialized');
+        }
 
-    // Ensure principal is properly converted to string representation
-    const principalString = principal.toString();
+        // Ensure principal is properly converted to string representation
+        const principalString = principal.toString();
+        
+        // Use the correct method signature expected by the canister
+        const playerArr = await cosmicrafts.getPlayer(principalString);
+        
+        if (playerArr?.length > 0 && playerArr[0]) {
+          return JSON.parse(
+            JSON.stringify(playerArr[0], (key, value) =>
+              typeof value === 'bigint' ? value.toString() : value
+            )
+          );
+        }
+        return null;
+      } catch (error) {
+        console.error('Error fetching player data:', error);
+        throw error;
+      }
+    },
     
-    // Use the correct method signature expected by the canister
-    const playerArr = await cosmicrafts.getPlayer(principalString);
-    
-    if (playerArr?.length > 0 && playerArr[0]) {
-      return JSON.parse(
-        JSON.stringify(playerArr[0], (key, value) =>
-          typeof value === 'bigint' ? value.toString() : value
-        )
-      );
-    }
-    return null;
-  } catch (error) {
-    console.error('Error fetching player data:', error);
-    throw error;
-  }
-},
     getIdentity() {
       return identity;
     },
+    
     isAuthenticated() {
       return this.authenticated;
     },
+    
     isRegistered() {
       return this.registered;
     },
+    
+    // Reveal and show the seed phrase in a modal
+    showSeedPhrase() {
+      if (!this.seedPhrase) {
+        console.error('No seed phrase available to reveal');
+        return false;
+      }
+      
+      const modalStore = useModalStore();
+      const publicKey = this.currentPublicKey;
+      const principalId = identity ? identity.getPrincipal().toText() : '';
+      
+      modalStore.openModal(SeedPhraseModal, {
+        seedPhrase: this.seedPhrase,
+        principalId,
+        publicKey,
+        title: 'Account Backup Information'
+      });
+      
+      return true;
+    },
+    
+    // Generate a new address from the same seed phrase
+    generateNewAddress() {
+      if (!this.seedPhrase) {
+        console.error('Cannot generate address: No seed phrase available');
+        return null;
+      }
+      
+      try {
+        // Use the next index for a new address
+        const newIndex = this.derivedAddresses.length;
+        const addressInfo = deriveAddressFromSeedPhrase(this.seedPhrase, newIndex);
+        
+        // Add to address list
+        this.derivedAddresses.push({
+          index: newIndex,
+          principalId: addressInfo.principalId,
+          publicKey: addressInfo.publicKey,
+          name: `Address ${newIndex + 1}`
+        });
+        
+        // Save state
+        this.saveStateToLocalStorage();
+        
+        return addressInfo;
+      } catch (error) {
+        console.error('Error generating new address:', error);
+        return null;
+      }
+    },
+    
+    // Switch to a different derived address
+    switchToAddress(addressIndex) {
+      if (addressIndex < 0 || addressIndex >= this.derivedAddresses.length) {
+        console.error('Invalid address index');
+        return false;
+      }
+      
+      try {
+        // Generate the identity from seed phrase and index
+        const { identity: newIdentity } = deriveAddressFromSeedPhrase(
+          this.seedPhrase, 
+          addressIndex
+        );
+        
+        // Update the global identity
+        identity = newIdentity;
+        this.currentAddressIndex = addressIndex;
+        
+        // Save state
+        this.saveStateToLocalStorage();
+        
+        return true;
+      } catch (error) {
+        console.error('Error switching address:', error);
+        return false;
+      }
+    },
+    
     async recoverAccount(seedPhrase) {
       return this.handleLoginFlow(seedPhrase);
     },
+    
     async handleLoginFlow(seedPhrase) {
       if (!validateMnemonic(seedPhrase)) {
         throw new Error('Invalid seed phrase.');
@@ -112,6 +230,19 @@ async getPlayerByPrincipal(principal) {
       this.authenticated = true;
     
       this.seedPhrase = seedPhrase;
+      
+      // Initialize the first derived address (which is the main identity)
+      // Only initialize if we don't already have addresses
+      if (!this.derivedAddresses || this.derivedAddresses.length === 0) {
+        this.derivedAddresses = [{
+          index: 0,
+          principalId: identity.getPrincipal().toText(),
+          publicKey: Buffer.from(keyPair.publicKey).toString('hex'),
+          name: 'Main Account'
+        }];
+        this.currentAddressIndex = 0;
+      }
+      
       this.saveStateToLocalStorage();
     
       try {
@@ -428,8 +559,10 @@ async getPlayerByPrincipal(principal) {
       // Finally reset the store
       this.$reset();
       
-      // Immediately refresh the page - no need for setTimeout
-      window.location.href = '/';
+      // Use Vue Router instead of refreshing the page
+      // Import the router dynamically to avoid circular dependencies
+      const router = (await import('@/router')).default;
+      router.push('/');
     },
     saveStateToLocalStorage() {
       const replacer = (key, value) => {
@@ -463,11 +596,21 @@ async getPlayerByPrincipal(principal) {
           // Apply parsed state to the store
           this.$patch(parsed);
     
-          // Reinitialize identity if a seedPhrase exists
+          // Reinitialize identity based on the current address index
           if (parsed.seedPhrase) {
             try {
-              const keyPair = deriveKeysFromSeedPhrase(parsed.seedPhrase);
-              identity = createIdentityFromKeyPair(keyPair);
+              // Get the current address index
+              const addressIndex = parsed.currentAddressIndex || 0;
+              
+              // Derive identity from seed phrase and address index
+              const { identity: derivedIdentity } = deriveAddressFromSeedPhrase(
+                parsed.seedPhrase, 
+                addressIndex
+              );
+              
+              // Set the global identity
+              identity = derivedIdentity;
+              
               console.log('Identity reinitialized from seed phrase:', identity.getPrincipal().toText());
               
               // Set authenticated state immediately
@@ -498,7 +641,13 @@ async getPlayerByPrincipal(principal) {
               }
             } catch (identityError) {
               console.error('Failed to reinitialize identity:', identityError);
-              // Clear invalid state
+              // Instead of completely resetting, try alternative recovery approach
+              if (this.tryAlternativeRecovery(parsed.seedPhrase)) {
+                console.log('Recovered using alternative method');
+                return true;
+              }
+              
+              // If recovery fails, reset state
               this.$reset();
               identity = null;
               localStorage.removeItem('authStore');
@@ -527,9 +676,30 @@ async getPlayerByPrincipal(principal) {
         return false; // Indicate that no user data was found
       }
     },
+    
+    // New method to try alternative recovery approaches
+    tryAlternativeRecovery(seedPhrase) {
+      try {
+        // Alternative 1: Try direct approach without index modification
+        const seed = bip39.mnemonicToSeedSync(seedPhrase).slice(0, 32);
+        const keyPair = nacl.sign.keyPair.fromSeed(seed);
+        identity = Ed25519KeyIdentity.fromKeyPair(keyPair.publicKey, keyPair.secretKey);
+        
+        console.log('Recovered identity with principal:', identity.getPrincipal().toText());
+        this.authenticated = true;
+        return true;
+      } catch (error) {
+        console.error('Alternative recovery also failed:', error);
+        return false;
+      }
+    },
     redirectToHome() {
-      // Redirect to feed for a social media experience
-      window.location.href = '/feed';
+      // Use Vue Router instead of directly changing window.location
+      // Import the router dynamically to avoid circular dependencies
+      import('@/router').then(module => {
+        const router = module.default;
+        router.push('/dashboard');
+      });
     },
     redirectToRegistration() {
       const modalStore = useModalStore(); // Access modal store
@@ -541,6 +711,37 @@ async getPlayerByPrincipal(principal) {
         modalStore.openModal(Registration); // Open the registration modal
         //console.log('Modal State After Opening Registration:', modalStore.isOpen);
       }, 0); // Add a slight delay to ensure Vue processes the close event
+    },
+    
+    // Add a new method to initialize identity from cache immediately on app start
+    initializeIdentityFromCache() {
+      const stored = localStorage.getItem('authStore');
+      if (!stored) return false;
+      
+      try {
+        const parsed = JSON.parse(stored);
+        if (!parsed.seedPhrase) return false;
+        
+        // Initialize identity synchronously to ensure it's available immediately
+        try {
+          // Get the current address index
+          const addressIndex = parsed.currentAddressIndex || 0;
+          
+          // Use the simplest derivation method to avoid errors
+          const seed = bip39.mnemonicToSeedSync(parsed.seedPhrase).slice(0, 32);
+          const keyPair = nacl.sign.keyPair.fromSeed(seed);
+          identity = Ed25519KeyIdentity.fromKeyPair(keyPair.publicKey, keyPair.secretKey);
+          
+          console.log('Identity initialized synchronously on app start');
+          return true;
+        } catch (e) {
+          console.error('Failed to initialize identity synchronously:', e);
+          return false;
+        }
+      } catch (e) {
+        console.error('Error parsing cached auth data:', e);
+        return false;
+      }
     },
   },
 });

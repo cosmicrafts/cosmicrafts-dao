@@ -126,6 +126,16 @@ export const useCanisterStore = defineStore('canister', {
         // If no identity, cannot initialize
         if (!identity) {
           console.warn('No identity available, cannot initialize agents');
+          
+          // Try to initialize identity from cache immediately as a last resort
+          const initialized = await authStore.initializeIdentityFromCache();
+          
+          if (initialized) {
+            // Retry with newly initialized identity
+            console.log('Successfully initialized identity from cache, retrying agent initialization');
+            return this.initializeAgents();
+          }
+          
           return false;
         }
         
@@ -169,7 +179,7 @@ export const useCanisterStore = defineStore('canister', {
             .finally(() => {
               initializing = false;
             });
-        }, 100);
+        }, 0); // Reduce delay to 0ms for faster initialization
         
         return true;
       } catch (error) {
@@ -419,7 +429,21 @@ export const useCanisterStore = defineStore('canister', {
     async get(canisterName) {
       // Initialize if needed and return right away with cached instance if available
       if (!canisters[canisterName]) {
-        await this.initializeAgents();
+        try {
+          await this.initializeAgents();
+        } catch (initError) {
+          console.error(`Error initializing agents for ${canisterName}:`, initError);
+          
+          // Try to recover with a fallback initialization
+          const authStore = useAuthStore();
+          if (await authStore.initializeIdentityFromCache()) {
+            try {
+              await this.initializeAgents();
+            } catch (secondError) {
+              console.error(`Fallback initialization also failed for ${canisterName}:`, secondError);
+            }
+          }
+        }
       }
 
       // If we have a canister, return it immediately

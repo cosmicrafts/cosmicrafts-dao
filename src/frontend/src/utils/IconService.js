@@ -8,6 +8,7 @@ import icpIcon from '@/assets/icons/icp.svg';
 import ethereumIcon from '@/assets/icons/ethereum.svg';
 import solanaIcon from '@/assets/icons/solana.svg';
 import bitcoinIcon from '@/assets/icons/bitcoin.svg';
+import ckbitcoinIcon from '@/assets/icons/ckbtc.svg';
 import usdtIcon from '@/assets/icons/usdt.svg';
 import usdcIcon from '@/assets/icons/usdc.svg';
 import creditCardIcon from '@/assets/icons/credit-card.svg';
@@ -30,7 +31,7 @@ const ICON_PATHS = {
   'token:cketh': ethereumIcon,
   'token:sol': solanaIcon,
   'token:btc': bitcoinIcon,
-  'token:ckbtc': bitcoinIcon,
+  'token:ckbtc': ckbitcoinIcon,
   'token:usdt': usdtIcon,
   'token:usdc': usdcIcon,
   'token:stds': creditCardIcon,

@@ -12,6 +12,17 @@ const { t } = useI18n();
 const loading = ref(false);
 
 const handleAfterLogin = async () => {
+  // Ensure addresses are initialized for the current account
+  if (!authStore.derivedAddresses || authStore.derivedAddresses.length === 0) {
+    console.log('Initializing addresses for the current account');
+    try {
+      // Generate the first address if none exists
+      await authStore.generateNewAddress();
+    } catch (error) {
+      console.error('Error initializing addresses:', error);
+    }
+  }
+  
   modalStore.closeModal(); // Close the modal immediately
 };
 

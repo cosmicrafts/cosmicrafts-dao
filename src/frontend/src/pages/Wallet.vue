@@ -2,156 +2,14 @@
   <div class="cosmic-wallet-container">
     <div class="cosmic-wallet">
       <!-- Account Header - combines account selection, network selection, and currency preferences -->
-      <div class="wallet-account-header">
-        <div class="account-selector">
-          <div class="selected-account" @click="toggleAccountsMenu">
-            <div class="account-avatar">
-              <!-- Use a placeholder or avatar if available -->
-              <img :src="placeholderAvatar" alt="Account Avatar" />
-            </div>
-            
-            <div class="account-details">
-              <span class="account-name">{{ accounts[currentAccountIndex]?.name || 'My Account' }}</span>
-              <span class="account-id">{{ formatPrincipalId(principalId) }}</span>
-            </div>
-            
-            <div class="account-toggle">
-              <i class="fas fa-chevron-down" :class="{'rotate-180': showAccountsMenu}"></i>
-            </div>
-          </div>
-          
-          <!-- Accounts dropdown menu -->
-          <div v-if="showAccountsMenu" class="accounts-menu">
-            <div class="accounts-menu-header">
-              <span>Select Account</span>
-              <button class="menu-action" @click="handleWalletAction('create-account')">
-                <i class="fas fa-plus"></i>
-              </button>
-            </div>
-            
-            <div class="accounts-list">
-              <!-- We would populate this with actual accounts -->
-              <div 
-                class="account-option" 
-                :class="{'selected': currentAccountIndex === 0}"
-                @click="handleAccountChange({index: 0, account: {name: 'Main Account'}})"
-              >
-                <div class="account-avatar small">
-                  <img :src="placeholderAvatar" alt="Account Avatar" />
-                </div>
-                <div class="account-details">
-                  <span class="account-name">Main Account</span>
-                  <span class="account-id">{{ formatPrincipalId(principalId) }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="account-actions">
-          <!-- Network Selector Dropdown -->
-          <div class="network-selector">
-            <div class="selected-network" @click="toggleNetworksMenu">
-              <div class="network-icon">
-                <img :src="getNetworkIcon(currentNetwork.id)" :alt="currentNetwork.name" />
-              </div>
-              <div class="network-name">{{ currentNetwork.name }}</div>
-              <div class="network-toggle">
-                <i class="fas fa-chevron-down" :class="{'rotate-180': showNetworksMenu}"></i>
-              </div>
-            </div>
-            
-            <!-- Networks dropdown menu -->
-            <div v-if="showNetworksMenu" class="networks-menu">
-              <div class="networks-menu-header">
-                <span>Select Network</span>
-              </div>
-              <div class="networks-list">
-                <div 
-                  class="network-option" 
-                  :class="{'selected': currentNetwork.id === 'icp'}"
-                  @click="handleNetworkChange({id: 'icp', name: 'Internet Computer'})"
-                >
-                  <div class="network-icon small">
-                    <img :src="getNetworkIcon('icp')" alt="ICP" />
-                  </div>
-                  <div class="network-name">Internet Computer</div>
-                </div>
-                <div 
-                  class="network-option" 
-                  :class="{'selected': currentNetwork.id === 'eth'}"
-                  @click="handleNetworkChange({id: 'eth', name: 'Ethereum'})"
-                >
-                  <div class="network-icon small">
-                    <img :src="getNetworkIcon('ethereum')" alt="ETH" />
-                  </div>
-                  <div class="network-name">Ethereum</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Currency Selector -->
-          <div class="currency-selector">
-            <div class="selected-currency" @click="toggleCurrenciesMenu">
-              <span class="currency-code">{{ preferredCurrency }}</span>
-              <div class="currency-toggle">
-                <i class="fas fa-chevron-down" :class="{'rotate-180': showCurrenciesMenu}"></i>
-              </div>
-            </div>
-            
-            <!-- Currency dropdown menu -->
-            <div v-if="showCurrenciesMenu" class="currencies-menu">
-              <div class="currencies-menu-header">
-                <span>Select Currency</span>
-              </div>
-              <div class="currencies-list">
-                <div 
-                  class="currency-option" 
-                  :class="{'selected': preferredCurrency === 'USD'}"
-                  @click="handleCurrencyChange({code: 'USD', name: 'US Dollar'})"
-                >
-                  <div class="currency-flag">🇺🇸</div>
-                  <div class="currency-details">
-                    <span class="currency-code">USD</span>
-                    <span class="currency-name">US Dollar</span>
-                  </div>
-                </div>
-                <div 
-                  class="currency-option" 
-                  :class="{'selected': preferredCurrency === 'EUR'}"
-                  @click="handleCurrencyChange({code: 'EUR', name: 'Euro'})"
-                >
-                  <div class="currency-flag">🇪🇺</div>
-                  <div class="currency-details">
-                    <span class="currency-code">EUR</span>
-                    <span class="currency-name">Euro</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Action Buttons -->
-          <div class="action-buttons">
-            <button 
-              class="action-button" 
-              @click="copyIdentifier"
-              :title="principalMode ? 'Copy Principal ID' : 'Copy Account ID'"
-            >
-              <i class="fas fa-copy"></i>
-            </button>
-            
-            <button 
-              class="action-button" 
-              @click="toggleIdentifierType"
-              :title="principalMode ? 'Switch to Account ID' : 'Switch to Principal ID'"
-            >
-              <i class="fas fa-exchange-alt"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+      <AccountHeader 
+        :defaultCurrency="preferredCurrency"
+        @action="handleWalletAction"
+        @currency-changed="handleCurrencyChange"
+        @network-changed="handleNetworkChange"
+        @account-changed="handleAccountChange"
+        @copy-success="handleCopy"
+      />
       
       <!-- Your Assets Section with Tabs -->
       <div class="assets-container">
@@ -361,6 +219,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useAuthStore } from '../stores/auth.js';
 import { useTokenStore } from '../stores/token.js';
 import { useNftsStore } from '../stores/nfts.js';
+import { useAccountsStore } from '../stores/accounts.js';
 import { Principal } from '@dfinity/principal';
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 
@@ -398,6 +257,7 @@ export default {
     const authStore = useAuthStore();
     const tokenStore = useTokenStore();
     const nftsStore = useNftsStore();
+    const accountsStore = useAccountsStore();
     
     // State variables from original implementation
     const principalId = ref('');
@@ -448,68 +308,13 @@ export default {
     const showCurrenciesMenu = ref(false);
     const showZeroBalances = ref(true);
     
-    // Dummy accounts data
-    const accounts = ref([
-      {
-        id: '1',
-        name: 'Main Account',
-        principalId: 'abc123def456ghi789jkl',
-        accountId: '0x1234567890abcdef1234567890abcdef12345678',
-        avatar: null
-      },
-      {
-        id: '2',
-        name: 'Game Account',
-        principalId: 'mno123pqr456stu789vwx',
-        accountId: '0xabcdef1234567890abcdef1234567890abcdef12',
-        avatar: null
-      }
-    ]);
-    
-    // Dummy tokens data - in a real app, this would come from tokenStore
-    const tokens = ref([
-      {
-        symbol: 'ICP',
-        name: 'Internet Computer',
-        decimals: 8,
-        standard: 'ICRC-1',
-        canisterId: 'ryjl3-tyaaa-aaaaa-aaaba-cai',
-        valueUsd: 13.5
-      },
-      {
-        symbol: 'ckBTC',
-        name: 'Chain Key Bitcoin',
-        decimals: 8,
-        standard: 'ICRC-1',
-        canisterId: 'mxzaz-hqaaa-aaaar-qaada-cai',
-        valueUsd: 66000
-      },
-      {
-        symbol: 'ckETH',
-        name: 'Chain Key Ethereum',
-        decimals: 18,
-        standard: 'ICRC-1',
-        canisterId: 'ss2fx-dyaaa-aaaar-qacoq-cai',
-        valueUsd: 3500
-      },
-      {
-        symbol: 'STDs',
-        name: 'Stardust',
-        decimals: 8,
-        standard: 'ICRC-1',
-        canisterId: 'stdst-waaaa-aaaaq-aacia-cai',
-        valueUsd: 0.01
-      }
-    ]);
-    
-    // Filtered tokens based on balance settings
+    // Computed properties for tokens
     const filteredTokens = computed(() => {
       if (showZeroBalances.value) {
-        return tokens.value;
+        return tokenStore.tokenList;
       } else {
-        return tokens.value.filter(token => {
-          const balance = tokenBalances.value[token.symbol] || BigInt(0);
-          return balance > BigInt(0);
+        return tokenStore.tokenList.filter(token => {
+          return token.balance > BigInt(0);
         });
       }
     });
@@ -522,28 +327,46 @@ export default {
       // Load logs from local storage
       loadLogs();
       
-      // Initialize user IDs
-      await initializeUserIds();
+      // Initialize accounts store
+      loading.value = true;
+      loadingMessage.value = 'Initializing wallet...';
       
-      // Initialize token store if not already done
-      if (!tokenStore.initialized) {
-        loading.value = true;
-        loadingMessage.value = 'Initializing wallet...';
+      try {
+        // Initialize accounts store first (this will create the first account if none exists)
+        await accountsStore.initialize();
         
-        try {
+        // Initialize IDs from the current account
+        await updateUserIdsFromCurrentAccount();
+        
+        // Initialize token store if not already done
+        if (!tokenStore.initialized) {
           await tokenStore.initialize();
-          addLog('Wallet initialized successfully', 'success');
-        } catch (error) {
-          console.error('Token initialization error:', error);
-          addLog(`Wallet initialization error: ${error.message}. Using cached data.`, 'error');
-        } finally {
-          loading.value = false;
         }
+        
+        addLog('Wallet initialized successfully', 'success');
+      } catch (error) {
+        console.error('Wallet initialization error:', error);
+        addLog(`Wallet initialization error: ${error.message}. Using cached data.`, 'error');
+      } finally {
+        loading.value = false;
       }
       
       // Fetch NFTs
       fetchUserNFTs().catch(e => console.error("NFT fetch error:", e));
     });
+    
+    // Update user IDs from the current account in the accounts store
+    async function updateUserIdsFromCurrentAccount() {
+      const currentAccount = accountsStore.currentAccount;
+      if (currentAccount) {
+        principalId.value = currentAccount.principalId;
+        accountId.value = currentAccount.accountId;
+        addLog('Account loaded: ' + currentAccount.name, 'success');
+      } else {
+        // If no account exists and user is authenticated, initialize from auth identity
+        await initializeUserIds();
+      }
+    }
     
     // Initialize user IDs
     async function initializeUserIds() {
@@ -598,9 +421,39 @@ export default {
     }
     
     // Handle wallet actions (receive, send, swap, buy)
-    function handleWalletAction(action) {
-      activeForm.value = action;
-      addLog(`Opening ${action} interface`, 'info');
+    function handleWalletAction(action, data = {}) {
+      switch (action) {
+        case 'send':
+          activeForm.value = 'send';
+          break;
+          
+        case 'receive':
+          activeForm.value = 'receive';
+          break;
+          
+        case 'swap':
+          activeForm.value = 'swap';
+          break;
+          
+        case 'buy':
+          activeForm.value = 'buy';
+          break;
+          
+        case 'add-token':
+          activeForm.value = 'add-token';
+          break;
+          
+        case 'create-account':
+          accountCreateNewAccount();
+          break;
+          
+        case 'import-account':
+          // This would be handled by the AccountHeader component
+          break;
+          
+        default:
+          console.log('Unknown action:', action);
+      }
     }
     
     // Handle token selection
@@ -1038,105 +891,109 @@ export default {
       saveUIState();
     }
     
-    // Handle account change
-    function handleAccountChange({ index, account }) {
-      currentAccountIndex.value = index;
-      addLog(`Switched to ${account.name}`, 'info');
-      saveUIState();
+    // Handle account change from AccountHeader
+    function handleAccountChange(data) {
+      // data: { index, account }
+      console.log('Account changed:', data);
+      
+      // Update user IDs
+      updateUserIdsFromCurrentAccount();
+      
+      // Refresh token balances
+      refreshTokenBalances();
+      
+      // Add log entry
+      addLog(`Switched to account: ${data.account.name}`, 'info');
     }
     
-    // Refresh all token balances
+    // Refresh token balances
     async function refreshTokenBalances() {
       try {
-        if (!tokenStore || !tokenStore.initialized) return;
-        
-        loading.value = true;
-        loadingMessage.value = 'Refreshing balances...';
-        
-        const tokenSymbols = tokens.value.map(t => t.symbol);
-        for (const symbol of tokenSymbols) {
-          await refreshTokenBalance(symbol);
-        }
-        
-        addLog('Token balances refreshed', 'success');
+        await tokenStore.fetchAllBalances();
       } catch (error) {
-        console.error('Error refreshing balances:', error);
-        addLog(`Error refreshing balances: ${error.message}`, 'error');
+        console.error('Error refreshing token balances:', error);
+        addLog(`Error loading balances: ${error.message}`, 'error');
+      }
+    }
+    
+    // Create a new account
+    async function accountCreateNewAccount() {
+      try {
+        loading.value = true;
+        loadingMessage.value = 'Creating new account...';
+        
+        const index = await accountsStore.createAccount();
+        
+        // Switch to the new account
+        await accountsStore.switchAccount(index);
+        
+        // Update user IDs
+        await updateUserIdsFromCurrentAccount();
+        
+        addLog('New account created successfully', 'success');
+      } catch (error) {
+        console.error('Error creating new account:', error);
+        addLog(`Error creating account: ${error.message}`, 'error');
       } finally {
         loading.value = false;
       }
     }
     
-    // Watch for token store changes
-    watch(() => tokenStore.balances, (newBalances) => {
-      tokenBalances.value = newBalances;
-    });
-    
     return {
-      // State
       principalId,
       accountId,
-      currentTokenSymbol,
-      principalMode,
       activeForm,
+      currentTokenSymbol,
+      preferredCurrency,
+      currentNetwork,
+      activeAssetTab,
+      principalMode,
+      activeCollection,
+      showZeroBalances,
       loading,
       loadingMessage,
-      tokenBalances,
       logs,
+      accountsStore,
+      
+      // NFT data
       nftCategories,
-      activeCollection,
-      showNFTSection,
       isOpeningChest,
       selectedChest,
       chestRewards,
       openingStage,
       openingError,
-      currentAccountIndex,
-      preferredCurrency,
-      currentNetwork,
-      accounts,
-      tokens,
-      filteredTokens,
       
-      // UI state
-      showAccountsMenu,
-      showNetworksMenu,
-      showCurrenciesMenu,
-      showZeroBalances,
-      activeAssetTab,
+      // Computed properties
+      filteredTokens,
       
       // Methods
       handleWalletAction,
-      handleTokenSelection,
-      handleCopy,
-      handleTransferComplete,
-      handleTokenAdded,
-      handleSwapComplete,
-      handlePurchaseComplete,
-      showAddTokenForm,
-      showManageTokensForm,
-      getTokenBalance,
-      addLog,
-      openChest,
-      closeChestDialog,
-      revealReward,
       handleCurrencyChange,
       handleNetworkChange,
       handleAccountChange,
       refreshTokenBalances,
       
-      // UI methods
-      toggleAccountsMenu,
-      toggleNetworksMenu,
-      toggleCurrenciesMenu,
-      toggleShowZeroBalances,
-      toggleIdentifierType,
-      formatPrincipalId,
+      // Helper methods
       formatTokenAmount,
       formatFiatValue,
+      getTokenBalance,
+      handleTokenSelection,
+      showAddTokenForm,
+      showManageTokensForm,
+      toggleShowZeroBalances,
+      handleCopy,
+      
+      // NFT methods
+      fetchUserNFTs,
+      
+      // Chest methods
+      addLog,
+      openChest,
+      closeChestDialog,
+      revealReward,
+      
+      // Icon utilities
       getNetworkIcon,
-      copyIdentifier,
-      placeholderAvatar: getAvatarIcon('placeholder'),
       getTokenIcon
     };
   }
