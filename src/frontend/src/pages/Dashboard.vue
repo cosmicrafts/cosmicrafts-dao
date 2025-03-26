@@ -24,13 +24,13 @@
               <button @click="copyPrincipal" class="copy-btn">
                 <i class="fas fa-copy"></i>
               </button>
-            </div>
-          </div>
+              </div>
+              </div>
           <div class="user-stats">
             <div class="stat-item">
               <span class="stat-value">{{ player?.level || 1 }}</span>
               <span class="stat-label">Level</span>
-            </div>
+              </div>
             <div class="stat-item">
               <span class="stat-value">{{ player?.friends?.length || 0 }}</span>
               <span class="stat-label">Friends</span>
@@ -38,144 +38,174 @@
             <div class="stat-item">
               <span class="stat-value">{{ totalNFTs }}</span>
               <span class="stat-label">NFTs</span>
-            </div>
           </div>
         </div>
       </div>
 
+        <!-- Dashboard Tabs -->
+      <div class="dashboard-tabs">
+        <button 
+            v-for="tab in tabs" 
+            :key="tab.id"
+            @click="activeTab = tab.id"
+          class="tab-button" 
+            :class="{ active: activeTab === tab.id }"
+          >
+            <i :class="tab.icon"></i>
+            <span>{{ tab.label }}</span>
+        </button>
+              </div>
+            </div>
+
       <!-- Main Dashboard Sections -->
       <div class="dashboard-grid">
-        <!-- Wallet Section -->
-        <section class="dashboard-section token-wallet cosmic-panel">
-          <div class="section-header">
-            <h2>Cosmic Wallet</h2>
-            <div class="actions">
-              <button @click="refreshTokens" class="cosmic-button-sm cosmic-button-outline-primary">
-                <i class="fas fa-sync-alt"></i>
-                <span>Refresh</span>
+        <!-- Left column - Wallet and Activity -->
+        <div class="dashboard-column">
+          <!-- Wallet Section -->
+          <section class="dashboard-section token-wallet cosmic-panel" v-if="activeTab === 'overview'">
+            <div class="section-header">
+              <h2>Cosmic Wallet</h2>
+              <div class="actions">
+                <button @click="refreshTokens" class="cosmic-button-sm cosmic-button-outline-primary">
+                  <i class="fas fa-sync-alt"></i>
+                  <span>Refresh</span>
               </button>
             </div>
           </div>
-          
-          <div class="token-summary">
-            <div class="total-value">
-              <span class="value-label">Total Value</span>
-              <span class="value-amount">${{ totalTokenValue.toFixed(2) }} USD</span>
-            </div>
-          </div>
-          
-          <div class="token-list">
-            <TokenCard 
-              v-for="token in visibleTokens" 
-              :key="token.symbol" 
-              :symbol="token.symbol" 
-              @balance-updated="handleBalanceUpdate"
-              @action="handleTokenAction"
-            />
-          </div>
-          
-          <div class="section-footer">
-            <button @click="navigateTo('/wallet')" class="cosmic-button cosmic-button-primary">
-              <span class="button-text">Open Wallet</span>
-            </button>
-          </div>
-        </section>
 
-        <!-- NFT Collection Section -->
-        <section class="dashboard-section nft-collection cosmic-panel">
-          <div class="section-header">
-            <h2>NFT Collection</h2>
-            <div class="actions">
-              <div class="category-filter">
-                <button 
-                  v-for="category in nftCategories" 
-                  :key="category"
-                  @click="currentNftCategory = category"
-                  :class="['filter-button', { active: currentNftCategory === category }]"
-                >
-                  {{ formatCategory(category) }}
-                </button>
-              </div>
-            </div>
+            <div class="token-summary">
+              <div class="total-value">
+                <span class="value-label">Total Value</span>
+                <span class="value-amount">${{ totalTokenValue.toFixed(2) }} USD</span>
           </div>
-          
-          <div class="nft-grid">
-            <div v-if="loadingNFTs" class="loading-nfts">
-              <div class="cosmic-loader small"></div>
-              <p>Loading NFTs...</p>
-            </div>
-            
-            <template v-else-if="currentCategoryNFTs.length > 0">
-              <NFTCard 
-                v-for="nft in currentCategoryNFTs.slice(0, 4)" 
-                :key="nft.id" 
-                :nft="nft"
-                @click="showNFTDetails(nft)"
+        </div>
+
+            <div class="token-list">
+              <TokenCard 
+                v-for="token in visibleTokens" 
+                :key="token.symbol" 
+                :symbol="token.symbol" 
+                @balance-updated="handleBalanceUpdate"
+                @action="handleTokenAction"
               />
-            </template>
-            
-            <div v-else class="empty-collection">
-              <i class="fas fa-cubes"></i>
-              <p>No {{ formatCategory(currentNftCategory) }} found in your collection</p>
-            </div>
           </div>
-          
-          <div class="section-footer">
-            <button @click="navigateTo('/collection')" class="cosmic-button cosmic-button-primary">
-              <span class="button-text">View All NFTs</span>
-            </button>
-          </div>
-        </section>
 
-        <!-- Activity Section -->
-        <section class="dashboard-section activity-feed cosmic-panel">
-          <div class="section-header">
-            <h2>Recent Activity</h2>
+            <div class="section-footer">
+              <button @click="navigateTo('/wallet')" class="cosmic-button cosmic-button-primary">
+                <span class="button-text">Open Wallet</span>
+            </button>
           </div>
-          
-          <div class="activity-list">
-            <div v-if="activities.length === 0" class="empty-activity">
-              <i class="fas fa-history"></i>
-              <p>No recent activity to display</p>
-            </div>
-            
-            <div v-else v-for="(activity, index) in activities" :key="index" class="activity-item">
-              <div class="activity-icon" :class="activity.type">
-                <i :class="getActivityIcon(activity.type)"></i>
-              </div>
-              <div class="activity-content">
-                <div class="activity-text">{{ activity.text }}</div>
-                <div class="activity-time">{{ formatTimeAgo(activity.timestamp) }}</div>
-              </div>
-            </div>
-          </div>
-        </section>
+          </section>
 
-        <!-- Quick Actions Section -->
-        <section class="dashboard-section quick-actions cosmic-panel">
-          <div class="section-header">
-            <h2>Quick Actions</h2>
-          </div>
+          <!-- Referrals Section (New Tab) -->
+          <section v-if="activeTab === 'referrals'" class="dashboard-section referrals-section">
+            <ReferralsSection />
+          </section>
           
-          <div class="actions-grid">
-            <button @click="navigateTo('/wallet/send')" class="action-card">
-              <i class="fas fa-paper-plane"></i>
-              <span>Send Tokens</span>
-            </button>
-            <button @click="navigateTo('/wallet/receive')" class="action-card">
-              <i class="fas fa-qrcode"></i>
-              <span>Receive</span>
-            </button>
-            <button @click="navigateTo('/marketplace')" class="action-card">
-              <i class="fas fa-store"></i>
-              <span>Marketplace</span>
-            </button>
-            <button @click="navigateTo('/games')" class="action-card">
-              <i class="fas fa-gamepad"></i>
-              <span>Play Games</span>
-            </button>
-          </div>
-        </section>
+          <!-- Activity Section -->
+          <section class="dashboard-section activity-feed cosmic-panel" v-if="activeTab === 'overview'">
+            <div class="section-header">
+              <h2>Recent Activity</h2>
+              </div>
+              
+            <div class="activity-list">
+              <div v-if="activities.length === 0" class="empty-activity">
+                <i class="fas fa-history"></i>
+                <p>No recent activity to display</p>
+            </div>
+
+              <div v-else v-for="(activity, index) in activities" :key="index" class="activity-item">
+                <div class="activity-icon" :class="activity.type">
+                  <i :class="getActivityIcon(activity.type)"></i>
+                </div>
+                <div class="activity-content">
+                  <div class="activity-text">{{ activity.text }}</div>
+                  <div class="activity-time">{{ formatTimeAgo(activity.timestamp) }}</div>
+                </div>
+              </div>
+                </div>
+          </section>
+
+          <!-- Missions Section (New Tab) -->
+          <section v-if="activeTab === 'missions'" class="dashboard-section missions-section">
+            <MissionsSection />
+          </section>
+              </div>
+
+        <!-- Right column - NFTs and Quick Actions -->
+        <div class="dashboard-column" v-if="activeTab === 'overview'">
+          <!-- NFT Collection Section -->
+          <section class="dashboard-section nft-collection cosmic-panel">
+            <div class="section-header">
+              <h2>NFT Collection</h2>
+              <div class="actions">
+                <div class="category-filter">
+                  <button 
+                    v-for="category in nftCategories" 
+                    :key="category"
+                    @click="currentNftCategory = category"
+                    :class="['filter-button', { active: currentNftCategory === category }]"
+                  >
+                    {{ formatCategory(category) }}
+                  </button>
+                </div>
+                </div>
+              </div>
+
+            <div class="nft-grid">
+              <div v-if="loadingNFTs" class="loading-nfts">
+                <div class="cosmic-loader small"></div>
+                <p>Loading NFTs...</p>
+            </div>
+
+              <template v-else-if="currentCategoryNFTs.length > 0">
+                <NFTCard 
+                  v-for="nft in currentCategoryNFTs.slice(0, 4)" 
+                  :key="nft.id" 
+                  :nft="nft"
+                  @click="showNFTDetails(nft)"
+                />
+              </template>
+              
+              <div v-else class="empty-collection">
+                <i class="fas fa-cubes"></i>
+                <p>No {{ formatCategory(currentNftCategory) }} found in your collection</p>
+              </div>
+            </div>
+
+            <div class="section-footer">
+              <button @click="navigateTo('/collection')" class="cosmic-button cosmic-button-primary">
+                <span class="button-text">View All NFTs</span>
+              </button>
+                    </div>
+          </section>
+
+          <!-- Quick Actions Section -->
+          <section class="dashboard-section quick-actions cosmic-panel">
+            <div class="section-header">
+              <h2>Quick Actions</h2>
+              </div>
+
+            <div class="actions-grid">
+              <button @click="navigateTo('/wallet/send')" class="action-card">
+                <i class="fas fa-paper-plane"></i>
+                <span>Send Tokens</span>
+              </button>
+              <button @click="navigateTo('/wallet/receive')" class="action-card">
+                <i class="fas fa-qrcode"></i>
+                <span>Receive</span>
+              </button>
+              <button @click="navigateTo('/marketplace')" class="action-card">
+                <i class="fas fa-store"></i>
+                <span>Marketplace</span>
+              </button>
+              <button @click="navigateTo('/games')" class="action-card">
+                <i class="fas fa-gamepad"></i>
+                <span>Play Games</span>
+              </button>
+                    </div>
+          </section>
+        </div>
       </div>
     </div>
   </div>
@@ -189,6 +219,8 @@ import { useTokenStore } from '@/stores/token';
 import { useNftsStore } from '@/stores/nfts';
 import TokenCard from '@/components/tokens/TokenCard.vue';
 import NFTCard from '@/components/ui/cards/NFTCard.vue';
+import ReferralsSection from '@/components/referrals/ReferralsSection.vue';
+import MissionsSection from '@/components/missions/MissionsSection.vue';
 
 // Router
 const router = useRouter();
@@ -205,6 +237,15 @@ const loadingNFTs = ref(false);
 const currentNftCategory = ref('characters');
 const activities = ref([]);
 const copySuccess = ref(false);
+const activeTab = ref('overview');
+
+// Tab options
+const tabs = [
+  { id: 'overview', label: 'Overview', icon: 'fas fa-columns' },
+  { id: 'referrals', label: 'Referrals', icon: 'fas fa-users' },
+  { id: 'missions', label: 'Missions', icon: 'fas fa-tasks' },
+  { id: 'stats', label: 'Stats', icon: 'fas fa-chart-bar' }
+];
 
 // Avatar
 const avatarUrl = computed(() => {
@@ -261,10 +302,10 @@ const formatCategory = (category) => {
 const copyPrincipal = () => {
   const principal = authStore.getIdentity()?.getPrincipal().toString() || '';
   navigator.clipboard.writeText(principal);
-  copySuccess.value = true;
-  setTimeout(() => {
-    copySuccess.value = false;
-  }, 2000);
+        copySuccess.value = true;
+        setTimeout(() => {
+          copySuccess.value = false;
+        }, 2000);
 };
 
 const refreshTokens = async () => {
@@ -573,7 +614,7 @@ onMounted(initializeDashboard);
 
 @media (max-width: 768px) {
   .user-stats {
-    width: 100%;
+  width: 100%;
     justify-content: center;
     margin-top: 1rem;
   }
@@ -604,9 +645,90 @@ onMounted(initializeDashboard);
   gap: 2rem;
 }
 
+.dashboard-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.dashboard-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(15, 185, 253, 0.1);
+  padding-top: 1.5rem;
+  overflow-x: auto;
+}
+
+.tab-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  background: rgba(15, 185, 253, 0.03);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  border-radius: var(--cosmic-radius-md);
+  color: var(--cosmic-text-secondary);
+  cursor: pointer;
+  transition: all var(--cosmic-transition-medium);
+}
+
+.tab-button i {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  transition: all var(--cosmic-transition-medium);
+}
+
+.tab-button span {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.tab-button:hover {
+  background: rgba(15, 185, 253, 0.08);
+  transform: translateY(-3px);
+  box-shadow: var(--cosmic-shadow-sm), var(--cosmic-glow-blue-sm);
+  color: var(--cosmic-blue);
+}
+
+.tab-button.active {
+  background: rgba(15, 185, 253, 0.12);
+  border-color: rgba(15, 185, 253, 0.3);
+  color: var(--cosmic-blue);
+  box-shadow: var(--cosmic-shadow-sm), var(--cosmic-glow-blue-sm);
+}
+
+.tab-button.active i {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 5px rgba(15, 185, 253, 0.5));
+}
+
+.referrals-section {
+  width: 100%;
+}
+
 @media (max-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .dashboard-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+  
+  .dashboard-tabs::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
+  .tab-button {
+    flex-shrink: 0;
+    min-width: 100px;
   }
 }
 
