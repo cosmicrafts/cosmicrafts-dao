@@ -85,7 +85,7 @@ export function getIconPath(key) {
  * @returns {Object} The imported icon asset
  */
 export function getNetworkIcon(network) {
-  console.log('getNetworkIcon called with:', network);
+
   
   // Handle null/undefined input
   if (!network) {
@@ -95,31 +95,30 @@ export function getNetworkIcon(network) {
   
   // Normalize the network name
   const normalizedNetwork = network.toLowerCase();
-  console.log('Normalized network name:', normalizedNetwork);
   
   let result;
   
   // Map networks to their corresponding imported icons
   if (normalizedNetwork === 'icp' || normalizedNetwork === 'icp-testnet') {
-    console.log('Matched ICP network');
+
     result = icpIcon;
   } else if (normalizedNetwork === 'ethereum' || normalizedNetwork === 'eth' || 
              normalizedNetwork === 'mainnet' || normalizedNetwork === 'goerli' || 
              normalizedNetwork === 'sepolia') {
-    console.log('Matched Ethereum network');
+
     result = ethereumIcon;
   } else if (normalizedNetwork === 'solana' || normalizedNetwork === 'sol') {
-    console.log('Matched Solana network');
+
     result = solanaIcon;
   } else if (normalizedNetwork === 'btc' || normalizedNetwork === 'bitcoin') {
-    console.log('Matched Bitcoin network');
+
     result = bitcoinIcon;
   } else {
-    console.log('No network match found, defaulting to ICP');
+;
     result = icpIcon;
   }
   
-  console.log('Returning icon:', result);
+
   return result;
 }
 

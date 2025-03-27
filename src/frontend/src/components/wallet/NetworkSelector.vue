@@ -176,16 +176,6 @@ export default {
 </script>
 
 <style scoped>
-/* Z-index variables */
-:root {
-  --z-index-base: 1;
-  --z-index-token-list: 5;
-  --z-index-account-header: 10;
-  --z-index-dropdown-menu: 1000;
-  --z-index-backdrop: 999;
-  --z-index-modal: 1500;
-}
-
 .network-selector {
   position: relative;
   width: 100%;
@@ -195,20 +185,22 @@ export default {
 .selected-network {
   display: flex;
   align-items: center;
-  background-color: rgba(15, 185, 253, 0.08);
-  border: 1px solid rgba(15, 185, 253, 0.15);
+  background: var(--cosmic-gradient-panel);
+  border: var(--cosmic-glass-border-blue);
   border-radius: var(--cosmic-radius-md);
   padding: 0 0.75rem;
   cursor: pointer;
   transition: all var(--cosmic-transition-fast);
   height: 100%;
   width: 100%;
+  box-shadow: var(--cosmic-shadow-sm);
 }
 
 .selected-network:hover {
-  background-color: rgba(15, 185, 253, 0.12);
-  border-color: rgba(15, 185, 253, 0.25);
-  box-shadow: var(--cosmic-glow-blue-sm);
+  background: var(--cosmic-gradient-panel-hover);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
+  transform: translateY(-2px);
 }
 
 .network-icon {
@@ -222,6 +214,7 @@ export default {
   background-color: rgba(15, 185, 253, 0.1);
   padding: 2px;
   flex-shrink: 0;
+  box-shadow: var(--cosmic-shadow-sm);
 }
 
 .network-icon img {
@@ -256,6 +249,8 @@ export default {
   border: var(--cosmic-glass-border-blue);
   z-index: var(--cosmic-z-dropdown);
   overflow: hidden;
+  transform-style: preserve-3d;
+  transform: translateZ(0);
 }
 
 .menu-header {
@@ -302,11 +297,12 @@ export default {
 }
 
 .network-option:hover {
-  background-color: rgba(15, 185, 253, 0.05);
+  background-color: rgba(15, 185, 253, 0.12);
+  transform: translateX(3px);
 }
 
 .network-option.active {
-  background-color: rgba(15, 185, 253, 0.08);
+  background-color: rgba(15, 185, 253, 0.15);
 }
 
 .network-option.disabled {
@@ -322,6 +318,7 @@ export default {
 .selected-indicator {
   color: var(--cosmic-blue);
   font-size: 1rem;
+  filter: drop-shadow(0 0 3px rgba(15, 185, 253, 0.5));
 }
 
 /* Network specific styles */

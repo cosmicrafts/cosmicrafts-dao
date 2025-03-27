@@ -224,7 +224,7 @@ import { Principal } from '@dfinity/principal';
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 
 // Import components
-import AccountHeader from '../components/wallet/AccountHeader.vue';
+import AccountHeader from '../components/wallet/WalletHeader.vue';
 import TokenList from '../components/wallet/TokenList.vue';
 import SendTokenForm from '../components/forms/SendTokenForm.vue';
 import ReceiveTokenInfo from '../components/forms/ReceiveTokenInfo.vue';

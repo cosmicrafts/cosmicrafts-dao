@@ -84,7 +84,7 @@ const MANUAL_ENV = 'ic'; // 'ic' for IC, 'local' for local development
 const isLocal = MANUAL_ENV === 'local';
 const host = isLocal ? 'http://127.0.0.1:8080' : 'https://ic0.app';
 
-console.log(`Environment: ${isLocal ? 'Local Development' : 'IC Production'}`);
+console.log(`Environment: ${isLocal ? 'Local Development' : 'ICP mainnet'}`);
 console.log(`Host: ${host}`);
 
 // ICP constants

@@ -1294,6 +1294,12 @@ export const useAuthStore = defineStore('auth', {
         return false;
       }
       
+      // If already connected, don't reinitialize unless forced
+      if (this.ethConnected && EthereumService.isInitialized()) {
+        console.log('Ethereum provider already initialized');
+        return true;
+      }
+      
       try {
         const currentAccount = this.currentEthAccount;
         if (!currentAccount) {
@@ -1340,14 +1346,10 @@ export const useAuthStore = defineStore('auth', {
     
     // Get current Ethereum balance
     async getEthBalance() {
-      if (!this.ethConnected || !this.hasEthAccounts) {
-        try {
-          await this.initializeEthereumProvider();
-        } catch (connError) {
-          console.warn('Failed to initialize Ethereum provider for balance check:', connError);
-        }
+      if (!this.hasEthAccounts) {
+        return '0.0';
       }
-      
+
       try {
         const currentAccount = this.currentEthAccount;
         if (!currentAccount) {
@@ -1355,7 +1357,18 @@ export const useAuthStore = defineStore('auth', {
           return '0.0';
         }
         
-        // Get balance from EthereumService
+        // Check if Ethereum service is already initialized before trying to connect
+        if (!EthereumService.isInitialized() && !this.ethConnected) {
+          console.log('Initializing Ethereum provider before fetching balance');
+          try {
+            await this.initializeEthereumProvider();
+          } catch (connError) {
+            console.warn('Failed to initialize Ethereum provider for balance check:', connError);
+            // Continue with balance check anyway, the service will retry initialization
+          }
+        }
+        
+        // Get balance from EthereumService - it will auto-initialize if needed
         try {
           const balance = await EthereumService.getBalance(currentAccount.address);
           return balance;
@@ -1426,6 +1439,12 @@ export const useAuthStore = defineStore('auth', {
         // This allows us to show Ethereum UI elements even if RPC is down
         this.activeChain = 'ethereum';
         this.saveStateToLocalStorage();
+        
+        // Check if we're already connected to avoid unnecessary reconnection
+        if (this.ethConnected && EthereumService.isInitialized()) {
+          console.log('Already connected to Ethereum, skipping provider initialization');
+          return true;
+        }
         
         // Try to initialize Ethereum provider if we have accounts
         if (this.hasEthAccounts) {
