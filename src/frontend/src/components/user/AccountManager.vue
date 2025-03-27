@@ -3,6 +3,27 @@
     <div class="account-section">
       <h2 class="section-title">{{ $t('account.title') || 'Account Management' }}</h2>
       
+      <!-- Chain Switcher -->
+      <div v-if="isAuthenticated" class="chain-switcher">
+        <button 
+          class="chain-btn" 
+          :class="{ active: activeChain === 'icp' }"
+          @click="switchToIcpChain"
+        >
+          <img src="/assets/networks/icp-logo.svg" alt="ICP" class="chain-icon" />
+          <span>ICP</span>
+        </button>
+        
+        <button 
+          class="chain-btn" 
+          :class="{ active: activeChain === 'ethereum' }"
+          @click="switchToEthereumChain"
+        >
+          <img src="/assets/networks/eth-logo.svg" alt="Ethereum" class="chain-icon" />
+          <span>Ethereum</span>
+        </button>
+      </div>
+      
       <!-- User Information -->
       <div v-if="isAuthenticated" class="user-info">
         <div class="user-avatar">
@@ -12,8 +33,9 @@
         <div class="user-details">
           <h3 class="username">{{ userName }}</h3>
           <div class="principal-id">
-            <span class="principal-text">{{ truncatedPrincipal }}</span>
-            <button class="copy-btn" @click="copyPrincipal" title="Copy principal ID">
+            <span v-if="activeChain === 'icp'" class="principal-text">{{ truncatedPrincipal }}</span>
+            <span v-else class="principal-text">{{ truncatedEthAddress }}</span>
+            <button class="copy-btn" @click="copyAddress" title="Copy address">
               <i class="fas fa-copy"></i>
             </button>
           </div>
@@ -37,12 +59,30 @@
           </button>
           
           <button 
-            v-if="hasMultipleAddresses"
+            v-if="activeChain === 'icp' && hasMultipleAddresses"
             class="cosmic-button cosmic-button-primary action-button"
             @click="manageAddresses"
           >
             <i class="fas fa-address-card"></i>
-            <span>{{ $t('account.manageAddresses') || 'Manage Addresses' }}</span>
+            <span>{{ $t('account.manageAddresses') || 'Manage ICP Addresses' }}</span>
+          </button>
+          
+          <button 
+            v-if="activeChain === 'ethereum' && hasEthAccounts"
+            class="cosmic-button cosmic-button-primary action-button"
+            @click="manageEthAccounts"
+          >
+            <i class="fas fa-wallet"></i>
+            <span>{{ $t('account.manageEthAddresses') || 'Manage ETH Accounts' }}</span>
+          </button>
+          
+          <button 
+            v-if="activeChain === 'ethereum'"
+            class="cosmic-button cosmic-button-secondary action-button"
+            @click="generateNewEthAccount"
+          >
+            <i class="fas fa-plus-circle"></i>
+            <span>{{ $t('account.newEthAccount') || 'Generate New ETH Account' }}</span>
           </button>
         </div>
       </div>
@@ -80,19 +120,34 @@
     
     <!-- Additional Account Information -->
     <div v-if="isAuthenticated" class="account-info">
-      <div class="info-row">
+      <div v-if="activeChain === 'icp'" class="info-row">
         <span class="info-label">{{ $t('account.registered') || 'Registered' }}:</span>
         <span class="info-value">{{ isRegistered ? $t('account.yes') : $t('account.no') }}</span>
       </div>
       
-      <div class="info-row">
-        <span class="info-label">{{ $t('account.addresses') || 'Addresses' }}:</span>
+      <div v-if="activeChain === 'icp'" class="info-row">
+        <span class="info-label">{{ $t('account.addresses') || 'ICP Addresses' }}:</span>
         <span class="info-value">{{ derivedAddresses.length }}</span>
       </div>
       
-      <div class="info-row">
-        <span class="info-label">{{ $t('account.currentAddress') || 'Current Address' }}:</span>
+      <div v-if="activeChain === 'icp'" class="info-row">
+        <span class="info-label">{{ $t('account.currentAddress') || 'Current ICP Address' }}:</span>
         <span class="info-value">{{ currentAddress ? currentAddress.name : '-' }}</span>
+      </div>
+      
+      <div v-if="activeChain === 'ethereum'" class="info-row">
+        <span class="info-label">{{ $t('account.ethAccounts') || 'ETH Accounts' }}:</span>
+        <span class="info-value">{{ ethAccounts.length }}</span>
+      </div>
+      
+      <div v-if="activeChain === 'ethereum'" class="info-row">
+        <span class="info-label">{{ $t('account.currentEthAccount') || 'Current ETH Account' }}:</span>
+        <span class="info-value">{{ currentEthAccount ? currentEthAccount.name : '-' }}</span>
+      </div>
+      
+      <div v-if="activeChain === 'ethereum'" class="info-row">
+        <span class="info-label">{{ $t('account.path') || 'Derivation Path' }}:</span>
+        <span class="info-value">{{ currentEthAccount ? currentEthAccount.path : '-' }}</span>
       </div>
       
       <div class="info-row">
@@ -129,6 +184,51 @@
         </div>
       </div>
     </div>
+    
+    <!-- Ethereum Account Manager Modal (placeholder) -->
+    <div v-if="showEthAccountManager" class="eth-account-manager-overlay" @click="closeEthAccountManager">
+      <div class="eth-account-manager-dialog" @click.stop>
+        <h3>{{ $t('account.manageEthAccounts') || 'Manage Ethereum Accounts' }}</h3>
+        
+        <div class="eth-accounts-list">
+          <div 
+            v-for="account in ethAccounts" 
+            :key="account.index"
+            class="eth-account-item"
+            :class="{ active: account.index === currentEthAccountIndex }"
+            @click="switchToEthAccount(account.index)"
+          >
+            <div class="eth-account-info">
+              <div class="eth-account-name">{{ account.name }}</div>
+              <div class="eth-account-address">{{ formatAddress(account.address) }}</div>
+            </div>
+            <div class="eth-account-actions">
+              <button v-if="account.index !== currentEthAccountIndex" class="eth-account-select-btn">
+                Select
+              </button>
+              <div v-else class="eth-account-active-badge">Active</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="eth-manager-actions">
+          <button 
+            class="cosmic-button cosmic-button-secondary"
+            @click="generateNewEthAccount"
+          >
+            <i class="fas fa-plus-circle"></i>
+            <span>{{ $t('account.newEthAccount') || 'Generate New Account' }}</span>
+          </button>
+          
+          <button 
+            class="cosmic-button cosmic-button-outline-primary"
+            @click="closeEthAccountManager"
+          >
+            {{ $t('account.close') || 'Close' }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -145,6 +245,7 @@ const modalStore = useModalStore();
 
 // Reactive state
 const showLogoutConfirm = ref(false);
+const showEthAccountManager = ref(false);
 
 // Computed properties
 const isAuthenticated = computed(() => authStore.isAuthenticated());
@@ -153,6 +254,11 @@ const derivedAddresses = computed(() => authStore.derivedAddresses || []);
 const hasMultipleAddresses = computed(() => derivedAddresses.value.length > 0);
 const currentAddress = computed(() => authStore.currentAddress);
 const hasSeedPhrase = computed(() => authStore.hasSeedPhrase);
+const activeChain = computed(() => authStore.activeChain);
+const ethAccounts = computed(() => authStore.ethAccounts || []);
+const hasEthAccounts = computed(() => authStore.hasEthAccounts);
+const currentEthAccount = computed(() => authStore.currentEthAccount);
+const currentEthAccountIndex = computed(() => authStore.currentEthAccountIndex);
 
 const userName = computed(() => {
   if (authStore.player && authStore.player.username) {
@@ -172,6 +278,14 @@ const truncatedPrincipal = computed(() => {
   return `${id.substring(0, 8)}...${id.substring(id.length - 8)}`;
 });
 
+const truncatedEthAddress = computed(() => {
+  const addr = currentEthAccount.value?.address;
+  if (!addr) return '';
+  
+  // Format Ethereum address for display
+  return formatAddress(addr);
+});
+
 const userAvatarSrc = computed(() => {
   if (authStore.player && authStore.player.avatar) {
     // Use player avatar if available
@@ -182,17 +296,33 @@ const userAvatarSrc = computed(() => {
   return '/assets/avatars/avatar_1.png';
 });
 
+// Format Ethereum address for display
+function formatAddress(address) {
+  if (!address) return '';
+  // Ensure the address has 0x prefix
+  const formattedAddr = address.startsWith('0x') ? address : `0x${address}`;
+  // Show the first 6 and last 4 characters
+  return `${formattedAddr.substring(0, 6)}...${formattedAddr.substring(formattedAddr.length - 4)}`;
+}
+
 // Methods
-const copyPrincipal = () => {
-  const principalId = authStore.getIdentity()?.getPrincipal().toString();
-  if (!principalId) return;
+const copyAddress = () => {
+  let addressToCopy = '';
   
-  navigator.clipboard.writeText(principalId)
+  if (activeChain.value === 'icp') {
+    addressToCopy = authStore.getIdentity()?.getPrincipal().toString();
+  } else {
+    addressToCopy = currentEthAccount.value?.address || '';
+  }
+  
+  if (!addressToCopy) return;
+  
+  navigator.clipboard.writeText(addressToCopy)
     .then(() => {
-      console.log('Principal ID copied to clipboard');
+      console.log('Address copied to clipboard');
     })
     .catch(err => {
-      console.error('Failed to copy principal ID:', err);
+      console.error('Failed to copy address:', err);
     });
 };
 
@@ -207,6 +337,34 @@ const showSeedPhrase = () => {
 
 const manageAddresses = () => {
   modalStore.openModal(AddressManager);
+};
+
+const manageEthAccounts = () => {
+  showEthAccountManager.value = true;
+};
+
+const closeEthAccountManager = () => {
+  showEthAccountManager.value = false;
+};
+
+const switchToEthAccount = (index) => {
+  authStore.switchToEthAccount(index);
+};
+
+const generateNewEthAccount = async () => {
+  await authStore.generateEthAccount();
+  // If we're in the ETH account manager, we're already in ethereum mode
+  if (!showEthAccountManager.value) {
+    authStore.switchToEthereumChain();
+  }
+};
+
+const switchToIcpChain = () => {
+  authStore.switchToIcpChain();
+};
+
+const switchToEthereumChain = async () => {
+  await authStore.switchToEthereumChain();
 };
 
 const openLoginModal = () => {
@@ -229,6 +387,18 @@ const logout = async () => {
   showLogoutConfirm.value = false;
   await authStore.logout();
 };
+
+// Initialize if needed
+onMounted(() => {
+  // Check if we need to initialize ethereum accounts
+  if (isAuthenticated.value && authStore.hasSeedPhrase && !hasEthAccounts.value) {
+    authStore.initializeEthAccounts(1).then(() => {
+      console.log('Initial Ethereum account created');
+    }).catch(err => {
+      console.error('Failed to initialize Ethereum account:', err);
+    });
+  }
+});
 </script>
 
 <style scoped>
@@ -465,5 +635,149 @@ const logout = async () => {
     flex-direction: column-reverse;
     gap: 0.5rem;
   }
+}
+
+/* Add new styles for chain switcher */
+.chain-switcher {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--cosmic-radius-md);
+  padding: 0.5rem;
+}
+
+.chain-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--cosmic-radius-sm);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--cosmic-text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chain-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--cosmic-text-primary);
+}
+
+.chain-btn.active {
+  background: rgba(15, 185, 253, 0.15);
+  border-color: rgba(15, 185, 253, 0.3);
+  color: var(--cosmic-blue);
+  box-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.chain-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Ethereum account manager */
+.eth-account-manager-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--cosmic-z-modal);
+}
+
+.eth-account-manager-dialog {
+  background: var(--cosmic-glass-bg-darker);
+  border: var(--cosmic-glass-border-blue);
+  border-radius: var(--cosmic-radius-lg);
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: var(--cosmic-shadow-lg), var(--cosmic-glow-blue-md);
+}
+
+.eth-account-manager-dialog h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--cosmic-text-primary);
+  text-align: center;
+}
+
+.eth-accounts-list {
+  max-height: 50vh;
+  overflow-y: auto;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.eth-account-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--cosmic-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.eth-account-item:hover {
+  background: rgba(15, 185, 253, 0.05);
+  border-color: rgba(15, 185, 253, 0.15);
+}
+
+.eth-account-item.active {
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.eth-account-info {
+  flex-grow: 1;
+}
+
+.eth-account-name {
+  font-weight: 500;
+  color: var(--cosmic-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.eth-account-address {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: var(--cosmic-text-secondary);
+}
+
+.eth-account-select-btn {
+  background: rgba(15, 185, 253, 0.1);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  color: var(--cosmic-blue);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--cosmic-radius-sm);
+  cursor: pointer;
+}
+
+.eth-account-active-badge {
+  background: rgba(39, 174, 96, 0.1);
+  border: 1px solid rgba(39, 174, 96, 0.3);
+  color: #27ae60;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--cosmic-radius-sm);
+  font-size: 0.8rem;
+}
+
+.eth-manager-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
 }
 </style> 

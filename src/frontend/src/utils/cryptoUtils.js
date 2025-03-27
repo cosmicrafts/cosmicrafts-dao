@@ -180,4 +180,74 @@ export function validateWord(word) {
   }
   
   return wordlist.includes(word.toLowerCase());
+}
+
+/**
+ * Derives Ethereum key pair from a seed phrase using BIP44 standard
+ * @param {string} seedPhrase - BIP39 mnemonic seed phrase
+ * @param {number} accountIndex - Account index for derivation path
+ * @returns {Object} - Ethereum wallet with private key and address
+ */
+export async function deriveEthereumFromSeedPhrase(seedPhrase, accountIndex = 0) {
+  if (!validateMnemonic(seedPhrase)) {
+    throw new Error('Invalid seed phrase');
+  }
+  
+  // Import ethers v6 - no need for .default anymore
+  const { HDNodeWallet } = await import('ethers');
+  
+  // In ethers v6, we need to use the full path directly with fromPhrase
+  const path = `m/44'/60'/0'/0/${accountIndex}`;
+  
+  // Create wallet directly with the path
+  const wallet = HDNodeWallet.fromPhrase(seedPhrase, "", path);
+  
+  return {
+    address: wallet.address,
+    privateKey: wallet.privateKey,
+    index: accountIndex,
+    path,
+    name: `ETH Account ${accountIndex + 1}`
+  };
+}
+
+/**
+ * Sign a message or transaction with Ethereum private key
+ * @param {string} privateKey - Hex-encoded private key
+ * @param {string|object} message - Message or transaction to sign
+ * @returns {string} - Signed message or transaction
+ */
+export async function signWithEthereumKey(privateKey, message) {
+  // Import ethers v6 - no need for .default
+  const { Wallet } = await import('ethers');
+  
+  // Create wallet from private key
+  const wallet = new Wallet(privateKey);
+  
+  // Sign message or transaction
+  if (typeof message === 'string') {
+    // Sign a simple message
+    return await wallet.signMessage(message);
+  } else if (message.to && (message.value !== undefined || message.data)) {
+    // Sign a transaction
+    return await wallet.signTransaction(message);
+  } else {
+    throw new Error('Invalid message or transaction format');
+  }
+}
+
+/**
+ * Get Ethereum public key from private key
+ * @param {string} privateKey - Hex-encoded private key 
+ * @returns {string} - Hex-encoded public key
+ */
+export async function getEthereumPublicKey(privateKey) {
+  // Import ethers v6 - no need for .default
+  const { Wallet } = await import('ethers');
+  
+  // Create wallet from private key
+  const wallet = new Wallet(privateKey);
+  
+  // Get the address (public key hash)
+  return wallet.address;
 } 

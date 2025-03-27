@@ -11,7 +11,7 @@ import bitcoinIcon from '@/assets/icons/bitcoin.svg';
 import ckbitcoinIcon from '@/assets/icons/ckbtc.svg';
 import usdtIcon from '@/assets/icons/usdt.svg';
 import usdcIcon from '@/assets/icons/usdc.svg';
-import stdIcon from '@/assets/icons/spiral.svg';
+import stdIcon from '@/assets/icons/std.svg';
 import creditCardIcon from '@/assets/icons/credit-card.svg';
 import cosmicIcon from '@/assets/icons/cosmicrafts.svg';
 import applePayIcon from '@/assets/icons/apple-pay.svg';

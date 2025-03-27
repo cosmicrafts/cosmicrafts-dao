@@ -1,0 +1,9 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M100 190C149.706 190 190 149.706 190 100C190 50.2944 149.706 10 100 10C50.2944 10 10 50.2944 10 100C10 149.706 50.2944 190 100 190Z" fill="#627EEA" fill-opacity="0.2" stroke="#627EEA" stroke-width="6"/>
+  <path d="M102.667 40V80L136 95.3333L102.667 40Z" fill="#627EEA"/>
+  <path d="M102.667 40L69.3333 95.3333L102.667 80V40Z" fill="#627EEA" fill-opacity="0.8"/>
+  <path d="M102.667 132.667V160L136 106.667L102.667 132.667Z" fill="#627EEA"/>
+  <path d="M102.667 160V132.667L69.3333 106.667L102.667 160Z" fill="#627EEA" fill-opacity="0.8"/>
+  <path d="M102.667 124.667L136 98.6667L102.667 83.3333V124.667Z" fill="#627EEA" fill-opacity="0.6"/>
+  <path d="M69.3333 98.6667L102.667 124.667V83.3333L69.3333 98.6667Z" fill="#627EEA" fill-opacity="0.4"/>
+</svg> 

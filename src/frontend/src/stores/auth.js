@@ -13,13 +13,17 @@ import SeedPhraseModal from '@/components/modals/SeedPhraseModal.vue';
 import { useLanguageStore } from '@/stores/language';
 import * as bip39 from 'bip39';
 import { generateName } from '@/utils/namegen';
+import EthereumService from '@/services/EthereumService';
 
 // Import crypto utility functions
 import { 
   deriveKeysFromSeedPhrase, 
   createIdentityFromKeyPair, 
   deriveAddressFromSeedPhrase,
-  calculateAccountId
+  calculateAccountId,
+  deriveEthereumFromSeedPhrase,
+  signWithEthereumKey,
+  getEthereumPublicKey
 } from '@/utils/cryptoUtils';
 
 let identity = null;
@@ -144,6 +148,13 @@ export const useAuthStore = defineStore('auth', {
     derivedAddresses: [],
     currentAddressIndex: 0,
     isCheckingPlayer: false,
+    // Add Ethereum accounts
+    ethAccounts: [],
+    currentEthAccountIndex: 0,
+    activeChain: 'icp', // 'icp' or 'ethereum'
+    // Ethereum network settings
+    currentEthNetwork: 'mainnet', // default to mainnet
+    ethConnected: false,
   }),
   
   getters: {
@@ -153,6 +164,27 @@ export const useAuthStore = defineStore('auth', {
         return state.derivedAddresses[state.currentAddressIndex];
       }
       return null;
+    },
+    
+    // Get current Ethereum account
+    currentEthAccount: (state) => {
+      if (state.ethAccounts.length > state.currentEthAccountIndex) {
+        return state.ethAccounts[state.currentEthAccountIndex];
+      }
+      return null;
+    },
+    
+    // Get all accounts (including both ICP and ETH)
+    allAccounts: (state) => {
+      return {
+        icp: state.derivedAddresses,
+        ethereum: state.ethAccounts
+      };
+    },
+    
+    // Check if user has Ethereum accounts
+    hasEthAccounts: (state) => {
+      return state.ethAccounts && state.ethAccounts.length > 0;
     },
     
     // Get public key of current identity
@@ -716,16 +748,32 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async logout() {
-      // First, clear localStorage (this is a fast operation)
-      localStorage.removeItem('authStore');
+      // Disconnect from Ethereum if connected
+      if (this.ethConnected) {
+        EthereumService.disconnect();
+      }
       
-      // Then reset authentication state (these are in-memory operations)
-      identity = null;
-      this.authenticated = false;
-      this.registered = false;
+      // Use the internal method to clear all user data
+      this._clearUserData();
       
-      // Finally reset the store
-      this.$reset();
+      // Reset store states from other stores
+      try {
+        // Import stores dynamically to avoid circular dependencies
+        const { useAccountsStore } = await import('./accounts.js');
+        const { useTokenStore } = await import('./token.js');
+        const { useCanisterStore } = await import('./canister.js');
+        
+        // Reset other stores
+        const accountsStore = useAccountsStore();
+        const tokenStore = useTokenStore();
+        const canisterStore = useCanisterStore();
+        
+        accountsStore.$reset();
+        tokenStore.$reset();
+        canisterStore.$reset();
+      } catch (error) {
+        console.error('Error resetting other stores:', error);
+      }
       
       // Use Vue Router instead of refreshing the page
       // Import the router dynamically to avoid circular dependencies
@@ -883,6 +931,13 @@ export const useAuthStore = defineStore('auth', {
     
     // Add a new method to initialize identity from cache immediately on app start
     initializeIdentityFromCache() {
+      // Check if user has explicitly logged out
+      const logoutFlag = localStorage.getItem('cosmicrafts-user-logged-out');
+      if (logoutFlag === 'true') {
+        console.log('User previously logged out, not initializing from cache');
+        return false;
+      }
+      
       const stored = localStorage.getItem('authStore');
       if (!stored) return false;
       
@@ -986,6 +1041,13 @@ export const useAuthStore = defineStore('auth', {
       let retryCount = 0;
       
       try {
+        // Clear any existing auth data to prevent stale state
+        // This acts as a soft logout without redirecting the user
+        this._clearUserData();
+        
+        // When explicitly logging in, clear the logout flag
+        localStorage.removeItem('cosmicrafts-user-logged-out');
+        
         // Validate and potentially fix the seed phrase
         const validSeedPhrase = validateAndFixSeedPhrase(seedPhrase);
         
@@ -1010,6 +1072,17 @@ export const useAuthStore = defineStore('auth', {
             name: 'Main Account'
           }];
           this.currentAddressIndex = 0;
+        }
+        
+        // After ICP identity setup, also initialize Ethereum accounts if needed
+        if (!this.ethAccounts || this.ethAccounts.length === 0) {
+          try {
+            await this.initializeEthAccounts(1);
+            console.log('Initialized first Ethereum account');
+          } catch (ethError) {
+            console.warn('Error initializing Ethereum accounts:', ethError);
+            // Continue even if Ethereum initialization fails
+          }
         }
         
         // Save state to localStorage immediately
@@ -1098,6 +1171,244 @@ export const useAuthStore = defineStore('auth', {
         localStorage.removeItem('authStore');
         
         throw new Error('Login failed. Please try again.');
+      }
+    },
+    // Helper method to clear user data without redirecting (for internal use)
+    _clearUserData() {
+      // Set a flag indicating the user has logged out
+      localStorage.setItem('cosmicrafts-user-logged-out', 'true');
+      
+      // Clear related localStorage data
+      localStorage.removeItem('authStore');
+      localStorage.removeItem('cosmicrafts-accounts');
+      localStorage.removeItem('cosmicrafts-current-account');
+      localStorage.removeItem('customTokens');
+      localStorage.removeItem('cosmicrafts-token-configs');
+      localStorage.removeItem('cosmicrafts-token-cache');
+      localStorage.removeItem('cosmicrafts-token-last-refresh');
+      localStorage.removeItem('cosmicrafts-token-balances');
+      localStorage.removeItem('cosmicrafts-wallet-ui-state');
+      localStorage.removeItem('cosmicrafts-wallet-logs');
+      localStorage.removeItem('playerStore');
+      localStorage.removeItem('cosmicrafts-canister-cache');
+      localStorage.removeItem('cosmicrafts-canister-last-refresh');
+      localStorage.removeItem('cosmicrafts-eth-accounts');
+      
+      // Clear any account-specific token data
+      Object.keys(localStorage).forEach(key => {
+        if (key.match(/^account_.*_tokens$/) || key.match(/^eth_.*_data$/)) {
+          localStorage.removeItem(key);
+        }
+      });
+      
+      // Reset auth state
+      identity = null;
+      this.authenticated = false;
+      this.registered = false;
+      
+      // Reset the store
+      this.$reset();
+    },
+    // Generate an Ethereum account from the seed phrase
+    async generateEthAccount() {
+      if (!this.seedPhrase) {
+        console.error('Cannot generate ETH account: No seed phrase available');
+        return null;
+      }
+      
+      try {
+        // Use the next index for a new address
+        const newIndex = this.ethAccounts.length;
+        const accountInfo = await deriveEthereumFromSeedPhrase(this.seedPhrase, newIndex);
+        
+        // Add to ETH accounts list
+        this.ethAccounts.push({
+          index: newIndex,
+          address: accountInfo.address,
+          privateKey: accountInfo.privateKey,
+          path: accountInfo.path,
+          name: `ETH Account ${newIndex + 1}`
+        });
+        
+        // Save state
+        this.saveStateToLocalStorage();
+        
+        return accountInfo;
+      } catch (error) {
+        console.error('Error generating new ETH account:', error);
+        return null;
+      }
+    },
+    
+    // Initialize Ethereum accounts from seed phrase
+    async initializeEthAccounts(count = 1) {
+      if (!this.seedPhrase) {
+        console.error('Cannot initialize ETH accounts: No seed phrase available');
+        return false;
+      }
+      
+      try {
+        // Generate initial Ethereum accounts
+        for (let i = 0; i < count; i++) {
+          await this.generateEthAccount();
+        }
+        
+        return true;
+      } catch (error) {
+        console.error('Error initializing ETH accounts:', error);
+        return false;
+      }
+    },
+    
+    // Switch to a different Ethereum account
+    async switchToEthAccount(accountIndex) {
+      if (accountIndex < 0 || accountIndex >= this.ethAccounts.length) {
+        console.error('Invalid ETH account index');
+        return false;
+      }
+      
+      this.currentEthAccountIndex = accountIndex;
+      this.activeChain = 'ethereum';
+      
+      // Save state
+      this.saveStateToLocalStorage();
+      
+      // Initialize Ethereum provider with this account
+      await this.initializeEthereumProvider();
+      
+      return true;
+    },
+    
+    // Initialize Ethereum provider for the current account
+    async initializeEthereumProvider() {
+      if (!this.hasEthAccounts) {
+        console.error('No Ethereum accounts available');
+        return false;
+      }
+      
+      try {
+        const currentAccount = this.currentEthAccount;
+        if (!currentAccount) {
+          throw new Error('No valid Ethereum account selected');
+        }
+        
+        // Connect to Ethereum using the account's private key
+        const connected = await EthereumService.connectWithPrivateKey(currentAccount.privateKey);
+        
+        if (connected) {
+          this.ethConnected = true;
+          console.log(`Connected to Ethereum ${this.currentEthNetwork} with account: ${currentAccount.address}`);
+          return true;
+        } else {
+          console.error('Failed to connect to Ethereum network');
+          this.ethConnected = false;
+          return false;
+        }
+      } catch (error) {
+        console.error('Error initializing Ethereum provider:', error);
+        this.ethConnected = false;
+        return false;
+      }
+    },
+    
+    // Switch to a different Ethereum network
+    async switchEthNetwork(networkId) {
+      if (!EthereumService.NETWORKS[networkId]) {
+        console.error(`Unsupported Ethereum network: ${networkId}`);
+        return false;
+      }
+      
+      this.currentEthNetwork = networkId;
+      
+      // If we're currently in Ethereum mode, reconnect with the new network
+      if (this.activeChain === 'ethereum' && this.hasEthAccounts) {
+        return await this.initializeEthereumProvider();
+      }
+      
+      this.saveStateToLocalStorage();
+      return true;
+    },
+    
+    // Get current Ethereum balance
+    async getEthBalance() {
+      if (!this.ethConnected || !this.hasEthAccounts) {
+        await this.initializeEthereumProvider();
+      }
+      
+      try {
+        const currentAccount = this.currentEthAccount;
+        if (!currentAccount) {
+          throw new Error('No Ethereum account selected');
+        }
+        
+        // Get balance from EthereumService
+        const balance = await EthereumService.getBalance(currentAccount.address);
+        return balance;
+      } catch (error) {
+        console.error('Error getting ETH balance:', error);
+        return '0.0';
+      }
+    },
+    
+    // Send Ethereum transaction
+    async sendEthTransaction(toAddress, amount, options = {}) {
+      if (!this.ethConnected || !this.hasEthAccounts) {
+        await this.initializeEthereumProvider();
+      }
+      
+      try {
+        // Send transaction using EthereumService
+        const receipt = await EthereumService.sendTransaction(toAddress, amount, options);
+        return receipt;
+      } catch (error) {
+        console.error('Error sending ETH transaction:', error);
+        throw error;
+      }
+    },
+    
+    // Switch to ICP chain
+    switchToIcpChain() {
+      this.activeChain = 'icp';
+      
+      // Disconnect from Ethereum if connected
+      if (this.ethConnected) {
+        EthereumService.disconnect();
+        this.ethConnected = false;
+      }
+      
+      this.saveStateToLocalStorage();
+      return true;
+    },
+    
+    // Switch to Ethereum chain
+    async switchToEthereumChain() {
+      if (!this.hasEthAccounts) {
+        // Initialize first account if none exists
+        await this.initializeEthAccounts(1);
+      }
+      
+      this.activeChain = 'ethereum';
+      this.saveStateToLocalStorage();
+      
+      // Initialize Ethereum provider
+      await this.initializeEthereumProvider();
+      
+      return true;
+    },
+    
+    // Sign a message with the current Ethereum account
+    async signWithCurrentEthAccount(message) {
+      const currentAccount = this.currentEthAccount;
+      if (!currentAccount || !currentAccount.privateKey) {
+        console.error('No valid ETH account selected');
+        return null;
+      }
+      
+      try {
+        return await signWithEthereumKey(currentAccount.privateKey, message);
+      } catch (error) {
+        console.error('Error signing with ETH account:', error);
+        return null;
       }
     },
   },
