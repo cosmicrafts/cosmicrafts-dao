@@ -11,9 +11,11 @@
       <!-- Header Section with User Information -->
       <div class="dashboard-header cosmic-panel">
         <div class="user-profile">
-          <div class="avatar-container">
-            <img :src="avatarUrl" :alt="player?.username || 'User'" class="user-avatar" />
-            <div class="level-badge">{{ player?.level || 1 }}</div>
+          <div class="avatar-wrapper">
+            <div class="avatar-container">
+              <img :src="avatarUrl" :alt="player?.username || 'User'" class="user-avatar" />
+              <div class="level-badge">{{ player?.level || 1 }}</div>
+            </div>
           </div>
           <div class="user-info">
             <h1 class="cosmic-title">{{ player?.username || 'Cosmic Explorer' }}</h1>
@@ -21,16 +23,16 @@
             <div class="principal-id">
               <span class="principal-label">Principal ID:</span>
               <span class="principal-value">{{ truncatedPrincipal }}</span>
-              <button @click="copyPrincipal" class="copy-btn">
-                <i class="fas fa-copy"></i>
+              <button @click="copyPrincipal" class="copy-btn" :class="{ 'copied': copySuccess }">
+                <i class="fas" :class="copySuccess ? 'fa-check' : 'fa-copy'"></i>
               </button>
-              </div>
-              </div>
+            </div>
+          </div>
           <div class="user-stats">
             <div class="stat-item">
               <span class="stat-value">{{ player?.level || 1 }}</span>
               <span class="stat-label">Level</span>
-              </div>
+            </div>
             <div class="stat-item">
               <span class="stat-value">{{ player?.friends?.length || 0 }}</span>
               <span class="stat-label">Friends</span>
@@ -38,27 +40,27 @@
             <div class="stat-item">
               <span class="stat-value">{{ totalNFTs }}</span>
               <span class="stat-label">NFTs</span>
+            </div>
           </div>
         </div>
-      </div>
 
         <!-- Dashboard Tabs -->
-      <div class="dashboard-tabs">
-        <button 
+        <div class="dashboard-tabs">
+          <button 
             v-for="tab in tabs" 
             :key="tab.id"
             @click="activeTab = tab.id"
-          class="tab-button" 
+            class="tab-button" 
             :class="{ active: activeTab === tab.id }"
           >
             <i :class="tab.icon"></i>
             <span>{{ tab.label }}</span>
-        </button>
-              </div>
-            </div>
+          </button>
+        </div>
+      </div>
 
       <!-- Main Dashboard Sections -->
-      <div class="dashboard-grid">
+      <div class="dashboard-grid" :class="{ 'full-width': activeTab !== 'overview' }">
         <!-- Left column - Wallet and Activity -->
         <div class="dashboard-column">
           <!-- Wallet Section -->
@@ -69,16 +71,16 @@
                 <button @click="refreshTokens" class="cosmic-button-sm cosmic-button-outline-primary">
                   <i class="fas fa-sync-alt"></i>
                   <span>Refresh</span>
-              </button>
+                </button>
+              </div>
             </div>
-          </div>
 
             <div class="token-summary">
               <div class="total-value">
                 <span class="value-label">Total Value</span>
                 <span class="value-amount">${{ totalTokenValue.toFixed(2) }} USD</span>
-          </div>
-        </div>
+              </div>
+            </div>
 
             <div class="token-list">
               <TokenCard 
@@ -88,16 +90,16 @@
                 @balance-updated="handleBalanceUpdate"
                 @action="handleTokenAction"
               />
-          </div>
+            </div>
 
             <div class="section-footer">
               <button @click="navigateTo('/wallet')" class="cosmic-button cosmic-button-primary">
                 <span class="button-text">Open Wallet</span>
-            </button>
-          </div>
+              </button>
+            </div>
           </section>
 
-          <!-- Referrals Section (New Tab) -->
+          <!-- Referrals Section (Tab) -->
           <section v-if="activeTab === 'referrals'" class="dashboard-section referrals-section">
             <ReferralsSection />
           </section>
@@ -106,13 +108,13 @@
           <section class="dashboard-section activity-feed cosmic-panel" v-if="activeTab === 'overview'">
             <div class="section-header">
               <h2>Recent Activity</h2>
-              </div>
+            </div>
               
             <div class="activity-list">
               <div v-if="activities.length === 0" class="empty-activity">
                 <i class="fas fa-history"></i>
                 <p>No recent activity to display</p>
-            </div>
+              </div>
 
               <div v-else v-for="(activity, index) in activities" :key="index" class="activity-item">
                 <div class="activity-icon" :class="activity.type">
@@ -123,26 +125,26 @@
                   <div class="activity-time">{{ formatTimeAgo(activity.timestamp) }}</div>
                 </div>
               </div>
-                </div>
+            </div>
           </section>
 
-          <!-- Missions Section -->
+          <!-- Missions Section (Tab) -->
           <section v-if="activeTab === 'missions'" class="dashboard-section missions-section">
             <MissionsSection />
           </section>
 
-          <!-- Achievements Section (New Tab) -->
+          <!-- Achievements Section (Tab) -->
           <section v-if="activeTab === 'achievements'" class="dashboard-section achievements-section">
             <AchievementsSection />
           </section>
           
-          <!-- Stats Section -->
+          <!-- Stats Section (Tab) -->
           <section v-if="activeTab === 'stats'" class="dashboard-section stats-section">
             <StatsSection />
           </section>
-              </div>
+        </div>
 
-        <!-- Right column - NFTs and Quick Actions -->
+        <!-- Right column - NFTs and Quick Actions (only in overview) -->
         <div class="dashboard-column" v-if="activeTab === 'overview'">
           <!-- NFT Collection Section -->
           <section class="dashboard-section nft-collection cosmic-panel">
@@ -159,14 +161,14 @@
                     {{ formatCategory(category) }}
                   </button>
                 </div>
-                </div>
               </div>
+            </div>
 
             <div class="nft-grid">
               <div v-if="loadingNFTs" class="loading-nfts">
                 <div class="cosmic-loader small"></div>
                 <p>Loading NFTs...</p>
-            </div>
+              </div>
 
               <template v-else-if="currentCategoryNFTs.length > 0">
                 <NFTCard 
@@ -187,14 +189,14 @@
               <button @click="navigateTo('/collection')" class="cosmic-button cosmic-button-primary">
                 <span class="button-text">View All NFTs</span>
               </button>
-                    </div>
+            </div>
           </section>
 
           <!-- Quick Actions Section -->
           <section class="dashboard-section quick-actions cosmic-panel">
             <div class="section-header">
               <h2>Quick Actions</h2>
-              </div>
+            </div>
 
             <div class="actions-grid">
               <button @click="navigateTo('/wallet/send')" class="action-card">
@@ -213,7 +215,7 @@
                 <i class="fas fa-gamepad"></i>
                 <span>Play Games</span>
               </button>
-                    </div>
+            </div>
           </section>
         </div>
       </div>
@@ -315,10 +317,10 @@ const formatCategory = (category) => {
 const copyPrincipal = () => {
   const principal = authStore.getIdentity()?.getPrincipal().toString() || '';
   navigator.clipboard.writeText(principal);
-        copySuccess.value = true;
-        setTimeout(() => {
-          copySuccess.value = false;
-        }, 2000);
+  copySuccess.value = true;
+  setTimeout(() => {
+    copySuccess.value = false;
+  }, 2000);
 };
 
 const refreshTokens = async () => {
@@ -469,11 +471,23 @@ onMounted(initializeDashboard);
 </script>
 
 <style scoped>
+/* Main container and reset */
+html, body {
+  overflow-x: hidden;
+}
+
 .dashboard-container {
   width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 2rem;
+  max-width: 100%;
+  margin: 0;
+  padding: 1rem;
+  padding-top: 6rem; /* Add top padding for header */
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
 
 .cosmic-loader-container {
@@ -482,6 +496,7 @@ onMounted(initializeDashboard);
   align-items: center;
   justify-content: center;
   height: 60vh;
+  margin: 2rem 0;
 }
 
 .cosmic-loader {
@@ -509,7 +524,11 @@ onMounted(initializeDashboard);
 .dashboard-content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1440px; /* Max width for content */
+  overflow-x: visible; /* Allow content to be visible */
+  box-sizing: border-box;
 }
 
 /* Header Section */
@@ -520,19 +539,21 @@ onMounted(initializeDashboard);
   border: var(--cosmic-glass-border-blue);
   backdrop-filter: var(--cosmic-glass-blur);
   box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .user-profile {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-@media (max-width: 768px) {
-  .user-profile {
-    flex-direction: column;
-    text-align: center;
-  }
+.avatar-wrapper {
+  flex-shrink: 0;
 }
 
 .avatar-container {
@@ -570,16 +591,22 @@ onMounted(initializeDashboard);
 
 .user-info {
   flex: 1;
+  min-width: 200px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .user-info h1 {
   margin: 0 0 0.5rem 0;
   font-weight: 800;
+  font-size: clamp(1.5rem, 3vw, 2rem);
   background: var(--cosmic-gradient-blue);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: var(--cosmic-glow-blue-sm);
+  overflow-wrap: break-word; /* Prevent text overflow */
+  word-break: break-word;
 }
 
 .user-title {
@@ -591,6 +618,7 @@ onMounted(initializeDashboard);
 .principal-id {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.5rem;
   font-size: 0.9rem;
@@ -606,6 +634,10 @@ onMounted(initializeDashboard);
   padding: 0.25rem 0.5rem;
   background: rgba(15, 185, 253, 0.1);
   border-radius: var(--cosmic-radius-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 150px; /* Reduced from 200px to prevent overflow */
 }
 
 .copy-btn {
@@ -614,23 +646,22 @@ onMounted(initializeDashboard);
   color: var(--cosmic-text-tertiary);
   cursor: pointer;
   padding: 0.25rem;
+  transition: all 0.3s ease;
 }
 
 .copy-btn:hover {
   color: var(--cosmic-blue);
 }
 
+.copy-btn.copied {
+  color: var(--cosmic-green);
+}
+
 .user-stats {
   display: flex;
   gap: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  .user-stats {
-  width: 100%;
-    justify-content: center;
-    margin-top: 1rem;
-  }
+  flex-wrap: wrap;
+  margin-left: auto;
 }
 
 .stat-item {
@@ -638,6 +669,7 @@ onMounted(initializeDashboard);
   flex-direction: column;
   align-items: center;
   color: var(--cosmic-text-secondary);
+  min-width: 60px;
 }
 
 .stat-value {
@@ -651,19 +683,7 @@ onMounted(initializeDashboard);
   font-size: 0.9rem;
 }
 
-/* Dashboard Grid */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-}
-
-.dashboard-column {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
+/* Dashboard Tabs */
 .dashboard-tabs {
   display: flex;
   justify-content: center;
@@ -672,6 +692,16 @@ onMounted(initializeDashboard);
   border-top: 1px solid rgba(15, 185, 253, 0.1);
   padding-top: 1.5rem;
   overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.dashboard-tabs::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .tab-button {
@@ -679,13 +709,15 @@ onMounted(initializeDashboard);
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   background: rgba(15, 185, 253, 0.03);
   border: 1px solid rgba(15, 185, 253, 0.1);
   border-radius: var(--cosmic-radius-md);
   color: var(--cosmic-text-secondary);
   cursor: pointer;
   transition: all var(--cosmic-transition-medium);
+  flex-shrink: 0;
+  min-width: 90px;
 }
 
 .tab-button i {
@@ -718,31 +750,25 @@ onMounted(initializeDashboard);
   filter: drop-shadow(0 0 5px rgba(15, 185, 253, 0.5));
 }
 
-.referrals-section {
+/* Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
   width: 100%;
+  box-sizing: border-box;
 }
 
-@media (max-width: 1024px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .dashboard-tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-  }
-  
-  .dashboard-tabs::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
-  
-  .tab-button {
-    flex-shrink: 0;
-    min-width: 100px;
-  }
+.dashboard-grid.full-width {
+  grid-template-columns: 1fr;
+}
+
+.dashboard-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Dashboard Section Styling */
@@ -754,14 +780,27 @@ onMounted(initializeDashboard);
   backdrop-filter: var(--cosmic-glass-blur);
   box-shadow: var(--cosmic-shadow-md);
   transition: all var(--cosmic-transition-medium);
-  height: 100%;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  box-sizing: border-box; /* Ensure padding is included in width calculation */
 }
 
 .dashboard-section:hover {
   border-color: rgba(15, 185, 253, 0.3);
   box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
+}
+
+/* Full-width sections */
+.referrals-section,
+.missions-section,
+.achievements-section,
+.stats-section {
+  min-height: 500px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .section-header {
@@ -771,6 +810,9 @@ onMounted(initializeDashboard);
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(15, 185, 253, 0.1);
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
 }
 
 .section-header h2 {
@@ -785,6 +827,7 @@ onMounted(initializeDashboard);
   padding-top: 1rem;
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 /* Token Wallet Section */
@@ -794,6 +837,8 @@ onMounted(initializeDashboard);
   border-radius: var(--cosmic-radius-md);
   margin-bottom: 1rem;
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .total-value {
@@ -817,9 +862,11 @@ onMounted(initializeDashboard);
 
 .token-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
   margin-bottom: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* NFT Collection Section */
@@ -828,6 +875,14 @@ onMounted(initializeDashboard);
   gap: 0.5rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.category-filter::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .filter-button {
@@ -840,6 +895,7 @@ onMounted(initializeDashboard);
   cursor: pointer;
   transition: all var(--cosmic-transition-fast);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .filter-button:hover {
@@ -856,10 +912,12 @@ onMounted(initializeDashboard);
 
 .nft-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 1rem;
   margin-bottom: 1.5rem;
   min-height: 200px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .loading-nfts {
@@ -894,6 +952,29 @@ onMounted(initializeDashboard);
   flex-direction: column;
   gap: 1rem;
   min-height: 200px;
+  overflow-y: auto;
+  max-height: 400px;
+  padding-right: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.activity-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.activity-list::-webkit-scrollbar-track {
+  background: rgba(15, 185, 253, 0.05);
+  border-radius: 3px;
+}
+
+.activity-list::-webkit-scrollbar-thumb {
+  background: rgba(15, 185, 253, 0.2);
+  border-radius: 3px;
+}
+
+.activity-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 185, 253, 0.3);
 }
 
 .activity-item {
@@ -903,6 +984,8 @@ onMounted(initializeDashboard);
   border-radius: var(--cosmic-radius-md);
   background: rgba(15, 185, 253, 0.05);
   transition: all var(--cosmic-transition-fast);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .activity-item:hover {
@@ -919,6 +1002,7 @@ onMounted(initializeDashboard);
   justify-content: center;
   background: rgba(15, 185, 253, 0.1);
   color: var(--cosmic-blue);
+  flex-shrink: 0;
 }
 
 .activity-icon.transfer {
@@ -943,11 +1027,15 @@ onMounted(initializeDashboard);
 
 .activity-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Prevent text overflow */
 }
 
 .activity-text {
   color: var(--cosmic-text-primary);
   margin-bottom: 0.25rem;
+  word-break: break-word; /* Handle long text without overflow */
 }
 
 .activity-time {
@@ -976,6 +1064,8 @@ onMounted(initializeDashboard);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .action-card {
@@ -984,7 +1074,7 @@ onMounted(initializeDashboard);
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  padding: 1.5rem;
+  padding: 1.25rem;
   background: rgba(15, 185, 253, 0.05);
   border: 1px solid rgba(15, 185, 253, 0.1);
   border-radius: var(--cosmic-radius-md);
@@ -1017,17 +1107,94 @@ onMounted(initializeDashboard);
 }
 
 /* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .user-stats {
+    margin-left: 0;
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: space-around;
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard-container {
+    padding: 0.75rem;
+    padding-top: 5rem; /* Slightly reduced top padding for mobile */
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .dashboard-content {
+    width: 100%;
+    max-width: 100%;
+    gap: 1rem;
+  }
+  
+  .dashboard-grid {
+    width: 100%;
+  }
+  
+  .user-profile,
+  .dashboard-tabs,
+  .token-list,
+  .nft-grid,
+  .activity-list,
+  .actions-grid {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .user-profile {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .user-info {
+    text-align: center;
+    width: 100%;
+  }
+  
+  .principal-id {
+    justify-content: center;
+  }
+  
+  .principal-value {
+    max-width: 140px; /* Smaller on mobile */
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .section-header .actions {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+  
+  .category-filter {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .action-card {
     padding: 1rem;
   }
   
-  .activity-list {
-    max-height: none;
+  .action-card i {
+    font-size: 1.5rem;
   }
   
-  .actions-grid {
-    grid-template-columns: 1fr;
+  .dashboard-section {
+    padding: 1rem;
   }
   
   .token-list {
@@ -1036,20 +1203,45 @@ onMounted(initializeDashboard);
 }
 
 @media (max-width: 480px) {
+  .dashboard-container {
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0.75rem;
+    padding-top: 4.5rem;
+  }
+  
   .nft-grid {
     grid-template-columns: repeat(2, 1fr);
   }
   
-  .category-filter {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+  .actions-grid {
+    grid-template-columns: 1fr;
   }
   
-  .category-filter::-webkit-scrollbar {
-    display: none;
+  .user-stats {
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .tab-button {
+    padding: 0.6rem 1rem;
+    min-width: 80px;
+  }
+  
+  .tab-button i {
+    font-size: 1.1rem;
+  }
+  
+  .tab-button span {
+    font-size: 0.8rem;
+  }
+  
+  .principal-value {
+    max-width: 100px; /* Even smaller on tiny screens */
   }
 }
 </style>
