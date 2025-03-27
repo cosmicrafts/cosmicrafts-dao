@@ -11,6 +11,7 @@ import bitcoinIcon from '@/assets/icons/bitcoin.svg';
 import ckbitcoinIcon from '@/assets/icons/ckbtc.svg';
 import usdtIcon from '@/assets/icons/usdt.svg';
 import usdcIcon from '@/assets/icons/usdc.svg';
+import stdIcon from '@/assets/icons/spiral.svg';
 import creditCardIcon from '@/assets/icons/credit-card.svg';
 import cosmicIcon from '@/assets/icons/cosmicrafts.svg';
 import applePayIcon from '@/assets/icons/apple-pay.svg';
@@ -34,8 +35,9 @@ const ICON_PATHS = {
   'token:ckbtc': ckbitcoinIcon,
   'token:usdt': usdtIcon,
   'token:usdc': usdcIcon,
-  'token:stds': creditCardIcon,
+  'token:stds': stdIcon,
   'token:cosmic': cosmicIcon,
+  'token:cycles': creditCardIcon,
   
   // Payment method icons
   'payment:credit-card': creditCardIcon,

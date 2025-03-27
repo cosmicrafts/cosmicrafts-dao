@@ -21,7 +21,10 @@
           v-for="network in availableNetworks" 
           :key="network.id"
           class="network-option"
-          :class="{ active: selectedNetwork.id === network.id }"
+          :class="{ 
+            active: selectedNetwork.id === network.id,
+            disabled: network.disabled
+          }"
           @click="selectNetwork(network)"
         >
           <div class="network-icon" :class="network.id">
@@ -30,6 +33,7 @@
           <div class="network-info">
             <span class="network-name">{{ network.name }}</span>
             <span class="network-status" :class="network.status">{{ network.status }}</span>
+            <span v-if="network.disabled" class="network-disabled-label">Coming Soon</span>
           </div>
           <span v-if="selectedNetwork.id === network.id" class="selected-indicator">
             <i class="fas fa-check"></i>
@@ -60,17 +64,14 @@ export default {
       {
         id: 'eth',
         name: 'Ethereum',
-        status: 'mainnet'
+        status: 'mainnet',
+        disabled: true
       },
       {
         id: 'sol',
         name: 'Solana',
-        status: 'mainnet'
-      },
-      {
-        id: 'icp-testnet',
-        name: 'ICP Testnet',
-        status: 'testnet'
+        status: 'mainnet',
+        disabled: true
       }
     ]);
     
@@ -84,6 +85,11 @@ export default {
     
     // Select a network
     const selectNetwork = (network) => {
+      // Only allow selecting ICP or non-disabled networks
+      if (network.disabled) {
+        return;
+      }
+      
       if (selectedNetwork.value.id !== network.id) {
         selectedNetwork.value = network;
         
@@ -264,6 +270,11 @@ export default {
   background-color: rgba(15, 185, 253, 0.08);
 }
 
+.network-option.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .network-info {
   flex: 1;
   margin-left: 0.75rem;
@@ -289,6 +300,18 @@ export default {
 .network-status.testnet {
   background-color: rgba(255, 171, 0, 0.1);
   color: #ffab00;
+}
+
+.network-disabled-label {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+  width: fit-content;
+  margin-top: 0.25rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--cosmic-text-secondary);
 }
 
 .selected-indicator {

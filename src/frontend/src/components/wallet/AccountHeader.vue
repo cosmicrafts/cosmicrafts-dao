@@ -298,7 +298,9 @@ import NetworkSelector from './NetworkSelector.vue';
 import CurrencySelector from './CurrencySelector.vue';
 import { getNetworkIcon } from '@/utils/IconService';
 import { validateMnemonic } from 'bip39';
-import AccountRecovery from '@/components/user/AccountRecovery.vue';
+import { AccountIdentifier } from '@dfinity/ledger-icp';
+import { Principal } from '@dfinity/principal';
+import { calculateAccountId } from '@/utils/cryptoUtils';
 
 export default {
   name: 'AccountHeader',
@@ -440,8 +442,14 @@ export default {
           if (currentAddress) {
             principalId.value = currentAddress.principalId;
             
-            // Account ID would need to be recalculated here, this is just a placeholder
-            accountId.value = '...calculating...'; 
+            // Calculate proper account ID
+            try {
+              const principal = Principal.fromText(currentAddress.principalId);
+              accountId.value = AccountIdentifier.fromPrincipal({ principal }).toHex();
+            } catch (error) {
+              console.error('Error calculating account ID:', error);
+              accountId.value = 'Error calculating';
+            }
           }
           
           // Refresh token balances
@@ -475,7 +483,15 @@ export default {
           
           // Update IDs
           principalId.value = newAddress.principalId;
-          // Account ID would need to be recalculated
+          
+          // Calculate proper account ID
+          try {
+            const principal = Principal.fromText(newAddress.principalId);
+            accountId.value = AccountIdentifier.fromPrincipal({ principal }).toHex();
+          } catch (error) {
+            console.error('Error calculating account ID:', error);
+            accountId.value = 'Error calculating';
+          }
           
           // Refresh balance
           await fetchBalanceData();
@@ -753,40 +769,54 @@ export default {
       isLoading.value = true;
       
       try {
-        // For ICP network, use the ICP identity
-        if (network.id === 'icp' || network.id === 'icp-testnet') {
+        // Only ICP network is supported for now
+        if (network.id === 'icp') {
+          // First check authentication status
+          if (!authStore.isAuthenticated()) {
+            // Try to initialize identity from cache
+            const initialized = authStore.initializeIdentityFromCache();
+            console.log('Identity initialization from cache:', initialized);
+            
+            if (!initialized) {
+              console.warn('User not authenticated, cannot load network data');
+              principalId.value = 'Not authenticated';
+              accountId.value = 'Not authenticated';
+              isLoading.value = false;
+              return;
+            }
+          }
+          
+          // Get identity from auth store
           const identity = authStore.getIdentity();
           if (identity) {
+            // Get principal ID directly from identity
             const principal = identity.getPrincipal();
             principalId.value = principal.toString();
             
-            // Account ID would be calculated differently for each network
-            // For now, we'll use a mock for non-ICP networks
-            if (network.id.startsWith('icp')) {
-              // This would use the correct AccountIdentifier calculation in real code
-              accountId.value = '1234...5678'; // Placeholder
-            } else {
-              accountId.value = '9876...5432'; // Placeholder
+            // Calculate account ID from principal using the proper function
+            try {
+              accountId.value = AccountIdentifier.fromPrincipal({ principal }).toHex();
+            } catch (accountError) {
+              console.error('Error calculating account ID:', accountError);
+              accountId.value = 'Error calculating';
             }
+          } else {
+            console.error('Identity not available in auth store');
+            principalId.value = 'Not available';
+            accountId.value = 'Not available';
           }
         } else {
-          // Mock data for other networks
-          principalId.value = network.id === 'eth' 
-            ? '0x1234...5678' 
-            : network.id === 'sol' 
-              ? 'ABCD...XYZ' 
-              : '---';
-          accountId.value = network.id === 'eth' 
-            ? '0x8765...4321' 
-            : network.id === 'sol' 
-              ? 'WXYZ...ABC' 
-              : '---';
+          // For other networks (currently disabled), just show unavailable
+          principalId.value = 'Not available';
+          accountId.value = 'Not available';
         }
         
         // Load account data for this network
         await loadAccountData();
       } catch (error) {
         console.error(`Error loading data for network ${network.id}:`, error);
+        principalId.value = 'Error loading';
+        accountId.value = 'Error loading';
       } finally {
         isLoading.value = false;
       }
@@ -821,15 +851,44 @@ export default {
           }
         }
         
-        // Load user IDs from current address
-        if (addresses.value && addresses.value.length > currentAddressIndex.value) {
+        // First check if we have an active identity in the auth store
+        const identity = authStore.getIdentity();
+        if (identity) {
+          // If we have identity, use it directly - this is the source of truth
+          const principal = identity.getPrincipal();
+          principalId.value = principal.toString();
+          
+          // Calculate account ID properly
+          try {
+            accountId.value = AccountIdentifier.fromPrincipal({ principal }).toHex();
+          } catch (error) {
+            console.error('Error calculating account ID:', error);
+            accountId.value = 'Error calculating';
+          }
+        }
+        // If no identity but we have address info, use that as fallback
+        else if (addresses.value && addresses.value.length > currentAddressIndex.value) {
           const currentAddress = addresses.value[currentAddressIndex.value];
           principalId.value = currentAddress.principalId;
-          // Account ID would need to be calculated
+          
+          // Calculate account ID
+          try {
+            const principal = Principal.fromText(currentAddress.principalId);
+            accountId.value = AccountIdentifier.fromPrincipal({ principal }).toHex();
+          } catch (error) {
+            console.error('Error calculating account ID from address:', error);
+            accountId.value = 'Error calculating';
+          }
         }
         
-        // Load initial network data
-        await loadNetworkSpecificData(currentNetwork.value);
+        // Load initial network data, but don't call if we don't need to update IDs
+        if (!principalId.value) {
+          await loadNetworkSpecificData(currentNetwork.value);
+        } else {
+          // Only load account data/balances without overwriting IDs
+          await loadAccountData();
+          await fetchBalanceData();
+        }
         
         // Set up periodic refresh of balance data
         const intervalId = setInterval(() => {

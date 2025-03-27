@@ -383,6 +383,69 @@ export const useAccountsStore = defineStore('accounts', () => {
     return accounts.value.length;
   }
 
+  /**
+   * Create an account using an existing identity
+   * @param {Ed25519KeyIdentity} identity - The identity to use
+   * @param {string} name - Optional account name
+   * @param {string} network - Network ID
+   */
+  async function createAccountFromIdentity(identity, name = '', network = 'icp') {
+    try {
+      if (!identity) {
+        throw new Error('Identity is required');
+      }
+      
+      // Get the principalId and calculate the accountId
+      const principalId = identity.getPrincipal().toString();
+      const accountId = calculateAccountId(principalId);
+      
+      // Check if this principal is already in an account
+      const existingAccount = accounts.value.find(acc => acc.principalId === principalId);
+      if (existingAccount) {
+        // If this account already exists, just switch to it
+        const index = accounts.value.indexOf(existingAccount);
+        await switchAccount(index);
+        return index;
+      }
+      
+      // Generate a deterministic name if none provided
+      const accountName = name || `Account ${accounts.value.length + 1}`;
+      
+      // Get seed phrase from auth store if available
+      const seedPhrase = authStore.seedPhrase || '';
+      
+      // Create the account object
+      const newAccount = {
+        name: accountName,
+        principalId,
+        accountId,
+        seedPhrase,
+        avatar: generateAccountAvatar(accounts.value.length),
+        createdAt: Date.now(),
+        lastUsed: Date.now(),
+        network
+      };
+      
+      // Add to accounts array
+      accounts.value.push(newAccount);
+      
+      // Switch to the new account
+      const newIndex = accounts.value.length - 1;
+      currentAccountIndex.value = newIndex;
+      
+      // Save accounts to localStorage
+      saveAccounts();
+      
+      // Save current account index
+      localStorage.setItem(CURRENT_ACCOUNT_KEY, newIndex.toString());
+      
+      return newIndex; // Return index of new account
+    } catch (error) {
+      console.error('Error creating account from identity:', error);
+      throw error;
+    }
+  }
+
   return {
     // State
     accounts,
@@ -404,7 +467,8 @@ export const useAccountsStore = defineStore('accounts', () => {
     saveAccounts,
     getAccount,
     getCurrentAccount,
-    getAccountCount
+    getAccountCount,
+    createAccountFromIdentity
   };
 });
 

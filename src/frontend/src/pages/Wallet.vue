@@ -332,7 +332,20 @@ export default {
       loadingMessage.value = 'Initializing wallet...';
       
       try {
-        // Initialize accounts store first (this will create the first account if none exists)
+        // Ensure authentication is initialized first
+        if (!authStore.isAuthenticated()) {
+          // Try to initialize identity from cache
+          const initialized = authStore.initializeIdentityFromCache();
+          console.log('Authentication initialized from cache:', initialized);
+          
+          // If not authenticated via cache, we need to prompt for login
+          if (!initialized) {
+            addLog('Authentication required. Please log in.', 'warning');
+            // You might want to redirect to login page or show a login modal here
+          }
+        }
+        
+        // Initialize accounts store (this will create the first account if none exists)
         await accountsStore.initialize();
         
         // Initialize IDs from the current account
@@ -363,33 +376,61 @@ export default {
         accountId.value = currentAccount.accountId;
         addLog('Account loaded: ' + currentAccount.name, 'success');
       } else {
-        // If no account exists and user is authenticated, initialize from auth identity
-        await initializeUserIds();
+        // If no account exists, try to initialize from auth identity
+        const authSuccess = await initializeUserIds();
+        
+        // If we couldn't initialize from auth, check if we need to create an account
+        if (!authSuccess && authStore.isAuthenticated()) {
+          addLog('Creating account from authenticated identity...', 'info');
+          // Request accounts store to create an account from the auth identity
+          await accountsStore.createAccountFromIdentity(authStore.getIdentity());
+          
+          // Try again with the newly created account
+          const retryAccount = accountsStore.currentAccount;
+          if (retryAccount) {
+            principalId.value = retryAccount.principalId;
+            accountId.value = retryAccount.accountId;
+            addLog('Account created successfully', 'success');
+          }
+        }
       }
     }
     
-    // Initialize user IDs
+    // Initialize user IDs from auth store
     async function initializeUserIds() {
       try {
         if (!authStore.isAuthenticated()) {
-          addLog('User not authenticated', 'warning');
-          return;
+          // If cache initialization didn't work, try one more time
+          const initialized = authStore.initializeIdentityFromCache();
+          
+          if (!initialized) {
+            addLog('User not authenticated', 'warning');
+            return false;
+          }
         }
         
+        // Get identity from auth store
         const identity = authStore.getIdentity();
-        if (identity) {
-          const principal = identity.getPrincipal();
-          principalId.value = principal.toString();
-          
-          // Calculate account ID
-          const accountIdentifier = AccountIdentifier.fromPrincipal({ principal });
-          accountId.value = accountIdentifier.toHex();
-          
-          addLog('User IDs loaded', 'success');
+        if (!identity) {
+          console.error('Identity not available in auth store');
+          addLog('Identity not available', 'error');
+          return false;
         }
+        
+        // Get principal and account ID
+        const principal = identity.getPrincipal();
+        principalId.value = principal.toString();
+        
+        // Calculate account ID
+        const accountIdentifier = AccountIdentifier.fromPrincipal({ principal });
+        accountId.value = accountIdentifier.toHex();
+        
+        addLog('User IDs loaded from auth store', 'success');
+        return true;
       } catch (error) {
         console.error('Error initializing user IDs:', error);
         addLog(`Error loading user IDs: ${error.message}`, 'error');
+        return false;
       }
     }
     

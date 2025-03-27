@@ -268,4 +268,4 @@ Swap:
         events: 8
         interval: 3 month
     duration: 1 day
-    neurons_fund_participation: true
+    neurons_fund_participation: false
