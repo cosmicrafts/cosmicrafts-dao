@@ -168,15 +168,36 @@ const getAvatarUrl = (avatarId) => {
 
 // Create D3 tree visualization
 const createNetworkTree = async () => {
-  if (!treeContainer.value) return;
+  if (!treeContainer.value) {
+    console.warn('Tree container DOM element not found, skipping network tree creation');
+    return;
+  }
   
   loading.value = true;
   
   try {
     // Dynamically import D3
     if (!d3) {
-      const module = await import('d3');
-      d3 = module.default;
+      try {
+        const d3Module = await import('d3');
+        // Fix: Assign specific D3 methods instead of the entire module
+        d3 = {
+          select: d3Module.select,
+          tree: d3Module.tree,
+          hierarchy: d3Module.hierarchy
+        };
+      } catch (importError) {
+        console.error('Error importing D3:', importError);
+        loading.value = false;
+        return;
+      }
+    }
+    
+    // Make sure we have access to the select method
+    if (!d3.select) {
+      console.error('D3 select method not available');
+      loading.value = false;
+      return;
     }
     
     // Clear container
@@ -283,26 +304,29 @@ const createNetworkTree = async () => {
       })
       .attr('stroke-width', 1.5)
       .attr('fill', 'none')
-      .attr('opacity', 0)
+      .style('opacity', 0)
       .transition()
       .duration(800)
-      .attr('opacity', 1);
+      .style('opacity', 1);
     
     // Create node groups
-    const node = svg.selectAll('.node')
+    // Fix: Use style instead of attr for opacity to ensure compatibility
+    const nodeGroups = svg.selectAll('.node')
       .data(root.descendants())
       .enter()
       .append('g')
       .attr('class', 'node')
       .attr('transform', d => `translate(${d.x},${d.y})`)
-      .attr('opacity', 0)
-      .transition()
+      .style('opacity', 0);
+      
+    // Apply transition separately
+    nodeGroups.transition()
       .duration(800)
       .delay((d, i) => i * 100)
-      .attr('opacity', 1);
+      .style('opacity', 1);
     
     // Add circles for nodes
-    node.append('circle')
+    nodeGroups.append('circle')
       .attr('r', d => d.data.level === 0 ? 24 : 18)
       .attr('fill', d => {
         const level = d.data.level;
@@ -321,7 +345,7 @@ const createNetworkTree = async () => {
       .attr('stroke-width', 2);
     
     // Add labels
-    node.append('text')
+    nodeGroups.append('text')
       .attr('dy', d => d.data.level === 0 ? 36 : 30)
       .attr('text-anchor', 'middle')
       .attr('font-size', d => d.data.level === 0 ? '12px' : '11px')
@@ -331,18 +355,17 @@ const createNetworkTree = async () => {
       })
       .attr('fill', 'var(--cosmic-text-primary)');
     
-    // Add avatar clip paths
-    svg.append('defs')
-      .selectAll('clipPath')
+    // Add gradients
+    const defs = svg.append('defs');
+    
+    // Add avatar clip paths - Fix: Use selectAll before data binding
+    defs.selectAll('clipPath')
       .data(root.descendants())
       .enter()
       .append('clipPath')
       .attr('id', d => `clip-${d.data.id}`)
       .append('circle')
       .attr('r', d => d.data.level === 0 ? 22 : 16);
-    
-    // Add gradients
-    const defs = svg.append('defs');
     
     // You gradient
     const youGradient = defs.append('radialGradient')

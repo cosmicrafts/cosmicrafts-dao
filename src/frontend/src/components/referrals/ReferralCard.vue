@@ -84,7 +84,10 @@ const totalReferrals = computed(() => {
 });
 
 const copyReferralCode = async () => {
-  if (!props.referralCode) return;
+  if (!props.referralCode) {
+    console.warn('No referral code available to copy');
+    return;
+  }
   
   try {
     await navigator.clipboard.writeText(props.referralCode);
@@ -96,11 +99,43 @@ const copyReferralCode = async () => {
     }, 2000);
   } catch (error) {
     console.error('Failed to copy referral code:', error);
+    // Fallback for browsers that don't support clipboard API
+    fallbackCopy(props.referralCode);
   }
 };
 
+// Fallback copy method for browsers without clipboard API
+const fallbackCopy = (text) => {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-999999px';
+  textArea.style.top = '-999999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      copied.value = true;
+      emits('copy', text);
+      setTimeout(() => {
+        copied.value = false;
+      }, 2000);
+    }
+  } catch (err) {
+    console.error('Fallback copy failed:', err);
+  }
+  
+  document.body.removeChild(textArea);
+};
+
 const shareReferralCode = () => {
-  if (!props.referralCode) return;
+  if (!props.referralCode) {
+    console.warn('No referral code available to share');
+    return;
+  }
   
   // Generate share URL
   const shareUrl = `${window.location.origin}/join?ref=${props.referralCode}`;
@@ -113,7 +148,11 @@ const shareReferralCode = () => {
       url: shareUrl
     })
     .then(() => emits('share', shareUrl))
-    .catch(error => console.error('Error sharing:', error));
+    .catch(error => {
+      console.error('Error sharing:', error);
+      // Fallback to copy on share error
+      copyReferralCode();
+    });
   } else {
     // Fallback to copy
     copyReferralCode();

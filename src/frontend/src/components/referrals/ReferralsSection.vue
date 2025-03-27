@@ -77,11 +77,9 @@ const fetchReferralData = async () => {
   loading.value = true;
   
   try {
-    // Get referral code
-    await fetchReferralCode();
-    
-    // Get referrals
-    await Promise.all([
+    // Get all data in parallel
+    await Promise.allSettled([
+      fetchReferralCode(),
       fetchDirectReferrals(),
       fetchIndirectReferrals(),
       fetchBeyondReferrals(),
@@ -94,6 +92,7 @@ const fetchReferralData = async () => {
     }
   } catch (error) {
     console.error('Error fetching referral data:', error);
+    // We already have mock data initialized, so no need for fallback here
   } finally {
     loading.value = false;
   }
@@ -104,7 +103,7 @@ const fetchReferralCode = async () => {
     const identity = authStore.getIdentity();
     if (!identity) return;
     
-    const principal = identity.getPrincipal().toString();
+    const principal = identity.getPrincipal();
     
     // Get canister
     const canisterStore = await import('@/stores/canister').then(m => m.useCanisterStore());
@@ -133,7 +132,7 @@ const fetchDirectReferrals = async () => {
     const identity = authStore.getIdentity();
     if (!identity) return;
     
-    const principal = identity.getPrincipal().toString();
+    const principal = identity.getPrincipal();
     
     // Get canister
     const canisterStore = await import('@/stores/canister').then(m => m.useCanisterStore());
@@ -170,7 +169,7 @@ const fetchDirectReferrals = async () => {
       // Filter out nulls
       directReferrals.value = referralDetails.filter(Boolean);
     } else {
-      // Use mock data for testing
+      // Use mock data for development
       directReferrals.value = generateMockDirectReferrals();
     }
   } catch (error) {
@@ -185,7 +184,7 @@ const fetchIndirectReferrals = async () => {
     const identity = authStore.getIdentity();
     if (!identity) return;
     
-    const principal = identity.getPrincipal().toString();
+    const principal = identity.getPrincipal();
     
     // Get canister
     const canisterStore = await import('@/stores/canister').then(m => m.useCanisterStore());
@@ -225,7 +224,7 @@ const fetchIndirectReferrals = async () => {
       // Filter out nulls
       indirectReferrals.value = indirectDetails.filter(Boolean);
     } else {
-      // Use mock data for testing
+      // Use mock data for development
       indirectReferrals.value = generateMockIndirectReferrals();
     }
   } catch (error) {
@@ -240,7 +239,7 @@ const fetchBeyondReferrals = async () => {
     const identity = authStore.getIdentity();
     if (!identity) return;
     
-    const principal = identity.getPrincipal().toString();
+    const principal = identity.getPrincipal();
     
     // Get canister
     const canisterStore = await import('@/stores/canister').then(m => m.useCanisterStore());
@@ -280,7 +279,7 @@ const fetchBeyondReferrals = async () => {
       // Filter out nulls
       beyondReferrals.value = beyondDetails.filter(Boolean);
     } else {
-      // Use mock data for testing
+      // Use mock data for development
       beyondReferrals.value = generateMockBeyondReferrals();
     }
   } catch (error) {
@@ -295,7 +294,7 @@ const fetchPlayerMultiplier = async () => {
     const identity = authStore.getIdentity();
     if (!identity) return;
     
-    const principal = identity.getPrincipal().toString();
+    const principal = identity.getPrincipal();
     
     // Get canister
     const canisterStore = await import('@/stores/canister').then(m => m.useCanisterStore());
@@ -458,6 +457,14 @@ const handleShare = (url) => {
 
 // Initialize on mount
 onMounted(() => {
+  // Initialize with mock data immediately for better UX
+  directReferrals.value = generateMockDirectReferrals();
+  indirectReferrals.value = generateMockIndirectReferrals();
+  beyondReferrals.value = generateMockBeyondReferrals();
+  playerMultiplier.value = calculateMockMultiplier();
+  referralCode.value = generateMockReferralCode();
+  
+  // Then fetch real data
   fetchReferralData();
 });
 </script>

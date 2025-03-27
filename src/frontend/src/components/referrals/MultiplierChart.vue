@@ -15,7 +15,7 @@
     
     <div class="chart-content">
       <div class="chart-wrapper">
-        <div ref="chartContainer" class="chart-container"></div>
+        <canvas ref="chartContainer" class="chart-container"></canvas>
       </div>
       
       <div class="multiplier-explanation">
@@ -117,94 +117,106 @@ const multiplierFactors = computed(() => {
 
 // Initialize chart
 const initChart = async () => {
-  if (!chartContainer.value) return;
-  
-  // Dynamically import Chart.js
-  if (!Chart) {
-    const module = await import('chart.js/auto');
-    Chart = module.default;
+  if (!chartContainer.value) {
+    console.warn('Chart container not found, skipping chart initialization');
+    return;
   }
   
-  // Generate chart data
-  const timestamps = props.multiplierHistory.map(item => item.timestamp);
-  const multipliers = props.multiplierHistory.map(item => item.value);
-  
-  // If no history, create some mock data
-  const chartData = {
-    labels: timestamps.length > 0 ? timestamps.map(ts => new Date(ts).toLocaleDateString()) : generateMockDates(),
-    datasets: [{
-      label: 'Multiplier',
-      data: multipliers.length > 0 ? multipliers : generateMockMultipliers(),
-      borderColor: '#0FB9FD',
-      backgroundColor: 'rgba(15, 185, 253, 0.2)',
-      borderWidth: 2,
-      pointBackgroundColor: '#0FB9FD',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: '#0FB9FD',
-      pointRadius: 4,
-      pointHoverRadius: 6,
-      tension: 0.4,
-      fill: true
-    }]
-  };
+  try {
+    // Dynamically import Chart.js
+    if (!Chart) {
+      const module = await import('chart.js/auto');
+      Chart = module.default;
+    }
+    
+    // Clean up any existing chart instance
+    if (multiplierChart) {
+      multiplierChart.destroy();
+    }
+    
+    // Generate chart data
+    const timestamps = props.multiplierHistory.map(item => item.timestamp);
+    const multipliers = props.multiplierHistory.map(item => item.value);
+    
+    // If no history, create some mock data
+    const chartData = {
+      labels: timestamps.length > 0 ? timestamps.map(ts => new Date(ts).toLocaleDateString()) : generateMockDates(),
+      datasets: [{
+        label: 'Multiplier',
+        data: multipliers.length > 0 ? multipliers : generateMockMultipliers(),
+        borderColor: '#0FB9FD',
+        backgroundColor: 'rgba(15, 185, 253, 0.2)',
+        borderWidth: 2,
+        pointBackgroundColor: '#0FB9FD',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#0FB9FD',
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        tension: 0.4,
+        fill: true
+      }]
+    };
 
-  // Create chart
-  multiplierChart = new Chart(chartContainer.value, {
-    type: 'line',
-    data: chartData,
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false
-        },
-        tooltip: {
-          backgroundColor: 'rgba(26, 26, 46, 0.9)',
-          titleColor: '#fff',
-          bodyColor: '#fff',
-          borderColor: 'rgba(15, 185, 253, 0.3)',
-          borderWidth: 1,
-          titleFont: {
-            size: 14,
-            weight: 'bold'
+    // Create chart directly with the canvas element
+    multiplierChart = new Chart(chartContainer.value, {
+      type: 'line',
+      data: chartData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
           },
-          bodyFont: {
-            size: 12
-          },
-          padding: 10,
-          displayColors: false,
-          callbacks: {
-            label: (context) => `Multiplier: ${context.parsed.y.toFixed(2)}x`
-          }
-        }
-      },
-      scales: {
-        x: {
-          grid: {
-            color: 'rgba(255, 255, 255, 0.05)',
-            tickLength: 0
-          },
-          ticks: {
-            color: 'rgba(255, 255, 255, 0.7)',
-            maxRotation: 45,
-            minRotation: 45
+          tooltip: {
+            backgroundColor: 'rgba(26, 26, 46, 0.9)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            borderColor: 'rgba(15, 185, 253, 0.3)',
+            borderWidth: 1,
+            titleFont: {
+              size: 14,
+              weight: 'bold'
+            },
+            bodyFont: {
+              size: 12
+            },
+            padding: 10,
+            displayColors: false,
+            callbacks: {
+              label: (context) => `Multiplier: ${context.parsed.y.toFixed(2)}x`
+            }
           }
         },
-        y: {
-          grid: {
-            color: 'rgba(255, 255, 255, 0.05)'
+        scales: {
+          x: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.05)',
+              tickLength: 0
+            },
+            ticks: {
+              color: 'rgba(255, 255, 255, 0.7)',
+              maxRotation: 45,
+              minRotation: 45
+            }
           },
-          ticks: {
-            color: 'rgba(255, 255, 255, 0.7)',
-            callback: (value) => `${value.toFixed(2)}x`
-          },
-          beginAtZero: true
+          y: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.05)'
+            },
+            ticks: {
+              color: 'rgba(255, 255, 255, 0.7)',
+              callback: (value) => `${value.toFixed(2)}x`
+            },
+            beginAtZero: true
+          }
         }
       }
-    }
-  });
+    });
+  } catch (error) {
+    console.error('Failed to create chart:', error);
+  }
 };
 
 // Generate mock dates for the last 7 days
