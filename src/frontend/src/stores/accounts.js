@@ -6,7 +6,7 @@ import { mnemonicToSeedSync, generateMnemonic, validateMnemonic } from 'bip39';
 import nacl from 'tweetnacl';
 import { Principal } from '@dfinity/principal';
 import { AccountIdentifier } from '@dfinity/ledger-icp';
-import { getAvatarIcon } from '@/utils/IconService';
+import AvatarService from '@/utils/AvatarService';
 
 // Constants
 const ACCOUNTS_STORE_KEY = 'cosmicrafts-accounts';
@@ -45,10 +45,10 @@ function calculateAccountId(principalId) {
  * Generate a unique avatar for an account
  */
 function generateAccountAvatar(index) {
-  // Create a deterministic avatar based on the account index
-  const avatarTypes = ['cat', 'dog', 'fox', 'bear', 'koala', 'panda', 'tiger', 'lion', 'rabbit', 'wolf'];
-  const type = avatarTypes[index % avatarTypes.length] || 'placeholder';
-  return getAvatarIcon(type);
+  // Use AvatarService to get a deterministic avatar based on the account index
+  // We'll use modulo to cycle through available avatars (1-12)
+  const avatarIndex = (index % 12) + 1;
+  return AvatarService.getAvatarById(avatarIndex);
 }
 
 export const useAccountsStore = defineStore('accounts', () => {

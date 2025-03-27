@@ -24,7 +24,10 @@
         <form @submit.prevent="registerPlayer" class="form-grid">
           <!-- Example AvatarSelector -->
           <div class="avatar-section">
-            <AvatarSelector @avatar-selected="onAvatarSelected" />
+            <AvatarSelector 
+              @avatar-selected="onAvatarSelected" 
+              ref="avatarSelector"
+            />
           </div>
 
           <!-- Right Section -->
@@ -95,7 +98,7 @@
 </template>
 
 <script>
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import { useAuthStore } from '@/stores/auth';
   import { useCanisterStore } from '@/stores/canister';
@@ -126,6 +129,7 @@
       const selectedAvatarId = ref(null);
       const acceptedTerms = ref(true);
       const registerResult = ref(null);
+      const avatarSelector = ref(null); // Reference to the AvatarSelector component
 
       const enforceUsernameLimit = () => {
         if (username.value.length > 12) {
@@ -140,8 +144,14 @@
       }
 
       const onAvatarSelected = (avatarIndex) => {
+        console.log('Avatar selected:', avatarIndex);
         selectedAvatarId.value = avatarIndex + 1; // Convert to 1-based index
       };
+
+      // Add onMounted to check if avatarSelector is properly rendered
+      onMounted(() => {
+        // Keep reference but remove logs
+      });
 
       const registerPlayer = async () => {
         loading.value = true;
@@ -245,6 +255,7 @@
         registerResult,
         onAvatarSelected,
         registerPlayer,
+        avatarSelector,
         t, // Make `t` available in the template
       };
     },

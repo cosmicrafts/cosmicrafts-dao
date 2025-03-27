@@ -224,6 +224,7 @@ import { useModalStore } from '@/stores/modal';
 import { validateMnemonic } from 'bip39';
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 import { Principal } from '@dfinity/principal';
+import AvatarService from '@/utils/AvatarService';
 
 export default {
   name: 'AccountSelector',
@@ -513,9 +514,10 @@ export default {
     
     // Get address avatar 
     const getAddressAvatar = (index) => {
-      // Simple function to get a different avatar for each address
-      const avatarIndex = (index % 12) + 1; // Loop through 12 different avatars
-      return `/assets/avatars/avatar_${avatarIndex}.png`;
+      // Use the AvatarService to generate a deterministic avatar based on account index
+      // We'll use modulo to cycle through the available avatars (1-12)
+      const avatarIndex = (index % AvatarService.TOTAL_AVATARS) + 1;
+      return AvatarService.getAvatarById(avatarIndex);
     };
     
     // Initial setup

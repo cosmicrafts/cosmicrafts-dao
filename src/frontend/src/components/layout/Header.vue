@@ -123,7 +123,7 @@ import logoKR from '@/assets/icons/logo-kr.svg';
 import logoJP from '@/assets/icons/logo-jp.svg';
 import logoRU from '@/assets/icons/logo-ru.svg';
 import logoAR from '@/assets/icons/logo-ar.svg';
-import avatarMap from '@/utils/avatarMap';
+import AvatarService from '@/utils/AvatarService';
 
 const { t, locale } = useI18n();
 const isMenuOpen = ref(false);
@@ -211,12 +211,9 @@ watch(
       // Unload the previous avatar
       playerAvatar.value = null;
 
-      const avatarId = newPlayer.avatar.toString().padStart(2, '0'); // Ensure two-digit format
-
-      // Dynamically import the avatar
       try {
-        const avatarModule = await avatarMap[avatarId]();
-        playerAvatar.value = avatarModule.default; // Set the new avatar URL
+        // Use AvatarService to load the avatar asynchronously
+        playerAvatar.value = await AvatarService.loadAvatarAsync(newPlayer.avatar);
       } catch (error) {
         console.error('Failed to load avatar:', error);
         playerAvatar.value = null; // Fallback to no avatar

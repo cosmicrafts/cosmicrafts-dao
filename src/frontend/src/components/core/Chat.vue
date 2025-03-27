@@ -6,7 +6,7 @@ import EmojiPicker from './EmojiPicker.vue';
 import MarkdownRenderer from './MarkdownRenderer.vue';
 import { useAuthStore } from '../../stores/auth';
 import { useLanguageStore, languages } from '../../stores/language';
-import avatarMap from '@/utils/avatarMap';
+import AvatarService from '@/utils/AvatarService';
 import aiAvatar from '@/assets/avatars/Avatar_AI.webp';
 
 // Import FontAwesome locally instead of loading remotely
@@ -1540,12 +1540,9 @@ watch(
       // Unload the previous avatar
       playerAvatar.value = null;
 
-      const avatarId = newPlayer.avatar.toString().padStart(2, '0'); // Ensure two-digit format
-
-      // Dynamically import the avatar
       try {
-        const avatarModule = await (avatarMap as any)[avatarId]();
-        playerAvatar.value = avatarModule.default; // Set the new avatar URL
+        // Use AvatarService to load the avatar asynchronously
+        playerAvatar.value = await AvatarService.loadAvatarAsync(newPlayer.avatar);
       } catch (error) {
         console.error('Failed to load avatar:', error);
         playerAvatar.value = null; // Fallback to no avatar

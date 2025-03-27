@@ -19,7 +19,7 @@
           <div class="avatar-grid-container">
             <div class="avatar-grid-header">
               <img src="@/assets/icons/avatar_icon.svg" :alt="t('register.avatarIconAlt')" class="avatar-icon" />
-              <h2 class="avatar-grid-title">{{ t('register.avatarGridTitle') }}</h2>
+              <h2 class="avatar-grid-title">{{ t('register.avatarGridTitle') || 'Choose Your Avatar' }}</h2>
             </div>
 
             <div class="outer-panel">
@@ -44,21 +44,14 @@
 </template>
 
 <script>
-import avatar1 from '@/assets/avatars/Avatar_01.webp';
-import avatar2 from '@/assets/avatars/Avatar_02.webp';
-import avatar3 from '@/assets/avatars/Avatar_03.webp';
-import avatar4 from '@/assets/avatars/Avatar_04.webp';
-import avatar5 from '@/assets/avatars/Avatar_05.webp';
-import avatar6 from '@/assets/avatars/Avatar_06.webp';
-import avatar7 from '@/assets/avatars/Avatar_07.webp';
-import avatar8 from '@/assets/avatars/Avatar_08.webp';
-import avatar9 from '@/assets/avatars/Avatar_09.webp';
-import avatar10 from '@/assets/avatars/Avatar_10.webp';
-import avatar11 from '@/assets/avatars/Avatar_11.webp';
-import avatar12 from '@/assets/avatars/Avatar_12.webp';
 import { useI18n } from 'vue-i18n';
+import AvatarService from '@/utils/AvatarService';
+import { Teleport } from 'vue';
 
 export default {
+  components: {
+    Teleport
+  },
   props: {
     initialAvatarIndex: {
       type: Number,
@@ -70,20 +63,7 @@ export default {
       showGrid: false,
       selectedAvatarIndex: this.initialAvatarIndex,
       hoveredAvatar: null,
-      avatarSrcArray: [
-        avatar1,
-        avatar2,
-        avatar3,
-        avatar4,
-        avatar5,
-        avatar6,
-        avatar7,
-        avatar8,
-        avatar9,
-        avatar10,
-        avatar11,
-        avatar12,
-      ]
+      avatarSrcArray: AvatarService.getAllAvatars()
     };
   },
   computed: {
@@ -92,7 +72,12 @@ export default {
     }
   },
   methods: {
-    toggleGrid() {
+    toggleGrid(event) {
+      // Stop event propagation to prevent document click handler from firing
+      if (event) {
+        event.stopPropagation();
+      }
+      
       this.showGrid = !this.showGrid;
     },
     selectAvatar(index) {
@@ -143,7 +128,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999; /* Ensure it appears above all other elements */
   opacity: 0;
   animation: fadeIn 0.10s forwards;
 }
