@@ -185,7 +185,7 @@ export function validateWord(word) {
 /**
  * Derives Ethereum key pair from a seed phrase using BIP44 standard
  * @param {string} seedPhrase - BIP39 mnemonic seed phrase
- * @param {number} accountIndex - Account index for derivation path
+ * @param {number|string} accountIndex - Account index for derivation path or full custom path
  * @returns {Object} - Ethereum wallet with private key and address
  */
 export async function deriveEthereumFromSeedPhrase(seedPhrase, accountIndex = 0) {
@@ -193,22 +193,34 @@ export async function deriveEthereumFromSeedPhrase(seedPhrase, accountIndex = 0)
     throw new Error('Invalid seed phrase');
   }
   
-  // Import ethers v6 - no need for .default anymore
-  const { HDNodeWallet } = await import('ethers');
-  
-  // In ethers v6, we need to use the full path directly with fromPhrase
-  const path = `m/44'/60'/0'/0/${accountIndex}`;
-  
-  // Create wallet directly with the path
-  const wallet = HDNodeWallet.fromPhrase(seedPhrase, "", path);
-  
-  return {
-    address: wallet.address,
-    privateKey: wallet.privateKey,
-    index: accountIndex,
-    path,
-    name: `ETH Account ${accountIndex + 1}`
-  };
+  try {
+    // Import ethers v6 - no need for .default anymore
+    const { HDNodeWallet } = await import('ethers');
+    
+    let path;
+    
+    // Check if accountIndex is a string and looks like a path
+    if (typeof accountIndex === 'string' && accountIndex.startsWith('m/')) {
+      path = accountIndex;
+    } else {
+      // Standard derivation path with numeric index
+      path = `m/44'/60'/0'/0/${parseInt(accountIndex, 10)}`;
+    }
+    
+    // Create wallet directly with the path
+    const wallet = HDNodeWallet.fromPhrase(seedPhrase, "", path);
+    
+    return {
+      address: wallet.address,
+      privateKey: wallet.privateKey,
+      index: typeof accountIndex === 'number' ? accountIndex : parseInt(path.split('/').pop(), 10),
+      path,
+      name: `ETH Account ${typeof accountIndex === 'number' ? accountIndex + 1 : 'Custom'}`
+    };
+  } catch (error) {
+    console.error('Error deriving Ethereum wallet:', error);
+    throw new Error(`Failed to derive Ethereum wallet: ${error.message}`);
+  }
 }
 
 /**
@@ -218,21 +230,26 @@ export async function deriveEthereumFromSeedPhrase(seedPhrase, accountIndex = 0)
  * @returns {string} - Signed message or transaction
  */
 export async function signWithEthereumKey(privateKey, message) {
-  // Import ethers v6 - no need for .default
-  const { Wallet } = await import('ethers');
-  
-  // Create wallet from private key
-  const wallet = new Wallet(privateKey);
-  
-  // Sign message or transaction
-  if (typeof message === 'string') {
-    // Sign a simple message
-    return await wallet.signMessage(message);
-  } else if (message.to && (message.value !== undefined || message.data)) {
-    // Sign a transaction
-    return await wallet.signTransaction(message);
-  } else {
-    throw new Error('Invalid message or transaction format');
+  try {
+    // Import ethers v6 - no need for .default
+    const { Wallet } = await import('ethers');
+    
+    // Create wallet from private key
+    const wallet = new Wallet(privateKey);
+    
+    // Sign message or transaction
+    if (typeof message === 'string') {
+      // Sign a simple message
+      return await wallet.signMessage(message);
+    } else if (message.to && (message.value !== undefined || message.data)) {
+      // Sign a transaction
+      return await wallet.signTransaction(message);
+    } else {
+      throw new Error('Invalid message or transaction format');
+    }
+  } catch (error) {
+    console.error('Error signing with Ethereum key:', error);
+    throw new Error(`Failed to sign with Ethereum key: ${error.message}`);
   }
 }
 

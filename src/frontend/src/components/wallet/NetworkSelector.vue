@@ -2,9 +2,11 @@
   <div class="network-selector">
     <div class="selected-network" @click="toggleNetworkMenu">
       <div class="network-icon" :class="selectedNetwork.id">
-        <img :src="getNetworkIcon(selectedNetwork.id)" :alt="selectedNetwork.name">
+        <img :src="networkIcons[selectedNetwork.id]" :alt="selectedNetwork.name">
       </div>
-      <span class="network-name">{{ selectedNetwork.name }}</span>
+      <div class="network-name-container">
+        <span class="network-name">{{ selectedNetwork.name }}</span>
+      </div>
       <i class="fas fa-chevron-down"></i>
     </div>
     
@@ -28,12 +30,10 @@
           @click="selectNetwork(network)"
         >
           <div class="network-icon" :class="network.id">
-            <img :src="getNetworkIcon(network.id)" :alt="network.name">
+            <img :src="networkIcons[network.id]" :alt="network.name">
           </div>
           <div class="network-info">
             <span class="network-name">{{ network.name }}</span>
-            <span class="network-status" :class="network.status">{{ network.status }}</span>
-            <span v-if="network.disabled" class="network-disabled-label">Coming Soon</span>
           </div>
           <span v-if="selectedNetwork.id === network.id" class="selected-indicator">
             <i class="fas fa-check"></i>
@@ -45,38 +45,68 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { getNetworkIcon } from '@/utils/IconService';
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+// Import icon assets directly
+import icpIcon from '@/assets/icons/icp.svg';
+import ethereumIcon from '@/assets/icons/ethereum.svg';
+import solanaIcon from '@/assets/icons/solana.svg';
 
 export default {
   name: 'NetworkSelector',
   emits: ['network-changed'],
   setup(props, { emit }) {
     const showNetworkMenu = ref(false);
+    const authStore = useAuthStore();
+    
+    // Create a map of network IDs to icon assets
+    const networkIcons = {
+      icp: icpIcon,
+      ethereum: ethereumIcon,
+      sol: solanaIcon
+    };
     
     // Available networks
     const availableNetworks = ref([
       {
         id: 'icp',
         name: 'Internet Computer',
-        status: 'mainnet'
+        status: 'mainnet',
+        chain: 'icp',
+        isActive: true
       },
       {
-        id: 'eth',
+        id: 'ethereum',
         name: 'Ethereum',
         status: 'mainnet',
-        disabled: true
+        chain: 'ethereum',
+        disabled: false,
+        isActive: true
       },
       {
         id: 'sol',
-        name: 'Solana',
+        name: 'Solana (soon)',
         status: 'mainnet',
-        disabled: true
+        chain: 'solana',
+        disabled: true,
+        isActive: false
       }
     ]);
     
-    // Currently selected network
-    const selectedNetwork = ref(availableNetworks.value[0]);
+    // Get current chain from auth store
+    const currentChain = computed(() => authStore.activeChain);
+    
+    // Get current network from auth store
+    const currentEthNetwork = computed(() => authStore.currentEthNetwork);
+    
+    // Computed property for selected network
+    const selectedNetwork = computed(() => {
+      if (currentChain.value === 'ethereum') {
+        return availableNetworks.value.find(n => n.id === 'ethereum') || availableNetworks.value[0];
+      } else {
+        return availableNetworks.value.find(n => n.id === 'icp') || availableNetworks.value[0];
+      }
+    });
     
     // Toggle network menu
     const toggleNetworkMenu = () => {
@@ -84,33 +114,36 @@ export default {
     };
     
     // Select a network
-    const selectNetwork = (network) => {
-      // Only allow selecting ICP or non-disabled networks
+    const selectNetwork = async (network) => {
+      // Don't do anything for disabled networks
       if (network.disabled) {
         return;
       }
       
-      if (selectedNetwork.value.id !== network.id) {
-        selectedNetwork.value = network;
+      // Close the menu
+      showNetworkMenu.value = false;
+      
+      // If already on this network, do nothing
+      if (selectedNetwork.value.id === network.id) {
+        return;
+      }
+      
+      try {
+        if (network.chain === 'ethereum') {
+          // Set active chain to Ethereum
+          await authStore.switchToEthereumChain();
+        } else if (network.chain === 'icp') {
+          // Switch to ICP chain
+          authStore.switchToIcpChain();
+        }
         
-        // Save to localStorage
+        // Save to localStorage for persistence
         localStorage.setItem('selectedNetwork', network.id);
         
         // Emit event to parent
         emit('network-changed', network);
-      }
-      
-      showNetworkMenu.value = false;
-    };
-    
-    // Load from localStorage
-    const loadSavedNetwork = () => {
-      const savedNetworkId = localStorage.getItem('selectedNetwork');
-      if (savedNetworkId) {
-        const network = availableNetworks.value.find(n => n.id === savedNetworkId);
-        if (network) {
-          selectedNetwork.value = network;
-        }
+      } catch (error) {
+        console.error(`Error switching to network ${network.id}:`, error);
       }
     };
     
@@ -123,7 +156,6 @@ export default {
     
     // Lifecycle hooks
     onMounted(() => {
-      loadSavedNetwork();
       document.addEventListener('click', handleOutsideClick);
     });
     
@@ -137,7 +169,7 @@ export default {
       selectedNetwork,
       toggleNetworkMenu,
       selectNetwork,
-      getNetworkIcon
+      networkIcons
     };
   }
 };
@@ -156,18 +188,21 @@ export default {
 
 .network-selector {
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .selected-network {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   background-color: rgba(15, 185, 253, 0.08);
   border: 1px solid rgba(15, 185, 253, 0.15);
   border-radius: var(--cosmic-radius-md);
-  padding: 0.5rem 0.75rem;
+  padding: 0 0.75rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--cosmic-transition-fast);
+  height: 100%;
+  width: 100%;
 }
 
 .selected-network:hover {
@@ -177,13 +212,16 @@ export default {
 }
 
 .network-icon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: rgba(15, 185, 253, 0.1);
+  padding: 2px;
+  flex-shrink: 0;
 }
 
 .network-icon img {
@@ -192,16 +230,12 @@ export default {
   object-fit: contain;
 }
 
-.network-icon.icp {
-  background-color: rgba(15, 185, 253, 0.1);
-}
-
-.network-icon.eth {
-  background-color: rgba(98, 126, 234, 0.1);
-}
-
-.network-icon.sol {
-  background-color: rgba(148, 76, 234, 0.1);
+.network-name-container {
+  flex: 1;
+  padding: 0 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .network-name {
@@ -214,13 +248,13 @@ export default {
   position: absolute;
   top: calc(100% + 0.5rem);
   left: 0;
-  width: 240px;
+  width: 220px;
   background: var(--cosmic-glass-bg-darker);
   border-radius: var(--cosmic-radius-md);
-  box-shadow: var(--cosmic-shadow-md);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
   backdrop-filter: var(--cosmic-glass-blur);
   border: var(--cosmic-glass-border-blue);
-  z-index: var(--z-index-dropdown-menu);
+  z-index: var(--cosmic-z-dropdown);
   overflow: hidden;
 }
 
@@ -247,6 +281,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all var(--cosmic-transition-fast);
+}
+
+.close-button:hover {
+  color: var(--cosmic-text-primary);
 }
 
 .network-list {
@@ -259,7 +298,7 @@ export default {
   align-items: center;
   padding: 0.75rem 1rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all var(--cosmic-transition-fast);
 }
 
 .network-option:hover {
@@ -278,53 +317,54 @@ export default {
 .network-info {
   flex: 1;
   margin-left: 0.75rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.network-status {
-  font-size: 0.7rem;
-  padding: 0.1rem 0.3rem;
-  border-radius: 4px;
-  text-transform: uppercase;
-  font-weight: 600;
-  width: fit-content;
-  margin-top: 0.25rem;
-}
-
-.network-status.mainnet {
-  background-color: rgba(0, 171, 85, 0.1);
-  color: #00ab55;
-}
-
-.network-status.testnet {
-  background-color: rgba(255, 171, 0, 0.1);
-  color: #ffab00;
-}
-
-.network-disabled-label {
-  font-size: 0.7rem;
-  padding: 0.1rem 0.3rem;
-  border-radius: 4px;
-  text-transform: uppercase;
-  font-weight: 600;
-  width: fit-content;
-  margin-top: 0.25rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--cosmic-text-secondary);
 }
 
 .selected-indicator {
   color: var(--cosmic-blue);
+  font-size: 1rem;
+}
+
+/* Network specific styles */
+.network-icon.icp {
+  background-color: rgba(166, 105, 247, 0.1);
+}
+
+.network-icon.ethereum {
+  background-color: rgba(98, 126, 234, 0.1);
+}
+
+.network-icon.sol {
+  background-color: rgba(20, 241, 155, 0.1);
 }
 
 @media (max-width: 768px) {
   .network-name {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
   
   .network-menu {
-    width: 220px;
+    width: 200px;
+  }
+  
+  .network-option {
+    padding: 0.6rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .network-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .network-menu {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 75vh;
+    border-radius: var(--cosmic-radius-lg) var(--cosmic-radius-lg) 0 0;
   }
 }
 </style> 

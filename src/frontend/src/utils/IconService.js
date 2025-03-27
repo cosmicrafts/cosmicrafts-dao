@@ -80,12 +80,47 @@ export function getIconPath(key) {
 }
 
 /**
- * Get network icon path
- * @param {string} networkId - The network ID (e.g., 'icp', 'ethereum', 'solana')
- * @returns {string} The path to the network icon
+ * Get network icon path - uses same icons as tokens for simplicity
+ * @param {string} network - The network name (e.g., 'icp', 'ethereum', 'solana')
+ * @returns {Object} The imported icon asset
  */
-export function getNetworkIcon(networkId) {
-  return getIconPath(`network:${networkId.toLowerCase()}`);
+export function getNetworkIcon(network) {
+  console.log('getNetworkIcon called with:', network);
+  
+  // Handle null/undefined input
+  if (!network) {
+    console.warn('getNetworkIcon: Network parameter is null or undefined, defaulting to ICP');
+    return icpIcon;
+  }
+  
+  // Normalize the network name
+  const normalizedNetwork = network.toLowerCase();
+  console.log('Normalized network name:', normalizedNetwork);
+  
+  let result;
+  
+  // Map networks to their corresponding imported icons
+  if (normalizedNetwork === 'icp' || normalizedNetwork === 'icp-testnet') {
+    console.log('Matched ICP network');
+    result = icpIcon;
+  } else if (normalizedNetwork === 'ethereum' || normalizedNetwork === 'eth' || 
+             normalizedNetwork === 'mainnet' || normalizedNetwork === 'goerli' || 
+             normalizedNetwork === 'sepolia') {
+    console.log('Matched Ethereum network');
+    result = ethereumIcon;
+  } else if (normalizedNetwork === 'solana' || normalizedNetwork === 'sol') {
+    console.log('Matched Solana network');
+    result = solanaIcon;
+  } else if (normalizedNetwork === 'btc' || normalizedNetwork === 'bitcoin') {
+    console.log('Matched Bitcoin network');
+    result = bitcoinIcon;
+  } else {
+    console.log('No network match found, defaulting to ICP');
+    result = icpIcon;
+  }
+  
+  console.log('Returning icon:', result);
+  return result;
 }
 
 /**

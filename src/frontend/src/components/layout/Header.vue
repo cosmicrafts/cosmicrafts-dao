@@ -140,15 +140,40 @@ const avatarContainerRef = ref(null); // Ref for the avatar container (the click
 // const devDropdownRef = ref(null); // Commented out for developer mode
 
 // Principal ID utilities
-const getPrincipalString = computed(() => {
+// Create a reactive ref to store the principal string
+const principalString = ref('');
+
+// Update principal when needed
+const updatePrincipal = () => {
   try {
     const identity = authStore.getIdentity();
-    return identity ? identity.getPrincipal().toText() : '';
+    if (identity) {
+      principalString.value = identity.getPrincipal().toText();
+    } else {
+      principalString.value = '';
+    }
   } catch (error) {
     console.error('Error getting principal string:', error);
-    return '';
+    principalString.value = '';
   }
-});
+};
+
+// Computed to access the principal string
+const getPrincipalString = computed(() => principalString.value);
+
+// Watch for identity changes
+watch(() => authStore.authenticated, (isAuthenticated) => {
+  if (isAuthenticated) {
+    updatePrincipal();
+  } else {
+    principalString.value = '';
+  }
+}, { immediate: true });
+
+// Also update principal when player changes
+watch(() => authStore.player, () => {
+  updatePrincipal();
+}, { immediate: true });
 
 const formatPrincipal = (principal) => {
   if (!principal) return '';
@@ -159,12 +184,11 @@ const formatPrincipal = (principal) => {
 
 const copyPrincipal = async (event) => {
   event.stopPropagation(); // Prevent closing the dropdown
-  const principalText = getPrincipalString.value;
-  if (principalText) {
+  if (principalString.value) {
     try {
-      await navigator.clipboard.writeText(principalText);
+      await navigator.clipboard.writeText(principalString.value);
       copySuccess.value = true;
-      console.log('Copied principal to clipboard:', principalText);
+      console.log('Copied principal to clipboard:', principalString.value);
       setTimeout(() => {
         copySuccess.value = false;
       }, 2000);
@@ -219,6 +243,8 @@ const toggleDropdown = (event) => {
 const logout = async () => {
   isDropdownVisible.value = false; // Close dropdown before logout
   await authStore.logout();
+  // Clear principal after logout
+  principalString.value = '';
   router.push('/');
 };
 
@@ -237,6 +263,8 @@ const goToWallet = () => {
 // Open login modal
 const handleLogin = () => {
   modalStore.openModal(Login);
+  // After login modal is closed, ensure we update the principal
+  // This will be triggered by the auth.authenticated watcher
 };
 
 // Scroll to the top of the page when the logo is clicked
@@ -303,6 +331,14 @@ const handleClickOutside = (event) => {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
+  
+  // Initialize principal value
+  updatePrincipal();
+  
+  // If auth store is already authenticated, ensure principal is updated
+  if (authStore.authenticated) {
+    updatePrincipal();
+  }
 });
 
 onBeforeUnmount(() => {

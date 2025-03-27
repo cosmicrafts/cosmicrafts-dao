@@ -9,21 +9,21 @@ const NETWORKS = {
   mainnet: {
     name: 'Ethereum Mainnet',
     chainId: '0x1',
-    rpcUrl: 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161', // Public Infura endpoint
+    rpcUrl: 'https://eth.llamarpc.com',
     symbol: 'ETH',
     blockExplorer: 'https://etherscan.io'
   },
   goerli: {
     name: 'Goerli Testnet',
     chainId: '0x5',
-    rpcUrl: 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161', // Public Infura endpoint
+    rpcUrl: 'https://ethereum-goerli.publicnode.com',
     symbol: 'ETH',
     blockExplorer: 'https://goerli.etherscan.io'
   },
   sepolia: {
     name: 'Sepolia Testnet',
     chainId: '0xaa36a7',
-    rpcUrl: 'https://sepolia.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161', // Public Infura endpoint
+    rpcUrl: 'https://ethereum-sepolia.publicnode.com',
     symbol: 'ETH',
     blockExplorer: 'https://sepolia.etherscan.io'
   }
@@ -52,32 +52,97 @@ async function initializeProvider(networkId = 'mainnet', privateKey = null) {
     // Clear previous state
     state.error = null;
     
-    // Load ethers library
-    const ethers = (await import('ethers')).default;
+    // Load ethers library - in v6 we use named imports
+    const { JsonRpcProvider, Wallet } = await import('ethers');
     
     // Get network configuration
     const network = NETWORKS[networkId] || NETWORKS.mainnet;
     state.currentNetworkId = networkId;
     
-    // Create provider
-    const provider = new ethers.providers.JsonRpcProvider(network.rpcUrl);
-    state.provider = provider;
-    state.network = network;
-    
-    // Create signer if privateKey is provided
-    if (privateKey) {
-      const wallet = new ethers.Wallet(privateKey, provider);
-      state.signer = wallet;
-      state.address = wallet.address;
+    // Create provider with timeout for better error handling
+    try {
+      console.log(`Connecting to Ethereum ${network.name}...`);
       
-      // Get balance
-      const balance = await provider.getBalance(wallet.address);
-      state.balance = ethers.utils.formatEther(balance);
+      // Add a timeout to prevent long waiting periods
+      const providerPromise = new Promise(async (resolve, reject) => {
+        try {
+          // Create provider - in v6, use JsonRpcProvider directly
+          const provider = new JsonRpcProvider(network.rpcUrl);
+          
+          // Test connection
+          const networkData = await provider.getNetwork();
+          console.log(`Connected to network: ${networkData.name} (${networkData.chainId})`);
+          resolve(provider);
+        } catch (error) {
+          reject(error);
+        }
+      });
+      
+      // Set a timeout of 5 seconds
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Connection timeout')), 5000);
+      });
+      
+      // Race the promises
+      const provider = await Promise.race([providerPromise, timeoutPromise]);
+      
+      state.provider = provider;
+      state.network = network;
+      
+      // Create signer if privateKey is provided
+      if (privateKey) {
+        const wallet = new Wallet(privateKey, provider);
+        state.signer = wallet;
+        state.address = wallet.address;
+        
+        try {
+          // Get balance - in v6 we can use formatEther directly
+          const { formatEther } = await import('ethers');
+          const balance = await provider.getBalance(wallet.address);
+          state.balance = formatEther(balance);
+        } catch (balanceError) {
+          console.warn('Could not fetch balance', balanceError);
+          state.balance = '0.0';
+        }
+      }
+      
+      state.connected = true;
+      console.log(`Connected to ${network.name}`);
+      return true;
+    } catch (providerError) {
+      console.error(`Provider connection error: ${providerError.message}`);
+      
+      // If we failed to connect to a mainnet provider, try a fallback
+      if (networkId === 'mainnet') {
+        try {
+          console.log('Trying fallback provider...');
+          // Try alternative mainnet provider
+          const fallbackProvider = new JsonRpcProvider('https://rpc.ankr.com/eth');
+          
+          // Test connection
+          await fallbackProvider.getNetwork();
+          
+          state.provider = fallbackProvider;
+          state.network = network;
+          
+          // Create signer if privateKey is provided
+          if (privateKey) {
+            const wallet = new Wallet(privateKey, fallbackProvider);
+            state.signer = wallet;
+            state.address = wallet.address;
+          }
+          
+          state.connected = true;
+          console.log('Connected to fallback provider');
+          return true;
+        } catch (fallbackError) {
+          console.error('Fallback provider also failed:', fallbackError);
+          throw new Error('All Ethereum providers failed to connect');
+        }
+      } else {
+        throw providerError;
+      }
     }
-    
-    state.connected = true;
-    console.log(`Connected to ${network.name}`);
-    return true;
   } catch (error) {
     console.error('Error initializing Ethereum provider:', error);
     state.error = error.message;
@@ -97,12 +162,32 @@ async function getBalance(address) {
       throw new Error('Provider not initialized');
     }
     
-    const ethers = (await import('ethers')).default;
-    const balance = await state.provider.getBalance(address);
-    return ethers.utils.formatEther(balance);
+    // In v6, we use formatEther as a separate import
+    const { formatEther } = await import('ethers');
+    
+    // Call getBalance with proper error handling
+    try {
+      // Try using the provider's getBalance method
+      const balanceWei = await state.provider.getBalance(address);
+      return formatEther(balanceWei);
+    } catch (balanceError) {
+      console.error('Error in provider.getBalance:', balanceError);
+      
+      // Fallback implementation - try accessing account balance directly
+      if (state.signer && state.signer.address === address) {
+        try {
+          const balance = await state.signer.provider.getBalance(address);
+          return formatEther(balance);
+        } catch (signerError) {
+          console.error('Signer balance error:', signerError);
+          return '0.0';
+        }
+      }
+      return '0.0';
+    }
   } catch (error) {
     console.error('Error getting balance:', error);
-    throw error;
+    return '0.0'; // Return 0 balance instead of throwing
   }
 }
 
@@ -119,16 +204,17 @@ async function sendTransaction(to, amount, options = {}) {
       throw new Error('Signer not initialized');
     }
     
-    const ethers = (await import('ethers')).default;
+    // In v6, we use parseEther as a separate import
+    const { parseEther } = await import('ethers');
     
     // Create transaction
     const tx = {
       to,
-      value: ethers.utils.parseEther(amount),
+      value: parseEther(amount),
       ...options
     };
     
-    // Send transaction
+    // Send transaction - in v6 the API is similar
     const txResponse = await state.signer.sendTransaction(tx);
     console.log(`Transaction sent: ${txResponse.hash}`);
     
@@ -210,9 +296,11 @@ async function getGasPrice() {
       throw new Error('Provider not initialized');
     }
     
-    const ethers = (await import('ethers')).default;
-    const gasPrice = await state.provider.getGasPrice();
-    return ethers.utils.formatUnits(gasPrice, 'gwei');
+    // In v6, we use getFeeData() instead of getGasPrice()
+    // and formatUnits as a separate import
+    const { formatUnits } = await import('ethers');
+    const feeData = await state.provider.getFeeData();
+    return formatUnits(feeData.gasPrice || feeData.maxFeePerGas, 'gwei');
   } catch (error) {
     console.error('Error getting gas price:', error);
     throw error;

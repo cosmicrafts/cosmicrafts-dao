@@ -1,22 +1,27 @@
 <template>
-  <div class="account-header">
+  <div class="account-header cosmic-panel">
     <!-- Network and account management -->
-    <div class="header-top">
-      <NetworkSelector @network-changed="handleNetworkChange" />
+    <div class="header-controls-grid">
+      <!-- Network selector -->
+      <div class="control-item network-control">
+        <NetworkSelector @network-changed="handleNetworkChange" />
+      </div>
       
       <!-- Account selector -->
-      <div class="account-selector" @click="toggleAccountMenu">
-        <div class="account-label">
+      <div class="control-item account-control">
+        <div class="account-selector" @click="toggleAccountMenu">
           <div class="account-avatar-container">
             <img v-if="addresses.length > currentAddressIndex" :src="getAddressAvatar(currentAddressIndex)" alt="Account Avatar" class="account-avatar" />
             <span v-else class="account-icon">{{ getAccountInitial() }}</span>
           </div>
-          <span class="account-name">{{ getCurrentAccountName() }}</span>
+          <div class="account-details">
+            <span class="account-name">{{ getCurrentAccountName() }}</span>
+          </div>
           <i class="fas fa-chevron-down"></i>
         </div>
         
         <!-- Account menu dropdown -->
-        <div v-if="showAccountMenu" class="account-menu">
+        <div v-if="showAccountMenu" class="cosmic-dropdown-menu account-menu">
           <div class="menu-header">
             <span>My Accounts</span>
             <div class="menu-actions">
@@ -72,7 +77,7 @@
             </div>
           </div>
           <div class="menu-footer">
-            <button class="menu-action-full backup-btn" @click.stop="showSeedPhrase" title="Backup Recovery Phrase">
+            <button class="cosmic-button cosmic-button-outline-primary menu-action-full" @click.stop="showSeedPhrase" title="Backup Recovery Phrase">
               <i class="fas fa-key"></i>
               <span>View Recovery Phrase</span>
             </button>
@@ -81,18 +86,20 @@
       </div>
       
       <!-- Currency selector -->
-      <CurrencySelector @currency-changed="handleCurrencyChange" />
+      <div class="control-item currency-control">
+        <CurrencySelector @currency-changed="handleCurrencyChange" />
+      </div>
     </div>
     
-    <!-- Account ID info with toggle for mobile -->
+    <!-- Account Information -->
     <div class="account-id-info">
       <div class="id-toggle" @click="toggleIdSection">
-        <span>Account IDs</span>
+        <span>{{ activeChain === 'ethereum' ? 'Ethereum Address' : 'Account IDs' }}</span>
         <i :class="['fas', idSectionExpanded ? 'fa-chevron-up' : 'fa-chevron-down']"></i>
       </div>
       
       <div class="id-sections" :class="{ 'expanded': idSectionExpanded }">
-        <div class="id-section">
+        <div v-if="activeChain !== 'ethereum'" class="id-section">
           <div class="id-label">Principal ID</div>
           <div class="id-value">
             <span class="id-text">{{ formatId(principalId) }}</span>
@@ -102,11 +109,21 @@
           </div>
         </div>
         
-        <div class="id-section">
+        <div v-if="activeChain !== 'ethereum'" class="id-section">
           <div class="id-label">Account ID</div>
           <div class="id-value">
             <span class="id-text">{{ formatId(accountId) }}</span>
             <button class="copy-btn" @click="copyToClipboard(accountId, 'account')">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div v-if="activeChain === 'ethereum'" class="id-section">
+          <div class="id-label">ETH Address</div>
+          <div class="id-value">
+            <span class="id-text">{{ formatEthAddress }}</span>
+            <button class="copy-btn" @click="copyToClipboard(currentEthAccount?.address || '', 'ethereum')">
               <i class="fas fa-copy"></i>
             </button>
           </div>
@@ -128,21 +145,21 @@
 
     <!-- Action buttons -->
     <div class="action-buttons">
-      <button class="action-button" @click="handleAction('receive')">
+      <button class="cosmic-button cosmic-button-outline-primary action-button" @click="handleAction('receive')">
         <i class="fas fa-qrcode"></i>
-        <span>Receive</span>
+        <span class="button-text">Receive</span>
       </button>
-      <button class="action-button" @click="handleAction('send')">
+      <button class="cosmic-button cosmic-button-outline-primary action-button" @click="handleAction('send')">
         <i class="fas fa-paper-plane"></i>
-        <span>Send</span>
+        <span class="button-text">Send</span>
       </button>
-      <button class="action-button" @click="handleAction('swap')">
+      <button class="cosmic-button cosmic-button-outline-primary action-button" @click="handleAction('swap')">
         <i class="fas fa-exchange-alt"></i>
-        <span>Swap</span>
+        <span class="button-text">Swap</span>
       </button>
-      <button class="action-button" @click="handleAction('buy')">
+      <button class="cosmic-button cosmic-button-outline-primary action-button" @click="handleAction('buy')">
         <i class="fas fa-dollar-sign"></i>
-        <span>Buy</span>
+        <span class="button-text">Buy</span>
       </button>
     </div>
   </div>
@@ -177,8 +194,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="button-secondary" @click="showRenameDialog = false">Cancel</button>
-        <button class="button-primary" @click="handleRenameAccount">Save</button>
+        <button class="cosmic-button cosmic-button-outline-primary" @click="showRenameDialog = false">Cancel</button>
+        <button class="cosmic-button cosmic-button-primary" @click="handleRenameAccount">Save</button>
       </div>
     </div>
   </div>
@@ -201,8 +218,8 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button class="button-secondary" @click="showDeleteDialog = false">Cancel</button>
-        <button class="button-danger" @click="handleDeleteAccount">Remove</button>
+        <button class="cosmic-button cosmic-button-outline-primary" @click="showDeleteDialog = false">Cancel</button>
+        <button class="cosmic-button cosmic-button-danger" @click="handleDeleteAccount">Remove</button>
       </div>
     </div>
   </div>
@@ -239,8 +256,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="button-secondary" @click="showImportDialog = false">Cancel</button>
-        <button class="button-primary" @click="handleImportAccount">Import</button>
+        <button class="cosmic-button cosmic-button-outline-primary" @click="showImportDialog = false">Cancel</button>
+        <button class="cosmic-button cosmic-button-primary" @click="handleImportAccount">Import</button>
       </div>
     </div>
   </div>
@@ -275,9 +292,9 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="button-secondary" @click="showRecoverDialog = false">Cancel</button>
+        <button class="cosmic-button cosmic-button-outline-primary" @click="showRecoverDialog = false">Cancel</button>
         <button 
-          class="button-primary" 
+          class="cosmic-button cosmic-button-primary" 
           @click="handleRecoverAccount"
           :disabled="!isRecoveryPhraseValid || isRecovering"
         >
@@ -294,7 +311,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useTokenStore } from '@/stores/token';
 import { useModalStore } from '@/stores/modal';
-import NetworkSelector from './NetworkSelector.vue';
+import NetworkSelector from '@/components/wallet/NetworkSelector.vue';
 import CurrencySelector from './CurrencySelector.vue';
 import { getNetworkIcon } from '@/utils/IconService';
 import { validateMnemonic } from 'bip39';
@@ -306,7 +323,7 @@ export default {
   name: 'AccountHeader',
   components: {
     NetworkSelector,
-    CurrencySelector
+    CurrencySelector,
   },
   props: {
     defaultCurrency: {
@@ -512,11 +529,10 @@ export default {
       emit('currency-changed', newCurrency);
     };
     
-    const handleNetworkChange = (network) => {
-      currentNetwork.value = network;
-      // Reset IDs when network changes
-      loadNetworkSpecificData(network);
-      emit('network-changed', network);
+    const handleNetworkChange = async (network) => {
+      console.log('Network changed to:', network.name);
+      // Balance will be updated via the activeChain watcher
+      await fetchBalanceData();
     };
     
     // Get account initial for avatar fallback
@@ -733,34 +749,54 @@ export default {
     // Fetch balance data for the current account
     const fetchBalanceData = async () => {
       try {
-        const networkId = currentNetwork.value.id;
+        if (isLoading.value) return; // Don't run if already loading
         
-        // This would vary based on the network
+        isLoading.value = true;
+        const currentChain = activeChain.value;
         let balanceNumber = 0;
         
-        if (networkId.startsWith('icp')) {
-          // Get ICP balance from token store
-          const icpBalance = await tokenStore.getBalance('ICP');
-          
-          // Convert from bigint to number (assuming reasonable size)
-          balanceNumber = parseFloat(icpBalance.toString()) / 100000000; // 8 decimals for ICP
-        } else {
-          // Mock data for other networks
-          // In a real app, you would use network-specific API calls
-          balanceNumber = networkId === 'eth' ? 0.25 : networkId === 'sol' ? 12.5 : 0;
+        if (currentChain === 'ethereum' && authStore.hasEthAccounts) {
+          try {
+            // Get ETH balance from the service
+            const ethBalance = await authStore.getEthBalance();
+            
+            // Parse float to convert string to number
+            balanceNumber = parseFloat(ethBalance || '0');
+          } catch (ethError) {
+            console.error('Error fetching ETH balance:', ethError);
+            balanceNumber = 0;
+          }
+        } else if (currentChain === 'icp') {
+          try {
+            // Get ICP balance from token store
+            const tokenStore = useTokenStore();
+            const icpBalance = await tokenStore.getBalance('ICP');
+            
+            // Convert from bigint to number
+            balanceNumber = parseFloat(icpBalance.toString() || '0') / 100000000; // 8 decimals for ICP
+          } catch (icpError) {
+            console.error('Error fetching ICP balance:', icpError);
+            balanceNumber = 0;
+          }
         }
         
         // Store previous balance for change calculation
         previousBalance.value = balance.value;
-        balance.value = balanceNumber;
+        balance.value = balanceNumber || 0;
         
-        // Cache the result
-        localStorage.setItem(`account_${networkId}_${currentAddressIndex.value}_balance`, JSON.stringify({
-          balance: balanceNumber,
-          timestamp: Date.now()
-        }));
+        // Cache the result with chain info
+        try {
+          localStorage.setItem(`account_${currentChain}_balance`, JSON.stringify({
+            balance: balanceNumber,
+            timestamp: Date.now()
+          }));
+        } catch (cacheError) {
+          console.warn('Failed to cache balance data:', cacheError);
+        }
       } catch (error) {
-        console.error('Error fetching balance:', error);
+        console.error('Error in fetchBalanceData:', error);
+      } finally {
+        isLoading.value = false;
       }
     };
     
@@ -934,6 +970,24 @@ export default {
       }
     };
     
+    // New computed properties
+    const activeChain = computed(() => authStore.activeChain);
+    const currentEthAccount = computed(() => authStore.currentEthAccount);
+    const formatEthAddress = computed(() => {
+      const addr = currentEthAccount.value?.address;
+      if (!addr) return '';
+      return formatId(addr);
+    });
+
+    // Add watch for activeChain
+    watch(
+      () => activeChain.value,
+      async () => {
+        // Update balances when the chain changes
+        await fetchBalanceData();
+      }
+    );
+
     return {
       addresses,
       currentAddressIndex,
@@ -990,72 +1044,94 @@ export default {
       handleRecoverAccount,
       recoveryError,
       isRecovering,
-      isRecoveryPhraseValid
+      isRecoveryPhraseValid,
+      
+      // New computed properties
+      activeChain,
+      formatEthAddress,
+      currentEthAccount,
     };
   }
 };
 </script>
 
 <style scoped>
-/* Z-index variables */
-:root {
-  --z-index-base: 1;
-  --z-index-token-list: 5;
-  --z-index-account-header: 10;
-  --z-index-dropdown-menu: 1000;
-  --z-index-backdrop: 999;
-  --z-index-modal: 1500;
-}
-
 .account-header {
   background: var(--cosmic-glass-bg-darker);
   border-radius: var(--cosmic-radius-lg);
-  padding: 1.25rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
   width: 100%;
   box-shadow: var(--cosmic-shadow-sm);
   border: var(--cosmic-glass-border-blue);
-  z-index: var(--z-index-account-header);
+  z-index: var(--cosmic-z-account-header);
+  transform: translateZ(0);
+  transition: all var(--cosmic-transition-medium);
 }
 
-.header-top {
-  display: flex;
-  justify-content: space-between;
+.account-header:hover {
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
+  transform: translateY(-2px);
+}
+
+/* New Grid Layout for Controls */
+.header-controls-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 1rem;
+  width: 100%;
   align-items: center;
 }
 
-.account-selector {
+.control-item {
+  height: 48px;
   position: relative;
-  flex: 1;
-  margin: 0 0.75rem;
 }
 
-.account-label {
+/* Network Control - Left */
+.network-control {
+  justify-self: start;
+}
+
+/* Account Control - Center */
+.account-control {
+  justify-self: center;
+  width: 100%;
+}
+
+/* Currency Control - Right */
+.currency-control {
+  justify-self: end;
+}
+
+/* Account Selector Styling */
+.account-selector {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  border-radius: var(--cosmic-radius-md);
-  background-color: rgba(15, 185, 253, 0.08);
+  background: rgba(15, 185, 253, 0.08);
   border: 1px solid rgba(15, 185, 253, 0.15);
+  border-radius: var(--cosmic-radius-md);
+  padding: 0 0.75rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--cosmic-transition-fast);
+  height: 100%;
+  width: 100%;
 }
 
-.account-label:hover {
-  background-color: rgba(15, 185, 253, 0.12);
+.account-selector:hover {
+  background: rgba(15, 185, 253, 0.12);
   border-color: rgba(15, 185, 253, 0.25);
   box-shadow: var(--cosmic-glow-blue-sm);
 }
 
 .account-avatar-container {
-  width: 2rem;
-  height: 2rem;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 0.5rem;
+  flex-shrink: 0;
 }
 
 .account-avatar {
@@ -1068,8 +1144,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 100%;
+  height: 100%;
   background-color: rgba(128, 96, 255, 0.15);
   border-radius: 50%;
   font-weight: 600;
@@ -1077,39 +1153,49 @@ export default {
   color: rgb(128, 96, 255);
 }
 
-.account-name {
-  font-weight: 600;
-  color: var(--cosmic-text-primary);
-  font-size: 0.9rem;
+.account-details {
+  flex: 1;
+  padding: 0 0.75rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.account-menu {
+.account-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--cosmic-text-primary);
+}
+
+/* Dropdown Menu Styling */
+.cosmic-dropdown-menu {
   position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  max-height: 60vh;
+  top: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  max-height: 400px;
   overflow-y: auto;
   background: var(--cosmic-glass-bg-darker);
   border-radius: var(--cosmic-radius-md);
-  box-shadow: var(--cosmic-shadow-md);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
   backdrop-filter: var(--cosmic-glass-blur);
   border: var(--cosmic-glass-border-blue);
-  z-index: var(--z-index-dropdown-menu);
-  padding: 0.5rem;
-  margin-top: 0.5rem;
+  z-index: var(--cosmic-z-dropdown);
+  transition: all var(--cosmic-transition-fast);
 }
 
 .menu-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
+  padding: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 0.5rem;
+}
+
+.menu-header span {
+  font-weight: 600;
+  color: var(--cosmic-text-primary);
 }
 
 .menu-actions {
@@ -1123,109 +1209,156 @@ export default {
   color: var(--cosmic-blue);
   cursor: pointer;
   font-size: 1rem;
+  transition: all var(--cosmic-transition-fast);
+}
+
+.menu-action:hover {
+  color: var(--cosmic-blue-light);
+  transform: scale(1.1);
 }
 
 .accounts-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  padding: 0.5rem;
 }
 
 .account-option {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 0.5rem;
+  padding: 0.75rem 1rem;
   border-radius: var(--cosmic-radius-sm);
+  margin-bottom: 0.5rem;
   cursor: pointer;
+  transition: all var(--cosmic-transition-fast);
 }
 
-.account-option.active,
 .account-option:hover {
-  background-color: rgba(15, 185, 253, 0.1);
+  background: rgba(15, 185, 253, 0.08);
+}
+
+.account-option.active {
+  background: rgba(15, 185, 253, 0.12);
+  border-left: 2px solid var(--cosmic-blue);
 }
 
 .account-option-content {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.account-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.75rem;
 }
 
 .account-id {
+  font-size: 0.8rem;
+  color: var(--cosmic-text-tertiary);
   font-family: monospace;
-  font-size: 0.9rem;
-  color: var(--cosmic-text-secondary);
 }
 
 .account-actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  opacity: 0;
+  transition: opacity var(--cosmic-transition-fast);
+}
+
+.account-option:hover .account-actions {
+  opacity: 1;
 }
 
 .active-indicator {
-  margin-left: auto;
   color: var(--cosmic-blue);
 }
 
-/* Account IDs styling */
-.account-id-info {
+.account-action-button {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  background-color: rgba(15, 185, 253, 0.03);
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--cosmic-text-tertiary);
+  cursor: pointer;
+  transition: all var(--cosmic-transition-fast);
+}
+
+.account-action-button.rename-btn:hover {
+  background: rgba(15, 185, 253, 0.15);
+  color: var(--cosmic-blue);
+  border-color: var(--cosmic-blue);
+}
+
+.account-action-button.delete-btn:hover {
+  background: rgba(255, 75, 75, 0.15);
+  color: var(--cosmic-red);
+  border-color: var(--cosmic-red);
+}
+
+.menu-footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menu-action-full {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* Account ID Info Section */
+.account-id-info {
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
   border-radius: var(--cosmic-radius-md);
-  padding: 0.75rem 1rem;
+  padding: 1rem;
 }
 
 .id-toggle {
-  display: none;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: 500;
-  cursor: pointer;
-  padding: 0.25rem 0;
-  transition: color 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.id-toggle:active {
-  color: var(--cosmic-blue);
+  color: var(--cosmic-text-primary);
+  margin-bottom: 0.5rem;
+  display: none; /* Hide on desktop */
 }
 
 .id-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
 }
 
 .id-section {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
 }
 
 .id-label {
   font-size: 0.8rem;
   color: var(--cosmic-text-tertiary);
+  font-weight: 500;
 }
 
 .id-value {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--cosmic-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .id-text {
   font-family: monospace;
   font-size: 0.9rem;
   color: var(--cosmic-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .copy-btn {
@@ -1233,304 +1366,113 @@ export default {
   border: none;
   color: var(--cosmic-text-tertiary);
   cursor: pointer;
-  padding: 0.25rem;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: all 0.2s;
-  -webkit-tap-highlight-color: transparent;
+  transition: all var(--cosmic-transition-fast);
 }
 
 .copy-btn:hover {
   color: var(--cosmic-blue);
-  background-color: rgba(15, 185, 253, 0.1);
+  background: rgba(15, 185, 253, 0.1);
 }
 
-.copy-btn:active {
-  transform: scale(0.95);
-  background-color: rgba(15, 185, 253, 0.2);
-}
-
-/* Balance styling */
+/* Balance Section */
 .balance-container {
   text-align: center;
-  margin: 0.5rem 0;
+  padding: 1.5rem;
+  background: var(--cosmic-gradient-panel);
+  border-radius: var(--cosmic-radius-md);
+  border: var(--cosmic-glass-border-blue);
+  box-shadow: var(--cosmic-shadow-sm);
+  transition: all var(--cosmic-transition-medium);
+}
+
+.balance-container:hover {
+  background: var(--cosmic-gradient-panel-hover);
+  border-color: rgba(15, 185, 253, 0.25);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
 }
 
 .main-balance {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--cosmic-text-primary);
-  margin-bottom: 0.25rem;
+  background: var(--cosmic-gradient-blue);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: var(--cosmic-glow-blue-sm);
+  margin-bottom: 0.5rem;
 }
 
 .balance-change {
-  font-size: 0.9rem;
+  font-size: 1rem;
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
   justify-content: center;
+  align-items: center;
 }
 
 .balance-change.positive {
-  color: #00c48c;
+  color: var(--cosmic-green);
 }
 
 .balance-change.negative {
-  color: #ff5252;
+  color: var(--cosmic-red);
 }
 
-/* Action buttons */
+/* Action Buttons */
 .action-buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .action-button {
+  padding: 0.75rem 0.5rem;
+  min-height: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(15, 185, 253, 0.05);
-  border: 1px solid rgba(15, 185, 253, 0.15);
-  border-radius: var(--cosmic-radius-md);
-  padding: 0.75rem 0;
-  cursor: pointer;
-  transition: all 0.2s;
-  -webkit-tap-highlight-color: transparent; /* Remove highlight on touch */
-}
-
-.action-button:hover {
-  background-color: rgba(15, 185, 253, 0.1);
-  transform: translateY(-2px);
-  box-shadow: var(--cosmic-glow-blue-sm);
-}
-
-.action-button:active {
-  background-color: rgba(15, 185, 253, 0.15);
-  transform: translateY(0);
-  box-shadow: none;
+  gap: 0.5rem;
 }
 
 .action-button i {
   font-size: 1.25rem;
-  margin-bottom: 0.35rem;
-  color: var(--cosmic-blue);
+  margin-bottom: 0.25rem;
 }
 
-.action-button span {
-  font-size: 0.8rem;
-  font-weight: 600;
+.action-button .button-text {
+  font-size: 0.9rem;
 }
 
-@media (max-width: 768px) {
-  .header-top {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .account-selector {
-    order: 1;
-    width: 100%;
-    margin: 0.5rem 0;
-  }
-  
-  .action-buttons {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
-  }
-  
-  .action-button {
-    padding: 0.6rem 0;
-  }
-  
-  .action-button i {
-    font-size: 1.1rem;
-  }
-  
-  .action-button span {
-    font-size: 0.75rem;
-  }
-  
-  .main-balance {
-    font-size: 2rem;
-  }
-}
-
-/* Add enhanced mobile styles for smaller screens */
-@media (max-width: 480px) {
-  .account-header {
-    padding: 1rem;
-    gap: 1rem;
-  }
-  
-  .header-top {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
-  
-  .account-selector {
-    margin: 0;
-    width: 100%;
-  }
-  
-  .account-label {
-    justify-content: space-between;
-    padding: 0.75rem;
-  }
-  
-  .id-toggle {
-    display: flex;
-    padding: 0.5rem 0;
-    font-size: 0.9rem;
-    color: var(--cosmic-text-secondary);
-  }
-  
-  .id-toggle:active {
-    opacity: 0.7;
-  }
-  
-  .id-sections {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
-    opacity: 0;
-  }
-  
-  .id-sections.expanded {
-    max-height: 200px;
-    opacity: 1;
-  }
-  
-  .id-section {
-    margin-top: 0.75rem;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .id-value {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 0.25rem;
-    background-color: rgba(15, 185, 253, 0.05);
-    padding: 0.5rem;
-    border-radius: var(--cosmic-radius-sm);
-  }
-  
-  .id-text {
-    max-width: 85%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .copy-btn {
-    background-color: rgba(15, 185, 253, 0.1);
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-  }
-  
-  .copy-btn:active {
-    transform: scale(0.9);
-  }
-  
-  .main-balance {
-    font-size: 1.75rem;
-  }
-  
-  .balance-change {
-    font-size: 0.8rem;
-  }
-  
-  .action-buttons {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-  }
-  
-  .action-button {
-    padding: 1rem 0;
-    touch-action: manipulation; /* Improves touch response */
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .action-button:active::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(15, 185, 253, 0.15);
-    opacity: 0.5;
-    border-radius: var(--cosmic-radius-md);
-    pointer-events: none;
-  }
-  
-  .account-menu {
-    position: fixed;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    max-height: 75vh;
-    margin-top: 0;
-    border-radius: var(--cosmic-radius-md) var(--cosmic-radius-md) 0 0;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .menu-header {
-    padding: 0.75rem;
-  }
-  
-  .account-option {
-    padding: 0.85rem 0.75rem;
-  }
-  
-  .menu-backdrop {
-    display: block;
-  }
-}
-
-.menu-backdrop {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: var(--z-index-backdrop);
-  cursor: pointer;
-}
-
-/* Modal styles */
+/* Modal Styling */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: var(--z-index-modal);
+  z-index: var(--cosmic-z-modal);
 }
 
 .modal-container {
   width: 90%;
-  max-width: 450px;
-  background: var(--cosmic-glass-bg-darker, rgba(23, 33, 43, 0.95));
-  border-radius: var(--cosmic-radius-lg, 12px);
-  border: var(--cosmic-glass-border-blue, 1px solid rgba(15, 185, 253, 0.2));
-  box-shadow: var(--cosmic-glow-blue-md, 0 0 20px rgba(15, 185, 253, 0.25));
+  max-width: 500px;
+  background: var(--cosmic-glass-bg-darker);
+  border-radius: var(--cosmic-radius-lg);
+  border: var(--cosmic-glass-border-blue);
+  box-shadow: var(--cosmic-shadow-lg), var(--cosmic-glow-blue-md);
   overflow: hidden;
-  backdrop-filter: blur(10px);
 }
 
 .modal-header {
@@ -1543,26 +1485,16 @@ export default {
 
 .modal-header h3 {
   margin: 0;
+  color: var(--cosmic-text-primary);
   font-size: 1.25rem;
-  color: var(--cosmic-text-primary, #ffffff);
 }
 
 .modal-close {
   background: transparent;
   border: none;
-  color: var(--cosmic-text-tertiary, rgba(255, 255, 255, 0.7));
+  color: var(--cosmic-text-tertiary);
   cursor: pointer;
   font-size: 1.25rem;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.modal-close:hover {
-  color: var(--cosmic-text-primary, #ffffff);
-  transform: scale(1.1);
 }
 
 .modal-body {
@@ -1570,7 +1502,7 @@ export default {
 }
 
 .modal-footer {
-  padding: 1rem 1.5rem;
+  padding: 1.5rem;
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
@@ -1584,185 +1516,55 @@ export default {
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.85));
+  color: var(--cosmic-text-secondary);
 }
 
 .form-input, .form-textarea {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--cosmic-radius-md, 8px);
-  color: var(--cosmic-text-primary, #ffffff);
-  font-size: 1rem;
-  transition: all 0.2s;
+  border-radius: var(--cosmic-radius-sm);
+  color: var(--cosmic-text-primary);
+  transition: all var(--cosmic-transition-fast);
 }
 
 .form-input:focus, .form-textarea:focus {
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-glow-blue-sm);
   outline: none;
-  border-color: rgba(15, 185, 253, 0.5);
-  box-shadow: 0 0 0 2px rgba(15, 185, 253, 0.25);
 }
 
 .form-textarea {
+  min-height: 120px;
   resize: vertical;
-  min-height: 100px;
-}
-
-.button-primary {
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, rgba(15, 185, 253, 0.9) 0%, rgba(77, 207, 255, 0.9) 50%, rgba(0, 157, 223, 0.9) 100%);
-  color: white;
-  font-weight: 600;
-  border: none;
-  border-radius: var(--cosmic-radius-md, 8px);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.button-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 15px rgba(15, 185, 253, 0.35);
-}
-
-.button-secondary {
-  padding: 0.75rem 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--cosmic-text-primary, #ffffff);
-  font-weight: 600;
-  border-radius: var(--cosmic-radius-md, 8px);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.button-secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
-
-.button-danger {
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, rgba(255, 75, 75, 0.9) 0%, rgba(255, 100, 100, 0.9) 50%, rgba(223, 0, 0, 0.9) 100%);
-  color: white;
-  font-weight: 600;
-  border: none;
-  border-radius: var(--cosmic-radius-md, 8px);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.button-danger:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 15px rgba(255, 75, 75, 0.35);
+  font-family: monospace;
 }
 
 .warning-text {
-  color: #ff4b4b;
-  font-weight: 600;
+  color: var(--cosmic-red);
+  font-weight: 500;
   margin-bottom: 1rem;
 }
 
 .info-text {
-  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.85));
+  color: var(--cosmic-text-secondary);
   font-size: 0.9rem;
-}
-
-/* Account option styling */
-.account-option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
-  border-radius: var(--cosmic-radius-md, 8px);
-  transition: all 0.2s ease;
-}
-
-.account-action-button {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--cosmic-text-tertiary, rgba(255, 255, 255, 0.7));
-  cursor: pointer;
-  transition: all 0.2s;
-  opacity: 0;
-}
-
-.account-option:hover .account-action-button {
-  opacity: 1;
-}
-
-.account-action-button.rename-btn:hover {
-  background: rgba(15, 185, 253, 0.1);
-  border-color: rgba(15, 185, 253, 0.2);
-  color: var(--cosmic-blue, #0FB9FD);
-}
-
-.account-action-button.delete-btn:hover {
-  background: rgba(255, 75, 75, 0.1);
-  border-color: rgba(255, 75, 75, 0.2);
-  color: var(--cosmic-danger, #FF4B4B);
-}
-
-/* Mobile specific styles */
-@media (max-width: 480px) {
-  .menu-backdrop {
-    display: block;
-  }
-  
-  .modal-container {
-    width: 95%;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  
-  .account-action-button {
-    opacity: 1;
-  }
-}
-
-/* Add these new styles for the recovery UI */
-.menu-footer {
-  padding: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.backup-btn {
-  background: rgba(15, 185, 253, 0.1);
-  color: var(--cosmic-blue, #0FB9FD);
-}
-
-.backup-btn:hover {
-  background: rgba(15, 185, 253, 0.15);
-  border-color: rgba(15, 185, 253, 0.3);
-}
-
-.form-textarea {
-  resize: vertical;
-  min-height: 100px;
-  font-family: monospace;
 }
 
 .error-message {
-  color: #ff4b4b;
   background: rgba(255, 75, 75, 0.1);
   border: 1px solid rgba(255, 75, 75, 0.2);
-  border-radius: var(--cosmic-radius-sm, 8px);
+  color: var(--cosmic-red);
   padding: 0.75rem;
+  border-radius: var(--cosmic-radius-sm);
   margin: 1rem 0;
-  font-size: 0.9rem;
 }
 
 .help-text {
-  color: var(--cosmic-text-secondary, rgba(255, 255, 255, 0.7));
+  color: var(--cosmic-text-tertiary);
   font-size: 0.85rem;
-  margin-top: 0.75rem;
+  margin-top: 1rem;
 }
 
 .button-spinner {
@@ -1778,5 +1580,119 @@ export default {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: var(--cosmic-z-backdrop);
+  cursor: pointer;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .header-controls-grid {
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-controls-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 0.75rem;
+  }
+  
+  .network-control {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  
+  .currency-control {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+  
+  .account-control {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+    justify-self: stretch;
+  }
+  
+  .id-sections {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .account-header {
+    padding: 1rem;
+  }
+  
+  .header-controls-grid {
+    gap: 0.5rem;
+  }
+  
+  .control-item {
+    height: 44px;
+  }
+
+  .id-toggle {
+    display: flex;
+    cursor: pointer;
+  }
+
+  .id-sections {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+
+  .id-sections.expanded {
+    max-height: 300px;
+    opacity: 1;
+  }
+
+  .cosmic-dropdown-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    top: auto;
+    width: 100%;
+    max-height: 75vh;
+    transform: none;
+    border-radius: var(--cosmic-radius-lg) var(--cosmic-radius-lg) 0 0;
+  }
+
+  .action-button {
+    padding: 0.6rem;
+    min-height: 55px;
+  }
+
+  .modal-container {
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .account-action-button {
+    opacity: 1; /* Always visible on mobile */
+  }
 }
 </style> 

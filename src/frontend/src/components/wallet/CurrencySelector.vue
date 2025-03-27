@@ -2,7 +2,9 @@
   <div class="currency-selector">
     <div class="selected-currency" @click="toggleCurrencyMenu">
       <span class="currency-symbol">{{ selectedCurrency.symbol }}</span>
-      <span class="currency-code">{{ selectedCurrency.code }}</span>
+      <div class="currency-code-container">
+        <span class="currency-code">{{ selectedCurrency.code }}</span>
+      </div>
       <i class="fas fa-chevron-down"></i>
     </div>
     
@@ -159,18 +161,21 @@ export default {
 
 .currency-selector {
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .selected-currency {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
   background-color: rgba(15, 185, 253, 0.08);
   border: 1px solid rgba(15, 185, 253, 0.15);
   border-radius: var(--cosmic-radius-md);
-  padding: 0.5rem 0.75rem;
+  padding: 0 0.75rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--cosmic-transition-fast);
+  height: 100%;
+  width: 100%;
 }
 
 .selected-currency:hover {
@@ -183,6 +188,16 @@ export default {
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--cosmic-blue);
+  flex-shrink: 0;
+  padding-right: 0.25rem;
+}
+
+.currency-code-container {
+  flex: 1;
+  padding: 0 0.25rem 0 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .currency-code {
@@ -198,10 +213,10 @@ export default {
   width: 220px;
   background: var(--cosmic-glass-bg-darker);
   border-radius: var(--cosmic-radius-md);
-  box-shadow: var(--cosmic-shadow-md);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
   backdrop-filter: var(--cosmic-glass-blur);
   border: var(--cosmic-glass-border-blue);
-  z-index: var(--z-index-dropdown-menu);
+  z-index: var(--cosmic-z-dropdown);
   overflow: hidden;
 }
 
@@ -228,6 +243,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all var(--cosmic-transition-fast);
+}
+
+.close-button:hover {
+  color: var(--cosmic-text-primary);
 }
 
 .currency-list {
@@ -240,7 +260,7 @@ export default {
   align-items: center;
   padding: 0.75rem 1rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all var(--cosmic-transition-fast);
 }
 
 .currency-option:hover {
@@ -258,15 +278,23 @@ export default {
   color: var(--cosmic-text-secondary);
 }
 
+.currency-code {
+  color: var(--cosmic-text-primary);
+  font-size: 0.85rem;
+  margin: 0 0.5rem;
+  opacity: 0.8;
+}
+
 .selected-indicator {
   color: var(--cosmic-blue);
-  margin-left: 0.5rem;
+  margin-left: 0.25rem;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
   .currency-code,
   .currency-symbol {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
   
   .currency-menu {
@@ -275,6 +303,22 @@ export default {
   
   .currency-option {
     padding: 0.6rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .currency-menu {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 75vh;
+    border-radius: var(--cosmic-radius-lg) var(--cosmic-radius-lg) 0 0;
+  }
+  
+  .selected-currency {
+    padding: 0 0.5rem;
   }
 }
 </style> 

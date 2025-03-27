@@ -1219,7 +1219,15 @@ export const useAuthStore = defineStore('auth', {
       try {
         // Use the next index for a new address
         const newIndex = this.ethAccounts.length;
+        console.log(`Generating Ethereum account with index: ${newIndex}`);
+        
+        // Dynamically import the function to avoid circular dependencies
+        const { deriveEthereumFromSeedPhrase } = await import('@/utils/cryptoUtils');
         const accountInfo = await deriveEthereumFromSeedPhrase(this.seedPhrase, newIndex);
+        
+        if (!accountInfo || !accountInfo.address) {
+          throw new Error('Failed to derive valid Ethereum account');
+        }
         
         // Add to ETH accounts list
         this.ethAccounts.push({
@@ -1293,6 +1301,7 @@ export const useAuthStore = defineStore('auth', {
         }
         
         // Connect to Ethereum using the account's private key
+        console.log(`Attempting to connect to Ethereum with account: ${currentAccount.address?.slice(0, 10)}...`);
         const connected = await EthereumService.connectWithPrivateKey(currentAccount.privateKey);
         
         if (connected) {
@@ -1332,18 +1341,28 @@ export const useAuthStore = defineStore('auth', {
     // Get current Ethereum balance
     async getEthBalance() {
       if (!this.ethConnected || !this.hasEthAccounts) {
-        await this.initializeEthereumProvider();
+        try {
+          await this.initializeEthereumProvider();
+        } catch (connError) {
+          console.warn('Failed to initialize Ethereum provider for balance check:', connError);
+        }
       }
       
       try {
         const currentAccount = this.currentEthAccount;
         if (!currentAccount) {
-          throw new Error('No Ethereum account selected');
+          console.warn('No Ethereum account selected');
+          return '0.0';
         }
         
         // Get balance from EthereumService
-        const balance = await EthereumService.getBalance(currentAccount.address);
-        return balance;
+        try {
+          const balance = await EthereumService.getBalance(currentAccount.address);
+          return balance;
+        } catch (balanceError) {
+          console.error('Error getting ETH balance:', balanceError);
+          return '0.0';
+        }
       } catch (error) {
         console.error('Error getting ETH balance:', error);
         return '0.0';
@@ -1382,18 +1401,49 @@ export const useAuthStore = defineStore('auth', {
     
     // Switch to Ethereum chain
     async switchToEthereumChain() {
-      if (!this.hasEthAccounts) {
+      try {
+        if (!this.hasSeedPhrase) {
+          console.error('Cannot switch to Ethereum: No seed phrase available');
+          return false;
+        }
+        
         // Initialize first account if none exists
-        await this.initializeEthAccounts(1);
+        if (!this.hasEthAccounts) {
+          console.log('No Ethereum accounts found, initializing...');
+          try {
+            const initialized = await this.initializeEthAccounts(1);
+            if (!initialized) {
+              console.error('Failed to initialize Ethereum accounts');
+              return false;
+            }
+          } catch (initError) {
+            console.error('Error creating Ethereum account:', initError);
+            return false;
+          }
+        }
+        
+        // Set active chain regardless of provider connection
+        // This allows us to show Ethereum UI elements even if RPC is down
+        this.activeChain = 'ethereum';
+        this.saveStateToLocalStorage();
+        
+        // Try to initialize Ethereum provider if we have accounts
+        if (this.hasEthAccounts) {
+          try {
+            const connected = await this.initializeEthereumProvider();
+            if (!connected) {
+              console.warn('Failed to connect to Ethereum provider, but chain switched');
+            }
+          } catch (providerError) {
+            console.warn('Provider initialization failed, but chain switched:', providerError);
+          }
+        }
+        
+        return true;
+      } catch (error) {
+        console.error('Error switching to Ethereum chain:', error);
+        return false;
       }
-      
-      this.activeChain = 'ethereum';
-      this.saveStateToLocalStorage();
-      
-      // Initialize Ethereum provider
-      await this.initializeEthereumProvider();
-      
-      return true;
     },
     
     // Sign a message with the current Ethereum account

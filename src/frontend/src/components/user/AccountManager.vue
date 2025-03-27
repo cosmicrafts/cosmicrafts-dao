@@ -190,34 +190,95 @@
       <div class="eth-account-manager-dialog" @click.stop>
         <h3>{{ $t('account.manageEthAccounts') || 'Manage Ethereum Accounts' }}</h3>
         
+        <!-- Network Selector -->
+        <div class="eth-network-selector">
+          <label for="eth-network">Network:</label>
+          <select id="eth-network" v-model="selectedEthNetwork" @change="switchEthNetwork">
+            <option value="mainnet">Ethereum Mainnet</option>
+            <option value="goerli">Goerli Testnet</option>
+            <option value="sepolia">Sepolia Testnet</option>
+          </select>
+        </div>
+        
         <div class="eth-accounts-list">
           <div 
             v-for="account in ethAccounts" 
             :key="account.index"
             class="eth-account-item"
             :class="{ active: account.index === currentEthAccountIndex }"
-            @click="switchToEthAccount(account.index)"
           >
             <div class="eth-account-info">
-              <div class="eth-account-name">{{ account.name }}</div>
+              <div class="eth-account-name">
+                {{ account.name }}
+                <input 
+                  v-if="editingAccountIndex === account.index" 
+                  v-model="editAccountName" 
+                  @keyup.enter="renameEthAccount"
+                  @click.stop
+                  class="eth-account-name-input"
+                />
+              </div>
               <div class="eth-account-address">{{ formatAddress(account.address) }}</div>
+              <div class="eth-account-path">{{ account.path }}</div>
             </div>
             <div class="eth-account-actions">
-              <button v-if="account.index !== currentEthAccountIndex" class="eth-account-select-btn">
+              <button v-if="account.index !== currentEthAccountIndex" 
+                      class="eth-account-select-btn" 
+                      @click.stop="switchToEthAccount(account.index)">
                 Select
               </button>
               <div v-else class="eth-account-active-badge">Active</div>
+              
+              <div class="eth-account-buttons">
+                <button class="eth-action-btn rename-btn" 
+                        @click.stop="startRenameAccount(account.index)"
+                        title="Rename Account">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="eth-action-btn copy-btn" 
+                        @click.stop="copyEthAddress(account.address)"
+                        title="Copy Address">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
             </div>
+          </div>
+        </div>
+        
+        <!-- Derivation Path Input -->
+        <div class="eth-derivation-section">
+          <h4>Create New Account</h4>
+          <div class="derivation-path-input">
+            <label for="custom-path">Custom Path (Optional):</label>
+            <input 
+              id="custom-path" 
+              type="text"
+              v-model="customDerivationPath"
+              placeholder="m/44'/60'/0'/0/x"
+              class="eth-input"
+            />
+            <p class="derivation-info">Leave blank to use next available index ({{ nextAccountIndex }})</p>
+          </div>
+          
+          <div class="eth-account-form">
+            <label for="new-account-name">Account Name:</label>
+            <input 
+              id="new-account-name" 
+              type="text"
+              v-model="newAccountName"
+              placeholder="My ETH Account"
+              class="eth-input"
+            />
           </div>
         </div>
         
         <div class="eth-manager-actions">
           <button 
             class="cosmic-button cosmic-button-secondary"
-            @click="generateNewEthAccount"
+            @click="createCustomEthAccount"
           >
             <i class="fas fa-plus-circle"></i>
-            <span>{{ $t('account.newEthAccount') || 'Generate New Account' }}</span>
+            <span>{{ $t('account.newEthAccount') || 'Create New Account' }}</span>
           </button>
           
           <button 
@@ -246,6 +307,11 @@ const modalStore = useModalStore();
 // Reactive state
 const showLogoutConfirm = ref(false);
 const showEthAccountManager = ref(false);
+const newAccountName = ref('');
+const customDerivationPath = ref('');
+const selectedEthNetwork = ref('mainnet');
+const editingAccountIndex = ref(-1);
+const editAccountName = ref('');
 
 // Computed properties
 const isAuthenticated = computed(() => authStore.isAuthenticated());
@@ -259,6 +325,7 @@ const ethAccounts = computed(() => authStore.ethAccounts || []);
 const hasEthAccounts = computed(() => authStore.hasEthAccounts);
 const currentEthAccount = computed(() => authStore.currentEthAccount);
 const currentEthAccountIndex = computed(() => authStore.currentEthAccountIndex);
+const nextAccountIndex = computed(() => ethAccounts.value.length);
 
 const userName = computed(() => {
   if (authStore.player && authStore.player.username) {
@@ -326,6 +393,18 @@ const copyAddress = () => {
     });
 };
 
+const copyEthAddress = (address) => {
+  if (!address) return;
+  
+  navigator.clipboard.writeText(address)
+    .then(() => {
+      console.log('Ethereum address copied to clipboard');
+    })
+    .catch(err => {
+      console.error('Failed to copy ethereum address:', err);
+    });
+};
+
 const showSeedPhrase = () => {
   if (authStore.hasSeedPhrase) {
     authStore.showSeedPhrase();
@@ -340,11 +419,16 @@ const manageAddresses = () => {
 };
 
 const manageEthAccounts = () => {
+  selectedEthNetwork.value = authStore.currentEthNetwork;
+  newAccountName.value = `ETH Account ${nextAccountIndex.value + 1}`;
+  customDerivationPath.value = '';
   showEthAccountManager.value = true;
 };
 
 const closeEthAccountManager = () => {
   showEthAccountManager.value = false;
+  editingAccountIndex.value = -1;
+  editAccountName.value = '';
 };
 
 const switchToEthAccount = (index) => {
@@ -357,6 +441,89 @@ const generateNewEthAccount = async () => {
   if (!showEthAccountManager.value) {
     authStore.switchToEthereumChain();
   }
+};
+
+const createCustomEthAccount = async () => {
+  try {
+    // Get account name or use default
+    const accountName = newAccountName.value.trim() || `ETH Account ${nextAccountIndex.value + 1}`;
+    
+    if (customDerivationPath.value.trim() && customDerivationPath.value.trim().startsWith('m/')) {
+      // Direct import from cryptoUtils for custom path
+      const { deriveEthereumFromSeedPhrase } = await import('@/utils/cryptoUtils');
+      
+      // Get the seed phrase from auth store
+      const seedPhrase = authStore.seedPhrase;
+      if (!seedPhrase) {
+        throw new Error('No seed phrase available');
+      }
+      
+      // Generate account with custom path
+      const newAccount = await deriveEthereumFromSeedPhrase(seedPhrase, customDerivationPath.value.trim());
+      
+      // Add account to auth store's list with custom name
+      newAccount.name = accountName;
+      
+      // Check if we already have an account with this address
+      const existingAccount = ethAccounts.value.find(acc => acc.address === newAccount.address);
+      if (existingAccount) {
+        throw new Error('Account with this derivation path already exists');
+      }
+      
+      // Add to accounts and switch to it
+      authStore.ethAccounts.push(newAccount);
+      authStore.saveStateToLocalStorage();
+      
+      // Switch to the new account
+      switchToEthAccount(authStore.ethAccounts.length - 1);
+    } else {
+      // Generate account with next index
+      await authStore.generateEthAccount();
+      
+      // Update the name of the newly created account
+      if (ethAccounts.value.length > 0) {
+        const lastIndex = ethAccounts.value.length - 1;
+        ethAccounts.value[lastIndex].name = accountName;
+        
+        // Save state
+        authStore.saveStateToLocalStorage();
+        
+        // Switch to the new account
+        switchToEthAccount(lastIndex);
+      }
+    }
+    
+    // Reset form
+    newAccountName.value = `ETH Account ${nextAccountIndex.value + 1}`;
+    customDerivationPath.value = '';
+    
+  } catch (error) {
+    console.error('Error creating custom ETH account:', error);
+    alert(`Error creating account: ${error.message}`);
+  }
+};
+
+const startRenameAccount = (index) => {
+  editingAccountIndex.value = index;
+  editAccountName.value = ethAccounts.value[index]?.name || '';
+};
+
+const renameEthAccount = () => {
+  if (editingAccountIndex.value >= 0 && editAccountName.value.trim()) {
+    // Update the account name
+    ethAccounts.value[editingAccountIndex.value].name = editAccountName.value.trim();
+    
+    // Save state
+    authStore.saveStateToLocalStorage();
+    
+    // Reset editing state
+    editingAccountIndex.value = -1;
+    editAccountName.value = '';
+  }
+};
+
+const switchEthNetwork = async () => {
+  await authStore.switchEthNetwork(selectedEthNetwork.value);
 };
 
 const switchToIcpChain = () => {
@@ -398,6 +565,9 @@ onMounted(() => {
       console.error('Failed to initialize Ethereum account:', err);
     });
   }
+  
+  // Set initial value for new account name
+  newAccountName.value = `ETH Account ${nextAccountIndex.value + 1}`;
 });
 </script>
 
@@ -709,13 +879,45 @@ onMounted(() => {
   text-align: center;
 }
 
+.eth-network-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  border-radius: var(--cosmic-radius-md);
+}
+
+.eth-network-selector label {
+  color: var(--cosmic-text-secondary);
+  font-size: 0.9rem;
+}
+
+.eth-network-selector select {
+  flex-grow: 1;
+  padding: 0.5rem;
+  border-radius: var(--cosmic-radius-sm);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--cosmic-text-primary);
+  outline: none;
+}
+
+.eth-network-selector select:focus {
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-glow-blue-sm);
+}
+
 .eth-accounts-list {
-  max-height: 50vh;
+  max-height: 40vh;
   overflow-y: auto;
   margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  padding-right: 0.5rem;
 }
 
 .eth-account-item {
@@ -749,12 +951,70 @@ onMounted(() => {
   font-weight: 500;
   color: var(--cosmic-text-primary);
   margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.eth-account-name-input {
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(15, 185, 253, 0.3);
+  border-radius: var(--cosmic-radius-sm);
+  color: var(--cosmic-text-primary);
+  font-size: 0.9rem;
+  width: 150px;
 }
 
 .eth-account-address {
   font-family: 'Courier New', monospace;
   font-size: 0.8rem;
   color: var(--cosmic-text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.eth-account-path {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: var(--cosmic-text-tertiary);
+}
+
+.eth-account-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.eth-account-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.eth-action-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--cosmic-text-tertiary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.eth-action-btn.copy-btn:hover {
+  background: rgba(15, 185, 253, 0.1);
+  border-color: rgba(15, 185, 253, 0.2);
+  color: var(--cosmic-blue);
+}
+
+.eth-action-btn.rename-btn:hover {
+  background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
 }
 
 .eth-account-select-btn {
@@ -764,6 +1024,14 @@ onMounted(() => {
   padding: 0.25rem 0.75rem;
   border-radius: var(--cosmic-radius-sm);
   cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.eth-account-select-btn:hover {
+  background: rgba(15, 185, 253, 0.2);
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-glow-blue-sm);
 }
 
 .eth-account-active-badge {
@@ -775,9 +1043,83 @@ onMounted(() => {
   font-size: 0.8rem;
 }
 
+.eth-derivation-section {
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  border-radius: var(--cosmic-radius-md);
+}
+
+.eth-derivation-section h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--cosmic-text-primary);
+  font-size: 1rem;
+}
+
+.derivation-path-input {
+  margin-bottom: 1rem;
+}
+
+.derivation-path-input label,
+.eth-account-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--cosmic-text-secondary);
+  font-size: 0.9rem;
+}
+
+.eth-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--cosmic-radius-sm);
+  color: var(--cosmic-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.eth-input:focus {
+  outline: none;
+  border-color: rgba(15, 185, 253, 0.3);
+  box-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.derivation-info {
+  font-size: 0.8rem;
+  color: var(--cosmic-text-tertiary);
+  margin: 0.25rem 0 0.5rem;
+}
+
 .eth-manager-actions {
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
+}
+
+@media (max-width: 480px) {
+  .eth-account-manager-dialog {
+    width: 95%;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .eth-accounts-list {
+    flex-grow: 1;
+  }
+  
+  .eth-account-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .eth-account-actions {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
 }
 </style> 
