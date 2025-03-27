@@ -1121,6 +1121,7 @@ html, body {
 }
 
 @media (max-width: 768px) {
+  /* Container structure */
   .dashboard-container {
     padding: 0.75rem;
     padding-top: 5rem; /* Slightly reduced top padding for mobile */
@@ -1135,21 +1136,72 @@ html, body {
     gap: 1rem;
   }
   
+  /* Grid containment */
   .dashboard-grid {
     width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
   
-  .user-profile,
-  .dashboard-tabs,
+  .dashboard-column {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+  
+  /* Section containment */
+  .dashboard-section {
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 1rem;
+    margin: 0;
+  }
+  
+  /* Main content sections */
+  .token-wallet,
+  .nft-collection,
+  .activity-feed,
+  .quick-actions {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    border-radius: var(--cosmic-radius-md); /* Slightly reduced radius on mobile */
+  }
+  
+  /* Content grids and lists */
   .token-list,
   .nft-grid,
-  .activity-list,
-  .actions-grid {
-    max-width: 100%;
+  .actions-grid,
+  .activity-list {
     width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
     box-sizing: border-box;
+    overflow-x: hidden;
   }
   
+  /* Headers and footers */
+  .section-header,
+  .section-footer,
+  .token-summary,
+  .total-value {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  
+  /* Profile layout fixes */
   .user-profile {
     flex-direction: column;
     align-items: center;
@@ -1170,6 +1222,7 @@ html, body {
     max-width: 140px; /* Smaller on mobile */
   }
   
+  /* Section headers */
   .section-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1180,11 +1233,13 @@ html, body {
     width: 100%;
   }
   
+  /* Category filters */
   .category-filter {
     width: 100%;
     justify-content: flex-start;
   }
   
+  /* Action cards */
   .action-card {
     padding: 1rem;
   }
@@ -1192,44 +1247,96 @@ html, body {
   .action-card i {
     font-size: 1.5rem;
   }
-  
-  .dashboard-section {
-    padding: 1rem;
-  }
-  
-  .token-list {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 480px) {
+  /* Container for tiny screens */
   .dashboard-container {
     width: 100vw;
     max-width: 100vw;
     overflow-x: hidden;
+    padding: 0.5rem;
+    padding-top: 4.5rem;
     left: 0;
     right: 0;
     margin: 0;
-    padding: 0.75rem;
-    padding-top: 4.5rem;
   }
   
+  /* Dashboard sections */
+  .dashboard-section {
+    padding: 0.75rem;
+    border-radius: var(--cosmic-radius-sm);
+  }
+  
+  /* Grid layouts */
   .nft-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem;
   }
   
   .actions-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem;
   }
   
+  .token-list {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* User stats */
   .user-stats {
     justify-content: center;
     gap: 2rem;
   }
   
+  /* Principal ID */
+  .principal-value {
+    max-width: 100px; /* Even smaller on tiny screens */
+  }
+  
+  /* Fix individual card elements */
+  .action-card {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 0.85rem;
+  }
+  
+  .activity-item {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 0.65rem;
+    box-sizing: border-box;
+  }
+  
+  .activity-content {
+    max-width: calc(100% - 35px);
+    overflow: hidden;
+  }
+  
+  /* Fix all list elements */
+  .token-list > *,
+  .nft-grid > *,
+  .actions-grid > *,
+  .activity-list > * {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+  }
+  
+  /* Adjust content padding */
+  .token-summary {
+    padding: 0.75rem;
+  }
+  
+  /* Tab buttons */
   .tab-button {
-    padding: 0.6rem 1rem;
-    min-width: 80px;
+    max-width: calc(20% - 0.4rem);
+    min-width: 70px;
+    padding: 0.5rem 0.25rem;
+    overflow: hidden;
   }
   
   .tab-button i {
@@ -1237,11 +1344,21 @@ html, body {
   }
   
   .tab-button span {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
-  .principal-value {
-    max-width: 100px; /* Even smaller on tiny screens */
+  /* Text content handling */
+  .activity-text,
+  .value-amount,
+  .user-title {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-word;
   }
 }
 </style>
