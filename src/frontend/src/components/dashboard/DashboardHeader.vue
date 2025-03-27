@@ -69,10 +69,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useNftsStore } from '@/stores/nfts';
 import DashboardMobileMenu from './DashboardMobileMenu.vue';
+import AvatarService from '@/utils/AvatarService';
 
 // Props
 const props = defineProps({
@@ -93,6 +94,22 @@ const nftsStore = useNftsStore();
 const player = computed(() => authStore.player);
 const copySuccess = ref(false);
 const isMobileMenuOpen = ref(false);
+const playerAvatar = ref(null);
+
+// Load player avatar
+watch(() => player.value?.avatar, async (newAvatarId) => {
+  if (newAvatarId !== undefined && newAvatarId !== null) {
+    try {
+      // Use AvatarService to load the avatar asynchronously
+      playerAvatar.value = await AvatarService.loadAvatarAsync(newAvatarId);
+    } catch (error) {
+      console.error('Failed to load avatar:', error);
+      playerAvatar.value = null; // Fallback to no avatar
+    }
+  } else {
+    playerAvatar.value = null;
+  }
+}, { immediate: true });
 
 // Tab options - split into main and additional tabs
 const mainTabs = [
@@ -118,12 +135,14 @@ const getCurrentTabLabel = computed(() => {
   return currentTab?.label || 'Menu';
 });
 
-// Avatar
+// Avatar URL for template binding
 const avatarUrl = computed(() => {
-  if (player.value?.avatar) {
-    return `/assets/avatars/avatar-${player.value.avatar}.webp`;
+  // If we already loaded it asynchronously, use that
+  if (playerAvatar.value) {
+    return playerAvatar.value;
   }
-  return '/assets/avatars/avatar-default.webp';
+  // Otherwise use the synchronous method (might be needed before async loading completes)
+  return AvatarService.getPlayerAvatar(player.value);
 });
 
 // Principal ID

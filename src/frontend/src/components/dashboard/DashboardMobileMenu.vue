@@ -96,6 +96,7 @@
 import { watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import AvatarService from '@/utils/AvatarService';
 
 // Router for navigation
 const router = useRouter();
