@@ -40,14 +40,52 @@
         >
           <!-- Overview Section -->
           <div v-if="activeTab === 'overview'" key="overview" class="dashboard-page">
-            <!-- Welcome Card -->
+            <!-- Enhanced Welcome Card -->
             <section class="welcome-card cosmic-panel">
+              <div class="cosmic-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+              </div>
+              
               <div class="welcome-content">
-                <h2>Welcome back, {{ player?.username || 'Explorer' }}!</h2>
-                <p class="user-title">{{ player?.title || 'Cosmic Recruit' }} • Level {{ player?.level || 1 }}</p>
-                <div class="token-summary">
-                  <span class="value-label">Total Value</span>
-                  <span class="value-amount">${{ totalTokenValue.toFixed(2) }} USD</span>
+                <div class="welcome-user-info">
+                  <img :src="avatarUrl" alt="User Avatar" class="welcome-avatar" />
+                  <div class="welcome-text">
+                    <h2>Welcome back, {{ player?.username || 'Explorer' }}!</h2>
+                    <div class="user-details">
+                      <span class="user-title">{{ player?.title || 'Cosmic Recruit' }}</span>
+                      <div class="level-indicator">
+                        <div class="level-badge">{{ player?.level || 1 }}</div>
+                        <div class="xp-bar">
+                          <div class="xp-progress" :style="{ width: `${playerXpPercentage}%` }"></div>
+                        </div>
+                        <span class="xp-text">{{ player?.xp || 0 }}/{{ nextLevelXp }} XP</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="stats-summary">
+                  <div class="stat-summary-item">
+                    <div class="summary-value">${{ totalTokenValue.toFixed(2) }}</div>
+                    <div class="summary-label">Portfolio Value</div>
+                  </div>
+                  <div class="stat-summary-item">
+                    <div class="summary-value">{{ totalNFTs }}</div>
+                    <div class="summary-label">NFT Collection</div>
+                  </div>
+                  <div class="stat-summary-item">
+                    <div class="summary-value">{{ activeQuests }}</div>
+                    <div class="summary-label">Active Quests</div>
+                  </div>
+                </div>
+                
+                <div class="daily-checkin" v-if="!hasDailyCheckin">
+                  <button @click="claimDailyReward" class="cosmic-button cosmic-button-primary checkin-button">
+                    <i class="fas fa-gift"></i>
+                    <span>Claim Daily Reward</span>
+                  </button>
                 </div>
               </div>
             </section>
@@ -65,7 +103,25 @@
               </div>
 
               <div class="token-list">
+                <template v-if="tokenStore.loading">
+                  <!-- Skeleton Token Cards -->
+                  <div v-for="i in 3" :key="`skeleton-token-${i}`" class="skeleton-card token-skeleton">
+                    <div class="skeleton-header">
+                      <div class="skeleton-icon"></div>
+                      <div class="skeleton-title"></div>
+                    </div>
+                    <div class="skeleton-content">
+                      <div class="skeleton-amount"></div>
+                      <div class="skeleton-value"></div>
+                    </div>
+                    <div class="skeleton-actions">
+                      <div class="skeleton-button"></div>
+                      <div class="skeleton-button"></div>
+                    </div>
+                  </div>
+                </template>
                 <TokenCard 
+                  v-else
                   v-for="token in visibleTokens" 
                   :key="token.symbol" 
                   :symbol="token.symbol" 
@@ -85,9 +141,15 @@
               </div>
 
               <div class="nft-preview-grid">
-                <div v-if="loadingNFTs" class="loading-nfts">
-                  <div class="cosmic-loader small"></div>
-                  <p>Loading NFTs...</p>
+                <div v-if="loadingNFTs" class="nft-loading-grid">
+                  <!-- Skeleton NFT Cards -->
+                  <div v-for="i in 4" :key="`skeleton-nft-${i}`" class="skeleton-card nft-skeleton">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-nft-details">
+                      <div class="skeleton-nft-title"></div>
+                      <div class="skeleton-nft-subtitle"></div>
+                    </div>
+                  </div>
                 </div>
 
                 <template v-else-if="currentCategoryNFTs.length > 0">
@@ -152,7 +214,25 @@
               </div>
 
               <div class="token-list">
+                <template v-if="tokenStore.loading">
+                  <!-- Skeleton Token Cards -->
+                  <div v-for="i in 3" :key="`skeleton-token-${i}`" class="skeleton-card token-skeleton">
+                    <div class="skeleton-header">
+                      <div class="skeleton-icon"></div>
+                      <div class="skeleton-title"></div>
+                    </div>
+                    <div class="skeleton-content">
+                      <div class="skeleton-amount"></div>
+                      <div class="skeleton-value"></div>
+                    </div>
+                    <div class="skeleton-actions">
+                      <div class="skeleton-button"></div>
+                      <div class="skeleton-button"></div>
+                    </div>
+                  </div>
+                </template>
                 <TokenCard 
+                  v-else
                   v-for="token in visibleTokens" 
                   :key="token.symbol" 
                   :symbol="token.symbol" 
@@ -1019,6 +1099,55 @@ const refreshDashboard = async () => {
     return false;
   }
 };
+
+// Add these new computed properties and refs
+
+// Sample active quests count (replace with actual data when available)
+const activeQuests = computed(() => {
+  return player.value?.activeMissions?.length || 3;
+});
+
+// Player XP percentage for progress bar
+const playerXpPercentage = computed(() => {
+  const currentXp = player.value?.xp || 0;
+  const currentLevel = player.value?.level || 1;
+  
+  // Calculate XP needed for next level (example formula)
+  const xpForNextLevel = currentLevel * 1000;
+  
+  // Calculate percentage (cap at 100%)
+  return Math.min(Math.floor((currentXp / xpForNextLevel) * 100), 100);
+});
+
+// Next level XP requirement
+const nextLevelXp = computed(() => {
+  const currentLevel = player.value?.level || 1;
+  return currentLevel * 1000;
+});
+
+// Daily check-in state
+const hasDailyCheckin = ref(false);
+
+// Daily reward claim function
+const claimDailyReward = () => {
+  // Call API to claim reward (mock for now)
+  
+  // Show success toast
+  showToast({
+    title: 'Daily Reward Claimed!',
+    message: 'You received 50 STDs and 25 XP',
+    type: 'reward',
+    duration: 5000
+  });
+  
+  // Set claimed state
+  hasDailyCheckin.value = true;
+  
+  // Add vibration if available
+  if (navigator.vibrate) {
+    navigator.vibrate([50, 50, 150]);
+  }
+};
 </script>
 
 <style scoped>
@@ -1164,52 +1293,230 @@ html, body {
   width: 100%;
 }
 
-/* Welcome Card */
+/* Enhanced Welcome Card Styles */
 .welcome-card {
   padding: 1.5rem;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, rgba(15, 185, 253, 0.1), rgba(15, 185, 253, 0.2));
+  background: linear-gradient(135deg, rgba(15, 185, 253, 0.1), rgba(157, 53, 191, 0.15));
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(15, 185, 253, 0.2);
+}
+
+.cosmic-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(15, 185, 253, 0.5);
+  box-shadow: 0 0 10px rgba(15, 185, 253, 0.8);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.particle:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation: float 15s ease-in-out infinite;
+}
+
+.particle:nth-child(2) {
+  top: 60%;
+  left: 80%;
+  width: 8px;
+  height: 8px;
+  animation: float 20s ease-in-out infinite reverse;
+}
+
+.particle:nth-child(3) {
+  top: 10%;
+  left: 60%;
+  width: 5px;
+  height: 5px;
+  animation: float 12s ease-in-out infinite 2s;
+}
+
+@keyframes float {
+  0% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(20px) translateX(10px); }
+  50% { transform: translateY(0) translateX(20px); }
+  75% { transform: translateY(-20px) translateX(10px); }
+  100% { transform: translateY(0) translateX(0); }
 }
 
 .welcome-content {
-  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
-.welcome-content h2 {
+.welcome-user-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.welcome-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid var(--cosmic-blue);
+  box-shadow: var(--cosmic-glow-blue-md);
+  object-fit: cover;
+}
+
+.welcome-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-text h2 {
   margin: 0 0 0.5rem 0;
   font-size: 1.5rem;
-  color: var(--cosmic-text-primary);
   background: var(--cosmic-gradient-blue);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: var(--cosmic-glow-blue-sm);
 }
 
-.welcome-content .user-title {
-  margin: 0 0 1rem 0;
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.user-title {
   color: var(--cosmic-text-secondary);
   font-size: 1rem;
+  margin: 0;
 }
 
-.token-summary {
-  background: rgba(15, 185, 253, 0.05);
+.level-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.level-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--cosmic-glass-bg);
+  border: 1px solid var(--cosmic-blue);
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: var(--cosmic-blue);
+  box-shadow: var(--cosmic-glow-blue-sm);
+}
+
+.xp-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(15, 185, 253, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 100px;
+}
+
+.xp-progress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cosmic-blue), var(--cosmic-purple));
+  border-radius: 3px;
+}
+
+.xp-text {
+  font-size: 0.75rem;
+  color: var(--cosmic-text-tertiary);
+  white-space: nowrap;
+}
+
+.stats-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
   padding: 1rem;
+  background: rgba(15, 185, 253, 0.05);
   border-radius: var(--cosmic-radius-md);
-  margin-bottom: 1rem;
-  text-align: center;
+  border: 1px solid rgba(15, 185, 253, 0.1);
 }
 
-.value-label {
-  font-size: 0.9rem;
+.stat-summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+}
+
+.summary-value {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--cosmic-blue);
+  margin-bottom: 0.25rem;
+}
+
+.summary-label {
+  font-size: 0.85rem;
   color: var(--cosmic-text-tertiary);
 }
 
-.value-amount {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: var(--cosmic-green);
-  margin-top: 0.25rem;
-  text-shadow: 0 0 5px rgba(0, 229, 164, 0.4);
+.daily-checkin {
+  display: flex;
+  justify-content: center;
+}
+
+.checkin-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+.checkin-button i {
+  font-size: 1.2rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .welcome-user-info {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .level-indicator {
+    justify-content: center;
+  }
+  
+  .user-details {
+    align-items: center;
+  }
+  
+  .stats-summary {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .stat-summary-item {
+    width: 100%;
+  }
 }
 
 /* Dashboard Section Styling */
@@ -1897,5 +2204,142 @@ html, body {
 .toast-leave-to {
   opacity: 0;
   transform: translateX(100px);
+}
+
+/* Skeleton Loading Styles */
+@keyframes skeleton-pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.6; }
+}
+
+.skeleton-card {
+  border-radius: var(--cosmic-radius-md);
+  background: rgba(15, 185, 253, 0.05);
+  padding: 1rem;
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  overflow: hidden;
+  position: relative;
+}
+
+.skeleton-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150px;
+  width: 150px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  animation: skeleton-shine 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes skeleton-shine {
+  0% { left: -150px; }
+  40%, 100% { left: 100%; }
+}
+
+.skeleton-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.skeleton-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(15, 185, 253, 0.1);
+  flex-shrink: 0;
+}
+
+.skeleton-title {
+  height: 1.2rem;
+  border-radius: 4px;
+  background: rgba(15, 185, 253, 0.1);
+  width: 60%;
+}
+
+.skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.skeleton-amount {
+  height: 1.8rem;
+  border-radius: 4px;
+  background: rgba(15, 185, 253, 0.1);
+  width: 80%;
+}
+
+.skeleton-value {
+  height: 1rem;
+  border-radius: 4px;
+  background: rgba(15, 185, 253, 0.1);
+  width: 40%;
+}
+
+.skeleton-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.skeleton-button {
+  height: 2.2rem;
+  border-radius: 4px;
+  background: rgba(15, 185, 253, 0.1);
+  flex: 1;
+}
+
+/* NFT Skeleton */
+.nft-skeleton {
+  display: flex;
+  flex-direction: column;
+  height: 220px;
+}
+
+.skeleton-image {
+  height: 140px;
+  border-radius: var(--cosmic-radius-sm);
+  background: rgba(15, 185, 253, 0.1);
+  margin-bottom: 0.8rem;
+}
+
+.skeleton-nft-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skeleton-nft-title {
+  height: 1.2rem;
+  border-radius: 4px;
+  background: rgba(15, 185, 253, 0.1);
+  width: 70%;
+}
+
+.skeleton-nft-subtitle {
+  height: 1rem;
+  border-radius: 4px;
+  background: rgba(15, 185, 253, 0.1);
+  width: 50%;
+}
+
+.nft-loading-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .nft-loading-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 </style>
