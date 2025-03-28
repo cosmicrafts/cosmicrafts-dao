@@ -8,169 +8,337 @@
 
     <!-- Dashboard Content -->
     <div v-else class="dashboard-content">
-      <!-- Header Section with User Information -->
-      <DashboardHeader v-model:activeTab="activeTab" />
+      <!-- Mobile app-style header with back button -->
+      <div class="mobile-app-header">
+        <button v-if="showBackButton" @click="goBack" class="back-button">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <h1 class="page-title">{{ getPageTitle }}</h1>
+        <div class="header-avatar" @click="toggleMobileMenu">
+          <img :src="avatarUrl" :alt="player?.username || 'User'" />
+        </div>
+      </div>
 
       <!-- Main Dashboard Sections -->
-      <div class="dashboard-grid" :class="{ 'full-width': activeTab !== 'overview' }">
-        <!-- Left column - Wallet and Activity -->
-        <div class="dashboard-column">
-          <!-- Wallet Section -->
-          <section class="dashboard-section token-wallet cosmic-panel" v-if="activeTab === 'overview'">
-            <div class="section-header">
-              <h2>Cosmic Wallet</h2>
-              <div class="actions">
-                <button @click="refreshTokens" class="cosmic-button-sm cosmic-button-outline-primary">
-                  <i class="fas fa-sync-alt"></i>
-                  <span>Refresh</span>
-                </button>
-              </div>
-            </div>
-
-            <div class="token-summary">
-              <div class="total-value">
-                <span class="value-label">Total Value</span>
-                <span class="value-amount">${{ totalTokenValue.toFixed(2) }} USD</span>
-              </div>
-            </div>
-
-            <div class="token-list">
-              <TokenCard 
-                v-for="token in visibleTokens" 
-                :key="token.symbol" 
-                :symbol="token.symbol" 
-                @balance-updated="handleBalanceUpdate"
-                @action="handleTokenAction"
-              />
-            </div>
-
-            <div class="section-footer">
-              <button @click="navigateTo('/wallet')" class="cosmic-button cosmic-button-primary">
-                <span class="button-text">Open Wallet</span>
-              </button>
-            </div>
-          </section>
-
-          <!-- Referrals Section (Tab) -->
-          <section v-if="activeTab === 'referrals'" class="dashboard-section referrals-section">
-            <ReferralsSection />
-          </section>
-          
-          <!-- Activity Section -->
-          <section class="dashboard-section activity-feed cosmic-panel" v-if="activeTab === 'overview'">
-            <div class="section-header">
-              <h2>Recent Activity</h2>
-            </div>
-              
-            <div class="activity-list">
-              <div v-if="activities.length === 0" class="empty-activity">
-                <i class="fas fa-history"></i>
-                <p>No recent activity to display</p>
-              </div>
-
-              <div v-else v-for="(activity, index) in activities" :key="index" class="activity-item">
-                <div class="activity-icon" :class="activity.type">
-                  <i :class="getActivityIcon(activity.type)"></i>
-                </div>
-                <div class="activity-content">
-                  <div class="activity-text">{{ activity.text }}</div>
-                  <div class="activity-time">{{ formatTimeAgo(activity.timestamp) }}</div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Missions Section (Tab) -->
-          <section v-if="activeTab === 'missions'" class="dashboard-section missions-section">
-            <MissionsSection />
-          </section>
-
-          <!-- Achievements Section (Tab) -->
-          <section v-if="activeTab === 'achievements'" class="dashboard-section achievements-section">
-            <AchievementsSection />
-          </section>
-          
-          <!-- Stats Section (Tab) -->
-          <section v-if="activeTab === 'stats'" class="dashboard-section stats-section">
-            <StatsSection />
-          </section>
+      <div class="dashboard-content-area" ref="contentArea" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+        <!-- Pull-to-refresh indicator -->
+        <div class="pull-to-refresh-indicator" :class="{ 'visible': isPulling, 'refreshing': isRefreshing }">
+          <div class="refresh-spinner">
+            <i class="fas fa-sync-alt"></i>
+          </div>
+          <span>{{ isRefreshing ? 'Refreshing...' : isPulling ? 'Release to refresh' : 'Pull down to refresh' }}</span>
         </div>
+        
+        <!-- Tab Content with Transition -->
+        <transition-group 
+          name="tab-transition" 
+          tag="div" 
+          class="tab-container"
+          @before-enter="beforeEnter"
+          @enter="enter"
+          @leave="leave"
+        >
+          <!-- Overview Section -->
+          <div v-if="activeTab === 'overview'" key="overview" class="dashboard-page">
+            <!-- Welcome Card -->
+            <section class="welcome-card cosmic-panel">
+              <div class="welcome-content">
+                <h2>Welcome back, {{ player?.username || 'Explorer' }}!</h2>
+                <p class="user-title">{{ player?.title || 'Cosmic Recruit' }} • Level {{ player?.level || 1 }}</p>
+                <div class="token-summary">
+                  <span class="value-label">Total Value</span>
+                  <span class="value-amount">${{ totalTokenValue.toFixed(2) }} USD</span>
+                </div>
+              </div>
+            </section>
 
-        <!-- Right column - NFTs and Quick Actions (only in overview) -->
-        <div class="dashboard-column" v-if="activeTab === 'overview'">
-          <!-- NFT Collection Section -->
-          <section class="dashboard-section nft-collection cosmic-panel">
-            <div class="section-header">
-              <h2>NFT Collection</h2>
-              <div class="actions">
-                <div class="category-filter">
-                  <button 
-                    v-for="category in nftCategories" 
-                    :key="category"
-                    @click="currentNftCategory = category"
-                    :class="['filter-button', { active: currentNftCategory === category }]"
-                  >
-                    {{ formatCategory(category) }}
+            <!-- Token Wallet Section -->
+            <section class="dashboard-section token-wallet cosmic-panel">
+              <div class="section-header">
+                <h2>Cosmic Wallet</h2>
+                <div class="actions">
+                  <button @click="refreshTokens" class="cosmic-button-sm cosmic-button-outline-primary">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Refresh</span>
                   </button>
                 </div>
               </div>
-            </div>
 
-            <div class="nft-grid">
-              <div v-if="loadingNFTs" class="loading-nfts">
-                <div class="cosmic-loader small"></div>
-                <p>Loading NFTs...</p>
-              </div>
-
-              <template v-else-if="currentCategoryNFTs.length > 0">
-                <NFTCard 
-                  v-for="nft in currentCategoryNFTs.slice(0, 4)" 
-                  :key="nft.id" 
-                  :nft="nft"
-                  @click="showNFTDetails(nft)"
+              <div class="token-list">
+                <TokenCard 
+                  v-for="token in visibleTokens" 
+                  :key="token.symbol" 
+                  :symbol="token.symbol" 
+                  @balance-updated="handleBalanceUpdate"
+                  @action="handleTokenAction"
                 />
-              </template>
-              
-              <div v-else class="empty-collection">
-                <i class="fas fa-cubes"></i>
-                <p>No {{ formatCategory(currentNftCategory) }} found in your collection</p>
               </div>
-            </div>
+            </section>
+            
+            <!-- NFT Collection Preview -->
+            <section class="dashboard-section nft-preview cosmic-panel">
+              <div class="section-header">
+                <h2>NFT Collection</h2>
+                <button @click="navigateTo('/collection')" class="view-all-btn">
+                  View All <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
 
-            <div class="section-footer">
-              <button @click="navigateTo('/collection')" class="cosmic-button cosmic-button-primary">
-                <span class="button-text">View All NFTs</span>
-              </button>
-            </div>
-          </section>
+              <div class="nft-preview-grid">
+                <div v-if="loadingNFTs" class="loading-nfts">
+                  <div class="cosmic-loader small"></div>
+                  <p>Loading NFTs...</p>
+                </div>
 
-          <!-- Quick Actions Section -->
-          <section class="dashboard-section quick-actions cosmic-panel">
-            <div class="section-header">
-              <h2>Quick Actions</h2>
-            </div>
+                <template v-else-if="currentCategoryNFTs.length > 0">
+                  <NFTCard 
+                    v-for="nft in currentCategoryNFTs.slice(0, 4)" 
+                    :key="nft.id" 
+                    :nft="nft"
+                    @click="showNFTDetails(nft)"
+                  />
+                </template>
+                
+                <div v-else class="empty-collection">
+                  <i class="fas fa-cubes"></i>
+                  <p>No {{ formatCategory(currentNftCategory) }} found in your collection</p>
+                </div>
+              </div>
+            </section>
 
-            <div class="actions-grid">
-              <button @click="navigateTo('/wallet/send')" class="action-card">
-                <i class="fas fa-paper-plane"></i>
-                <span>Send Tokens</span>
-              </button>
-              <button @click="navigateTo('/wallet/receive')" class="action-card">
-                <i class="fas fa-qrcode"></i>
-                <span>Receive</span>
-              </button>
-              <button @click="navigateTo('/marketplace')" class="action-card">
-                <i class="fas fa-store"></i>
-                <span>Marketplace</span>
-              </button>
-              <button @click="navigateTo('/games')" class="action-card">
-                <i class="fas fa-gamepad"></i>
-                <span>Play Games</span>
-              </button>
-            </div>
-          </section>
-        </div>
+            <!-- Activity Feed -->
+            <section class="dashboard-section activity-feed cosmic-panel">
+              <div class="section-header">
+                <h2>Recent Activity</h2>
+              </div>
+                
+              <div class="activity-list">
+                <div v-if="activities.length === 0" class="empty-activity">
+                  <i class="fas fa-history"></i>
+                  <p>No recent activity to display</p>
+                </div>
+
+                <div v-else v-for="(activity, index) in activities" :key="index" class="activity-item">
+                  <div class="activity-icon" :class="activity.type">
+                    <i :class="getActivityIcon(activity.type)"></i>
+                  </div>
+                  <div class="activity-content">
+                    <div class="activity-text">{{ activity.text }}</div>
+                    <div class="activity-time">{{ formatTimeAgo(activity.timestamp) }}</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Wallet Section -->
+          <div v-if="activeTab === 'wallet'" key="wallet" class="dashboard-page">
+            <section class="dashboard-section token-wallet cosmic-panel">
+              <div class="section-header">
+                <h2>Your Tokens</h2>
+                <div class="actions">
+                  <button @click="refreshTokens" class="cosmic-button-sm cosmic-button-outline-primary">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Refresh</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="token-summary">
+                <div class="total-value">
+                  <span class="value-label">Total Value</span>
+                  <span class="value-amount">${{ totalTokenValue.toFixed(2) }} USD</span>
+                </div>
+              </div>
+
+              <div class="token-list">
+                <TokenCard 
+                  v-for="token in visibleTokens" 
+                  :key="token.symbol" 
+                  :symbol="token.symbol" 
+                  @balance-updated="handleBalanceUpdate"
+                  @action="handleTokenAction"
+                />
+              </div>
+
+              <div class="wallet-actions">
+                <button @click="navigateTo('/wallet/send')" class="wallet-action-btn">
+                  <i class="fas fa-paper-plane"></i>
+                  <span>Send</span>
+                </button>
+                <button @click="navigateTo('/wallet/receive')" class="wallet-action-btn">
+                  <i class="fas fa-qrcode"></i>
+                  <span>Receive</span>
+                </button>
+                <button @click="navigateTo('/wallet/history')" class="wallet-action-btn">
+                  <i class="fas fa-history"></i>
+                  <span>History</span>
+                </button>
+                <button @click="navigateTo('/wallet/swap')" class="wallet-action-btn">
+                  <i class="fas fa-exchange-alt"></i>
+                  <span>Swap</span>
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <!-- Collection Tab -->
+          <div v-if="activeTab === 'collection'" key="collection" class="dashboard-page">
+            <section class="dashboard-section nft-collection cosmic-panel">
+              <div class="section-header">
+                <h2>NFT Collection</h2>
+                <div class="actions">
+                  <div class="category-filter">
+                    <button 
+                      v-for="category in nftCategories" 
+                      :key="category"
+                      @click="currentNftCategory = category"
+                      :class="['filter-button', { active: currentNftCategory === category }]"
+                    >
+                      {{ formatCategory(category) }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="nft-grid">
+                <div v-if="loadingNFTs" class="loading-nfts">
+                  <div class="cosmic-loader small"></div>
+                  <p>Loading NFTs...</p>
+                </div>
+
+                <template v-else-if="currentCategoryNFTs.length > 0">
+                  <NFTCard 
+                    v-for="nft in currentCategoryNFTs" 
+                    :key="nft.id" 
+                    :nft="nft"
+                    @click="showNFTDetails(nft)"
+                  />
+                </template>
+                
+                <div v-else class="empty-collection">
+                  <i class="fas fa-cubes"></i>
+                  <p>No {{ formatCategory(currentNftCategory) }} found in your collection</p>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Referrals Section (Tab) -->
+          <div v-if="activeTab === 'referrals'" key="referrals" class="dashboard-page">
+            <ReferralsSection />
+          </div>
+
+          <!-- Missions Section (Tab) -->
+          <div v-if="activeTab === 'missions'" key="missions" class="dashboard-page">
+            <MissionsSection />
+          </div>
+
+          <!-- Achievements Section (Tab) -->
+          <div v-if="activeTab === 'achievements'" key="achievements" class="dashboard-page">
+            <AchievementsSection />
+          </div>
+          
+          <!-- Stats Section (Tab) -->
+          <div v-if="activeTab === 'stats'" key="stats" class="dashboard-page">
+            <StatsSection />
+          </div>
+
+          <!-- Marketplace Section (Tab) -->
+          <div v-if="activeTab === 'marketplace'" key="marketplace" class="dashboard-page">
+            <section class="dashboard-section marketplace-preview cosmic-panel">
+              <div class="section-header">
+                <h2>Marketplace</h2>
+              </div>
+              <div class="marketplace-content">
+                <p>Marketplace section is coming soon!</p>
+                <button @click="navigateTo('/marketplace')" class="cosmic-button cosmic-button-primary">
+                  <span class="button-text">Browse Marketplace</span>
+                </button>
+              </div>
+            </section>
+          </div>
+        </transition-group>
       </div>
+
+      <!-- Bottom Navigation Bar for Mobile -->
+      <nav class="mobile-bottom-nav">
+        <button 
+          v-for="tab in bottomNavTabs" 
+          :key="tab.id"
+          @click="selectTab(tab.id)"
+          class="bottom-nav-item" 
+          :class="{ active: activeTab === tab.id }"
+        >
+          <i :class="tab.icon"></i>
+          <span>{{ tab.label }}</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Mobile Menu Component -->
+    <DashboardMobileMenu
+      v-model:is-open="isMobileMenuOpen"
+      :active-tab="activeTab"
+      :player="player"
+      :avatar-url="avatarUrl"
+      :main-tabs="mainTabs"
+      :additional-tabs="additionalTabs"
+      @select-tab="selectTab"
+    />
+
+    <!-- Floating Action Button (FAB) -->
+    <div class="fab-container" :class="{ 'fab-expanded': isFabExpanded }">
+      <div class="fab-actions" :class="{ 'fab-actions-visible': isFabExpanded }">
+        <button @click="handleFabAction('wallet/send')" class="fab-action-button">
+          <i class="fas fa-paper-plane"></i>
+          <span class="fab-action-label">Send</span>
+        </button>
+        <button @click="handleFabAction('wallet/receive')" class="fab-action-button">
+          <i class="fas fa-qrcode"></i>
+          <span class="fab-action-label">Receive</span>
+        </button>
+        <button @click="handleFabAction('marketplace')" class="fab-action-button">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="fab-action-label">Shop</span>
+        </button>
+        <button @click="handleFabAction('missions')" class="fab-action-button">
+          <i class="fas fa-tasks"></i>
+          <span class="fab-action-label">Missions</span>
+        </button>
+      </div>
+      <button class="fab-main" @click="toggleFab">
+        <i class="fas" :class="isFabExpanded ? 'fa-times' : 'fa-plus'"></i>
+      </button>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container">
+      <transition-group name="toast">
+        <div 
+          v-for="toast in toastMessages" 
+          :key="toast.id" 
+          class="toast-notification"
+          :class="[`toast-${toast.type}`, { 'with-progress': toast.showProgress }]"
+        >
+          <div class="toast-icon">
+            <i :class="getToastIcon(toast.type)"></i>
+          </div>
+          <div class="toast-content">
+            <div class="toast-title">{{ toast.title }}</div>
+            <div v-if="toast.message" class="toast-message">{{ toast.message }}</div>
+            <div v-if="toast.showProgress" class="toast-progress-bar">
+              <div 
+                class="toast-progress" 
+                :style="{ width: `${getToastProgress(toast)}%` }"
+              ></div>
+            </div>
+          </div>
+          <button class="toast-close" @click="() => dismissToast(toast.id)">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -187,7 +355,8 @@ import ReferralsSection from '@/components/referrals/ReferralsSection.vue';
 import MissionsSection from '@/components/missions/MissionsSection.vue';
 import AchievementsSection from '@/components/achievements';
 import StatsSection from '@/components/stats';
-import { DashboardHeader } from '@/components/dashboard';
+import DashboardMobileMenu from '@/components/dashboard/DashboardMobileMenu.vue';
+import { v4 as uuidv4 } from 'uuid';
 
 // Router
 const router = useRouter();
@@ -203,6 +372,46 @@ const loadingNFTs = ref(false);
 const currentNftCategory = ref('characters');
 const activities = ref([]);
 const activeTab = ref('overview');
+const isMobileMenuOpen = ref(false);
+const navHistory = ref([]);
+const contentArea = ref(null);
+const isPulling = ref(false);
+const isRefreshing = ref(false);
+const pullStartY = ref(0);
+const pullMoveY = ref(0);
+const pullThreshold = 80; // Pixels to pull before refresh triggers
+const isFabExpanded = ref(false);
+const toastMessages = ref([]);
+
+// Add swipe gesture tracking
+const swipeStartX = ref(0);
+const swipeMoveX = ref(0);
+const swipeThreshold = 80; // Pixels to swipe before tab switch
+const isHorizontalSwipe = ref(false);
+
+// Tabs for bottom navigation
+const bottomNavTabs = [
+  { id: 'overview', label: 'Home', icon: 'fas fa-home' },
+  { id: 'wallet', label: 'Wallet', icon: 'fas fa-wallet' },
+  { id: 'collection', label: 'NFTs', icon: 'fas fa-cubes' },
+  { id: 'marketplace', label: 'Market', icon: 'fas fa-store' },
+  { id: 'missions', label: 'Missions', icon: 'fas fa-tasks' }
+];
+
+// Full list of tabs (including ones not in bottom nav)
+const mainTabs = [
+  { id: 'overview', label: 'Overview', icon: 'fas fa-columns' },
+  { id: 'wallet', label: 'Wallet', icon: 'fas fa-wallet' },
+  { id: 'collection', label: 'Collection', icon: 'fas fa-cubes' },
+  { id: 'marketplace', label: 'Marketplace', icon: 'fas fa-store' },
+  { id: 'missions', label: 'Missions', icon: 'fas fa-tasks' }
+];
+
+const additionalTabs = [
+  { id: 'referrals', label: 'Referrals', icon: 'fas fa-users' },
+  { id: 'achievements', label: 'Achievements', icon: 'fas fa-trophy' },
+  { id: 'stats', label: 'Stats', icon: 'fas fa-chart-bar' }
+];
 
 // NFT Categories
 const nftCategories = ['characters', 'units', 'avatars', 'trophies', 'chests'];
@@ -221,6 +430,32 @@ const totalTokenValue = computed(() => {
   return tokenStore.tokenList.reduce((total, token) => {
     return total + (token.valueUsd || 0);
   }, 0);
+});
+
+// Avatar URL
+const avatarUrl = computed(() => {
+  if (authStore.player?.avatar) {
+    return `/assets/avatars/avatar-${authStore.player.avatar}.webp`;
+  }
+  return '/assets/avatars/avatar-default.webp';
+});
+
+// Player info
+const player = computed(() => authStore.player);
+
+// Navigation state
+const showBackButton = computed(() => {
+  return navHistory.value.length > 0;
+});
+
+// Direction of transition (left or right)
+const transitionDirection = ref('right');
+
+// Get current page title based on active tab
+const getPageTitle = computed(() => {
+  const allTabs = [...mainTabs, ...additionalTabs];
+  const currentTab = allTabs.find(tab => tab.id === activeTab.value);
+  return currentTab ? currentTab.label : 'Dashboard';
 });
 
 // Methods
@@ -297,6 +532,237 @@ const formatTimeAgo = (timestamp) => {
   return `${days} day${days !== 1 ? 's' : ''} ago`;
 };
 
+// Mobile menu toggle
+const toggleMobileMenu = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value;
+};
+
+// Tab transition methods
+const beforeEnter = (el) => {
+  el.style.opacity = 0;
+  el.style.transform = `translateX(${transitionDirection.value === 'right' ? '50px' : '-50px'})`;
+};
+
+const enter = (el, done) => {
+  // Trigger a reflow to ensure the transition happens
+  void el.offsetWidth;
+  
+  el.style.transition = 'all 0.3s ease-out';
+  el.style.opacity = 1;
+  el.style.transform = 'translateX(0)';
+  
+  el.addEventListener('transitionend', done, { once: true });
+};
+
+const leave = (el, done) => {
+  el.style.transition = 'all 0.3s ease-out';
+  el.style.opacity = 0;
+  el.style.transform = `translateX(${transitionDirection.value === 'right' ? '-50px' : '50px'})`;
+  
+  el.addEventListener('transitionend', done, { once: true });
+};
+
+// Selection handler with history tracking and transition direction
+const selectTab = (tabId) => {
+  if (tabId !== activeTab.value) {
+    // Determine direction based on tab index
+    const allTabs = [...mainTabs, ...additionalTabs];
+    const currentIndex = allTabs.findIndex(tab => tab.id === activeTab.value);
+    const newIndex = allTabs.findIndex(tab => tab.id === tabId);
+    
+    // Set transition direction based on tab order
+    if (newIndex > currentIndex) {
+      transitionDirection.value = 'right';
+    } else {
+      transitionDirection.value = 'left';
+    }
+    
+    navHistory.value.push(activeTab.value);
+    activeTab.value = tabId;
+    
+    // Scroll to top when changing tabs
+    if (contentArea.value) {
+      setTimeout(() => {
+        contentArea.value.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 50);
+    }
+  }
+};
+
+// Go back in navigation history
+const goBack = () => {
+  if (navHistory.value.length > 0) {
+    transitionDirection.value = 'left'; // Always go left when going back
+    activeTab.value = navHistory.value.pop();
+    
+    // Scroll to top when going back
+    if (contentArea.value) {
+      setTimeout(() => {
+        contentArea.value.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 50);
+    }
+  }
+};
+
+// FAB handlers
+const toggleFab = () => {
+  isFabExpanded.value = !isFabExpanded.value;
+};
+
+// Toast Notification System
+const showToast = ({ title, message = '', type = 'info', duration = 5000, showProgress = true }) => {
+  const id = uuidv4();
+  const timestamp = Date.now();
+  const expiresAt = timestamp + duration;
+  
+  const toast = {
+    id,
+    title,
+    message,
+    type,
+    timestamp,
+    duration,
+    expiresAt,
+    showProgress
+  };
+  
+  toastMessages.value.push(toast);
+  
+  if (duration > 0) {
+    setTimeout(() => {
+      dismissToast(id);
+    }, duration);
+  }
+  
+  return id;
+};
+
+const dismissToast = (id) => {
+  const index = toastMessages.value.findIndex(toast => toast.id === id);
+  if (index !== -1) {
+    toastMessages.value.splice(index, 1);
+  }
+};
+
+const getToastIcon = (type) => {
+  const icons = {
+    success: 'fas fa-check-circle',
+    error: 'fas fa-exclamation-circle',
+    warning: 'fas fa-exclamation-triangle',
+    info: 'fas fa-info-circle',
+    achievement: 'fas fa-trophy',
+    reward: 'fas fa-gift'
+  };
+  
+  return icons[type] || icons.info;
+};
+
+const getToastProgress = (toast) => {
+  if (!toast.showProgress) return 0;
+  
+  const now = Date.now();
+  const elapsed = now - toast.timestamp;
+  const total = toast.duration;
+  
+  const remaining = Math.max(0, total - elapsed);
+  return (remaining / total) * 100;
+};
+
+// Example: Show a demo toast when dashboard is loaded
+onMounted(() => {
+  // Add listener and initialize dashboard
+  document.addEventListener('click', handleOutsideClick);
+  initializeDashboard();
+  
+  // Show a welcome toast after a short delay
+  setTimeout(() => {
+    showToast({
+      title: 'Welcome back!',
+      message: 'Your cosmic journey awaits...',
+      type: 'info',
+      duration: 5000
+    });
+  }, 1000);
+  
+  // Simulate an achievement notification after some time
+  setTimeout(() => {
+    showToast({
+      title: 'Achievement Unlocked!',
+      message: 'Daily Login Streak: 3 Days',
+      type: 'achievement',
+      duration: 7000
+    });
+  }, 4000);
+});
+
+// Helper to simulate toast for demo purposes
+const simulateAction = (action) => {
+  if (action === 'wallet/send') {
+    showToast({
+      title: 'Transaction Initiated',
+      message: 'Preparing to send tokens...',
+      type: 'info'
+    });
+  } else if (action === 'wallet/receive') {
+    showToast({
+      title: 'Wallet Address Ready',
+      message: 'Share your address to receive tokens',
+      type: 'success'
+    });
+  } else if (action === 'marketplace') {
+    showToast({
+      title: 'Marketplace',
+      message: 'Browsing latest NFTs...',
+      type: 'info'
+    });
+  } else if (action === 'missions') {
+    showToast({
+      title: '2 New Missions Available!',
+      message: 'Complete them to earn rewards',
+      type: 'reward'
+    });
+  }
+};
+
+// Update FAB action handler to show toast notifications
+const handleFabAction = (action) => {
+  // Handle different FAB actions
+  if (action.includes('/')) {
+    // It's a route path
+    navigateTo(`/${action}`);
+  } else {
+    // It's a tab
+    selectTab(action);
+  }
+  
+  // Show toast notification for the action
+  simulateAction(action);
+  
+  // Close FAB after action
+  isFabExpanded.value = false;
+};
+
+// Close FAB when clicking outside
+const handleOutsideClick = (event) => {
+  if (isFabExpanded.value) {
+    const fabContainer = document.querySelector('.fab-container');
+    if (fabContainer && !fabContainer.contains(event.target)) {
+      isFabExpanded.value = false;
+    }
+  }
+};
+
+// Remember to clean up event listeners
+watch(() => isFabExpanded.value, (newVal) => {
+  if (newVal) {
+    // Add backdrop when FAB is expanded
+    document.body.classList.add('fab-backdrop-active');
+  } else {
+    // Remove backdrop when FAB is closed
+    document.body.classList.remove('fab-backdrop-active');
+  }
+});
+
 // Initialize dashboard
 const initializeDashboard = async () => {
   loading.value = true;
@@ -371,8 +837,188 @@ const watchCategory = async () => {
 // Watch for category changes and reload NFTs
 watch(currentNftCategory, watchCategory);
 
-// Initialize dashboard on mount
-onMounted(initializeDashboard);
+// Pull-to-refresh and swipe navigation handling
+const handleTouchStart = (e) => {
+  // Store both X and Y coordinates
+  pullStartY.value = e.touches[0].clientY;
+  swipeStartX.value = e.touches[0].clientX;
+  
+  // Only enable pull-to-refresh when scrolled to top
+  if (contentArea.value.scrollTop === 0) {
+    isPulling.value = true;
+  }
+  
+  // Reset horizontal swipe tracking
+  isHorizontalSwipe.value = false;
+};
+
+const handleTouchMove = (e) => {
+  pullMoveY.value = e.touches[0].clientY;
+  swipeMoveX.value = e.touches[0].clientX;
+  
+  // Calculate vertical and horizontal movement
+  const verticalDistance = pullMoveY.value - pullStartY.value;
+  const horizontalDistance = swipeMoveX.value - swipeStartX.value;
+  
+  // Determine if this is primarily a horizontal swipe
+  if (!isHorizontalSwipe.value && Math.abs(horizontalDistance) > Math.abs(verticalDistance) && 
+      Math.abs(horizontalDistance) > 20) {
+    isHorizontalSwipe.value = true;
+  }
+  
+  // Handle vertical pull (pull-to-refresh)
+  if (isPulling.value && !isHorizontalSwipe.value) {
+    if (verticalDistance > 0) {
+      const pullIndicator = document.querySelector('.pull-to-refresh-indicator');
+      if (pullIndicator) {
+        const translateY = Math.min(Math.pow(verticalDistance, 0.8), pullThreshold);
+        pullIndicator.style.transform = `translateY(${translateY}px)`;
+        
+        // Rotate spinner based on pull distance
+        const spinner = pullIndicator.querySelector('.refresh-spinner i');
+        if (spinner) {
+          spinner.style.transform = `rotate(${verticalDistance * 2}deg)`;
+        }
+      }
+      
+      e.preventDefault(); // Prevent scrolling while pulling
+    }
+  }
+  
+  // Handle horizontal swipe (tab navigation)
+  if (isHorizontalSwipe.value && Math.abs(horizontalDistance) > 30) {
+    e.preventDefault(); // Prevent page scrolling during swipe
+    
+    // Apply subtle reactive resistance effect
+    const swipeProgress = Math.min(Math.abs(horizontalDistance) / (swipeThreshold * 3), 0.3);
+    const targetPage = document.querySelector(`[key="${activeTab.value}"].dashboard-page`);
+    if (targetPage) {
+      targetPage.style.transform = `translateX(${horizontalDistance * swipeProgress}px)`;
+      targetPage.style.transition = 'none'; // Disable transition for direct manipulation
+    }
+  }
+};
+
+const handleTouchEnd = async (e) => {
+  const verticalDistance = pullMoveY.value - pullStartY.value;
+  const horizontalDistance = swipeMoveX.value - swipeStartX.value;
+  
+  // Handle horizontal swipe completion
+  if (isHorizontalSwipe.value) {
+    // Reset any transforms applied during swiping
+    const targetPage = document.querySelector(`[key="${activeTab.value}"].dashboard-page`);
+    if (targetPage) {
+      targetPage.style.transition = 'transform 0.3s ease-out';
+      targetPage.style.transform = 'translateX(0)';
+    }
+    
+    // Check if swipe exceeds threshold to change tabs
+    if (Math.abs(horizontalDistance) > swipeThreshold) {
+      // Determine which direction to navigate
+      const allTabs = [...mainTabs, ...additionalTabs];
+      const currentIndex = allTabs.findIndex(tab => tab.id === activeTab.value);
+      
+      if (horizontalDistance > 0 && currentIndex > 0) {
+        // Swipe right -> go to previous tab
+        selectTab(allTabs[currentIndex - 1].id);
+        
+        // Show haptic feedback if available
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
+      } else if (horizontalDistance < 0 && currentIndex < allTabs.length - 1) {
+        // Swipe left -> go to next tab
+        selectTab(allTabs[currentIndex + 1].id);
+        
+        // Show haptic feedback if available
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
+      }
+    }
+  }
+  
+  // Handle vertical pull-to-refresh completion
+  if (isPulling.value && !isHorizontalSwipe.value) {
+    const pullIndicator = document.querySelector('.pull-to-refresh-indicator');
+    
+    if (verticalDistance > pullThreshold) {
+      // User pulled enough to trigger refresh
+      isRefreshing.value = true;
+      
+      if (pullIndicator) {
+        pullIndicator.style.transform = 'translateY(50px)';
+      }
+      
+      // Perform refresh actions
+      await refreshDashboard();
+      
+      // Reset after small delay
+      setTimeout(() => {
+        isRefreshing.value = false;
+        isPulling.value = false;
+        if (pullIndicator) {
+          pullIndicator.style.transform = 'translateY(0)';
+        }
+      }, 500);
+    } else {
+      // Not pulled enough, reset
+      isPulling.value = false;
+      if (pullIndicator) {
+        pullIndicator.style.transform = 'translateY(0)';
+      }
+    }
+  }
+  
+  isPulling.value = false;
+  isHorizontalSwipe.value = false;
+};
+
+// Refresh dashboard data with toast notification
+const refreshDashboard = async () => {
+  const toastId = showToast({
+    title: 'Refreshing Dashboard',
+    message: 'Fetching latest data...',
+    type: 'info',
+    showProgress: true
+  });
+  
+  try {
+    // Refresh token data
+    await tokenStore.fetchAllBalances();
+    
+    // Refresh NFTs
+    if (nftsStore) {
+      await nftsStore.fetchNFTs();
+      await nftsStore.fetchNFTsByCategory(currentNftCategory.value);
+    }
+    
+    // Refresh activities
+    loadMockActivities();
+    
+    // Show success toast
+    dismissToast(toastId);
+    showToast({
+      title: 'Dashboard Updated',
+      message: 'All data is now up to date',
+      type: 'success'
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Error refreshing dashboard:', error);
+    
+    // Show error toast
+    dismissToast(toastId);
+    showToast({
+      title: 'Update Failed',
+      message: 'Could not refresh dashboard data',
+      type: 'error'
+    });
+    
+    return false;
+  }
+};
 </script>
 
 <style scoped>
@@ -385,14 +1031,16 @@ html, body {
   width: 100%;
   max-width: 100%;
   margin: 0;
-  padding: 1rem;
-  padding-top: 6rem; /* Add top padding for header */
+  padding: 0;
   overflow-x: hidden; /* Prevent horizontal overflow */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
+  height: 100%;
+  min-height: 100vh;
+  background-color: var(--cosmic-bg-darker);
 }
 
 .cosmic-loader-container {
@@ -429,108 +1077,126 @@ html, body {
 .dashboard-content {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 1440px; /* Max width for content */
-  overflow-x: visible; /* Allow content to be visible */
-  box-sizing: border-box;
-}
-
-/* Dashboard Grid */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.dashboard-grid.full-width {
-  grid-template-columns: 1fr;
-}
-
-.dashboard-column {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Dashboard Section Styling */
-.dashboard-section {
-  padding: 1.5rem;
-  border-radius: var(--cosmic-radius-lg);
-  background: var(--cosmic-glass-bg);
-  border: var(--cosmic-glass-border-blue);
-  backdrop-filter: var(--cosmic-glass-blur);
-  box-shadow: var(--cosmic-shadow-md);
-  transition: all var(--cosmic-transition-medium);
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  box-sizing: border-box; /* Ensure padding is included in width calculation */
-}
-
-.dashboard-section:hover {
-  border-color: rgba(15, 185, 253, 0.3);
-  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
-}
-
-/* Full-width sections */
-.referrals-section,
-.missions-section,
-.achievements-section,
-.stats-section {
-  min-height: 500px;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  position: relative;
+  flex: 1;
+  height: 100%;
 }
 
-.section-header {
+/* Mobile App Header */
+.mobile-app-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--cosmic-glass-bg);
+  backdrop-filter: var(--cosmic-glass-blur);
   border-bottom: 1px solid rgba(15, 185, 253, 0.1);
-  flex-wrap: wrap;
+  z-index: 10;
+  box-shadow: var(--cosmic-shadow-sm);
+}
+
+.back-button {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 185, 253, 0.1);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  border-radius: 50%;
+  color: var(--cosmic-text-primary);
+  font-size: 1rem;
+  transition: all var(--cosmic-transition-fast);
+  cursor: pointer;
+}
+
+.back-button:active {
+  transform: scale(0.95);
+  background: rgba(15, 185, 253, 0.2);
+}
+
+.page-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--cosmic-text-primary);
+  flex: 1;
+  text-align: center;
+}
+
+.header-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--cosmic-blue);
+  box-shadow: var(--cosmic-glow-blue-sm);
+  cursor: pointer;
+}
+
+.header-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dashboard Content Area */
+.dashboard-content-area {
+  flex: 1;
+  width: 100%;
+  padding: 1rem;
+  padding-bottom: 5rem; /* Add space for bottom nav */
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
   width: 100%;
 }
 
-.section-header h2 {
+/* Welcome Card */
+.welcome-card {
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, rgba(15, 185, 253, 0.1), rgba(15, 185, 253, 0.2));
+}
+
+.welcome-content {
+  text-align: center;
+}
+
+.welcome-content h2 {
+  margin: 0 0 0.5rem 0;
   font-size: 1.5rem;
-  margin: 0;
   color: var(--cosmic-text-primary);
-  font-weight: 700;
+  background: var(--cosmic-gradient-blue);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.section-footer {
-  margin-top: auto;
-  padding-top: 1rem;
-  display: flex;
-  justify-content: center;
-  width: 100%;
+.welcome-content .user-title {
+  margin: 0 0 1rem 0;
+  color: var(--cosmic-text-secondary);
+  font-size: 1rem;
 }
 
-/* Token Wallet Section */
 .token-summary {
   background: rgba(15, 185, 253, 0.05);
   padding: 1rem;
   border-radius: var(--cosmic-radius-md);
   margin-bottom: 1rem;
   text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.total-value {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .value-label {
@@ -546,16 +1212,256 @@ html, body {
   text-shadow: 0 0 5px rgba(0, 229, 164, 0.4);
 }
 
-.token-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+/* Dashboard Section Styling */
+.dashboard-section {
+  padding: 1.5rem;
+  border-radius: var(--cosmic-radius-lg);
+  background: var(--cosmic-glass-bg);
+  border: var(--cosmic-glass-border-blue);
+  backdrop-filter: var(--cosmic-glass-blur);
+  box-shadow: var(--cosmic-shadow-md);
+  transition: all var(--cosmic-transition-medium);
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Ensure padding is included in width calculation */
+  margin-bottom: 1rem;
 }
 
-/* NFT Collection Section */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(15, 185, 253, 0.1);
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+.section-header h2 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: var(--cosmic-text-primary);
+  font-weight: 700;
+}
+
+/* Token List */
+.token-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* NFT Preview */
+.nft-preview-grid, .nft-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+.empty-collection, .loading-nfts {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--cosmic-text-tertiary);
+  text-align: center;
+}
+
+.empty-collection i, .loading-nfts i {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.view-all-btn {
+  background: transparent;
+  border: none;
+  color: var(--cosmic-blue);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.view-all-btn i {
+  font-size: 0.8rem;
+}
+
+/* Activity Feed */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.activity-item {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: var(--cosmic-radius-md);
+  background: rgba(15, 185, 253, 0.05);
+  transition: all var(--cosmic-transition-fast);
+}
+
+.activity-item:hover {
+  background: rgba(15, 185, 253, 0.1);
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 185, 253, 0.1);
+  color: var(--cosmic-blue);
+  flex-shrink: 0;
+}
+
+.activity-icon.transfer {
+  background: rgba(15, 185, 253, 0.1);
+  color: var(--cosmic-blue);
+}
+
+.activity-icon.mint {
+  background: rgba(0, 229, 164, 0.1);
+  color: var(--cosmic-green);
+}
+
+.activity-icon.game {
+  background: rgba(157, 53, 191, 0.1);
+  color: var(--cosmic-purple);
+}
+
+.activity-icon.reward {
+  background: rgba(255, 145, 0, 0.1);
+  color: var(--cosmic-orange);
+}
+
+.activity-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-text {
+  color: var(--cosmic-text-primary);
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.activity-time {
+  font-size: 0.8rem;
+  color: var(--cosmic-text-tertiary);
+}
+
+/* Wallet Section */
+.wallet-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.wallet-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 0.5rem;
+  background: rgba(15, 185, 253, 0.05);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  border-radius: var(--cosmic-radius-md);
+  color: var(--cosmic-text-primary);
+  transition: all var(--cosmic-transition-medium);
+  cursor: pointer;
+}
+
+.wallet-action-btn i {
+  font-size: 1.5rem;
+  color: var(--cosmic-blue);
+}
+
+.wallet-action-btn span {
+  font-size: 0.8rem;
+}
+
+.wallet-action-btn:hover, .wallet-action-btn:active {
+  background: rgba(15, 185, 253, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Marketplace Preview */
+.marketplace-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  text-align: center;
+  gap: 1rem;
+}
+
+/* Bottom Navigation Bar */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: var(--cosmic-glass-bg);
+  backdrop-filter: var(--cosmic-glass-blur);
+  border-top: 1px solid rgba(15, 185, 253, 0.15);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  padding: 0.5rem 0;
+  padding-bottom: env(safe-area-inset-bottom, 0.5rem);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 0.5rem;
+  color: var(--cosmic-text-tertiary);
+  background: transparent;
+  border: none;
+  transition: all var(--cosmic-transition-fast);
+  cursor: pointer;
+  font-size: 0.75rem;
+  gap: 0.25rem;
+}
+
+.bottom-nav-item i {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.bottom-nav-item.active {
+  color: var(--cosmic-blue);
+}
+
+.bottom-nav-item.active i {
+  filter: drop-shadow(0 0 8px rgba(15, 185, 253, 0.5));
+}
+
+/* Category Filter */
 .category-filter {
   display: flex;
   gap: 0.5rem;
@@ -596,397 +1502,400 @@ html, body {
   box-shadow: var(--cosmic-glow-blue-sm);
 }
 
-.nft-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  min-height: 200px;
-  width: 100%;
-  box-sizing: border-box;
+/* Medium screens */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .nft-preview-grid, .nft-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .dashboard-content-area {
+    max-width: 800px;
+    margin: 0 auto;
+  }
 }
 
-.loading-nfts {
+/* Large screens */
+@media (min-width: 1200px) {
+  .nft-preview-grid, .nft-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .dashboard-content-area {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .wallet-actions {
+    max-width: 600px;
+    margin: 1rem auto 0;
+  }
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+  .wallet-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .section-header h2 {
+    font-size: 1.1rem;
+  }
+  
+  .bottom-nav-item {
+    font-size: 0.7rem;
+  }
+  
+  .bottom-nav-item i {
+    font-size: 1.1rem;
+  }
+}
+
+/* Pull to refresh styles */
+.pull-to-refresh-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  grid-column: 1 / -1;
-  height: 200px;
+  background: transparent;
+  transform: translateY(0);
+  transition: transform 0.3s ease-out;
+  pointer-events: none;
+  z-index: 5;
+  gap: 10px;
+  color: var(--cosmic-blue);
 }
 
-.empty-collection {
+.pull-to-refresh-indicator span {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.refresh-spinner {
+  width: 24px;
+  height: 24px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  grid-column: 1 / -1;
-  height: 200px;
-  color: var(--cosmic-text-tertiary);
-  text-align: center;
 }
 
-.empty-collection i {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
+.pull-to-refresh-indicator.refreshing .refresh-spinner i {
+  animation: cosmic-spin 1s linear infinite;
 }
 
-/* Activity Feed Section */
-.activity-list {
+.pull-to-refresh-indicator.visible {
+  opacity: 1;
+}
+
+/* Tab transition styles */
+.tab-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.dashboard-page {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform, opacity;
+}
+
+/* Keep the active page visible */
+.dashboard-page[style*="opacity: 1"] {
+  position: relative;
+  pointer-events: auto;
+}
+
+/* Hide any page that's transitioning out or not active */
+.dashboard-page[style*="opacity: 0"] {
+  pointer-events: none;
+}
+
+/* Floating Action Button */
+.fab-container {
+  position: fixed;
+  bottom: 80px; /* Position above bottom nav */
+  right: 20px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  z-index: 90;
+}
+
+.fab-main {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cosmic-blue), var(--cosmic-blue-dark));
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 15px rgba(15, 185, 253, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform;
+}
+
+.fab-main i {
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.fab-expanded .fab-main {
+  transform: rotate(135deg);
+  background: linear-gradient(135deg, var(--cosmic-blue-dark), var(--cosmic-blue));
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), 0 0 20px rgba(15, 185, 253, 0.5);
+}
+
+.fab-actions {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  min-height: 200px;
-  overflow-y: auto;
-  max-height: 400px;
-  padding-right: 0.5rem;
-  width: 100%;
-  box-sizing: border-box;
+  gap: 16px;
+  position: absolute;
+  bottom: 70px;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: all 0.3s ease-out;
 }
 
-.activity-list::-webkit-scrollbar {
-  width: 6px;
+.fab-actions-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
 }
 
-.activity-list::-webkit-scrollbar-track {
-  background: rgba(15, 185, 253, 0.05);
-  border-radius: 3px;
-}
-
-.activity-list::-webkit-scrollbar-thumb {
-  background: rgba(15, 185, 253, 0.2);
-  border-radius: 3px;
-}
-
-.activity-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(15, 185, 253, 0.3);
-}
-
-.activity-item {
+.fab-action-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(15, 185, 253, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(15, 185, 253, 0.3);
+  color: var(--cosmic-blue);
   display: flex;
-  gap: 1rem;
-  padding: 0.75rem;
-  border-radius: var(--cosmic-radius-md);
-  background: rgba(15, 185, 253, 0.05);
-  transition: all var(--cosmic-transition-fast);
-  width: 100%;
-  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1), 0 0 8px rgba(15, 185, 253, 0.2);
+  transition: all 0.2s ease;
 }
 
-.activity-item:hover {
-  background: rgba(15, 185, 253, 0.1);
+.fab-action-button:hover {
+  background: rgba(15, 185, 253, 0.25);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 12px rgba(15, 185, 253, 0.3);
 }
 
-.activity-icon {
-  width: 40px;
-  height: 40px;
+.fab-action-button i {
+  font-size: 1.2rem;
+}
+
+.fab-action-label {
+  position: absolute;
+  right: 60px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.fab-action-button:hover .fab-action-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Add backdrop when FAB is expanded */
+:global(body.fab-backdrop-active)::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  z-index: 80;
+  pointer-events: all;
+}
+
+/* Adjust for safe areas */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .fab-container {
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  max-width: 400px;
+  width: calc(100% - 40px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast-notification {
+  background: var(--cosmic-glass-bg);
+  backdrop-filter: var(--cosmic-glass-blur);
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), 0 0 10px rgba(15, 185, 253, 0.2);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  overflow: hidden;
+  pointer-events: all;
+  max-width: 100%;
+}
+
+.toast-notification.with-progress::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--cosmic-blue);
+  border-radius: 0 0 0 8px;
+  transition: width 0.1s linear;
+}
+
+.toast-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.toast-title {
+  font-weight: 600;
+  color: var(--cosmic-text-primary);
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+
+.toast-message {
+  color: var(--cosmic-text-secondary);
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toast-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.toast-icon i {
+  font-size: 1.2rem;
+}
+
+.toast-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(15, 185, 253, 0.1);
+  overflow: hidden;
+}
+
+.toast-progress {
+  height: 100%;
+  background: var(--cosmic-blue);
+  transition: width 0.05s linear;
+}
+
+.toast-close {
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 185, 253, 0.1);
-  color: var(--cosmic-blue);
+  background: transparent;
+  border: none;
+  color: var(--cosmic-text-tertiary);
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
   flex-shrink: 0;
 }
 
-.activity-icon.transfer {
-  background: rgba(15, 185, 253, 0.1);
+.toast-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--cosmic-text-primary);
+}
+
+/* Toast types */
+.toast-info .toast-icon {
+  background: rgba(15, 185, 253, 0.15);
   color: var(--cosmic-blue);
 }
 
-.activity-icon.mint {
-  background: rgba(0, 229, 164, 0.1);
+.toast-success .toast-icon {
+  background: rgba(0, 229, 164, 0.15);
   color: var(--cosmic-green);
 }
 
-.activity-icon.game {
-  background: rgba(157, 53, 191, 0.1);
-  color: var(--cosmic-purple);
-}
-
-.activity-icon.reward {
-  background: rgba(255, 145, 0, 0.1);
+.toast-warning .toast-icon {
+  background: rgba(255, 145, 0, 0.15);
   color: var(--cosmic-orange);
 }
 
-.activity-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0; /* Prevent text overflow */
+.toast-error .toast-icon {
+  background: rgba(255, 0, 76, 0.15);
+  color: var(--cosmic-red);
 }
 
-.activity-text {
-  color: var(--cosmic-text-primary);
-  margin-bottom: 0.25rem;
-  word-break: break-word; /* Handle long text without overflow */
+.toast-achievement .toast-icon {
+  background: rgba(157, 53, 191, 0.15);
+  color: var(--cosmic-purple);
 }
 
-.activity-time {
-  font-size: 0.8rem;
-  color: var(--cosmic-text-tertiary);
+.toast-reward .toast-icon {
+  background: rgba(255, 215, 0, 0.15);
+  color: gold;
 }
 
-.empty-activity {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-  color: var(--cosmic-text-tertiary);
-  text-align: center;
+/* Toast transition animations */
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.empty-activity i {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
+.toast-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
 }
 
-/* Quick Actions Section */
-.actions-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.action-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 1.25rem;
-  background: rgba(15, 185, 253, 0.05);
-  border: 1px solid rgba(15, 185, 253, 0.1);
-  border-radius: var(--cosmic-radius-md);
-  transition: all var(--cosmic-transition-medium);
-  cursor: pointer;
-  color: var(--cosmic-text-primary);
-}
-
-.action-card:hover {
-  background: rgba(15, 185, 253, 0.1);
-  border-color: var(--cosmic-blue);
-  transform: translateY(-5px);
-  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-sm);
-}
-
-.action-card i {
-  font-size: 1.75rem;
-  color: var(--cosmic-blue);
-  transition: all var(--cosmic-transition-medium);
-}
-
-.action-card:hover i {
-  transform: scale(1.2);
-  text-shadow: var(--cosmic-glow-blue-md);
-}
-
-.action-card span {
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 1200px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  /* Container structure */
-  .dashboard-container {
-    padding: 0.75rem;
-    padding-top: 5rem; /* Slightly reduced top padding for mobile */
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-  
-  .dashboard-content {
-    width: 100%;
-    max-width: 100%;
-    gap: 1rem;
-  }
-  
-  /* Grid containment */
-  .dashboard-grid {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    overflow-x: hidden;
-  }
-  
-  .dashboard-column {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    overflow-x: hidden;
-  }
-  
-  /* Section containment */
-  .dashboard-section {
-    width: 100%;
-    max-width: 100vw;
-    box-sizing: border-box;
-    overflow: hidden;
-    padding: 1rem;
-    margin: 0;
-  }
-  
-  /* Main content sections */
-  .token-wallet,
-  .nft-collection,
-  .activity-feed,
-  .quick-actions {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-    box-sizing: border-box;
-    border-radius: var(--cosmic-radius-md); /* Slightly reduced radius on mobile */
-  }
-  
-  /* Content grids and lists */
-  .token-list,
-  .nft-grid,
-  .actions-grid,
-  .activity-list {
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    overflow-x: hidden;
-  }
-  
-  /* Headers and footers */
-  .section-header,
-  .section-footer,
-  .token-summary,
-  .total-value {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-  
-  /* Section headers */
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .section-header .actions {
-    margin-top: 0.5rem;
-    width: 100%;
-  }
-  
-  /* Category filters */
-  .category-filter {
-    width: 100%;
-    justify-content: flex-start;
-  }
-  
-  /* Action cards */
-  .action-card {
-    padding: 1rem;
-  }
-  
-  .action-card i {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  /* Container for tiny screens */
-  .dashboard-container {
-    width: 100vw;
-    max-width: 100vw;
-    overflow-x: hidden;
-    padding: 0.5rem;
-    padding-top: 4.5rem;
-    left: 0;
-    right: 0;
-    margin: 0;
-  }
-  
-  /* Dashboard sections */
-  .dashboard-section {
-    padding: 0.75rem;
-    border-radius: var(--cosmic-radius-sm);
-  }
-  
-  /* Grid layouts */
-  .nft-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.5rem;
-  }
-  
-  .actions-grid {
-    grid-template-columns: 1fr !important;
-    gap: 0.75rem;
-  }
-  
-  .token-list {
-    grid-template-columns: 1fr !important;
-  }
-  
-  /* Fix individual card elements */
-  .action-card {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-    padding: 0.85rem;
-  }
-  
-  .activity-item {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-    padding: 0.65rem;
-    box-sizing: border-box;
-  }
-  
-  .activity-content {
-    max-width: calc(100% - 35px);
-    overflow: hidden;
-  }
-  
-  /* Fix all list elements */
-  .token-list > *,
-  .nft-grid > *,
-  .actions-grid > *,
-  .activity-list > * {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    margin: 0;
-  }
-  
-  /* Adjust content padding */
-  .token-summary {
-    padding: 0.75rem;
-  }
-  
-  /* Text content handling */
-  .activity-text,
-  .value-amount,
-  .user-title {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-    word-break: break-word;
-  }
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(100px);
 }
 </style>
