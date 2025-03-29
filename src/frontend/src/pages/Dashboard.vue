@@ -20,15 +20,11 @@
       </div>
 
       <!-- Main Dashboard Sections -->
-      <div class="dashboard-content-area" ref="contentArea" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-        <!-- Pull-to-refresh indicator -->
-        <div class="pull-to-refresh-indicator" :class="{ 'visible': isPulling, 'refreshing': isRefreshing }">
-          <div class="refresh-spinner">
-            <i class="fas fa-sync-alt"></i>
-          </div>
-          <span>{{ isRefreshing ? 'Refreshing...' : isPulling ? 'Release to refresh' : 'Pull down to refresh' }}</span>
-        </div>
-        
+      <PullToRefreshContainer 
+        class="dashboard-content-area" 
+        ref="contentArea"
+        @refresh="refreshDashboard"
+      >
         <!-- Tab Content with Transition -->
         <transition-group 
           name="tab-transition" 
@@ -41,272 +37,60 @@
           <!-- Overview Section -->
           <div v-if="activeTab === 'overview'" key="overview" class="dashboard-page">
             <!-- Enhanced Welcome Card -->
-            <section class="welcome-card cosmic-panel">
-              <div class="cosmic-particles">
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-              </div>
-              
-              <div class="welcome-content">
-                <div class="welcome-user-info">
-                  <img :src="avatarUrl" alt="User Avatar" class="welcome-avatar" />
-                  <div class="welcome-text">
-                    <h2>Welcome back, {{ player?.username || 'Explorer' }}!</h2>
-                    <div class="user-details">
-                      <span class="user-title">{{ player?.title || 'Cosmic Recruit' }}</span>
-                      <div class="level-indicator">
-                        <div class="level-badge">{{ player?.level || 1 }}</div>
-                        <div class="xp-bar">
-                          <div class="xp-progress" :style="{ width: `${playerXpPercentage}%` }"></div>
-                        </div>
-                        <span class="xp-text">{{ player?.xp || 0 }}/{{ nextLevelXp }} XP</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="stats-summary">
-                  <div class="stat-summary-item">
-                    <div class="summary-value">${{ totalTokenValue.toFixed(2) }}</div>
-                    <div class="summary-label">Portfolio Value</div>
-                  </div>
-                  <div class="stat-summary-item">
-                    <div class="summary-value">{{ totalNFTs }}</div>
-                    <div class="summary-label">NFT Collection</div>
-                  </div>
-                  <div class="stat-summary-item">
-                    <div class="summary-value">{{ activeQuests }}</div>
-                    <div class="summary-label">Active Quests</div>
-                  </div>
-                </div>
-                
-                <div class="daily-checkin" v-if="!hasDailyCheckin">
-                  <button @click="claimDailyReward" class="cosmic-button cosmic-button-primary checkin-button">
-                    <i class="fas fa-gift"></i>
-                    <span>Claim Daily Reward</span>
-                  </button>
-                </div>
-              </div>
-            </section>
-
+            <WelcomeCardSection 
+              @daily-reward-claimed="handleDailyReward"
+            />
+            
             <!-- Token Wallet Section -->
-            <section class="dashboard-section token-wallet cosmic-panel">
-              <div class="section-header">
-                <h2>Cosmic Wallet</h2>
-                <div class="actions">
-                  <button @click="refreshTokens" class="cosmic-button-sm cosmic-button-outline-primary">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>Refresh</span>
-                  </button>
-                </div>
-              </div>
-
-              <div class="token-list">
-                <template v-if="tokenStore.loading">
-                  <!-- Skeleton Token Cards -->
-                  <div v-for="i in 3" :key="`skeleton-token-${i}`" class="skeleton-card token-skeleton">
-                    <div class="skeleton-header">
-                      <div class="skeleton-icon"></div>
-                      <div class="skeleton-title"></div>
-                    </div>
-                    <div class="skeleton-content">
-                      <div class="skeleton-amount"></div>
-                      <div class="skeleton-value"></div>
-                    </div>
-                    <div class="skeleton-actions">
-                      <div class="skeleton-button"></div>
-                      <div class="skeleton-button"></div>
-                    </div>
-                  </div>
-                </template>
-                <TokenCard 
-                  v-else
-                  v-for="token in visibleTokens" 
-                  :key="token.symbol" 
-                  :symbol="token.symbol" 
-                  @balance-updated="handleBalanceUpdate"
-                  @action="handleTokenAction"
-                />
-              </div>
-            </section>
+            <TokenWalletSection 
+              :limit="3"
+              @token-balance-updated="handleBalanceUpdate"
+              @token-action="handleTokenAction"
+              @refresh="handleWalletRefresh"
+            />
             
             <!-- NFT Collection Preview -->
-            <section class="dashboard-section nft-preview cosmic-panel">
-              <div class="section-header">
-                <h2>NFT Collection</h2>
-                <button @click="navigateTo('/collection')" class="view-all-btn">
-                  View All <i class="fas fa-chevron-right"></i>
-                </button>
-              </div>
-
-              <div class="nft-preview-grid">
-                <div v-if="loadingNFTs" class="nft-loading-grid">
-                  <!-- Skeleton NFT Cards -->
-                  <div v-for="i in 4" :key="`skeleton-nft-${i}`" class="skeleton-card nft-skeleton">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-nft-details">
-                      <div class="skeleton-nft-title"></div>
-                      <div class="skeleton-nft-subtitle"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <template v-else-if="currentCategoryNFTs.length > 0">
-                  <NFTCard 
-                    v-for="nft in currentCategoryNFTs.slice(0, 4)" 
-                    :key="nft.id" 
-                    :nft="nft"
-                    @click="showNFTDetails(nft)"
-                  />
-                </template>
-                
-                <div v-else class="empty-collection">
-                  <i class="fas fa-cubes"></i>
-                  <p>No {{ formatCategory(currentNftCategory) }} found in your collection</p>
-                </div>
-              </div>
-            </section>
+            <NFTCollectionSection
+              title="NFT Collection"
+              compact
+              :limit="4"
+              @nft-selected="showNFTDetails"
+              @category-changed="handleCategoryChange"
+            />
 
             <!-- Activity Feed -->
-            <section class="dashboard-section activity-feed cosmic-panel">
-              <div class="section-header">
-                <h2>Recent Activity</h2>
-              </div>
-                
-              <div class="activity-list">
-                <div v-if="activities.length === 0" class="empty-activity">
-                  <i class="fas fa-history"></i>
-                  <p>No recent activity to display</p>
-                </div>
-
-                <div v-else v-for="(activity, index) in activities" :key="index" class="activity-item">
-                  <div class="activity-icon" :class="activity.type">
-                    <i :class="getActivityIcon(activity.type)"></i>
-                  </div>
-                  <div class="activity-content">
-                    <div class="activity-text">{{ activity.text }}</div>
-                    <div class="activity-time">{{ formatTimeAgo(activity.timestamp) }}</div>
-                  </div>
-                </div>
-              </div>
-            </section>
+            <ActivityFeedSection
+              :activities="activities"
+              :limit="4"
+              @refresh="loadMockActivities"
+            />
           </div>
 
           <!-- Wallet Section -->
           <div v-if="activeTab === 'wallet'" key="wallet" class="dashboard-page">
-            <section class="dashboard-section token-wallet cosmic-panel">
-              <div class="section-header">
-                <h2>Your Tokens</h2>
-                <div class="actions">
-                  <button @click="refreshTokens" class="cosmic-button-sm cosmic-button-outline-primary">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>Refresh</span>
-                  </button>
-                </div>
-              </div>
-
-              <div class="token-summary">
-                <div class="total-value">
-                  <span class="value-label">Total Value</span>
-                  <span class="value-amount">${{ totalTokenValue.toFixed(2) }} USD</span>
-                </div>
-              </div>
-
-              <div class="token-list">
-                <template v-if="tokenStore.loading">
-                  <!-- Skeleton Token Cards -->
-                  <div v-for="i in 3" :key="`skeleton-token-${i}`" class="skeleton-card token-skeleton">
-                    <div class="skeleton-header">
-                      <div class="skeleton-icon"></div>
-                      <div class="skeleton-title"></div>
-                    </div>
-                    <div class="skeleton-content">
-                      <div class="skeleton-amount"></div>
-                      <div class="skeleton-value"></div>
-                    </div>
-                    <div class="skeleton-actions">
-                      <div class="skeleton-button"></div>
-                      <div class="skeleton-button"></div>
-                    </div>
-                  </div>
-                </template>
-                <TokenCard 
-                  v-else
-                  v-for="token in visibleTokens" 
-                  :key="token.symbol" 
-                  :symbol="token.symbol" 
-                  @balance-updated="handleBalanceUpdate"
-                  @action="handleTokenAction"
-                />
-              </div>
-
-              <div class="wallet-actions">
-                <button @click="navigateTo('/wallet/send')" class="wallet-action-btn">
-                  <i class="fas fa-paper-plane"></i>
-                  <span>Send</span>
-                </button>
-                <button @click="navigateTo('/wallet/receive')" class="wallet-action-btn">
-                  <i class="fas fa-qrcode"></i>
-                  <span>Receive</span>
-                </button>
-                <button @click="navigateTo('/wallet/history')" class="wallet-action-btn">
-                  <i class="fas fa-history"></i>
-                  <span>History</span>
-                </button>
-                <button @click="navigateTo('/wallet/swap')" class="wallet-action-btn">
-                  <i class="fas fa-exchange-alt"></i>
-                  <span>Swap</span>
-                </button>
-              </div>
-            </section>
+            <TokenWalletSection 
+              @token-balance-updated="handleBalanceUpdate"
+              @token-action="handleTokenAction"
+              @refresh="handleWalletRefresh"
+            />
           </div>
 
           <!-- Collection Tab -->
           <div v-if="activeTab === 'collection'" key="collection" class="dashboard-page">
-            <section class="dashboard-section nft-collection cosmic-panel">
-              <div class="section-header">
-                <h2>NFT Collection</h2>
-                <div class="actions">
-                  <div class="category-filter">
-                    <button 
-                      v-for="category in nftCategories" 
-                      :key="category"
-                      @click="currentNftCategory = category"
-                      :class="['filter-button', { active: currentNftCategory === category }]"
-                    >
-                      {{ formatCategory(category) }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="nft-grid">
-                <div v-if="loadingNFTs" class="loading-nfts">
-                  <div class="cosmic-loader small"></div>
-                  <p>Loading NFTs...</p>
-                </div>
-
-                <template v-else-if="currentCategoryNFTs.length > 0">
-                  <NFTCard 
-                    v-for="nft in currentCategoryNFTs" 
-                    :key="nft.id" 
-                    :nft="nft"
-                    @click="showNFTDetails(nft)"
-                  />
-                </template>
-                
-                <div v-else class="empty-collection">
-                  <i class="fas fa-cubes"></i>
-                  <p>No {{ formatCategory(currentNftCategory) }} found in your collection</p>
-                </div>
-              </div>
-            </section>
+            <NFTCollectionSection
+              @nft-selected="showNFTDetails"
+              @category-changed="handleCategoryChange"
+            />
           </div>
 
           <!-- Referrals Section (Tab) -->
           <div v-if="activeTab === 'referrals'" key="referrals" class="dashboard-page">
             <ReferralsSection />
+          </div>
+
+          <!-- Friends Section (Tab) -->
+          <div v-if="activeTab === 'friends'" key="friends" class="dashboard-page">
+            <FriendsSection ref="friendsRef" />
           </div>
 
           <!-- Missions Section (Tab) -->
@@ -339,21 +123,14 @@
             </section>
           </div>
         </transition-group>
-      </div>
+      </PullToRefreshContainer>
 
       <!-- Bottom Navigation Bar for Mobile -->
-      <nav class="mobile-bottom-nav">
-        <button 
-          v-for="tab in bottomNavTabs" 
-          :key="tab.id"
-          @click="selectTab(tab.id)"
-          class="bottom-nav-item" 
-          :class="{ active: activeTab === tab.id }"
-        >
-          <i :class="tab.icon"></i>
-          <span>{{ tab.label }}</span>
-        </button>
-      </nav>
+      <BottomNavigation
+        v-model="activeTab"
+        :tabs="bottomNavTabs"
+        @tab-selected="handleTabSelected"
+      />
     </div>
 
     <!-- Mobile Menu Component -->
@@ -368,58 +145,17 @@
     />
 
     <!-- Floating Action Button (FAB) -->
-    <div class="fab-container" :class="{ 'fab-expanded': isFabExpanded }">
-      <div class="fab-actions" :class="{ 'fab-actions-visible': isFabExpanded }">
-        <button @click="handleFabAction('wallet/send')" class="fab-action-button">
-          <i class="fas fa-paper-plane"></i>
-          <span class="fab-action-label">Send</span>
-        </button>
-        <button @click="handleFabAction('wallet/receive')" class="fab-action-button">
-          <i class="fas fa-qrcode"></i>
-          <span class="fab-action-label">Receive</span>
-        </button>
-        <button @click="handleFabAction('marketplace')" class="fab-action-button">
-          <i class="fas fa-shopping-cart"></i>
-          <span class="fab-action-label">Shop</span>
-        </button>
-        <button @click="handleFabAction('missions')" class="fab-action-button">
-          <i class="fas fa-tasks"></i>
-          <span class="fab-action-label">Missions</span>
-        </button>
-      </div>
-      <button class="fab-main" @click="toggleFab">
-        <i class="fas" :class="isFabExpanded ? 'fa-times' : 'fa-plus'"></i>
-      </button>
-    </div>
+    <FloatingActionButton
+      :actions="fabActions"
+      @action="handleFabAction"
+      :offsetBottom="80"
+    />
 
-    <!-- Toast Notifications Container -->
-    <div class="toast-container">
-      <transition-group name="toast">
-        <div 
-          v-for="toast in toastMessages" 
-          :key="toast.id" 
-          class="toast-notification"
-          :class="[`toast-${toast.type}`, { 'with-progress': toast.showProgress }]"
-        >
-          <div class="toast-icon">
-            <i :class="getToastIcon(toast.type)"></i>
-          </div>
-          <div class="toast-content">
-            <div class="toast-title">{{ toast.title }}</div>
-            <div v-if="toast.message" class="toast-message">{{ toast.message }}</div>
-            <div v-if="toast.showProgress" class="toast-progress-bar">
-              <div 
-                class="toast-progress" 
-                :style="{ width: `${getToastProgress(toast)}%` }"
-              ></div>
-            </div>
-          </div>
-          <button class="toast-close" @click="() => dismissToast(toast.id)">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-      </transition-group>
-    </div>
+    <!-- Toast Notifications System -->
+    <ToastNotificationSystem
+      ref="toastSystem"
+      position="top-right"
+    />
   </div>
 </template>
 
@@ -429,14 +165,23 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useTokenStore } from '@/stores/token';
 import { useNftsStore } from '@/stores/nfts';
-import TokenCard from '@/components/tokens/TokenCard.vue';
-import NFTCard from '@/components/ui/cards/NFTCard.vue';
+
+// Import the new components
+import WelcomeCardSection from '@/components/dashboard/sections/WelcomeCardSection.vue';
+import TokenWalletSection from '@/components/dashboard/sections/TokenWalletSection.vue';
+import NFTCollectionSection from '@/components/dashboard/sections/NFTCollectionSection.vue';
+import ActivityFeedSection from '@/components/dashboard/sections/ActivityFeedSection.vue';
+import BottomNavigation from '@/components/dashboard/ui/BottomNavigation.vue';
+import FloatingActionButton from '@/components/dashboard/ui/FloatingActionButton.vue';
+import ToastNotificationSystem from '@/components/dashboard/ui/ToastNotificationSystem.vue';
+import PullToRefreshContainer from '@/components/dashboard/ui/PullToRefreshContainer.vue';
+
+import DashboardMobileMenu from '@/components/dashboard/DashboardMobileMenu.vue';
 import ReferralsSection from '@/components/referrals/ReferralsSection.vue';
 import MissionsSection from '@/components/missions/MissionsSection.vue';
-import AchievementsSection from '@/components/achievements';
-import StatsSection from '@/components/stats';
-import DashboardMobileMenu from '@/components/dashboard/DashboardMobileMenu.vue';
-import { v4 as uuidv4 } from 'uuid';
+import AchievementsSection from '@/components/achievements/AchievementsSection.vue';
+import StatsSection from '@/components/stats/StatsSection.vue';
+import FriendsSection from '@/components/dashboard/sections/FriendsSection.vue';
 
 // Router
 const router = useRouter();
@@ -449,68 +194,15 @@ const nftsStore = useNftsStore();
 // State
 const loading = ref(true);
 const loadingNFTs = ref(false);
-const currentNftCategory = ref('characters');
 const activities = ref([]);
 const activeTab = ref('overview');
 const isMobileMenuOpen = ref(false);
 const navHistory = ref([]);
 const contentArea = ref(null);
-const isPulling = ref(false);
-const isRefreshing = ref(false);
-const pullStartY = ref(0);
-const pullMoveY = ref(0);
-const pullThreshold = 80; // Pixels to pull before refresh triggers
-const isFabExpanded = ref(false);
-const toastMessages = ref([]);
+const friendsRef = ref(null); // Reference to friends component
 
-// Add swipe gesture tracking
-const swipeStartX = ref(0);
-const swipeMoveX = ref(0);
-const swipeThreshold = 80; // Pixels to swipe before tab switch
-const isHorizontalSwipe = ref(false);
-
-// Tabs for bottom navigation
-const bottomNavTabs = [
-  { id: 'overview', label: 'Home', icon: 'fas fa-home' },
-  { id: 'wallet', label: 'Wallet', icon: 'fas fa-wallet' },
-  { id: 'collection', label: 'NFTs', icon: 'fas fa-cubes' },
-  { id: 'marketplace', label: 'Market', icon: 'fas fa-store' },
-  { id: 'missions', label: 'Missions', icon: 'fas fa-tasks' }
-];
-
-// Full list of tabs (including ones not in bottom nav)
-const mainTabs = [
-  { id: 'overview', label: 'Overview', icon: 'fas fa-columns' },
-  { id: 'wallet', label: 'Wallet', icon: 'fas fa-wallet' },
-  { id: 'collection', label: 'Collection', icon: 'fas fa-cubes' },
-  { id: 'marketplace', label: 'Marketplace', icon: 'fas fa-store' },
-  { id: 'missions', label: 'Missions', icon: 'fas fa-tasks' }
-];
-
-const additionalTabs = [
-  { id: 'referrals', label: 'Referrals', icon: 'fas fa-users' },
-  { id: 'achievements', label: 'Achievements', icon: 'fas fa-trophy' },
-  { id: 'stats', label: 'Stats', icon: 'fas fa-chart-bar' }
-];
-
-// NFT Categories
-const nftCategories = ['characters', 'units', 'avatars', 'trophies', 'chests'];
-
-// Current Category NFTs
-const currentCategoryNFTs = computed(() => {
-  return nftsStore.getCategoryNFTs(currentNftCategory.value) || [];
-});
-
-// Token Data
-const visibleTokens = computed(() => {
-  return tokenStore.visibleTokens;
-});
-
-const totalTokenValue = computed(() => {
-  return tokenStore.tokenList.reduce((total, token) => {
-    return total + (token.valueUsd || 0);
-  }, 0);
-});
+// Direction of transition (left or right)
+const transitionDirection = ref('right');
 
 // Avatar URL
 const avatarUrl = computed(() => {
@@ -528,9 +220,6 @@ const showBackButton = computed(() => {
   return navHistory.value.length > 0;
 });
 
-// Direction of transition (left or right)
-const transitionDirection = ref('right');
-
 // Get current page title based on active tab
 const getPageTitle = computed(() => {
   const allTabs = [...mainTabs, ...additionalTabs];
@@ -538,21 +227,44 @@ const getPageTitle = computed(() => {
   return currentTab ? currentTab.label : 'Dashboard';
 });
 
+// Tabs for bottom navigation
+const bottomNavTabs = [
+  { id: 'overview', label: 'Home', icon: 'fas fa-home' },
+  { id: 'wallet', label: 'Wallet', icon: 'fas fa-wallet' },
+  { id: 'friends', label: 'Friends', icon: 'fas fa-user-friends' },
+  { id: 'marketplace', label: 'Market', icon: 'fas fa-store' }
+];
+
+// Full list of tabs (including ones not in bottom nav)
+const mainTabs = [
+  { id: 'overview', label: 'Overview', icon: 'fas fa-columns' },
+  { id: 'wallet', label: 'Wallet', icon: 'fas fa-wallet' },
+  { id: 'collection', label: 'Collection', icon: 'fas fa-cubes' },
+  { id: 'marketplace', label: 'Marketplace', icon: 'fas fa-store' }
+];
+
+const additionalTabs = [
+  { id: 'referrals', label: 'Referrals', icon: 'fas fa-users' },
+  { id: 'friends', label: 'Friends', icon: 'fas fa-user-friends' },
+  { id: 'missions', label: 'Missions', icon: 'fas fa-tasks' },
+  { id: 'achievements', label: 'Achievements', icon: 'fas fa-trophy' },
+  { id: 'stats', label: 'Stats', icon: 'fas fa-chart-bar' }
+];
+
+// FAB actions
+const fabActions = [
+  { icon: 'fas fa-paper-plane', label: 'Send', action: 'wallet/send' },
+  { icon: 'fas fa-qrcode', label: 'Receive', action: 'wallet/receive' },
+  { icon: 'fas fa-user-plus', label: 'Add Friend', action: 'friends' },
+  { icon: 'fas fa-tasks', label: 'Missions', action: 'missions', showPulse: true }
+];
+
 // Methods
 const navigateTo = (path) => {
   router.push(path);
 };
 
-const formatCategory = (category) => {
-  return category.charAt(0).toUpperCase() + category.slice(1);
-};
-
-const refreshTokens = async () => {
-  await tokenStore.fetchAllBalances();
-};
-
 const handleBalanceUpdate = (data) => {
-  // You can add any additional logic when a token balance is updated
   console.log(`Token ${data.symbol} balance updated: ${data.formatted}`);
 };
 
@@ -570,46 +282,12 @@ const showNFTDetails = (nft) => {
   navigateTo(`/collection/${nft.id}`);
 };
 
-const getActivityIcon = (type) => {
-  const icons = {
-    transfer: 'fas fa-exchange-alt',
-    mint: 'fas fa-plus-circle',
-    purchase: 'fas fa-shopping-cart',
-    sale: 'fas fa-tag',
-    game: 'fas fa-gamepad',
-    reward: 'fas fa-gift',
-    default: 'fas fa-bell'
-  };
-  
-  return icons[type] || icons.default;
+const handleCategoryChange = (category) => {
+  console.log(`Selected category: ${category}`);
 };
 
-const formatTimeAgo = (timestamp) => {
-  const now = Date.now();
-  const diff = now - timestamp;
-  
-  // Convert to seconds
-  const seconds = Math.floor(diff / 1000);
-  
-  if (seconds < 60) {
-    return 'just now';
-  }
-  
-  // Convert to minutes
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) {
-    return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
-  }
-  
-  // Convert to hours
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) {
-    return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
-  }
-  
-  // Convert to days
-  const days = Math.floor(hours / 24);
-  return `${days} day${days !== 1 ? 's' : ''} ago`;
+const handleWalletRefresh = () => {
+  console.log('Wallet refreshed');
 };
 
 // Mobile menu toggle
@@ -669,6 +347,12 @@ const selectTab = (tabId) => {
   }
 };
 
+// Handle tab selection from bottom navigation
+const handleTabSelected = (tab) => {
+  console.log('Tab selected:', tab);
+  // Any additional handling specific to bottom navigation
+};
+
 // Go back in navigation history
 const goBack = () => {
   if (navHistory.value.length > 0) {
@@ -684,200 +368,88 @@ const goBack = () => {
   }
 };
 
-// FAB handlers
-const toggleFab = () => {
-  isFabExpanded.value = !isFabExpanded.value;
-};
-
-// Toast Notification System
-const showToast = ({ title, message = '', type = 'info', duration = 5000, showProgress = true }) => {
-  const id = uuidv4();
-  const timestamp = Date.now();
-  const expiresAt = timestamp + duration;
-  
-  const toast = {
-    id,
-    title,
-    message,
-    type,
-    timestamp,
-    duration,
-    expiresAt,
-    showProgress
-  };
-  
-  toastMessages.value.push(toast);
-  
-  if (duration > 0) {
-    setTimeout(() => {
-      dismissToast(id);
-    }, duration);
-  }
-  
-  return id;
-};
-
-const dismissToast = (id) => {
-  const index = toastMessages.value.findIndex(toast => toast.id === id);
-  if (index !== -1) {
-    toastMessages.value.splice(index, 1);
-  }
-};
-
-const getToastIcon = (type) => {
-  const icons = {
-    success: 'fas fa-check-circle',
-    error: 'fas fa-exclamation-circle',
-    warning: 'fas fa-exclamation-triangle',
-    info: 'fas fa-info-circle',
-    achievement: 'fas fa-trophy',
-    reward: 'fas fa-gift'
-  };
-  
-  return icons[type] || icons.info;
-};
-
-const getToastProgress = (toast) => {
-  if (!toast.showProgress) return 0;
-  
-  const now = Date.now();
-  const elapsed = now - toast.timestamp;
-  const total = toast.duration;
-  
-  const remaining = Math.max(0, total - elapsed);
-  return (remaining / total) * 100;
-};
-
-// Example: Show a demo toast when dashboard is loaded
-onMounted(() => {
-  // Add listener and initialize dashboard
-  document.addEventListener('click', handleOutsideClick);
-  initializeDashboard();
-  
-  // Show a welcome toast after a short delay
-  setTimeout(() => {
-    showToast({
-      title: 'Welcome back!',
-      message: 'Your cosmic journey awaits...',
-      type: 'info',
-      duration: 5000
-    });
-  }, 1000);
-  
-  // Simulate an achievement notification after some time
-  setTimeout(() => {
-    showToast({
-      title: 'Achievement Unlocked!',
-      message: 'Daily Login Streak: 3 Days',
-      type: 'achievement',
-      duration: 7000
-    });
-  }, 4000);
-});
-
-// Helper to simulate toast for demo purposes
-const simulateAction = (action) => {
-  if (action === 'wallet/send') {
-    showToast({
-      title: 'Transaction Initiated',
-      message: 'Preparing to send tokens...',
-      type: 'info'
-    });
-  } else if (action === 'wallet/receive') {
-    showToast({
-      title: 'Wallet Address Ready',
-      message: 'Share your address to receive tokens',
-      type: 'success'
-    });
-  } else if (action === 'marketplace') {
-    showToast({
-      title: 'Marketplace',
-      message: 'Browsing latest NFTs...',
-      type: 'info'
-    });
-  } else if (action === 'missions') {
-    showToast({
-      title: '2 New Missions Available!',
-      message: 'Complete them to earn rewards',
-      type: 'reward'
-    });
-  }
-};
-
-// Update FAB action handler to show toast notifications
+// FAB action handler
 const handleFabAction = (action) => {
+  console.log('FAB action:', action);
+  
+  // Special handling for friends action
+  if (action.action === 'friends') {
+    selectTab('friends');
+    
+    // Set the friends tab to discover (for searching new friends)
+    setTimeout(() => {
+      if (friendsRef.value) {
+        friendsRef.value.activeTab = 'discover';
+      }
+    }, 100);
+    
+    // Show toast notification
+    const toastSystem = document.querySelector('#app')?.querySelector('.toast-system');
+    if (toastSystem) {
+      toastSystem.showToast({
+        title: 'Add Friends',
+        message: 'Find and connect with other players',
+        type: 'info'
+      });
+    }
+    return;
+  }
+  
   // Handle different FAB actions
-  if (action.includes('/')) {
+  if (action.action.includes('/')) {
     // It's a route path
-    navigateTo(`/${action}`);
+    navigateTo(`/${action.action}`);
   } else {
     // It's a tab
-    selectTab(action);
+    selectTab(action.action);
   }
   
   // Show toast notification for the action
-  simulateAction(action);
-  
-  // Close FAB after action
-  isFabExpanded.value = false;
-};
-
-// Close FAB when clicking outside
-const handleOutsideClick = (event) => {
-  if (isFabExpanded.value) {
-    const fabContainer = document.querySelector('.fab-container');
-    if (fabContainer && !fabContainer.contains(event.target)) {
-      isFabExpanded.value = false;
-    }
+  const toastSystem = document.querySelector('#app')?.querySelector('.toast-system');
+  if (toastSystem) {
+    toastSystem.showToast({
+      title: `${action.label} Action`,
+      message: `You clicked on ${action.label}`,
+      type: 'info'
+    });
   }
 };
 
-// Remember to clean up event listeners
-watch(() => isFabExpanded.value, (newVal) => {
-  if (newVal) {
-    // Add backdrop when FAB is expanded
-    document.body.classList.add('fab-backdrop-active');
-  } else {
-    // Remove backdrop when FAB is closed
-    document.body.classList.remove('fab-backdrop-active');
+// Daily reward claim handler
+const handleDailyReward = (data) => {
+  const toastSystem = document.querySelector('#app')?.querySelector('.toast-system');
+  if (toastSystem) {
+    toastSystem.showToast({
+      title: 'Daily Reward Claimed!',
+      message: `You received ${data.reward.tokens} tokens and ${data.reward.xp} XP`,
+      type: 'reward',
+      duration: 5000
+    });
   }
-});
+};
 
-// Initialize dashboard
-const initializeDashboard = async () => {
-  loading.value = true;
+// Refresh dashboard data
+const refreshDashboard = async () => {
+  console.log('Refreshing dashboard data...');
   
   try {
-    // Initialize token store if not already initialized
-    if (!tokenStore.initialized) {
-      await tokenStore.initialize();
+    // Refresh token data
+    if (tokenStore) {
+      await tokenStore.fetchAllBalances();
     }
     
-    // Load NFTs
-    loadingNFTs.value = true;
-    await loadNFTs();
-    loadingNFTs.value = false;
+    // Refresh NFTs
+    if (nftsStore) {
+      await nftsStore.fetchNFTs();
+    }
     
-    // Load mock activities for now
-    // In a real app, these would come from your backend
+    // Refresh activities
     loadMockActivities();
     
+    return true;
   } catch (error) {
-    console.error('Error initializing dashboard:', error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-const loadNFTs = async () => {
-  try {
-    // Load NFTs for current category
-    await nftsStore.fetchNFTsByCategory(currentNftCategory.value);
-    
-    // Also load summary data for all categories
-    await nftsStore.fetchNFTs();
-  } catch (error) {
-    console.error('Error loading NFTs:', error);
+    console.error('Error refreshing dashboard:', error);
+    return false;
   }
 };
 
@@ -907,247 +479,35 @@ const loadMockActivities = () => {
   ];
 };
 
-// Watch for category changes
-const watchCategory = async () => {
-  loadingNFTs.value = true;
-  await nftsStore.fetchNFTsByCategory(currentNftCategory.value);
-  loadingNFTs.value = false;
-};
-
-// Watch for category changes and reload NFTs
-watch(currentNftCategory, watchCategory);
-
-// Pull-to-refresh and swipe navigation handling
-const handleTouchStart = (e) => {
-  // Store both X and Y coordinates
-  pullStartY.value = e.touches[0].clientY;
-  swipeStartX.value = e.touches[0].clientX;
-  
-  // Only enable pull-to-refresh when scrolled to top
-  if (contentArea.value.scrollTop === 0) {
-    isPulling.value = true;
-  }
-  
-  // Reset horizontal swipe tracking
-  isHorizontalSwipe.value = false;
-};
-
-const handleTouchMove = (e) => {
-  pullMoveY.value = e.touches[0].clientY;
-  swipeMoveX.value = e.touches[0].clientX;
-  
-  // Calculate vertical and horizontal movement
-  const verticalDistance = pullMoveY.value - pullStartY.value;
-  const horizontalDistance = swipeMoveX.value - swipeStartX.value;
-  
-  // Determine if this is primarily a horizontal swipe
-  if (!isHorizontalSwipe.value && Math.abs(horizontalDistance) > Math.abs(verticalDistance) && 
-      Math.abs(horizontalDistance) > 20) {
-    isHorizontalSwipe.value = true;
-  }
-  
-  // Handle vertical pull (pull-to-refresh)
-  if (isPulling.value && !isHorizontalSwipe.value) {
-    if (verticalDistance > 0) {
-      const pullIndicator = document.querySelector('.pull-to-refresh-indicator');
-      if (pullIndicator) {
-        const translateY = Math.min(Math.pow(verticalDistance, 0.8), pullThreshold);
-        pullIndicator.style.transform = `translateY(${translateY}px)`;
-        
-        // Rotate spinner based on pull distance
-        const spinner = pullIndicator.querySelector('.refresh-spinner i');
-        if (spinner) {
-          spinner.style.transform = `rotate(${verticalDistance * 2}deg)`;
-        }
-      }
-      
-      e.preventDefault(); // Prevent scrolling while pulling
-    }
-  }
-  
-  // Handle horizontal swipe (tab navigation)
-  if (isHorizontalSwipe.value && Math.abs(horizontalDistance) > 30) {
-    e.preventDefault(); // Prevent page scrolling during swipe
-    
-    // Apply subtle reactive resistance effect
-    const swipeProgress = Math.min(Math.abs(horizontalDistance) / (swipeThreshold * 3), 0.3);
-    const targetPage = document.querySelector(`[key="${activeTab.value}"].dashboard-page`);
-    if (targetPage) {
-      targetPage.style.transform = `translateX(${horizontalDistance * swipeProgress}px)`;
-      targetPage.style.transition = 'none'; // Disable transition for direct manipulation
-    }
-  }
-};
-
-const handleTouchEnd = async (e) => {
-  const verticalDistance = pullMoveY.value - pullStartY.value;
-  const horizontalDistance = swipeMoveX.value - swipeStartX.value;
-  
-  // Handle horizontal swipe completion
-  if (isHorizontalSwipe.value) {
-    // Reset any transforms applied during swiping
-    const targetPage = document.querySelector(`[key="${activeTab.value}"].dashboard-page`);
-    if (targetPage) {
-      targetPage.style.transition = 'transform 0.3s ease-out';
-      targetPage.style.transform = 'translateX(0)';
-    }
-    
-    // Check if swipe exceeds threshold to change tabs
-    if (Math.abs(horizontalDistance) > swipeThreshold) {
-      // Determine which direction to navigate
-      const allTabs = [...mainTabs, ...additionalTabs];
-      const currentIndex = allTabs.findIndex(tab => tab.id === activeTab.value);
-      
-      if (horizontalDistance > 0 && currentIndex > 0) {
-        // Swipe right -> go to previous tab
-        selectTab(allTabs[currentIndex - 1].id);
-        
-        // Show haptic feedback if available
-        if (navigator.vibrate) {
-          navigator.vibrate(50);
-        }
-      } else if (horizontalDistance < 0 && currentIndex < allTabs.length - 1) {
-        // Swipe left -> go to next tab
-        selectTab(allTabs[currentIndex + 1].id);
-        
-        // Show haptic feedback if available
-        if (navigator.vibrate) {
-          navigator.vibrate(50);
-        }
-      }
-    }
-  }
-  
-  // Handle vertical pull-to-refresh completion
-  if (isPulling.value && !isHorizontalSwipe.value) {
-    const pullIndicator = document.querySelector('.pull-to-refresh-indicator');
-    
-    if (verticalDistance > pullThreshold) {
-      // User pulled enough to trigger refresh
-      isRefreshing.value = true;
-      
-      if (pullIndicator) {
-        pullIndicator.style.transform = 'translateY(50px)';
-      }
-      
-      // Perform refresh actions
-      await refreshDashboard();
-      
-      // Reset after small delay
-      setTimeout(() => {
-        isRefreshing.value = false;
-        isPulling.value = false;
-        if (pullIndicator) {
-          pullIndicator.style.transform = 'translateY(0)';
-        }
-      }, 500);
-    } else {
-      // Not pulled enough, reset
-      isPulling.value = false;
-      if (pullIndicator) {
-        pullIndicator.style.transform = 'translateY(0)';
-      }
-    }
-  }
-  
-  isPulling.value = false;
-  isHorizontalSwipe.value = false;
-};
-
-// Refresh dashboard data with toast notification
-const refreshDashboard = async () => {
-  const toastId = showToast({
-    title: 'Refreshing Dashboard',
-    message: 'Fetching latest data...',
-    type: 'info',
-    showProgress: true
-  });
+// Initialize dashboard
+const initializeDashboard = async () => {
+  loading.value = true;
   
   try {
-    // Refresh token data
-    await tokenStore.fetchAllBalances();
-    
-    // Refresh NFTs
-    if (nftsStore) {
-      await nftsStore.fetchNFTs();
-      await nftsStore.fetchNFTsByCategory(currentNftCategory.value);
+    // Initialize token store if not already initialized
+    if (!tokenStore.initialized) {
+      await tokenStore.initialize();
     }
     
-    // Refresh activities
+    // Load NFTs
+    loadingNFTs.value = true;
+    await nftsStore.fetchNFTs();
+    loadingNFTs.value = false;
+    
+    // Load mock activities
     loadMockActivities();
     
-    // Show success toast
-    dismissToast(toastId);
-    showToast({
-      title: 'Dashboard Updated',
-      message: 'All data is now up to date',
-      type: 'success'
-    });
-    
-    return true;
   } catch (error) {
-    console.error('Error refreshing dashboard:', error);
-    
-    // Show error toast
-    dismissToast(toastId);
-    showToast({
-      title: 'Update Failed',
-      message: 'Could not refresh dashboard data',
-      type: 'error'
-    });
-    
-    return false;
+    console.error('Error initializing dashboard:', error);
+  } finally {
+    loading.value = false;
   }
 };
 
-// Add these new computed properties and refs
-
-// Sample active quests count (replace with actual data when available)
-const activeQuests = computed(() => {
-  return player.value?.activeMissions?.length || 3;
+// On component mount
+onMounted(() => {
+  initializeDashboard();
 });
-
-// Player XP percentage for progress bar
-const playerXpPercentage = computed(() => {
-  const currentXp = player.value?.xp || 0;
-  const currentLevel = player.value?.level || 1;
-  
-  // Calculate XP needed for next level (example formula)
-  const xpForNextLevel = currentLevel * 1000;
-  
-  // Calculate percentage (cap at 100%)
-  return Math.min(Math.floor((currentXp / xpForNextLevel) * 100), 100);
-});
-
-// Next level XP requirement
-const nextLevelXp = computed(() => {
-  const currentLevel = player.value?.level || 1;
-  return currentLevel * 1000;
-});
-
-// Daily check-in state
-const hasDailyCheckin = ref(false);
-
-// Daily reward claim function
-const claimDailyReward = () => {
-  // Call API to claim reward (mock for now)
-  
-  // Show success toast
-  showToast({
-    title: 'Daily Reward Claimed!',
-    message: 'You received 50 STDs and 25 XP',
-    type: 'reward',
-    duration: 5000
-  });
-  
-  // Set claimed state
-  hasDailyCheckin.value = true;
-  
-  // Add vibration if available
-  if (navigator.vibrate) {
-    navigator.vibrate([50, 50, 150]);
-  }
-};
 </script>
 
 <style scoped>

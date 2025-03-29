@@ -7,6 +7,7 @@ import Footer from './components/layout/Footer.vue';
 import Modal from '@/components/core/modals/BaseModal.vue'; 
 import Chat from "@/components/core/Chat.vue";
 import EscMenu from "@/components/navigation/menus/EscMenu.vue";
+import NotificationSystem from '@/components/ui/notifications/NotificationSystem.vue';
 import vScrollToTop from '@/directives/scrollToTop';
 
 const route = useRoute();
@@ -139,6 +140,9 @@ const closeEscMenu = () => {
       @close="closeEscMenu"
       @update:isOpen="isEscMenuOpen = $event"
     />
+    
+    <!-- Notification System -->
+    <NotificationSystem position="top-right" />
   </main>
 </template>
 
