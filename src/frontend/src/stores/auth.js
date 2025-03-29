@@ -9,6 +9,11 @@ import { useModalStore } from '@/stores/modal';
 import nacl from 'tweetnacl';
 import MetaMaskService from '@/services/MetaMaskService';
 import PhantomService from '@/services/PhantomService';
+import XverseService from '@/services/XverseService';
+import MagicEdenService from '@/services/MagicEdenService';
+import UnisatService from '@/services/UnisatService';
+import OKXService from '@/services/OKXService';
+import LeatherService from '@/services/LeatherService';
 import SeedPhraseModal from '@/components/modals/SeedPhraseModal.vue';
 import { useLanguageStore } from '@/stores/language';
 import * as bip39 from 'bip39';
@@ -741,6 +746,121 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         console.error('Phantom login error:', error);
         throw new Error('Phantom login failed.');
+      }
+    },
+    async loginWithXverse() {
+      try {
+        const message = 'Sign this message to log in with your Xverse Wallet';
+        const signature = await XverseService.signMessage(message);
+    
+        // Generate and save seed phrase
+        if (signature) {
+          const seedPhrase = await generateSeedPhrase(signature);
+          if (!validateMnemonic(seedPhrase)) {
+            console.warn('Generated invalid seed phrase from Xverse, using fallback');
+            // Fallback to a valid random mnemonic if validation fails
+            await this.handleLoginFlow(generateMnemonic());
+          } else {
+            await this.handleLoginFlow(seedPhrase);
+          }
+        } else {
+          throw new Error('Failed to sign with Xverse.');
+        }
+      } catch (error) {
+        console.error('Xverse login error:', error);
+        throw new Error('Xverse login failed.');
+      }
+    },
+    async loginWithMagicEden() {
+      try {
+        const message = 'Sign this message to log in with your Magic Eden Wallet';
+        const signature = await MagicEdenService.signMessage(message);
+    
+        // Generate and save seed phrase
+        if (signature) {
+          const seedPhrase = await generateSeedPhrase(signature);
+          if (!validateMnemonic(seedPhrase)) {
+            console.warn('Generated invalid seed phrase from Magic Eden, using fallback');
+            // Fallback to a valid random mnemonic if validation fails
+            await this.handleLoginFlow(generateMnemonic());
+          } else {
+            await this.handleLoginFlow(seedPhrase);
+          }
+        } else {
+          throw new Error('Failed to sign with Magic Eden.');
+        }
+      } catch (error) {
+        console.error('Magic Eden login error:', error);
+        throw new Error('Magic Eden login failed.');
+      }
+    },
+    async loginWithUnisat() {
+      try {
+        const message = 'Sign this message to log in with your Unisat Wallet';
+        const signature = await UnisatService.signMessage(message);
+    
+        // Generate and save seed phrase
+        if (signature) {
+          const seedPhrase = await generateSeedPhrase(signature);
+          if (!validateMnemonic(seedPhrase)) {
+            console.warn('Generated invalid seed phrase from Unisat, using fallback');
+            // Fallback to a valid random mnemonic if validation fails
+            await this.handleLoginFlow(generateMnemonic());
+          } else {
+            await this.handleLoginFlow(seedPhrase);
+          }
+        } else {
+          throw new Error('Failed to sign with Unisat.');
+        }
+      } catch (error) {
+        console.error('Unisat login error:', error);
+        throw new Error('Unisat login failed.');
+      }
+    },
+    async loginWithOKX() {
+      try {
+        const message = 'Sign this message to log in with your OKX Wallet';
+        const signature = await OKXService.signMessage(message);
+    
+        // Generate and save seed phrase
+        if (signature) {
+          const seedPhrase = await generateSeedPhrase(signature);
+          if (!validateMnemonic(seedPhrase)) {
+            console.warn('Generated invalid seed phrase from OKX, using fallback');
+            // Fallback to a valid random mnemonic if validation fails
+            await this.handleLoginFlow(generateMnemonic());
+          } else {
+            await this.handleLoginFlow(seedPhrase);
+          }
+        } else {
+          throw new Error('Failed to sign with OKX.');
+        }
+      } catch (error) {
+        console.error('OKX login error:', error);
+        throw new Error('OKX login failed.');
+      }
+    },
+    async loginWithLeather() {
+      try {
+        const message = 'Sign this message to log in with your Leather Wallet';
+        const signature = await LeatherService.signMessage(message);
+    
+        // Generate and save seed phrase
+        if (signature) {
+          const seedPhrase = await generateSeedPhrase(signature);
+          if (!validateMnemonic(seedPhrase)) {
+            console.warn('Generated invalid seed phrase from Leather, using fallback');
+            // Fallback to a valid random mnemonic if validation fails
+            await this.handleLoginFlow(generateMnemonic());
+          } else {
+            await this.handleLoginFlow(seedPhrase);
+          }
+        } else {
+          throw new Error('Failed to sign with Leather.');
+        }
+      } catch (error) {
+        console.error('Leather login error:', error);
+        throw new Error('Leather login failed.');
       }
     },
     async loginWithInternetIdentity() {

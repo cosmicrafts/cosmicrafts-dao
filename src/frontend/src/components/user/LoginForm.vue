@@ -127,6 +127,31 @@ const secondaryMethods = [
     onClick: () => handleLogin(authStore.loginWithPhantom.bind(authStore)),
   },
   {
+    logo: new URL('@/assets/icons/xverse_icon.svg', import.meta.url).href,
+    title: 'Xverse',
+    onClick: () => handleLogin(authStore.loginWithXverse.bind(authStore)),
+  },
+  {
+    logo: new URL('@/assets/icons/magic_eden_icon.svg', import.meta.url).href,
+    title: 'Magic Eden',
+    onClick: () => handleLogin(authStore.loginWithMagicEden.bind(authStore)),
+  },
+  {
+    logo: new URL('@/assets/icons/unisat_icon.svg', import.meta.url).href,
+    title: 'Unisat',
+    onClick: () => handleLogin(authStore.loginWithUnisat.bind(authStore)),
+  },
+  {
+    logo: new URL('@/assets/icons/okx_icon.svg', import.meta.url).href,
+    title: 'OKX',
+    onClick: () => handleLogin(authStore.loginWithOKX.bind(authStore)),
+  },
+  {
+    logo: new URL('@/assets/icons/leather_icon.svg', import.meta.url).href,
+    title: 'Leather',
+    onClick: () => handleLogin(authStore.loginWithLeather.bind(authStore)),
+  },
+  {
     logo: new URL('@/assets/icons/nfid.svg', import.meta.url).href,
     title: 'NFID',
     onClick: () => handleLogin(authStore.loginWithNFID.bind(authStore)),

@@ -116,7 +116,7 @@
       AvatarSelector,
       LoadingScreen,
     },
-    setup() {
+    setup(props, { emit }) {
       const authStore = useAuthStore();
       const router = useRouter();
       const modalStore = useModalStore();
@@ -213,8 +213,8 @@
                 }
               }
               
-              modalStore.closeModal();
-              router.push('/');
+              // Emit registration-complete event for the parent component
+              emit('registration-complete');
             } else {
               // Error case (if success is false)
               console.log('Registration failed:', message);
