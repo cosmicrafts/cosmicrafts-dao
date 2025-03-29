@@ -46,6 +46,7 @@
         v-for="friend in friends"
         :key="friend.playerId"
         :friend="friend"
+        :dashboard-mode="props.dashboardMode"
         @remove="confirmRemoveFriend"
         @message="messageFriend"
         @view-profile="viewProfile"
@@ -271,6 +272,14 @@ const authStore = useAuthStore();
 const canisterStore = useCanisterStore();
 const notificationStore = useNotificationStore();
 const router = useRouter();
+
+// Props
+const props = defineProps({
+  dashboardMode: {
+    type: Boolean,
+    default: false
+  }
+});
 
 // State
 const isLoading = ref(true);

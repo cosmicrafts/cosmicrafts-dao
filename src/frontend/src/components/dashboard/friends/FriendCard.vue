@@ -1,11 +1,11 @@
 <template>
   <div class="friend-card">
-    <div class="friend-avatar" @click="$emit('view-profile', friend.playerId)">
+    <div class="friend-avatar" @click="viewFriendProfile(friend)">
       <img :src="getAvatarUrl(friend.avatar)" :alt="friend.username">
       <div class="online-indicator" v-if="friend.isOnline"></div>
     </div>
     
-    <div class="friend-info" @click="$emit('view-profile', friend.playerId)">
+    <div class="friend-info" @click="viewFriendProfile(friend)">
       <div class="friend-name">{{ friend.username }}</div>
       <div class="friend-details">
         <span class="friend-level">Level {{ friend.level }}</span>
@@ -26,6 +26,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 import avatar1 from '@/assets/avatars/Avatar_01.webp';
 import avatar2 from '@/assets/avatars/Avatar_02.webp';
 import avatar3 from '@/assets/avatars/Avatar_03.webp';
@@ -39,16 +40,23 @@ import avatar10 from '@/assets/avatars/Avatar_10.webp';
 import avatar11 from '@/assets/avatars/Avatar_11.webp';
 import avatar12 from '@/assets/avatars/Avatar_12.webp';
 
+// Router
+const router = useRouter();
+
 // Define props
 const props = defineProps({
   friend: {
     type: Object,
     required: true
+  },
+  dashboardMode: {
+    type: Boolean,
+    default: false
   }
 });
 
 // Define emits
-defineEmits(['remove', 'message', 'view-profile']);
+const emit = defineEmits(['remove', 'message', 'view-profile']);
 
 // Avatar array
 const avatarSrcArray = [
@@ -61,6 +69,18 @@ const avatarSrcArray = [
 const getAvatarUrl = (avatarId) => {
   const index = (Number(avatarId) - 1) % avatarSrcArray.length;
   return avatarSrcArray[index] || avatar1;
+};
+
+// View friend profile
+const viewFriendProfile = (friend) => {
+  if (props.dashboardMode) {
+    // In dashboard mode, emit event to show profile in dashboard
+    emit('view-profile', friend.playerId);
+  } else {
+    // Navigate to friend profile page using username if available, otherwise principalId
+    const identifier = friend.username || friend.playerId;
+    router.push(`/${identifier}`);
+  }
 };
 </script>
 

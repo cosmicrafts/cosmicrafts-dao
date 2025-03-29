@@ -90,7 +90,24 @@
 
           <!-- Friends Section (Tab) -->
           <div v-if="activeTab === 'friends'" key="friends" class="dashboard-page">
-            <FriendsSection ref="friendsRef" />
+            <FriendsSection 
+              ref="friendsRef" 
+              dashboardMode
+              @view-profile="viewUserProfile"
+            />
+          </div>
+
+          <!-- User Profile Section (Tab) -->
+          <div v-if="activeTab === 'profile' && viewingProfile" key="profile" class="dashboard-page">
+            <div class="dashboard-section profile-preview cosmic-panel">
+              <div class="section-header with-back">
+                <button @click="backToFriends" class="back-button">
+                  <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>{{ viewingProfile.username }}'s Profile</h2>
+              </div>
+              <ProfilePreview :profile-id="viewingProfile.playerId" embedded />
+            </div>
           </div>
 
           <!-- Missions Section (Tab) -->
@@ -182,6 +199,7 @@ import MissionsSection from '@/components/missions/MissionsSection.vue';
 import AchievementsSection from '@/components/achievements/AchievementsSection.vue';
 import StatsSection from '@/components/stats/StatsSection.vue';
 import FriendsSection from '@/components/dashboard/sections/FriendsSection.vue';
+import ProfilePreview from '@/components/profile/ProfilePreview.vue';
 
 // Router
 const router = useRouter();
@@ -200,6 +218,7 @@ const isMobileMenuOpen = ref(false);
 const navHistory = ref([]);
 const contentArea = ref(null);
 const friendsRef = ref(null); // Reference to friends component
+const viewingProfile = ref(null);
 
 // Direction of transition (left or right)
 const transitionDirection = ref('right');
@@ -508,6 +527,17 @@ const initializeDashboard = async () => {
 onMounted(() => {
   initializeDashboard();
 });
+
+// New methods
+const viewUserProfile = (profile) => {
+  viewingProfile.value = profile;
+  selectTab('profile');
+};
+
+const backToFriends = () => {
+  viewingProfile.value = null;
+  selectTab('friends');
+};
 </script>
 
 <style scoped>
