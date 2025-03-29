@@ -1,113 +1,132 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
 
-export const useNotificationStore = defineStore('notification', () => {
-  // State
-  const notifications = ref([]);
-  const nextId = ref(1);
-  
-  // Actions
-  
-  /**
-   * Show a notification
-   * @param {Object} notification - The notification object
-   * @param {string} notification.title - The notification title
-   * @param {string} notification.message - The notification message
-   * @param {string} notification.type - The notification type (info, success, error, warning)
-   * @param {number} notification.duration - The notification duration in ms (default: 5000)
-   */
-  function showNotification({ title, message, type = 'info', duration = 5000 }) {
-    const id = nextId.value++;
-    
-    // Add notification to list
-    notifications.value.push({
-      id,
-      title,
-      message,
-      type,
-      duration,
-      timestamp: Date.now(),
-    });
-    
-    // Auto-dismiss after duration
-    if (duration > 0) {
-      setTimeout(() => {
-        dismissNotification(id);
-      }, duration);
+export const useNotificationStore = defineStore('notification', {
+  state: () => ({
+    notifications: [],
+    config: {
+      position: 'top-right',
+      maxNotifications: 5,
+      defaultDuration: 5000
     }
-    
-    return id;
-  }
+  }),
   
-  /**
-   * Dismiss a notification by ID
-   * @param {number} id - The notification ID
-   */
-  function dismissNotification(id) {
-    const index = notifications.value.findIndex(n => n.id === id);
-    if (index !== -1) {
-      notifications.value.splice(index, 1);
+  actions: {
+    addNotification(notification) {
+      const id = notification.id || uuidv4();
+      const duration = notification.duration || this.config.defaultDuration;
+      
+      // Create the notification object
+      const newNotification = {
+        id,
+        title: notification.title || 'Notification',
+        message: notification.message || '',
+        type: notification.type || 'info',
+        duration,
+        timestamp: Date.now(),
+        actions: notification.actions || [],
+        autoClose: notification.autoClose !== false,
+        ...notification
+      };
+      
+      // Add to beginning of array to show newest notifications at the top
+      this.notifications.unshift(newNotification);
+      
+      // Remove excess notifications
+      if (this.notifications.length > this.config.maxNotifications) {
+        const toRemove = this.notifications.slice(this.config.maxNotifications);
+        toRemove.forEach(n => this.removeNotification(n.id));
+      }
+      
+      // Auto-remove after duration if autoClose is true
+      if (newNotification.autoClose && duration > 0) {
+        setTimeout(() => {
+          this.removeNotification(id);
+        }, duration);
+      }
+      
+      return id;
+    },
+    
+    removeNotification(id) {
+      const index = this.notifications.findIndex(n => n.id === id);
+      if (index !== -1) {
+        this.notifications.splice(index, 1);
+      }
+    },
+    
+    clearAll() {
+      this.notifications = [];
+    },
+    
+    // Utility methods for common notification types
+    success(message, options = {}) {
+      return this.addNotification({
+        title: options.title || 'Success',
+        message,
+        type: 'success',
+        ...options
+      });
+    },
+    
+    error(message, options = {}) {
+      return this.addNotification({
+        title: options.title || 'Error',
+        message,
+        type: 'error',
+        duration: options.duration || 8000, // Errors stay longer by default
+        ...options
+      });
+    },
+    
+    info(message, options = {}) {
+      return this.addNotification({
+        title: options.title || 'Information',
+        message,
+        type: 'info',
+        ...options
+      });
+    },
+    
+    warning(message, options = {}) {
+      return this.addNotification({
+        title: options.title || 'Warning',
+        message,
+        type: 'warning',
+        ...options
+      });
+    },
+    
+    achievement(message, options = {}) {
+      return this.addNotification({
+        title: options.title || 'Achievement',
+        message,
+        type: 'achievement',
+        ...options
+      });
+    },
+    
+    reward(message, options = {}) {
+      return this.addNotification({
+        title: options.title || 'Reward',
+        message,
+        type: 'reward',
+        ...options
+      });
+    },
+    
+    // Handle API responses directly
+    fromApiResponse(success, message, options = {}) {
+      if (success) {
+        return this.success(message, options);
+      } else {
+        return this.error(message, options);
+      }
+    },
+    
+    // Configuration
+    updateConfig(config) {
+      this.config = { ...this.config, ...config };
     }
   }
-  
-  /**
-   * Dismiss all notifications
-   */
-  function dismissAll() {
-    notifications.value = [];
-  }
-  
-  /**
-   * Show a success notification
-   * @param {string} title - The notification title
-   * @param {string} message - The notification message
-   * @param {number} duration - The notification duration in ms (default: 5000)
-   */
-  function showSuccess(title, message, duration = 5000) {
-    return showNotification({ title, message, type: 'success', duration });
-  }
-  
-  /**
-   * Show an error notification
-   * @param {string} title - The notification title
-   * @param {string} message - The notification message
-   * @param {number} duration - The notification duration in ms (default: 8000)
-   */
-  function showError(title, message, duration = 8000) {
-    return showNotification({ title, message, type: 'error', duration });
-  }
-  
-  /**
-   * Show a warning notification
-   * @param {string} title - The notification title
-   * @param {string} message - The notification message
-   * @param {number} duration - The notification duration in ms (default: 6000)
-   */
-  function showWarning(title, message, duration = 6000) {
-    return showNotification({ title, message, type: 'warning', duration });
-  }
-  
-  /**
-   * Show an info notification
-   * @param {string} title - The notification title
-   * @param {string} message - The notification message
-   * @param {number} duration - The notification duration in ms (default: 5000)
-   */
-  function showInfo(title, message, duration = 5000) {
-    return showNotification({ title, message, type: 'info', duration });
-  }
-  
-  return {
-    // State
-    notifications,
-    
-    // Actions
-    showNotification,
-    dismissNotification,
-    dismissAll,
-    showSuccess,
-    showError,
-    showWarning,
-    showInfo,
-  };
 }); 

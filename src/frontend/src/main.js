@@ -24,7 +24,9 @@ import zh from '@/locales/zh.json';
 import tr from '@/locales/tr.json';
 import { registerSW } from 'virtual:pwa-register';
 
+// Import components
 import AccountManagement from '@/components/wallet/AccountManagement.vue';
+import NotificationSystem from '@/components/notifications/NotificationSystem.vue';
 
 // Create i18n instance
 const i18n = createI18n({
@@ -55,6 +57,42 @@ const updateSW = registerSW({
 
 // Register global components
 app.component('AccountManagement', AccountManagement);
+app.component('NotificationSystem', NotificationSystem);
+
+// Create global notification access
+import { useNotificationStore } from '@/stores/notification';
+
+// Define a global $notify function that Vue components can use
+app.config.globalProperties.$notify = {
+  success: (message, options = {}) => {
+    const store = useNotificationStore();
+    return store.success(message, options);
+  },
+  error: (message, options = {}) => {
+    const store = useNotificationStore();
+    return store.error(message, options);
+  },
+  info: (message, options = {}) => {
+    const store = useNotificationStore();
+    return store.info(message, options);
+  },
+  warning: (message, options = {}) => {
+    const store = useNotificationStore();
+    return store.warning(message, options);
+  },
+  achievement: (message, options = {}) => {
+    const store = useNotificationStore();
+    return store.achievement(message, options);
+  },
+  reward: (message, options = {}) => {
+    const store = useNotificationStore();
+    return store.reward(message, options);
+  },
+  fromApiResponse: (success, message, options = {}) => {
+    const store = useNotificationStore();
+    return store.fromApiResponse(success, message, options);
+  }
+};
 
 // Bootstrap the application - First mount the app, then load user data
 // This ensures the UI is visible immediately before data loading

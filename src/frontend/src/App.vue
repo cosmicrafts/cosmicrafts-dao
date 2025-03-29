@@ -8,11 +8,15 @@ import Modal from '@/components/core/modals/BaseModal.vue';
 import Chat from "@/components/core/Chat.vue";
 import EscMenu from "@/components/navigation/menus/EscMenu.vue";
 import NotificationSystem from '@/components/ui/notifications/NotificationSystem.vue';
+import ToastNotificationSystem from '@/components/dashboard/ui/ToastNotificationSystem.vue';
 import vScrollToTop from '@/directives/scrollToTop';
+import { useToastStore } from '@/stores/toast';
 
 const route = useRoute();
 const isWhitepaper = computed(() => route.path === '/whitepaper');
 const isGame = computed(() => route.path === '/game');
+const toastStore = useToastStore();
+const globalToastSystem = ref(null);
 
 // Add welcome tooltip state
 const hasShownWelcome = ref(localStorage.getItem('hasShownWelcome') === 'true');
@@ -95,6 +99,11 @@ const handleKeyDown = (event) => {
 onMounted(() => {
   document.addEventListener('keydown', handleKeyDown);
   
+  // Register the toast system with the store
+  if (globalToastSystem.value) {
+    toastStore.setToastSystem(globalToastSystem.value);
+  }
+  
   // Show welcome tooltip after 10 seconds if it hasn't been shown before
   if (!hasShownWelcome.value) {
     setTimeout(() => {
@@ -141,8 +150,10 @@ const closeEscMenu = () => {
       @update:isOpen="isEscMenuOpen = $event"
     />
     
-    <!-- Notification System -->
+    <!-- Notification Systems -->
     <NotificationSystem position="top-right" />
+    <!-- Replace ToastNotificationSystem with a comment explaining the change -->
+    <!-- ToastNotificationSystem has been replaced by the global NotificationSystem -->
   </main>
 </template>
 

@@ -167,12 +167,6 @@
       @action="handleFabAction"
       :offsetBottom="80"
     />
-
-    <!-- Toast Notifications System -->
-    <ToastNotificationSystem
-      ref="toastSystem"
-      position="top-right"
-    />
   </div>
 </template>
 
@@ -182,6 +176,7 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useTokenStore } from '@/stores/token';
 import { useNftsStore } from '@/stores/nfts';
+import { useNotification } from '@/composables/useNotification';
 
 // Import the new components
 import WelcomeCardSection from '@/components/dashboard/sections/WelcomeCardSection.vue';
@@ -190,7 +185,6 @@ import NFTCollectionSection from '@/components/dashboard/sections/NFTCollectionS
 import ActivityFeedSection from '@/components/dashboard/sections/ActivityFeedSection.vue';
 import BottomNavigation from '@/components/dashboard/ui/BottomNavigation.vue';
 import FloatingActionButton from '@/components/dashboard/ui/FloatingActionButton.vue';
-import ToastNotificationSystem from '@/components/dashboard/ui/ToastNotificationSystem.vue';
 import PullToRefreshContainer from '@/components/dashboard/ui/PullToRefreshContainer.vue';
 
 import DashboardMobileMenu from '@/components/dashboard/DashboardMobileMenu.vue';
@@ -277,6 +271,14 @@ const fabActions = [
   { icon: 'fas fa-user-plus', label: 'Add Friend', action: 'friends' },
   { icon: 'fas fa-tasks', label: 'Missions', action: 'missions', showPulse: true }
 ];
+
+// Replace getCurrentInstance with our composable
+// Replace this:
+// import { getCurrentInstance } from 'vue';
+// const { proxy } = getCurrentInstance();
+
+// With this:
+const notify = useNotification();
 
 // Methods
 const navigateTo = (path) => {
@@ -402,15 +404,10 @@ const handleFabAction = (action) => {
       }
     }, 100);
     
-    // Show toast notification
-    const toastSystem = document.querySelector('#app')?.querySelector('.toast-system');
-    if (toastSystem) {
-      toastSystem.showToast({
-        title: 'Add Friends',
-        message: 'Find and connect with other players',
-        type: 'info'
-      });
-    }
+    // Show toast notification using the global system
+    notify.info('Find and connect with other players', {
+      title: 'Add Friends'
+    });
     return;
   }
   
@@ -423,25 +420,18 @@ const handleFabAction = (action) => {
     selectTab(action.action);
   }
   
-  // Show toast notification for the action
-  const toastSystem = document.querySelector('#app')?.querySelector('.toast-system');
-  if (toastSystem) {
-    toastSystem.showToast({
-      title: `${action.label} Action`,
-      message: `You clicked on ${action.label}`,
-      type: 'info'
-    });
-  }
+  // Show toast notification for the action using global system
+  notify.info(`You clicked on ${action.label}`, {
+    title: `${action.label} Action`
+  });
 };
 
 // Daily reward claim handler
 const handleDailyReward = (data) => {
-  const toastSystem = document.querySelector('#app')?.querySelector('.toast-system');
-  if (toastSystem) {
-    toastSystem.showToast({
+  const { success, reward } = data;
+  if (success) {
+    notify.reward(`You received ${reward.tokens} tokens and ${reward.xp} XP`, {
       title: 'Daily Reward Claimed!',
-      message: `You received ${data.reward.tokens} tokens and ${data.reward.xp} XP`,
-      type: 'reward',
       duration: 5000
     });
   }
