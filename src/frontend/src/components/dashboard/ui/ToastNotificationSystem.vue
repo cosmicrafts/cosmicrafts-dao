@@ -248,13 +248,6 @@ onUnmounted(() => {
     clearInterval(progressIntervals.value[id]);
   });
 });
-
-// Expose the API
-defineExpose({
-  showToast,
-  dismissToast,
-  updateToast
-});
 </script>
 
 <style scoped>

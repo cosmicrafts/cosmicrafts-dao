@@ -72,23 +72,52 @@ export function generateRandomBase32(length = 20) {
   return result;
 }
 
-export function verifyTOTP(token, secret, window = 1) {
-  const currentTime = Math.floor(Date.now() / 1000);
-  
-  // Check a window of tokens (usually -1, 0, +1)
-  for (let i = -window; i <= window; i++) {
-    const time = currentTime + (i * 30); // 30-second TOTP window
-    const calculatedToken = generateTOTP(secret, time);
+// Implementation of HMAC-SHA1 for TOTP
+async function hmacSha1(key, message) {
+  try {
+    // Convert hex string key to ArrayBuffer
+    const hexToBytes = (hex) => {
+      const bytes = new Uint8Array(hex.length / 2);
+      for (let i = 0; i < hex.length; i += 2) {
+        bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+      }
+      return bytes;
+    };
     
-    if (calculatedToken === token) {
-      return true;
-    }
+    // Convert counter hex string to ArrayBuffer
+    const messageBytes = hexToBytes(message);
+    const keyBytes = hexToBytes(key);
+    
+    // Use Web Crypto API to create HMAC
+    const cryptoKey = await window.crypto.subtle.importKey(
+      'raw',
+      keyBytes,
+      { name: 'HMAC', hash: { name: 'SHA-1' } },
+      false,
+      ['sign']
+    );
+    
+    const signature = await window.crypto.subtle.sign(
+      'HMAC',
+      cryptoKey,
+      messageBytes
+    );
+    
+    // Convert signature to hex string
+    const hashBytes = new Uint8Array(signature);
+    const hashHex = Array.from(hashBytes)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+      
+    return hashHex;
+  } catch (error) {
+    console.error('HMAC-SHA1 calculation error:', error);
+    throw new Error('Failed to calculate TOTP code');
   }
-  
-  return false;
 }
 
-export function generateTOTP(secret, time = Math.floor(Date.now() / 1000)) {
+// Update generateTOTP to use async/await with the new hmacSha1
+export async function generateTOTP(secret, time = Math.floor(Date.now() / 1000)) {
   // Convert base32 secret to hex
   const base32Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
   let bits = '';
@@ -114,7 +143,7 @@ export function generateTOTP(secret, time = Math.floor(Date.now() / 1000)) {
   const counterHex = counter.toString(16).padStart(16, '0');
   
   // Use HMAC-SHA1 algorithm
-  const hmacDigest = hmacSha1(secretHex.join(''), counterHex);
+  const hmacDigest = await hmacSha1(secretHex.join(''), counterHex);
   
   // Get offset and truncated hash
   const offset = parseInt(hmacDigest.charAt(hmacDigest.length - 1), 16);
@@ -125,20 +154,27 @@ export function generateTOTP(secret, time = Math.floor(Date.now() / 1000)) {
   return otp.toString().padStart(6, '0');
 }
 
-// Implementation of HMAC-SHA1 for TOTP
-function hmacSha1(key, message) {
-  // This is a simplified implementation
-  // In production, you should use a proper crypto library
-  // This is just to demonstrate the concept
+// Update verifyTOTP to handle async generateTOTP
+export async function verifyTOTP(token, secret, window = 1) {
+  if (!token || !secret) return false;
   
-  // For now, return a dummy value
-  // In real implementation, use the Web Crypto API or a crypto library
-  const dummyHmac = Array.from(
-    { length: 20 }, 
-    () => Math.floor(Math.random() * 256).toString(16).padStart(2, '0')
-  ).join('');
+  const currentTime = Math.floor(Date.now() / 1000);
   
-  return dummyHmac;
+  // Check a window of tokens (usually -1, 0, +1)
+  for (let i = -window; i <= window; i++) {
+    const time = currentTime + (i * 30); // 30-second TOTP window
+    try {
+      const calculatedToken = await generateTOTP(secret, time);
+      
+      if (calculatedToken === token) {
+        return true;
+      }
+    } catch (error) {
+      console.error('Error generating TOTP for verification:', error);
+    }
+  }
+  
+  return false;
 }
 
 // Check if passkeys/WebAuthn is supported in this browser

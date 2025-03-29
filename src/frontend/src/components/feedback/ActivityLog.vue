@@ -46,12 +46,16 @@
   </div>
 </template>
 
-<script setup>
-import { defineProps, defineEmits } from 'vue';
+<script setup lang="ts">
+interface LogEntry {
+  type: 'info' | 'success' | 'error' | 'warning';
+  message: string;
+  time: string;
+}
 
 const props = defineProps({
   logs: {
-    type: Array,
+    type: Array as () => LogEntry[],
     default: () => []
   }
 });

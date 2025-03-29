@@ -14,7 +14,17 @@
   "invalidSeedLength": "A frase-semente deve conter exatamente 12 palavras.",
   "guestLoginError": "Opa! Algo deu errado.",
   "recoverySuccess": "Recuperação de conta bem-sucedida!",
-  "recovering": "Recuperando..."
+  "recovering": "Recuperando...",
+  "seedPhraseInput": "Cola tua frase-semente aqui (12 palavras, mano)",
+  "backToLogin": "Voltar pra tela de login",
+  "checksumWarning": "Todas as palavras tão certas, mas não formam uma frase-semente válida. Dá uma conferida na ordem, parça.",
+  "recoverWithSeedPhrase": "Recuperar com a frase-semente",
+  "invalidWords": "Tem palavra aí que não tá no dicionário BIP39. Olha se não digitou errado.",
+  "invalidChecksum": "Checksum da frase-semente tá zoado. Essas palavras não formam uma frase de recuperação que funciona.",
+  "invalidWordCount": "Número de palavras errado: {count}. Precisa ter 12 palavras, mano.",
+  "tooManyWords": "Muita palavra, véi. Vamos usar só as primeiras 12.",
+  "tooFewWords": "Tá faltando palavras. Completa os campos que faltam, blz?",
+  "recoveryFailed": "Recuperação de conta falhou. Confira a frase-semente e tenta de novo."
 },
 "register": {
   "usernameLabel": "Nome de Usuário:",
@@ -571,7 +581,7 @@
   "receiveTokens": "Receber Tokens",
   "receiveDescription": "Compartilhe seu endereço para receber tokens",
   "scanToSend": "Escaneie para enviar tokens",
-  "receiveTokensNotice": "Certifique-se de que o remetente esteja usando a rede correta. Envie apenas tokens suportados por esta carteira.",
+  "receiveTokensNotice": "Certifique-se de que o remetente esteja usando a rede correta. Apenas envie tokens suportados por esta carteira.",
   "yourAddress": "Seu endereço",
   "swap": "Trocar",
   "swapTooltip": "Trocar entre diferentes tokens",
@@ -580,8 +590,8 @@
 
   "recipient": "Destinatário",
   "enterRecipient": "Digite o endereço do destinatário",
-  "amount": "Quantia",
-  "enterAmount": "Digite a quantia",
+  "amount": "Quantidade",
+  "enterAmount": "Digite a quantidade",
   "memo": "Memo",
   "optional": "opcional",
   "enterMemo": "Digite um memo ou mensagem (opcional)",
@@ -607,17 +617,75 @@
   "noRewardsFound": "Nenhuma recompensa encontrada",
   "tapToReveal": "Toque para revelar",
 
-  "activityLog": "Registro de Atividades",
+  "activityLog": "Registro de Atividade",
   "clearLogs": "Limpar Registros",
-  "noLogs": "Nenhuma atividade para mostrar",
+  "noLogs": "Nenhuma atividade para exibir",
 
   "copy": "Copiar",
   "comingSoon": "Em Breve",
 
   "closeDialog": "Fechar",
+  "close": "Fechar",
 
   "loading": "Carregando...",
-  "error": "Erro"
+  "error": "Erro",
+  
+  "seedWarningTitle": "ATENÇÃO MANINHO: GUARDA ESSA FRASE-SEMENTE AÍ!",
+  "seedWarningPoint1": "Tá ligado que essa frase-semente é a ÚNICA maneira de recuperar tua conta, né? Não vacila, meu!",
+  "seedWarningPoint2": "Qualquer Zé Ruela com essa frase pode entrar na tua conta e meter o pé com tuas paradas. É sério, mano!",
+  "seedWarningPoint3": "Jamais compartilha isso com ninguém e nem coloca em sites furados. Isso seria mó vacilo, tá ligado?",
+  "seedWarningPoint4": "Guarda num lugar seguro pra caramba, melhor se for offline ou numa carteira top das galáxias.",
+  "revealSeedPhrase": "Fechou, entendi tudo. Mostra minha frase-semente aí",
+  "hideSeedPhrase": "Esconder frase-semente",
+  "seedPhraseInput": "Digite a frase-semente",
+  
+  "accounts": {
+    "manage": "Gerenciar Contas",
+    "defaultName": "Minha Conta",
+    "error": {
+      "management": "Não foi possível abrir o Gerenciamento de Contas, mano. Tenta de novo aí."
+    }
+  },
+  
+  "header": {
+    "accountIds": "IDs da Conta",
+    "ethereumAddress": "Endereço Ethereum",
+    "ethAddress": "Endereço ETH",
+    "buy": "Comprar"
+  },
+  
+  "management": {
+    "title": "Segurança da Conta",
+    "tabs": {
+      "accounts": "Contas",
+      "security": "Segurança",
+      "recovery": "Recuperação"
+    },
+    "myAccounts": "Minhas Contas",
+    "createNewAccount": "Criar Nova Conta",
+    "importAccount": "Importar Conta",
+    "recoverAccount": "Recuperar Conta",
+    "securitySettings": "Configurações de Segurança",
+    "notEncrypted": "Sua carteira não tá criptografada, mano. Se liga!",
+    "encryptionRecommendation": "Recomendamos ativar pelo menos um método de segurança pra proteger sua carteira. No momento, sua frase-semente tá guardada sem criptografia.",
+    "passwordProtection": "Proteção por Senha",
+    "passwordDescription": "Criptografa os dados da sua carteira com uma senha bem massa",
+    "passkey": "Autenticação por Passkey",
+    "passkeyDescription": "Usa biometria ou PIN do seu dispositivo pra acesso seguro demais",
+    "twoFactor": "Autenticação de Dois Fatores",
+    "twoFactorDescription": "Adiciona uma camada extra de segurança com código temporário",
+    "enabled": "Ativado",
+    "disabled": "Desativado",
+    "enable": "Ativar",
+    "disable": "Desativar",
+    "walletRecovery": "Recuperação da Carteira",
+    "recoveryPhrase": "Frase de Recuperação",
+    "recoveryPhraseDescription": "Sua frase de recuperação dá acesso total à sua carteira. Guarde com muito cuidado, parça.",
+    "viewRecoveryPhrase": "Ver minha Frase de Recuperação",
+    "recoveryWarning": "Nunca compartilhe sua frase de recuperação com ninguém. Ninguém deveria pedir isso pra você nunca, se perder, já era tudo."
+  },
+  
+  "backToLogin": "Voltar para o Login"
 },
 "common": {
   "cancel": "Cancelar",

@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, defineProps, computed } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 
 // Import Chart.js dynamically to avoid SSR issues
 let Chart;

@@ -96,9 +96,64 @@
     "comingSoon": "Coming Soon",
 
     "closeDialog": "Close",
+    "close": "Close",
 
     "loading": "Loading...",
-    "error": "Error"
+    "error": "Error",
+    
+    "seedWarningTitle": "IMPORTANT: BACKUP YOUR SEED PHRASE",
+    "seedWarningPoint1": "This seed phrase is the ONLY way to recover your account. Keep it safe!",
+    "seedWarningPoint2": "Anyone with this seed phrase can access your account and assets.",
+    "seedWarningPoint3": "Never share this with anyone or enter it on untrusted websites.",
+    "seedWarningPoint4": "Store it in a secure location, preferably offline or in a hardware wallet.",
+    "revealSeedPhrase": "I understand, show my seed phrase",
+    "hideSeedPhrase": "Hide seed phrase",
+    
+    "accounts": {
+      "manage": "Manage Accounts",
+      "defaultName": "My Account",
+      "error": {
+        "management": "Could not open Account Management. Please try again."
+      }
+    },
+    
+    "header": {
+      "accountIds": "Account IDs",
+      "ethereumAddress": "Ethereum Address",
+      "ethAddress": "ETH Address",
+      "buy": "Buy"
+    },
+    
+    "management": {
+      "title": "Account Security",
+      "tabs": {
+        "accounts": "Accounts",
+        "security": "Security",
+        "recovery": "Recovery"
+      },
+      "myAccounts": "My Accounts",
+      "createNewAccount": "Create New Account",
+      "importAccount": "Import Account",
+      "recoverAccount": "Recover Account",
+      "securitySettings": "Security Settings",
+      "notEncrypted": "Your wallet is not encrypted",
+      "encryptionRecommendation": "We recommend enabling at least one security method to protect your wallet. Your recovery phrase is currently stored unencrypted.",
+      "passwordProtection": "Password Protection",
+      "passwordDescription": "Encrypt your wallet data with a password",
+      "passkey": "Passkey Authentication",
+      "passkeyDescription": "Use your device's biometrics or PIN for secure access",
+      "twoFactor": "Two-Factor Authentication",
+      "twoFactorDescription": "Add an extra layer of security with a time-based code",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "enable": "Enable",
+      "disable": "Disable",
+      "walletRecovery": "Wallet Recovery",
+      "recoveryPhrase": "Recovery Phrase",
+      "recoveryPhraseDescription": "Your recovery phrase provides full access to your wallet. Keep it secure and private.",
+      "viewRecoveryPhrase": "View Recovery Phrase",
+      "recoveryWarning": "Never share your recovery phrase with anyone. Nobody should ever ask for it, if you lose it you lose your wallet."
+    }
   },
   "register": {
     "usernameLabel": "Username:",

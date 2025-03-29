@@ -88,7 +88,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, defineProps } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 
 // Import D3.js dynamically
 let d3;

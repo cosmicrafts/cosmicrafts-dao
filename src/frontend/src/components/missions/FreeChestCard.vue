@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, defineEmits } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
 // Chest properties and state
 const props = defineProps({

@@ -259,7 +259,7 @@
         <div class="setup-instructions">
           <p>1. Scan this QR code with your authenticator app (Google Authenticator, Authy, etc.)</p>
           <div class="qr-code-container">
-            <img :src="`https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=${encodeURIComponent(totpQrCode)}`" alt="QR Code" class="qr-code" />
+            <img :src="qrCodeDataUrl" alt="QR Code" class="qr-code" />
           </div>
           
           <p>2. If you can't scan the QR code, enter this secret key manually:</p>
@@ -322,6 +322,7 @@ import { useModalStore } from '@/stores/modal';
 import AvatarService from '@/utils/AvatarService';
 import { isPasskeySupported as checkPasskeySupport } from '@/utils/securityUtils';
 import { encryptData, decryptData } from '@/utils/securityUtils';
+import QRCode from 'qrcode';
 
 export default {
   name: 'AccountManagement',
@@ -373,6 +374,7 @@ export default {
     const totpCode = ref('');
     const totpSecret = ref('');
     const totpQrCode = ref('');
+    const qrCodeDataUrl = ref('');
     
     // Format ID (truncate middle part)
     const formatId = (id) => {
@@ -472,6 +474,22 @@ export default {
         totpSecret.value = result.secret;
         totpQrCode.value = result.otpauth;
         
+        // Generate QR code data URL
+        try {
+          qrCodeDataUrl.value = await QRCode.toDataURL(result.otpauth, {
+            width: 200,
+            margin: 2,
+            color: {
+              dark: '#000000FF',
+              light: '#FFFFFFFF'
+            }
+          });
+        } catch (qrError) {
+          console.error('Error generating QR code:', qrError);
+          // Fall back to Google Charts if local generation fails
+          qrCodeDataUrl.value = `https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=${encodeURIComponent(result.otpauth)}`;
+        }
+        
         // Show TOTP setup dialog
         showTwoFactorDialog.value = true;
         totpCode.value = '';
@@ -484,7 +502,7 @@ export default {
     const confirmTwoFactorSetup = async () => {
       try {
         // Verify the entered TOTP code
-        if (!authStore.verifyTwoFactor(totpCode.value)) {
+        if (!(await authStore.verifyTwoFactor(totpCode.value))) {
           throw new Error('Invalid verification code. Please try again.');
         }
         
@@ -624,7 +642,8 @@ export default {
       createNewAccount,
       showImportAccountDialog,
       showRecoverAccountDialog,
-      closeModal
+      closeModal,
+      qrCodeDataUrl
     };
   }
 };

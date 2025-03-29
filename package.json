@@ -17,5 +17,6 @@
     "src/icp-minting"
   ],
   "dependencies": {
+    "qrcode": "^1.5.4"
   }
 }

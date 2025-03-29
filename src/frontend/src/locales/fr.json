@@ -14,7 +14,17 @@
   "invalidSeedLength": "La phrase secrète doit contenir exactement 12 mots.",
   "guestLoginError": "Oups ! Quelque chose a mal tourné.",
   "recoverySuccess": "Récupération de compte réussie !",
-  "recovering": "Récupération..."
+  "recovering": "Récupération...",
+  "seedPhraseInput": "Balance ta phrase de récup ici (12 mots, wesh)",
+  "backToLogin": "Retour à la page de connexion",
+  "checksumWarning": "Tous les mots sont valides, mais ils forment pas une phrase de récup valide. Vérifie l'ordre, meuf/mec.",
+  "recoverWithSeedPhrase": "Récupérer avec ta phrase de récup",
+  "invalidWords": "Y'a des mots qui sont pas dans le dico BIP39. Cherche les fautes de frappe.",
+  "invalidChecksum": "Checksum de ta phrase pas valide. Ces mots forment pas une phrase de récup qui marche.",
+  "invalidWordCount": "Nombre de mots incorrect : {count}. Il faut 12 mots, pas plus pas moins.",
+  "tooManyWords": "Trop de mots là. On prend juste les 12 premiers.",
+  "tooFewWords": "Pas assez de mots. Complète les champs manquants.",
+  "recoveryFailed": "Récup de compte foirée. Vérifie ta phrase et retente."
 },
 "register": {
   "usernameLabel": "Nom d'Utilisateur :",
@@ -57,7 +67,11 @@
   "settings": "Paramètres",
   "signout": "Se déconnecter",
   "profile": "Profil",
-  "roadmap": "Roadmap"
+  "roadmap": "Roadmap",
+  "accountIds": "IDs de Compte",
+  "ethereumAddress": "Adresse Ethereum",
+  "ethAddress": "Adresse ETH",
+  "buy": "Acheter"
 },
 "error": {
       "title": "Oh là là!",
@@ -615,9 +629,64 @@
   "comingSoon": "Bientôt Disponible",
 
   "closeDialog": "Fermer",
+  "close": "Fermer",
 
   "loading": "Chargement...",
-  "error": "Erreur"
+  "error": "Erreur",
+  
+  "seedWarningTitle": "ATTENTION MEUF/MEC : PROTÈGE TA PHRASE DE RÉCUP !",
+  "seedWarningPoint1": "Cette phrase de récup, c'est le SEUL moyen de retrouver ton compte si tu te plantes. Garde-la au chaud !",
+  "seedWarningPoint2": "N'importe quel keum avec cette phrase peut se taper l'incruste sur ton compte et te piquer tes affaires. C'est pas des blagues !",
+  "seedWarningPoint3": "Jamais tu la partages avec qui que ce soit ou tu la mets sur des sites chelous. Ce serait trop la dech !",
+  "seedWarningPoint4": "Planque-la dans un endroit sûr, de préférence hors ligne ou dans un portefeuille blindé.",
+  "revealSeedPhrase": "Ça roule, j'ai capté, montre-moi ma phrase de récup",
+  "hideSeedPhrase": "Cacher la phrase de récup",
+  
+  "accounts": {
+    "manage": "Gérer les Comptes",
+    "defaultName": "Mon Compte",
+    "error": {
+      "management": "Impossible d'ouvrir la Gestion de Compte. Réessaie, wesh."
+    }
+  },
+  
+  "header": {
+    "accountIds": "IDs de Compte",
+    "ethereumAddress": "Adresse Ethereum",
+    "ethAddress": "Adresse ETH",
+    "buy": "Acheter"
+  },
+  
+  "management": {
+    "title": "Sécurité du Compte",
+    "tabs": {
+      "accounts": "Comptes",
+      "security": "Sécurité",
+      "recovery": "Récupération"
+    },
+    "myAccounts": "Mes Comptes",
+    "createNewAccount": "Créer un Nouveau Compte",
+    "importAccount": "Importer un Compte",
+    "recoverAccount": "Récupérer un Compte",
+    "securitySettings": "Paramètres de Sécurité",
+    "notEncrypted": "Ton portefeuille n'est pas crypté, meuf/mec",
+    "encryptionRecommendation": "On te conseille d'activer au moins une méthode de sécu pour protéger ton portefeuille. Ta phrase de récup est stockée sans cryptage pour l'instant.",
+    "passwordProtection": "Protection par Mot de Passe",
+    "passwordDescription": "Crypte les données de ton portefeuille avec un mot de passe",
+    "passkey": "Authentification par Passkey",
+    "passkeyDescription": "Utilise la biométrie ou le PIN de ton appareil pour un accès sécurisé",
+    "twoFactor": "Authentification à Deux Facteurs",
+    "twoFactorDescription": "Ajoute une couche de sécu sup avec un code temporaire",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "enable": "Activer",
+    "disable": "Désactiver",
+    "walletRecovery": "Récupération du Portefeuille",
+    "recoveryPhrase": "Phrase de Récupération",
+    "recoveryPhraseDescription": "Ta phrase de récup donne accès complet à ton portefeuille. Garde-la bien planquée.",
+    "viewRecoveryPhrase": "Voir ma Phrase de Récup",
+    "recoveryWarning": "Ne partage jamais ta phrase de récup avec personne. Personne ne devrait te la demander, si tu la perds, t'as tout perdu."
+  }
 },
 "common": {
   "cancel": "Annuler",
