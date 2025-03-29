@@ -5,7 +5,7 @@
       <NetworkSelector @network-changed="handleNetworkChange" />
       
       <!-- Account selector -->
-      <AccountSelector class="account-selector-container" @account-changed="handleAccountChange" />
+      <SimpleAccountSelector class="account-selector-container" @account-changed="handleAccountChange" />
       
       <!-- Currency selector -->
       <CurrencySelector @currency-changed="handleCurrencyChange" />
@@ -97,19 +97,21 @@ import { useTokenStore } from '@/stores/token';
 import { useModalStore } from '@/stores/modal';
 import NetworkSelector from '@/components/wallet/NetworkSelector.vue';
 import CurrencySelector from './CurrencySelector.vue';
-import AccountSelector from '@/components/wallet/AccountSelector.vue';
+import SimpleAccountSelector from '@/components/wallet/SimpleAccountSelector.vue';
 import { getNetworkIcon } from '@/utils/IconService';
 import { validateMnemonic } from 'bip39';
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 import { Principal } from '@dfinity/principal';
 import { calculateAccountId } from '@/utils/cryptoUtils';
+import { encryptData, decryptData } from '@/utils/securityUtils';
+import * as jsSHA from 'jssha';
 
 export default {
   name: 'AccountHeader',
   components: {
     NetworkSelector,
     CurrencySelector,
-    AccountSelector
+    SimpleAccountSelector
   },
   props: {
     defaultCurrency: {
@@ -298,19 +300,40 @@ export default {
       try {
         // Only ICP network is supported for now
         if (network.id === 'icp') {
-          // First check authentication status
-          if (!authStore.isAuthenticated()) {
-            // Try to initialize identity from cache
-            const initialized = authStore.initializeIdentityFromCache();
-            console.log('Identity initialization from cache:', initialized);
-            
-            if (!initialized) {
-              console.warn('User not authenticated, cannot load network data');
-              principalId.value = 'Not authenticated';
-              accountId.value = 'Not authenticated';
-              isLoading.value = false;
-              return;
+          // Wait for core initialization to complete with retry
+          const retryInitialization = async (maxAttempts = 3, delayMs = 500) => {
+            for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+              // First check authentication status
+              if (!authStore.isAuthenticated()) {
+                // Try to initialize identity from cache with force=true to ensure best chance of success
+                const initialized = authStore.initializeIdentityFromCache(true);
+                console.log(`Identity initialization attempt ${attempt}/${maxAttempts}:`, initialized);
+                
+                if (initialized) {
+                  break; // Success, exit retry loop
+                } else if (attempt < maxAttempts) {
+                  // Wait before next attempt
+                  console.log(`Waiting ${delayMs}ms before retry ${attempt+1}/${maxAttempts}...`);
+                  await new Promise(resolve => setTimeout(resolve, delayMs));
+                  delayMs *= 1.5; // Increase delay for each retry
+                }
+              } else {
+                console.log('User already authenticated, proceeding with data loading');
+                break; // Already authenticated, no need to retry
+              }
             }
+          };
+          
+          // Try to initialize with retry mechanism
+          await retryInitialization();
+          
+          // Check again if we're authenticated
+          if (!authStore.isAuthenticated()) {
+            console.warn('User not authenticated after retries, cannot load network data');
+            principalId.value = 'Not authenticated';
+            accountId.value = 'Not authenticated';
+            isLoading.value = false;
+            return;
           }
           
           // Get identity from auth store
@@ -446,8 +469,27 @@ export default {
     // Initial setup
     onMounted(async () => {
       try {
+        // Wait a brief moment to let app initialization progress
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
         // First check if we have an active identity in the auth store
-        const identity = authStore.getIdentity();
+        let identity = authStore.getIdentity();
+        
+        // If no identity yet, wait a bit more and retry before giving up
+        if (!identity) {
+          console.log('No identity yet, waiting for initialization to complete...');
+          
+          // Wait longer to give the auth initialization a chance to complete
+          await new Promise(resolve => setTimeout(resolve, 700));
+          
+          // Try force initialization
+          const initialized = authStore.initializeIdentityFromCache(true);
+          console.log('Force identity initialization result:', initialized);
+          
+          // Try getting identity again
+          identity = authStore.getIdentity();
+        }
+        
         if (identity) {
           // If we have identity, use it directly - this is the source of truth
           const principal = identity.getPrincipal();

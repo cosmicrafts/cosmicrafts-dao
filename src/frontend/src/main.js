@@ -24,6 +24,8 @@ import zh from '@/locales/zh.json';
 import tr from '@/locales/tr.json';
 import { registerSW } from 'virtual:pwa-register';
 
+import AccountManagement from '@/components/wallet/AccountManagement.vue';
+
 // Create i18n instance
 const i18n = createI18n({
   legacy: false,
@@ -51,52 +53,87 @@ const updateSW = registerSW({
   },
 });
 
+// Register global components
+app.component('AccountManagement', AccountManagement);
+
 // Bootstrap the application - First mount the app, then load user data
 // This ensures the UI is visible immediately before data loading
 app.use(i18n);
 app.use(router);
 app.mount('#app');
 
-// Add immediate identity initialization
-// This needs to happen BEFORE any data loading to ensure canister calls can work
-(async function initializeAuth() {
+// GLOBAL initialization state to ensure proper coordination
+let isIdentityInitialized = false;
+let isCanisterInitialized = false;
+
+// Unified initialization flow to properly coordinate identity and canister setup
+(async function initializeApplication() {
+  console.log('Starting unified application initialization...');
+  
   try {
-    // Import auth store synchronously first
+    // First: Initialize identity
+    console.log('STEP 1: Initializing identity...');
     const { useAuthStore } = await import('@/stores/auth');
     const authStore = useAuthStore();
     
-    // Initialize identity immediately so it's available for all canister calls
-    const initialized = authStore.initializeIdentityFromCache();
-    console.log(`Identity immediate initialization: ${initialized ? 'successful' : 'not needed'}`);
+    // First try loading state from localStorage with a proper await
+    // This is critical as it loads the seed phrase needed for identity
+    await authStore.loadStateFromLocalStorage();
+    console.log('State loaded from localStorage - authenticated:', authStore.authenticated);
     
-    // If identity was initialized, also initialize canisters immediately
-    if (initialized) {
-      try {
-        const { useCanisterStore } = await import('@/stores/canister');
-        const canisterStore = useCanisterStore();
-        
-        // Initialize canister store immediately to ensure it's ready for API calls
-        const canisterInitialized = canisterStore.initializeImmediately();
-        console.log(`Canister immediate initialization: ${canisterInitialized ? 'successful' : 'failed'}`);
-        
-        // If we have a player and language, restore language immediately 
-        if (authStore.player?.language) {
-          try {
-            const { useLanguageStore } = await import('@/stores/language');
-            const languageStore = useLanguageStore();
-            const language = authStore.player.language;
-            languageStore.setLanguage(language);
-            console.log(`Language immediately restored to: ${language}`);
-          } catch (langError) {
-            console.warn('Error initializing language immediately:', langError);
-          }
-        }
-      } catch (canisterError) {
-        console.warn('Error initializing canisters immediately:', canisterError);
+    // Then initialize identity from cache with force option
+    // This will ensure we create the identity object from the seed phrase
+    let identityInitialized = false;
+    
+    // Always attempt initialization with force=true 
+    identityInitialized = authStore.initializeIdentityFromCache(true);
+    console.log(`Direct identity initialization result: ${identityInitialized ? 'SUCCESS' : 'FAILED'}`);
+    
+    if (!identityInitialized) {
+      console.log('Identity initialization failed. Check if there is a valid seed phrase.');
+      
+      // If we still have authenticated = true but no seed phrase, fix this inconsistency
+      if (authStore.authenticated && !authStore.seedPhrase) {
+        console.warn('Authentication state inconsistency detected. Resetting authenticated state.');
+        authStore.authenticated = false;
       }
     }
+    
+    isIdentityInitialized = identityInitialized;
+    console.log(`Identity initialization: ${identityInitialized ? 'SUCCESSFUL' : 'FAILED - limited functionality'}`);
+    
+    // Second: Initialize canister EVEN IF identity failed - we'll use anonymous agent
+    console.log('STEP 2: Initializing canisters...');
+    const { useCanisterStore } = await import('@/stores/canister');
+    const canisterStore = useCanisterStore();
+    
+    // This will use the identity if available, or create anonymous agent if not
+    const canisterInitialized = await canisterStore.initializeImmediately();
+    isCanisterInitialized = true; // Mark as initialized even if it returns false
+    console.log(`Canister initialization: ${canisterInitialized ? 'SUCCESSFUL' : 'LIMITED - anonymous mode'}`);
+    
+    // Third: Initialize language if we have player data
+    if (authStore.player?.language) {
+      console.log('STEP 3: Initializing language...');
+      try {
+        const { useLanguageStore } = await import('@/stores/language');
+        const languageStore = useLanguageStore();
+        const language = authStore.player.language;
+        languageStore.setLanguage(language);
+        console.log(`Language initialized to: ${language}`);
+      } catch (langError) {
+        console.warn('Error initializing language:', langError);
+      }
+    }
+    
+    // Now that core initialization is complete, we can load user data
+    console.log('Core initialization complete, proceeding with user data loading...');
+    loadUserData();
+    
   } catch (err) {
-    console.warn('Error during immediate identity initialization:', err);
+    console.error('Error during application initialization:', err);
+    // Still try to load user data even if core initialization failed
+    loadUserData();
   }
 })();
 
@@ -114,14 +151,9 @@ const loadUserData = () => {
     
     // Wrap in try-catch to ensure errors don't break the app
     try {
-      // Load auth data independently - doesn't block anything else
-      authStore.loadStateFromLocalStorage().then(hasUserData => {
-        // Authentication data loaded - no waiting or callbacks
-        console.log(hasUserData ? 'User authenticated' : 'No user data found');
-      }).catch(err => {
-        console.warn('Auth data loading error:', err);
-        // Continue app operation even if auth fails
-      });
+      // The initial initialization already called loadStateFromLocalStorage
+      // Just check if we're authenticated now
+      console.log(authStore.authenticated ? 'User authenticated' : 'No user data found');
     } catch (criticalError) {
       console.error('Critical auth store initialization error:', criticalError);
       // App can still function without auth data
@@ -155,22 +187,4 @@ const loadUserData = () => {
   }).catch(err => {
     console.warn('Language store import error:', err);
   });
-  
-  // Pre-load other stores that might be needed soon in parallel
-  // This happens concurrently with auth and language loading
-  Promise.all([
-    // Pre-fetch token store module (but don't initialize yet)
-    import('@/stores/token'),
-    // Wait a bit before loading the canister store to spread the load
-    new Promise(resolve => setTimeout(() => 
-      import('@/stores/canister').then(resolve), 
-      300
-    ))
-  ]).catch(err => {
-    console.warn('Error pre-loading stores:', err);
-  });
 };
-
-// Start loading immediately but give the UI rendering thread priority
-// by pushing this to the end of the event queue
-setTimeout(loadUserData, 0);

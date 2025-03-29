@@ -136,14 +136,32 @@ const toggleNotifications = async () => {
 };
 
 const fetchNotifications = async () => {
-  if (!authStore.isAuthenticated) return;
+  if (isLoading.value) return;
   
   isLoading.value = true;
   
   try {
-    const cosmicrafts = await canisterStore.get("cosmicrafts");
+    // Wait for initialization with retry mechanism
+    let cosmicrafts = null;
+    const maxRetries = 3;
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      console.log(`Attempting to get cosmicrafts canister (attempt ${attempt}/${maxRetries})...`);
+      cosmicrafts = await canisterStore.get("cosmicrafts");
+      
+      if (cosmicrafts) {
+        console.log('Successfully obtained cosmicrafts canister');
+        break;
+      } else if (attempt < maxRetries) {
+        // Wait before retry with exponential backoff
+        const delay = 500 * Math.pow(1.5, attempt - 1);
+        console.log(`Waiting ${delay}ms before retry...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+    
     if (!cosmicrafts) {
-      console.error('Cosmicrafts canister not initialized');
+      console.error('Cosmicrafts canister not initialized after retries');
       return;
     }
     
@@ -298,12 +316,23 @@ const handleClickOutside = (event) => {
 };
 
 // Lifecycle hooks
-onMounted(() => {
+onMounted(async () => {
   document.addEventListener('click', handleClickOutside);
   
-  // Fetch notifications initially if user is authenticated
+  // Wait a brief moment to let app initialization progress
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  // Fetch notifications initially if user is authenticated, but with delay to let auth initialize
   if (authStore.isAuthenticated) {
     fetchNotifications();
+  } else {
+    console.log('Waiting for authentication before fetching notifications...');
+    // Additional delay if not authenticated yet, auth might still be initializing
+    await new Promise(resolve => setTimeout(resolve, 800));
+    // Try again after delay
+    if (authStore.isAuthenticated) {
+      fetchNotifications();
+    }
   }
 });
 

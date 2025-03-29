@@ -48,6 +48,7 @@
     "ethers": "^6.13.5",
     "gsap": "^3.12.7",
     "highlight.js": "^11.9.0",
+    "jssha": "^3.3.1",
     "lodash-es": "^4.17.21",
     "lottie-web": "^5.12.2",
     "markdown-it": "^14.1.0",

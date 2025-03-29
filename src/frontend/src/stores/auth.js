@@ -26,6 +26,9 @@ import {
   getEthereumPublicKey
 } from '@/utils/cryptoUtils';
 
+// Import security utilities
+import { encryptData, decryptData, verifyTOTP, generateRandomBase32 } from '@/utils/securityUtils';
+
 let identity = null;
 
 // Fix the generateSeedPhrase function to ensure it always creates a valid BIP39 seed phrase
@@ -155,6 +158,17 @@ export const useAuthStore = defineStore('auth', {
     // Ethereum network settings
     currentEthNetwork: 'mainnet', // default to mainnet
     ethConnected: false,
+    // Add security settings
+    securitySettings: {
+      hasPassword: false,
+      passwordHash: null,
+      encryptionMethod: null, // 'password', 'passkey', or null
+      hasPasskey: false,
+      passkeyId: null,
+      hasTwoFactor: false,
+      totpSecret: null
+    },
+    encryptedSeedPhrase: null,
   }),
   
   getters: {
@@ -262,24 +276,81 @@ export const useAuthStore = defineStore('auth', {
     },
     
     // Reveal and show the seed phrase in a modal
-    showSeedPhrase() {
-      if (!this.seedPhrase) {
-        console.error('No seed phrase available to reveal');
-        return false;
+    async showSeedPhrase(credentials = null) {
+      try {
+        // Check if we need authentication
+        const needsAuth = this.securitySettings.hasPassword || 
+                         this.securitySettings.hasPasskey || 
+                         this.securitySettings.hasTwoFactor;
+        
+        if (needsAuth && !credentials) {
+          // Open authentication modal
+          // This part would be handled by your UI components
+          return {
+            success: false,
+            needsAuth: true
+          };
+        }
+        
+        if (needsAuth) {
+          const isAuthenticated = await this.authenticate(credentials);
+          if (!isAuthenticated) {
+            throw new Error('Authentication failed');
+          }
+        }
+        
+        // Get the seed phrase - if encrypted, it should already be decrypted by authenticate()
+        let phrase = this.seedPhrase;
+        
+        // If seed phrase is still encrypted, try to decrypt with credentials
+        if (!phrase && this.encryptedSeedPhrase && credentials?.password) {
+          phrase = await decryptData(this.encryptedSeedPhrase, credentials.password);
+        }
+        
+        if (!phrase) {
+          throw new Error('Could not retrieve seed phrase');
+        }
+        
+        // If this method is called directly without the need for authentication,
+        // show the modal directly
+        if (!needsAuth && !credentials) {
+          const modalStore = useModalStore();
+          const publicKey = this.currentPublicKey;
+          
+          // Get principalId safely - handle case when identity is null
+          let principalId = '';
+          try {
+            principalId = identity ? identity.getPrincipal().toText() : '';
+          } catch (err) {
+            console.warn('Could not get principal ID from identity:', err);
+            // Try to get from current address if available
+            if (this.derivedAddresses && this.derivedAddresses.length > this.currentAddressIndex) {
+              principalId = this.derivedAddresses[this.currentAddressIndex].principalId || '';
+            }
+          }
+          
+          modalStore.openModal(SeedPhraseModal, {
+            seedPhrase: phrase,
+            principalId,
+            publicKey,
+            title: 'Account Backup Information'
+          });
+          
+          return { success: true };
+        }
+        
+        // Otherwise just return the seed phrase for the caller to handle
+        return {
+          success: true,
+          phrase
+        };
+      } catch (error) {
+        console.error('Error showing seed phrase:', error);
+        return {
+          success: false,
+          error: error.message
+        };
       }
-      
-      const modalStore = useModalStore();
-      const publicKey = this.currentPublicKey;
-      const principalId = identity ? identity.getPrincipal().toText() : '';
-      
-      modalStore.openModal(SeedPhraseModal, {
-        seedPhrase: this.seedPhrase,
-        principalId,
-        publicKey,
-        title: 'Account Backup Information'
-      });
-      
-      return true;
     },
     
     // Generate a new address from the same seed phrase
@@ -782,115 +853,133 @@ export const useAuthStore = defineStore('auth', {
     },
     saveStateToLocalStorage() {
       const replacer = (key, value) => {
+        // Handle BigInt serialization
         if (typeof value === 'bigint') {
-          return value.toString(); // Convert BigInt to string
+          return value.toString() + 'n'; // Add 'n' suffix to identify as BigInt
         }
-        return value; // Return other values as is
+        
+        // For security-sensitive fields, we need special handling
+        if (key === 'principal' || key === 'identity') {
+          return undefined; // Never serialize these
+        }
+        
+        return value;
       };
-    
-      // Stringify state with replacer
-      const serializedState = JSON.stringify(this.$state, replacer);
-      localStorage.setItem('authStore', serializedState);
-      console.log('User data synchronized locally:', this.$state); // Log the entire state
+      
+      // Save state to localStorage
+      try {
+        // We need to always save the seed phrase in order for authentication to work properly
+        // Later, the user can choose to encrypt it with the security options
+        localStorage.setItem(
+          'authState',
+          JSON.stringify({
+            authenticated: this.authenticated,
+            registered: this.registered,
+            player: this.player,
+            derivedAddresses: this.derivedAddresses,
+            hdKeys: this.hdKeys,
+            ethAccounts: this.ethAccounts,
+            activeChain: this.activeChain,
+            currentAddressIndex: this.currentAddressIndex,
+            currentEthAccountIndex: this.currentEthAccountIndex,
+            encryptedSeedPhrase: this.encryptedSeedPhrase,
+            // Always save the seed phrase to ensure proper authentication
+            seedPhrase: this.seedPhrase,
+            securitySettings: this.securitySettings
+          }, replacer)
+        );
+        
+        console.log('Auth state saved to localStorage with seed phrase:', !!this.seedPhrase);
+      } catch (error) {
+        console.error('Error saving auth state to localStorage:', error);
+      }
     },
     async loadStateFromLocalStorage() {
-      const stored = localStorage.getItem('authStore');
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored, (key, value) => {
-            // Convert strings matching BigInt pattern back to BigInt
-            if (typeof value === 'string' && /^\d+$/.test(value)) {
-              try {
-                return BigInt(value); // Convert back to BigInt
-              } catch {
-                return value; // Fallback if conversion fails
-              }
+      try {
+        console.log('Initializing identity from loadStateFromLocalStorage');
+        const authState = localStorage.getItem('authState');
+        if (authState) {
+          const parsed = JSON.parse(authState, (key, value) => {
+            // Convert string representation of BigInt back to BigInt
+            if (typeof value === 'string' && /^\d+n$/.test(value)) {
+              return BigInt(value.slice(0, -1));
             }
             return value;
           });
-    
-          // Apply parsed state to the store
-          this.$patch(parsed);
-    
-          // Reinitialize identity based on the current address index
-          if (parsed.seedPhrase) {
+          
+          // Log the auth state contents for debugging
+          console.log('Loaded auth state contents:', {
+            hasSeedPhrase: !!parsed.seedPhrase,
+            hasEncryptedSeedPhrase: !!parsed.encryptedSeedPhrase,
+            authenticated: parsed.authenticated,
+            hasSecuritySettings: !!parsed.securitySettings
+          });
+          
+          // Never set authenticated=true if we don't have any seed phrase
+          if (parsed.authenticated && !parsed.seedPhrase && !parsed.encryptedSeedPhrase) {
+            console.warn('Auth state claims to be authenticated but has no seed phrase - fixing inconsistency');
+            parsed.authenticated = false;
+          }
+          
+          // Restore all state values
+          this.authenticated = parsed.authenticated || false;
+          this.registered = parsed.registered || false;
+          this.player = parsed.player || null;
+          this.derivedAddresses = parsed.derivedAddresses || [];
+          this.hdKeys = parsed.hdKeys || {};
+          this.ethAccounts = parsed.ethAccounts || [];
+          this.activeChain = parsed.activeChain || 'icp';
+          this.currentAddressIndex = parsed.currentAddressIndex || 0;
+          this.currentEthAccountIndex = parsed.currentEthAccountIndex || 0;
+          
+          // Restore security settings
+          this.securitySettings = parsed.securitySettings || {
+            hasPassword: false,
+            passwordHash: null,
+            encryptionMethod: null,
+            hasPasskey: false,
+            passkeyId: null,
+            hasTwoFactor: false,
+            totpSecret: null
+          };
+          
+          // Handle seed phrase restoration
+          this.encryptedSeedPhrase = parsed.encryptedSeedPhrase || null;
+          this.seedPhrase = parsed.seedPhrase || null;
+          
+          // Only try to initialize identity if we have a seed phrase and don't already have an identity
+          if (this.seedPhrase && !identity) {
+            // Try to initialize immediately with the seed phrase
             try {
-              // Get the current address index
-              const addressIndex = parsed.currentAddressIndex || 0;
+              const seed = bip39.mnemonicToSeedSync(this.seedPhrase).slice(0, 32);
+              const keyPair = nacl.sign.keyPair.fromSeed(seed);
+              identity = Ed25519KeyIdentity.fromKeyPair(keyPair.publicKey, keyPair.secretKey);
               
-              // Derive identity from seed phrase and address index
-              const { identity: derivedIdentity } = deriveAddressFromSeedPhrase(
-                parsed.seedPhrase, 
-                addressIndex
-              );
-              
-              // Set the global identity
-              identity = derivedIdentity;
-              
-              console.log('Identity reinitialized from seed phrase:', identity.getPrincipal().toText());
-              
-              // Set authenticated state immediately
+              console.log('Identity successfully initialized during loadStateFromLocalStorage');
               this.authenticated = true;
-              
-              // Try to fetch fresh player data, but don't fail if it doesn't work
-              try {
-                const canister = useCanisterStore();
-                const cosmicrafts = await canister.get('cosmicrafts');
-                
-                if (cosmicrafts) {
-                  const playerArr = await cosmicrafts.getPlayer();
-                  if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0]) {
-                    const safePlayer = JSON.parse(
-                      JSON.stringify(playerArr[0], (key, value) =>
-                        typeof value === 'bigint' ? value.toString() : value
-                      )
-                    );
-                    this.$patch((state) => {
-                      state.player = safePlayer;
-                    });
-                    this.registered = true;
-                  }
-                }
-              } catch (playerError) {
-                console.warn('Could not fetch fresh player data, using cached data:', playerError);
-                // Keep using the cached player data from localStorage
-              }
             } catch (identityError) {
-              console.error('Failed to reinitialize identity:', identityError);
-              // Instead of completely resetting, try alternative recovery approach
-              if (this.tryAlternativeRecovery(parsed.seedPhrase)) {
-                console.log('Recovered using alternative method');
-                return true;
-              }
-              
-              // If recovery fails, reset state
-              this.$reset();
-              identity = null;
-              localStorage.removeItem('authStore');
-              return false;
+              console.error('Error initializing identity during loadStateFromLocalStorage:', identityError);
+              // If direct initialization fails, try standard method
+              this.initializeIdentityFromCache(true);
             }
+          } else if (!this.seedPhrase && this.encryptedSeedPhrase) {
+            console.log('Found encrypted seed phrase, identity requires authentication');
+            // Mark as not authenticated if we only have encrypted seed phrase
+            this.authenticated = false;
+          } else if (!this.seedPhrase && !this.encryptedSeedPhrase) {
+            // No seed phrase available at all - definitely not authenticated
+            console.warn('No seed phrase available, setting authenticated to false');
+            this.authenticated = false;
           }
-    
-          // Log the username if player data exists
-          if (parsed.player && parsed.player.username) {
-            console.log(`Loading account: ${parsed.player.username}`);
-          } else {
-            console.log('No username found in the stored player data.');
-          }
-    
-          return true; // Indicate that user data was found
-        } catch (error) {
-          console.error('Error parsing stored auth data:', error);
-          // Clear invalid state
-          this.$reset();
-          identity = null;
-          localStorage.removeItem('authStore');
-          return false;
+          
+          return true;
         }
-      } else {
-        console.log('No user data stored found.');
-        return false; // Indicate that no user data was found
+      } catch (error) {
+        console.error('Error loading auth state from localStorage:', error);
+        this.authenticated = false; // Ensure we're not authenticated after an error
       }
+      
+      return false;
     },
     
     // New method to try alternative recovery approaches
@@ -930,56 +1019,140 @@ export const useAuthStore = defineStore('auth', {
     },
     
     // Add a new method to initialize identity from cache immediately on app start
-    initializeIdentityFromCache() {
-      // Check if user has explicitly logged out
-      const logoutFlag = localStorage.getItem('cosmicrafts-user-logged-out');
-      if (logoutFlag === 'true') {
-        console.log('User previously logged out, not initializing from cache');
-        return false;
-      }
-      
-      const stored = localStorage.getItem('authStore');
-      if (!stored) return false;
-      
+    initializeIdentityFromCache(forceInit = false) {
       try {
-        const parsed = JSON.parse(stored);
-        if (!parsed.seedPhrase) return false;
+        console.log(`Initializing identity from cache (forceInit=${forceInit})`);
         
-        // Initialize identity synchronously to ensure it's available immediately
-        try {
-          // Get the current address index
-          const addressIndex = parsed.currentAddressIndex || 0;
-          
-          // Use the simplest derivation method to avoid errors
-          const seed = bip39.mnemonicToSeedSync(parsed.seedPhrase).slice(0, 32);
-          const keyPair = nacl.sign.keyPair.fromSeed(seed);
-          identity = Ed25519KeyIdentity.fromKeyPair(keyPair.publicKey, keyPair.secretKey);
-          
-          console.log('Identity initialized synchronously on app start');
-          
-          // Restore full auth state immediately
+        // If forceInit is true, completely skip the logout check
+        if (!forceInit) {
+          const logoutFlag = localStorage.getItem('cosmicrafts-user-logged-out');
+          if (logoutFlag === 'true') {
+            console.log('User previously logged out, not initializing from cache');
+            this.authenticated = false;
+            return false;
+          }
+        } else {
+          // When forcing init, we need to remove the logged out flag to prevent future checks from failing
+          localStorage.removeItem('cosmicrafts-user-logged-out');
+          console.log('Force init enabled - ignoring logged out state and clearing logout flag');
+        }
+        
+        // If we already have a valid identity, return true immediately
+        if (identity && identity.getPrincipal) {
+          console.log('Using existing identity: ' + identity.getPrincipal().toString());
           this.authenticated = true;
-          this.seedPhrase = parsed.seedPhrase;
-          
-          // Restore derived addresses if available
-          if (Array.isArray(parsed.derivedAddresses) && parsed.derivedAddresses.length > 0) {
-            this.derivedAddresses = parsed.derivedAddresses;
-            this.currentAddressIndex = parsed.currentAddressIndex || 0;
-          }
-          
-          // Restore player data if available
-          if (parsed.player) {
-            this.player = parsed.player;
-            this.registered = true;
-          }
-          
           return true;
-        } catch (e) {
-          console.error('Failed to initialize identity synchronously:', e);
+        }
+        
+        const stored = localStorage.getItem('authState');
+        if (!stored) {
+          console.log('No stored auth state found');
+          this.authenticated = false;
           return false;
         }
+        
+        const parsed = JSON.parse(stored);
+        if (!parsed) {
+          console.error('Failed to parse stored auth state');
+          this.authenticated = false;
+          return false;
+        }
+        
+        console.log('Auth state contents check:', {
+          hasSeedPhrase: !!parsed.seedPhrase,
+          hasEncryptedSeedPhrase: !!parsed.encryptedSeedPhrase,
+          authenticated: parsed.authenticated,
+          hasSecuritySettings: !!parsed.securitySettings
+        });
+        
+        if (!parsed.seedPhrase && !parsed.encryptedSeedPhrase) {
+          console.log('No seed phrase found in stored auth state');
+          this.authenticated = false;
+          return false;
+        }
+        
+        // Get the current address index
+        const addressIndex = parsed.currentAddressIndex || 0;
+        
+        // Handle encrypted seed phrase case
+        if (!parsed.seedPhrase && parsed.encryptedSeedPhrase && parsed.securitySettings?.hasPassword) {
+          console.log('Found encrypted seed phrase, identity requires authentication');
+          // Return false since we can't fully initialize without password
+          this.authenticated = false; // Not fully authenticated until password entered
+          
+          // Store the encrypted state so it can be used later
+          this.encryptedSeedPhrase = parsed.encryptedSeedPhrase;
+          this.securitySettings = parsed.securitySettings;
+          
+          return false;
+        }
+        
+        // If we have the seed phrase directly
+        if (parsed.seedPhrase) {
+          try {
+            // Use the simplest derivation method to avoid errors
+            console.log('Deriving identity from seed phrase...');
+            const seed = bip39.mnemonicToSeedSync(parsed.seedPhrase).slice(0, 32);
+            const keyPair = nacl.sign.keyPair.fromSeed(seed);
+            identity = Ed25519KeyIdentity.fromKeyPair(keyPair.publicKey, keyPair.secretKey);
+            
+            console.log('Identity initialized with principal:', identity.getPrincipal().toString());
+            
+            // Restore full auth state immediately
+            this.authenticated = true;
+            this.seedPhrase = parsed.seedPhrase;
+            
+            // Restore derived addresses if available
+            if (Array.isArray(parsed.derivedAddresses) && parsed.derivedAddresses.length > 0) {
+              this.derivedAddresses = parsed.derivedAddresses;
+              this.currentAddressIndex = parsed.currentAddressIndex || 0;
+            } else if (identity) {
+              // If we have identity but no addresses, create one
+              console.log('No derived addresses found, creating default address');
+              this.derivedAddresses = [{
+                index: 0,
+                principalId: identity.getPrincipal().toText(),
+                publicKey: Buffer.from(keyPair.publicKey).toString('hex'),
+                name: 'Main Account'
+              }];
+              this.currentAddressIndex = 0;
+            }
+            
+            // Restore player data if available
+            if (parsed.player) {
+              this.player = parsed.player;
+              this.registered = true;
+            }
+            
+            // Restore security settings
+            if (parsed.securitySettings) {
+              this.securitySettings = parsed.securitySettings;
+            }
+            
+            // Also store encrypted version if available
+            if (parsed.encryptedSeedPhrase) {
+              this.encryptedSeedPhrase = parsed.encryptedSeedPhrase;
+            }
+            
+            // Save state back to ensure it's consistent
+            this.saveStateToLocalStorage();
+            
+            return true;
+          } catch (identityError) {
+            console.error('Error creating identity from seed phrase:', identityError);
+            
+            // Try alternative recovery as a fallback
+            console.log('Attempting alternative recovery method...');
+            return this.tryAlternativeRecovery(parsed.seedPhrase);
+          }
+        }
+        
+        // If we get here, no identity was created
+        this.authenticated = false;
+        return false;
       } catch (e) {
-        console.error('Error parsing cached auth data:', e);
+        console.error('Error initializing identity from cache:', e);
+        this.authenticated = false;
         return false;
       }
     },
@@ -1168,7 +1341,7 @@ export const useAuthStore = defineStore('auth', {
         identity = null;
         this.authenticated = false;
         this.registered = false;
-        localStorage.removeItem('authStore');
+        localStorage.removeItem('authState');
         
         throw new Error('Login failed. Please try again.');
       }
@@ -1179,7 +1352,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('cosmicrafts-user-logged-out', 'true');
       
       // Clear related localStorage data
-      localStorage.removeItem('authStore');
+      localStorage.removeItem('authState');
       localStorage.removeItem('cosmicrafts-accounts');
       localStorage.removeItem('cosmicrafts-current-account');
       localStorage.removeItem('customTokens');
@@ -1479,6 +1652,299 @@ export const useAuthStore = defineStore('auth', {
         console.error('Error signing with ETH account:', error);
         return null;
       }
+    },
+    
+    // Security-related methods
+    async enablePasswordProtection(password) {
+      try {
+        // Hash the password for verification
+        const encoder = new TextEncoder();
+        const passwordHash = await crypto.subtle.digest(
+          'SHA-256', 
+          encoder.encode(password)
+        );
+        
+        // Convert to hex string for storage
+        const hashArray = Array.from(new Uint8Array(passwordHash));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        
+        // Store the password hash
+        this.securitySettings.hasPassword = true;
+        this.securitySettings.passwordHash = hashHex;
+        this.securitySettings.encryptionMethod = 'password';
+        
+        // Encrypt sensitive data
+        if (this.seedPhrase) {
+          const encryptedSeed = await encryptData(this.seedPhrase, password);
+          this.encryptedSeedPhrase = encryptedSeed;
+          // Don't store unencrypted version in memory
+          this.seedPhrase = null;
+        }
+        
+        this.saveStateToLocalStorage();
+        return true;
+      } catch (error) {
+        console.error('Error enabling password protection:', error);
+        throw new Error('Failed to set up password protection');
+      }
+    },
+    
+    async disablePasswordProtection(password) {
+      try {
+        // Verify password first
+        if (!await this.verifyPassword(password)) {
+          throw new Error('Invalid password');
+        }
+        
+        // Decrypt seed phrase if it exists
+        if (this.encryptedSeedPhrase) {
+          this.seedPhrase = await decryptData(this.encryptedSeedPhrase, password);
+          this.encryptedSeedPhrase = null;
+        }
+        
+        // Reset security settings
+        this.securitySettings.hasPassword = false;
+        this.securitySettings.passwordHash = null;
+        this.securitySettings.encryptionMethod = null;
+        
+        this.saveStateToLocalStorage();
+        return true;
+      } catch (error) {
+        console.error('Error disabling password protection:', error);
+        throw new Error('Failed to disable password protection');
+      }
+    },
+    
+    async verifyPassword(password) {
+      if (!this.securitySettings.hasPassword || !this.securitySettings.passwordHash) {
+        return false;
+      }
+      
+      try {
+        // Hash the provided password
+        const encoder = new TextEncoder();
+        const passwordHash = await crypto.subtle.digest(
+          'SHA-256', 
+          encoder.encode(password)
+        );
+        
+        // Convert to hex for comparison
+        const hashArray = Array.from(new Uint8Array(passwordHash));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        
+        // Compare with stored hash
+        return hashHex === this.securitySettings.passwordHash;
+      } catch (error) {
+        console.error('Error verifying password:', error);
+        return false;
+      }
+    },
+    
+    async enablePasskey() {
+      // Check if WebAuthn is supported
+      if (!window.PublicKeyCredential) {
+        throw new Error('Passkeys not supported in this browser');
+      }
+      
+      try {
+        // Generate a random user ID
+        const userId = new Uint8Array(16);
+        window.crypto.getRandomValues(userId);
+        
+        // Create passkey registration options
+        const createOptions = {
+          challenge: window.crypto.getRandomValues(new Uint8Array(32)),
+          rp: {
+            name: "CosmicRafts",
+            id: window.location.hostname
+          },
+          user: {
+            id: userId,
+            name: this.player?.username || "Cosmic User",
+            displayName: this.player?.username || "Cosmic User"
+          },
+          pubKeyCredParams: [
+            { type: "public-key", alg: -7 }, // ES256
+            { type: "public-key", alg: -257 } // RS256
+          ],
+          authenticatorSelection: {
+            authenticatorAttachment: "platform",
+            userVerification: "required"
+          },
+          timeout: 60000,
+          attestation: "none"
+        };
+        
+        // Create the credential
+        const credential = await navigator.credentials.create({
+          publicKey: createOptions
+        });
+        
+        // Store the credential ID for future authentications
+        this.securitySettings.hasPasskey = true;
+        this.securitySettings.passkeyId = credential.id;
+        this.securitySettings.encryptionMethod = 'passkey';
+        
+        this.saveStateToLocalStorage();
+        return true;
+      } catch (error) {
+        console.error('Passkey creation failed:', error);
+        throw error;
+      }
+    },
+    
+    async verifyPasskey() {
+      if (!this.securitySettings.hasPasskey || !this.securitySettings.passkeyId) {
+        return false;
+      }
+      
+      try {
+        // Challenge for authentication
+        const challenge = window.crypto.getRandomValues(new Uint8Array(32));
+        
+        // Request options
+        const requestOptions = {
+          challenge,
+          allowCredentials: [{
+            id: this.securitySettings.passkeyId,
+            type: 'public-key',
+          }],
+          userVerification: 'required',
+          timeout: 60000
+        };
+        
+        // Request authentication with the passkey
+        const credential = await navigator.credentials.get({
+          publicKey: requestOptions
+        });
+        
+        return !!credential;
+      } catch (error) {
+        console.error('Passkey verification failed:', error);
+        return false;
+      }
+    },
+    
+    async disablePasskey() {
+      if (!this.securitySettings.hasPasskey) {
+        return true;
+      }
+      
+      try {
+        // Reset passkey settings
+        this.securitySettings.hasPasskey = false;
+        this.securitySettings.passkeyId = null;
+        
+        // If this was the encryption method, reset it
+        if (this.securitySettings.encryptionMethod === 'passkey') {
+          this.securitySettings.encryptionMethod = null;
+        }
+        
+        this.saveStateToLocalStorage();
+        return true;
+      } catch (error) {
+        console.error('Error disabling passkey:', error);
+        throw new Error('Failed to disable passkey');
+      }
+    },
+    
+    async enableTwoFactor() {
+      try {
+        // Generate a TOTP secret
+        const secret = generateRandomBase32();
+        
+        // Create a QR code URL for the authenticator app
+        const otpauth = `otpauth://totp/CosmicRafts:${this.player?.username || 'user'}?secret=${secret}&issuer=CosmicRafts`;
+        
+        // Save TOTP settings
+        this.securitySettings.hasTwoFactor = true;
+        this.securitySettings.totpSecret = secret;
+        
+        this.saveStateToLocalStorage();
+        return {
+          secret,
+          otpauth
+        };
+      } catch (error) {
+        console.error('Error enabling 2FA:', error);
+        throw new Error('Failed to set up two-factor authentication');
+      }
+    },
+    
+    verifyTwoFactor(token) {
+      if (!this.securitySettings.hasTwoFactor || !this.securitySettings.totpSecret) {
+        return false;
+      }
+      
+      try {
+        return verifyTOTP(token, this.securitySettings.totpSecret);
+      } catch (error) {
+        console.error('Error verifying 2FA code:', error);
+        return false;
+      }
+    },
+    
+    async disableTwoFactor(totpCode) {
+      if (!this.securitySettings.hasTwoFactor) {
+        return true;
+      }
+      
+      try {
+        // Verify the TOTP code first
+        if (totpCode && !this.verifyTwoFactor(totpCode)) {
+          throw new Error('Invalid verification code');
+        }
+        
+        // Reset 2FA settings
+        this.securitySettings.hasTwoFactor = false;
+        this.securitySettings.totpSecret = null;
+        
+        this.saveStateToLocalStorage();
+        return true;
+      } catch (error) {
+        console.error('Error disabling 2FA:', error);
+        throw new Error('Failed to disable two-factor authentication');
+      }
+    },
+    
+    // Authentication method for sensitive operations
+    async authenticate(credentials = {}) {
+      if (this.securitySettings.hasPassword && credentials.password) {
+        // Verify password
+        if (!await this.verifyPassword(credentials.password)) {
+          throw new Error('Invalid password');
+        }
+        
+        // Decrypt seed phrase if needed
+        if (this.encryptedSeedPhrase && !this.seedPhrase) {
+          this.seedPhrase = await decryptData(this.encryptedSeedPhrase, credentials.password);
+        }
+        
+        return true;
+      }
+      
+      if (this.securitySettings.hasPasskey) {
+        // Verify passkey
+        if (!await this.verifyPasskey()) {
+          throw new Error('Passkey authentication failed');
+        }
+        
+        return true;
+      }
+      
+      if (this.securitySettings.hasTwoFactor && credentials.totpCode) {
+        // Verify TOTP code
+        if (!this.verifyTwoFactor(credentials.totpCode)) {
+          throw new Error('Invalid 2FA code');
+        }
+        
+        return true;
+      }
+      
+      // If no security is enabled, authentication passes
+      return !this.securitySettings.hasPassword && 
+             !this.securitySettings.hasPasskey && 
+             !this.securitySettings.hasTwoFactor;
     },
   },
 });

@@ -225,6 +225,7 @@ import { validateMnemonic } from 'bip39';
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 import { Principal } from '@dfinity/principal';
 import AvatarService from '@/utils/AvatarService';
+import { isPasskeySupported } from '@/utils/securityUtils';
 
 export default {
   name: 'AccountSelector',
@@ -507,8 +508,34 @@ export default {
     };
     
     // Show seed phrase
-    const showSeedPhrase = () => {
-      authStore.showSeedPhrase();
+    const showSeedPhrase = async () => {
+      try {
+        const result = await authStore.showSeedPhrase();
+        
+        // Check if authentication is needed
+        if (result && result.needsAuth) {
+          // Open authentication modal
+          modalStore.openModal({
+            component: () => import('@/components/wallet/AccountManagement.vue'),
+            props: {
+              activeTab: 'recovery'
+            }
+          });
+          return;
+        }
+        
+        if (result && result.success && result.phrase) {
+          // Show seed phrase in a modal
+          modalStore.openModal(SeedPhraseModal, {
+            seedPhrase: result.phrase,
+            principalId: authStore.getIdentity()?.getPrincipal().toText() || '',
+            title: 'Account Recovery Phrase'
+          });
+        }
+      } catch (error) {
+        console.error('Error showing seed phrase:', error);
+      }
+      
       showAccountMenu.value = false;
     };
     

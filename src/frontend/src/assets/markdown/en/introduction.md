@@ -2,8 +2,6 @@
 
 ![Executive Summary](executivesummary.webp)
 
-
-
 **Cosmicrafts DAO** is pioneering the gaming industry through Web3 technology, creating the first fully on-chain gaming franchise with real ownership economics. In development since 2016 and built entirely on the [Internet Computer](https://internetcomputer.org) since 2021, we've consistently advanced our vision of blockchain gaming without the limitations that have held back previous Web3 ventures.
 
 > This isn't all about funding development anymore; it's about driving adoption and scaling up. The game is already built, the infrastructure is solid, and the framework is in place.
