@@ -26,6 +26,7 @@ module {
         symbol: Text;
         isVerified: Bool;
         createdAt: Time.Time;
+        manager: Principal;
     };
     
     // Combined key for token lookup
@@ -106,6 +107,7 @@ module {
         #ListingTicketExpired;
         #NFTNotTransferred;
         #ListingNotCancelled;
+        #NotCollectionManager;
         // ICRC-8 specific errors
         #TokenSpecNotSupported;
         #UnsupportedOperation;

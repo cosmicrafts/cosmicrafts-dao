@@ -278,8 +278,8 @@ export const useCanisterStore = defineStore('canister', {
         host,
         // Add a time offset to handle clock synchronization issues
         fetchRootKey: isLocal,
-        // Add 10 seconds to ensure we're ahead of the IC time
-        timeOffset: 10000
+        // Add 120 seconds to ensure we're ahead of the IC time
+        timeOffset: 120000
       });
       this.agent = agent;
       
@@ -580,12 +580,12 @@ export const useCanisterStore = defineStore('canister', {
               identity, 
               host, 
               fetchRootKey: isLocal,
-              timeOffset: 10000 // Add 10 seconds offset for clock synchronization
+              timeOffset: 120000 // Add 120 seconds offset for clock synchronization
             })
           : new HttpAgent({ 
               host, 
               fetchRootKey: isLocal,
-              timeOffset: 10000
+              timeOffset: 120000
             });
         
         this.agent = agent;

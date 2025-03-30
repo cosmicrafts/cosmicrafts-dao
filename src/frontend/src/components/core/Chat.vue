@@ -425,7 +425,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
                         activeElement?.getAttribute('contenteditable') === 'true';
   
   // 'C' key to open chat (only when not already open and not typing in an input)
-  if (event.key.toLowerCase() === 'a' && !showChat.value && !isInputActive) {
+  if (event.key && event.key.toLowerCase() === 'a' && !showChat.value && !isInputActive) {
     toggleChat();
     event.preventDefault();
   }

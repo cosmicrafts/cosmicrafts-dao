@@ -12,6 +12,7 @@ import Text "mo:base/Text";
 import Time "mo:base/Time";
 import Types "./types";
 import Utils "./utils";
+import ResultWrapper "./result_wrapper";
 
 actor class Marketplace() = this {
 
@@ -876,47 +877,107 @@ actor class Marketplace() = this {
     };
     
     // Admin method to register approved tokens
-    public shared({ caller }) func addApprovedToken(token: Principal) : async Result.Result<(), Types.Error> {
+    public shared({ caller }) func addApprovedToken(token: Principal) : async ResultWrapper.Result<(), Types.Error> {
         if (not _verifyOwner(caller)) {
-            return #err(#Unauthorized);
+            return ResultWrapper.err(#Unauthorized);
         };
         
-        // Check if token is already approved
+        // Check if token is already approved to avoid duplicates
         if (_isTokenApproved(token)) {
-            return #ok();
+            return ResultWrapper.ok(());
         };
         
+        // Verify that the token canister implements ICRC7 standard
+        let isCompliant = await _isICRC7Compliant(token);
+        if (not isCompliant) {
+            return ResultWrapper.err(#NotICRC7Compliant);
+        };
+        
+        // Add the token to approved list
         approvedTokens.add(token);
-        return #ok();
+        return ResultWrapper.ok(());
     };
-    
+
+    // Public method to allow anyone to register their own collection
+    public shared({ caller }) func registerCollection(token: Principal) : async ResultWrapper.Result<(), Types.Error> {
+        // Check if token is already approved to avoid duplicates
+        if (_isTokenApproved(token)) {
+            return ResultWrapper.ok(());
+        };
+        
+        // Verify that the token canister implements ICRC7 standard
+        let isCompliant = await _isICRC7Compliant(token);
+        if (not isCompliant) {
+            return ResultWrapper.err(#NotICRC7Compliant);
+        };
+        
+        // Add the token to approved list
+        approvedTokens.add(token);
+        
+        // Store caller as the collection manager
+        try {
+            let nftCanister : NFTBackend = actor(Principal.toText(token));
+            let name = await nftCanister.icrc7_name();
+            let symbol = await nftCanister.icrc7_symbol();
+            
+            // Create and store collection with caller as manager
+            let newCollection : Collection = {
+                id = token;
+                name = name;
+                symbol = symbol;
+                isVerified = false;
+                createdAt = Time.now();
+                manager = caller;
+            };
+            
+            collections.put(token, newCollection);
+            
+            // Record this as a transaction
+            let _ = _recordTransaction(
+                #CollectionRegistered,
+                0, // No listing ID for collection registration
+                token,
+                0, // No token ID for collection registration
+                caller,
+                null, // No buyer
+                0, // No price
+                Time.now()
+            );
+        } catch (e) {
+            // Still add to approved tokens even if we fail to get collection details
+            return ResultWrapper.ok(());
+        };
+        
+        return ResultWrapper.ok(());
+    };
+
     // Admin method to update fee percentage
-    public shared({ caller }) func updateFeePercentage(newFeePercentage : Nat) : async Result.Result<Nat, Types.Error> {
+    public shared({ caller }) func updateFeePercentage(newFeePercentage : Nat) : async ResultWrapper.Result<Nat, Types.Error> {
         if (not _verifyOwner(caller)) {
-            return #err(#Unauthorized);
+            return ResultWrapper.err(#Unauthorized);
         };
         
         if (newFeePercentage > 3000) { // Max 30% fee
-            return #err(#InvalidFeePercentage);
+            return ResultWrapper.err(#InvalidFeePercentage);
         };
         
         marketplaceFeePercentage := newFeePercentage;
-        return #ok(marketplaceFeePercentage);
+        return ResultWrapper.ok(marketplaceFeePercentage);
     };
 
-    // Improved createNFTAsk function with ownership verification
+    // Update createNFTAsk to use our custom Result type
     public shared({ caller }) func createNFTAsk(
         collectionId: CollectionId,
         tokenId: TokenId,
         price: Nat
-    ) : async Result.Result<Nat, Types.Error> {
+    ) : async ResultWrapper.Result<Nat, Types.Error> {
         if (price == 0) {
-            return #err(#InvalidPrice);
+            return ResultWrapper.err(#InvalidPrice);
         };
         
         // Check if token is approved
         if (not _isTokenApproved(collectionId)) {
-            return #err(#TokenSpecNotSupported);
+            return ResultWrapper.err(#TokenSpecNotSupported);
         };
         
         // Verify ownership
@@ -927,15 +988,15 @@ actor class Marketplace() = this {
             switch (ownerResult) {
                 case (#ok(owner)) {
                     if (owner.owner != caller) {
-                        return #err(#NotOwner);
+                        return ResultWrapper.err(#NotOwner);
                     };
                 };
                 case (#err(_)) {
-                    return #err(#TokenNotFound);
+                    return ResultWrapper.err(#TokenNotFound);
                 };
             };
         } catch (_) {
-            return #err(#NotICRC7Compliant);
+            return ResultWrapper.err(#NotICRC7Compliant);
         };
         
         // Create ask features for the NFT
@@ -946,24 +1007,24 @@ actor class Marketplace() = this {
         
         switch (result) {
             case (#err(_error)) {
-                return #err(#UnsupportedOperation);
+                return ResultWrapper.err(#UnsupportedOperation);
             };
             case (#ok(newAskResult)) {
-                return #ok(newAskResult.ask_id);
+                return ResultWrapper.ok(newAskResult.ask_id);
             };
         };
     };
     
-    // Simplified buyNFT function
-    public shared({ caller }) func buyNFT(askId: Nat) : async Result.Result<Nat, Types.Error> {
+    // Update buyNFT to use our custom Result type
+    public shared({ caller }) func buyNFT(askId: Nat) : async ResultWrapper.Result<Nat, Types.Error> {
         // Check if ask exists and is open
         switch (asks.get(askId)) {
             case (null) {
-                return #err(#ListingNotFound);
+                return ResultWrapper.err(#ListingNotFound);
             };
             case (?askStatus) {
                 if (askStatus.status != #open) {
-                    return #err(#AskNotActive);
+                    return ResultWrapper.err(#AskNotActive);
                 };
                 
                 // Create an empty feature array for the bid
@@ -974,7 +1035,7 @@ actor class Marketplace() = this {
                 
                 switch (result) {
                     case (#err(error)) {
-                        return #err(#UnsupportedOperation);
+                        return ResultWrapper.err(#UnsupportedOperation);
                     };
                     case (#ok(bidResult)) {
                         // In a real implementation, you would handle token transfers here
@@ -988,7 +1049,7 @@ actor class Marketplace() = this {
                         asks.put(askId, updatedStatus);
                         askHistory.put(askId, updatedStatus);
                         
-                        return #ok(bidResult.result);
+                        return ResultWrapper.ok(bidResult.result);
                     };
                 };
             };
@@ -1342,36 +1403,33 @@ actor class Marketplace() = this {
         askId: Nat,
         trustee: Principal,
         expiresAt: Time.Time
-    ) : async Result.Result<(), Types.Error> {
-        // Only the marketplace owner can encumber asks (this should be refined for more precise access control)
-        if (not _verifyOwner(caller)) {
-            return #err(#Unauthorized);
-        };
-        
+    ) : async ResultWrapper.Result<(), Types.Error> {
+        // Check if ask exists
         switch (asks.get(askId)) {
-            case (null) { 
-                return #err(#ListingNotFound);
+            case (null) {
+                return ResultWrapper.err(#ListingNotFound);
             };
             case (?askStatus) {
                 if (askStatus.status != #open) {
-                    return #err(#UnsupportedOperation);
+                    return ResultWrapper.err(#AskNotActive);
                 };
                 
-                // Create encumbrance details
-                let encumbranceDetail : Types.EncumbranceDetail = {
+                // Create encumbrance detail
+                let encumbrance : EncumbranceDetail = {
                     trustee = trustee;
-                    expires_at = Nat64.fromNat(Int.abs(expiresAt));
+                    expires_at = Nat64.fromIntWrap(expiresAt);
                 };
                 
                 // Update ask status to encumbered
                 let updatedStatus : AskStatus = {
                     askStatus with
-                    status = #encumbered([encumbranceDetail]);
+                    status = #encumbered([encumbrance]);
                 };
                 
                 asks.put(askId, updatedStatus);
+                askHistory.put(askId, updatedStatus);
                 
-                return #ok();
+                return ResultWrapper.ok(());
             };
         };
     };
@@ -1379,51 +1437,49 @@ actor class Marketplace() = this {
     // Add a method to unencumber an ask
     public shared({ caller }) func unencumberAsk(
         askId: Nat
-    ) : async Result.Result<(), Types.Error> {
+    ) : async ResultWrapper.Result<(), Types.Error> {
+        // Check if ask exists and is encumbered
         switch (asks.get(askId)) {
             case (null) {
-                return #err(#ListingNotFound);
+                return ResultWrapper.err(#ListingNotFound);
             };
             case (?askStatus) {
                 switch (askStatus.status) {
                     case (#encumbered(details)) {
-                        // Check if caller is a trustee of any encumbrance
-                        let isCallerTrustee = Array.find<Types.EncumbranceDetail>(
-                            details,
-                            func(detail: Types.EncumbranceDetail): Bool {
-                                detail.trustee == caller
-                            }
+                        // Verify caller is the trustee
+                        let authorized = Array.foldLeft<EncumbranceDetail, Bool>(
+                            details, 
+                            false, 
+                            func(acc, detail) { acc or detail.trustee == caller }
                         );
                         
-                        switch (isCallerTrustee) {
-                            case (null) {
-                                return #err(#Unauthorized);
-                            };
-                            case (_) {
-                                // Update ask status back to open
-                                let updatedStatus : AskStatus = {
-                                    askStatus with
-                                    status = #open;
-                                };
-                                
-                                asks.put(askId, updatedStatus);
-                        
-                        return #ok();
-                            };
+                        if (not authorized) {
+                            return ResultWrapper.err(#Unauthorized);
                         };
+                        
+                        // Update ask status to open
+                        let updatedStatus : AskStatus = {
+                            askStatus with
+                            status = #open;
+                        };
+                        
+                        asks.put(askId, updatedStatus);
+                        askHistory.put(askId, updatedStatus);
+                        
+                        return ResultWrapper.ok(());
                     };
                     case (_) {
-                        return #err(#UnsupportedOperation);
+                        return ResultWrapper.err(#ListingNotActive);
                     };
                 };
             };
         };
     };
 
-    // Marketplace initialization
-    public shared({ caller }) func initializeMarketplace() : async Result.Result<(), Types.Error> {
+    // Update initializeMarketplace to use our custom Result type
+    public shared({ caller }) func initializeMarketplace() : async ResultWrapper.Result<(), Types.Error> {
         if (not _verifyOwner(caller)) {
-            return #err(#Unauthorized);
+            return ResultWrapper.err(#Unauthorized);
         };
         
         // Check if ICP token is already approved
@@ -1438,58 +1494,11 @@ actor class Marketplace() = this {
         // Set default fee percentage (2.5%)
         marketplaceFeePercentage := 250;
         
-        return #ok();
+        return ResultWrapper.ok(());
     };
 
-    // Get detailed information for a specific ask
-    public query func getAskDetails(askId: Nat) : async ?{
-        ask_id: Nat;
-        status: AskStatusType;
-        seller: Account;
-        token_details: ?{
-            collection_id: Principal;
-            token_id: Nat;
-            price: Nat;
-        };
-        created_at: ?Nat64;
-        participants: [Account];
-    } {
-        switch (asks.get(askId)) {
-            case (null) {
-                return null;
-            };
-            case (?askStatus) {
-                let tokenDetails = _extractTokenDetails(askStatus);
-                var createdAt : ?Nat64 = null;
-                
-                // Extract created_at from features
-                for (feature in askStatus.config.vals()) {
-                    switch (feature) {
-                        case (#created_at(timestamp)) {
-                            createdAt := ?timestamp;
-                        };
-                        case (_) {};
-                    };
-                };
-                
-                return ?{
-                    ask_id = askId;
-                    status = askStatus.status;
-                    seller = askStatus.seller;
-                    token_details = ?{
-                        collection_id = tokenDetails.collectionId;
-                        token_id = tokenDetails.tokenId;
-                        price = tokenDetails.price;
-                    };
-                    created_at = createdAt;
-                    participants = askStatus.participants;
-                };
-            };
-        };
-    };
-
-    // Check and update expired asks
-    public shared func cleanupExpiredAsks() : async Result.Result<Nat, Types.Error> {
+    // Update cleanupExpiredAsks to use our custom Result type
+    public shared func cleanupExpiredAsks() : async ResultWrapper.Result<Nat, Types.Error> {
         let currentTime = Time.now();
         let currentTimeNat = Nat64.fromNat(Int.abs(currentTime));
         var expiredCount = 0;
@@ -1541,6 +1550,144 @@ actor class Marketplace() = this {
             };
         };
         
-        return #ok(expiredCount);
+        return ResultWrapper.ok(expiredCount);
+    };
+
+    // Get detailed information for a specific ask
+    public query func getAskDetails(askId: Nat) : async ?{
+        ask_id: Nat;
+        status: AskStatusType;
+        seller: Account;
+        token_details: ?{
+            collection_id: Principal;
+            token_id: Nat;
+            price: Nat;
+        };
+        created_at: ?Nat64;
+        participants: [Account];
+    } {
+        switch (asks.get(askId)) {
+            case (null) {
+                return null;
+            };
+            case (?askStatus) {
+                let tokenDetails = _extractTokenDetails(askStatus);
+                var createdAt : ?Nat64 = null;
+                
+                // Extract created_at from features
+                for (feature in askStatus.config.vals()) {
+                    switch (feature) {
+                        case (#created_at(timestamp)) {
+                            createdAt := ?timestamp;
+                        };
+                        case (_) {};
+                    };
+                };
+                
+                return ?{
+                    ask_id = askId;
+                    status = askStatus.status;
+                    seller = askStatus.seller;
+                    token_details = ?{
+                        collection_id = tokenDetails.collectionId;
+                        token_id = tokenDetails.tokenId;
+                        price = tokenDetails.price;
+                    };
+                    created_at = createdAt;
+                    participants = askStatus.participants;
+                };
+            };
+        };
+    };
+
+    // Add methods for collection management
+
+    // Query to get collection details
+    public query func getCollectionDetails(collectionId: CollectionId) : async ?Collection {
+        collections.get(collectionId)
+    };
+
+    // Get all collections managed by a specific principal
+    public query func getUserManagedCollections(principal: Principal) : async [Collection] {
+        let managedCollections = Buffer.Buffer<Collection>(0);
+        
+        for ((_, collection) in collections.entries()) {
+            if (collection.manager == principal) {
+                managedCollections.add(collection);
+            };
+        };
+        
+        return Buffer.toArray(managedCollections);
+    };
+
+    // Transfer collection management to another principal
+    public shared({ caller }) func transferCollectionManagement(
+        collectionId: CollectionId, 
+        newManager: Principal
+    ) : async ResultWrapper.Result<(), Types.Error> {
+        switch (collections.get(collectionId)) {
+            case (null) {
+                return ResultWrapper.err(#CollectionNotRegistered);
+            };
+            
+            case (?collection) {
+                // Verify caller is current manager
+                if (collection.manager != caller) {
+                    return ResultWrapper.err(#NotCollectionManager);
+                };
+                
+                // Update collection with new manager
+                let updatedCollection : Collection = {
+                    collection with
+                    manager = newManager;
+                };
+                
+                collections.put(collectionId, updatedCollection);
+                
+                return ResultWrapper.ok(());
+            };
+        };
+    };
+
+    // Update collection details (only manager can update)
+    public shared({ caller }) func updateCollectionDetails(
+        collectionId: CollectionId,
+        newName: ?Text,
+        newSymbol: ?Text
+    ) : async ResultWrapper.Result<(), Types.Error> {
+        switch (collections.get(collectionId)) {
+            case (null) {
+                return ResultWrapper.err(#CollectionNotRegistered);
+            };
+            
+            case (?collection) {
+                // Verify caller is current manager
+                if (collection.manager != caller) {
+                    return ResultWrapper.err(#NotCollectionManager);
+                };
+                
+                // Update collection details
+                let updatedCollection : Collection = {
+                    collection with
+                    name = switch (newName) {
+                        case (null) { collection.name };
+                        case (?name) { name };
+                    };
+                    symbol = switch (newSymbol) {
+                        case (null) { collection.symbol };
+                        case (?symbol) { symbol };
+                    };
+                };
+                
+                collections.put(collectionId, updatedCollection);
+                
+                return ResultWrapper.ok(());
+            };
+        };
+    };
+
+    // Get all approved and registered collections
+    public query func getAllCollections() : async [Collection] {
+        Iter.toArray(collections.vals())
     };
 } 

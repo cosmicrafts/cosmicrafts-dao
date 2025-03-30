@@ -10,6 +10,7 @@ import { storeToRefs } from 'pinia';
 import CosmicButton from '@/components/ui/buttons/BaseButton.vue';
 import CosmicCard from '@/components/ui/cards/BaseCard.vue';
 import NFTCard from '@/components/ui/cards/NFTCard.vue';
+import { Principal } from '@dfinity/principal';
 
 const { t } = useI18n();
 const marketplaceStore = useMarketplaceStore();
@@ -27,6 +28,20 @@ const newAsk = ref({
   collectionId: '',
   tokenId: '',
   price: null,
+  loading: false,
+  error: null
+});
+
+// Track token support error state
+const tokenNotSupportedError = ref(false);
+const addingToken = ref(false);
+const creatingOffer = ref(false);
+const registeringCollection = ref(false);
+
+// Add state for registering a collection
+const showRegisterCollectionModal = ref(false);
+const registrationData = ref({
+  collectionId: '',
   loading: false,
   error: null
 });
@@ -52,9 +67,35 @@ const error = computed(() => marketplaceStore.error);
 
 // Initialize marketplace on component mount
 onMounted(async () => {
-  await marketplaceStore.initialize();
-  if (isAuthenticated.value) {
-    await marketplaceStore.getUserAsks();
+  try {
+    // Set local loading state before relying on store state
+    const initPromise = marketplaceStore.initialize();
+    
+    // Set a timeout to prevent infinite loading - increase from 10 to 30 seconds
+    const timeoutPromise = new Promise((resolve) => {
+      setTimeout(() => {
+        console.warn('Marketplace initialization timed out after 30 seconds');
+        resolve(false);
+      }, 30000);
+    });
+    
+    // Race between initialization and timeout
+    await Promise.race([initPromise, timeoutPromise]);
+    
+    if (isAuthenticated.value) {
+      try {
+        // Use fetchUserAsks directly since that's the method we know exists
+        if (typeof marketplaceStore.fetchUserAsks === 'function') {
+          await marketplaceStore.fetchUserAsks();
+        } else {
+          console.warn('Unable to fetch user asks - fetchUserAsks method not available');
+        }
+      } catch (askError) {
+        console.error('Error fetching user asks:', askError);
+      }
+    }
+  } catch (error) {
+    console.error('Error initializing marketplace:', error);
   }
 });
 
@@ -88,7 +129,7 @@ const handleTabChange = (tab) => {
   activeTab.value = tab;
   
   if (tab === 'myasks' && isAuthenticated.value) {
-    marketplaceStore.getUserAsks();
+    getUserAsks();
   }
   
   if (tab === 'mynfts' && isAuthenticated.value) {
@@ -137,6 +178,7 @@ const handleCreateAsk = async () => {
   
   newAsk.value.loading = true;
   newAsk.value.error = null;
+  tokenNotSupportedError.value = false;
   
   try {
     const price = Math.floor(parseFloat(newAsk.value.price) * 100_000_000); // Convert to ICP base units (e8s)
@@ -163,9 +205,21 @@ const handleCreateAsk = async () => {
       await marketplaceStore.initialize();
     } else {
       newAsk.value.error = result.error;
+      
+      // Check for TokenSpecNotSupported error
+      if (result.error && result.error.includes('TokenSpecNotSupported')) {
+        tokenNotSupportedError.value = true;
+        newAsk.value.error = 'This token is not in the approved list. You need to add it before creating a listing.';
+      }
     }
   } catch (error) {
     newAsk.value.error = error.message || t('marketplace.error.create_ask_failed');
+    
+    // Check for TokenSpecNotSupported error message
+    if (error.message && error.message.includes('TokenSpecNotSupported')) {
+      tokenNotSupportedError.value = true;
+      newAsk.value.error = 'This token is not in the approved list. You need to add it before creating a listing.';
+    }
   } finally {
     newAsk.value.loading = false;
   }
@@ -212,6 +266,98 @@ const handleViewAskDetails = async (askId) => {
 const connectWallet = async () => {
   showConnectWalletModal.value = false;
   modalStore.openModal(Login);
+};
+
+// Add a new method for registering collections
+const handleRegisterCollection = async () => {
+  if (!isAuthenticated.value) {
+    showConnectWalletModal.value = true;
+    return;
+  }
+  
+  if (!registrationData.value.collectionId) {
+    registrationData.value.error = 'Collection ID is required';
+    return;
+  }
+  
+  registrationData.value.loading = true;
+  registrationData.value.error = null;
+  
+  try {
+    // Clean up any whitespace from the input
+    const collectionId = registrationData.value.collectionId.trim();
+    
+    // Validate it's a properly formatted Principal ID
+    try {
+      // This will throw if the format is invalid
+      Principal.fromText(collectionId);
+    } catch (err) {
+      registrationData.value.error = 'Invalid Principal ID format';
+      return;
+    }
+    
+    // Convert to Principal object after validation
+    const principalId = Principal.fromText(collectionId);
+    console.log('Using principal object:', principalId.toString());
+    
+    const result = await marketplaceStore.registerCollection(principalId);
+    
+    if (result.success) {
+      showRegisterCollectionModal.value = false;
+      registrationData.value = {
+        collectionId: '',
+        loading: false,
+        error: null
+      };
+      
+      // Show success notification
+      displaySuccess(result.message || 'Collection registered successfully!');
+      
+      // Refresh the marketplace data
+      await marketplaceStore.initialize();
+    } else {
+      registrationData.value.error = result.error;
+    }
+  } catch (error) {
+    console.error('Registration error:', error);
+    registrationData.value.error = error.message || 'Failed to register collection';
+    
+    // Check for specific error patterns in the message
+    if (error.message && error.message.includes('IDL error: unexpected variant tag')) {
+      registrationData.value.error = 'The marketplace canister encountered a compatibility issue. Please try again later.';
+    }
+  } finally {
+    registrationData.value.loading = false;
+  }
+};
+
+// Add method to register collection from the NFT ask creation form
+const registerCurrentCollection = async () => {
+  if (!newAsk.value.collectionId) {
+    newAsk.value.error = 'Collection ID is required';
+    return;
+  }
+  
+  registeringCollection.value = true;
+  
+  try {
+    // Convert to Principal object directly here before passing to store
+    const principalId = Principal.fromText(newAsk.value.collectionId);
+    const result = await marketplaceStore.registerCollection(principalId);
+    
+    if (result.success) {
+      // Show success notification
+      displaySuccess('Collection registered successfully! You can now create your listing.');
+      tokenNotSupportedError.value = false;
+      newAsk.value.error = null;
+    } else {
+      newAsk.value.error = result.error;
+    }
+  } catch (error) {
+    newAsk.value.error = error.message || 'Failed to register collection';
+  } finally {
+    registeringCollection.value = false;
+  }
 };
 
 // Extract ask details like price, token specs, etc.
@@ -278,6 +424,86 @@ const refreshUserData = async () => {
     console.error('Failed to refresh user data:', error);
   }
 };
+
+// Add the missing getUserAsks method as a wrapper around fetchUserAsks
+const getUserAsks = async () => {
+  if (typeof marketplaceStore.fetchUserAsks === 'function') {
+    return marketplaceStore.fetchUserAsks();
+  } else {
+    console.warn('fetchUserAsks method not available');
+    return [];
+  }
+}
+
+// Function to handle adding a token to the approved list
+const handleAddApprovedToken = async (tokenCanisterId) => {
+  if (!tokenCanisterId) {
+    alert('Please enter a valid collection ID');
+    return;
+  }
+  
+  try {
+    addingToken.value = true;
+    
+    const result = await marketplaceStore.addApprovedToken(tokenCanisterId);
+    
+    if (result.success) {
+      displaySuccess('Token added to approved list');
+      tokenNotSupportedError.value = false;
+    } else {
+      newAsk.value.error = result.error || 'Failed to add token to approved list';
+    }
+  } catch (error) {
+    newAsk.value.error = error.message;
+  } finally {
+    addingToken.value = false;
+  }
+};
+
+// Function to create an unsolicited offer instead of a regular listing
+const createUnsolicitedOfferInstead = async () => {
+  if (!newAsk.value.collectionId || !newAsk.value.tokenId || !newAsk.value.price) {
+    newAsk.value.error = 'All fields are required';
+    return;
+  }
+  
+  creatingOffer.value = true;
+  newAsk.value.error = null;
+  
+  try {
+    const price = Math.floor(parseFloat(newAsk.value.price) * 100_000_000); // Convert to ICP base units (e8s)
+    const result = await marketplaceStore.createUnsolicitedOffer(
+      newAsk.value.collectionId,
+      parseInt(newAsk.value.tokenId),
+      price,
+      // Use current user as owner since we're creating an offer for our own NFT
+      null
+    );
+    
+    if (result.success) {
+      showCreateAskModal.value = false;
+      newAsk.value = {
+        collectionId: '',
+        tokenId: '',
+        price: null,
+        loading: false,
+        error: null
+      };
+      
+      // Show success notification
+      displaySuccess('Unsolicited offer created successfully');
+      
+      // Refresh asks
+      await marketplaceStore.fetchUserAsks();
+    } else {
+      newAsk.value.error = result.error;
+    }
+  } catch (error) {
+    newAsk.value.error = error.message || 'Failed to create unsolicited offer';
+  } finally {
+    creatingOffer.value = false;
+  }
+};
 </script>
 
 <template>
@@ -285,6 +511,14 @@ const refreshUserData = async () => {
     <div class="marketplace-header">
       <h1>{{ t('marketplace.title') }}</h1>
       <p>{{ t('marketplace.subtitle') }}</p>
+      <div class="marketplace-actions">
+        <CosmicButton v-if="isAuthenticated" @click="showRegisterCollectionModal = true" class="register-collection-btn">
+          Register Collection
+        </CosmicButton>
+        <CosmicButton v-if="isAuthenticated" @click="showCreateAskModal = true">
+          {{ t('marketplace.create_listing') }}
+        </CosmicButton>
+      </div>
     </div>
     
     <!-- Marketplace Stats -->
@@ -327,12 +561,6 @@ const refreshUserData = async () => {
         @click="handleTabChange('mynfts')"
       >
         {{ t('marketplace.tabs.my_nfts') }}
-      </button>
-      <button 
-        class="create-ask-btn"
-        @click="showCreateAskModal = true"
-      >
-        {{ t('marketplace.create_ask') }}
       </button>
     </div>
     
@@ -467,14 +695,14 @@ const refreshUserData = async () => {
         </div>
       </div>
       
-      <!-- My NFTs tab - show user's NFTs -->
-      <div v-if="activeTab === 'mynfts'" class="asks-grid">
+      <!-- My NFTs tab - REVISED -->
+      <div v-if="activeTab === 'mynfts'" class="nfts-grid">
         <template v-if="isAuthenticated">
           <div class="mynfts-header">
             <h2>{{ t('marketplace.my_nfts_title') }}</h2>
             <CosmicButton 
               variant="secondary"
-              @click="refreshUserData"
+              @click="marketplaceStore.fetchUserNFTs"
               :loading="marketplaceStore.loadingNFTs"
               size="small"
             >
@@ -487,42 +715,23 @@ const refreshUserData = async () => {
             <p>{{ t('marketplace.loading_nfts') }}</p>
           </div>
           
-          <CosmicCard 
+          <NFTCard 
             v-for="nft in marketplaceStore.userNFTs" 
-            :key="`${nft.collectionId}-${nft.tokenId}`" 
-            class="nft-card"
+            :key="nft.id" 
+            :nft="nft" 
+            :showPrice="false"
+            class="my-nft-item"
           >
-            <template #header>
-              <div class="nft-header">
-                <h3>{{ nft.collectionSymbol }} #{{ nft.tokenId }}</h3>
-              </div>
+            <template #actions>
+              <CosmicButton
+                @click="openCreateListingForNFT(nft)"
+                size="small" 
+                class="list-nft-btn"
+              >
+                {{ t('marketplace.list_for_sale') }}
+              </CosmicButton>
             </template>
-            
-            <div class="nft-details">
-              <p>
-                <strong>{{ t('marketplace.collection') }}:</strong>
-                {{ nft.collectionName }}
-              </p>
-              <p>
-                <strong>{{ t('marketplace.token_id') }}:</strong>
-                {{ nft.tokenId }}
-              </p>
-              <p v-if="nft.metadata && nft.metadata.name">
-                <strong>{{ t('marketplace.nft_name') }}:</strong>
-                {{ nft.metadata.name }}
-              </p>
-            </div>
-            
-            <template #footer>
-              <div class="nft-actions">
-                <CosmicButton
-                  @click="openCreateListingForNFT(nft)"
-                >
-                  {{ t('marketplace.list_for_sale') }}
-                </CosmicButton>
-              </div>
-            </template>
-          </CosmicCard>
+          </NFTCard>
           
           <div v-if="marketplaceStore.userNFTs.length === 0 && !marketplaceStore.loadingNFTs" class="no-results">
             <p>{{ t('marketplace.no_nfts_found') }}</p>
@@ -580,6 +789,27 @@ const refreshUserData = async () => {
               :placeholder="t('marketplace.enter_price')"
               required
             />
+          </div>
+          
+          <!-- Add token approval section for token not supported errors -->
+          <div v-if="tokenNotSupportedError" class="token-not-supported">
+            <p>This token is not in the approved list. You can register it yourself:</p>
+            <div class="token-actions">
+              <CosmicButton 
+                @click="registerCurrentCollection" 
+                :loading="registeringCollection"
+                class="register-btn"
+              >
+                Register Collection
+              </CosmicButton>
+              <CosmicButton 
+                @click="createUnsolicitedOfferInstead" 
+                :loading="creatingOffer"
+                variant="secondary"
+              >
+                Create Unsolicited Offer
+              </CosmicButton>
+            </div>
           </div>
           
           <div class="modal-actions">
@@ -696,6 +926,45 @@ const refreshUserData = async () => {
     <!-- Add success notification to the template -->
     <div v-if="showSuccessNotification" class="success-notification">
       {{ successMessage }}
+    </div>
+    
+    <!-- Add Register Collection Modal -->
+    <div v-if="showRegisterCollectionModal" class="modal-overlay" @click="showRegisterCollectionModal = false">
+      <div class="modal-content" @click.stop>
+        <h2>Register Collection</h2>
+        
+        <div v-if="registrationData.error" class="modal-error">
+          {{ registrationData.error }}
+        </div>
+        
+        <form @submit.prevent="handleRegisterCollection" class="register-collection-form">
+          <div class="form-group">
+            <label for="collectionId">Collection Canister ID</label>
+            <input 
+              id="collectionId"
+              v-model="registrationData.collectionId"
+              placeholder="Enter collection canister ID (Principal)"
+              required
+            />
+          </div>
+          
+          <div class="modal-footer">
+            <CosmicButton 
+              type="button" 
+              variant="secondary" 
+              @click="showRegisterCollectionModal = false"
+            >
+              Cancel
+            </CosmicButton>
+            <CosmicButton 
+              type="submit" 
+              :loading="registrationData.loading"
+            >
+              Register Collection
+            </CosmicButton>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -1014,34 +1283,26 @@ const refreshUserData = async () => {
   margin: 0;
 }
 
-.nft-card {
-  height: 100%;
+.nfts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.my-nft-item .list-nft-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.my-nft-item >>> .nft-info {
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease-in-out;
-  overflow: hidden;
+  height: 100%;
 }
 
-.nft-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 10px rgba(5, 163, 204, 0.4);
-}
-
-.nft-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.nft-details {
-  flex-grow: 1;
-  padding: 1rem 0;
-}
-
-.nft-actions {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+.my-nft-item >>> .nft-info slot[name="actions"] {
+  margin-top: auto;
+  padding-top: 0.5rem;
 }
 
 .user-balance {
@@ -1049,5 +1310,28 @@ const refreshUserData = async () => {
   padding: 0.5rem;
   border-radius: 8px;
   border-left: 3px solid #4caf50;
+}
+
+.token-not-supported {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border-left: 4px solid #ffc107;
+}
+
+.token-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.register-btn {
+  background-color: #28a745;
+}
+
+/* Add styles for the register collection button and modal */
+.register-collection-btn {
+  margin-right: 10px;
 }
 </style> 
