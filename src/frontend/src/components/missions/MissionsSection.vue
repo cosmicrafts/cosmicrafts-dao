@@ -117,6 +117,11 @@
           />
         </template>
       </div>
+
+      <!-- Federation Missions Tab -->
+      <div v-if="activeTab === 'federation'" class="missions-tab-content">
+        <FederationMissions />
+      </div>
     </div>
   </div>
 </template>
@@ -126,17 +131,19 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useCanisterStore } from '@/stores/canister';
 import MissionCard from './MissionCard.vue';
 import FreeChestCard from './FreeChestCard.vue';
+import FederationMissions from './FederationMissions.vue';
 
 // State
 const isLoading = ref(true);
 const isRefreshing = ref(false);
 const errorMessage = ref('');
-const activeTab = ref('daily');
+const activeTab = ref('federation'); // Default to federation tab to highlight the new feature
 const autoRefreshInterval = ref(null);
 const lastRefreshTime = ref(Date.now());
 
 // Mission tabs
 const tabs = [
+  { id: 'federation', label: 'Federation', icon: 'fas fa-globe-americas' },
   { id: 'daily', label: 'Daily', icon: 'fas fa-sun' },
   { id: 'weekly', label: 'Weekly', icon: 'fas fa-calendar-week' },
   { id: 'chests', label: 'Free Chests', icon: 'fas fa-box-open' },
@@ -156,7 +163,8 @@ const readyToClaimCounts = ref({
   daily: 0,
   weekly: 0,
   chests: 0,
-  personal: 0
+  personal: 0,
+  federation: 0
 });
 
 // Get count of missions ready to claim for a specific tab

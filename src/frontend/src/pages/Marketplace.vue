@@ -299,7 +299,7 @@ const refreshUserData = async () => {
       </div>
       <div class="stat-item">
         <span class="stat-label">{{ t('marketplace.stats.fee') }}</span>
-        <span class="stat-value">{{ marketStats.fee_percentage / 100 }}%</span>
+        <span class="stat-value">{{ Number(marketStats.fee_percentage) / 100 }}%</span>
       </div>
       <!-- Add user balance display -->
       <div v-if="isAuthenticated" class="stat-item user-balance">
@@ -637,7 +637,7 @@ const refreshUserData = async () => {
               </p>
               <p>
                 <strong>{{ t('marketplace.token_id') }}:</strong>
-                {{ getAskTokenDetails(selectedAskDetails).tokenId }}
+                {{ String(getAskTokenDetails(selectedAskDetails).tokenId) }}
               </p>
               <p>
                 <strong>{{ t('marketplace.price') }}:</strong>

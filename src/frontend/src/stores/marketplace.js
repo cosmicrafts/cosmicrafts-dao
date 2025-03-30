@@ -3,7 +3,13 @@ import { defineStore } from 'pinia';
 import { useCanisterStore } from './canister.js';
 import { useAuthStore } from './auth.js';
 import { Principal } from '@dfinity/principal';
+import { HttpAgent, Actor } from '@dfinity/agent';
+import { idlFactory } from '../../../declarations/marketplace/marketplace.did.js';
 import { computed, ref } from 'vue';
+
+// Direct marketplace canister ID
+const MARKETPLACE_CANISTER_ID = 'zgc5e-qiaaa-aaaan-qzyga-cai';
+const IC_HOST = 'https://ic0.app';
 
 export const useMarketplaceStore = defineStore('marketplace', {
   state: () => ({
@@ -23,7 +29,9 @@ export const useMarketplaceStore = defineStore('marketplace', {
     initialized: ref(false),
     activeAsksLoading: ref(false),
     userAsksLoading: ref(false),
-    balanceLoading: ref(false)
+    balanceLoading: ref(false),
+    // Create direct reference to actor
+    marketplaceActor: null
   }),
   
   getters: {
@@ -48,10 +56,40 @@ export const useMarketplaceStore = defineStore('marketplace', {
         console.error('Error formatting balance:', e);
         return '0.00000000';
       }
+    },
+    
+    formattedTokenBalance() {
+      if (!this.userTokenBalance) return '0';
+      return this.formatIcp(this.userTokenBalance);
     }
   },
   
   actions: {
+    // Create marketplace actor directly without relying on canister store
+    createMarketplaceActor(identity = null) {
+      try {
+        console.log('Creating direct marketplace actor with identity:', !!identity);
+        
+        // Create agent with large time offset to handle clock sync issues
+        const agent = new HttpAgent({
+          identity,
+          host: IC_HOST,
+          timeOffset: 30000 // 30 seconds to be safe
+        });
+        
+        // Create actor
+        const actor = Actor.createActor(idlFactory, {
+          agent,
+          canisterId: MARKETPLACE_CANISTER_ID
+        });
+        
+        return actor;
+      } catch (error) {
+        console.error('Error creating marketplace actor:', error);
+        return null;
+      }
+    },
+    
     async initialize() {
       if (this.initialized) return;
       
@@ -59,53 +97,52 @@ export const useMarketplaceStore = defineStore('marketplace', {
         this.loading = true;
         this.error = null;
         
-        const canisterStore = useCanisterStore();
-        const marketplace = await canisterStore.get('marketplace');
+        // Get identity if user is authenticated
+        const authStore = useAuthStore();
+        const identity = authStore.isAuthenticated() ? authStore.getIdentity() : null;
         
-        if (!marketplace) {
-          throw new Error('Marketplace canister not found');
+        // Create marketplace actor directly
+        this.marketplaceActor = this.createMarketplaceActor(identity);
+        
+        if (!this.marketplaceActor) {
+          console.warn('Failed to create marketplace actor - entering fallback mode');
+          // Create a basic fallback marketplace stats object
+          this.marketStats = {
+            total_asks: 0,
+            active_asks: 0,
+            fee_percentage: BigInt(300), // 3.00%
+            approved_tokens: []
+          };
+          this.activeAsks = [];
+          this.userAsks = [];
+          
+          this.initialized = true;
+          this.error = 'Marketplace canister not available - some features may be limited';
+          return false;
         }
         
-        this.marketStats = await marketplace.getMarketplaceStats();
+        console.log('Marketplace actor created successfully, fetching stats...');
         
-        const approvedTokensResult = await marketplace.icrc8_approved_tokens();
+        // Fetch marketplace stats
+        this.marketStats = await this.marketplaceActor.getMarketplaceStats();
+        console.log('Got marketplace stats:', this.marketStats);
+        
+        // Fetch approved tokens
+        const approvedTokensResult = await this.marketplaceActor.icrc8_approved_tokens();
         if (approvedTokensResult && approvedTokensResult.length > 0) {
           this.approvedTokens = approvedTokensResult;
           
-          this.nftCollections = await Promise.all(
-            this.approvedTokens.map(async (collectionId) => {
-              try {
-                const nftCanister = await canisterStore.get(Principal.fromText(collectionId.toString()));
-                if (nftCanister) {
-                  const name = await nftCanister.icrc7_name();
-                  const symbol = await nftCanister.icrc7_symbol();
-                  return {
-                    id: collectionId.toString(),
-                    name,
-                    symbol
-                  };
-                }
-                return {
-                  id: collectionId.toString(),
-                  name: 'Unknown Collection',
-                  symbol: 'UNKNOWN'
-                };
-              } catch (error) {
-                console.warn(`Failed to load collection info for ${collectionId}:`, error);
-                return {
-                  id: collectionId.toString(),
-                  name: 'Unknown Collection',
-                  symbol: 'UNKNOWN'
-                };
-              }
-            })
-          );
+          // We'll fetch collection info in the background but not block initialization
+          this.fetchNFTCollectionsInfo();
         }
         
-        await Promise.all([
-          this.fetchActiveAsks(),
-          this.fetchUserData()
-        ]);
+        // Fetch asks data
+        await this.fetchActiveAsks();
+        
+        // Fetch user data if authenticated
+        if (authStore.isAuthenticated()) {
+          await this.fetchUserAsks();
+        }
         
         this.initialized = true;
         return true;
@@ -118,22 +155,58 @@ export const useMarketplaceStore = defineStore('marketplace', {
       }
     },
     
+    async fetchNFTCollectionsInfo() {
+      try {
+        const canisterStore = useCanisterStore();
+        
+        this.nftCollections = await Promise.all(
+          this.approvedTokens.map(async (collectionId) => {
+            try {
+              const nftCanister = await canisterStore.get(Principal.fromText(collectionId.toString()));
+              if (nftCanister) {
+                const name = await nftCanister.icrc7_name();
+                const symbol = await nftCanister.icrc7_symbol();
+                return {
+                  id: collectionId.toString(),
+                  name,
+                  symbol
+                };
+              }
+              return {
+                id: collectionId.toString(),
+                name: 'Unknown Collection',
+                symbol: 'UNKNOWN'
+              };
+            } catch (error) {
+              console.warn(`Failed to load collection info for ${collectionId}:`, error);
+              return {
+                id: collectionId.toString(),
+                name: 'Unknown Collection',
+                symbol: 'UNKNOWN'
+              };
+            }
+          })
+        );
+      } catch (error) {
+        console.error('Error fetching NFT collections info:', error);
+      }
+    },
+    
     async fetchActiveAsks() {
       this.activeAsksLoading = true;
       
       try {
-        const canisterStore = useCanisterStore();
-        const marketplace = await canisterStore.get('marketplace');
-        
-        if (!marketplace) {
-          throw new Error('Marketplace canister not found');
+        if (!this.marketplaceActor) {
+          this.activeAsks = [];
+          return;
         }
         
-        const result = await marketplace.getAllActiveAsks(100, 0);
+        const result = await this.marketplaceActor.getAllActiveAsks(100, 0);
         this.activeAsks = result;
       } catch (error) {
         console.error('Error fetching active asks:', error);
         this.error = error.message;
+        this.activeAsks = [];
       } finally {
         this.activeAsksLoading = false;
       }
@@ -145,8 +218,7 @@ export const useMarketplaceStore = defineStore('marketplace', {
       
       await Promise.all([
         this.fetchUserNFTs(),
-        this.fetchUserAsks(),
-        this.fetchUserTokenBalance()
+        this.fetchUserAsks()
       ]);
     },
     
@@ -158,7 +230,7 @@ export const useMarketplaceStore = defineStore('marketplace', {
         const authStore = useAuthStore();
         
         if (!authStore.isAuthenticated()) {
-          throw new Error('User not authenticated');
+          return [];
         }
         
         const principal = authStore.getIdentity().getPrincipal();
@@ -220,44 +292,35 @@ export const useMarketplaceStore = defineStore('marketplace', {
       }
     },
     
+    async getUserAsks() {
+      return this.fetchUserAsks();
+    },
+    
     async fetchUserAsks() {
       this.userAsksLoading = true;
       
       try {
         const authStore = useAuthStore();
-        const canisterStore = useCanisterStore();
-        const marketplace = await canisterStore.get('marketplace');
-        
-        if (!marketplace || !authStore.principal) {
-          throw new Error('Marketplace canister or user principal not found');
-        }
-        
-        const result = await marketplace.getUserAskHistory(authStore.principal, 20, 0);
-        this.userAsks = result;
-      } catch (error) {
-        console.error('Error fetching user asks:', error);
-      } finally {
-        this.userAsksLoading = false;
-      }
-    },
-    
-    async fetchUserTokenBalance() {
-      this.balanceLoading = true;
-      
-      try {
-        const authStore = useAuthStore();
-        const canisterStore = useCanisterStore();
         
         if (!authStore.isAuthenticated() || !authStore.principal) {
-          return;
+          this.userAsks = [];
+          return [];
         }
         
-        const balance = await canisterStore.getIcpBalance(authStore.principal);
-        this.userTokenBalance = balance;
+        if (!this.marketplaceActor) {
+          this.userAsks = [];
+          return [];
+        }
+        
+        const result = await this.marketplaceActor.getUserAskHistory(authStore.principal, 20, 0);
+        this.userAsks = result;
+        return result;
       } catch (error) {
-        console.error('Error fetching token balance:', error);
+        console.error('Error fetching user asks:', error);
+        this.userAsks = [];
+        return [];
       } finally {
-        this.balanceLoading = false;
+        this.userAsksLoading = false;
       }
     },
     
@@ -303,12 +366,13 @@ export const useMarketplaceStore = defineStore('marketplace', {
           throw new Error('You do not own this NFT');
         }
         
-        const canisterStore = useCanisterStore();
-        const marketplace = await canisterStore.get('marketplace');
+        if (!this.marketplaceActor) {
+          throw new Error('Marketplace not available');
+        }
         
         const collectionPrincipal = Principal.fromText(collectionId);
         
-        const result = await marketplace.createNFTAsk(collectionPrincipal, tokenId, price);
+        const result = await this.marketplaceActor.createNFTAsk(collectionPrincipal, tokenId, price);
         
         if (result.hasOwnProperty('Ok')) {
           await this.fetchUserAsks();
@@ -336,14 +400,11 @@ export const useMarketplaceStore = defineStore('marketplace', {
           throw new Error('User not authenticated');
         }
         
-        if (this.userTokenBalance <= 0) {
-          throw new Error('Insufficient token balance');
+        if (!this.marketplaceActor) {
+          throw new Error('Marketplace not available');
         }
         
-        const canisterStore = useCanisterStore();
-        const marketplace = await canisterStore.get('marketplace');
-        
-        const result = await marketplace.buyNFT(askId);
+        const result = await this.marketplaceActor.buyNFT(askId);
         
         if (result.hasOwnProperty('Ok')) {
           await this.initialize();
@@ -364,14 +425,15 @@ export const useMarketplaceStore = defineStore('marketplace', {
       try {
         this.loading = true;
         
-        const canisterStore = useCanisterStore();
-        const marketplace = await canisterStore.get('marketplace');
+        if (!this.marketplaceActor) {
+          return null;
+        }
         
         const askInfoRequests = [{ status: askId }];
-        const askInfo = await marketplace.icrc8_ask_info(askInfoRequests);
+        const askInfo = await this.marketplaceActor.icrc8_ask_info(askInfoRequests);
         
-        if (askInfo && askInfo.length > 0 && askInfo[0]?.status) {
-          this.selectedAsk = askInfo[0].status;
+        if (askInfo && askInfo.length > 0 && askInfo[0][1]?.status) {
+          this.selectedAsk = askInfo[0][1].status;
           return this.selectedAsk;
         } else {
           throw new Error('Ask details not found');

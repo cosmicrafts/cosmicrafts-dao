@@ -1,243 +1,154 @@
 <template>
-  <div class="onboarding-experience" v-if="isVisible">
-    <!-- Full page overlay with cosmic background -->
-    <div class="onboarding-overlay" :class="{ 'fade-in': isVisible }">
-      <!-- Progress bar -->
-      <div class="progress-container">
-        <div class="progress-bar">
-          <div class="progress-fill" :style="{ width: `${(currentStep / totalSteps) * 100}%` }"></div>
-        </div>
-        <div class="progress-text">{{ currentStep }} / {{ totalSteps }} {{ $t('onboarding.steps') }}</div>
+  <div class="onboarding-container" v-if="isVisible">
+    <div class="onboarding-overlay" :class="{ 'fade-in': animateOverlay }"></div>
+    
+    <!-- Step 1: Immediate Reward (15 seconds) -->
+    <div v-if="currentStep === 1" class="reward-claim-container">
+      <div class="reward-chest" :class="{ 'animate-open': chestOpened }">
+        <img src="/assets/webp/chests/stellar-box.webp" alt="Welcome Chest" @click="openChest" />
+        <div class="chest-glow" :class="{ 'pulse-fast': !chestOpened }"></div>
       </div>
-
-      <!-- Content slides with cosmic animation -->
-      <transition name="slide-fade" mode="out-in">
-        <div :key="currentStep" class="onboarding-content">
-          <!-- Welcome & Daily Reward -->
-          <div v-if="currentStep === 1" class="onboarding-step welcome-step">
-            <h1>{{ $t('onboarding.welcome', { username: playerName }) }}</h1>
-            <div class="welcome-bonus">
-              <div class="bonus-chest">
-                <img src="@/assets/chests/welcome-chest.webp" alt="Welcome chest" />
-                <div class="chest-glow"></div>
+      
+      <div class="reward-prompt" v-if="!chestOpened">
+        <h2>TAP TO CLAIM YOUR FREE CHEST!</h2>
+        <div class="countdown-timer">
+          <span>{{ countdownTime }}s</span>
+          <div class="timer-bar">
+            <div class="timer-progress" :style="{ width: `${countdownProgress}%` }"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="reward-details" v-if="chestOpened">
+        <div class="reward-animation">
+          <div class="token-burst">
+            <div v-for="n in 12" :key="n" class="token-particle"></div>
+          </div>
+        </div>
+        <div class="reward-items">
+          <div class="reward-item">
+            <div class="reward-icon token-icon">
+              <i class="fas fa-coins"></i>
+            </div>
+            <div class="reward-value">+30</div>
+            <div class="reward-label">TOKENS</div>
+          </div>
+          <div class="reward-item">
+            <div class="reward-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="reward-value">+20</div>
+            <div class="reward-label">XP</div>
+          </div>
+        </div>
+        <button @click="nextStep" class="action-button pulse-button">
+          CHECK WALLET <i class="fas fa-wallet"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Step 2: Wallet & NFT Introduction (45 seconds) -->
+    <div v-if="currentStep === 2" class="wallet-nft-container">
+      <h2>YOUR COSMIC WALLET</h2>
+      
+      <div class="wallet-display">
+        <div class="wallet-balance">
+          <div class="balance-header">
+            <i class="fas fa-wallet"></i>
+            <span>BALANCE</span>
+          </div>
+          <div class="balance-amount">
+            <span class="amount">30</span>
+            <span class="token">TOKENS</span>
+          </div>
+        </div>
+        
+        <div class="wallet-actions">
+          <button @click="activateFeature('wallet')" class="wallet-action-button active">
+            <i class="fas fa-check-circle"></i> WALLET ACTIVATED
+          </button>
+        </div>
+      </div>
+      
+      <div class="nft-preview">
+        <h3>MINT YOUR FIRST SHIP</h3>
+        <div class="nft-card">
+          <div class="nft-image">
+            <div class="nft-glow"></div>
+            <img src="@/assets/webp/ships/starter-ship.webp" alt="Starter Ship" onerror="this.src='/assets/webp/chests/cosmic-cache.webp'"/>
+          </div>
+          <div class="nft-info">
+            <div class="nft-name">Cosmic Guardian</div>
+            <div class="nft-type">Starter Ship</div>
+            <div class="nft-stats">
+              <div class="stat">
+                <i class="fas fa-shield-alt"></i>
+                <span>100 HP</span>
               </div>
-              <div class="bonus-details">
-                <h2>{{ $t('onboarding.welcomeReward') }}</h2>
-                <ul class="reward-list">
-                  <li>
-                    <img src="@/assets/tokens/std-token.webp" alt="STD Tokens" />
-                    <span>{{ initialRewards.tokens }} {{ $t('onboarding.tokens') }}</span>
-                  </li>
-                  <li>
-                    <img src="@/assets/icons/xp-icon.webp" alt="XP" />
-                    <span>{{ initialRewards.xp }} {{ $t('onboarding.xp') }}</span>
-                  </li>
-                  <li v-if="initialRewards.nft">
-                    <img src="@/assets/nfts/starter-nft.webp" alt="Starter NFT" />
-                    <span>{{ $t('onboarding.starterNFT') }}</span>
-                  </li>
-                </ul>
-                <button @click="claimInitialRewards" class="cosmic-button claim-button">
-                  <span class="pulse-animation"></span>
-                  {{ $t('onboarding.claimReward') }}
-                </button>
+              <div class="stat">
+                <i class="fas fa-bolt"></i>
+                <span>15 POWER</span>
               </div>
             </div>
+            <button 
+              @click="activateFeature('ship')" 
+              class="mint-button"
+              :class="{ 'minted': activatedFeatures.includes('ship') }"
+            >
+              <span v-if="!activatedFeatures.includes('ship')">
+                <i class="fas fa-fire"></i> MINT SHIP (25 TOKENS)
+              </span>
+              <span v-else>
+                <i class="fas fa-check-circle"></i> SHIP MINTED!
+              </span>
+            </button>
           </div>
-
-          <!-- Daily Missions -->
-          <div v-else-if="currentStep === 2" class="onboarding-step missions-step">
-            <h2>{{ $t('onboarding.dailyMissions') }}</h2>
-            <p>{{ $t('onboarding.missionsDescription') }}</p>
-            
-            <div class="mission-examples">
-              <div v-for="(mission, index) in introMissions" :key="index" class="mission-card">
-                <div class="mission-icon">
-                  <i :class="mission.icon"></i>
-                </div>
-                <div class="mission-details">
-                  <h3>{{ mission.title }}</h3>
-                  <p>{{ mission.description }}</p>
-                  <div class="mission-reward">
-                    <img :src="mission.rewardIcon" :alt="mission.rewardType" />
-                    <span>{{ mission.rewardAmount }} {{ mission.rewardType }}</span>
-                  </div>
-                </div>
-                <button @click="activateMission(mission.id)" class="cosmic-button activate-mission">
-                  {{ $t('onboarding.activateMission') }}
-                </button>
-              </div>
+        </div>
+      </div>
+      
+      <div class="mission-preview" v-if="activatedFeatures.includes('ship')">
+        <h3>STARTER MISSION UNLOCKED!</h3>
+        <div class="mission-card">
+          <div class="mission-icon">
+            <i class="fas fa-rocket"></i>
+          </div>
+          <div class="mission-details">
+            <div class="mission-name">First Voyage</div>
+            <div class="mission-description">Deploy your ship and complete your first mission</div>
+            <div class="mission-reward">
+              <i class="fas fa-coins"></i> <span>20 TOKENS</span>
+              <i class="fas fa-star"></i> <span>50 XP</span>
             </div>
-          </div>
-
-          <!-- Friend Connect -->
-          <div v-else-if="currentStep === 3" class="onboarding-step friends-step">
-            <h2>{{ $t('onboarding.connectWithFriends') }}</h2>
-            <p>{{ $t('onboarding.friendsDescription') }}</p>
-            
-            <div class="friend-options">
-              <div class="referral-code">
-                <h3>{{ $t('onboarding.yourReferralCode') }}</h3>
-                <div class="code-display">
-                  <span>{{ referralCode }}</span>
-                  <button @click="copyReferralCode" class="copy-button">
-                    <i class="fas" :class="copied ? 'fa-check' : 'fa-copy'"></i>
-                  </button>
-                </div>
-                <p>{{ $t('onboarding.referralDescription') }}</p>
-                <div class="social-share">
-                  <button @click="shareOnSocial('twitter')" class="social-button twitter">
-                    <i class="fab fa-twitter"></i>
-                  </button>
-                  <button @click="shareOnSocial('discord')" class="social-button discord">
-                    <i class="fab fa-discord"></i>
-                  </button>
-                  <button @click="shareOnSocial('telegram')" class="social-button telegram">
-                    <i class="fab fa-telegram"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Personalization -->
-          <div v-else-if="currentStep === 4" class="onboarding-step personalization-step">
-            <h2>{{ $t('onboarding.personalizeProfile') }}</h2>
-            <p>{{ $t('onboarding.personalizationDescription') }}</p>
-            
-            <div class="personalization-options">
-              <div class="avatar-selection">
-                <h3>{{ $t('onboarding.chooseAvatar') }}</h3>
-                <div class="avatar-grid">
-                  <div 
-                    v-for="(avatar, index) in avatarOptions" 
-                    :key="index"
-                    class="avatar-option"
-                    :class="{ 'selected': selectedAvatar === index }"
-                    @click="selectAvatar(index)"
-                  >
-                    <img :src="`/assets/avatars/avatar-${avatar}.webp`" :alt="`Avatar ${avatar}`" />
-                  </div>
-                </div>
-              </div>
-              
-              <div class="title-selection">
-                <h3>{{ $t('onboarding.chooseTitle') }}</h3>
-                <div class="title-options">
-                  <div 
-                    v-for="(title, index) in titleOptions" 
-                    :key="index"
-                    class="title-option"
-                    :class="{ 'selected': selectedTitle === index }"
-                    @click="selectTitle(index)"
-                  >
-                    <span>{{ title }}</span>
-                  </div>
-                </div>
-              </div>
-              
-              <button @click="savePersonalization" class="cosmic-button save-personalization">
-                {{ $t('onboarding.saveChoices') }}
-              </button>
-            </div>
-          </div>
-
-          <!-- Completion -->
-          <div v-else-if="currentStep === 5" class="onboarding-step completion-step">
-            <h2>{{ $t('onboarding.ready') }}</h2>
-            <div class="completion-details">
-              <div class="completion-rewards">
-                <h3>{{ $t('onboarding.yourRewards') }}</h3>
-                <ul class="final-rewards">
-                  <li>
-                    <img src="@/assets/tokens/std-token.webp" alt="STD Tokens" />
-                    <span>{{ totalRewards.tokens }} {{ $t('onboarding.tokens') }}</span>
-                  </li>
-                  <li>
-                    <img src="@/assets/icons/xp-icon.webp" alt="XP" />
-                    <span>{{ totalRewards.xp }} {{ $t('onboarding.xp') }}</span>
-                  </li>
-                  <li v-if="totalRewards.nft">
-                    <img src="@/assets/nfts/starter-nft.webp" alt="Starter NFT" />
-                    <span>1 {{ $t('onboarding.starterNFT') }}</span>
-                  </li>
-                </ul>
-              </div>
-              
-              <div class="next-steps">
-                <h3>{{ $t('onboarding.whatNext') }}</h3>
-                <div class="next-steps-options">
-                  <button @click="navigateTo('/dashboard')" class="cosmic-button primary">
-                    <i class="fas fa-columns"></i>
-                    {{ $t('onboarding.exploreDashboard') }}
-                  </button>
-                  <button @click="navigateTo('/missions')" class="cosmic-button secondary">
-                    <i class="fas fa-tasks"></i>
-                    {{ $t('onboarding.completeMissions') }}
-                  </button>
-                  <button @click="navigateTo('/friends')" class="cosmic-button secondary">
-                    <i class="fas fa-user-friends"></i>
-                    {{ $t('onboarding.inviteFriends') }}
-                  </button>
-                </div>
-              </div>
+            <div class="mission-time">
+              <i class="fas fa-clock"></i> <span>5 min</span>
             </div>
           </div>
         </div>
-      </transition>
-
-      <!-- Navigation controls -->
-      <div class="navigation-controls">
+      </div>
+      
+      <div class="onboarding-footer">
         <button 
-          v-if="currentStep > 1" 
-          @click="previousStep" 
-          class="nav-button prev-button"
-        >
-          <i class="fas fa-chevron-left"></i>
-          {{ $t('onboarding.back') }}
-        </button>
-        
-        <button 
-          v-if="currentStep < totalSteps" 
-          @click="nextStep" 
-          class="nav-button next-button"
-          :disabled="isStepBlocked"
-        >
-          {{ $t('onboarding.next') }}
-          <i class="fas fa-chevron-right"></i>
-        </button>
-        
-        <button 
-          v-if="currentStep === totalSteps" 
           @click="completeOnboarding" 
-          class="nav-button complete-button"
+          class="action-button"
+          :class="{ 'pulse-button': activatedFeatures.includes('ship') }"
         >
-          {{ $t('onboarding.getStarted') }}
+          {{ activatedFeatures.includes('ship') ? 'START EXPLORING!' : 'CONTINUE' }}
           <i class="fas fa-rocket"></i>
         </button>
       </div>
-
-      <!-- Skip button (only show in first 4 steps) -->
-      <button 
-        v-if="currentStep < totalSteps" 
-        @click="showSkipConfirmation = true" 
-        class="skip-button"
-      >
-        {{ $t('onboarding.skip') }}
-      </button>
     </div>
-
+    
     <!-- Skip confirmation modal -->
-    <div v-if="showSkipConfirmation" class="skip-confirmation-modal">
+    <div class="modal-overlay" v-if="showSkipModal">
       <div class="modal-content">
-        <h3>{{ $t('onboarding.skipConfirmTitle') }}</h3>
-        <p>{{ $t('onboarding.skipConfirmMessage') }}</p>
+        <h3>Skip Minting Ship?</h3>
+        <p>Your starter ship gives you an advantage in early missions!</p>
         <div class="modal-actions">
-          <button @click="showSkipConfirmation = false" class="cosmic-button secondary">
-            {{ $t('onboarding.stayHere') }}
+          <button @click="showSkipModal = false" class="secondary-button">
+            No, Mint Ship
           </button>
-          <button @click="skipOnboarding" class="cosmic-button primary">
-            {{ $t('onboarding.confirmSkip') }}
+          <button @click="skipOnboarding" class="danger-button">
+            Skip Anyway
           </button>
         </div>
       </div>
@@ -246,370 +157,200 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
-import { useCanisterStore } from '@/stores/canister';
+import { ref, computed, onMounted } from 'vue';
 import { useNotification } from '@/composables/useNotification';
-import { storeOnboardingProgress } from '@/utils/localStorageUtils';
-
-// Router and stores
-const router = useRouter();
-const authStore = useAuthStore();
-const canisterStore = useCanisterStore();
-const notify = useNotification();
 
 // State
 const isVisible = ref(true);
+const animateOverlay = ref(false);
 const currentStep = ref(1);
-const totalSteps = 5;
-const showSkipConfirmation = ref(false);
-const copied = ref(false);
-const playerName = computed(() => authStore.player?.username || 'Explorer');
-const referralCode = ref('COSMIC-123456');
-const isStepBlocked = ref(false);
+const chestOpened = ref(false);
+const countdownTime = ref(15); // Shortened to 15 seconds for faster engagement
+const countdownProgress = ref(100);
+const showSkipModal = ref(false);
+const activatedFeatures = ref(['wallet']); // Wallet activated by default
+const tokenBalance = ref(30);
+const notify = useNotification();
 
-// Feature-specific onboarding mode
-const featureOnboardingMode = ref(false);
-const featureFocus = ref(null);
+// Emit events
+const emit = defineEmits(['onboarding-completed', 'onboarding-skipped', 'mission-activated']);
 
-// Avatar and title selection
-const selectedAvatar = ref(0);
-const selectedTitle = ref(0);
-const avatarOptions = ref([1, 2, 3, 4, 5, 6, 7, 8]);
-const titleOptions = ref([
-  'Cosmic Explorer',
-  'Starbound Initiate',
-  'Galactic Pioneer',
-  'Nebula Navigator'
-]);
-
-// Initial rewards
-const initialRewards = ref({
-  tokens: 100,
-  xp: 50,
-  nft: true
-});
-
-// Total rewards accumulated during onboarding
-const totalRewards = ref({
-  tokens: 100,
-  xp: 50,
-  nft: true
-});
-
-// Example missions for step 2
-const introMissions = ref([
-  {
-    id: 1,
-    title: 'Daily Login Streak',
-    description: 'Log in for 3 consecutive days',
-    icon: 'fas fa-calendar-check',
-    rewardIcon: '@/assets/tokens/std-token.webp',
-    rewardType: 'STD',
-    rewardAmount: 25
-  },
-  {
-    id: 2,
-    title: 'Profile Customization',
-    description: 'Update your profile avatar and title',
-    icon: 'fas fa-user-astronaut',
-    rewardIcon: '@/assets/icons/xp-icon.webp',
-    rewardType: 'XP',
-    rewardAmount: 30
-  },
-  {
-    id: 3,
-    title: 'First Friend Connection',
-    description: 'Add your first friend',
-    icon: 'fas fa-user-friends',
-    rewardIcon: '@/assets/tokens/std-token.webp',
-    rewardType: 'STD',
-    rewardAmount: 50
-  }
-]);
-
-// Methods
-const nextStep = () => {
-  if (currentStep.value < totalSteps) {
-    currentStep.value++;
-    // Track progress to resume if user leaves
-    storeOnboardingProgress(currentStep.value);
-  }
-};
-
-const previousStep = () => {
-  if (currentStep.value > 1) {
-    currentStep.value--;
-  }
-};
-
-const claimInitialRewards = async () => {
-  try {
-    // Call backend to claim initial rewards
-    const cosmicrafts = await canisterStore.get('cosmicrafts');
-    
-    // Optimistic UI update while the backend processes
-    notify.reward(`You received ${initialRewards.value.tokens} tokens and ${initialRewards.value.xp} XP`, {
-      title: 'Welcome Reward Claimed!',
-      duration: 5000
-    });
-    
-    // Allow proceeding to next step
-    isStepBlocked.value = false;
-    
-    // Automatically go to next step after a short delay
-    setTimeout(() => {
-      nextStep();
-    }, 1500);
-    
-  } catch (error) {
-    console.error('Error claiming initial rewards:', error);
-    notify.error('There was an issue claiming your rewards. Please try again.');
-  }
-};
-
-const activateMission = async (missionId) => {
-  try {
-    // Call backend to activate the mission
-    const cosmicrafts = await canisterStore.get('cosmicrafts');
-    
-    // For now, just show notification
-    notify.success(`Mission activated!`, {
-      title: 'Mission Ready',
-      duration: 3000
-    });
-    
-    // Update the mission in the UI to show it's activated
-    const missionIndex = introMissions.value.findIndex(m => m.id === missionId);
-    if (missionIndex !== -1) {
-      // Clone and modify the mission
-      const updatedMissions = [...introMissions.value];
-      updatedMissions[missionIndex] = { 
-        ...updatedMissions[missionIndex],
-        activated: true 
-      };
-      introMissions.value = updatedMissions;
+// Start countdown
+const startCountdown = () => {
+  const totalTime = 15; // 15 seconds for faster engagement
+  countdownTime.value = totalTime;
+  countdownProgress.value = 100;
+  
+  const interval = setInterval(() => {
+    if (countdownTime.value > 0) {
+      countdownTime.value--;
+      countdownProgress.value = (countdownTime.value / totalTime) * 100;
+    } else {
+      clearInterval(interval);
+      // Auto-open chest if not opened by user
+      if (!chestOpened.value) {
+        openChest();
+      }
     }
-    
-  } catch (error) {
-    console.error('Error activating mission:', error);
-    notify.error('There was an issue activating the mission. Please try again.');
-  }
+  }, 1000);
 };
 
-const copyReferralCode = () => {
-  navigator.clipboard.writeText(referralCode.value);
-  copied.value = true;
+// Open chest and show rewards
+const openChest = () => {
+  if (chestOpened.value) return;
+  
+  chestOpened.value = true;
+  
+  // Play sound effect if available
+  // playSound('chest-open');
+  
+  // Show tokens animation
   setTimeout(() => {
-    copied.value = false;
-  }, 2000);
-  
-  notify.success('Referral code copied to clipboard!', {
-    duration: 2000
-  });
-};
-
-const shareOnSocial = (platform) => {
-  const message = `Join me in Cosmicrafts! Use my referral code ${referralCode.value} to get bonus rewards when you sign up: https://cosmicrafts.com/register?ref=${referralCode.value}`;
-  
-  let url = '';
-  switch (platform) {
-    case 'twitter':
-      url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
-      break;
-    case 'discord':
-      notify.info('Referral code copied. Paste it in your Discord message!', {
-        title: 'Share on Discord',
-        duration: 3000
-      });
-      navigator.clipboard.writeText(message);
-      return;
-    case 'telegram':
-      url = `https://t.me/share/url?url=https://cosmicrafts.com&text=${encodeURIComponent(message)}`;
-      break;
-  }
-  
-  if (url) {
-    window.open(url, '_blank');
-  }
-  
-  // Add social sharing bonus
-  totalRewards.value.tokens += 25;
-  notify.reward('You earned 25 STD tokens for sharing!', {
-    title: 'Sharing Bonus',
-    duration: 3000
-  });
-};
-
-const selectAvatar = (index) => {
-  selectedAvatar.value = index;
-};
-
-const selectTitle = (index) => {
-  selectedTitle.value = index;
-};
-
-const savePersonalization = async () => {
-  try {
-    // Call backend to save personalization choices
-    const cosmicrafts = await canisterStore.get('cosmicrafts');
-    
-    // For now, just show notification
-    notify.success('Your profile has been updated!', {
-      title: 'Profile Updated',
+    notify.reward('30 Tokens and 20 XP claimed!', {
+      title: 'Free Daily Chest!',
       duration: 3000
     });
     
-    // Add personalization bonus
-    totalRewards.value.xp += 20;
-    notify.reward('You earned 20 XP for personalizing your profile!', {
-      title: 'Personalization Bonus',
-      duration: 3000
-    });
+    // Update mission progress in analytics
+    console.log('Analytics: Daily free chest claimed');
     
-    // Allow proceeding to next step
-    isStepBlocked.value = false;
-    
-    // Automatically go to next step after a short delay
-    setTimeout(() => {
-      nextStep();
-    }, 1500);
-    
-  } catch (error) {
-    console.error('Error saving personalization:', error);
-    notify.error('There was an issue saving your preferences. Please try again.');
-  }
-};
-
-const navigateTo = (path) => {
-  router.push(path);
-};
-
-const completeOnboarding = async () => {
-  try {
-    // Mark onboarding as completed in backend and local storage
-    const cosmicrafts = await canisterStore.get('cosmicrafts');
-    
-    // Close the onboarding experience
-    isVisible.value = false;
-    featureOnboardingMode.value = false;
-    featureFocus.value = null;
-    
-    // Navigate to dashboard only if not in feature mode
-    if (!featureOnboardingMode.value) {
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 500);
-    }
-    
-    // Show final notification
-    notify.success('Welcome to Cosmicrafts! Your journey begins now.', {
-      title: 'Onboarding Complete',
-      duration: 5000
-    });
-    
-  } catch (error) {
-    console.error('Error completing onboarding:', error);
-    // Force complete anyway
-    isVisible.value = false;
-    router.push('/dashboard');
-  }
-};
-
-const skipOnboarding = () => {
-  // Mark onboarding as skipped but still grant some rewards
-  showSkipConfirmation.value = false;
-  
-  // Notify about missed rewards
-  notify.info('You skipped onboarding and missed some rewards. You can always access tutorials from settings.', {
-    title: 'Onboarding Skipped',
-    duration: 5000
-  });
-  
-  // Close the onboarding experience
-  isVisible.value = false;
-  
-  // Navigate to dashboard
-  setTimeout(() => {
-    router.push('/dashboard');
+    // Would trigger backend update here in production
+    // updateMissionProgress('dailyFreeChest', 1);
   }, 500);
 };
 
-// Method to initiate feature-specific onboarding
-const startFeatureOnboarding = (feature) => {
-  featureOnboardingMode.value = true;
-  featureFocus.value = feature;
-  isVisible.value = true;
-  
-  // Set the appropriate step based on the feature
-  switch(feature) {
-    case 'missions':
-      currentStep.value = 2;
-      break;
-    case 'friends':
-      currentStep.value = 3;
-      break;
-    case 'personalization':
-      currentStep.value = 4;
-      break;
-    default:
-      currentStep.value = 1;
-  }
-  
-  // Track impression for analytics
-  try {
-    // Log feature-specific onboarding start
-    console.log(`Feature onboarding started: ${feature}`);
-  } catch (error) {
-    console.error('Error logging feature onboarding:', error);
+// Go to next step
+const nextStep = () => {
+  currentStep.value++;
+};
+
+// Activate feature
+const activateFeature = (feature) => {
+  if (!activatedFeatures.value.includes(feature)) {
+    activatedFeatures.value.push(feature);
+    
+    // Show notification
+    let message = '';
+    let title = '';
+    
+    switch (feature) {
+      case 'ship':
+        message = 'Cosmic Guardian ship minted and added to your collection!';
+        title = 'Ship NFT Minted!';
+        tokenBalance.value -= 25; // Deduct tokens for minting
+        
+        // Activate mission
+        setTimeout(() => {
+          notify.info('First Voyage mission is now available!', {
+            title: 'Mission Unlocked',
+            duration: 4000
+          });
+          
+          emit('mission-activated', {
+            missionId: 'firstVoyage',
+            missionName: 'First Voyage'
+          });
+        }, 1000);
+        break;
+    }
+    
+    if (message) {
+      notify.success(message, {
+        title,
+        duration: 3000
+      });
+    }
   }
 };
 
-// Expose method to parent components
-defineExpose({ startFeatureOnboarding });
-
-// Fetch user's referral code on mount
-onMounted(async () => {
-  try {
-    const cosmicrafts = await canisterStore.get('cosmicrafts');
-    
-    // Fetch referral code
-    // This is a placeholder - actual implementation would call the backend
-    
-    // Fetch personalization options
-    // This is a placeholder - actual implementation would call the backend
-    
-  } catch (error) {
-    console.error('Error fetching onboarding data:', error);
+// Complete onboarding
+const completeOnboarding = () => {
+  // If ship isn't minted, confirm
+  if (!activatedFeatures.value.includes('ship')) {
+    showSkipModal.value = true;
+    return;
   }
-});
-
-// Watch for step changes to update block state
-watch(currentStep, (newStep) => {
-  // Reset block state on step change
-  isStepBlocked.value = false;
   
-  // Set specific steps as blocked until action is taken
-  if (newStep === 1) {
-    // Block next button until initial rewards are claimed
-    isStepBlocked.value = true;
-  } else if (newStep === 4) {
-    // Block next button until personalization is saved
-    isStepBlocked.value = true;
+  finishOnboarding();
+};
+
+// Skip onboarding
+const skipOnboarding = () => {
+  try {
+    // Emit event to parent
+    emit('onboarding-skipped');
+    
+    // Hide onboarding
+    isVisible.value = false;
+    showSkipModal.value = false;
+    
+    // Notify user
+    notify.info('You can mint your ship later from the Collection tab.', {
+      title: 'Onboarding Skipped',
+      duration: 4000
+    });
+    
+    // Save onboarding status
+    localStorage.setItem('onboardingSkipped', 'true');
+    console.log('Analytics: Onboarding skipped');
+  } catch (error) {
+    console.error('Error skipping onboarding:', error);
   }
+};
+
+// Finish onboarding with ship minted
+const finishOnboarding = () => {
+  // Emit completed event
+  emit('onboarding-completed', {
+    activatedFeatures: activatedFeatures.value,
+    shipMinted: activatedFeatures.value.includes('ship')
+  });
+  
+  // Show completion notification
+  notify.reward('Welcome to Cosmicrafts! Your journey begins now.', {
+    title: 'Ready to Explore!',
+    duration: 4000
+  });
+  
+  // Hide onboarding
+  isVisible.value = false;
+  
+  // Save onboarding status
+  localStorage.setItem('onboardingCompleted', 'true');
+  console.log('Analytics: Onboarding completed successfully with ship minted');
+};
+
+// Initialize
+onMounted(() => {
+  // Check if onboarding has been completed already
+  const hasCompletedOnboarding = localStorage.getItem('onboardingCompleted') === 'true';
+  
+  if (hasCompletedOnboarding) {
+    isVisible.value = false;
+    return;
+  }
+  
+  // Animate overlay
+  setTimeout(() => {
+    animateOverlay.value = true;
+  }, 100);
+  
+  // Start countdown
+  startCountdown();
 });
 </script>
 
 <style scoped>
-.onboarding-experience {
+.onboarding-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 9999;
-  font-family: 'Exo 2', sans-serif;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .onboarding-overlay {
@@ -618,13 +359,8 @@ watch(currentStep, (newStep) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #080c24 0%, #1a1248 50%, #341a54 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  overflow-y: auto;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(16, 24, 48, 0.95) 100%);
+  backdrop-filter: blur(8px);
   opacity: 0;
   transition: opacity 0.5s ease;
 }
@@ -633,95 +369,34 @@ watch(currentStep, (newStep) => {
   opacity: 1;
 }
 
-.progress-container {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.progress-bar {
-  width: 60%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 5px;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #0fb9fd, #9d35bf);
-  border-radius: 4px;
-  transition: width 0.5s ease;
-}
-
-.progress-text {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.onboarding-content {
-  max-width: 800px;
-  width: 100%;
-  background: rgba(10, 15, 30, 0.8);
-  border-radius: 16px;
-  padding: 30px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  margin: 60px 0;
-}
-
-.onboarding-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.onboarding-step h1, 
-.onboarding-step h2 {
-  background: linear-gradient(90deg, #0fb9fd, #9d35bf);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.onboarding-step h1 {
-  font-size: 36px;
-}
-
-.onboarding-step h2 {
-  font-size: 28px;
-}
-
-.onboarding-step p {
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 30px;
-  text-align: center;
-  max-width: 80%;
-}
-
-/* Welcome step styling */
-.welcome-bonus {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  margin: 20px 0;
-}
-
-.bonus-chest {
+/* Step 1: Reward Claim Styles */
+.reward-claim-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  max-width: 90%;
+  width: 400px;
 }
 
-.bonus-chest img {
-  width: 150px;
-  height: auto;
+.reward-chest {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.reward-chest:hover {
+  transform: scale(1.05);
+}
+
+.reward-chest img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .chest-glow {
@@ -730,466 +405,462 @@ watch(currentStep, (newStep) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(15, 185, 253, 0.4) 0%, rgba(157, 53, 191, 0.4) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.5) 0%, rgba(255, 140, 0, 0.2) 50%, transparent 70%);
   filter: blur(10px);
   z-index: -1;
-  animation: pulse 2s infinite;
 }
 
-@keyframes pulse {
-  0% { transform: scale(0.95); opacity: 0.7; }
-  50% { transform: scale(1.05); opacity: 0.9; }
-  100% { transform: scale(0.95); opacity: 0.7; }
+.pulse-fast {
+  animation: pulse-fast 1.2s infinite;
 }
 
-.bonus-details {
+@keyframes pulse-fast {
+  0% { opacity: 0.5; transform: scale(0.95); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+  100% { opacity: 0.5; transform: scale(0.95); }
+}
+
+.reward-chest.animate-open {
+  animation: chest-open 0.8s forwards;
+}
+
+@keyframes chest-open {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1.1); }
+}
+
+.reward-prompt {
+  text-align: center;
+  color: white;
+}
+
+.reward-prompt h2 {
+  font-size: 1.8rem;
+  margin: 0 0 1rem 0;
+  background: linear-gradient(90deg, #FFD700, #FF8C00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-pulse 2s infinite;
+}
+
+@keyframes text-pulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.countdown-timer {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.reward-list, .final-rewards {
-  list-style: none;
-  padding: 0;
-  margin: 15px 0;
+.countdown-timer span {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #FF8C00;
 }
 
-.reward-list li, .final-rewards li {
+.timer-bar {
+  width: 200px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.timer-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #FF8C00, #FFD700);
+  border-radius: 3px;
+  transition: width 1s linear;
+}
+
+.reward-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  animation: fade-in 0.5s ease-out;
+}
+
+.reward-animation {
+  position: relative;
+  width: 100%;
+  height: 60px;
+}
+
+.token-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.token-particle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #FFD700;
+  border-radius: 50%;
+  animation: particle-burst 1s forwards;
+}
+
+@keyframes particle-burst {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+      calc(cos(var(--angle, 0deg)) * 100px),
+      calc(sin(var(--angle, 0deg)) * 100px)
+    );
+    opacity: 0;
+  }
+}
+
+.reward-items {
+  display: flex;
+  gap: 2rem;
+}
+
+.reward-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  gap: 0.5rem;
+}
+
+.reward-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
-  color: white;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: #9d35bf;
 }
 
-.reward-list li img, .final-rewards li img {
-  width: 24px;
-  height: 24px;
-  margin-right: 10px;
+.token-icon {
+  color: #FFD700;
 }
 
-.cosmic-button {
-  background: linear-gradient(90deg, #0fb9fd, #9d35bf);
+.reward-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.reward-label {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* Step 2: Wallet & NFT Styles */
+.wallet-nft-container {
+  position: relative;
+  background: rgba(15, 20, 40, 0.8);
+  border-radius: 16px;
+  border: 1px solid rgba(15, 185, 253, 0.3);
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 500px;
+  z-index: 10;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: slide-up 0.5s ease-out;
+}
+
+.wallet-nft-container h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
   color: white;
-  border: none;
-  border-radius: 30px;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.wallet-nft-container h3 {
+  color: white;
+  font-size: 1.2rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.wallet-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 185, 253, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  padding: 1rem;
+}
+
+.wallet-balance {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.balance-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.balance-amount {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.amount {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #FFD700;
+}
+
+.token {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.wallet-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.wallet-action-button {
+  background: rgba(0, 229, 164, 0.1);
+  color: var(--cosmic-green, #00e5a4);
+  border: 1px solid rgba(0, 229, 164, 0.3);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nft-preview {
+  margin-top: 1rem;
+}
+
+.nft-card {
+  display: flex;
+  background: rgba(15, 185, 253, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  overflow: hidden;
+}
+
+.nft-image {
+  width: 120px;
+  height: 150px;
   position: relative;
   overflow: hidden;
 }
 
-.cosmic-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(157, 53, 191, 0.4);
+.nft-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.cosmic-button:disabled {
-  background: linear-gradient(90deg, #536272, #6e6b80);
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.claim-button {
-  margin-top: 15px;
-}
-
-.pulse-animation {
+.nft-glow {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 30px;
-  z-index: -1;
-  animation: pulse-btn 2s infinite;
+  background: linear-gradient(135deg, rgba(15, 185, 253, 0.2) 0%, rgba(157, 53, 191, 0.1) 100%);
+  pointer-events: none;
 }
 
-@keyframes pulse-btn {
-  0% { transform: scale(0.95); opacity: 0.7; }
-  50% { transform: scale(1.05); opacity: 0; }
-  100% { transform: scale(0.95); opacity: 0.7; }
-}
-
-/* Missions step styling */
-.mission-examples {
+.nft-info {
+  flex: 1;
+  padding: 1rem;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.nft-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+
+.nft-type {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.75rem;
+}
+
+.nft-stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+.mint-button {
+  margin-top: auto;
+  background: linear-gradient(90deg, #FF6B6B, #FF8E53);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 20px;
-  width: 100%;
+  gap: 0.5rem;
+}
+
+.mint-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+}
+
+.mint-button.minted {
+  background: linear-gradient(90deg, #00e5a4, #00c497);
+}
+
+.mission-preview {
+  margin-top: 1.5rem;
+  animation: fade-in 0.5s ease-out;
 }
 
 .mission-card {
-  background: rgba(10, 20, 40, 0.6);
-  border-radius: 12px;
-  padding: 20px;
-  width: calc(33% - 20px);
-  min-width: 220px;
-  border: 1px solid rgba(15, 185, 253, 0.2);
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.mission-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(15, 185, 253, 0.15);
+  background: rgba(15, 185, 253, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  padding: 1rem;
+  gap: 1rem;
 }
 
 .mission-icon {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0fb9fd 0%, #9d35bf 100%);
+  background: rgba(157, 53, 191, 0.1);
+  color: #9d35bf;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 15px;
-}
-
-.mission-icon i {
-  font-size: 24px;
-  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
 .mission-details {
-  text-align: center;
-  margin-bottom: 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.mission-details h3 {
+.mission-name {
+  font-size: 1.1rem;
+  font-weight: bold;
   color: white;
-  margin-bottom: 10px;
-  font-size: 18px;
 }
 
-.mission-details p {
+.mission-description {
+  font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 14px;
-  margin-bottom: 10px;
 }
 
 .mission-reward {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 5px;
-  margin-top: 10px;
+  gap: 1rem;
+  margin-top: 0.5rem;
 }
 
-.mission-reward img {
-  width: 20px;
-  height: 20px;
+.mission-reward i {
+  color: #FFD700;
 }
 
 .mission-reward span {
-  color: #0fb9fd;
-  font-weight: 600;
-}
-
-.activate-mission {
-  margin-top: auto;
-  width: 100%;
-  max-width: 180px;
-}
-
-/* Friends step styling */
-.friend-options {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 500px;
-}
-
-.referral-code {
-  background: rgba(10, 20, 40, 0.6);
-  border-radius: 12px;
-  padding: 20px;
-  width: 100%;
-  border: 1px solid rgba(15, 185, 253, 0.2);
-  margin-bottom: 20px;
-}
-
-.referral-code h3 {
   color: white;
-  margin-bottom: 15px;
-  text-align: center;
+  font-size: 0.9rem;
 }
 
-.code-display {
+.mission-time {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-  padding: 10px 15px;
-  margin-bottom: 15px;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 0.25rem;
 }
 
-.code-display span {
-  color: #0fb9fd;
-  font-family: 'Courier New', monospace;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 1px;
+.onboarding-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
 }
 
-.copy-button {
-  background: none;
+.action-button {
+  background: linear-gradient(90deg, var(--cosmic-blue, #0fb9fd), var(--cosmic-purple, #9d35bf));
+  color: white;
   border: none;
-  color: rgba(255, 255, 255, 0.7);
+  border-radius: 24px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.copy-button:hover {
-  color: white;
-}
-
-.copy-button i {
-  font-size: 18px;
-}
-
-.social-share {
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
+  gap: 0.5rem;
 }
 
-.social-button {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+.action-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(15, 185, 253, 0.3);
 }
 
-.social-button:hover {
-  transform: scale(1.1);
+.pulse-button {
+  animation: pulse-button 2s infinite;
 }
 
-.social-button i {
-  font-size: 20px;
-  color: white;
+@keyframes pulse-button {
+  0% {
+    box-shadow: 0 0 0 0 rgba(15, 185, 253, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(15, 185, 253, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(15, 185, 253, 0);
+  }
 }
 
-.twitter {
-  background: #1DA1F2;
-}
-
-.discord {
-  background: #5865F2;
-}
-
-.telegram {
-  background: #0088cc;
-}
-
-/* Personalization step styling */
-.personalization-options {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.avatar-selection, .title-selection {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.avatar-selection h3, .title-selection h3 {
-  color: white;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.avatar-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.avatar-option {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid transparent;
-}
-
-.avatar-option:hover {
-  transform: scale(1.05);
-}
-
-.avatar-option.selected {
-  border: 2px solid #0fb9fd;
-  box-shadow: 0 0 10px rgba(15, 185, 253, 0.5);
-}
-
-.avatar-option img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.title-options {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-
-.title-option {
-  background: rgba(10, 20, 40, 0.6);
-  border-radius: 8px;
-  padding: 10px;
-  cursor: pointer;
-  text-align: center;
-  transition: background 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.title-option:hover {
-  background: rgba(15, 185, 253, 0.1);
-}
-
-.title-option.selected {
-  background: rgba(15, 185, 253, 0.2);
-  border: 1px solid rgba(15, 185, 253, 0.5);
-}
-
-.title-option span {
-  color: white;
-}
-
-.save-personalization {
-  margin-top: 20px;
-}
-
-/* Completion step styling */
-.completion-details {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.completion-rewards, .next-steps {
-  width: 100%;
-  margin-bottom: 30px;
-}
-
-.completion-rewards h3, .next-steps h3 {
-  color: white;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.next-steps-options {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-}
-
-.next-steps-options .cosmic-button {
-  min-width: 180px;
-}
-
-.next-steps-options .cosmic-button i {
-  margin-right: 8px;
-}
-
-.cosmic-button.primary {
-  background: linear-gradient(90deg, #0fb9fd, #9d35bf);
-}
-
-.cosmic-button.secondary {
-  background: rgba(15, 185, 253, 0.2);
-  border: 1px solid rgba(15, 185, 253, 0.5);
-}
-
-.cosmic-button.secondary:hover {
-  background: rgba(15, 185, 253, 0.3);
-}
-
-/* Navigation controls */
-.navigation-controls {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 800px;
-  margin-top: 20px;
-}
-
-.nav-button {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 30px;
-  padding: 10px 20px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background 0.3s ease;
-}
-
-.nav-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.next-button, .complete-button {
-  background: linear-gradient(90deg, #0fb9fd, #9d35bf);
-  border: none;
-}
-
-.next-button:hover, .complete-button:hover {
-  background: linear-gradient(90deg, #0fb9fd, #9d35bf);
-  opacity: 0.9;
-}
-
-.next-button:disabled {
-  background: linear-gradient(90deg, #536272, #6e6b80);
-  cursor: not-allowed;
-}
-
-.skip-button {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 14px;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.skip-button:hover {
-  color: white;
-  text-decoration: underline;
-}
-
-/* Skip confirmation modal */
-.skip-confirmation-modal {
+/* Modal Styles */
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -1199,86 +870,117 @@ watch(currentStep, (newStep) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
+  z-index: 1001;
 }
 
 .modal-content {
-  background: rgba(10, 15, 30, 0.95);
-  border-radius: 16px;
-  padding: 30px;
-  max-width: 400px;
+  background: rgba(15, 20, 40, 0.95);
+  border-radius: 12px;
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  padding: 1.5rem;
   width: 90%;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 350px;
+  text-align: center;
 }
 
 .modal-content h3 {
+  margin-top: 0;
   color: white;
-  margin-bottom: 15px;
-  text-align: center;
 }
 
 .modal-content p {
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 20px;
-  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .modal-actions {
   display: flex;
-  justify-content: space-between;
-  gap: 15px;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-.modal-actions button {
-  flex: 1;
+.secondary-button, .danger-button {
+  padding: 0.7rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* Transitions */
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.5s ease;
+.secondary-button {
+  background: rgba(15, 185, 253, 0.1);
+  color: var(--cosmic-blue, #0fb9fd);
+  border: 1px solid rgba(15, 185, 253, 0.3);
 }
 
-.slide-fade-enter-from {
-  opacity: 0;
-  transform: translateX(30px);
+.secondary-button:hover {
+  background: rgba(15, 185, 253, 0.2);
 }
 
-.slide-fade-leave-to {
-  opacity: 0;
-  transform: translateX(-30px);
+.danger-button {
+  background: rgba(255, 0, 76, 0.1);
+  color: #ff004c;
+  border: 1px solid rgba(255, 0, 76, 0.3);
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
-  .onboarding-content {
-    padding: 20px;
+.danger-button:hover {
+  background: rgba(255, 0, 76, 0.2);
+}
+
+/* Animations */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .reward-chest {
+    width: 160px;
+    height: 160px;
   }
   
-  .welcome-bonus {
-    flex-direction: column;
-    gap: 20px;
+  .reward-prompt h2 {
+    font-size: 1.4rem;
   }
   
-  .mission-card {
-    width: 100%;
+  .reward-items {
+    gap: 1rem;
   }
   
-  .avatar-grid {
-    grid-template-columns: repeat(4, 1fr);
+  .reward-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
   }
   
-  .title-options {
-    grid-template-columns: 1fr;
+  .wallet-nft-container {
+    padding: 1rem;
   }
   
-  .next-steps-options {
-    flex-direction: column;
+  .nft-image {
+    width: 100px;
   }
   
-  .next-steps-options .cosmic-button {
-    width: 100%;
+  .nft-name {
+    font-size: 1.1rem;
+  }
+  
+  .mission-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
   }
 }
 </style> 

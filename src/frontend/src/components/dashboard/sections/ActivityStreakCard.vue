@@ -1,74 +1,100 @@
 <template>
-  <div class="activity-streak-card cosmic-panel">
+  <div class="activity-streak-card">
     <div class="streak-header">
-      <div class="streak-title">
-        <h3>{{ $t('activityStreak.title') || 'Activity Streak' }}</h3>
-        <div class="streak-counter">
-          <span class="streak-days">{{ currentStreak }}</span> 
-          <span class="streak-label">{{ $t('activityStreak.days') || 'days' }}</span>
+      <div class="streak-info">
+        <h3>
+          <i class="fas fa-fire streak-icon"></i>
+          Daily Streak: <span class="streak-count">{{ currentStreak }}</span>
+        </h3>
+        <div class="streak-multiplier" v-if="streakMultiplier > 1">
+          <i class="fas fa-bolt"></i> {{ streakMultiplier }}x Rewards
         </div>
       </div>
-      <div class="streak-multiplier" v-if="streakMultiplier > 1">
-        <div class="multiplier-badge">
-          <span>{{ streakMultiplier }}x</span>
-        </div>
-        <span class="multiplier-label">{{ $t('activityStreak.rewardMultiplier') || 'Reward Multiplier' }}</span>
-      </div>
-    </div>
-
-    <div class="streak-calendar">
-      <div 
-        v-for="(day, index) in streakDays" 
-        :key="index"
-        class="day-marker"
-        :class="{
-          'completed': day.status === 'completed',
-          'current': day.status === 'current',
-          'future': day.status === 'future',
-          'missed': day.status === 'missed'
-        }"
-      >
-        <div class="day-circle">
-          <i v-if="day.status === 'completed'" class="fas fa-check"></i>
-          <i v-else-if="day.status === 'current'" class="fas fa-star pulse"></i>
-          <span v-else>{{ index + 1 }}</span>
-        </div>
-        <div class="day-label">{{ formatDay(day.date) }}</div>
-        <div class="day-reward" v-if="day.reward">
-          <img :src="day.reward.icon" :alt="day.reward.type" class="reward-icon" />
-          <span class="reward-amount">{{ day.reward.amount }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="streak-actions">
       <button 
-        v-if="canClaimToday" 
         @click="claimDailyStreak" 
-        class="claim-button cosmic-button"
-        :disabled="isProcessing"
+        class="streak-claim-button"
+        :class="{ 'disabled': !canClaimToday, 'pulse': canClaimToday }"
+        :disabled="!canClaimToday"
       >
         <i class="fas fa-calendar-check"></i>
-        {{ $t('activityStreak.checkIn') || 'Check In' }}
+        <span>{{ claimButtonText }}</span>
       </button>
-      <div v-else-if="hasClaimedToday" class="claimed-message">
-        <i class="fas fa-check-circle"></i>
-        {{ $t('activityStreak.alreadyClaimed') || 'Already checked in today!' }}
-      </div>
-      <div v-else class="next-day-message">
-        <i class="fas fa-hourglass-half"></i>
-        {{ $t('activityStreak.comeback') || 'Come back tomorrow to continue your streak!' }}
+    </div>
+    
+    <div class="streak-calendar">
+      <div 
+        v-for="n in 7" 
+        :key="n" 
+        class="streak-day"
+        :class="{
+          'completed': n <= daysSinceClaim,
+          'current': n === daysSinceClaim + 1,
+          'future': n > daysSinceClaim + 1,
+          'milestone': [3, 7].includes(n)
+        }"
+      >
+        <div class="day-number">Day {{ n }}</div>
+        <div class="day-icon">
+          <i 
+            :class="[
+              n <= daysSinceClaim ? 'fas fa-check-circle' : 
+              n === daysSinceClaim + 1 ? 'far fa-calendar-alt' : 'far fa-circle'
+            ]"
+          ></i>
+        </div>
+        <div class="day-reward" v-if="[3, 7].includes(n)">
+          <span v-if="n === 3">1.2x</span>
+          <span v-if="n === 7">1.5x</span>
+        </div>
       </div>
     </div>
-
-    <div class="streak-milestone" v-if="nextMilestone">
-      <div class="milestone-icon">
-        <i class="fas fa-trophy"></i>
+    
+    <div class="streak-message" v-if="showStreakMessage">
+      <div v-if="streakBroken" class="streak-broken">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Your streak was reset! Come back tomorrow to start a new streak.</span>
       </div>
-      <div class="milestone-info">
-        <div class="milestone-title">{{ $t('activityStreak.nextMilestone') || 'Next Milestone' }}</div>
-        <div class="milestone-description">
-          {{ nextMilestone.days }} {{ $t('activityStreak.days') || 'days' }}: {{ nextMilestone.description }}
+      <div v-else-if="showMilestoneMessage" class="streak-milestone">
+        <i class="fas fa-trophy"></i>
+        <span>{{ milestoneMessage }}</span>
+      </div>
+      <div v-else-if="canClaimToday" class="streak-reminder">
+        <i class="fas fa-bell"></i>
+        <span>Check in now to continue your streak!</span>
+      </div>
+      <div v-else class="streak-next">
+        <i class="fas fa-calendar-day"></i>
+        <span>Come back tomorrow to continue your streak!</span>
+      </div>
+    </div>
+    
+    <div class="streak-milestones" v-if="showMilestones">
+      <h4>Upcoming Milestones</h4>
+      <div class="milestones-list">
+        <div 
+          v-for="milestone in visibleMilestones" 
+          :key="milestone.days"
+          class="milestone-item"
+          :class="{ 'completed': currentStreak >= milestone.days }"
+        >
+          <div class="milestone-days">
+            <i class="fas fa-calendar-week"></i>
+            <span>{{ milestone.days }} Days</span>
+          </div>
+          <div class="milestone-reward">
+            <i :class="milestone.icon"></i>
+            <span>{{ milestone.reward }}</span>
+          </div>
+          <div class="milestone-progress" v-if="currentStreak < milestone.days">
+            <div class="progress-bar">
+              <div class="progress-filled" :style="{ width: `${Math.min(100, (currentStreak / milestone.days) * 100)}%` }"></div>
+            </div>
+            <span class="progress-text">{{ currentStreak }}/{{ milestone.days }}</span>
+          </div>
+          <div class="milestone-completed" v-else>
+            <i class="fas fa-check-circle"></i>
+            <span>Completed</span>
+          </div>
         </div>
       </div>
     </div>
@@ -77,29 +103,46 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { useAuthStore } from '@/stores/auth';
-import { useCanisterStore } from '@/stores/canister';
+import { format, addDays, differenceInDays, isBefore, isToday } from 'date-fns';
 import { useNotification } from '@/composables/useNotification';
-import { format, addDays, isSameDay } from 'date-fns';
 
-// Settings & Props
-const STREAK_LENGTH = 7; // Number of days to display
-const MILESTONE_DAYS = [3, 7, 14, 21, 30, 60, 90]; // Milestone days for special rewards
+// Props
+const props = defineProps({
+  showMilestones: {
+    type: Boolean,
+    default: true
+  }
+});
 
-// Get stores & notifications
-const authStore = useAuthStore();
-const canisterStore = useCanisterStore();
+// Emit events
+const emit = defineEmits(['streak-claimed', 'milestone-reached']);
+
+// Notification system
 const notify = useNotification();
 
 // State
-const isProcessing = ref(false);
 const currentStreak = ref(0);
 const lastCheckIn = ref(null);
-const streakDays = ref([]);
+const canClaimToday = ref(false);
+const daysSinceClaim = ref(0);
+const streakBroken = ref(false);
+const showStreakMessage = ref(true);
+const showMilestoneMessage = ref(false);
+const milestoneReached = ref(null);
+
+// Milestone configuration
+const milestones = [
+  { days: 3, reward: '1.2x Multiplier', icon: 'fas fa-bolt' },
+  { days: 7, reward: '1.5x Multiplier', icon: 'fas fa-bolt' },
+  { days: 14, reward: '2.0x Multiplier', icon: 'fas fa-bolt' },
+  { days: 21, reward: 'Avatar Frame', icon: 'fas fa-id-badge' },
+  { days: 30, reward: '3.0x Multiplier', icon: 'fas fa-bolt' },
+  { days: 60, reward: 'Exclusive Emotes', icon: 'fas fa-laugh' },
+  { days: 90, reward: '"Steadfast Explorer" Title', icon: 'fas fa-crown' },
+];
 
 // Computed
 const streakMultiplier = computed(() => {
-  // Calculate multiplier based on streak length
   if (currentStreak.value >= 30) return 3.0;
   if (currentStreak.value >= 14) return 2.0;
   if (currentStreak.value >= 7) return 1.5;
@@ -107,534 +150,559 @@ const streakMultiplier = computed(() => {
   return 1.0;
 });
 
-const canClaimToday = computed(() => {
-  if (!lastCheckIn.value) return true;
-  
-  const today = new Date();
-  const lastDate = new Date(lastCheckIn.value);
-  
-  // Check if last check-in was not today
-  return !isSameDay(today, lastDate);
-});
-
-const hasClaimedToday = computed(() => {
-  if (!lastCheckIn.value) return false;
-  
-  const today = new Date();
-  const lastDate = new Date(lastCheckIn.value);
-  
-  // Check if last check-in was today
-  return isSameDay(today, lastDate);
-});
-
-const nextMilestone = computed(() => {
-  // Find the next milestone based on current streak
-  const nextMilestoneDay = MILESTONE_DAYS.find(day => day > currentStreak.value);
-  
-  if (!nextMilestoneDay) return null;
-  
-  let description = '';
-  let reward = 0;
-  
-  // Define milestone rewards
-  switch (nextMilestoneDay) {
-    case 3:
-      description = 'Unlock 1.2x reward multiplier';
-      break;
-    case 7:
-      description = 'Unlock 1.5x reward multiplier';
-      break;
-    case 14:
-      description = 'Unlock 2.0x reward multiplier';
-      break;
-    case 21:
-      description = 'Earn exclusive avatar frame';
-      break;
-    case 30:
-      description = 'Unlock 3.0x reward multiplier';
-      break;
-    case 60:
-      description = 'Earn exclusive emote set';
-      break;
-    case 90:
-      description = 'Earn exclusive title: "Steadfast Explorer"';
-      break;
+const claimButtonText = computed(() => {
+  if (!canClaimToday.value) {
+    return 'Already Claimed';
   }
+  return 'Check In';
+});
+
+const milestoneMessage = computed(() => {
+  if (!milestoneReached.value) return '';
   
-  return {
-    days: nextMilestoneDay,
-    description,
-    daysLeft: nextMilestoneDay - currentStreak.value
-  };
+  const milestone = milestones.find(m => m.days === milestoneReached.value);
+  if (!milestone) return '';
+  
+  return `Milestone achieved: ${milestone.days} day streak! You've unlocked ${milestone.reward}!`;
+});
+
+const visibleMilestones = computed(() => {
+  // Show the next 3 upcoming milestones
+  return milestones
+    .filter(m => m.days > currentStreak.value || m.days === currentStreak.value)
+    .slice(0, 3);
 });
 
 // Methods
-const formatDay = (date) => {
-  if (!date) return '';
-  return format(new Date(date), 'EEE');
-};
-
-const loadStreakData = async () => {
+const loadStreakData = () => {
   try {
-    // In a real implementation, this would fetch from the backend
-    // For now we'll use localStorage to simulate streak data
+    // Load streak data from localStorage
     const storedStreak = localStorage.getItem('userStreak');
     const storedLastCheckIn = localStorage.getItem('lastCheckIn');
     
     if (storedStreak) {
-      currentStreak.value = parseInt(storedStreak);
+      currentStreak.value = parseInt(storedStreak, 10);
     }
     
     if (storedLastCheckIn) {
-      lastCheckIn.value = storedLastCheckIn;
+      lastCheckIn.value = new Date(storedLastCheckIn);
       
-      // Check if streak should be reset (missed a day)
+      // Calculate days since last claim
       const today = new Date();
-      const lastCheckInDate = new Date(storedLastCheckIn);
-      const daysSinceLastCheckIn = Math.floor((today - lastCheckInDate) / (1000 * 60 * 60 * 24));
+      const dayDiff = differenceInDays(today, lastCheckIn.value);
       
-      if (daysSinceLastCheckIn > 1) {
-        // User missed a day, reset streak
-        currentStreak.value = 0;
-        localStorage.setItem('userStreak', '0');
-        notify.info('Your activity streak was reset. Check in today to start a new streak!', {
-          title: 'Streak Reset',
-          duration: 5000
-        });
+      if (dayDiff === 0) {
+        // Already claimed today
+        canClaimToday.value = false;
+        daysSinceClaim.value = 1; // Show as claimed for today
+      } else if (dayDiff === 1) {
+        // Yesterday, can claim today
+        canClaimToday.value = true;
+        daysSinceClaim.value = 0; // Need to claim today
+      } else {
+        // More than 1 day, streak broken
+        streakBroken.value = true;
+        canClaimToday.value = true;
+        daysSinceClaim.value = 0;
       }
+    } else {
+      // First time user, can claim
+      canClaimToday.value = true;
+      daysSinceClaim.value = 0;
     }
-    
-    generateStreakDays();
   } catch (error) {
     console.error('Error loading streak data:', error);
+    // Default to allowing claim if there's an error
+    canClaimToday.value = true;
+    daysSinceClaim.value = 0;
   }
 };
 
-const generateStreakDays = () => {
-  const today = new Date();
-  const days = [];
+const claimDailyStreak = () => {
+  if (!canClaimToday.value) return;
   
-  for (let i = 0; i < STREAK_LENGTH; i++) {
-    const date = addDays(today, i);
-    let status = 'future';
-    
-    if (i === 0 && !hasClaimedToday.value) {
-      status = 'current';
-    } else if (i === 0 && hasClaimedToday.value) {
-      status = 'completed';
-    } else if (i < currentStreak.value) {
-      status = 'completed';
+  // Track previous streak for milestone checking
+  const prevStreak = currentStreak.value;
+  
+  // If streak was broken, reset to 0 before incrementing
+  if (streakBroken.value) {
+    currentStreak.value = 0;
+    streakBroken.value = false;
+  }
+  
+  // Increment streak
+  currentStreak.value++;
+  
+  // Save to localStorage
+  localStorage.setItem('userStreak', currentStreak.value.toString());
+  
+  // Update last check-in date
+  const now = new Date();
+  lastCheckIn.value = now;
+  localStorage.setItem('lastCheckIn', now.toISOString());
+  
+  // Update UI
+  canClaimToday.value = false;
+  daysSinceClaim.value = 1;
+  
+  // Check for milestones
+  checkMilestones(prevStreak);
+  
+  // Create reward based on streak
+  const baseReward = 10;
+  const baseXp = 25;
+  
+  // Apply multiplier if applicable
+  const tokenReward = Math.floor(baseReward * streakMultiplier.value);
+  const xpReward = Math.floor(baseXp * streakMultiplier.value);
+  
+  // Show notification
+  notify.reward(`You received ${tokenReward} tokens and ${xpReward} XP!`, {
+    title: currentStreak.value > 1 ? `${currentStreak.value} Day Streak!` : 'Daily Reward Claimed!',
+    duration: 4000
+  });
+  
+  // Emit claim event
+  emit('streak-claimed', {
+    streak: currentStreak.value,
+    tokenReward,
+    xpReward,
+    multiplier: streakMultiplier.value
+  });
+  
+  // Log for analytics
+  console.log('Analytics: Daily streak claimed', {
+    streak: currentStreak.value,
+    tokenReward,
+    xpReward,
+    multiplier: streakMultiplier.value
+  });
+};
+
+const checkMilestones = (prevStreak) => {
+  // Find the first milestone that was reached with this claim
+  for (const milestone of milestones) {
+    if (prevStreak < milestone.days && currentStreak.value >= milestone.days) {
+      // Found a newly reached milestone
+      milestoneReached.value = milestone.days;
+      showMilestoneMessage.value = true;
+      
+      // Show special notification
+      notify.achievement(`Milestone reached: ${milestone.days} day streak!`, {
+        title: 'Streak Milestone!',
+        duration: 5000
+      });
+      
+      // Emit milestone event
+      emit('milestone-reached', {
+        days: milestone.days,
+        reward: milestone.reward
+      });
+      
+      // Log for analytics
+      console.log('Analytics: Streak milestone reached', {
+        days: milestone.days,
+        reward: milestone.reward
+      });
+      
+      // We only care about the first milestone reached
+      break;
     }
-    
-    // Determine reward for this day
-    const reward = {
-      icon: i % 2 === 0 ? '/assets/tokens/std-token.webp' : '/assets/icons/xp-icon.webp',
-      type: i % 2 === 0 ? 'STD' : 'XP',
-      amount: calculateReward(i)
-    };
-    
-    days.push({
-      date,
-      status,
-      reward
-    });
-  }
-  
-  streakDays.value = days;
-};
-
-const calculateReward = (dayIndex) => {
-  // Base rewards that increase with streak
-  const baseTokens = 10;
-  const baseXP = 5;
-  
-  // Apply multiplier for longer streaks
-  const multiplier = streakMultiplier.value;
-  
-  // Special rewards for milestone days
-  const isMilestone = MILESTONE_DAYS.includes(currentStreak.value + dayIndex);
-  const milestoneBonus = isMilestone ? 2 : 1;
-  
-  if (dayIndex % 2 === 0) {
-    // Token days
-    return Math.round((baseTokens + (dayIndex * 2)) * multiplier * milestoneBonus);
-  } else {
-    // XP days
-    return Math.round((baseXP + dayIndex) * multiplier * milestoneBonus);
   }
 };
 
-const claimDailyStreak = async () => {
-  if (isProcessing.value || !canClaimToday.value) return;
+// For testing - allows simulating different streak scenarios
+const simulateStreak = (streak, daysAgo = 1) => {
+  // Set streak and last check-in date
+  currentStreak.value = streak;
   
-  isProcessing.value = true;
+  // Set last check-in to n days ago
+  const date = new Date();
+  date.setDate(date.getDate() - daysAgo);
+  lastCheckIn.value = date;
   
-  try {
-    // In a real implementation, this would call the backend
-    // For now we'll use localStorage to simulate
-    
-    const newStreak = currentStreak.value + 1;
-    currentStreak.value = newStreak;
-    
-    const today = new Date();
-    lastCheckIn.value = today.toISOString();
-    
-    // Store in localStorage
-    localStorage.setItem('userStreak', newStreak.toString());
-    localStorage.setItem('lastCheckIn', today.toISOString());
-    
-    // Determine today's reward
-    const todayReward = streakDays.value[0]?.reward;
-    
-    // Apply milestone rewards if applicable
-    let milestoneReward = null;
-    if (MILESTONE_DAYS.includes(newStreak)) {
-      // Handle milestone rewards
-      switch (newStreak) {
-        case 3:
-          milestoneReward = { type: 'multiplier', value: '1.2x' };
-          break;
-        case 7:
-          milestoneReward = { type: 'multiplier', value: '1.5x' };
-          break;
-        case 14:
-          milestoneReward = { type: 'multiplier', value: '2.0x' };
-          break;
-        case 21:
-          milestoneReward = { type: 'avatar_frame', value: 'Cosmic Frame' };
-          break;
-        case 30:
-          milestoneReward = { type: 'multiplier', value: '3.0x' };
-          break;
-        case 60:
-          milestoneReward = { type: 'emotes', value: 'Cosmic Emotes Pack' };
-          break;
-        case 90:
-          milestoneReward = { type: 'title', value: 'Steadfast Explorer' };
-          break;
-      }
-    }
-    
-    // Update UI
-    generateStreakDays();
-    
-    // Show notification for daily reward
-    notify.reward(`You received ${todayReward.amount} ${todayReward.type}!`, {
-      title: `Day ${newStreak} Streak Reward`,
-      duration: 4000
-    });
-    
-    // Show milestone notification if applicable
-    if (milestoneReward) {
-      setTimeout(() => {
-        notify.success(`You unlocked: ${milestoneReward.value}`, {
-          title: `${newStreak} Day Milestone Achievement!`,
-          duration: 5000
-        });
-      }, 1500);
-    }
-    
-    // Emit event to parent component
-    emit('streak-claimed', {
-      streak: newStreak,
-      reward: todayReward,
-      milestone: milestoneReward
-    });
-    
-  } catch (error) {
-    console.error('Error claiming streak:', error);
-    notify.error('There was an issue claiming your streak reward. Please try again.', {
-      duration: 3000
-    });
-  } finally {
-    isProcessing.value = false;
-  }
+  // Save to localStorage
+  localStorage.setItem('userStreak', streak.toString());
+  localStorage.setItem('lastCheckIn', date.toISOString());
+  
+  // Reload streak data
+  loadStreakData();
 };
 
-// Define emits
-const emit = defineEmits(['streak-claimed']);
-
-// Load data on mount
+// Initialize
 onMounted(() => {
   loadStreakData();
+});
+
+// Expose test methods
+defineExpose({
+  simulateStreak
 });
 </script>
 
 <style scoped>
 .activity-streak-card {
-  margin-bottom: 20px;
-  padding: 20px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, rgba(10, 15, 30, 0.7) 0%, rgba(26, 18, 72, 0.7) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cosmic-glass-bg);
+  backdrop-filter: var(--cosmic-glass-blur);
+  border-radius: var(--cosmic-radius-md);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  padding: 1.25rem;
+  box-shadow: var(--cosmic-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .streak-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.streak-title {
+.streak-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.streak-info h3 {
   display: flex;
   align-items: center;
-  gap: 15px;
-}
-
-.streak-title h3 {
-  font-size: 1.2rem;
-  color: white;
+  gap: 0.5rem;
   margin: 0;
+  font-size: 1.25rem;
+  color: var(--cosmic-text-primary);
 }
 
-.streak-counter {
-  display: flex;
-  align-items: baseline;
+.streak-icon {
+  color: #ff6b35;
 }
 
-.streak-days {
-  font-size: 1.5rem;
+.streak-count {
+  color: #ff6b35;
   font-weight: 700;
-  color: #0fb9fd;
-}
-
-.streak-label {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-left: 5px;
 }
 
 .streak-multiplier {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.multiplier-badge {
-  background: linear-gradient(90deg, #0fb9fd, #9d35bf);
-  border-radius: 20px;
-  padding: 5px 10px;
-  font-weight: 700;
-  color: white;
+  gap: 0.35rem;
   font-size: 0.9rem;
+  color: var(--cosmic-purple);
+  font-weight: 600;
 }
 
-.multiplier-label {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
+.streak-claim-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: linear-gradient(135deg, #ff6b35, #ff3c00);
+  color: white;
+  border: none;
+  border-radius: var(--cosmic-radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 10px rgba(255, 107, 53, 0.3);
+}
+
+.streak-claim-button:hover:not(.disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+}
+
+.streak-claim-button.disabled {
+  background: linear-gradient(135deg, #b8b8b8, #8a8a8a);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.streak-claim-button.pulse {
+  animation: pulse-orange 2s infinite;
 }
 
 .streak-calendar {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
-  position: relative;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  background: rgba(15, 185, 253, 0.05);
+  border-radius: var(--cosmic-radius-md);
+  border: 1px solid rgba(15, 185, 253, 0.1);
 }
 
-.streak-calendar::before {
-  content: '';
-  position: absolute;
-  top: 35px;
-  left: 20px;
-  right: 20px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.1);
-  z-index: 0;
-}
-
-.day-marker {
+.streak-day {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0.35rem;
+  text-align: center;
   position: relative;
-  z-index: 1;
-  width: calc(100% / 7);
+  width: 14%;
 }
 
-.day-circle {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+.day-number {
+  font-size: 0.75rem;
+  color: var(--cosmic-text-tertiary);
+  font-weight: 500;
+}
+
+.streak-day.current .day-number {
+  color: #ff6b35;
+  font-weight: 600;
+}
+
+.streak-day.completed .day-number {
+  color: var(--cosmic-text-secondary);
+}
+
+.day-icon {
+  font-size: 1.1rem;
+  height: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 5px;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.5);
-  border: 2px solid transparent;
 }
 
-.day-marker.completed .day-circle {
-  background: linear-gradient(90deg, #0fb9fd, #9d35bf);
-  color: white;
+.streak-day.completed .day-icon i {
+  color: var(--cosmic-green);
 }
 
-.day-marker.current .day-circle {
-  background: rgba(15, 185, 253, 0.2);
-  color: #0fb9fd;
-  border: 2px solid #0fb9fd;
+.streak-day.current .day-icon i {
+  color: #ff6b35;
+  animation: pulse-orange 2s infinite;
 }
 
-.day-marker.missed .day-circle {
-  background: rgba(255, 100, 100, 0.2);
-  color: #ff6464;
-  border: 2px solid #ff6464;
-}
-
-.pulse {
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-.day-label {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 5px;
+.streak-day.future .day-icon i {
+  color: var(--cosmic-text-tertiary);
+  opacity: 0.5;
 }
 
 .day-reward {
-  display: flex;
-  align-items: center;
-  gap: 2px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--cosmic-purple);
+  margin-top: 0.35rem;
 }
 
-.reward-icon {
+.streak-day.milestone::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: -8px;
   width: 16px;
   height: 16px;
-}
-
-.reward-amount {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 600;
-}
-
-.streak-actions {
+  border-radius: 50%;
+  background: var(--cosmic-purple);
+  border: 1px solid white;
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
-}
-
-.claim-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 30px;
-  background: linear-gradient(90deg, #0fb9fd, #9d35bf);
+  font-size: 8px;
   color: white;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  box-shadow: 0 0 5px rgba(157, 53, 191, 0.5);
 }
 
-.claim-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(15, 185, 253, 0.3);
+.streak-day.milestone.completed::after {
+  background: var(--cosmic-green);
+  box-shadow: 0 0 5px rgba(0, 229, 164, 0.5);
 }
 
-.claim-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.claimed-message, .next-day-message {
+.streak-message {
+  padding: 0.75rem 1rem;
+  border-radius: var(--cosmic-radius-md);
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  gap: 0.75rem;
   font-size: 0.9rem;
 }
 
-.claimed-message i {
-  color: #4CAF50;
-}
-
-.next-day-message i {
-  color: #FFC107;
+.streak-broken {
+  color: var(--cosmic-red);
+  background: rgba(255, 0, 76, 0.1);
+  border: 1px solid rgba(255, 0, 76, 0.2);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--cosmic-radius-md);
 }
 
 .streak-milestone {
+  color: var(--cosmic-purple);
+  background: rgba(157, 53, 191, 0.1);
+  border: 1px solid rgba(157, 53, 191, 0.2);
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 15px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 12px 15px;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--cosmic-radius-md);
 }
 
-.milestone-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #FFC107, #FF9800);
+.streak-reminder {
+  color: #ff6b35;
+  background: rgba(255, 107, 53, 0.1);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: white;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--cosmic-radius-md);
 }
 
-.milestone-info {
+.streak-next {
+  color: var(--cosmic-blue);
+  background: rgba(15, 185, 253, 0.1);
+  border: 1px solid rgba(15, 185, 253, 0.2);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--cosmic-radius-md);
+}
+
+.streak-milestones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.streak-milestones h4 {
+  font-size: 1rem;
+  margin: 0;
+  color: var(--cosmic-text-primary);
+}
+
+.milestones-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.milestone-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(15, 185, 253, 0.05);
+  border-radius: var(--cosmic-radius-md);
+  border: 1px solid rgba(15, 185, 253, 0.1);
+  transition: all 0.25s ease;
+}
+
+.milestone-item:hover {
+  background: rgba(15, 185, 253, 0.08);
+}
+
+.milestone-item.completed {
+  background: rgba(0, 229, 164, 0.05);
+  border: 1px solid rgba(0, 229, 164, 0.2);
+}
+
+.milestone-days {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--cosmic-text-primary);
+  min-width: 100px;
+}
+
+.milestone-reward {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cosmic-purple);
+  min-width: 140px;
+}
+
+.milestone-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   flex: 1;
 }
 
-.milestone-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: white;
-  margin-bottom: 3px;
+.progress-bar {
+  height: 6px;
+  background: rgba(15, 185, 253, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  flex: 1;
 }
 
-.milestone-description {
+.progress-filled {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cosmic-blue), var(--cosmic-purple));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--cosmic-text-tertiary);
+  min-width: 40px;
+  text-align: right;
+}
+
+.milestone-completed {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cosmic-green);
+  flex: 1;
+  justify-content: flex-end;
+}
+
+@keyframes pulse-orange {
+  0% {
+    filter: drop-shadow(0 0 0px #ff6b35);
+  }
+  50% {
+    filter: drop-shadow(0 0 3px #ff6b35);
+  }
+  100% {
+    filter: drop-shadow(0 0 0px #ff6b35);
+  }
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .streak-calendar::before {
-    top: 25px;
+  .streak-calendar {
+    padding: 0.75rem 0.5rem;
   }
   
-  .day-circle {
-    width: 30px;
-    height: 30px;
-    font-size: 0.8rem;
-  }
-  
-  .day-label {
+  .day-number {
     font-size: 0.7rem;
   }
   
-  .reward-icon {
-    width: 12px;
-    height: 12px;
+  .day-icon {
+    font-size: 1rem;
   }
   
-  .reward-amount {
+  .day-reward {
     font-size: 0.7rem;
   }
-}
-
-@media (max-width: 480px) {
-  .streak-header {
+  
+  .milestone-item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 0.5rem;
   }
   
-  .streak-multiplier {
-    align-self: flex-end;
+  .milestone-progress, .milestone-completed {
+    width: 100%;
   }
 }
 </style> 

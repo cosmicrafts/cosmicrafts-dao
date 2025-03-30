@@ -8,6 +8,22 @@
 
     <!-- Dashboard Content -->
     <div v-else class="dashboard-content">
+      <!-- Onboarding Experience -->
+      <OnboardingExperience
+        ref="onboardingRef"
+        @onboarding-completed="handleOnboardingCompleted"
+        @onboarding-skipped="handleOnboardingSkipped"
+      />
+      
+      <!-- Progressive Guide -->
+      <ProgressiveGuide
+        ref="progressiveGuideRef"
+        :dashboardRef="$refs.contentArea"
+        @tip-completed="handleTipCompleted"
+        @guide-completed="handleGuideCompleted"
+        @select-tab="selectTab"
+      />
+      
       <!-- Mobile app-style header with back button -->
       <div class="mobile-app-header">
         <button v-if="showBackButton" @click="goBack" class="back-button">
@@ -194,6 +210,8 @@ import AchievementsSection from '@/components/achievements/AchievementsSection.v
 import StatsSection from '@/components/stats/StatsSection.vue';
 import FriendsSection from '@/components/dashboard/sections/FriendsSection.vue';
 import ProfilePreview from '@/components/profile/ProfilePreview.vue';
+import OnboardingExperience from '@/components/onboarding/OnboardingExperience.vue';
+import ProgressiveGuide from '@/components/dashboard/ui/ProgressiveGuide.vue';
 
 // Router
 const router = useRouter();
@@ -527,6 +545,107 @@ const viewUserProfile = (profile) => {
 const backToFriends = () => {
   viewingProfile.value = null;
   selectTab('friends');
+};
+
+const onboardingRef = ref(null);
+const progressiveGuideRef = ref(null);
+
+// Handle onboarding events
+const handleOnboardingCompleted = async (data) => {
+  console.log('%c✅ Onboarding completed! Data:', 'color: #4CAF50; font-weight: bold', data);
+  
+  // Log potential avatar/title updates (in real app, this would be an API call)
+  if (data.avatarId) console.log('Analytics: User selected avatar:', data.avatarId);
+  if (data.titleId) console.log('Analytics: User selected title:', data.titleId);
+  
+  console.log('Attempting to refresh token balances after onboarding completion reward...');
+  try {
+    // The correct action is to re-fetch balances, assuming the backend granted the reward.
+    if (tokenStore.fetchAllBalances && typeof tokenStore.fetchAllBalances === 'function') {
+      await tokenStore.fetchAllBalances(); // Refresh all balances
+      console.log('%c🔄 Balances refreshed via fetchAllBalances()', 'color: #2196F3;');
+    } else {
+      console.warn('tokenStore.fetchAllBalances method not found. Cannot refresh balances automatically.');
+    }
+  } catch (error) {
+    console.error('Error refreshing token balances after onboarding completion:', error);
+  }
+  
+  // Optionally, call the main dashboard refresh function as well if it does more
+  console.log('Performing full dashboard refresh after onboarding...');
+  await refreshDashboard(); // Assuming refreshDashboard is async
+};
+
+const handleOnboardingSkipped = async () => {
+  console.log('%c⚠️ Onboarding skipped by user.', 'color: #FF9800; font-weight: bold');
+  
+  console.log('Attempting to refresh data after onboarding skip...');
+  try {
+    // Refresh balances (in case some minimal reward was given or state needs update)
+    if (tokenStore.fetchAllBalances && typeof tokenStore.fetchAllBalances === 'function') {
+      await tokenStore.fetchAllBalances();
+      console.log('%c🔄 Balances refreshed via fetchAllBalances()', 'color: #2196F3;');
+    } else {
+      console.warn('tokenStore.fetchAllBalances not found. Cannot refresh balances.');
+    }
+    
+    // Update any other necessary data (e.g., activities)
+    loadMockActivities(); // Assuming this isn't async
+    console.log('Mock activities reloaded after skip.');
+    
+  } catch (error) {
+    console.error('Error updating data after onboarding skip:', error);
+  }
+  
+  // You might still want to call the full dashboard refresh here if needed
+  // await refreshDashboard();
+};
+
+// Method to trigger feature onboarding for specific features
+const startFeatureOnboarding = (feature) => {
+  if (onboardingRef.value) {
+    onboardingRef.value.startFeatureOnboarding(feature);
+  }
+};
+
+// Handle progressive guide events
+const handleTipCompleted = (tipId) => {
+  console.log('Tip completed:', tipId);
+  
+  // Could add a small reward for completing tips
+  if (tipId === 'welcome') {
+    notify.info('Keep exploring your dashboard to learn more!', {
+      title: 'Great Start',
+      duration: 3000
+    });
+  }
+};
+
+const handleGuideCompleted = () => {
+  console.log('Guide completed');
+  
+  // Reward for completing the entire guide
+  notify.reward('You earned 10 tokens for learning the dashboard!', {
+    title: 'Guide Completed',
+    duration: 4000
+  });
+  
+  // If we had a token store update
+  // tokenStore.updateTokenBalance('STD', 10);
+};
+
+// Method to show the guide manually (could be triggered by a help button)
+const showGuide = () => {
+  if (progressiveGuideRef.value) {
+    progressiveGuideRef.value.showGuide();
+  }
+};
+
+// Method to reset the guide (for testing or if requested by user)
+const resetGuide = () => {
+  if (progressiveGuideRef.value) {
+    progressiveGuideRef.value.resetGuide();
+  }
 };
 </script>
 

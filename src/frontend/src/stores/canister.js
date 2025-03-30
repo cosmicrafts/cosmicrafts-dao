@@ -96,7 +96,7 @@ export const useCanisterStore = defineStore('canister', {
     canisterIds: {
       cosmicrafts: 'opcce-byaaa-aaaak-qcgda-cai',
       roadmap: 'be2us-64aaa-aaaaa-qaabq-cai',
-      marketplace: 'br5f7-7uaaa-aaaaa-qaaca-cai',
+      marketplace: 'zgc5e-qiaaa-aaaan-qzyga-cai',
       ledger: 'ryjl3-tyaaa-aaaaa-aaaba-cai', // ICP ledger canister ID
     },
     agent: null,
@@ -272,20 +272,18 @@ export const useCanisterStore = defineStore('canister', {
     async backgroundInitialize(identity) {
       console.log('Initializing HttpAgent in background...');
       
-      // Create agent
-      const agent = new HttpAgent({ identity, host });
+      // Create agent with a time offset to handle clock drift
+      const agent = new HttpAgent({ 
+        identity, 
+        host,
+        // Add a time offset to handle clock synchronization issues
+        fetchRootKey: isLocal,
+        // Add 10 seconds to ensure we're ahead of the IC time
+        timeOffset: 10000
+      });
       this.agent = agent;
       
-      // Fetch root key for local development
-      if (isLocal) {
-        console.log('Fetching root key for local development...');
-        // Handle this with a promise but don't wait for it
-        agent.fetchRootKey().then(() => {
-          console.log('Root key fetched successfully');
-        }).catch(err => {
-          console.warn('Error fetching root key:', err);
-        });
-      }
+      // Fetch root key for local development is now handled via the option above
       
       // Initialize token service to ensure tokens are loaded
       // Pass our newly created agent to the token service
@@ -317,6 +315,7 @@ export const useCanisterStore = defineStore('canister', {
       try {
         console.log(`Creating actor for marketplace with ID: ${this.canisterIds.marketplace}`);
         canisters.marketplace = createActorMarketplace(this.canisterIds.marketplace, { agent });
+        console.log('Marketplace actor created:', canisters.marketplace ? 'Success' : 'Failed (null/undefined)');
       } catch (error) {
         console.error('Error creating marketplace actor:', error);
       }
@@ -465,6 +464,12 @@ export const useCanisterStore = defineStore('canister', {
      * @returns {Promise<Object>} - Canister actor
      */
     async get(canisterName) {
+      // Log the canister request more verbosely
+      console.log(`[DEBUG] Requesting canister: ${canisterName}, current state:`, 
+        canisterName in canisters ? 
+          (canisters[canisterName] ? 'Exists' : 'Null/Undefined') : 
+          'Not initialized');
+      
       // Check for the specific canister first - return immediately if available
       if (canisters[canisterName]) {
         console.log(`Using existing ${canisterName} canister`);
@@ -501,7 +506,17 @@ export const useCanisterStore = defineStore('canister', {
       
       // Initialize agents if needed
       try {
-        await this.initializeAgents();
+        console.log(`[DEBUG] Calling initializeAgents for ${canisterName}...`);
+        const result = await this.initializeAgents();
+        console.log(`[DEBUG] initializeAgents result: ${result}`);
+        
+        // Check if canister was created during initialization
+        if (canisters[canisterName]) {
+          console.log(`${canisterName} canister became available after initializeAgents`);
+          return canisters[canisterName];
+        } else {
+          console.log(`[DEBUG] ${canisterName} still not available after initializeAgents`);
+        }
       } catch (initError) {
         console.error(`Error initializing agents for ${canisterName}:`, initError);
         
@@ -516,7 +531,9 @@ export const useCanisterStore = defineStore('canister', {
             } else if (canisterName === 'roadmap') {
               canisters.roadmap = createActorRoadmap(this.canisterIds.roadmap, { agent });
             } else if (canisterName === 'marketplace') {
+              console.log(`[DEBUG] Creating marketplace actor with ID ${this.canisterIds.marketplace}`);
               canisters.marketplace = createActorMarketplace(this.canisterIds.marketplace, { agent });
+              console.log(`[DEBUG] Marketplace actor created: ${canisters.marketplace ? 'Success' : 'Failed'}`);
             } else if (canisterName === 'ledger') {
               canisters.ledger = Actor.createActor(icpLedgerIDL, {
                 agent,
@@ -529,13 +546,20 @@ export const useCanisterStore = defineStore('canister', {
         }
       }
 
-      // Final check for the canister
+      // Final check for the canister with detailed logging
       if (canisters[canisterName]) {
+        console.log(`${canisterName} canister is now available`);
         return canisters[canisterName];
       }
       
-      // If still not available, log a clear message and return null
-      console.error(`${canisterName} canister not available after initialization attempts`);
+      // If still not available, try to provide a more specific reason
+      console.error(`${canisterName} canister not available after initialization attempts. Current canisters state:`, 
+        Object.keys(canisters).reduce((acc, key) => {
+          acc[key] = key === 'tokenLedgers' ? 
+            `Object with ${Object.keys(canisters.tokenLedgers || {}).length} keys` : 
+            !!canisters[key];
+          return acc;
+        }, {}));
       return null;
     },
 
@@ -550,23 +574,23 @@ export const useCanisterStore = defineStore('canister', {
         
         console.log('Initializing canisters immediately...');
         
-        // Create agent with or without identity
+        // Create agent with or without identity, including time offset
         const agent = identity 
-          ? new HttpAgent({ identity, host })
-          : new HttpAgent({ host });
+          ? new HttpAgent({ 
+              identity, 
+              host, 
+              fetchRootKey: isLocal,
+              timeOffset: 10000 // Add 10 seconds offset for clock synchronization
+            })
+          : new HttpAgent({ 
+              host, 
+              fetchRootKey: isLocal,
+              timeOffset: 10000
+            });
         
         this.agent = agent;
         
-        // Fetch root key for local development
-        if (isLocal) {
-          console.log('Fetching root key for local development...');
-          // Handle this with a promise but don't wait for it
-          agent.fetchRootKey().then(() => {
-            console.log('Root key fetched successfully');
-          }).catch(err => {
-            console.warn('Error fetching root key:', err);
-          });
-        }
+        // Fetch root key is now handled via the option above
         
         // Set identity and initialization flag even with anonymous agent
         currentIdentity = identity;

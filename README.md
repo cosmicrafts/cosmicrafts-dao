@@ -208,3 +208,56 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+# Federation Missions System
+
+This module implements a WoW Garrison-style mission system for Cosmicrafts DAO, where users join a global federation and take on community missions.
+
+## Key Features
+
+- **Global Mission Board**: Unlike personal missions, these are federation-wide with limited slots
+- **Real-time Competition**: Players can see other commanders working on the same missions
+- **Tiered Rewards**: Mission rewards scale based on rarity and difficulty
+- **Time-based Mechanics**: Missions have set durations, creating a check-in gameplay loop
+
+## Components
+
+### Frontend
+
+- **FederationMissions.vue**: Main mission board interface showing available missions
+- **FederationMissionCard.vue**: Individual mission display with requirements and rewards
+- **MissionsSection.vue**: Integration into existing missions interface
+
+### Backend
+
+- **federation_missions.mo**: Separate canister to handle mission data and gameplay
+
+## Implementation Notes
+
+The Federation Missions system is designed to create an immediate engagement loop in the first minute of gameplay, followed by longer-term engagement through progressively unlocked content. Key elements:
+
+1. **First-minute engagement**: Quick missions with fast rewards keep new users hooked
+2. **Community competition**: Limited slots create urgency (FOMO)
+3. **Progressive difficulty**: Starter missions lead to more complex, rewarding tasks
+4. **Visual feedback**: Rarity tiers and time countdowns drive engagement
+
+## Setup Instructions
+
+1. Deploy the federation_missions canister:
+   ```
+   dfx deploy federation_missions
+   ```
+
+2. Initialize with starter missions:
+   ```
+   dfx canister call federation_missions initialize
+   ```
+
+3. Frontend will automatically connect to the canister and display available missions.
+
+## Next Steps
+
+- Add inter-canister calls to synchronize rewards with the main backend
+- Implement mission-specific requirements (ship types, items, etc.)
+- Create mission chains where completing one unlocks related missions
+- Add mission outcomes with narrative elements

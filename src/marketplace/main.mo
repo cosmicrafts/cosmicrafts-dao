@@ -292,11 +292,23 @@ actor class Marketplace() = this {
     private func _isICRC7Compliant(canisterId: Principal) : async Bool {
         try {
             let nftCanister : NFTBackend = actor(Principal.toText(canisterId));
-            // Call a few methods to verify it follows ICRC7 standard
+            // Call multiple standard methods to verify it follows ICRC7 standard
             let _ = await nftCanister.icrc7_name();
             let _ = await nftCanister.icrc7_symbol();
+            
+            // Try to verify the standard by calling owner_of on token 1
+            // This is just a check and we expect it might fail if token 1 doesn't exist
+            // But if the method exists, it should either return a valid result or a known error
+            try {
+                let ownerResult = await nftCanister.icrc7_owner_of(1);
+                // Result doesn't matter, just that the method exists and returns correctly formatted data
+            } catch(e) {
+                // An error here is expected for non-existent tokens
+                // But the method signature should exist for ICRC-7
+            };
+            
             return true;
-        } catch(_) {
+        } catch(e) {
             return false;
         };
     };
@@ -669,7 +681,7 @@ actor class Marketplace() = this {
                                 ?#new_ask(#Ok(newAskResult))
                             ));
                         };
-                    case (#err(error)) {
+                        case (#err(error)) {
                             results.add((
                                 ?#new_ask(features), 
                                 ?#new_ask(#Err(error))
@@ -691,19 +703,19 @@ actor class Marketplace() = this {
                                 ?#end_ask(askId), 
                                 ?#end_ask(#Err(error))
                             ));
+                        };
+                    };
                 };
-            };
-        };
                 case (_) {
                     // Not implemented yet
                     results.add((
                         request, 
                         null
                     ));
+                };
             };
         };
-    };
-    
+        
         return Buffer.toArray(results);
     };
     
@@ -852,10 +864,10 @@ actor class Marketplace() = this {
                 case (_) {
                     // Not implemented yet
                     results.add((request, null));
+                };
             };
         };
-    };
-    
+        
         return Buffer.toArray(results);
     };
     
@@ -892,7 +904,7 @@ actor class Marketplace() = this {
         return #ok(marketplaceFeePercentage);
     };
 
-    // Simplified createNFTAsk function
+    // Improved createNFTAsk function with ownership verification
     public shared({ caller }) func createNFTAsk(
         collectionId: CollectionId,
         tokenId: TokenId,
@@ -905,6 +917,25 @@ actor class Marketplace() = this {
         // Check if token is approved
         if (not _isTokenApproved(collectionId)) {
             return #err(#TokenSpecNotSupported);
+        };
+        
+        // Verify ownership
+        try {
+            let nftCanister : NFTBackend = actor(Principal.toText(collectionId));
+            let ownerResult = await nftCanister.icrc7_owner_of(tokenId);
+            
+            switch (ownerResult) {
+                case (#ok(owner)) {
+                    if (owner.owner != caller) {
+                        return #err(#NotOwner);
+                    };
+                };
+                case (#err(_)) {
+                    return #err(#TokenNotFound);
+                };
+            };
+        } catch (_) {
+            return #err(#NotICRC7Compliant);
         };
         
         // Create ask features for the NFT
@@ -925,25 +956,30 @@ actor class Marketplace() = this {
     
     // Simplified buyNFT function
     public shared({ caller }) func buyNFT(askId: Nat) : async Result.Result<Nat, Types.Error> {
-        // Create an empty feature array
-        let _bidFeatures : [?BidFeature] = [];
-        
-        // Create a bid for the ask
-        let result = await _createBidForAsk(caller, askId, _bidFeatures);
-        
-        switch (result) {
-            case (#err(_error)) {
-                return #err(#UnsupportedOperation);
+        // Check if ask exists and is open
+        switch (asks.get(askId)) {
+            case (null) {
+                return #err(#ListingNotFound);
             };
-            case (#ok(bidResult)) {
-                // In a real implementation, you would handle token transfers here
+            case (?askStatus) {
+                if (askStatus.status != #open) {
+                    return #err(#AskNotActive);
+                };
                 
-                // Update ask status to closed
-                switch (asks.get(askId)) {
-                    case (null) { 
-                        return #err(#ListingNotFound);
+                // Create an empty feature array for the bid
+                let _bidFeatures : [?BidFeature] = [];
+                
+                // Create a bid for the ask
+                let result = await _createBidForAsk(caller, askId, _bidFeatures);
+                
+                switch (result) {
+                    case (#err(error)) {
+                        return #err(#UnsupportedOperation);
                     };
-                    case (?askStatus) {
+                    case (#ok(bidResult)) {
+                        // In a real implementation, you would handle token transfers here
+                        
+                        // Update ask status to closed
                         let updatedStatus : AskStatus = {
                             askStatus with
                             status = #closed;
@@ -956,6 +992,67 @@ actor class Marketplace() = this {
                     };
                 };
             };
+        };
+    };
+    
+    // Helper function to extract token details from ask features
+    private func _extractTokenDetails(ask: AskStatus) : {
+        price: Nat;
+        collectionId: Principal;
+        tokenId: Nat;
+    } {
+        var price: Nat = 0;
+        var collectionId: Principal = Principal.fromText("aaaaa-aa");
+        var tokenId: Nat = 0;
+        
+        for (feature in ask.config.vals()) {
+            // Extract buy_now price
+            switch (feature) {
+                case (#buy_now(buyNowOptions)) {
+                    if (buyNowOptions.size() > 0 and buyNowOptions[0].size() > 0) {
+                        switch (buyNowOptions[0][0]) {
+                            case (buyNow) {
+                                price := buyNow.amount;
+                            };
+                        };
+                    };
+                };
+                
+                // Extract token details
+                case (#ask_token(tokenSpecs)) {
+                    if (tokenSpecs.size() > 0) {
+                        switch (tokenSpecs[0]) {
+                            case (?spec) {
+                                collectionId := spec.canister;
+                                
+                                // Extract token ID
+                                for (standard in spec.standards.vals()) {
+                                    switch (standard) {
+                                        case (#ICRC7(?details)) {
+                                            switch (details.token_id) {
+                                                case (?id) {
+                                                    tokenId := id;
+                                                };
+                                                case (null) {};
+                                            };
+                                        };
+                                        case (_) {};
+                                    };
+                                };
+                            };
+                            case (null) {};
+                        };
+                    };
+                };
+                
+                case (_) {}; // Skip other features
+            };
+        };
+        
+        return {
+            price;
+            collectionId;
+            tokenId;
         };
     };
     
@@ -1076,7 +1173,7 @@ actor class Marketplace() = this {
         return owner;
     };
 
-    // Add support for creating unsolicited offers
+    // Add support for creating unsolicited offers with improved validation
     public shared({ caller }) func createUnsolicitedOffer(
         collectionId: CollectionId,
         tokenId: TokenId,
@@ -1090,6 +1187,30 @@ actor class Marketplace() = this {
         // Check if token is approved
         if (not _isTokenApproved(collectionId)) {
             return #err(#TokenSpecNotSupported);
+        };
+        
+        // Verify that the target owner actually owns the token
+        try {
+            let nftCanister : NFTBackend = actor(Principal.toText(collectionId));
+            let ownerResult = await nftCanister.icrc7_owner_of(tokenId);
+            
+            switch (ownerResult) {
+                case (#ok(actualOwner)) {
+                    if (actualOwner.owner != owner) {
+                        return #err(#NotOwner);
+                    };
+                };
+                case (#err(_)) {
+                    return #err(#TokenNotFound);
+                };
+            };
+        } catch (_) {
+            return #err(#NotICRC7Compliant);
+        };
+        
+        // Ensure the caller is not making an offer to themselves
+        if (caller == owner) {
+            return #err(#CannotBuyOwnNFT);
         };
         
         let _timestamp = Time.now();
@@ -1139,11 +1260,12 @@ actor class Marketplace() = this {
                 return #err(#UnsupportedOperation);
             };
             case (#ok(newAskResult)) {
+                // Notify the owner of the unsolicited offer (could implement notification mechanism here)
                 return #ok(newAskResult.ask_id);
-                        };
-                    };
-                };
-                
+            };
+        };
+    };
+    
     // Add a new method for advanced ask creation
     public shared({ caller }) func createAdvancedNFTAsk(
         collectionId: CollectionId,
@@ -1296,5 +1418,129 @@ actor class Marketplace() = this {
                 };
             };
         };
+    };
+
+    // Marketplace initialization
+    public shared({ caller }) func initializeMarketplace() : async Result.Result<(), Types.Error> {
+        if (not _verifyOwner(caller)) {
+            return #err(#Unauthorized);
+        };
+        
+        // Check if ICP token is already approved
+        let icpLedgerId = Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai");
+        let icpAlreadyApproved = _isTokenApproved(icpLedgerId);
+        
+        if (not icpAlreadyApproved) {
+            // Add ICP as approved token by default
+            approvedTokens.add(icpLedgerId);
+        };
+        
+        // Set default fee percentage (2.5%)
+        marketplaceFeePercentage := 250;
+        
+        return #ok();
+    };
+
+    // Get detailed information for a specific ask
+    public query func getAskDetails(askId: Nat) : async ?{
+        ask_id: Nat;
+        status: AskStatusType;
+        seller: Account;
+        token_details: ?{
+            collection_id: Principal;
+            token_id: Nat;
+            price: Nat;
+        };
+        created_at: ?Nat64;
+        participants: [Account];
+    } {
+        switch (asks.get(askId)) {
+            case (null) {
+                return null;
+            };
+            case (?askStatus) {
+                let tokenDetails = _extractTokenDetails(askStatus);
+                var createdAt : ?Nat64 = null;
+                
+                // Extract created_at from features
+                for (feature in askStatus.config.vals()) {
+                    switch (feature) {
+                        case (#created_at(timestamp)) {
+                            createdAt := ?timestamp;
+                        };
+                        case (_) {};
+                    };
+                };
+                
+                return ?{
+                    ask_id = askId;
+                    status = askStatus.status;
+                    seller = askStatus.seller;
+                    token_details = ?{
+                        collection_id = tokenDetails.collectionId;
+                        token_id = tokenDetails.tokenId;
+                        price = tokenDetails.price;
+                    };
+                    created_at = createdAt;
+                    participants = askStatus.participants;
+                };
+            };
+        };
+    };
+
+    // Check and update expired asks
+    public shared func cleanupExpiredAsks() : async Result.Result<Nat, Types.Error> {
+        let currentTime = Time.now();
+        let currentTimeNat = Nat64.fromNat(Int.abs(currentTime));
+        var expiredCount = 0;
+        
+        for ((askId, askStatus) in asks.entries()) {
+            if (askStatus.status == #open) {
+                var shouldExpire = false;
+                var expiryTimestamp : Nat64 = 0;
+                
+                // Check ending feature for expiration
+                for (feature in askStatus.config.vals()) {
+                    switch (feature) {
+                        case (#ending(#date(timestamp))) {
+                            if (timestamp <= currentTimeNat) {
+                                shouldExpire := true;
+                                expiryTimestamp := timestamp;
+                            };
+                        };
+                        case (#ending(#timeout(duration))) {
+                            // Check if created_at + duration < current time
+                            for (innerFeature in askStatus.config.vals()) {
+                                switch (innerFeature) {
+                                    case (#created_at(creationTime)) {
+                                        let expiryTime = creationTime + duration;
+                                        if (expiryTime <= currentTimeNat) {
+                                            shouldExpire := true;
+                                            expiryTimestamp := expiryTime;
+                                        };
+                                    };
+                                    case (_) {};
+                                };
+                            };
+                        };
+                        case (_) {};
+                    };
+                };
+                
+                if (shouldExpire) {
+                    // Update ask status to closed
+                    let updatedStatus : AskStatus = {
+                        askStatus with
+                        status = #closed;
+                    };
+                    
+                    asks.put(askId, updatedStatus);
+                    askHistory.put(askId, updatedStatus);
+                    expiredCount += 1;
+                };
+            };
+        };
+        
+        return #ok(expiredCount);
     };
 } 

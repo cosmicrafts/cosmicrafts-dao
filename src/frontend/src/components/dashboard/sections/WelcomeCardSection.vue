@@ -1,38 +1,60 @@
 <!-- WelcomeCardSection.vue -->
 <template>
-  <div>
-    <section class="welcome-card-section cosmic-panel">
-      <div class="welcome-card-content">
-        <div class="welcome-message">
-          <h2>{{ welcomeMessage }}</h2>
-          <p>{{ subWelcomeMessage }}</p>
-        </div>
-        
-        <div class="player-stats">
-          <div class="stat-item">
-            <span class="stat-value">{{ playerLevel }}</span>
-            <span class="stat-label">{{ $t('dashboard.level') }}</span>
-            <div class="level-progress">
-              <div class="progress-bar" :style="{ width: levelProgress + '%' }"></div>
+  <section class="dashboard-section welcome-card cosmic-panel">
+    <!-- Decorative particles -->
+    <div class="cosmic-particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+    
+    <div class="welcome-content">
+      <!-- User Welcome Info -->
+      <div class="welcome-user-info">
+        <img 
+          :src="avatarUrl" 
+          :alt="player?.username || 'User'" 
+          class="welcome-avatar"
+        />
+        <div class="welcome-text">
+          <h2>Welcome{{ player ? ', ' + player.username : '' }}!</h2>
+          <div class="user-details">
+            <p class="user-title">{{ player?.title || 'Cosmic Explorer' }}</p>
+            <div class="level-indicator">
+              <div class="level-badge">{{ player?.level || 1 }}</div>
+              <div class="xp-bar">
+                <div class="xp-progress" :style="{ width: `${xpPercentage}%` }"></div>
+              </div>
+              <span class="xp-text">{{ playerXp }} / {{ xpRequired }} XP</span>
             </div>
-          </div>
-          
-          <div class="stat-item">
-            <span class="stat-value">{{ playerXP }}</span>
-            <span class="stat-label">{{ $t('dashboard.xp') }}</span>
-          </div>
-          
-          <div class="stat-item">
-            <span class="stat-value">{{ playerRank }}</span>
-            <span class="stat-label">{{ $t('dashboard.rank') }}</span>
           </div>
         </div>
       </div>
-    </section>
-    
-    <!-- Activity Streak Card -->
-    <ActivityStreakCard @streak-claimed="handleStreakClaimed" />
-  </div>
+      
+      <!-- Stats Summary -->
+      <div class="stats-summary">
+        <div class="stat-summary-item">
+          <div class="summary-value">{{ playerStats?.gamesPlayed || 0 }}</div>
+          <div class="summary-label">Games Played</div>
+        </div>
+        <div class="stat-summary-item">
+          <div class="summary-value">{{ playerStats?.gamesWon || 0 }}</div>
+          <div class="summary-label">Games Won</div>
+        </div>
+        <div class="stat-summary-item">
+          <div class="summary-value">{{ playerWinRate }}%</div>
+          <div class="summary-label">Win Rate</div>
+        </div>
+      </div>
+      
+      <!-- Activity Streak Card -->
+      <ActivityStreakCard
+        ref="streakRef"
+        @streak-claimed="handleStreakClaimed"
+        @milestone-reached="handleMilestoneReached"
+      />
+    </div>
+  </section>
 </template>
 
 <script setup>
@@ -41,7 +63,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useTokenStore } from '@/stores/token';
 import { useNftsStore } from '@/stores/nfts';
 import { useNotification } from '@/composables/useNotification';
-import ActivityStreakCard from './ActivityStreakCard.vue';
+import ActivityStreakCard from '@/components/dashboard/sections/ActivityStreakCard.vue';
 
 // Props with defaults
 const props = defineProps({
@@ -59,6 +81,9 @@ const authStore = useAuthStore();
 const tokenStore = useTokenStore();
 const nftsStore = useNftsStore();
 const notify = useNotification();
+
+// Refs
+const streakRef = ref(null);
 
 // Player info
 const player = computed(() => authStore.player);
@@ -119,14 +144,41 @@ const playerRank = ref('Explorer');
 const levelProgress = ref(65); // percentage to next level
 
 // Methods
-const handleStreakClaimed = (streakData) => {
-  // Forward the streak claimed event to parent
+const handleStreakClaimed = (data) => {
+  console.log('Streak claimed:', data);
+  
+  // Emit event to parent component with reward details
   emit('daily-reward-claimed', {
-    streak: streakData.streak,
-    reward: streakData.reward,
-    milestone: streakData.milestone
+    success: true,
+    reward: {
+      tokens: data.tokenReward,
+      xp: data.xpReward
+    }
   });
 };
+
+const handleMilestoneReached = (milestone) => {
+  console.log('Milestone reached:', milestone);
+  
+  // Handle milestone rewards
+  // This could trigger special rewards, avatar frames, etc.
+  notify.achievement(`You've reached the ${milestone.days} day streak milestone!`, {
+    title: 'Streak Milestone!',
+    duration: 5000
+  });
+};
+
+// For testing purposes
+const simulateStreak = (streak, daysAgo = 1) => {
+  if (streakRef.value) {
+    streakRef.value.simulateStreak(streak, daysAgo);
+  }
+};
+
+// Expose methods to parent
+defineExpose({
+  simulateStreak
+});
 
 // Lifecycle
 onMounted(() => {
@@ -151,7 +203,7 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/backgrounds/stars-bg.webp');
+  background-image: url('@/assets/backgrounds/dark-bg.webp');
   background-size: cover;
   opacity: 0.2;
   z-index: 0;
@@ -261,5 +313,10 @@ onMounted(() => {
     width: 100%;
     margin-top: 8px;
   }
+}
+
+.welcome-content {
+  position: relative;
+  z-index: 1;
 }
 </style> 
