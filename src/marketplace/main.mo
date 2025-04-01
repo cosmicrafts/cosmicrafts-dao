@@ -301,15 +301,15 @@ actor class Marketplace() = this {
             // This is just a check and we expect it might fail if token 1 doesn't exist
             // But if the method exists, it should either return a valid result or a known error
             try {
-                let ownerResult = await nftCanister.icrc7_owner_of(1);
+                let _ = await nftCanister.icrc7_owner_of(1);
                 // Result doesn't matter, just that the method exists and returns correctly formatted data
-            } catch(e) {
+            } catch(_) {
                 // An error here is expected for non-existent tokens
                 // But the method signature should exist for ICRC-7
             };
             
             return true;
-        } catch(e) {
+        } catch(_) {
             return false;
         };
     };
@@ -368,61 +368,27 @@ actor class Marketplace() = this {
         for (feature in features.vals()) {
             switch(feature) {
                 case (null) { /* Skip null features */ };
-                case (?#ask_token(askTokens)) {
-                    hasAskToken := true;
-                    validFeatures.add(#ask_token(askTokens));
-                };
-                case (?#buy_now(buyNow)) {
-                    hasBuyNow := true;
-                    validFeatures.add(#buy_now(buyNow));
-                };
-                case (?#created_at(timestamp)) {
-                    validFeatures.add(#created_at(timestamp));
-                };
-                case (?#ending(endingType)) {
-                    validFeatures.add(#ending(endingType));
-                };
-                case (?#fee_schema(schema)) {
-                    validFeatures.add(#fee_schema(schema));
-                };
-                case (?#broker(account)) {
-                    validFeatures.add(#broker(account));
-                };
-                case (?#allow_list(accounts)) {
-                    validFeatures.add(#allow_list(accounts));
-                };
-                case (?#start_date(date)) {
-                    validFeatures.add(#start_date(date));
-                };
-                case (?#memo(data)) {
-                    validFeatures.add(#memo(data));
-                };
-                case (?#fee_accounts(accounts)) {
-                    validFeatures.add(#fee_accounts(accounts));
-                };
-                case (?#bid_pays_fees(fees)) {
-                    validFeatures.add(#bid_pays_fees(fees));
-                };
-                case (?#allow_partial) {
-                    validFeatures.add(#allow_partial);
-                };
-                case (?#unsolicited_offer(account)) {
-                    validFeatures.add(#unsolicited_offer(account));
-                };
-                case (_) {
-                    // Handle unrecognized features - if it's a valid feature, add it
-                    switch (feature) {
-                        case (null) { /* Skip null features */ };
-                        case (?feat) { validFeatures.add(feat); };
+                case (?f) {
+                    validFeatures.add(f);
+                    
+                    switch(f) {
+                        case (#ask_token(_)) {
+                            hasAskToken := true;
+                        };
+                        case (#buy_now(_)) {
+                            hasBuyNow := true;
+                        };
+                        case (_) {};
                     };
                 };
             };
         };
         
+        // Validate required features
         if (not hasAskToken) {
             return #err({
                 error_code = 400;
-                message = "Missing required ask_token feature";
+                message = "Missing required token_id feature";
             });
         };
         
@@ -724,7 +690,7 @@ actor class Marketplace() = this {
     private func _createBidForAsk(
         caller: Principal,
         askId: Nat,
-        bidFeatures: [?BidFeature]
+        _bidFeatures: [?BidFeature]
     ) : async Result.Result<{escrow: EscrowRecord; result: Nat}, GenericError> {
         // Check if ask exists and is open
         switch (asks.get(askId)) {
@@ -758,7 +724,7 @@ actor class Marketplace() = this {
                 };
                 
                 // Add escrow record
-                let escrowId = _addEscrowRecord(escrowRecord);
+                let _escrowId = _addEscrowRecord(escrowRecord);
                 
                 // Update ask participants
                 let updatedParticipants = Array.append(askStatus.participants, [buyer]);
@@ -914,7 +880,8 @@ actor class Marketplace() = this {
         // Add the token to approved list
         approvedTokens.add(token);
         
-        // Store caller as the collection manager
+        // Get collection metadata and store with caller as manager
+        let timestamp = Time.now();
         try {
             let nftCanister : NFTBackend = actor(Principal.toText(token));
             let name = await nftCanister.icrc7_name();
@@ -925,8 +892,8 @@ actor class Marketplace() = this {
                 id = token;
                 name = name;
                 symbol = symbol;
-                isVerified = false;
-                createdAt = Time.now();
+                isVerified = true; // Set to true by default as in original implementation
+                createdAt = timestamp;
                 manager = caller;
             };
             
@@ -943,7 +910,7 @@ actor class Marketplace() = this {
                 0, // No price
                 Time.now()
             );
-        } catch (e) {
+        } catch(_) {
             // Still add to approved tokens even if we fail to get collection details
             return ResultWrapper.ok(());
         };
@@ -1006,7 +973,7 @@ actor class Marketplace() = this {
         let result = await _createNewAsk(caller, askFeatures);
         
         switch (result) {
-            case (#err(_error)) {
+            case (#err(_)) {
                 return ResultWrapper.err(#UnsupportedOperation);
             };
             case (#ok(newAskResult)) {
@@ -1034,7 +1001,7 @@ actor class Marketplace() = this {
                 let result = await _createBidForAsk(caller, askId, _bidFeatures);
                 
                 switch (result) {
-                    case (#err(error)) {
+                    case (#err(_)) {
                         return ResultWrapper.err(#UnsupportedOperation);
                     };
                     case (#ok(bidResult)) {
@@ -1317,7 +1284,7 @@ actor class Marketplace() = this {
         let result = await _createNewAsk(caller, askFeatures);
         
         switch (result) {
-            case (#err(error)) {
+            case (#err(_)) {
                 return #err(#UnsupportedOperation);
             };
             case (#ok(newAskResult)) {
@@ -1389,7 +1356,7 @@ actor class Marketplace() = this {
         let result = await _createNewAsk(caller, askFeatures);
         
         switch (result) {
-            case (#err(error)) {
+            case (#err(_)) {
                 return #err(#UnsupportedOperation);
             };
             case (#ok(newAskResult)) {
@@ -1399,7 +1366,7 @@ actor class Marketplace() = this {
     };
 
     // Add a method to handle ask encumbrance
-    public shared({ caller }) func encumberAsk(
+    public shared({ caller = _ }) func encumberAsk(
         askId: Nat,
         trustee: Principal,
         expiresAt: Time.Time

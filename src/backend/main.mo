@@ -5752,7 +5752,7 @@ shared actor class Cosmicrafts() = Self {
         };
     };
 
-    public shared({ caller }) func mintNFT(mintArgs: TypesICRC7.MintArgs): async TypesICRC7.MintReceipt {
+    public shared({ caller = _ }) func mintNFT(mintArgs: TypesICRC7.MintArgs): async TypesICRC7.MintReceipt {
         let now = Nat64.fromIntWrap(Time.now());
         let acceptedTo: TypesICRC7.Account = _acceptAccount(mintArgs.to);
 

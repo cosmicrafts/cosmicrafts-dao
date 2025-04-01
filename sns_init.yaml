@@ -76,154 +76,154 @@ Voting:
 Distribution:
     Neurons:
         # 2Link - 8 neurons with quarterly dissolve delays
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 4hmmk-uynbn-mlvmi-2lckw-emhui-z5lcy-4b5uw-h5pgj-2c2t2-f7vp5-rae
           stake: 2_000_000 tokens
           memo: 0
           dissolve_delay: 0 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 4hmmk-uynbn-mlvmi-2lckw-emhui-z5lcy-4b5uw-h5pgj-2c2t2-f7vp5-rae
           stake: 2_000_000 tokens
           memo: 1
           dissolve_delay: 90 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 4hmmk-uynbn-mlvmi-2lckw-emhui-z5lcy-4b5uw-h5pgj-2c2t2-f7vp5-rae
           stake: 2_000_000 tokens
           memo: 2
           dissolve_delay: 180 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 4hmmk-uynbn-mlvmi-2lckw-emhui-z5lcy-4b5uw-h5pgj-2c2t2-f7vp5-rae
           stake: 2_000_000 tokens
           memo: 3
           dissolve_delay: 270 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 4hmmk-uynbn-mlvmi-2lckw-emhui-z5lcy-4b5uw-h5pgj-2c2t2-f7vp5-rae
           stake: 2_000_000 tokens
           memo: 4
           dissolve_delay: 360 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 4hmmk-uynbn-mlvmi-2lckw-emhui-z5lcy-4b5uw-h5pgj-2c2t2-f7vp5-rae
           stake: 2_000_000 tokens
           memo: 5
           dissolve_delay: 450 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 4hmmk-uynbn-mlvmi-2lckw-emhui-z5lcy-4b5uw-h5pgj-2c2t2-f7vp5-rae
           stake: 2_000_000 tokens
           memo: 6
           dissolve_delay: 540 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 4hmmk-uynbn-mlvmi-2lckw-emhui-z5lcy-4b5uw-h5pgj-2c2t2-f7vp5-rae
           stake: 2_000_000 tokens
           memo: 7
           dissolve_delay: 630 days
           vesting_period: 0 days
 
         # Anmi Capital - 8 neurons with quarterly dissolve delays
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: ss2b5-2f3o7-3d5vw-bulrx-xxp3d-5lymy-gjbs2-7r652-zkz66-h7zxc-3qe
           stake: 1_250_000 tokens
           memo: 8
           dissolve_delay: 0 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: ss2b5-2f3o7-3d5vw-bulrx-xxp3d-5lymy-gjbs2-7r652-zkz66-h7zxc-3qe
           stake: 1_250_000 tokens
           memo: 9
           dissolve_delay: 90 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: ss2b5-2f3o7-3d5vw-bulrx-xxp3d-5lymy-gjbs2-7r652-zkz66-h7zxc-3qe
           stake: 1_250_000 tokens
           memo: 10
           dissolve_delay: 180 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: ss2b5-2f3o7-3d5vw-bulrx-xxp3d-5lymy-gjbs2-7r652-zkz66-h7zxc-3qe
           stake: 1_250_000 tokens
           memo: 11
           dissolve_delay: 270 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: ss2b5-2f3o7-3d5vw-bulrx-xxp3d-5lymy-gjbs2-7r652-zkz66-h7zxc-3qe
           stake: 1_250_000 tokens
           memo: 12
           dissolve_delay: 360 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: ss2b5-2f3o7-3d5vw-bulrx-xxp3d-5lymy-gjbs2-7r652-zkz66-h7zxc-3qe
           stake: 1_250_000 tokens
           memo: 13
           dissolve_delay: 450 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: ss2b5-2f3o7-3d5vw-bulrx-xxp3d-5lymy-gjbs2-7r652-zkz66-h7zxc-3qe
           stake: 1_250_000 tokens
           memo: 14
           dissolve_delay: 540 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: ss2b5-2f3o7-3d5vw-bulrx-xxp3d-5lymy-gjbs2-7r652-zkz66-h7zxc-3qe
           stake: 1_250_000 tokens
           memo: 15
           dissolve_delay: 630 days
           vesting_period: 0 days
 
         # Genesis - 8 neurons with yearly dissolve delays
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
           stake: 1_750_000 tokens
           memo: 16
           dissolve_delay: 0 days
           vesting_period: 0 days
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
           stake: 1_750_000 tokens
           memo: 17
           dissolve_delay: 1 year
           vesting_period: 0 year
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
           stake: 1_750_000 tokens
           memo: 18
           dissolve_delay: 2 years
           vesting_period: 0 years
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
           stake: 1_750_000 tokens
           memo: 19
           dissolve_delay: 3 years
           vesting_period: 0 years
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
           stake: 1_750_000 tokens
           memo: 20
           dissolve_delay: 4 years
           vesting_period: 0 years
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
           stake: 1_750_000 tokens
           memo: 21
           dissolve_delay: 5 years
           vesting_period: 0 years
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
           stake: 1_750_000 tokens
           memo: 22
           dissolve_delay: 6 years
           vesting_period: 0 years
 
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
           stake: 1_750_000 tokens
           memo: 23
           dissolve_delay: 7 years
           vesting_period: 0 years
 
         # Developer Team
-        - principal: 7j7ws-loju7-f6q4t-k3aib-545c4-ch2wh-ge7sy-b353w-l2t5e-ql7hc-3ae
+        - principal: xms3v-5ldqg-7klmj-onyws-2v2ku-fzzrs-yitwh-rue2o-naa6i-ptzze-rae
           stake: 80_000_000 tokens
           memo: 24
           dissolve_delay: 8 years
