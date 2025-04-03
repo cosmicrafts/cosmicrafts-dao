@@ -4,13 +4,6 @@
       "main": "src/backend/main.mo",
       "type": "motoko"
     },
-    "marketplace": {
-      "main": "src/marketplace/main.mo",
-      "type": "motoko",
-      "dependencies": [
-        "backend"
-      ]
-    },
     "frontend": {
       "dependencies": [
         "backend",
@@ -21,6 +14,43 @@
       ],
       "type": "assets",
       "workspace": "frontend"
+    },
+    "marketplace": {
+      "dependencies": [
+        "backend"
+      ],
+      "main": "src/marketplace/main.mo",
+      "type": "motoko"
+    },
+    "sns_governance": {
+      "build": "",
+      "candid": "candid/sns_governance.did",
+      "type": "custom",
+      "wasm": ""
+    },
+    "sns_index": {
+      "build": "",
+      "candid": "candid/sns_index.did",
+      "type": "custom",
+      "wasm": ""
+    },
+    "sns_ledger": {
+      "build": "",
+      "candid": "candid/sns_ledger.did",
+      "type": "custom",
+      "wasm": ""
+    },
+    "sns_root": {
+      "build": "",
+      "candid": "candid/sns_root.did",
+      "type": "custom",
+      "wasm": ""
+    },
+    "sns_swap": {
+      "build": "",
+      "candid": "candid/sns_swap.did",
+      "type": "custom",
+      "wasm": ""
     }
   },
   "defaults": {

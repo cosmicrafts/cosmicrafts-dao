@@ -1,7 +1,7 @@
 {
-  "governance_canister_id": "ajuq4-ruaaa-aaaaa-qaaga-cai",
-  "index_canister_id": "aovwi-4maaa-aaaaa-qaagq-cai",
-  "ledger_canister_id": "ahw5u-keaaa-aaaaa-qaaha-cai",
-  "root_canister_id": "aax3a-h4aaa-aaaaa-qaahq-cai",
-  "swap_canister_id": "c5kvi-uuaaa-aaaaa-qaaia-cai"
+  "governance_canister_id": "v2soh-2iaaa-aaaap-qpy4q-cai",
+  "ledger_canister_id": "vuqdp-byaaa-aaaap-qpy5q-cai",
+  "root_canister_id": "vbxsc-aqaaa-aaaap-qpy6a-cai",
+  "swap_canister_id": "vgwuw-niaaa-aaaap-qpy6q-cai",
+  "index_canister_id": "vtrf3-maaaa-aaaap-qpy5a-cai"
 }

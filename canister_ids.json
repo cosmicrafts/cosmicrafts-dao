@@ -7,5 +7,20 @@
   },
   "marketplace": {
     "ic": "zgc5e-qiaaa-aaaan-qzyga-cai"
+  },
+  "sns_governance": {
+    "ic": "v2soh-2iaaa-aaaap-qpy4q-cai"
+  },
+  "sns_index": {
+    "ic": "vtrf3-maaaa-aaaap-qpy5a-cai"
+  },
+  "sns_ledger": {
+    "ic": "vuqdp-byaaa-aaaap-qpy5q-cai"
+  },
+  "sns_root": {
+    "ic": "vbxsc-aqaaa-aaaap-qpy6a-cai"
+  },
+  "sns_swap": {
+    "ic": "vgwuw-niaaa-aaaap-qpy6q-cai"
   }
 }
