@@ -62,31 +62,106 @@ const sendAuthDataToUnity = () => {
     // Get current user authentication data
     const currentAddress = authStore.currentAddress as AddressInfo | null;
     
+    // Extract the seed phrase and keys for blockchain interaction
+    const seedPhrase = authStore.seedPhrase || '';
+    
+    // Extract the key details in a more usable format
+    let keyDetails = {
+      principalId: currentAddress?.principalId || '',
+      publicKey: currentAddress?.publicKey || '',
+      seedPhrase: seedPhrase,
+      // Include essential derived keys for ICP interaction
+      derivedAddresses: authStore.derivedAddresses ? 
+        authStore.derivedAddresses.map((addr: any) => ({
+          index: addr.index,
+          principalId: addr.principalId,
+          publicKey: addr.publicKey,
+          name: addr.name
+        })) : []
+    };
+    
+    // Create data object to send to Unity
     const authData = {
       authenticated: authStore.authenticated,
       registered: authStore.registered,
-      principalId: currentAddress?.principalId || '',
-      publicKey: currentAddress?.publicKey || '',
-      seedPhrase: authStore.seedPhrase || '', // Be careful with sending seed phrase
-      playerData: authStore.player ? JSON.stringify(authStore.player) : ''
+      // Include identity and key info for ICP interaction
+      keys: keyDetails,
+      // Still include player data but clean it up
+      playerData: authStore.player ? 
+        sanitizePlayerData(authStore.player) : ''
     };
     
     console.log('Sending auth data to Unity');
     
+    // Convert to JSON with BigInt replacer function
+    const jsonString = JSON.stringify(authData, bigIntReplacer);
+    
     // Send authentication data to Unity
-    unityContext.value.sendMessage('AuthenticationManager', 'ReceiveAuthData', JSON.stringify(authData));
+    unityContext.value.sendMessage('AuthenticationManager', 'ReceiveAuthData', jsonString);
     
-    // You can also send individual pieces of data if needed
-    if (currentAddress?.principalId) {
-      unityContext.value.sendMessage('AuthenticationManager', 'SetPrincipalId', currentAddress.principalId);
-    }
+    // Send just the critical blockchain identity information separately 
+    // for direct ICP interaction from Unity
+    const icpIdentityData = {
+      principalId: currentAddress?.principalId || '',
+      seedPhrase: seedPhrase,
+      publicKey: currentAddress?.publicKey || '',
+      // Add derivation details if needed by Unity
+      derivationPath: "m/44'/223'/0'/0/0", // Standard ICP derivation path
+    };
     
+    unityContext.value.sendMessage(
+      'AuthenticationManager', 
+      'SetICPIdentity', 
+      JSON.stringify(icpIdentityData, bigIntReplacer)
+    );
+    
+    // Also send player data
     if (authStore.player) {
-      unityContext.value.sendMessage('AuthenticationManager', 'SetPlayerData', JSON.stringify(authStore.player));
+      const cleanPlayerData = sanitizePlayerData(authStore.player);
+      unityContext.value.sendMessage(
+        'AuthenticationManager', 
+        'SetPlayerData', 
+        JSON.stringify(cleanPlayerData, bigIntReplacer)
+      );
     }
   } catch (err) {
     console.error('Error sending auth data to Unity:', err);
   }
+};
+
+// Helper function to sanitize player data for Unity
+const sanitizePlayerData = (playerData: any): any => {
+  // Create a clean copy of the player data
+  const cleanData = { ...playerData };
+  
+  // Convert any complex objects to strings
+  if (cleanData.id && cleanData.id._isPrincipal) {
+    // Convert principal ID object to string representation
+    cleanData.principalIdString = cleanData.id.toString();
+  }
+  
+  // Convert registration date to a readable format if needed
+  if (cleanData.registrationDate && typeof cleanData.registrationDate === 'string') {
+    try {
+      // Convert nano timestamp to milliseconds and create a date
+      const timestampNs = BigInt(cleanData.registrationDate);
+      const timestampMs = Number(timestampNs / BigInt(1000000));
+      cleanData.registrationDateFormatted = new Date(timestampMs).toISOString();
+    } catch (e) {
+      console.warn('Could not format registration date:', e);
+    }
+  }
+  
+  return cleanData;
+};
+
+// Helper function to handle BigInt serialization in JSON
+const bigIntReplacer = (key: string, value: any): any => {
+  // Handle BigInt values
+  if (typeof value === 'bigint') {
+    return value.toString();
+  }
+  return value;
 };
 
 onMounted(async () => {
