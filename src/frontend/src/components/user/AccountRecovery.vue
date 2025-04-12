@@ -218,10 +218,19 @@ const handleAccountRecovery = async () => {
       
       recoverySuccess.value = true;
       
-      // Close the modal after successful recovery with a slight delay
-      setTimeout(() => {
-        modalStore.closeModal();
-      }, 1500);
+      // Check if the player is registered before closing the modal
+      if (authStore.isRegistered()) {
+        // Close the modal after successful recovery with a slight delay
+        setTimeout(() => {
+          modalStore.closeModal();
+        }, 1500);
+      } else {
+        // Redirect to registration if player not registered
+        setTimeout(() => {
+          modalStore.closeModal();
+          authStore.redirectToRegistration();
+        }, 1500);
+      }
     } catch (recoveryError) {
       // If recovery fails, try one more approach - direct identity creation
       console.warn('Standard recovery failed, trying alternative approach:', recoveryError);
@@ -240,10 +249,19 @@ const handleAccountRecovery = async () => {
         
         recoverySuccess.value = true;
         
-        // Close the modal after successful recovery
-        setTimeout(() => {
-          modalStore.closeModal();
-        }, 1500);
+        // Check if the player is registered before closing the modal
+        if (authStore.isRegistered()) {
+          // Close the modal after successful recovery
+          setTimeout(() => {
+            modalStore.closeModal();
+          }, 1500);
+        } else {
+          // Redirect to registration if player not registered
+          setTimeout(() => {
+            modalStore.closeModal();
+            authStore.redirectToRegistration();
+          }, 1500);
+        }
       } catch (directError) {
         throw new Error(`Recovery failed: ${directError.message || 'Unknown error'}`);
       }

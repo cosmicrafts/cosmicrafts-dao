@@ -2840,6 +2840,9 @@ shared actor class Cosmicrafts() = Self {
                 availableAvatars.put(playerId, Iter.toArray(Iter.range(1, 12)));
                 availableTitles.put(playerId, [1]);
 
+                // Mint a deck for the new player without waiting for the result
+                ignore mintDeck();
+
                 return (true, ?newPlayer, "User registered successfully with referral code " # finalCode);
             };
         };
