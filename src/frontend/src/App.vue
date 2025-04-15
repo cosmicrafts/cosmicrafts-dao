@@ -5,7 +5,8 @@ import { useRoute } from 'vue-router';
 import Header from './components/layout/Header.vue';
 import Footer from './components/layout/Footer.vue';
 import Modal from '@/components/core/modals/BaseModal.vue'; 
-import Chat from "@/components/core/Chat.vue";
+// Temporarily disabled Chat component for performance testing
+// import Chat from "@/components/core/Chat.vue";
 import EscMenu from "@/components/navigation/menus/EscMenu.vue";
 import NotificationSystem from '@/components/ui/notifications/NotificationSystem.vue';
 import ToastNotificationSystem from '@/components/dashboard/ui/ToastNotificationSystem.vue';
@@ -22,7 +23,7 @@ const globalToastSystem = ref(null);
 const hasShownWelcome = ref(localStorage.getItem('hasShownWelcome') === 'true');
 const showWelcomeTooltip = ref(false);
 
-// Provide welcome tooltip state to Chat component
+// Provide welcome tooltip state to Chat component - keep for when we re-enable it
 provide('showWelcomeTooltip', showWelcomeTooltip);
 
 // Add watcher for route changes to force scroll to top
@@ -48,6 +49,7 @@ watch(
 
 // State for tracking if other windows are open
 const isEscMenuOpen = ref(false);
+// Temporarily keep chatRef but not initialize it
 const chatRef = ref(null);
 
 // Provide chat reference to child components
@@ -55,10 +57,10 @@ provide('chatRef', chatRef);
 
 // Method to check if any other windows are open
 const areOtherWindowsOpen = () => {
-  // Check if the Chat component is showing
-  if (chatRef.value?.isOpen) {
-    return true;
-  }
+  // Chat is disabled for performance testing
+  // if (chatRef.value?.isOpen) {
+  //   return true;
+  // }
   
   // Add checks for other windows/modals here if needed
   // (e.g., modal dialogs, settings windows, etc.)
@@ -130,11 +132,11 @@ const closeEscMenu = () => {
 </script>
 
 <template>
-  <!-- Persistent Chat Component with welcome tooltip prop -->
-  <Chat 
+  <!-- Temporarily disabled Chat Component for performance testing -->
+  <!-- <Chat 
     ref="chatRef"
     :show-welcome-tooltip="showWelcomeTooltip"
-  />
+  /> -->
   
   <main id="app" @keydown.esc="handleEscKey">
     <Header />

@@ -502,10 +502,20 @@ export const useAuthStore = defineStore('auth', {
       
       // Generate a 12-word seed phrase
       const seedPhrase = generateMnemonic();
-      await this.handleLoginFlow(seedPhrase);
-    
-      // Return a dummy username or principal for compatibility
-      return { username: identity.getPrincipal().toText() };
+      
+      try {
+        // We'll use a modified version of handleLoginFlow with override
+        await this.handleLoginFlow(seedPhrase, { forceCheckRegistration: true });
+        
+        // Return a dummy username or principal for compatibility
+        return { username: identity.getPrincipal().toText() };
+      } catch (error) {
+        console.error('Error creating guest account:', error);
+        // If an error occurs, we should clean up
+        this.authenticated = false;
+        this.registered = false;
+        throw error;
+      }
     },
     async createAutomatedAccount() {
       console.log('Creating an automated account...');
@@ -1330,7 +1340,12 @@ export const useAuthStore = defineStore('auth', {
     // Add back handleLoginFlow for other login methods to use
     // (but make it more resilient and use our new validation)
     async handleLoginFlow(seedPhrase, options = {}) {
-      const { source = 'unknown', retry = false, maxRetries = 3 } = options;
+      const { 
+        source = 'unknown', 
+        retry = false, 
+        maxRetries = 3,
+        forceCheckRegistration = false  // New parameter to force registration check
+      } = options;
       let retryCount = 0;
       
       try {
@@ -1400,19 +1415,38 @@ export const useAuthStore = defineStore('auth', {
           }
           
           if (!cosmicrafts) {
-            console.warn('Canister not available, proceeding with login in offline mode');
-            // Instead of failing, proceed with offline mode
-            this.redirectToHome();
-            return true;
+            console.warn('Canister not available, redirecting to registration');
+            // If we can't connect, go to registration for new users
+            this.registered = false;
+            this.redirectToRegistration();
+            return false;
           }
           
           // Try to get player data
+          console.log('Requesting player data from canister...');
           const playerArr = await cosmicrafts.getPlayer();
+          console.log('Player data response:', playerArr);
           
-          if (Array.isArray(playerArr) && playerArr.length > 0 && playerArr[0]) {
+          // Check if player data exists - need to perform a thorough check
+          // getPlayer returns ?Player (an optional type)
+          // We need to check if it's null or contains actual user data
+          if (playerArr === null || playerArr === undefined || 
+              (Array.isArray(playerArr) && (playerArr.length === 0 || !playerArr[0]))) {
+            
+            console.log('Player does not exist. Redirecting to registration...');
+            this.registered = false;
+            
+            // Save state even if player doesn't exist
+            this.saveStateToLocalStorage();
+            
+            // Always redirect to registration for new users
+            this.redirectToRegistration();
+            return false;
+          } else {
             console.log('Player exists. Updating state...');
             this.registered = true;
 
+            // Convert the player data for storage
             const safePlayer = JSON.parse(
               JSON.stringify(playerArr[0], (key, value) =>
                 typeof value === 'bigint' ? value.toString() : value
@@ -1434,24 +1468,38 @@ export const useAuthStore = defineStore('auth', {
             // Save updated state
             this.saveStateToLocalStorage();
 
+            // If we've been asked to force check registration, do more checks
+            if (forceCheckRegistration) {
+              // For guest accounts: consider required fields to determine if really registered
+              const isCompleteProfile = safePlayer && 
+                safePlayer.username && 
+                safePlayer.username !== identity.getPrincipal().toText();
+                
+              if (!isCompleteProfile) {
+                console.log('Player exists but profile is incomplete. Redirecting to registration...');
+                this.redirectToRegistration();
+                return false;
+              }
+            }
+            
             this.redirectToHome();
             return true;
-          } else {
-            // No player data found - need to register
-            console.log('Player does not exist. Redirecting to registration...');
-            this.registered = false;
-            
-            // Save state even if player doesn't exist
-            this.saveStateToLocalStorage();
-            
-            this.redirectToRegistration();
-            return false;
           }
         } catch (error) {
-          console.warn('Error during player data fetch, continuing in offline mode:', error);
-          // Continue with local login even if server is unavailable
-          this.redirectToHome();
-          return true;
+          console.warn('Error during player data fetch:', error);
+          
+          // If checking registration was forced, go to registration on error
+          if (forceCheckRegistration) {
+            console.log('Forcing redirect to registration due to fetch error');
+            this.registered = false;
+            this.redirectToRegistration();
+            return false;
+          } else {
+            // Original behavior: continue in offline mode
+            console.warn('Continuing in offline mode');
+            this.redirectToHome();
+            return true;
+          }
         }
       } catch (error) {
         console.error('Login failed:', error);

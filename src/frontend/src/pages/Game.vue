@@ -24,22 +24,18 @@ declare global {
   interface Window {
     gameInstance?: any;
     dispatchUnityEvent: (name: string, ...args: any[]) => void;
+    sendSeedPhraseToUnity: () => void;
+    listUnityGameObjects: () => void;
   }
 }
 
-// Define interfaces for auth store types
-interface AddressInfo {
-  index: number;
-  principalId: string;
-  publicKey: string;
-  name: string;
-}
+// Initialize auth store
+const authStore = useAuthStore();
 
 const loading = ref(true);
 const loadingProgress = ref(0);
 const error = ref<string | null>(null);
 const unityContext = ref<any>(null);
-const authStore = useAuthStore();
 
 // Unity build configuration: update these as needed
 const buildUrl = '/Cosmicrafts/';
@@ -54,120 +50,47 @@ const config = {
   productVersion: '1.0.1',
 };
 
-// Function to send auth data to Unity
-const sendAuthDataToUnity = () => {
-  if (!unityContext.value) return;
+// Function to send seed phrase to Unity
+const sendSeedPhraseToUnity = () => {
+  if (!unityContext.value) {
+    console.error('Unity context not initialized when trying to send seed phrase');
+    return;
+  }
   
   try {
-    // Get current user authentication data
-    const currentAddress = authStore.currentAddress as AddressInfo | null;
-    
-    // Extract the seed phrase and keys for blockchain interaction
     const seedPhrase = authStore.seedPhrase || '';
+    console.log('Sending seed phrase to Unity');
     
-    // Extract the key details in a more usable format
-    let keyDetails = {
-      principalId: currentAddress?.principalId || '',
-      publicKey: currentAddress?.publicKey || '',
-      seedPhrase: seedPhrase,
-      // Include essential derived keys for ICP interaction
-      derivedAddresses: authStore.derivedAddresses ? 
-        authStore.derivedAddresses.map((addr: any) => ({
-          index: addr.index,
-          principalId: addr.principalId,
-          publicKey: addr.publicKey,
-          name: addr.name
-        })) : []
-    };
+    // Based on the Unity logs, only ICPService.SetSeedPhrase is working properly
+    // Send directly to ICPService which is the component that actually needs and uses the seed phrase
+    unityContext.value.sendMessage('ICPService', 'SetSeedPhrase', seedPhrase);
+    console.log('Sent seed phrase to ICPService.SetSeedPhrase');
     
-    // Create data object to send to Unity
-    const authData = {
-      authenticated: authStore.authenticated,
-      registered: authStore.registered,
-      // Include identity and key info for ICP interaction
-      keys: keyDetails,
-      // Still include player data but clean it up
-      playerData: authStore.player ? 
-        sanitizePlayerData(authStore.player) : ''
-    };
-    
-    console.log('Sending auth data to Unity');
-    
-    // Convert to JSON with BigInt replacer function
-    const jsonString = JSON.stringify(authData, bigIntReplacer);
-    
-    // Send authentication data to Unity
-    unityContext.value.sendMessage('AuthenticationManager', 'ReceiveAuthData', jsonString);
-    
-    // Send just the critical blockchain identity information separately 
-    // for direct ICP interaction from Unity
-    const icpIdentityData = {
-      principalId: currentAddress?.principalId || '',
-      seedPhrase: seedPhrase,
-      publicKey: currentAddress?.publicKey || '',
-      // Add derivation details if needed by Unity
-      derivationPath: "m/44'/223'/0'/0/0", // Standard ICP derivation path
-    };
-    
-    unityContext.value.sendMessage(
-      'AuthenticationManager', 
-      'SetICPIdentity', 
-      JSON.stringify(icpIdentityData, bigIntReplacer)
-    );
-    
-    // Also send player data
-    if (authStore.player) {
-      const cleanPlayerData = sanitizePlayerData(authStore.player);
-      unityContext.value.sendMessage(
-        'AuthenticationManager', 
-        'SetPlayerData', 
-        JSON.stringify(cleanPlayerData, bigIntReplacer)
-      );
-    }
   } catch (err) {
-    console.error('Error sending auth data to Unity:', err);
+    console.error('Error sending seed phrase to Unity:', err);
   }
-};
-
-// Helper function to sanitize player data for Unity
-const sanitizePlayerData = (playerData: any): any => {
-  // Create a clean copy of the player data
-  const cleanData = { ...playerData };
-  
-  // Convert any complex objects to strings
-  if (cleanData.id && cleanData.id._isPrincipal) {
-    // Convert principal ID object to string representation
-    cleanData.principalIdString = cleanData.id.toString();
-  }
-  
-  // Convert registration date to a readable format if needed
-  if (cleanData.registrationDate && typeof cleanData.registrationDate === 'string') {
-    try {
-      // Convert nano timestamp to milliseconds and create a date
-      const timestampNs = BigInt(cleanData.registrationDate);
-      const timestampMs = Number(timestampNs / BigInt(1000000));
-      cleanData.registrationDateFormatted = new Date(timestampMs).toISOString();
-    } catch (e) {
-      console.warn('Could not format registration date:', e);
-    }
-  }
-  
-  return cleanData;
-};
-
-// Helper function to handle BigInt serialization in JSON
-const bigIntReplacer = (key: string, value: any): any => {
-  // Handle BigInt values
-  if (typeof value === 'bigint') {
-    return value.toString();
-  }
-  return value;
 };
 
 onMounted(async () => {
   try {
     // Create the Unity WebGL instance
     unityContext.value = new UnityWebgl('#unity-canvas', config);
+    
+    // Attach the sendSeedPhraseToUnity function to the window object
+    window.sendSeedPhraseToUnity = sendSeedPhraseToUnity;
+    
+    // Add a function to list active GameObjects for debugging
+    window.listUnityGameObjects = () => {
+      console.log('Unity requested to list GameObjects - this is just a stub in the web app');
+    };
+    
+    // Add a generic event dispatcher for Unity
+    window.dispatchUnityEvent = (name, ...args) => {
+      console.log(`Unity dispatched event: ${name}`, args);
+      if (name === 'requestSeedPhrase') {
+        sendSeedPhraseToUnity();
+      }
+    };
     
     // Set up event listeners
     unityContext.value
@@ -184,14 +107,19 @@ onMounted(async () => {
         loading.value = false;
         window.gameInstance = unityContext.value;
         
-        // Once Unity is loaded, send the auth data
-        setTimeout(() => sendAuthDataToUnity(), 1000);
+        // According to unity-webgl docs, only send messages after Unity is mounted
+        // Wait a moment to ensure Unity has fully initialized its GameObjects
+        setTimeout(() => {
+          console.log('Attempting to send seed phrase after Unity mount');
+          sendSeedPhraseToUnity();
+        }, 2000); // Give Unity more time to initialize (2 seconds)
       });
     
+      
     // Register methods for Unity to call
-    unityContext.value.addUnityListener('requestAuthData', () => {
-      console.log('Unity requested auth data');
-      sendAuthDataToUnity();
+    unityContext.value.addUnityListener('requestSeedPhrase', () => {
+      console.log('Unity requested seed phrase');
+      sendSeedPhraseToUnity();
     });
     
     unityContext.value.addUnityListener('logoutRequested', () => {
@@ -201,17 +129,6 @@ onMounted(async () => {
       }).catch(err => {
         console.error('Logout error:', err);
       });
-    });
-    
-    unityContext.value.addUnityListener('savePlayerData', (playerDataJson: string) => {
-      console.log('Saving player data from Unity:', playerDataJson);
-      try {
-        const playerData = JSON.parse(playerDataJson);
-        // Implement saving player data to your backend
-        console.log('Player data received from Unity:', playerData);
-      } catch (err) {
-        console.error('Error parsing player data from Unity:', err);
-      }
     });
     
   } catch (err: any) {

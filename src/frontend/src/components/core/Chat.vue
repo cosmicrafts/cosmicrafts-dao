@@ -424,8 +424,8 @@ const handleKeyDown = (event: KeyboardEvent): void => {
                         activeElement instanceof HTMLTextAreaElement ||
                         activeElement?.getAttribute('contenteditable') === 'true';
   
-  // 'C' key to open chat (only when not already open and not typing in an input)
-  if (event.key && event.key.toLowerCase() === 'a' && !showChat.value && !isInputActive) {
+  // 'P' key to open chat (only when not already open and not typing in an input)
+  if (event.key && event.key.toLowerCase() === 'p' && !showChat.value && !isInputActive) {
     toggleChat();
     event.preventDefault();
   }
@@ -1607,7 +1607,7 @@ const showOptionsMenu = ref(false);
     <!-- Tooltip -->
     <div class="tooltip" :class="{ 'visible': isHovering }">
       <span class="tooltip-text">{{ showChat ? 'Close' : 'Open your AI Assistant' }}</span>
-      <span class="tooltip-hotkey">Hotkey: <span class="key">{{ showChat ? 'ESC' : 'A' }}</span></span>
+      <span class="tooltip-hotkey">Hotkey: <span class="key">{{ showChat ? 'ESC' : 'P' }}</span></span>
       <span class="tooltip-hint">Drag to reposition</span>
     </div>
   </div>
