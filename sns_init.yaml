@@ -32,7 +32,7 @@ NnsProposal:
       * Min participation - 100 ICP
       * Min participants -  10
       * Min to be raised -  100 ICP
-      * Max to be raised -  100,000 ICP
+      * Max to be raised -  1,000,000 ICP
 
       **Learn more**
       * [Whitepaper](https://cosmicrafts.com/whitepaper)
@@ -174,49 +174,49 @@ Distribution:
           vesting_period: 0 days
 
         # Genesis - 8 neurons with yearly dissolve delays
-        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
+        - principal: ayrep-3yny5-nrhtk-bnlf4-nczzz-c2yn4-m7ltk-2xiw7-4sfu5-eyjde-bqe
           stake: 1_750_000 tokens
           memo: 16
           dissolve_delay: 0 days
           vesting_period: 0 days
 
-        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
+        - principal: ayrep-3yny5-nrhtk-bnlf4-nczzz-c2yn4-m7ltk-2xiw7-4sfu5-eyjde-bqe
           stake: 1_750_000 tokens
           memo: 17
           dissolve_delay: 1 year
           vesting_period: 0 year
 
-        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
+        - principal: ayrep-3yny5-nrhtk-bnlf4-nczzz-c2yn4-m7ltk-2xiw7-4sfu5-eyjde-bqe
           stake: 1_750_000 tokens
           memo: 18
           dissolve_delay: 2 years
           vesting_period: 0 years
 
-        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
+        - principal: ayrep-3yny5-nrhtk-bnlf4-nczzz-c2yn4-m7ltk-2xiw7-4sfu5-eyjde-bqe
           stake: 1_750_000 tokens
           memo: 19
           dissolve_delay: 3 years
           vesting_period: 0 years
 
-        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
+        - principal: ayrep-3yny5-nrhtk-bnlf4-nczzz-c2yn4-m7ltk-2xiw7-4sfu5-eyjde-bqe
           stake: 1_750_000 tokens
           memo: 20
           dissolve_delay: 4 years
           vesting_period: 0 years
 
-        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
+        - principal: ayrep-3yny5-nrhtk-bnlf4-nczzz-c2yn4-m7ltk-2xiw7-4sfu5-eyjde-bqe
           stake: 1_750_000 tokens
           memo: 21
           dissolve_delay: 5 years
           vesting_period: 0 years
 
-        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
+        - principal: ayrep-3yny5-nrhtk-bnlf4-nczzz-c2yn4-m7ltk-2xiw7-4sfu5-eyjde-bqe
           stake: 1_750_000 tokens
           memo: 22
           dissolve_delay: 6 years
           vesting_period: 0 years
 
-        - principal: 2eypd-xj2re-tff5z-47r6i-xw5qp-4c4pb-zrklk-cfull-6p7re-crdk4-fae
+        - principal: ayrep-3yny5-nrhtk-bnlf4-nczzz-c2yn4-m7ltk-2xiw7-4sfu5-eyjde-bqe
           stake: 1_750_000 tokens
           memo: 23
           dissolve_delay: 7 years
@@ -237,8 +237,8 @@ Distribution:
 Swap:
     minimum_participants: 10
     minimum_direct_participation_icp: 100 tokens
-    maximum_direct_participation_icp: 100_000 tokens
-    minimum_participant_icp: 10 tokens
+    maximum_direct_participation_icp: 1_000_000 tokens
+    minimum_participant_icp: 100 tokens
     maximum_participant_icp: 100_000 tokens
     restricted_countries:
         - AF  
