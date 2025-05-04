@@ -32,7 +32,7 @@ NnsProposal:
       * Min participation - 100 ICP
       * Min participants -  10
       * Min to be raised -  100 ICP
-      * Max to be raised -  1,000,000 ICP
+      * Max to be raised -  100,000 ICP
 
       **Learn more**
       * [Whitepaper](https://cosmicrafts.com/whitepaper)
@@ -237,8 +237,8 @@ Distribution:
 Swap:
     minimum_participants: 10
     minimum_direct_participation_icp: 100 tokens
-    maximum_direct_participation_icp: 1_000_000 tokens
-    minimum_participant_icp: 100 tokens
+    maximum_direct_participation_icp: 100_000 tokens
+    minimum_participant_icp: 10 tokens
     maximum_participant_icp: 100_000 tokens
     restricted_countries:
         - AF  
@@ -265,7 +265,7 @@ Swap:
         - VE  
         - YE
     VestingSchedule:
-        events: 8
-        interval: 3 month
-    duration: 1 day
+        events: 2
+        interval: 6 months
+    duration: 7 days
     neurons_fund_participation: false
