@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia';
 import { HttpAgent, Actor } from '@dfinity/agent';
-import { createActor as createActorBackend, canisterId as backendCanisterId } from '../../../declarations/backend';
-import { createActor as createActorRoadmap, canisterId as roadmapCanisterId } from '../../../declarations/backend';
-import { createActor as createActorMarketplace, canisterId as marketplaceCanisterId } from '../../../declarations/marketplace';
 // Import the ledger-specific libraries
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 import { Principal } from '@dfinity/principal';
@@ -69,9 +66,6 @@ const CANISTER_LAST_REFRESH_KEY = 'cosmicrafts-canister-last-refresh';
 
 // Store token canisters and state
 let canisters = {
-  cosmicrafts: null,
-  roadmap: null,
-  marketplace: null,
   ledger: null,
   // Storage for token canisters
   tokenLedgers: {},
@@ -94,9 +88,6 @@ const ICP_DECIMALS = BigInt(100_000_000); // 1 ICP = 10^8 e8s
 export const useCanisterStore = defineStore('canister', {
   state: () => ({
     canisterIds: {
-      cosmicrafts: 'opcce-byaaa-aaaak-qcgda-cai',
-      roadmap: 'be2us-64aaa-aaaaa-qaabq-cai',
-      marketplace: 'zgc5e-qiaaa-aaaan-qzyga-cai',
       ledger: 'ryjl3-tyaaa-aaaaa-aaaba-cai', // ICP ledger canister ID
     },
     agent: null,
@@ -165,7 +156,7 @@ export const useCanisterStore = defineStore('canister', {
         if (
           currentIdentity === identity && 
           Date.now() - lastInitialized < 5 * 60 * 1000 &&
-          canisters.cosmicrafts
+          canisters.ledger
         ) {
           console.log('Agents already initialized and recent, using existing instances');
           return true;
@@ -283,8 +274,6 @@ export const useCanisterStore = defineStore('canister', {
       });
       this.agent = agent;
       
-      // Fetch root key for local development is now handled via the option above
-      
       // Initialize token service to ensure tokens are loaded
       // Pass our newly created agent to the token service
       try {
@@ -297,27 +286,6 @@ export const useCanisterStore = defineStore('canister', {
         }
       } catch (tokenError) {
         console.warn('Error initializing TokenService:', tokenError);
-      }
-      
-      // Initialize all canisters with error handling for each
-      try {
-        canisters.cosmicrafts = createActorBackend(this.canisterIds.cosmicrafts, { agent });
-      } catch (error) {
-        console.error('Error creating cosmicrafts actor:', error);
-      }
-      
-      try {
-        canisters.roadmap = createActorRoadmap(this.canisterIds.roadmap, { agent });
-      } catch (error) {
-        console.error('Error creating roadmap actor:', error);
-      }
-      
-      try {
-        console.log(`Creating actor for marketplace with ID: ${this.canisterIds.marketplace}`);
-        canisters.marketplace = createActorMarketplace(this.canisterIds.marketplace, { agent });
-        console.log('Marketplace actor created:', canisters.marketplace ? 'Success' : 'Failed (null/undefined)');
-      } catch (error) {
-        console.error('Error creating marketplace actor:', error);
       }
       
       // Initialize ICP ledger canister using direct Actor interface
@@ -526,15 +494,7 @@ export const useCanisterStore = defineStore('canister', {
           try {
             const agent = new HttpAgent({ host });
             
-            if (canisterName === 'cosmicrafts') {
-              canisters.cosmicrafts = createActorBackend(this.canisterIds.cosmicrafts, { agent });
-            } else if (canisterName === 'roadmap') {
-              canisters.roadmap = createActorRoadmap(this.canisterIds.roadmap, { agent });
-            } else if (canisterName === 'marketplace') {
-              console.log(`[DEBUG] Creating marketplace actor with ID ${this.canisterIds.marketplace}`);
-              canisters.marketplace = createActorMarketplace(this.canisterIds.marketplace, { agent });
-              console.log(`[DEBUG] Marketplace actor created: ${canisters.marketplace ? 'Success' : 'Failed'}`);
-            } else if (canisterName === 'ledger') {
+            if (canisterName === 'ledger') {
               canisters.ledger = Actor.createActor(icpLedgerIDL, {
                 agent,
                 canisterId: this.canisterIds.ledger,
@@ -590,19 +550,9 @@ export const useCanisterStore = defineStore('canister', {
         
         this.agent = agent;
         
-        // Fetch root key is now handled via the option above
-        
         // Set identity and initialization flag even with anonymous agent
         currentIdentity = identity;
         initializing = true;
-        
-        // Initialize cosmicrafts canister immediately regardless of identity
-        try {
-          canisters.cosmicrafts = createActorBackend(this.canisterIds.cosmicrafts, { agent });
-          console.log('Cosmicrafts canister initialized immediately');
-        } catch (err) {
-          console.error('Failed to initialize cosmicrafts canister:', err);
-        }
         
         // Start the rest of initialization in the background
         setTimeout(() => {

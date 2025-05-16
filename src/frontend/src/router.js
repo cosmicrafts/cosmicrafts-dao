@@ -20,7 +20,6 @@ import Notifications from './pages/Notifications.vue';
 import StyleGuide from './pages/StyleGuide.vue';
 import Contact from './pages/Contact.vue';
 import ThemeGuide from './views/ThemeGuide.vue';
-import Marketplace from './pages/Marketplace.vue';
 import Wallet from './pages/Wallet.vue';
 import Timeline from './pages/Timeline.vue';
 import TestNotifications from './pages/TestNotifications.vue';
@@ -46,7 +45,6 @@ const routes = [
   { path: '/contact', component: Contact, meta: { title: 'header.contact' } },
   { path: '/style-guide', component: StyleGuide, meta: { title: 'Style Guide' } },
   { path: '/theme-guide', component: ThemeGuide, meta: { title: 'Theme Guide' } },
-  { path: '/marketplace', component: Marketplace, meta: { title: 'header.marketplace' } },
   { path: '/wallet', component: Wallet, meta: { title: 'Wallet', requiresAuth: true } },
   { path: '/test-notifications', component: TestNotifications, meta: { title: 'Test Notifications' } },
   // New catch-all route for usernames/principals
