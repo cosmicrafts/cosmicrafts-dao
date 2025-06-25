@@ -4,7 +4,6 @@ import environment from 'vite-plugin-environment';
 import vue from '@vitejs/plugin-vue';
 import dotenv from 'dotenv';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
-import { VitePWA } from 'vite-plugin-pwa';
 
 dotenv.config({ path: '../../.env' });
 
@@ -46,34 +45,7 @@ export default defineConfig({
       },
     }),
     environment('all', { prefix: 'CANISTER_' }),
-    environment('all', { prefix: 'DFX_' }),
-    VitePWA({
-      registerType: 'autoUpdate',
-      injectRegister: 'auto',
-      manifest: {
-        name: 'Cosmicrafts DAO',
-        short_name: 'Cosmicrafts',
-        start_url: '/',
-        display: 'standalone',
-        background_color: '#000000',
-        theme_color: '#1a1a1a',
-        icons: [
-          {
-            src: 'icons/icon-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          }
-        ]
-      },
-      workbox: {
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024  // Increase to 10MB
-      }
-    })
+    environment('all', { prefix: 'DFX_' })
   ],
   resolve: {
     alias: [

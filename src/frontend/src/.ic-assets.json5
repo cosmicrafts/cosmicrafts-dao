@@ -1,0 +1,7 @@
+[ 
+  { 
+    "match": ".well-known/ic-domains", 
+    "headers": { "Content-Type": "text/plain" },
+    "ignore": false 
+  }
+]
