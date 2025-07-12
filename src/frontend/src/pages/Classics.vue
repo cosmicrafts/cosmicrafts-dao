@@ -1,152 +1,85 @@
-<script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-// Game data
-const games = {
-  adventures: {
-    title: 'Cosmicrafts Adventures',
-    image: '/assets/webp/hero.webp',
-    route: '/adventures',
-    downloadUrl: 'https://example.com/cosmicrafts-adventures.zip'
-  },
-  adventures2d: {
-    title: 'Cosmicrafts Adventures 2D',
-    image: '/assets/webp/classics-alpha.webp',
-    route: '/adventures2d',
-    downloadUrl: 'https://example.com/cosmicrafts-adventures2d.zip'
-  },
-  battlegrounds: {
-    title: 'Cosmicrafts Battlegrounds',
-    image: '/assets/webp/battlegrounds.webp',
-    route: '/battlegrounds',
-    downloadUrl: 'https://example.com/cosmicrafts-battlegrounds.zip'
-  },
-  classics: {
-    title: 'Cosmicrafts Classics',
-    image: '/assets/webp/classics-logo.webp',
-    route: '/classics',
-    downloadUrl: 'https://example.com/cosmicrafts-classics.zip'
-  }
-};
-
-// Reactive state
-const showLauncher = ref(false);
-const selectedGame = ref(null);
-const selectedGameTitle = ref('');
-const selectedGameImage = ref('');
-const launchType = ref('web');
-
-// Methods
-const selectGame = (gameKey) => {
-  const game = games[gameKey];
-  selectedGame.value = gameKey;
-  selectedGameTitle.value = game.title;
-  selectedGameImage.value = game.image;
-  showLauncher.value = true;
-};
-
-const closeLauncher = () => {
-  showLauncher.value = false;
-  selectedGame.value = null;
-};
-
-const launchGame = () => {
-  if (launchType.value === 'web') {
-    // Navigate to the game route
-    const game = games[selectedGame.value];
-    router.push(game.route);
-  } else {
-    // Download the game
-    const game = games[selectedGame.value];
-    window.open(game.downloadUrl, '_blank');
-  }
-  closeLauncher();
-};
-</script>
-
 <template>
-  <div class="games-container">
+  <div class="classics-container">
     <!-- Hero Section -->
-    <section class="games-hero">
+    <section class="classics-hero">
       <div class="hero-content">
-        <h1 class="hero-title">Cosmicrafts Games</h1>
-        <p class="hero-subtitle">Choose your adventure in the Cosmicrafts Metaverse</p>
+        <h1 class="hero-title">Cosmicrafts Classics</h1>
+        <p class="hero-subtitle">Bring back the legacy of Cosmicrafts through the ages</p>
         <div class="hero-description">
-          Explore all available Cosmicrafts games, from the latest releases to the timeless classics. Pick your favorite and start playing!
+          Experience the evolution of Cosmicrafts from its earliest prototypes to the groundbreaking Lugano release. 
+          Each version represents a milestone in our journey to create the ultimate space strategy experience.
         </div>
       </div>
     </section>
 
     <!-- Games Grid -->
     <section class="games-grid">
-      <div class="game-card" @click="selectGame('adventures')">
+      <div class="game-card" @click="selectGame('alpha2021')">
         <div class="game-image">
-          <img src="@/assets/webp/hero.webp" alt="Cosmicrafts Adventures" />
+          <div class="game-badge alpha">Alpha</div>
+          <img src="@/assets/webp/classics-alpha.webp" alt="Cosmicrafts Alpha 2021" />
         </div>
         <div class="game-info">
-          <h3 class="game-title">Cosmicrafts Adventures</h3>
-          <p class="game-description">The flagship 3D space RTS experience. Embark on epic quests, build your fleet, and conquer the galaxy in real time!</p>
+          <h3 class="game-title">Cosmicrafts Alpha 2021</h3>
+          <p class="game-description">The original prototype that started it all. Experience the raw beginnings of Cosmicrafts with basic RTS mechanics and space exploration.</p>
           <div class="game-meta">
-            <span class="release-date">Live</span>
-            <span class="game-type">3D RTS</span>
+            <span class="release-date">Released: 2021</span>
+            <span class="game-type">Prototype</span>
+          </div>
+          <div class="game-features">
+            <span class="feature">Basic RTS</span>
+            <span class="feature">Space Exploration</span>
+            <span class="feature">Resource Management</span>
           </div>
         </div>
         <div class="game-cta">
-          <button class="play-button">Play Adventures</button>
+          <button class="play-button">Play Alpha 2021</button>
         </div>
       </div>
 
-      <div class="game-card" @click="selectGame('adventures2d')">
+      <div class="game-card" @click="selectGame('beta2022')">
         <div class="game-image">
-          <img src="@/assets/webp/classics-alpha.webp" alt="Cosmicrafts Adventures 2D" />
+          <div class="game-badge beta">Beta</div>
+          <img src="@/assets/webp/classics-beta.webp" alt="Cosmicrafts Beta 2022" />
         </div>
         <div class="game-info">
-          <h3 class="game-title">Cosmicrafts Adventures 2D</h3>
-          <p class="game-description">A retro-inspired 2D version of Cosmicrafts. Fast-paced, accessible, and perfect for quick matches and classic fun.</p>
+          <h3 class="game-title">Cosmicrafts Beta 2022</h3>
+          <p class="game-description">The refined beta version with improved graphics, enhanced gameplay mechanics, and the introduction of multiplayer features.</p>
           <div class="game-meta">
-            <span class="release-date">Beta</span>
-            <span class="game-type">2D RTS</span>
+            <span class="release-date">Released: 2022</span>
+            <span class="game-type">Beta</span>
+          </div>
+          <div class="game-features">
+            <span class="feature">Enhanced Graphics</span>
+            <span class="feature">Multiplayer</span>
+            <span class="feature">Advanced Combat</span>
           </div>
         </div>
         <div class="game-cta">
-          <button class="play-button">Play Adventures 2D</button>
+          <button class="play-button">Play Beta 2022</button>
         </div>
       </div>
 
-      <div class="game-card" @click="selectGame('battlegrounds')">
+      <div class="game-card" @click="selectGame('lugano2023')">
         <div class="game-image">
-          <img src="@/assets/webp/battlegrounds.webp" alt="Cosmicrafts Battlegrounds" />
+          <div class="game-badge lugano">Lugano</div>
+          <img src="@/assets/webp/classics-lugano.webp" alt="Cosmicrafts Lugano 2023" />
         </div>
         <div class="game-info">
-          <h3 class="game-title">Cosmicrafts Battlegrounds</h3>
-          <p class="game-description">Jump into massive multiplayer battles! Test your skills and strategy in the ultimate on-chain competitive arena.</p>
+          <h3 class="game-title">Cosmicrafts Lugano 2023</h3>
+          <p class="game-description">The groundbreaking Lugano release featuring blockchain integration, NFT assets, and revolutionary on-chain gameplay mechanics.</p>
           <div class="game-meta">
-            <span class="release-date">Coming Soon</span>
-            <span class="game-type">Multiplayer</span>
+            <span class="release-date">Released: 2023</span>
+            <span class="game-type">Full Release</span>
+          </div>
+          <div class="game-features">
+            <span class="feature">Blockchain Integration</span>
+            <span class="feature">NFT Assets</span>
+            <span class="feature">On-chain Gameplay</span>
           </div>
         </div>
         <div class="game-cta">
-          <button class="play-button">Play Battlegrounds</button>
-        </div>
-      </div>
-
-      <div class="game-card" @click="selectGame('classics')">
-        <div class="game-image">
-          <img src="@/assets/webp/classics-logo.webp" alt="Cosmicrafts Classics" />
-        </div>
-        <div class="game-info">
-          <h3 class="game-title">Cosmicrafts Classics</h3>
-          <p class="game-description">Relive the legacy! Play Alpha 2021, Beta 2022, and Lugano 2023 in one place. A tribute to the evolution of Cosmicrafts.</p>
-          <div class="game-meta">
-            <span class="release-date">Legacy</span>
-            <span class="game-type">Collection</span>
-          </div>
-        </div>
-        <div class="game-cta">
-          <button class="play-button">Play Classics</button>
+          <button class="play-button">Play Lugano 2023</button>
         </div>
       </div>
     </section>
@@ -186,15 +119,78 @@ const launchGame = () => {
   </div>
 </template>
 
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+// Game data
+const games = {
+  alpha2021: {
+    title: 'Cosmicrafts Alpha 2021',
+    image: '/assets/webp/classics-alpha.webp',
+    route: '/classics/alpha2021',
+    downloadUrl: 'https://example.com/cosmicrafts-alpha-2021.zip'
+  },
+  beta2022: {
+    title: 'Cosmicrafts Beta 2022',
+    image: '/assets/webp/classics-beta.webp',
+    route: '/classics/beta2022',
+    downloadUrl: 'https://example.com/cosmicrafts-beta-2022.zip'
+  },
+  lugano2023: {
+    title: 'Cosmicrafts Lugano 2023',
+    image: '/assets/webp/classics-lugano.webp',
+    route: '/classics/lugano2023',
+    downloadUrl: 'https://example.com/cosmicrafts-lugano-2023.zip'
+  }
+};
+
+// Reactive state
+const showLauncher = ref(false);
+const selectedGame = ref(null);
+const selectedGameTitle = ref('');
+const selectedGameImage = ref('');
+const launchType = ref('web');
+
+// Methods
+const selectGame = (gameKey) => {
+  const game = games[gameKey];
+  selectedGame.value = gameKey;
+  selectedGameTitle.value = game.title;
+  selectedGameImage.value = game.image;
+  showLauncher.value = true;
+};
+
+const closeLauncher = () => {
+  showLauncher.value = false;
+  selectedGame.value = null;
+};
+
+const launchGame = () => {
+  if (launchType.value === 'web') {
+    // Navigate to the game route
+    const game = games[selectedGame.value];
+    router.push(game.route);
+  } else {
+    // Download the game
+    const game = games[selectedGame.value];
+    window.open(game.downloadUrl, '_blank');
+  }
+  closeLauncher();
+};
+</script>
+
 <style scoped>
-.games-container {
+.classics-container {
   min-height: 100vh;
   background: linear-gradient(135deg, var(--cosmic-bg-darkest) 0%, var(--cosmic-bg-dark) 100%);
   color: var(--cosmic-text-primary);
 }
 
 /* Hero Section */
-.games-hero {
+.classics-hero {
   padding: 4rem 2rem;
   text-align: center;
   background: radial-gradient(circle at center, rgba(0, 183, 255, 0.1) 0%, transparent 70%);
@@ -268,6 +264,33 @@ const launchGame = () => {
   transform: scale(1.05);
 }
 
+.game-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.game-badge.alpha {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+}
+
+.game-badge.beta {
+  background: linear-gradient(135deg, #feca57, #ff9ff3);
+  color: #2c3e50;
+}
+
+.game-badge.lugano {
+  background: linear-gradient(135deg, #48dbfb, #0abde3);
+  color: white;
+}
+
 .game-info {
   padding: 1.5rem;
 }
@@ -301,6 +324,21 @@ const launchGame = () => {
   color: var(--cosmic-blue-light);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
+}
+
+.game-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.feature {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--cosmic-text-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
 }
 
 .game-cta {
@@ -473,4 +511,4 @@ const launchGame = () => {
     margin: 1rem;
   }
 }
-</style>
+</style> 

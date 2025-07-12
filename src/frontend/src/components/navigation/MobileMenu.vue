@@ -73,12 +73,17 @@ const scrollToTop = () => {
 
     <div class="nav-container">
       <ul class="nav-links">
+        <li>
+          <router-link to="/games" class="cosmic-nav-link" :style="{ '--index': 0 }" @click="closeMenu">
+            {{ t('header.games') }}
+          </router-link>
+        </li>
         <li v-for="(item, index) in [
           { label: 'header.dao', path: '/dao' },
           { label: 'header.whitepaper', path: '/whitepaper' },
           { label: 'header.roadmap', path: '/roadmap' }
-        ]" :key="index">
-          <router-link :to="item.path" class="cosmic-nav-link" :style="{ '--index': index }" @click="closeMenu">
+        ]" :key="index + 1">
+          <router-link :to="item.path" class="cosmic-nav-link" :style="{ '--index': index + 1 }" @click="closeMenu">
             {{ t(item.label) }}
           </router-link>
         </li>

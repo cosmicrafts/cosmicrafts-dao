@@ -155,6 +155,9 @@ import heroImage2JP from '@/assets/icons/logo-jp.svg';
 import heroImage2RU from '@/assets/icons/logo-ru.svg';
 import heroImage2AR from '@/assets/icons/logo-ar.svg';
 
+import logoClassics from '@/assets/webp/classics-logo.webp';
+import heroImageClassics from '@/assets/webp/classics-hero.webp';
+
 const { t, locale } = useI18n();
 const router = useRouter();
 
@@ -191,7 +194,7 @@ const slides = ref([
     logo: logo1,
     title: "This is ground zero. Alpha's live!",
     ctaButtons: [
-      { text: 'Play Now', link: '/game', style: 'primary' },
+      { text: 'Play Now', link: '/adventures', style: 'primary' },
       { text: 'Wishlist on Epic Games', link: 'https://store.epicgames.com/en-US/p/cosmicrafts-499a8f', style: 'secondary' },
     ],
   },
@@ -204,7 +207,6 @@ const slides = ref([
       { text: 'Learn More', link: '/whitepaper', style: 'secondary' },
     ],
   },
-  // Slide 3
   {
     heroImage: heroImage3,
     logo: logo3,
@@ -214,7 +216,16 @@ const slides = ref([
       { text: 'Learn More', link: 'https://cosmicrafts.fandom.com/wiki/Cosmicrafts_Wiki', style: 'secondary' },
     ],
   },
-  // Slide 4
+  // Classics Slide
+  {
+    heroImage: heroImageClassics,
+    logo: logoClassics,
+    title: 'Cosmicrafts Classics - Bring back the Legacy',
+    ctaButtons: [
+      { text: 'Play Classics', link: '/classics', style: 'primary' },
+      { text: 'X Highlights', link: 'https://x.com/cosmicrafts/highlights', style: 'secondary' },
+    ],
+  },
   {
     heroImage: heroImage4,
     logo: logo4,
