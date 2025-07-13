@@ -13,10 +13,10 @@ const games = {
     downloadUrl: 'https://example.com/cosmicrafts-adventures.zip'
   },
   adventures2d: {
-    title: 'Cosmicrafts Adventures 2D',
+    title: 'Cosmicrafts 2D (2019)',
     image: '/assets/webp/classics-alpha.webp',
-    route: '/adventures2d',
-    downloadUrl: 'https://example.com/cosmicrafts-adventures2d.zip'
+    route: '/cosmicrafts2d',
+    downloadUrl: 'https://example.com/cosmicrafts-2d-2019.zip'
   },
   battlegrounds: {
     title: 'Cosmicrafts Battlegrounds',
@@ -101,18 +101,18 @@ const launchGame = () => {
 
       <div class="game-card" @click="selectGame('adventures2d')">
         <div class="game-image">
-          <img src="@/assets/webp/classics-alpha.webp" alt="Cosmicrafts Adventures 2D" />
+          <img src="@/assets/webp/classics-alpha.webp" alt="Cosmicrafts 2D (2019)" />
         </div>
         <div class="game-info">
-          <h3 class="game-title">Cosmicrafts Adventures 2D</h3>
-          <p class="game-description">A retro-inspired 2D version of Cosmicrafts. Fast-paced, accessible, and perfect for quick matches and classic fun.</p>
+          <h3 class="game-title">Cosmicrafts 2D (2019)</h3>
+          <p class="game-description">The original Cosmicrafts RTS experience in 2D! This is the classic 2019 version that started it all. Fast-paced strategic gameplay in a retro 2D format.</p>
           <div class="game-meta">
-            <span class="release-date">Beta</span>
+            <span class="release-date">Classic</span>
             <span class="game-type">2D RTS</span>
           </div>
         </div>
         <div class="game-cta">
-          <button class="play-button">Play Adventures 2D</button>
+          <button class="play-button">Play Cosmicrafts 2D</button>
         </div>
       </div>
 

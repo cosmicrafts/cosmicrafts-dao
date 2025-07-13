@@ -10,7 +10,7 @@ import Games from './pages/Games.vue';
 import Login from './components/user/LoginForm.vue';
 import Profile from './pages/Profile.vue';
 import Error from './pages/Error.vue';
-import Game from './pages/Game.vue';
+import Adventures from './pages/Adventures.vue';
 import Classics from './pages/Classics.vue';
 import Roadmap from './pages/Roadmap.vue';
 import Careers from './pages/Careers.vue';
@@ -25,7 +25,7 @@ import Wallet from './pages/Wallet.vue';
 import Timeline from './pages/Timeline.vue';
 import TestNotifications from './pages/TestNotifications.vue';
 // Add placeholder imports
-import Adventures2D from './pages/Adventures2D.vue';
+import Cosmicrafts2D from './pages/Cosmicrafts2D.vue';
 import Battlegrounds from './pages/Battlegrounds.vue';
 
 const routes = [
@@ -36,8 +36,8 @@ const routes = [
   { path: '/whitepaper', component: Whitepaper, meta: { title: 'header.whitepaper' } },
   { path: '/dashboard', component: Dashboard, meta: { title: 'header.dashboard', requiresAuth: true } },
   { path: '/games', component: Games, meta: { title: 'header.games' } },
-  { path: '/adventures', component: Game, meta: { title: 'header.game' } },
-  { path: '/adventures2d', component: Adventures2D, meta: { title: 'Cosmicrafts Adventures 2D' } },
+  { path: '/adventures', component: Adventures, meta: { title: 'header.adventures' } },
+  { path: '/cosmicrafts2d', component: Cosmicrafts2D, meta: { title: 'Cosmicrafts 2D (2019)' } },
   { path: '/battlegrounds', component: Battlegrounds, meta: { title: 'Cosmicrafts Battlegrounds' } },
   { path: '/classics', component: Classics, meta: { title: 'Cosmicrafts Classics' } },
   { path: '/roadmap', component: Roadmap, meta: { title: 'header.roadmap' } },

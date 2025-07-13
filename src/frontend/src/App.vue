@@ -15,7 +15,19 @@ import { useToastStore } from '@/stores/toast';
 
 const route = useRoute();
 const isWhitepaper = computed(() => route.path === '/whitepaper');
-const isGame = computed(() => route.path === '/game');
+const isGame = computed(() => route.path === '/adventures');
+const isCosmicrafts2D = computed(() => route.path === '/cosmicrafts2d');
+const isFullscreenGame = computed(() => isGame.value || isCosmicrafts2D.value);
+
+// Debug logging for route detection
+watch(() => route.path, (newPath) => {
+  console.log('Route changed:', {
+    path: newPath,
+    isGame: isGame.value,
+    isCosmicrafts2D: isCosmicrafts2D.value,
+    isFullscreenGame: isFullscreenGame.value
+  });
+}, { immediate: true });
 const toastStore = useToastStore();
 const globalToastSystem = ref(null);
 
@@ -129,6 +141,8 @@ onUnmounted(() => {
 const closeEscMenu = () => {
   isEscMenuOpen.value = false;
 };
+
+// Remove: isHeaderVisible, headerHoverTimeout, showHeader, hideHeader, handleTopHover, handleMouseLeave, and related event listeners
 </script>
 
 <template>
@@ -138,11 +152,11 @@ const closeEscMenu = () => {
     :show-welcome-tooltip="showWelcomeTooltip"
   /> -->
   
-  <main id="app" @keydown.esc="handleEscKey">
-    <Header />
+  <main id="app" @keydown.esc="handleEscKey" :class="{ 'fullscreen-game': isFullscreenGame }">
+    <Header :hoverToShow="isFullscreenGame" />
     <Modal />
     <router-view v-scroll-to-top />
-    <Footer v-if="!isWhitepaper && !isGame" />
+    <Footer :hideForFullscreenGame="isFullscreenGame" />
     
     <!-- ESC Menu component -->
     <EscMenu 
@@ -161,4 +175,28 @@ const closeEscMenu = () => {
 
 <style scoped>
 /* Global styles (optional) */
+
+/* Fullscreen game styles */
+.fullscreen-game {
+  overflow: hidden;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .hidden-header {
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+  
+  .hidden-header.header-visible {
+    top: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hidden-header {
+    left: 0.25rem;
+    right: 0.25rem;
+  }
+}
 </style>

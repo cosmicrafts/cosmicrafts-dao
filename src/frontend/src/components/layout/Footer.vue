@@ -2,7 +2,11 @@
 import { useI18n } from 'vue-i18n';
 import { useLanguageStore } from '@/stores/language'; // Import languageStore
 import LanguageSelector from '@/components/navigation/LanguageSelector.vue';
-import { ref } from 'vue';
+import { ref, defineProps } from 'vue';
+
+const props = defineProps({
+  hideForFullscreenGame: { type: Boolean, default: false }
+});
 
 // Access languageStore and i18n
 const languageStore = useLanguageStore();
@@ -43,7 +47,7 @@ const isSectionExpanded = (section) => {
 
 <template>
   <!-- Desktop Footer -->
-  <footer class="cosmic-footer">
+  <footer class="cosmic-footer" v-show="!hideForFullscreenGame">
     <div class="footer-cosmic-bg"></div>
     
     <!-- Social Buttons Row -->

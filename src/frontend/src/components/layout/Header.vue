@@ -1,114 +1,229 @@
 <template>
-  <header>
-    <!-- Burger Menu Icon (Visible on Mobile) -->
-    <div class="burger" @click="toggleMenu">
-      <span :class="{ open: isMenuOpen }"></span>
-      <span :class="{ open: isMenuOpen }"></span>
-      <span :class="{ open: isMenuOpen }"></span>
-    </div>
+  <div v-if="hoverToShow">
+    <div class="header-hover-area" @mouseenter="showHeader" @mouseleave="hideHeader"></div>
+    <div
+      class="header-fade"
+      :class="{ 'header-fade-visible': isVisible }"
+      @mouseenter="showHeader"
+      @mouseleave="hideHeader"
+    >
+      <header>
+        <!-- Burger Menu Icon (Visible on Mobile) -->
+        <div class="burger" @click="toggleMenu">
+          <span :class="{ open: isMenuOpen }"></span>
+          <span :class="{ open: isMenuOpen }"></span>
+          <span :class="{ open: isMenuOpen }"></span>
+        </div>
 
-    <!-- Logo -->
-    <div class="logo-wrapper " @click="scrollToTop">
-      <div class="logo">
-        <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts Logo" />
-      </div>
-      <div class="additional-logo">
-        <img :src="additionalLogoSrc" alt="Additional Logo" />
-      </div>
-    </div>
-
-    <!-- Navigation Links (Desktop Only) -->
-    <nav class="nav-links">
-      <ul>
-        <li><router-link to="/games" class="cosmic-hover">{{ t('header.games') }}</router-link></li>
-        <li><router-link to="/dao" class="cosmic-hover">{{ t('header.dao') }}</router-link></li>
-        <li><router-link to="/whitepaper" class="cosmic-hover">{{ t('header.whitepaper') }}</router-link></li>
-        <li><router-link to="/roadmap" class="cosmic-hover">{{ t('header.roadmap') }}</router-link></li>
-        
-        <!-- Developer dropdown - commented out for now -->
-        <!--
-        <li class="dev-dropdown" ref="devDropdownRef">
-          <div class="dropdown-trigger cosmic-hover" @click="toggleDevDropdown">Developers</div>
-          <div v-if="isDevDropdownVisible" class="dev-dropdown-menu">
-            <ul>
-              <li><router-link to="/theme-guide" @click="isDevDropdownVisible = false">Theme Guide</router-link></li>
-              <li><router-link to="/style-guide" @click="isDevDropdownVisible = false">Style Guide</router-link></li>
-            </ul>
+        <!-- Logo -->
+        <div class="logo-wrapper " @click="scrollToTop">
+          <div class="logo">
+            <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts Logo" />
           </div>
-        </li>
-        -->
-      </ul>
-    </nav>
+          <div class="additional-logo">
+            <img :src="additionalLogoSrc" alt="Additional Logo" />
+          </div>
+        </div>
 
-
-    <!-- Flex Container for Connect Button and Language Selector -->
-    <div class="connect-container">
-      <!-- Multi-Language Selector -->
-      <div class="desktop-language-selector header">
-        <LanguageSelector context="header" />
-      </div>
-
-      <!-- Notifications Icon (Only show when logged in) -->
-      <NotificationIcon v-if="authStore.player" />
-
-      <!-- Avatar and Dropdown Menu -->
-      <div v-if="authStore.player" class="avatar-container" ref="avatarContainerRef">  <img
-          v-if="computedPlayerAvatar"
-          :src="computedPlayerAvatar"
-          :key="computedPlayerAvatar"
-          alt="Avatar"
-          class="player-avatar"
-          @click="toggleDropdown"
-        />
-        <span v-else class="player-placeholder" @click="toggleDropdown"></span>
-
-        <div v-if="isDropdownVisible" class="dropdown-menu" ref="dropdownMenuRef">
+        <!-- Navigation Links (Desktop Only) -->
+        <nav class="nav-links">
           <ul>
-            <li class="principal-item">
-              <div class="principal-id-display">
-                <div class="principal-header">
-                  <img src="@/assets/icons/icp.svg" alt="ICP Logo" class="principal-icon" />
-                  <span class="principal-label">Principal ID</span>
-                </div>
-                <div class="principal-value-container">
-                  <span class="principal-value">{{ formatPrincipal(getPrincipalString) }}</span>
-                  <button @click.stop="copyPrincipal" class="copy-button">
-                    <i class="fas fa-copy"></i>
-                    <span v-if="copySuccess" class="copy-tooltip">{{ t('header.copied') }}</span>
-                  </button>
-                </div>
+            <li><router-link to="/games" class="cosmic-hover">{{ t('header.games') }}</router-link></li>
+            <li><router-link to="/dao" class="cosmic-hover">{{ t('header.dao') }}</router-link></li>
+            <li><router-link to="/whitepaper" class="cosmic-hover">{{ t('header.whitepaper') }}</router-link></li>
+            <li><router-link to="/roadmap" class="cosmic-hover">{{ t('header.roadmap') }}</router-link></li>
+            
+            <!-- Developer dropdown - commented out for now -->
+            <!--
+            <li class="dev-dropdown" ref="devDropdownRef">
+              <div class="dropdown-trigger cosmic-hover" @click="toggleDevDropdown">Developers</div>
+              <div v-if="isDevDropdownVisible" class="dev-dropdown-menu">
+                <ul>
+                  <li><router-link to="/theme-guide" @click="isDevDropdownVisible = false">Theme Guide</router-link></li>
+                  <li><router-link to="/style-guide" @click="isDevDropdownVisible = false">Style Guide</router-link></li>
+                </ul>
               </div>
             </li>
-            <li class="menu-divider"></li>
-            <li @click="goToDashboard">
-              <i class="fas fa-tachometer-alt"></i>
-              <span>{{ t('header.dashboard') }}</span>
-            </li>
-            <li @click="goToWallet">
-              <i class="fas fa-wallet"></i>
-              <span>Wallet</span>
-            </li>
-            <li @click="logout" class="logout-item">
-              <i class="fas fa-sign-out-alt"></i>
-              <span>{{ t('header.signout') }}</span>
-            </li>
+            -->
           </ul>
+        </nav>
+
+
+        <!-- Flex Container for Connect Button and Language Selector -->
+        <div class="connect-container">
+          <!-- Multi-Language Selector -->
+          <div class="desktop-language-selector header">
+            <LanguageSelector context="header" />
+          </div>
+
+          <!-- Notifications Icon (Only show when logged in) -->
+          <NotificationIcon v-if="authStore.player" />
+
+          <!-- Avatar and Dropdown Menu -->
+          <div v-if="authStore.player" class="avatar-container" ref="avatarContainerRef">  <img
+              v-if="computedPlayerAvatar"
+              :src="computedPlayerAvatar"
+              :key="computedPlayerAvatar"
+              alt="Avatar"
+              class="player-avatar"
+              @click="toggleDropdown"
+            />
+            <span v-else class="player-placeholder" @click="toggleDropdown"></span>
+
+            <div v-if="isDropdownVisible" class="dropdown-menu" ref="dropdownMenuRef">
+              <ul>
+                <li class="principal-item">
+                  <div class="principal-id-display">
+                    <div class="principal-header">
+                      <img src="@/assets/icons/icp.svg" alt="ICP Logo" class="principal-icon" />
+                      <span class="principal-label">Principal ID</span>
+                    </div>
+                    <div class="principal-value-container">
+                      <span class="principal-value">{{ formatPrincipal(getPrincipalString) }}</span>
+                      <button @click.stop="copyPrincipal" class="copy-button">
+                        <i class="fas fa-copy"></i>
+                        <span v-if="copySuccess" class="copy-tooltip">{{ t('header.copied') }}</span>
+                      </button>
+                    </div>
+                  </div>
+                </li>
+                <li class="menu-divider"></li>
+                <li @click="goToDashboard">
+                  <i class="fas fa-tachometer-alt"></i>
+                  <span>{{ t('header.dashboard') }}</span>
+                </li>
+                <li @click="goToWallet">
+                  <i class="fas fa-wallet"></i>
+                  <span>Wallet</span>
+                </li>
+                <li @click="logout" class="logout-item">
+                  <i class="fas fa-sign-out-alt"></i>
+                  <span>{{ t('header.signout') }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <button v-else class="cosmic-button cosmic-button-outline-primary" @click="handleLogin">
+            <span class="button-text">{{ t('header.connect') }}</span>
+            <span class="button-glow"></span>
+            <span class="button-particles"></span>
+          </button>
+        </div>
+      </header>
+    </div>
+  </div>
+  <div v-else>
+    <header>
+      <!-- Burger Menu Icon (Visible on Mobile) -->
+      <div class="burger" @click="toggleMenu">
+        <span :class="{ open: isMenuOpen }"></span>
+        <span :class="{ open: isMenuOpen }"></span>
+        <span :class="{ open: isMenuOpen }"></span>
+      </div>
+
+      <!-- Logo -->
+      <div class="logo-wrapper " @click="scrollToTop">
+        <div class="logo">
+          <img src="@/assets/icons/cosmicrafts.svg" alt="Cosmicrafts Logo" />
+        </div>
+        <div class="additional-logo">
+          <img :src="additionalLogoSrc" alt="Additional Logo" />
         </div>
       </div>
 
-      <button v-else class="cosmic-button cosmic-button-outline-primary" @click="handleLogin">
-        <span class="button-text">{{ t('header.connect') }}</span>
-        <span class="button-glow"></span>
-        <span class="button-particles"></span>
-      </button>
-    </div>
-  </header>
+      <!-- Navigation Links (Desktop Only) -->
+      <nav class="nav-links">
+        <ul>
+          <li><router-link to="/games" class="cosmic-hover">{{ t('header.games') }}</router-link></li>
+          <li><router-link to="/dao" class="cosmic-hover">{{ t('header.dao') }}</router-link></li>
+          <li><router-link to="/whitepaper" class="cosmic-hover">{{ t('header.whitepaper') }}</router-link></li>
+          <li><router-link to="/roadmap" class="cosmic-hover">{{ t('header.roadmap') }}</router-link></li>
+          <!-- Developer dropdown - commented out for now -->
+          <!--
+          <li class="dev-dropdown" ref="devDropdownRef">
+            <div class="dropdown-trigger cosmic-hover" @click="toggleDevDropdown">Developers</div>
+            <div v-if="isDevDropdownVisible" class="dev-dropdown-menu">
+              <ul>
+                <li><router-link to="/theme-guide" @click="isDevDropdownVisible = false">Theme Guide</router-link></li>
+                <li><router-link to="/style-guide" @click="isDevDropdownVisible = false">Style Guide</router-link></li>
+              </ul>
+            </div>
+          </li>
+          -->
+        </ul>
+      </nav>
+
+
+      <!-- Flex Container for Connect Button and Language Selector -->
+      <div class="connect-container">
+        <!-- Multi-Language Selector -->
+        <div class="desktop-language-selector header">
+          <LanguageSelector context="header" />
+        </div>
+
+        <!-- Notifications Icon (Only show when logged in) -->
+        <NotificationIcon v-if="authStore.player" />
+
+        <!-- Avatar and Dropdown Menu -->
+        <div v-if="authStore.player" class="avatar-container" ref="avatarContainerRef">  <img
+            v-if="computedPlayerAvatar"
+            :src="computedPlayerAvatar"
+            :key="computedPlayerAvatar"
+            alt="Avatar"
+            class="player-avatar"
+            @click="toggleDropdown"
+          />
+          <span v-else class="player-placeholder" @click="toggleDropdown"></span>
+
+          <div v-if="isDropdownVisible" class="dropdown-menu" ref="dropdownMenuRef">
+            <ul>
+              <li class="principal-item">
+                <div class="principal-id-display">
+                  <div class="principal-header">
+                    <img src="@/assets/icons/icp.svg" alt="ICP Logo" class="principal-icon" />
+                    <span class="principal-label">Principal ID</span>
+                  </div>
+                  <div class="principal-value-container">
+                    <span class="principal-value">{{ formatPrincipal(getPrincipalString) }}</span>
+                    <button @click.stop="copyPrincipal" class="copy-button">
+                      <i class="fas fa-copy"></i>
+                      <span v-if="copySuccess" class="copy-tooltip">{{ t('header.copied') }}</span>
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li class="menu-divider"></li>
+              <li @click="goToDashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>{{ t('header.dashboard') }}</span>
+              </li>
+              <li @click="goToWallet">
+                <i class="fas fa-wallet"></i>
+                <span>Wallet</span>
+              </li>
+              <li @click="logout" class="logout-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>{{ t('header.signout') }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <button v-else class="cosmic-button cosmic-button-outline-primary" @click="handleLogin">
+          <span class="button-text">{{ t('header.connect') }}</span>
+          <span class="button-glow"></span>
+          <span class="button-particles"></span>
+        </button>
+      </div>
+    </header>
+  </div>
 
   <MobileMenu :isOpen="isMenuOpen" @closeMenu="toggleMenu" />
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount, defineProps } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
@@ -133,6 +248,7 @@ const playerAvatar = ref(null); // Reactive avatar reference
 const isDropdownVisible = ref(false);
 // const isDevDropdownVisible = ref(false); // Commented out for developer mode
 const copySuccess = ref(false);
+const hideTimeout = ref(null);
 
 // Refs for DOM elements - ADD THESE LINES
 const dropdownMenuRef = ref(null); // Ref for the dropdown menu itself
@@ -325,6 +441,42 @@ const handleClickOutside = (event) => {
   }
   */
 };
+
+const props = defineProps({
+  hoverToShow: { type: Boolean, default: false }
+});
+
+const isVisible = ref(false);
+
+function showHeader() {
+  if (hideTimeout.value) {
+    clearTimeout(hideTimeout.value);
+    hideTimeout.value = null;
+  }
+  isVisible.value = true;
+}
+function hideHeader() {
+  if (hideTimeout.value) {
+    clearTimeout(hideTimeout.value);
+  }
+  hideTimeout.value = setTimeout(() => {
+    isVisible.value = false;
+    hideTimeout.value = null;
+  }, 750); // 1.8 seconds delay before hiding
+}
+
+watch(
+  () => props.hoverToShow,
+  (newVal) => {
+    if (newVal) {
+      if (hideTimeout.value) {
+        clearTimeout(hideTimeout.value);
+        hideTimeout.value = null;
+      }
+      isVisible.value = false;
+    }
+  }
+);
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
@@ -862,6 +1014,45 @@ header:hover {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.header-hover-area {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  z-index: 9999;
+  background: transparent;
+}
+.header-fade {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-30px);
+  transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  will-change: opacity, transform;
+  position: fixed;
+  top: 0;
+  left: 2rem;
+  right: 2rem;
+  z-index: var(--cosmic-z-header);
+}
+.header-fade.header-fade-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+@media (max-width: 768px) {
+  .header-fade, .header-fade.header-fade-visible {
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .header-fade, .header-fade.header-fade-visible {
+    left: 0.25rem;
+    right: 0.25rem;
   }
 }
 </style>
