@@ -224,7 +224,7 @@ const slides = ref([
     logo: logoClassics,
     title: 'Cosmicrafts Classics - Bring back the Legacy',
     ctaButtons: [
-      { text: 'Play Classics', link: '/classics', style: 'primary' },
+      { text: 'Play Classics', link: '/games', style: 'primary' },
       { text: 'X Highlights', link: 'https://x.com/cosmicrafts/highlights', style: 'secondary' },
     ],
   },

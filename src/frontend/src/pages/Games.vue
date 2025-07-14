@@ -4,32 +4,44 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-// Game data
+// Game data - now including all games including individual classics
 const games = {
   adventures: {
     title: 'Cosmicrafts Adventures',
     image: '/assets/webp/hero.webp',
     route: '/adventures',
-    downloadUrl: 'https://example.com/cosmicrafts-adventures.zip'
+    downloadUrl: 'https://example.com/cosmicrafts-adventures.zip',
+    description: 'A top-down isometric space shooter with procedural generation, blending exploration, combat, and endless variety'
   },
   adventures2d: {
     title: 'Cosmicrafts 2D (2019)',
     image: '/assets/webp/classics-alpha.webp',
     route: '/cosmicrafts2d',
-    downloadUrl: 'https://example.com/cosmicrafts-2d-2019.zip'
+    downloadUrl: 'https://example.com/cosmicrafts-2d-2019.zip',
+    description: 'The original 2D browser RTS that launched the Cosmicrafts universe. Fast-paced, strategic, and retro-inspired gameplay.'
   },
-  battlegrounds: {
-    title: 'Cosmicrafts Battlegrounds',
-    image: '/assets/webp/battlegrounds.webp',
-    route: '/battlegrounds',
-    downloadUrl: 'https://example.com/cosmicrafts-battlegrounds.zip'
+  alpha2021: {
+    title: 'Cosmicrafts Alpha 2021',
+    image: '/assets/webp/classics-alpha.webp',
+    route: '/classics/alpha2021',
+    downloadUrl: 'https://example.com/cosmicrafts-alpha-2021.zip',
+    description: 'The first milestone in our Web3 journey: experience the first playable prototype that set the foundation for our cross-platform metaverse game.'
   },
-  classics: {
-    title: 'Cosmicrafts Classics',
-    image: '/assets/webp/classics-logo.webp',
-    route: '/classics',
-    downloadUrl: 'https://example.com/cosmicrafts-classics.zip'
+  beta2022: {
+    title: 'Cosmicrafts Beta 2022',
+    image: '/assets/webp/classics-beta.webp',
+    route: '/classics/beta2022',
+    downloadUrl: 'https://example.com/cosmicrafts-beta-2022.zip',
+    description: 'Enhanced graphics, multiplayer features, and advanced combat. The beta that brought our community together and proved our technical capabilities.'
+  },
+  rts2023: {
+    title: 'Cosmicrafts RTS 2023',
+    image: '/assets/webp/classics-lugano.webp',
+    route: '/classics/lugano2023',
+    downloadUrl: 'https://example.com/cosmicrafts-lugano-2023.zip',
+    description: 'Our most advanced browser-based RTS to date. Featuring blockchain integration, NFT assets, and on-chain gameplay, Cosmicrafts RTS 2023 is a showcase of innovation and technical excellence.'
   }
+  // battlegrounds and lugano2023 are hidden for now
 };
 
 // Reactive state
@@ -72,26 +84,31 @@ const launchGame = () => {
     <!-- Hero Section -->
     <section class="games-hero">
       <div class="hero-content">
-        <h1 class="hero-title">Cosmicrafts Games</h1>
-        <p class="hero-subtitle">Choose your adventure in the Cosmicrafts Metaverse</p>
-        <div class="hero-description">
-          Explore all available Cosmicrafts games, from the latest releases to the timeless classics. Pick your favorite and start playing!
-        </div>
+        <h1 class="hero-title">Cosmicrafts Metaverse</h1>
+        <p class="hero-subtitle">A Metaverse legacy, community-driven design, and pioneering web-based strategy games</p>
+
       </div>
     </section>
 
     <!-- Games Grid -->
     <section class="games-grid">
+      <!-- Main Games -->
       <div class="game-card" @click="selectGame('adventures')">
         <div class="game-image">
           <img src="@/assets/webp/hero.webp" alt="Cosmicrafts Adventures" />
         </div>
         <div class="game-info">
           <h3 class="game-title">Cosmicrafts Adventures</h3>
-          <p class="game-description">The flagship 3D space RTS experience. Embark on epic quests, build your fleet, and conquer the galaxy in real time!</p>
+          <p class="game-description">{{ games.adventures.description }}</p>
           <div class="game-meta">
-            <span class="release-date">Live</span>
-            <span class="game-type">3D RTS</span>
+            <span class="release-date">Prototype</span>
+            <span class="game-type">3D RPG</span>
+          </div>
+          <div class="game-features">
+            <span class="feature">Adventure</span>
+            <span class="feature">Exploration</span>
+            <span class="feature">RPG</span>
+            <span class="feature">Shooter</span>
           </div>
         </div>
         <div class="game-cta">
@@ -105,10 +122,15 @@ const launchGame = () => {
         </div>
         <div class="game-info">
           <h3 class="game-title">Cosmicrafts 2D (2019)</h3>
-          <p class="game-description">The original Cosmicrafts RTS experience in 2D! This is the classic 2019 version that started it all. Fast-paced strategic gameplay in a retro 2D format.</p>
+          <p class="game-description">{{ games.adventures2d.description }}</p>
           <div class="game-meta">
             <span class="release-date">Classic</span>
             <span class="game-type">2D RTS</span>
+          </div>
+          <div class="game-features">
+            <span class="feature">Strategy</span>
+            <span class="feature">Fast paced</span>
+            <span class="feature">Retro</span>
           </div>
         </div>
         <div class="game-cta">
@@ -116,37 +138,73 @@ const launchGame = () => {
         </div>
       </div>
 
-      <div class="game-card" @click="selectGame('battlegrounds')">
+      <!-- Classic Games -->
+      <div class="game-card" @click="selectGame('alpha2021')">
         <div class="game-image">
-          <img src="@/assets/webp/battlegrounds.webp" alt="Cosmicrafts Battlegrounds" />
+          <div class="game-badge alpha">Alpha</div>
+          <img src="@/assets/webp/classics-alpha.webp" alt="Cosmicrafts Alpha 2021" />
         </div>
         <div class="game-info">
-          <h3 class="game-title">Cosmicrafts Battlegrounds</h3>
-          <p class="game-description">Jump into massive multiplayer battles! Test your skills and strategy in the ultimate on-chain competitive arena.</p>
+          <h3 class="game-title">Cosmicrafts Alpha 2021</h3>
+          <p class="game-description">{{ games.alpha2021.description }}</p>
           <div class="game-meta">
-            <span class="release-date">Coming Soon</span>
-            <span class="game-type">Multiplayer</span>
+            <span class="release-date">Released: 2021</span>
+            <span class="game-type">3D RTS</span>
+          </div>
+          <div class="game-features">
+            <span class="feature">DFINITY Grant 30-day Sprint</span>
+            <span class="feature">DSCVR Hackathon</span>
+            <span class="feature">Prototype</span>
           </div>
         </div>
         <div class="game-cta">
-          <button class="play-button">Play Battlegrounds</button>
+          <button class="play-button">Play Alpha 2021</button>
         </div>
       </div>
 
-      <div class="game-card" @click="selectGame('classics')">
+      <div class="game-card" @click="selectGame('beta2022')">
         <div class="game-image">
-          <img src="@/assets/webp/classics-logo.webp" alt="Cosmicrafts Classics" />
+          <div class="game-badge beta">Beta</div>
+          <img src="@/assets/webp/classics-beta.webp" alt="Cosmicrafts Beta 2022" />
         </div>
         <div class="game-info">
-          <h3 class="game-title">Cosmicrafts Classics</h3>
-          <p class="game-description">Relive the legacy! Play Alpha 2021, Beta 2022, and Lugano 2023 in one place. A tribute to the evolution of Cosmicrafts.</p>
+          <h3 class="game-title">Cosmicrafts Beta 2022</h3>
+          <p class="game-description">{{ games.beta2022.description }}</p>
           <div class="game-meta">
-            <span class="release-date">Legacy</span>
-            <span class="game-type">Collection</span>
+            <span class="release-date">Released: 2022</span>
+            <span class="game-type">3D RTS</span>
+          </div>
+          <div class="game-features">
+            <span class="feature">Supernova Hackathon Champion</span>
+            <span class="feature">Beta-NFT</span>
+            <span class="feature">Halloween Theme</span>
           </div>
         </div>
         <div class="game-cta">
-          <button class="play-button">Play Classics</button>
+          <button class="play-button">Play Beta 2022</button>
+        </div>
+      </div>
+
+      <div class="game-card" @click="selectGame('rts2023')">
+        <div class="game-image">
+          <div class="game-badge lugano">2023</div>
+          <img src="@/assets/webp/classics-lugano.webp" alt="Cosmicrafts RTS 2023" />
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Cosmicrafts RTS 2023</h3>
+          <p class="game-description">{{ games.rts2023.description }}</p>
+          <div class="game-meta">
+            <span class="release-date">Released: 2023</span>
+            <span class="game-type">On-chain RTS</span>
+          </div>
+          <div class="game-features">
+            <span class="feature">Blockchain Integration</span>
+            <span class="feature">NFT Assets</span>
+            <span class="feature">On-chain Gameplay</span>
+          </div>
+        </div>
+        <div class="game-cta">
+          <button class="play-button">Play RTS 2023</button>
         </div>
       </div>
     </section>
@@ -195,14 +253,19 @@ const launchGame = () => {
 
 /* Hero Section */
 .games-hero {
-  padding: 4rem 2rem;
-  text-align: center;
-  background: radial-gradient(circle at center, rgba(0, 183, 255, 0.1) 0%, transparent 70%);
+  position: relative;
+  padding: 4rem;
+  padding-top: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .hero-title {
   font-size: 3.5rem;
   font-weight: bold;
+  margin-top: 1rem;
   margin-bottom: 1rem;
   background: linear-gradient(135deg, var(--cosmic-blue-light), var(--cosmic-purple-light));
   -webkit-background-clip: text;
@@ -212,24 +275,18 @@ const launchGame = () => {
 
 .hero-subtitle {
   font-size: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   color: var(--cosmic-text-secondary);
-  margin-bottom: 1.5rem;
 }
 
-.hero-description {
-  max-width: 800px;
-  margin: 0 auto;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: var(--cosmic-text-secondary);
-}
 
 /* Games Grid */
 .games-grid {
-  padding: 2rem;
   display: grid;
+  padding: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
+  gap: 3rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -268,6 +325,34 @@ const launchGame = () => {
   transform: scale(1.05);
 }
 
+.game-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+
+.game-badge.alpha {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+}
+
+.game-badge.beta {
+  background: linear-gradient(135deg, #feca57, #ff9ff3);
+  color: #2c3e50;
+}
+
+.game-badge.lugano {
+  background: linear-gradient(135deg, #48dbfb, #0abde3);
+  color: white;
+}
+
 .game-info {
   padding: 1.5rem;
 }
@@ -301,6 +386,21 @@ const launchGame = () => {
   color: var(--cosmic-blue-light);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
+}
+
+.game-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.feature {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--cosmic-text-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
 }
 
 .game-cta {

@@ -17,7 +17,9 @@ const route = useRoute();
 const isWhitepaper = computed(() => route.path === '/whitepaper');
 const isGame = computed(() => route.path === '/adventures');
 const isCosmicrafts2D = computed(() => route.path === '/cosmicrafts2d');
-const isFullscreenGame = computed(() => isGame.value || isCosmicrafts2D.value);
+const isAlpha2021 = computed(() => route.path === '/classics/alpha2021');
+const isBeta2022 = computed(() => route.path === '/classics/beta2022');
+const isFullscreenGame = computed(() => isGame.value || isCosmicrafts2D.value || isAlpha2021.value || isBeta2022.value);
 
 // Debug logging for route detection
 watch(() => route.path, (newPath) => {
