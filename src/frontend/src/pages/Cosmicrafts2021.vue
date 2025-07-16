@@ -2,12 +2,17 @@
   <div class="game-container">
     <div id="unity-container">
       <canvas id="unity-canvas"></canvas>
-      <div v-if="loading" class="loading-screen">
-        <div class="loader-text">Loading Cosmicrafts Alpha 2021...</div>
-        <div class="progress-bar">
-          <div class="progress-fill" :style="{width: `${loadingProgress}%`}"></div>
+      <div v-if="showLoadingScreen" :class="['loading-screen', !loading ? 'fade-out' : '']">
+        <img class="loader-preview-bg" src="@/assets/webp/alpha-2021.webp" alt="Cosmicrafts Alpha 2021 Preview" />
+        <div class="loader-overlay">
+          <div class="loader-text">Loading Cosmicrafts Alpha 2021...</div>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" :style="{width: `${displayProgress}%`}" />
+            </div>
+            <div class="progress-text">{{ displayProgress }}%</div>
+          </div>
         </div>
-        <div class="progress-text">{{ Math.round(loadingProgress) }}%</div>
       </div>
       <div v-if="error" class="error-message">{{ error }}</div>
     </div>
@@ -15,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import UnityWebgl from 'unity-webgl';
 
 // Define types for Unity communication
@@ -31,6 +36,27 @@ const loading = ref(true);
 const loadingProgress = ref(0);
 const error = ref<string | null>(null);
 const unityContext = ref<any>(null);
+
+// Remap Unity's 0-0.60 progress to 0-100% (faster fill)
+const displayProgress = computed(() => {
+  const unityProgress = loadingProgress.value / 100;
+  const maxUnityProgress = 0.60;
+  let mapped = (unityProgress / maxUnityProgress) * 100;
+  mapped = Math.min(Math.round(mapped), 100);
+  return mapped;
+});
+
+// Fade out loading screen after loading is complete
+const showLoadingScreen = ref(true);
+watch(loading, (isLoading) => {
+  if (!isLoading) {
+    setTimeout(() => {
+      showLoadingScreen.value = false;
+    }, 600); // 600ms delay after loading is done
+  } else {
+    showLoadingScreen.value = true;
+  }
+});
 
 // Unity build configuration for Cosmicrafts2021
 const buildUrl = '/Cosmicrafts2021/';
@@ -63,7 +89,6 @@ onMounted(async () => {
     // Set up event listeners
     unityContext.value
       .on('progress', (progress: number) => {
-        console.log('Unity loading progress:', progress);
         loadingProgress.value = progress * 100;
       })
       .on('error', (message: string) => {
@@ -71,7 +96,6 @@ onMounted(async () => {
         error.value = 'Error loading Cosmicrafts Alpha 2021: ' + message;
       })
       .on('mounted', () => {
-        console.log('Cosmicrafts Alpha 2021 Unity WebGL instance mounted successfully');
         loading.value = false;
         window.gameInstance = unityContext.value;
       });
@@ -128,30 +152,77 @@ onUnmounted(() => {
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
   z-index: 10;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  pointer-events: all;
+}
+.loading-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader-preview-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.7);
+}
+
+.loader-overlay {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 18px 0 16px 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.85) 70%, rgba(0,0,0,0.2) 100%, rgba(0,0,0,0));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
 }
 
 .loader-text {
-  font-size: 2rem;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(0, 210, 255, 0.7);
+}
+
+.progress-container {
+  width: 80%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .progress-bar {
-  width: 80%;
-  height: 30px;
-  background-color: #333;
-  border-radius: 15px;
+  width: 100%;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
   overflow: hidden;
+  margin-bottom: 8px;
 }
 
 .progress-fill {
   height: 100%;
-  background-color: #4CAF50;
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, #3a7bd5 0%, #00d2ff 100%);
+  transition: width 0.15s ease-out;
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.6);
 }
 
 .progress-text {
-  margin-top: 10px;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #00d2ff;
+  text-shadow: 0 0 8px rgba(0, 210, 255, 0.7);
 }
 
 .error-message {
@@ -159,11 +230,14 @@ onUnmounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: red;
-  font-size: 1.5rem;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 20px;
+  color: #ff4d4d;
+  font-size: 1.2rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px 30px;
   border-radius: 10px;
+  border: 1px solid #ff4d4d;
   z-index: 10;
+  text-align: center;
+  max-width: 80%;
 }
 </style> 

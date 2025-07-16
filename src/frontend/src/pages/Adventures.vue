@@ -2,12 +2,17 @@
   <div class="game-container">
     <div id="unity-container">
       <canvas id="unity-canvas"></canvas>
-      <div v-if="loading" class="loading-screen">
-        <div class="loader-text">Cargando Juego...</div>
-        <div class="progress-bar">
-          <div class="progress-fill" :style="{width: `${loadingProgress}%`}"></div>
+      <div v-if="showLoadingScreen" :class="['loading-screen', !loading ? 'fade-out' : '']">
+        <img class="loader-preview-bg" src="@/assets/webp/adventures-3d.webp" alt="Cosmicrafts Adventures 3D Preview" />
+        <div class="loader-overlay">
+          <div class="loader-text">Loading...</div>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" :style="{width: `${displayProgress}%`}" />
+            </div>
+            <div class="progress-text">{{ displayProgress }}%</div>
+          </div>
         </div>
-        <div class="progress-text">{{ Math.round(loadingProgress) }}%</div>
       </div>
       <div v-if="error" class="error-message">{{ error }}</div>
     </div>
@@ -15,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import UnityWebgl from 'unity-webgl';
 
@@ -37,7 +42,31 @@ const loadingProgress = ref(0);
 const error = ref<string | null>(null);
 const unityContext = ref<any>(null);
 
-// Unity build configuration: update these as needed
+// Display progress (0-100%) independent of Unity's internal progress
+const displayProgress = computed(() => {
+  // Remap Unity's 0-0.60 progress to 0-100% (faster fill)
+  const unityProgress = loadingProgress.value / 100; // Convert back to 0-1
+  const maxUnityProgress = 0.60; // reach 100% sooner
+  let mapped = (unityProgress / maxUnityProgress) * 100;
+  mapped = Math.min(Math.round(mapped), 100);
+  return mapped;
+});
+
+// Fade out loading screen after loading is complete
+const showLoadingScreen = ref(true);
+
+watch(loading, (isLoading) => {
+  if (!isLoading) {
+    // Add a small delay before starting fade out
+    setTimeout(() => {
+      showLoadingScreen.value = false;
+    }, 600); // 600ms delay after loading is done
+  } else {
+    showLoadingScreen.value = true;
+  }
+});
+
+// Unity build configuration
 const buildUrl = '/Cosmicrafts/';
 const config = {
   loaderUrl: buildUrl + 'Cosmicrafts.loader.js',
@@ -60,12 +89,8 @@ const sendSeedPhraseToUnity = () => {
   try {
     const seedPhrase = authStore.seedPhrase || '';
     console.log('Sending seed phrase to Unity');
-    
-    // Based on the Unity logs, only ICPService.SetSeedPhrase is working properly
-    // Send directly to ICPService which is the component that actually needs and uses the seed phrase
     unityContext.value.sendMessage('ICPService', 'SetSeedPhrase', seedPhrase);
     console.log('Sent seed phrase to ICPService.SetSeedPhrase');
-    
   } catch (err) {
     console.error('Error sending seed phrase to Unity:', err);
   }
@@ -76,15 +101,13 @@ onMounted(async () => {
     // Create the Unity WebGL instance
     unityContext.value = new UnityWebgl('#unity-canvas', config);
     
-    // Attach the sendSeedPhraseToUnity function to the window object
+    // Attach functions to window
     window.sendSeedPhraseToUnity = sendSeedPhraseToUnity;
     
-    // Add a function to list active GameObjects for debugging
     window.listUnityGameObjects = () => {
-      console.log('Unity requested to list GameObjects - this is just a stub in the web app');
+      console.log('Unity requested to list GameObjects');
     };
     
-    // Add a generic event dispatcher for Unity
     window.dispatchUnityEvent = (name, ...args) => {
       console.log(`Unity dispatched event: ${name}`, args);
       if (name === 'requestSeedPhrase') {
@@ -95,54 +118,41 @@ onMounted(async () => {
     // Set up event listeners
     unityContext.value
       .on('progress', (progress: number) => {
-        console.log('Unity loading progress:', progress);
+        // Convert Unity's 0-1 progress to 0-100%
         loadingProgress.value = progress * 100;
       })
       .on('error', (message: string) => {
         console.error('Unity error:', message);
-        error.value = 'Error al cargar el juego: ' + message;
+        error.value = 'Error loading game: ' + message;
       })
       .on('mounted', () => {
         console.log('Unity WebGL instance mounted successfully');
         loading.value = false;
         window.gameInstance = unityContext.value;
         
-        // According to unity-webgl docs, only send messages after Unity is mounted
-        // Wait a moment to ensure Unity has fully initialized its GameObjects
         setTimeout(() => {
-          console.log('Attempting to send seed phrase after Unity mount');
           sendSeedPhraseToUnity();
-        }, 2000); // Give Unity more time to initialize (2 seconds)
+        }, 2000);
       });
     
-      
-    // Register methods for Unity to call
+    // Register Unity callbacks
     unityContext.value.addUnityListener('requestSeedPhrase', () => {
-      console.log('Unity requested seed phrase');
       sendSeedPhraseToUnity();
     });
     
     unityContext.value.addUnityListener('logoutRequested', () => {
-      console.log('Unity requested logout');
-      authStore.logout().then(() => {
-        console.log('Logged out successfully');
-      }).catch(err => {
-        console.error('Logout error:', err);
-      });
+      authStore.logout().catch(console.error);
     });
     
   } catch (err: any) {
-    error.value = 'Error al inicializar el juego: ' + (err.message || err);
+    error.value = 'Error initializing game: ' + (err.message || err);
     console.error('Unity initialization error:', err);
   }
 });
 
 onUnmounted(() => {
-  // Clean up Unity instance when component is unmounted
   if (unityContext.value) {
-    unityContext.value.unload().catch((err: any) => {
-      console.error('Error unloading Unity:', err);
-    });
+    unityContext.value.unload().catch(console.error);
   }
 });
 </script>
@@ -183,30 +193,77 @@ onUnmounted(() => {
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
   z-index: 10;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  pointer-events: all;
+}
+.loading-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader-preview-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.7);
+}
+
+.loader-overlay {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 18px 0 16px 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.85) 70%, rgba(0,0,0,0.2) 100%, rgba(0,0,0,0));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
 }
 
 .loader-text {
-  font-size: 2rem;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(0, 210, 255, 0.7);
+}
+
+.progress-container {
+  width: 80%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .progress-bar {
-  width: 80%;
-  height: 30px;
-  background-color: #333;
-  border-radius: 15px;
+  width: 100%;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
   overflow: hidden;
+  margin-bottom: 8px;
 }
 
 .progress-fill {
   height: 100%;
-  background-color: #4CAF50;
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, #3a7bd5 0%, #00d2ff 100%);
+  transition: width 0.15s ease-out;
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.6);
 }
 
 .progress-text {
-  margin-top: 10px;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #00d2ff;
+  text-shadow: 0 0 8px rgba(0, 210, 255, 0.7);
 }
 
 .error-message {
@@ -214,11 +271,14 @@ onUnmounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: red;
-  font-size: 1.5rem;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 20px;
+  color: #ff4d4d;
+  font-size: 1.2rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px 30px;
   border-radius: 10px;
+  border: 1px solid #ff4d4d;
   z-index: 10;
+  text-align: center;
+  max-width: 80%;
 }
 </style>

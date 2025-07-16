@@ -88,14 +88,6 @@
                   </div>
                 </li>
                 <li class="menu-divider"></li>
-                <li @click="goToDashboard">
-                  <i class="fas fa-tachometer-alt"></i>
-                  <span>{{ t('header.dashboard') }}</span>
-                </li>
-                <li @click="goToWallet">
-                  <i class="fas fa-wallet"></i>
-                  <span>Wallet</span>
-                </li>
                 <li @click="logout" class="logout-item">
                   <i class="fas fa-sign-out-alt"></i>
                   <span>{{ t('header.signout') }}</span>
@@ -194,14 +186,6 @@
                 </div>
               </li>
               <li class="menu-divider"></li>
-              <li @click="goToDashboard">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>{{ t('header.dashboard') }}</span>
-              </li>
-              <li @click="goToWallet">
-                <i class="fas fa-wallet"></i>
-                <span>Wallet</span>
-              </li>
               <li @click="logout" class="logout-item">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>{{ t('header.signout') }}</span>

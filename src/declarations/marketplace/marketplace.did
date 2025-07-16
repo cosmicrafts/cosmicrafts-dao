@@ -1,0 +1,499 @@
+type TransferError = 
+ variant {
+   CreatedInFuture: record {ledger_time: nat64;};
+   Duplicate: record {duplicate_of: nat;};
+   GenericError: record {
+                   error_code: nat;
+                   message: text;
+                 };
+   TemporarilyUnavailable;
+   TooOld;
+   Unauthorized: record {token_ids: vec TokenId;};
+ };
+type TokenSpecResult = 
+ record {
+   ask_id: opt nat;
+   canister: principal;
+   receiving_account: Account;
+   result: nat;
+   sending_account: Account;
+   standards: vec ICRCStandards;
+   symbol: text;
+ };
+type TokenSpec = 
+ record {
+   canister: principal;
+   standards: vec ICRCStandards;
+   symbol: text;
+ };
+type TokenId = nat;
+type Time = int;
+type SettlementInfo = 
+ record {
+   ask_tokens: vec opt TokenSpecResult;
+   bid_tokens: vec opt TokenSpecResult;
+   royalties: vec record {
+                    Account;
+                    nat;
+                    text;
+                  };
+ };
+type Result_1 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result = 
+ variant {
+   err: Error;
+   ok: nat;
+ };
+type NewAskResult = 
+ record {
+   ask_id: nat;
+   escrow_records: vec EscrowRecord;
+ };
+type Marketplace = 
+ service {
+   addApprovedToken: (token: principal) -> (Result_1);
+   buyNFT: (askId: nat) -> (Result);
+   createAdvancedNFTAsk: (collectionId: CollectionId, tokenId: TokenId,
+    price: nat, params:
+    record {
+      allowList: opt vec principal;
+      broker: opt principal;
+      endDate: opt Time;
+      feeSchema: opt text;
+      memo: opt blob;
+      startDate: opt Time;
+    }) -> (Result);
+   createNFTAsk: (collectionId: CollectionId, tokenId: TokenId, price:
+    nat) -> (Result);
+   createUnsolicitedOffer: (collectionId: CollectionId, tokenId: TokenId,
+    price: nat, owner: principal) -> (Result);
+   encumberAsk: (askId: nat, trustee: principal, expiresAt: Time) ->
+    (Result_1);
+   getAllActiveAsks: (limit: nat, offset: nat) -> (vec AskStatus) query;
+   getMarketplaceStats: () ->
+    (record {
+       active_asks: nat;
+       approved_tokens: vec principal;
+       fee_percentage: nat;
+       total_asks: nat;
+     }) query;
+   getOwner: () -> (principal) query;
+   getUserAskHistory: (user: principal, limit: nat, offset: nat) ->
+    (vec AskStatus) query;
+   icrc8_approved_tokens: () -> (opt vec principal) composite_query;
+   icrc8_ask: (requests: vec opt ManageAskRequest) ->
+    (vec record {
+           opt ManageAskRequest;
+           opt ManageAskResponse;
+         });
+   icrc8_ask_info: (requests: vec opt AskInfoRequest) ->
+    (vec record {
+           opt AskInfoRequest;
+           opt AskInfoResponse;
+         }) query;
+   icrc8_balance_of: (requests:
+    vec record {
+          Account;
+          opt vec opt BalanceRequest;
+        }) -> (vec record {
+                     Account;
+                     vec opt BalanceResult;
+                   }) query;
+   icrc8_bid: (requests: vec opt ManageBidRequest) ->
+    (vec record {
+           opt ManageBidRequest;
+           opt ManageBidResponse;
+         });
+   icrc8_metadata: () ->
+    (vec
+      record {
+        text;
+        variant {
+          Array: vec nat;
+          Blob: blob;
+          Int: int;
+          Nat: nat;
+          Text: text;
+        };
+      }) query;
+   icrc8_supported_standards: () ->
+    (vec record {
+           name: text;
+           url: text;
+         }) query;
+   unencumberAsk: (askId: nat) -> (Result_1);
+   updateFeePercentage: (newFeePercentage: nat) -> (Result);
+ };
+type ManageBidResponse = 
+ variant {
+   engine_match:
+    variant {
+      Err: GenericError;
+      Ok:
+       vec
+        record {
+          ask_canister: opt principal;
+          ask_id: nat;
+          token: opt vec opt TokenSpecResult;
+        };
+    };
+   new_bid:
+    variant {
+      Err: GenericError;
+      Ok: record {
+            escrow: EscrowRecord;
+            result: nat;
+          };
+    };
+   withdraw_escrow:
+    variant {
+      Err: GenericError;
+      Ok:
+       record {
+         token_results:
+          vec
+           record {
+             result: variant {
+                       Err: GenericError;
+                       Ok: nat;
+                     };
+             token: TokenSpec;
+           };
+         withdraw_result: nat;
+       };
+    };
+ };
+type ManageBidRequest = 
+ variant {
+   engine_match: EngineMatch;
+   new_bid: record {
+              ask_id: nat;
+              feature: vec opt BidFeature;
+            };
+   withdraw_escrow: EscrowRecord;
+ };
+type ManageAskResponse = 
+ variant {
+   distribute_ask:
+    variant {
+      Err: GenericError;
+      Ok:
+       vec
+        record {
+          result: variant {
+                    Err: GenericError;
+                    Ok: nat;
+                  };
+          token: TokenSpec;
+        };
+    };
+   end_ask: variant {
+              Err: GenericError;
+              Ok: nat;
+            };
+   new_ask: variant {
+              Err: GenericError;
+              Ok: NewAskResult;
+            };
+   refresh_offers:
+    variant {
+      Err: GenericError;
+      Ok:
+       record {
+         count: nat;
+         eof: bool;
+         records: vec record {
+                        blob;
+                        opt AskStatus;
+                      };
+       };
+    };
+   withdraw_settlement:
+    variant {
+      Err: GenericError;
+      Ok:
+       record {
+         token_results:
+          vec
+           record {
+             result: variant {
+                       Err: GenericError;
+                       Ok: nat;
+                     };
+             token: TokenSpec;
+           };
+         withdraw_result: nat;
+       };
+    };
+ };
+type ManageAskRequest = 
+ variant {
+   distribute_ask: nat;
+   end_ask: nat;
+   new_ask: vec opt AskFeature;
+   refresh_offers: opt Account;
+   reject_offer: nat;
+   unencumber: nat;
+   withdraw_escrow: EscrowRecord;
+   withdraw_settlement: EscrowRecord;
+ };
+type ICRCStandards = 
+ variant {
+   ICRC1: opt ICRC1TokenSpecDetail;
+   ICRC2: opt ICRC2TokenSpecDetail;
+   ICRC37: opt ICRC37TokenSpecDetail;
+   ICRC4: opt ICRC4TokenSpecDetail;
+   ICRC7: opt ICRC7TokenSpecDetail;
+ };
+type ICRC7TokenSpecDetail = 
+ record {
+   fee: opt TokenSpec;
+   token_id: opt TokenId;
+ };
+type ICRC4TokenSpecDetail = 
+ record {
+   batch_fee: opt nat;
+   decimals: nat;
+ };
+type ICRC37TokenSpecDetail = 
+ record {
+   approval_fee: opt TokenSpec;
+   token_id: opt TokenId;
+   transfer_from_fee: opt TokenSpec;
+ };
+type ICRC2TokenSpecDetail = 
+ record {
+   amount: nat;
+   approval_fee: opt nat;
+   decimals: nat;
+   transfer_from_fee: opt nat;
+ };
+type ICRC1TokenSpecDetail = 
+ record {
+   amount: nat;
+   decimals: nat;
+   fee: opt nat;
+ };
+type GenericError = 
+ record {
+   error_code: nat;
+   message: text;
+ };
+type FeeName = text;
+type EscrowRecord = 
+ record {
+   ask_id: opt nat;
+   buyer: opt Account;
+   lock_to_date: opt nat64;
+   seller: Account;
+   "type":
+    variant {
+      ask: vec opt TokenSpec;
+      bid: vec opt TokenSpec;
+      settlement: vec opt TokenSpec;
+    };
+ };
+type Error = 
+ variant {
+   AlreadyListed;
+   AskNotActive;
+   BidTooLow;
+   CannotBuyOwnNFT;
+   CollectionAlreadyRegistered;
+   CollectionNotRegistered;
+   EscrowNotFound;
+   InsufficientFunds;
+   InvalidAskFeature;
+   InvalidFeePercentage;
+   InvalidPrice;
+   ListingNotActive;
+   ListingNotCancelled;
+   ListingNotFound;
+   ListingTicketExpired;
+   ListingTicketNotFound;
+   NFTNotTransferred;
+   NoMatchingBid;
+   NotICRC7Compliant;
+   NotOwner;
+   NotSeller;
+   TokenNotFound;
+   TokenSpecNotSupported;
+   TransferFailed: TransferError;
+   Unauthorized;
+   UnsupportedOperation;
+ };
+type EngineMatch = 
+ record {
+   asks:
+    vec
+     record {
+       ask_canister: opt principal;
+       ask_id: nat;
+       token: opt vec opt TokenSpec;
+     };
+   leader: opt principal;
+ };
+type EncumbranceDetail = 
+ record {
+   expires_at: nat64;
+   trustee: principal;
+ };
+type CollectionId = principal;
+type BuyNowReq = 
+ record {
+   amount: nat;
+   token: TokenSpec;
+ };
+type BidFeature = 
+ variant {
+   broker: Account;
+   escrow: EscrowRecord;
+   fee_account: vec record {
+                      FeeName;
+                      TokenSpec;
+                      Account;
+                    };
+   fee_schema: text;
+ };
+type BalanceResult = 
+ variant {
+   ask_settlements:
+    record {
+      count: nat;
+      eof: bool;
+      records: vec record {
+                     EncumbranceDetail;
+                     EscrowRecord;
+                   };
+    };
+   escrow: record {
+             count: nat;
+             eof: bool;
+             records: vec EscrowRecord;
+           };
+   nfts: opt record {
+               count: nat;
+               eof: bool;
+               records: vec EscrowRecord;
+             };
+   offers: record {
+             count: nat;
+             eof: bool;
+             records: vec EscrowRecord;
+           };
+   tokens: opt nat;
+ };
+type BalanceRequest = 
+ variant {
+   ask_settlements: opt record {
+                          prev: opt nat;
+                          take: opt nat;
+                        };
+   escrow: opt record {
+                 prev: opt nat;
+                 take: opt nat;
+               };
+   nfts: opt record {
+               prev: opt nat;
+               take: opt nat;
+             };
+   offers: opt record {
+                 prev: opt nat;
+                 take: opt nat;
+               };
+   tokens;
+ };
+type AuctionInfo = 
+ record {
+   current_bid_amount: opt nat;
+   current_escrow: opt EscrowRecord;
+   end_date: opt nat64;
+   min_next_bid: opt nat;
+   start_date: opt nat64;
+   token: TokenSpec;
+   wait_for_quiet_count: opt nat;
+ };
+type AskStatusType = 
+ variant {
+   closed;
+   encumbered: vec EncumbranceDetail;
+   not_started;
+   open;
+ };
+type AskStatus = 
+ record {
+   allow_list: opt vec Account;
+   ask_id: nat;
+   auction_info: opt AuctionInfo;
+   config: vec AskFeature;
+   current_broker_id: opt Account;
+   original_broker_id: opt Account;
+   participants: vec Account;
+   seller: Account;
+   settled_at: opt record {
+                     principal;
+                     nat;
+                   };
+   settlement: opt SettlementInfo;
+   status: AskStatusType;
+ };
+type AskInfoResponse = 
+ variant {
+   active: record {
+             count: nat;
+             eof: bool;
+             records: vec opt AskStatus;
+           };
+   history: record {
+              count: nat;
+              eof: bool;
+              records: vec opt AskStatus;
+            };
+   status: opt AskStatus;
+ };
+type AskInfoRequest = 
+ variant {
+   active: opt record {
+                 opt nat;
+                 opt nat;
+               };
+   history: opt record {
+                  nat;
+                  nat;
+                };
+   status: nat;
+ };
+type AskFeature = 
+ variant {
+   allow_list: vec Account;
+   allow_partial;
+   ask_token: vec opt TokenSpec;
+   bid_pays_fees: opt vec FeeName;
+   broker: Account;
+   buy_now: vec vec BuyNowReq;
+   created_at: nat64;
+   ending: variant {
+             date: nat64;
+             perpetual;
+             timeout: nat64;
+           };
+   fee_accounts: vec record {
+                       FeeName;
+                       TokenSpec;
+                       Account;
+                     };
+   fee_schema: text;
+   memo: blob;
+   start_date: nat64;
+   unsolicited_offer: Account;
+ };
+type Account = 
+ record {
+   owner: principal;
+   subaccount: opt blob;
+ };
+service : () -> Marketplace

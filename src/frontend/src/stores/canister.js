@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia';
 import { HttpAgent, Actor } from '@dfinity/agent';
+import { createActor as createActorBackend, canisterId as backendCanisterId } from '../../../declarations/backend';
+import { createActor as createActorRoadmap, canisterId as roadmapCanisterId } from '../../../declarations/backend';
+import { createActor as createActorMarketplace, canisterId as marketplaceCanisterId } from '../../../declarations/marketplace';
 // Import the ledger-specific libraries
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 import { Principal } from '@dfinity/principal';
@@ -66,6 +69,9 @@ const CANISTER_LAST_REFRESH_KEY = 'cosmicrafts-canister-last-refresh';
 
 // Store token canisters and state
 let canisters = {
+  cosmicrafts: null,
+  roadmap: null,
+  marketplace: null,
   ledger: null,
   // Storage for token canisters
   tokenLedgers: {},
@@ -78,7 +84,7 @@ const MANUAL_ENV = 'ic'; // 'ic' for IC, 'local' for local development
 const isLocal = MANUAL_ENV === 'local';
 const host = isLocal ? 'http://127.0.0.1:8080' : 'https://ic0.app';
 
-console.log(`Environment: ${isLocal ? 'Local Development' : 'ICP mainnet'}`);
+console.log(`Environment: ${isLocal ? 'Local Development' : 'IC Production'}`);
 console.log(`Host: ${host}`);
 
 // ICP constants
@@ -88,6 +94,9 @@ const ICP_DECIMALS = BigInt(100_000_000); // 1 ICP = 10^8 e8s
 export const useCanisterStore = defineStore('canister', {
   state: () => ({
     canisterIds: {
+      cosmicrafts: 'opcce-byaaa-aaaak-qcgda-cai',
+      roadmap: 'be2us-64aaa-aaaaa-qaabq-cai',
+      marketplace: 'br5f7-7uaaa-aaaaa-qaaca-cai',
       ledger: 'ryjl3-tyaaa-aaaaa-aaaba-cai', // ICP ledger canister ID
     },
     agent: null,
@@ -114,49 +123,17 @@ export const useCanisterStore = defineStore('canister', {
         const authStore = useAuthStore();
         const identity = authStore.getIdentity();
         
-        // If no identity, try to initialize from cache first
+        // If no identity, cannot initialize
         if (!identity) {
-          console.log('No identity available, attempting to initialize from cache with force=true...');
-          
-          // Try to initialize identity from cache with force parameter ALWAYS true (synchronous call)
-          const initialized = authStore.initializeIdentityFromCache(true);
-          
-          if (initialized) {
-            // Retry with newly initialized identity
-            console.log('Successfully initialized identity from cache, retrying agent initialization');
-            return this.initializeAgents();
-          } else {
-            console.warn('Could not initialize identity from cache, proceeding with limited functionality');
-            // Instead of failing, continue with limited functionality
-            // We'll create a basic agent without identity that can be used for public data
-            try {
-              const agent = new HttpAgent({ host });
-              this.agent = agent;
-              
-              // Fetch root key for local development
-              if (isLocal) {
-                console.log('Fetching root key for local development...');
-                // Handle this with a promise but don't wait for it
-                agent.fetchRootKey().then(() => {
-                  console.log('Root key fetched successfully');
-                }).catch(err => {
-                  console.warn('Error fetching root key:', err);
-                });
-              }
-              
-              return false; // Return false to indicate limited functionality
-            } catch (error) {
-              console.error('Failed to create anonymous agent:', error);
-              return false;
-            }
-          }
+          console.warn('No identity available, cannot initialize agents');
+          return false;
         }
         
         // Skip if already initialized recently and identity is the same
         if (
           currentIdentity === identity && 
           Date.now() - lastInitialized < 5 * 60 * 1000 &&
-          canisters.ledger
+          canisters.cosmicrafts
         ) {
           console.log('Agents already initialized and recent, using existing instances');
           return true;
@@ -192,7 +169,7 @@ export const useCanisterStore = defineStore('canister', {
             .finally(() => {
               initializing = false;
             });
-        }, 0); // Reduce delay to 0ms for faster initialization
+        }, 100);
         
         return true;
       } catch (error) {
@@ -236,21 +213,10 @@ export const useCanisterStore = defineStore('canister', {
      */
     saveCachedCanisterConfig() {
       try {
-        const cacheData = {
+        localStorage.setItem(CANISTER_CACHE_KEY, JSON.stringify({
           tokens: this.supportedTokens,
           lastUpdated: Date.now()
-        };
-        
-        // Also include canister existence status for better recovery
-        const canisterStatus = {};
-        for (const key in canisters) {
-          if (typeof key === 'string' && key !== 'tokenLedgers') {
-            canisterStatus[key] = !!canisters[key]; // Store boolean representing if canister exists
-          }
-        }
-        cacheData.canisterStatus = canisterStatus;
-        
-        localStorage.setItem(CANISTER_CACHE_KEY, JSON.stringify(cacheData));
+        }));
         localStorage.setItem(CANISTER_LAST_REFRESH_KEY, Date.now().toString());
       } catch (error) {
         console.error('Error saving canister config to cache:', error);
@@ -263,16 +229,15 @@ export const useCanisterStore = defineStore('canister', {
     async backgroundInitialize(identity) {
       console.log('Initializing HttpAgent in background...');
       
-      // Create agent with a time offset to handle clock drift
-      const agent = new HttpAgent({ 
-        identity, 
-        host,
-        // Add a time offset to handle clock synchronization issues
-        fetchRootKey: isLocal,
-        // Add 120 seconds to ensure we're ahead of the IC time
-        timeOffset: 120000
-      });
+      // Create agent
+      const agent = new HttpAgent({ identity, host });
       this.agent = agent;
+      
+      // Fetch root key for local development
+      if (isLocal) {
+        console.log('Fetching root key for local development...');
+        await agent.fetchRootKey();
+      }
       
       // Initialize token service to ensure tokens are loaded
       // Pass our newly created agent to the token service
@@ -286,6 +251,26 @@ export const useCanisterStore = defineStore('canister', {
         }
       } catch (tokenError) {
         console.warn('Error initializing TokenService:', tokenError);
+      }
+      
+      // Initialize all canisters with error handling for each
+      try {
+        canisters.cosmicrafts = createActorBackend(this.canisterIds.cosmicrafts, { agent });
+      } catch (error) {
+        console.error('Error creating cosmicrafts actor:', error);
+      }
+      
+      try {
+        canisters.roadmap = createActorRoadmap(this.canisterIds.roadmap, { agent });
+      } catch (error) {
+        console.error('Error creating roadmap actor:', error);
+      }
+      
+      try {
+        console.log(`Creating actor for marketplace with ID: ${this.canisterIds.marketplace}`);
+        canisters.marketplace = createActorMarketplace(this.canisterIds.marketplace, { agent });
+      } catch (error) {
+        console.error('Error creating marketplace actor:', error);
       }
       
       // Initialize ICP ledger canister using direct Actor interface
@@ -432,149 +417,34 @@ export const useCanisterStore = defineStore('canister', {
      * @returns {Promise<Object>} - Canister actor
      */
     async get(canisterName) {
-      // Log the canister request more verbosely
-      console.log(`[DEBUG] Requesting canister: ${canisterName}, current state:`, 
-        canisterName in canisters ? 
-          (canisters[canisterName] ? 'Exists' : 'Null/Undefined') : 
-          'Not initialized');
-      
-      // Check for the specific canister first - return immediately if available
+      // Initialize if needed and return right away with cached instance if available
+      if (!canisters[canisterName]) {
+        await this.initializeAgents();
+      }
+
+      // If we have a canister, return it immediately
       if (canisters[canisterName]) {
-        console.log(`Using existing ${canisterName} canister`);
         return canisters[canisterName];
       }
       
-      console.log(`Canister ${canisterName} not initialized, attempting initialization...`);
-      
-      // If we're already initializing, wait a bit for it
+      // If still initializing, wait for it
       if (initializing) {
-        console.log(`Initialization already in progress, waiting for ${canisterName}...`);
+        console.log(`Waiting for ${canisterName} canister to initialize...`);
         let attempts = 0;
-        const maxAttempts = 20; // Allow more attempts (2 seconds total)
-        
-        while (initializing && attempts < maxAttempts) {
+        while (initializing && attempts < 50) {
           await new Promise(resolve => setTimeout(resolve, 100));
           attempts++;
           
           // If canister becomes available while waiting, return it
           if (canisters[canisterName]) {
-            console.log(`${canisterName} canister became available while waiting`);
             return canisters[canisterName];
           }
         }
-        
-        // Check again after waiting
-        if (canisters[canisterName]) {
-          return canisters[canisterName];
-        }
-        
-        // If we're still initializing after max attempts, proceed anyway
-        console.warn(`Timed out waiting for initialization, proceeding with ${canisterName} canister request`);
       }
       
-      // Initialize agents if needed
-      try {
-        console.log(`[DEBUG] Calling initializeAgents for ${canisterName}...`);
-        const result = await this.initializeAgents();
-        console.log(`[DEBUG] initializeAgents result: ${result}`);
-        
-        // Check if canister was created during initialization
-        if (canisters[canisterName]) {
-          console.log(`${canisterName} canister became available after initializeAgents`);
-          return canisters[canisterName];
-        } else {
-          console.log(`[DEBUG] ${canisterName} still not available after initializeAgents`);
-        }
-      } catch (initError) {
-        console.error(`Error initializing agents for ${canisterName}:`, initError);
-        
-        // If initialization failed and we still don't have the canister, try anonymous access
-        if (!canisters[canisterName]) {
-          console.log(`Attempting anonymous access to ${canisterName} canister...`);
-          try {
-            const agent = new HttpAgent({ host });
-            
-            if (canisterName === 'ledger') {
-              canisters.ledger = Actor.createActor(icpLedgerIDL, {
-                agent,
-                canisterId: this.canisterIds.ledger,
-              });
-            }
-          } catch (secondError) {
-            console.error(`Anonymous access also failed for ${canisterName}:`, secondError);
-          }
-        }
-      }
-
-      // Final check for the canister with detailed logging
-      if (canisters[canisterName]) {
-        console.log(`${canisterName} canister is now available`);
-        return canisters[canisterName];
-      }
-      
-      // If still not available, try to provide a more specific reason
-      console.error(`${canisterName} canister not available after initialization attempts. Current canisters state:`, 
-        Object.keys(canisters).reduce((acc, key) => {
-          acc[key] = key === 'tokenLedgers' ? 
-            `Object with ${Object.keys(canisters.tokenLedgers || {}).length} keys` : 
-            !!canisters[key];
-          return acc;
-        }, {}));
+      // If we get here, the canister is still not available
+      console.warn(`Canister ${canisterName} not available after waiting`);
       return null;
-    },
-
-    /**
-     * Perform an immediate identity check and initialization
-     * This is used at application startup to ensure identity is ready right away
-     */
-    initializeImmediately() {
-      try {
-        const authStore = useAuthStore();
-        let identity = authStore.getIdentity();
-        
-        console.log('Initializing canisters immediately...');
-        
-        // Create agent with or without identity, including time offset
-        const agent = identity 
-          ? new HttpAgent({ 
-              identity, 
-              host, 
-              fetchRootKey: isLocal,
-              timeOffset: 120000 // Add 120 seconds offset for clock synchronization
-            })
-          : new HttpAgent({ 
-              host, 
-              fetchRootKey: isLocal,
-              timeOffset: 120000
-            });
-        
-        this.agent = agent;
-        
-        // Set identity and initialization flag even with anonymous agent
-        currentIdentity = identity;
-        initializing = true;
-        
-        // Start the rest of initialization in the background
-        setTimeout(() => {
-          // If we have an identity, initialize all canisters
-          // Otherwise initialize with limited functionality
-          this.backgroundInitialize(identity)
-            .catch(error => console.error('Error in background initialization:', error))
-            .finally(() => {
-              initializing = false;
-              console.log('Background canister initialization completed');
-            });
-        }, 0);
-        
-        // Consider initialization successful even with an anonymous agent
-        // Components can still use the canister for public data
-        lastInitialized = Date.now();
-        return true;
-      } catch (error) {
-        console.error('Error in immediate canister initialization:', error);
-        initializing = false;
-        return false;
-      }
     },
   },
 });

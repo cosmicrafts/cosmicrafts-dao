@@ -1,6 +1,4 @@
 <template>
-  <div>
-    <!-- Loading Spinner -->
     <LoadingScreen 
       :isLoading="loading" 
       :messages="[
@@ -15,6 +13,8 @@
         t('loadingScreen.messages.debuggingTheMultiverse'),
       ]"
     />
+  <div>
+    <!-- rest of the template as before, but without the LoadingScreen here -->
 
 
     <div class="register-container">
@@ -215,6 +215,8 @@
               
               // Emit registration-complete event for the parent component
               emit('registration-complete');
+              // Close the modal after successful registration
+              modalStore.closeModal();
             } else {
               // Error case (if success is false)
               console.log('Registration failed:', message);
@@ -271,11 +273,10 @@
   }
 
   .register-container {
-    position: relative;
+    /* Removed position: relative; and overflow: hidden; to allow LoadingScreen to overlay */
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
   }
 
   .register-container::before {

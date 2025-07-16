@@ -7,39 +7,28 @@ const router = useRouter();
 // Game data - now including all games including individual classics
 const games = {
   adventures: {
-    title: 'Cosmicrafts Adventures',
-    image: '/assets/webp/hero.webp',
+    title: 'Cosmicrafts Adventures 3D (2025)',
+    image: '/assets/webp/adventures-3d.webp',
     route: '/adventures',
-    downloadUrl: 'https://example.com/cosmicrafts-adventures.zip',
     description: 'A top-down isometric space shooter with procedural generation, blending exploration, combat, and endless variety'
   },
-  adventures2d: {
+  cosmicrafts2d: {
     title: 'Cosmicrafts 2D (2019)',
-    image: '/assets/webp/classics-alpha.webp',
+    image: '/assets/webp/cosmicrafts-2d.webp',
     route: '/cosmicrafts2d',
-    downloadUrl: 'https://example.com/cosmicrafts-2d-2019.zip',
-    description: 'The original 2D browser RTS that launched the Cosmicrafts universe. Fast-paced, strategic, and retro-inspired gameplay.'
+    description: 'Rediscover the original 2D RTS that launched the Cosmicrafts saga. With retro-inspired visuals, lightning-fast strategy, and pure tactical depth.'
   },
   alpha2021: {
-    title: 'Cosmicrafts Alpha 2021',
-    image: '/assets/webp/classics-alpha.webp',
+    title: 'Cosmicrafts Alpha (2021)',
+    image: '/assets/webp/alpha-2021.webp',
     route: '/classics/alpha2021',
-    downloadUrl: 'https://example.com/cosmicrafts-alpha-2021.zip',
-    description: 'The first milestone in our Web3 journey: experience the first playable prototype that set the foundation for our cross-platform metaverse game.'
+    description: 'Experience Web3’s first playable 3D RTS prototype that set the foundation for our cross-platform metaverse franchise.'
   },
   beta2022: {
-    title: 'Cosmicrafts Beta 2022',
-    image: '/assets/webp/classics-beta.webp',
+    title: 'Cosmicrafts Beta (2022-2023)',
+    image: '/assets/webp/beta-2022.webp',
     route: '/classics/beta2022',
-    downloadUrl: 'https://example.com/cosmicrafts-beta-2022.zip',
-    description: 'Enhanced graphics, multiplayer features, and advanced combat. The beta that brought our community together and proved our technical capabilities.'
-  },
-  rts2023: {
-    title: 'Cosmicrafts RTS 2023',
-    image: '/assets/webp/classics-lugano.webp',
-    route: '/classics/lugano2023',
-    downloadUrl: 'https://example.com/cosmicrafts-lugano-2023.zip',
-    description: 'Our most advanced browser-based RTS to date. Featuring blockchain integration, NFT assets, and on-chain gameplay, Cosmicrafts RTS 2023 is a showcase of innovation and technical excellence.'
+    description: 'Step into the first community‑driven open beta. Featuring upgraded visuals, robust combat, deck‑builder heroes, and the launch of beta‑phase NFTs. United, we built it.'
   }
   // battlegrounds and lugano2023 are hidden for now
 };
@@ -66,27 +55,45 @@ const closeLauncher = () => {
 };
 
 const launchGame = () => {
-  if (launchType.value === 'web') {
-    // Navigate to the game route
-    const game = games[selectedGame.value];
-    router.push(game.route);
-  } else {
-    // Download the game
-    const game = games[selectedGame.value];
-    window.open(game.downloadUrl, '_blank');
-  }
+  // Always navigate to the game route
+  const game = games[selectedGame.value];
+  router.push(game.route);
   closeLauncher();
+};
+
+// CTA handlers for banner
+const openEpicGames = () => {
+  window.open('https://store.epicgames.com/en-US/p/cosmicrafts-499a8f', '_blank');
+};
+const openItchIo = () => {
+  window.open('https://ohsalmeron.itch.io/cosmicrafts', '_blank');
 };
 </script>
 
 <template>
   <div class="games-container">
-    <!-- Hero Section -->
-    <section class="games-hero">
-      <div class="hero-content">
-        <h1 class="hero-title">Cosmicrafts Metaverse</h1>
-        <p class="hero-subtitle">A Metaverse legacy, community-driven design, and pioneering web-based strategy games</p>
-
+    <!-- Top Banner for Battlegrounds Launch -->
+    <section class="battlegrounds-banner cosmic-panel cosmic-float">
+      <!-- Full-width background image -->
+      <img class="banner-bg-image" src="@/assets/webp/banner-battlegrounds.webp" alt="Battlegrounds Background" />
+      <div class="banner-content">
+        <img class="banner-logo" src="@/assets/webp/battlegrounds.webp" alt="Cosmicrafts Battlegrounds Logo" />
+        <div class="banner-text">
+          <h1 class="banner-title text-gradient">Cosmicrafts Battlegrounds</h1>
+          <p class="banner-subtitle text-secondary">Launching Q4 2025 &mdash; The next evolution in on-chain RTS. Wishlist and play the demo now!</p>
+          <div class="banner-ctas">
+            <button class="cosmic-button cosmic-button-primary" @click="openEpicGames">
+              <span class="button-text">Wishlist on Epic Games</span>
+              <span class="button-glow"></span>
+              <span class="button-particles"></span>
+            </button>
+            <button class="cosmic-button cosmic-button-secondary" @click="openItchIo">
+              <span class="button-text">Play Demo on itch.io</span>
+              <span class="button-glow"></span>
+              <span class="button-particles"></span>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -95,10 +102,11 @@ const launchGame = () => {
       <!-- Main Games -->
       <div class="game-card" @click="selectGame('adventures')">
         <div class="game-image">
-          <img src="@/assets/webp/hero.webp" alt="Cosmicrafts Adventures" />
+          <div class="game-badge prototype">Prototype</div>
+          <img src="@/assets/webp/adventures-3d.webp" alt="Cosmicrafts Adventures 3D (2025)" />
         </div>
         <div class="game-info">
-          <h3 class="game-title">Cosmicrafts Adventures</h3>
+          <h3 class="game-title">Cosmicrafts Adventures 3D (2025)</h3>
           <p class="game-description">{{ games.adventures.description }}</p>
           <div class="game-meta">
             <span class="release-date">Prototype</span>
@@ -112,17 +120,18 @@ const launchGame = () => {
           </div>
         </div>
         <div class="game-cta">
-          <button class="play-button">Play Adventures</button>
+          <button class="play-button">Play Adventures 3D</button>
         </div>
       </div>
 
-      <div class="game-card" @click="selectGame('adventures2d')">
+      <div class="game-card" @click="selectGame('cosmicrafts2d')">
         <div class="game-image">
-          <img src="@/assets/webp/classics-alpha.webp" alt="Cosmicrafts 2D (2019)" />
+          <div class="game-badge classic">Classic</div>
+          <img src="@/assets/webp/cosmicrafts-2d.webp" alt="Cosmicrafts 2D (2019)" />
         </div>
         <div class="game-info">
           <h3 class="game-title">Cosmicrafts 2D (2019)</h3>
-          <p class="game-description">{{ games.adventures2d.description }}</p>
+          <p class="game-description">{{ games.cosmicrafts2d.description }}</p>
           <div class="game-meta">
             <span class="release-date">Classic</span>
             <span class="game-type">2D RTS</span>
@@ -142,10 +151,10 @@ const launchGame = () => {
       <div class="game-card" @click="selectGame('alpha2021')">
         <div class="game-image">
           <div class="game-badge alpha">Alpha</div>
-          <img src="@/assets/webp/classics-alpha.webp" alt="Cosmicrafts Alpha 2021" />
+          <img src="@/assets/webp/alpha-2021.webp" alt="Cosmicrafts Alpha (2021)" />
         </div>
         <div class="game-info">
-          <h3 class="game-title">Cosmicrafts Alpha 2021</h3>
+          <h3 class="game-title">Cosmicrafts Alpha (2021)</h3>
           <p class="game-description">{{ games.alpha2021.description }}</p>
           <div class="game-meta">
             <span class="release-date">Released: 2021</span>
@@ -153,7 +162,7 @@ const launchGame = () => {
           </div>
           <div class="game-features">
             <span class="feature">DFINITY Grant 30-day Sprint</span>
-            <span class="feature">DSCVR Hackathon</span>
+            <span class="feature">DSCVR Hackathon Champion</span>
             <span class="feature">Prototype</span>
           </div>
         </div>
@@ -165,10 +174,10 @@ const launchGame = () => {
       <div class="game-card" @click="selectGame('beta2022')">
         <div class="game-image">
           <div class="game-badge beta">Beta</div>
-          <img src="@/assets/webp/classics-beta.webp" alt="Cosmicrafts Beta 2022" />
+          <img src="@/assets/webp/beta-2022.webp" alt="Cosmicrafts Beta (2022-2023)" />
         </div>
         <div class="game-info">
-          <h3 class="game-title">Cosmicrafts Beta 2022</h3>
+          <h3 class="game-title">Cosmicrafts Beta (2022-2023)</h3>
           <p class="game-description">{{ games.beta2022.description }}</p>
           <div class="game-meta">
             <span class="release-date">Released: 2022</span>
@@ -176,35 +185,12 @@ const launchGame = () => {
           </div>
           <div class="game-features">
             <span class="feature">Supernova Hackathon Champion</span>
-            <span class="feature">Beta-NFT</span>
-            <span class="feature">Halloween Theme</span>
+            <span class="feature">Beta-NFTs</span>
+            <span class="feature">Heroes + Deck builder</span>
           </div>
         </div>
         <div class="game-cta">
           <button class="play-button">Play Beta 2022</button>
-        </div>
-      </div>
-
-      <div class="game-card" @click="selectGame('rts2023')">
-        <div class="game-image">
-          <div class="game-badge lugano">2023</div>
-          <img src="@/assets/webp/classics-lugano.webp" alt="Cosmicrafts RTS 2023" />
-        </div>
-        <div class="game-info">
-          <h3 class="game-title">Cosmicrafts RTS 2023</h3>
-          <p class="game-description">{{ games.rts2023.description }}</p>
-          <div class="game-meta">
-            <span class="release-date">Released: 2023</span>
-            <span class="game-type">On-chain RTS</span>
-          </div>
-          <div class="game-features">
-            <span class="feature">Blockchain Integration</span>
-            <span class="feature">NFT Assets</span>
-            <span class="feature">On-chain Gameplay</span>
-          </div>
-        </div>
-        <div class="game-cta">
-          <button class="play-button">Play RTS 2023</button>
         </div>
       </div>
     </section>
@@ -227,10 +213,6 @@ const launchGame = () => {
                 <input type="radio" id="web" name="launchType" value="web" v-model="launchType" />
                 <label for="web">Web Browser (Recommended)</label>
               </div>
-              <div class="option">
-                <input type="radio" id="download" name="launchType" value="download" v-model="launchType" />
-                <label for="download">Download & Install</label>
-              </div>
             </div>
             <div class="launch-button-container">
               <button class="launch-button" @click="launchGame">
@@ -251,40 +233,121 @@ const launchGame = () => {
   color: var(--cosmic-text-primary);
 }
 
-/* Hero Section */
-.games-hero {
-  position: relative;
-  padding: 4rem;
-  padding-top: 5rem;
+/* Battlegrounds Banner */
+.battlegrounds-banner {
   display: flex;
   align-items: center;
   justify-content: center;
+  top: 6rem;
+  margin: 0rem auto 3rem auto;
+  padding: 2.5rem 2rem 2.5rem 2rem;
+  max-width: 1200px;
+  position: relative;
   overflow: hidden;
+  animation: fadeIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.hero-title {
-  font-size: 3.5rem;
-  font-weight: bold;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--cosmic-blue-light), var(--cosmic-purple-light));
+/* Full-width background image for banner */
+.banner-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.32;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.battlegrounds-banner .banner-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  width: 100%;
+}
+
+.banner-logo {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  border-radius: var(--cosmic-radius-lg);
+  box-shadow: var(--cosmic-shadow-md), var(--cosmic-glow-blue-md);
+  background: rgba(0,0,0,0.15);
+  flex-shrink: 0;
+}
+
+.banner-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.banner-title {
+  font-size: 2.7rem;
+  font-weight: 900;
+  background: var(--cosmic-gradient-blue);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(0, 183, 255, 0.5);
+  text-shadow: var(--cosmic-glow-blue-md);
+  margin: 0 0 0.5rem 0;
 }
 
-.hero-subtitle {
-  font-size: 1.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+.banner-subtitle {
+  font-size: 1.25rem;
   color: var(--cosmic-text-secondary);
+  margin-bottom: 0.5rem;
+  max-width: 600px;
 }
 
+.banner-ctas {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
 
-/* Games Grid */
+/* Responsive adjustments for banner */
+@media (max-width: 900px) {
+  .banner-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .banner-logo {
+    width: 120px;
+    height: 120px;
+  }
+  .banner-title {
+    font-size: 2rem;
+  }
+}
+@media (max-width: 600px) {
+  .battlegrounds-banner {
+    padding: 1.2rem 0.5rem;
+  }
+  .banner-title {
+    font-size: 1.3rem;
+  }
+  .banner-logo {
+    width: 80px;
+    height: 80px;
+  }
+  .banner-ctas {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+}
+
+/* Games Grid and Cards (unchanged, but ensure cosmic style) */
 .games-grid {
   display: grid;
-  padding: 2rem;
+  padding: 4rem;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 3rem;
   max-width: 1200px;
@@ -300,6 +363,7 @@ const launchGame = () => {
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
+  margin-top: 1rem;
 }
 
 .game-card:hover {
@@ -348,8 +412,13 @@ const launchGame = () => {
   color: #2c3e50;
 }
 
-.game-badge.lugano {
-  background: linear-gradient(135deg, #48dbfb, #0abde3);
+.game-badge.classic {
+  background: linear-gradient(135deg, #d448fb, #e30a9b);
+  color: white;
+}
+
+.game-badge.prototype {
+  background: linear-gradient(135deg, #48fb51, #2fa704);
   color: white;
 }
 

@@ -7,12 +7,10 @@
 # Mac OSX temporary files
 .DS_Store
 **/.DS_Store
+**/.data.br
 
 # dfx temporary files
 .dfx/
-
-# generated files
-**/declarations/
 
 # rust
 target/
@@ -27,3 +25,10 @@ dist/
 .env.local
 .mops
 /src/frontend/oisy-wallet
+
+# Ignore all .data.br files recursively
+**/*.data.br
+
+# Ignore specific large file in Cosmicrafts2022
+src/frontend/public/Cosmicrafts2022/CosmicraftsBeta.data.br
+

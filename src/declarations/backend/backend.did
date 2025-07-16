@@ -1,0 +1,1226 @@
+type Value = 
+ variant {
+   Blob: blob;
+   Int: int;
+   Nat: nat;
+   Text: text;
+ };
+type Username = text;
+type UpdateInformationRequest = record {
+                                  metrics: opt CollectMetricsRequestType;};
+type UpdateCallsAggregatedData = vec nat64;
+type Unit = 
+ variant {
+   Character;
+   Spaceship;
+   Station;
+   Weapon;
+ };
+type TxIndex = nat;
+type TransferResult = 
+ variant {
+   Err: TransferError;
+   Ok: TxIndex;
+ };
+type TransferReceipt = 
+ variant {
+   Err: TransferError__1;
+   Ok: TransferId;
+ };
+type TransferId = nat;
+type TransferError__1 = 
+ variant {
+   CreatedInFuture: record {ledger_time: nat64;};
+   Duplicate: record {duplicate_of: TransferId;};
+   GenericError: record {
+                   error_code: nat;
+                   message: text;
+                 };
+   TemporarilyUnavailable: record {};
+   TooOld;
+   Unauthorized: record {token_ids: vec TokenId;};
+ };
+type TransferError = 
+ variant {
+   BadBurn: record {min_burn_amount: Balance;};
+   BadFee: record {expected_fee: Balance;};
+   CreatedInFuture: record {ledger_time: Timestamp;};
+   Duplicate: record {duplicate_of: TxIndex;};
+   GenericError: record {
+                   error_code: nat;
+                   message: text;
+                 };
+   InsufficientFunds: record {balance: Balance;};
+   TemporarilyUnavailable;
+   TooOld;
+ };
+type TransferArgs__1 = 
+ record {
+   amount: Balance;
+   created_at_time: opt nat64;
+   fee: opt Balance;
+   from_subaccount: opt Subaccount;
+   memo: opt blob;
+   to: Account__1;
+ };
+type TransferArgs = 
+ record {
+   created_at_time: opt nat64;
+   from: opt Account;
+   is_atomic: opt bool;
+   memo: opt blob;
+   spender_subaccount: opt Subaccount;
+   to: Account;
+   token_ids: vec TokenId;
+ };
+type Transfer = 
+ record {
+   amount: Balance;
+   created_at_time: opt nat64;
+   fee: opt Balance;
+   from: Account__1;
+   memo: opt blob;
+   to: Account__1;
+ };
+type Transaction__1 = 
+ record {
+   burn: opt Burn;
+   index: TxIndex;
+   kind: text;
+   mint: opt Mint;
+   timestamp: Timestamp;
+   transfer: opt Transfer;
+ };
+type TransactionRange = record {transactions: vec Transaction__1;};
+type Transaction = 
+ record {
+   icrc7_approve:
+    opt
+     record {
+       created_at_time: opt nat64;
+       expires_at: opt nat64;
+       from: Account;
+       memo: opt blob;
+       spender: Account;
+       token_ids: opt vec TokenId;
+     };
+   icrc7_transfer:
+    opt
+     record {
+       created_at_time: opt nat64;
+       from: Account;
+       memo: opt blob;
+       spender: opt Account;
+       to: Account;
+       token_ids: vec TokenId;
+     };
+   kind: text;
+   mint: opt record {
+               to: Account;
+               token_ids: vec TokenId;
+             };
+   timestamp: nat64;
+   upgrade:
+    opt
+     record {
+       memo: opt blob;
+       new_metadata: vec record {
+                           text;
+                           Metadata;
+                         };
+       prev_metadata: vec record {
+                            text;
+                            Metadata;
+                          };
+       token_id: opt TokenId;
+       upgraded_at: opt nat64;
+     };
+ };
+type Tournament = 
+ record {
+   bracketCreated: bool;
+   expirationDate: Time;
+   id: nat;
+   isActive: bool;
+   matchCounter: nat;
+   name: text;
+   participants: vec principal;
+   prizePool: text;
+   registeredParticipants: vec principal;
+   startDate: Time;
+ };
+type TokensOfResult = 
+ variant {
+   Err: CallError;
+   Ok: vec TokenId;
+ };
+type TokenMetadata = 
+ record {
+   metadata: Metadata;
+   owner: Account;
+   tokenId: TokenId;
+ };
+type TokenInitArgs = 
+ record {
+   advanced_settings: opt AdvancedSettings;
+   decimals: nat8;
+   fee: Balance;
+   initial_balances: vec record {
+                           Account__1;
+                           Balance;
+                         };
+   logo: text;
+   max_supply: Balance;
+   min_burn_amount: Balance;
+   minting_account: opt Account__1;
+   name: text;
+   symbol: text;
+ };
+type TokenId = nat;
+type TokenID = nat;
+type Title__1 = 
+ record {
+   description: text;
+   id: nat;
+   title: text;
+ };
+type Title = text;
+type Timestamp = nat64;
+type Time = int;
+type SupportedStandard = 
+ record {
+   name: text;
+   url: text;
+ };
+type Subaccount = blob;
+type StatusResponse = 
+ record {
+   cycles: opt nat64;
+   heap_memory_size: opt nat64;
+   memory_size: opt nat64;
+ };
+type StatusRequest = 
+ record {
+   cycles: bool;
+   heap_memory_size: bool;
+   memory_size: bool;
+ };
+type SoulMetadata = 
+ record {
+   birth: Time;
+   combatExperience: nat;
+   gamesPlayed: opt nat;
+   totalDamageDealt: opt nat;
+   totalKills: opt nat;
+ };
+type SkinMetadata = variant {Skin;};
+type SkillMetadata = 
+ variant {
+   CriticalStrike;
+   Evasion;
+   Shield;
+ };
+type RewardType = 
+ variant {
+   Chest;
+   Stardust;
+ };
+type RegistrationDate = int;
+type ReferralCode = text;
+type QueryArchiveFn = func (GetTransactionsRequest) ->
+                       (TransactionRange) query;
+type PrivacySetting = 
+ variant {
+   acceptAll;
+   blockAll;
+   friendsOfFriends;
+ };
+type PlayerStats = 
+ record {
+   botDifficulty: nat;
+   botMode: nat;
+   characterID: nat;
+   damageCritic: nat;
+   damageDealt: nat;
+   damageEvaded: nat;
+   damageTaken: nat;
+   deploys: nat;
+   energyChargeRate: nat;
+   energyGenerated: nat;
+   energyUsed: nat;
+   energyWasted: nat;
+   faction: nat;
+   gameMode: nat;
+   kills: nat;
+   playerId: PlayerId;
+   secRemaining: nat;
+   wonGame: bool;
+   xpEarned: nat;
+ };
+type PlayerId = principal;
+type PlayerGamesStats = 
+ record {
+   energyGenerated: nat;
+   energyUsed: nat;
+   energyWasted: nat;
+   gamesLost: nat;
+   gamesPlayed: nat;
+   gamesWon: nat;
+   totalDamageCrit: nat;
+   totalDamageDealt: nat;
+   totalDamageEvaded: nat;
+   totalDamageTaken: nat;
+   totalGamesGameMode: vec GamesWithGameMode;
+   totalGamesWithCharacter: vec GamesWithCharacter;
+   totalGamesWithFaction: vec GamesWithFaction;
+   totalKills: nat;
+   totalXpEarned: nat;
+ };
+type PlayerGameData = record {deck: vec nat;};
+type Player = 
+ record {
+   avatar: AvatarID;
+   description: Description;
+   elo: float64;
+   friends: vec FriendDetails;
+   id: PlayerId;
+   language: text;
+   level: Level;
+   registrationDate: RegistrationDate;
+   title: Title;
+   username: Username;
+ };
+type OwnerResult = 
+ variant {
+   Err: CallError;
+   Ok: Account;
+ };
+type OverallStats = 
+ record {
+   totalDamageDealt: nat;
+   totalEnergyGenerated: nat;
+   totalEnergyUsed: nat;
+   totalEnergyWasted: nat;
+   totalGamesGameMode: vec OverallGamesWithGameMode;
+   totalGamesMP: nat;
+   totalGamesPlayed: nat;
+   totalGamesSP: nat;
+   totalGamesWithCharacter: vec OverallGamesWithCharacter;
+   totalGamesWithFaction: vec OverallGamesWithFaction;
+   totalKills: nat;
+   totalTimePlayed: nat;
+   totalXpEarned: nat;
+ };
+type OverallGamesWithGameMode = 
+ record {
+   gameModeID: nat;
+   gamesPlayed: nat;
+ };
+type OverallGamesWithFaction = 
+ record {
+   factionID: nat;
+   gamesPlayed: nat;
+ };
+type OverallGamesWithCharacter = 
+ record {
+   characterID: nat;
+   gamesPlayed: nat;
+ };
+type NumericEntity = 
+ record {
+   avg: nat64;
+   first: nat64;
+   last: nat64;
+   max: nat64;
+   min: nat64;
+ };
+type Notification = 
+ record {
+   from: PlayerId;
+   message: text;
+   timestamp: Time;
+ };
+type Nanos = nat64;
+type MissionsUser = 
+ record {
+   expiration: nat64;
+   finish_date: nat64;
+   finished: bool;
+   id_mission: nat;
+   missionCategory: MissionCategory;
+   missionType: MissionType;
+   progress: nat;
+   reward_amount: nat;
+   reward_type: MissionRewardType;
+   start_date: nat64;
+   total: nat;
+ };
+type MissionType = 
+ variant {
+   DamageDealt;
+   DamageTaken;
+   EnergyUsed;
+   FactionPlayed;
+   GameModePlayed;
+   GamesCompleted;
+   GamesWon;
+   Kills;
+   UnitsDeployed;
+   XPEarned;
+ };
+type MissionRewardType = 
+ variant {
+   Chest;
+   Stardust;
+ };
+type MissionCategory = 
+ variant {
+   Achievement;
+   Daily;
+   Free;
+   Hourly;
+   Weekly;
+ };
+type MintReceipt = 
+ variant {
+   Err: MintError;
+   Ok: TokenId;
+ };
+type MintError = 
+ variant {
+   AlreadyExistTokenId;
+   GenericError: record {
+                   error_code: nat;
+                   message: text;
+                 };
+   InvalidRecipient;
+   SupplyCapOverflow;
+   Unauthorized;
+ };
+type MintArgs = 
+ record {
+   metadata: Metadata;
+   to: Account;
+   token_id: TokenId;
+ };
+type Mint = 
+ record {
+   amount: Balance;
+   created_at_time: opt nat64;
+   memo: opt blob;
+   to: Account__1;
+ };
+type MetricsResponse = record {metrics: opt CanisterMetrics;};
+type MetricsRequest = record {parameters: GetMetricsParameters;};
+type MetricsGranularity = 
+ variant {
+   daily;
+   hourly;
+ };
+type MetadataResult = 
+ variant {
+   Err: CallError;
+   Ok: Metadata;
+ };
+type Metadata = 
+ record {
+   basic: opt BasicMetadata;
+   category: Category;
+   general: GeneralMetadata;
+   skills: opt SkillMetadata;
+   skins: opt SkinMetadata;
+   soul: opt SoulMetadata;
+ };
+type MetaDatum = 
+ record {
+   text;
+   Value;
+ };
+type MatchID = nat;
+type MatchData = 
+ record {
+   matchID: MatchID;
+   player1: MMInfo;
+   player2: opt MMInfo;
+   status: MMStatus;
+ };
+type Match = 
+ record {
+   id: nat;
+   nextMatchId: opt nat;
+   participants: vec principal;
+   result: opt record {
+                 score: text;
+                 winner: principal;
+               };
+   status: text;
+   tournamentId: nat;
+ };
+type MMStatus = 
+ variant {
+   Accepted;
+   Accepting;
+   Ended;
+   InGame;
+   Reserved;
+   Searching;
+ };
+type MMSearchStatus = 
+ variant {
+   Assigned;
+   Available;
+   NotAvailable;
+ };
+type MMInfo = 
+ record {
+   elo: float64;
+   id: PlayerId;
+   lastPlayerActive: nat64;
+   matchAccepted: bool;
+   playerGameData: PlayerGameData;
+   username: Username;
+ };
+type LogMessagesData = 
+ record {
+   message: text;
+   timeNanos: Nanos;
+ };
+type LogEntry = 
+ record {
+   amount: opt nat;
+   itemType: ItemType;
+   timestamp: nat64;
+   tokenID: opt TokenID;
+   user: principal;
+ };
+type Level = nat;
+type ItemType = 
+ variant {
+   Chest;
+   GameNFTs;
+   Stardust;
+ };
+type IndividualAchievement = 
+ record {
+   achievementId: nat;
+   achievementType: AchievementType;
+   claimed: bool;
+   completed: bool;
+   id: nat;
+   name: text;
+   progress: nat;
+   requiredProgress: nat;
+   reward: vec AchievementReward;
+ };
+type HourlyMetricsData = 
+ record {
+   canisterCycles: CanisterCyclesAggregatedData;
+   canisterHeapMemorySize: CanisterHeapMemoryAggregatedData;
+   canisterMemorySize: CanisterMemoryAggregatedData;
+   timeMillis: int;
+   updateCalls: UpdateCallsAggregatedData;
+ };
+type GetTransactionsResult = 
+ record {
+   total: nat;
+   transactions: vec Transaction;
+ };
+type GetTransactionsResponse = 
+ record {
+   archived_transactions: vec ArchivedTransaction;
+   first_index: TxIndex;
+   log_length: nat;
+   transactions: vec Transaction__1;
+ };
+type GetTransactionsRequest = 
+ record {
+   length: nat;
+   start: TxIndex;
+ };
+type GetTransactionsArgs = 
+ record {
+   account: opt Account;
+   limit: nat;
+   offset: nat;
+ };
+type GetMetricsParameters = 
+ record {
+   dateFromMillis: nat;
+   dateToMillis: nat;
+   granularity: MetricsGranularity;
+ };
+type GetLogMessagesParameters = 
+ record {
+   count: nat32;
+   filter: opt GetLogMessagesFilter;
+   fromTimeNanos: opt Nanos;
+ };
+type GetLogMessagesFilter = 
+ record {
+   analyzeCount: nat32;
+   messageContains: opt text;
+   messageRegex: opt text;
+ };
+type GetLatestLogMessagesParameters = 
+ record {
+   count: nat32;
+   filter: opt GetLogMessagesFilter;
+   upToTimeNanos: opt Nanos;
+ };
+type GetInformationResponse = 
+ record {
+   logs: opt CanisterLogResponse;
+   metrics: opt MetricsResponse;
+   status: opt StatusResponse;
+   version: opt nat;
+ };
+type GetInformationRequest = 
+ record {
+   logs: opt CanisterLogRequest;
+   metrics: opt MetricsRequest;
+   status: opt StatusRequest;
+   version: bool;
+ };
+type GeneralMetadata = 
+ record {
+   description: text;
+   faction: opt Faction;
+   id: nat;
+   image: text;
+   name: text;
+   rarity: opt nat;
+ };
+type GamesWithGameMode = 
+ record {
+   gameModeID: nat;
+   gamesPlayed: nat;
+   gamesWon: nat;
+ };
+type GamesWithFaction = 
+ record {
+   factionID: nat;
+   gamesPlayed: nat;
+   gamesWon: nat;
+ };
+type GamesWithCharacter = 
+ record {
+   characterID: nat;
+   gamesPlayed: nat;
+   gamesWon: nat;
+ };
+type FullMatchData = 
+ record {
+   matchID: MatchID;
+   player1:
+    record {
+      avatar: AvatarID;
+      elo: float64;
+      id: PlayerId;
+      level: Level;
+      matchAccepted: bool;
+      playerGameData: PlayerGameData;
+      username: Username;
+    };
+   player2:
+    opt
+     record {
+       avatar: AvatarID;
+       elo: float64;
+       id: PlayerId;
+       level: Level;
+       matchAccepted: bool;
+       playerGameData: PlayerGameData;
+       username: Username;
+     };
+   status: MMStatus;
+ };
+type FriendRequest = 
+ record {
+   from: PlayerId;
+   timestamp: int;
+   to: PlayerId;
+ };
+type FriendDetails = 
+ record {
+   avatar: AvatarID;
+   playerId: PlayerId;
+   username: Username;
+ };
+type Faction = 
+ variant {
+   Arch;
+   Celestial;
+   Cosmicon;
+   Neutral;
+   Spade;
+   Spirat;
+   Webe;
+ };
+type Description = text;
+type DailyMetricsData = 
+ record {
+   canisterCycles: NumericEntity;
+   canisterHeapMemorySize: NumericEntity;
+   canisterMemorySize: NumericEntity;
+   timeMillis: int;
+   updateCalls: nat64;
+ };
+type Cosmicrafts = 
+ service {
+   acceptFriendRequest: (fromId: PlayerId) -> (bool, text);
+   add: (a: nat, b: nat) -> (nat);
+   addAvatarToUser: (newAvatarId: nat) -> (bool, text);
+   addProgressToIndividualAchievement: (user: PlayerId,
+    individualAchievementId: nat, progressToAdd: nat) -> (bool);
+   addTitleToUser: (newTitleId: nat) -> (bool, text);
+   admin: (funcToCall: AdminFunction) -> (bool, text);
+   adminUpdateMatch: (tournamentId: nat, matchId: nat, winnerIndex: nat,
+    score: text) -> (bool);
+   assignAchievementsToUser: (user: PlayerId) -> ();
+   blockUser: (blockedId: PlayerId) -> (bool, text);
+   burn: (args: BurnArgs) -> (TransferResult);
+   cancelMatchmaking: () -> (bool, text);
+   claimAchievementLineReward: (achievementId: nat) -> (bool, text);
+   claimCategoryAchievementReward: (categoryId: nat) -> (bool, text);
+   claimGeneralReward: (idMission: nat) -> (bool, text);
+   claimIndividualAchievementReward: (achievementId: nat) -> (bool, text);
+   claimUserReward: (idMission: nat) -> (bool, text);
+   createAchievement: (categoryId: nat, name: text, rewards:
+    vec AchievementReward) -> (bool, text, nat);
+   createAchievementCategory: (name: text, rewards: vec AchievementReward) ->
+    (bool, text, nat);
+   createBatchOfUnassignedCodes: () -> (vec ReferralCode);
+   createIndividualAchievement: (achievementId: nat, name: text,
+    achievementType: AchievementType, requiredProgress: nat, rewards:
+    vec AchievementReward) -> (bool, text, nat);
+   createTournament: (name: text, startDate: Time, prizePool: text,
+    expirationDate: Time) -> (nat);
+   createUserMission: (user: PlayerId) -> (bool, text, nat);
+   declineFriendRequest: (fromId: PlayerId) -> (bool, text);
+   deleteAccount: () -> (bool, text);
+   deleteAllTournaments: () -> (bool);
+   deposit_cycles: () -> ();
+   disputeMatch: (tournamentId: nat, matchId: nat, reason: text) -> (bool);
+   dumpAllPlayerMultipliers: () -> (vec record {
+                                          PlayerId;
+                                          float64;
+                                        }) query;
+   getAchievements: () -> (vec AchievementCategory);
+   getActiveTournaments: () -> (vec Tournament) query;
+   getAllAchievementsData: () -> (vec AchievementCategory) query;
+   getAllPlayers: () -> (vec Player) query;
+   getAllSearching: () -> (vec MatchData) query;
+   getAllTournaments: () -> (vec Tournament) query;
+   getAvailableAvatarDetails: () -> (vec Avatar) query;
+   getAvailableAvatars: () -> (vec nat) query;
+   getAvailableTitleDetails: () -> (vec Title__1) query;
+   getAvailableTitles: () -> (vec nat) query;
+   getAvatarById: (id: nat) -> (Avatar);
+   getAvatars: ("principal": principal) ->
+    (vec record {
+           TokenId;
+           TokenMetadata;
+         }) query;
+   getBeyondReferrals: (playerId: PlayerId) -> (vec PlayerId) query;
+   getBlockedUsers: () -> (vec PlayerId) query;
+   getCanistergeekInformation: (request: GetInformationRequest) ->
+    (GetInformationResponse) query;
+   getCharacters: ("principal": principal) ->
+    (vec record {
+           TokenId;
+           TokenMetadata;
+         }) query;
+   getChests: ("principal": principal) ->
+    (vec record {
+           TokenId;
+           TokenMetadata;
+         }) query;
+   getCosmicraftsStats: () -> (OverallStats) query;
+   getDirectReferrals: (playerId: PlayerId) -> (vec PlayerId) query;
+   getFriendRequests: () -> (vec FriendRequest) query;
+   getFriendsList: () -> (opt vec PlayerId) query;
+   getFullProfile: (player: PlayerId) ->
+    (opt record {
+           Player;
+           PlayerGamesStats;
+           AverageStats;
+         }) query;
+   getGeneralMissionProgress: (user: principal, missionID: nat) ->
+    (opt MissionsUser) query;
+   getGeneralMissions: () -> (vec MissionsUser);
+   getGrandReferrer: (playerId: PlayerId) -> (opt PlayerId) query;
+   getInactiveTournaments: () -> (vec Tournament) query;
+   getIndirectReferrals: (playerId: PlayerId) -> (vec PlayerId) query;
+   getInitArgs: () -> (TokenInitArgs) query;
+   getLastLogin: (playerId: PlayerId) ->
+    (opt record {
+           country: opt text;
+           timestamp: nat64;
+         }) query;
+   getMatchDetails: (matchID: MatchID) ->
+    (opt record {
+           MatchData;
+           vec record {
+                 Player;
+                 PlayerGamesStats;
+               };
+         }) query;
+   getMatchHistoryByPrincipal: (player: PlayerId) ->
+    (vec record {
+           MatchID;
+           opt BasicStats;
+         }) query;
+   getMatchIDsByPrincipal: (player: PlayerId) -> (vec MatchID) query;
+   getMatchParticipants: (matchID: MatchID) ->
+    (opt record {
+           principal;
+           opt principal;
+         }) query;
+   getMatchSearching: () -> (MMSearchStatus, nat, text);
+   getMatchStats: (MatchID: MatchID) -> (opt BasicStats) query;
+   getMessage: () -> (text) query;
+   getMintedInfo: (user: principal) ->
+    (record {
+       chests: record {
+                 quantity: nat;
+                 tokenIDs: vec TokenID;
+               };
+       gameNFTs: record {
+                   quantity: nat;
+                   tokenIDs: vec TokenID;
+                 };
+       stardust: nat;
+     }) query;
+   getMultiplier: (playerId: PlayerId) -> (float64) query;
+   getMyMatchData: () -> (opt FullMatchData, nat) composite_query;
+   getMyPrivacySettings: () -> (PrivacySetting) query;
+   getMyStats: () -> (opt PlayerGamesStats) query;
+   getNFTs: ("principal": principal) ->
+    (vec record {
+           TokenId;
+           TokenMetadata;
+         }) query;
+   getNotifications: () -> (vec Notification) query;
+   getPlayer: () -> (opt Player) query;
+   getPlayerAverageStats: (_player: principal) -> (opt AverageStats) query;
+   getPlayerDeck: ("principal": principal) -> (opt vec TokenId) query;
+   getPlayerElo: (player: principal) -> (float64) query;
+   getPlayerStats: (player: PlayerId) -> (opt PlayerGamesStats) query;
+   getProfile: (player: PlayerId) -> (opt Player) query;
+   getReferralCode: (player: PlayerId) -> (opt ReferralCode) query;
+   getReferrer: (playerId: PlayerId) -> (opt PlayerId) query;
+   getRegisteredUsers: (tournamentId: nat) -> (vec principal) query;
+   getSelectedAvatar: () -> (opt nat) query;
+   getSelectedTitle: () -> (opt nat) query;
+   getTitleById: (id: nat) -> (Title__1);
+   getTotalPlayers: () -> (nat) query;
+   getTotalReferralNetwork: (playerId: PlayerId) ->
+    (record {
+       beyondReferrals: vec PlayerId;
+       directReferrals: vec PlayerId;
+       indirectReferrals: vec PlayerId;
+     }) query;
+   getTournamentBracket: (tournamentId: nat) ->
+    (record {matches: vec Match;}) query;
+   getTransactionLogs: (user: principal, itemType: ItemType) ->
+    (vec LogEntry) query;
+   getTrophies: ("principal": principal) ->
+    (vec record {
+           TokenId;
+           TokenMetadata;
+         }) query;
+   getUnits: ("principal": principal) ->
+    (vec record {
+           TokenId;
+           TokenMetadata;
+         }) query;
+   getUserAchievementsStructure: (user: PlayerId) ->
+    (vec AchievementCategory) query;
+   getUserAchievementsStructureByCaller: () ->
+    (vec AchievementCategory) query;
+   getUserMissionProgress: (user: PlayerId, missionID: nat) ->
+    (opt MissionsUser) query;
+   getUserMissions: () -> (vec MissionsUser);
+   get_collection_owner: () -> (Account) query;
+   get_transaction: (i: TxIndex) -> (opt Transaction__1);
+   get_transactions: (req: GetTransactionsRequest) ->
+    (GetTransactionsResponse) query;
+   greet: (name: text) -> (text) query;
+   handleCombatXP: (deck: vec TokenId, totalXP: nat) -> (vec TokenId);
+   icrc1_balance_of: (args: Account__1) -> (Balance) query;
+   icrc1_decimals: () -> (nat8) query;
+   icrc1_fee: () -> (Balance) query;
+   icrc1_metadata: () -> (vec MetaDatum) query;
+   icrc1_minting_account: () -> (opt Account__1) query;
+   /// Functions for the ICRC1 token standard
+   icrc1_name: () -> (text) query;
+   icrc1_pay_for_transaction: (args: TransferArgs__1, from: principal) ->
+    (TransferResult);
+   icrc1_supported_standards: () -> (vec SupportedStandard) query;
+   icrc1_symbol: () -> (text) query;
+   icrc1_total_supply: () -> (Balance) query;
+   icrc1_transfer: (args: TransferArgs__1) -> (TransferResult);
+   icrc7_approve: (approvalArgs: ApprovalArgs) -> (ApprovalReceipt);
+   icrc7_balance_of: (account: Account) -> (BalanceResult) query;
+   icrc7_collection_metadata: () -> (CollectionMetadata) query;
+   icrc7_description: () -> (opt text) query;
+   icrc7_get_transactions: (getTransactionsArgs: GetTransactionsArgs) ->
+    (GetTransactionsResult);
+   icrc7_image: () -> (opt blob) query;
+   icrc7_metadata: (tokenId: TokenId) -> (MetadataResult) query;
+   icrc7_name: () -> (text) query;
+   icrc7_owner_of: (tokenId: TokenId) -> (OwnerResult) query;
+   icrc7_royalties: () -> (opt nat16) query;
+   icrc7_royalty_recipient: () -> (opt Account) query;
+   icrc7_supply_cap: () -> (opt nat) query;
+   icrc7_supported_standards: () -> (vec SupportedStandard) query;
+   icrc7_symbol: () -> (text) query;
+   icrc7_tokens_of: (account: Account) -> (TokensOfResult) query;
+   icrc7_total_supply: () -> (nat) query;
+   icrc7_transfer: (transferArgs: TransferArgs) -> (TransferReceipt);
+   isEven: (n: nat) -> (bool) query;
+   isGameMatched: () -> (bool, text) query;
+   joinTournament: (tournamentId: nat) -> (bool);
+   loadAchievements: () -> (bool);
+   login: (country: opt text) -> (bool, text);
+   mint: (args: Mint) -> (TransferResult);
+   mintAchievementRewards: (reward: AchievementReward, caller: PlayerId) ->
+    (bool, text);
+   mintChest: (PlayerId: principal, rarity: nat) -> (bool, text);
+   mintDeck: () -> (bool, text, vec TokenId);
+   mintNFT: (mintArgs: MintArgs) -> (MintReceipt);
+   openChest: (chestID: nat) -> (bool, text);
+   saveFinishedGame: (matchID: MatchID, _playerStats:
+    record {
+      botDifficulty: nat;
+      botMode: nat;
+      characterID: nat;
+      damageCritic: nat;
+      damageDealt: nat;
+      damageEvaded: nat;
+      damageTaken: nat;
+      deploys: nat;
+      energyChargeRate: nat;
+      energyGenerated: nat;
+      energyUsed: nat;
+      energyWasted: nat;
+      faction: nat;
+      gameMode: nat;
+      kills: nat;
+      secRemaining: nat;
+      wonGame: bool;
+      xpEarned: nat;
+    }) -> (bool, text);
+   searchActiveGeneralMissions: (user: principal) -> (vec MissionsUser) query;
+   searchActiveUserMissions: (user: PlayerId) -> (vec MissionsUser) query;
+   searchUserByUsername: (username: Username) -> (vec Player) query;
+   selectRandomUnits: (deck: vec TokenId) -> (vec TokenId);
+   sendFriendRequest: (friendId: PlayerId) -> (bool, text);
+   setMessage: (newMessage: text) -> ();
+   setPlayerActive: () -> (bool);
+   setPrivacySetting: (setting: PrivacySetting) -> (bool, text);
+   signup: (username: Username, avatar: AvatarID, referralCode:
+    opt ReferralCode, language: text) -> (bool, opt Player, text);
+   storeCurrentDeck: (newDeck: vec TokenId) -> (bool);
+   submitFeedback: (_tournamentId: nat, feedbackText: text) -> (bool);
+   submitMatchResult: (tournamentId: nat, matchId: nat, score: text) ->
+    (bool);
+   test: (playerId: PlayerId) ->
+    (opt
+      record {
+        elo: float64;
+        gamesLost: nat;
+        gamesWon: nat;
+        level: Level;
+        username: Username;
+        xp: nat;
+      }) query;
+   topPlayersByMultiplier: (page: nat) ->
+    (vec record {
+           PlayerId;
+           float64;
+         }) query;
+   unblockUser: (blockedId: PlayerId) -> (bool, text);
+   updateAddFriendAchievement: (user: PlayerId) -> (bool, text);
+   updateAvatar: (avatarId: nat) -> (bool, text);
+   updateAvatarChangeAchievement: (user: PlayerId) -> (bool, text);
+   updateBracket: (tournamentId: nat) -> (bool);
+   updateBracketAfterMatchUpdate: (tournamentId: nat, matchId: nat, winner:
+    principal) -> ();
+   updateCanistergeekInformation: (request: UpdateInformationRequest) -> ();
+   updateDescription: (description: Description) -> (bool, PlayerId, text);
+   updatePlayerGameStats: (playerId: PlayerId, _playerStats: PlayerStats,
+    _winner: nat, _looser: nat) -> () oneway;
+   updatePlayerLevel: (playerId: principal) -> ();
+   updateProgressManager: (user: principal, playerStats: PlayerStats) ->
+    (bool, text);
+   updateSoulNFTPlayed: (playerDeck: vec TokenId) -> (vec TokenId);
+   updateTitle: (titleId: nat) -> (bool, text);
+   updateUpgradeNFTAchievement: (user: PlayerId) -> (bool, text);
+   updateUsername: (username: Username) -> (bool, PlayerId, text);
+   upgradeNFT: (nftID: TokenID) -> (bool, text);
+ };
+type CollectionMetadata = 
+ record {
+   description: opt text;
+   image: opt blob;
+   name: text;
+   royalties: opt nat16;
+   royaltyRecipient: opt Account;
+   supplyCap: opt nat;
+   symbol: text;
+   totalSupply: nat;
+ };
+type CollectionInitArgs = 
+ record {
+   description: opt text;
+   image: opt blob;
+   name: text;
+   royalties: opt nat16;
+   royaltyRecipient: opt Account;
+   supplyCap: opt nat;
+   symbol: text;
+ };
+type CollectMetricsRequestType = 
+ variant {
+   force;
+   normal;
+ };
+type Category = 
+ variant {
+   Avatar;
+   Chest;
+   Trophy;
+   Unit: Unit;
+ };
+type CanisterMetricsData = 
+ variant {
+   daily: vec DailyMetricsData;
+   hourly: vec HourlyMetricsData;
+ };
+type CanisterMetrics = record {data: CanisterMetricsData;};
+type CanisterMemoryAggregatedData = vec nat64;
+type CanisterLogResponse = 
+ variant {
+   messages: CanisterLogMessages;
+   messagesInfo: CanisterLogMessagesInfo;
+ };
+type CanisterLogRequest = 
+ variant {
+   getLatestMessages: GetLatestLogMessagesParameters;
+   getMessages: GetLogMessagesParameters;
+   getMessagesInfo;
+ };
+type CanisterLogMessagesInfo = 
+ record {
+   count: nat32;
+   features: vec opt CanisterLogFeature;
+   firstTimeNanos: opt Nanos;
+   lastTimeNanos: opt Nanos;
+ };
+type CanisterLogMessages = 
+ record {
+   data: vec LogMessagesData;
+   lastAnalyzedMessageTimeNanos: opt Nanos;
+ };
+type CanisterLogFeature = 
+ variant {
+   filterMessageByContains;
+   filterMessageByRegex;
+ };
+type CanisterHeapMemoryAggregatedData = vec nat64;
+type CanisterCyclesAggregatedData = vec nat64;
+type CallError = 
+ variant {
+   AlreadyExistTokenId;
+   GenericError;
+   InvalidRecipient;
+   InvalidTokenId;
+   SupplyCapOverflow;
+   Unauthorized;
+ };
+type BurnArgs = 
+ record {
+   amount: Balance;
+   created_at_time: opt nat64;
+   from_subaccount: opt Subaccount;
+   memo: opt blob;
+ };
+type Burn = 
+ record {
+   amount: Balance;
+   created_at_time: opt nat64;
+   from: Account__1;
+   memo: opt blob;
+ };
+type BasicStats = record {playerStats: vec PlayerStats;};
+type BasicMetadata = 
+ record {
+   damage: nat;
+   health: nat;
+   level: nat;
+ };
+type BalanceResult = 
+ variant {
+   Err: CallError;
+   Ok: nat;
+ };
+type Balance = nat;
+type AverageStats = 
+ record {
+   averageDamageDealt: nat;
+   averageEnergyGenerated: nat;
+   averageEnergyUsed: nat;
+   averageEnergyWasted: nat;
+   averageKills: nat;
+   averageXpEarned: nat;
+ };
+type AvatarID = nat;
+type Avatar = 
+ record {
+   description: text;
+   id: nat;
+ };
+type ArchivedTransaction = 
+ record {
+   callback: QueryArchiveFn;
+   length: nat;
+   start: TxIndex;
+ };
+type ApprovalReceipt = 
+ variant {
+   Err: ApprovalError;
+   Ok: ApprovalId;
+ };
+type ApprovalId = nat;
+type ApprovalError = 
+ variant {
+   GenericError: record {
+                   error_code: nat;
+                   message: text;
+                 };
+   TemporarilyUnavailable: record {};
+   TooOld;
+   Unauthorized: record {token_ids: vec TokenId;};
+ };
+type ApprovalArgs = 
+ record {
+   created_at_time: opt nat64;
+   expires_at: opt nat64;
+   from_subaccount: opt Subaccount;
+   memo: opt blob;
+   spender: Account;
+   token_ids: opt vec TokenId;
+ };
+type AdvancedSettings = 
+ record {
+   burned_tokens: Balance;
+   permitted_drift: Timestamp;
+   transaction_window: Timestamp;
+ };
+type AdminFunction = 
+ variant {
+   BurnToken: record {
+                opt Account;
+                Account;
+                TokenId;
+                nat64;
+              };
+   CreateMission:
+    record {
+      text;
+      MissionCategory;
+      MissionType;
+      RewardType;
+      nat;
+      nat;
+      nat64;
+    };
+   CreateMissionsPeriodically;
+   GetCollectionOwner: Account;
+   GetInitArgs: CollectionInitArgs;
+   MintChest: record {
+                principal;
+                nat;
+              };
+ };
+type AchievementType = 
+ variant {
+   AchievementsUnlocked;
+   ChestsMinted;
+   ChestsOpened;
+   Customization;
+   DailyMissionsCompleted;
+   DamageDealt;
+   DamageTaken;
+   EnergyUsed;
+   FluxMinted;
+   FriendsAdded;
+   GameModePlayed;
+   GamesCompleted;
+   GamesPlayed;
+   GamesWithCharacter;
+   GamesWithFaction;
+   GamesWon;
+   Kills;
+   LevelReached;
+   NFTsMinted;
+   RewardsClaimed;
+   ShardsMinted;
+   Social;
+   TimePlayed;
+   UnitsDeployed;
+   UpgradeNFT;
+   UserMissionsCompleted;
+   WeeklyMissionsCompleted;
+   XPEarned;
+ };
+type AchievementRewardsType = 
+ variant {
+   Avatar;
+   Chest;
+   Multiplier;
+   NFT;
+   Stardust;
+   Title;
+   XP;
+ };
+type AchievementReward = 
+ record {
+   amount: nat;
+   rewardType: AchievementRewardsType;
+ };
+type AchievementLine = 
+ record {
+   categoryId: nat;
+   claimed: bool;
+   completed: bool;
+   id: nat;
+   individualAchievements: vec IndividualAchievement;
+   name: text;
+   progress: nat;
+   requiredProgress: nat;
+   reward: vec AchievementReward;
+ };
+type AchievementCategory = 
+ record {
+   achievements: vec AchievementLine;
+   claimed: bool;
+   completed: bool;
+   id: nat;
+   name: text;
+   progress: nat;
+   requiredProgress: nat;
+   reward: vec AchievementReward;
+ };
+type Account__1 = 
+ record {
+   owner: principal;
+   subaccount: opt Subaccount;
+ };
+type Account = 
+ record {
+   owner: principal;
+   subaccount: opt blob;
+ };
+service : () -> Cosmicrafts

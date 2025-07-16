@@ -1,6 +1,9 @@
 class MetaMaskService {
   async isMetaMaskInstalled() {
     const isInstalled = typeof window.ethereum !== 'undefined';
+    if (!isInstalled) {
+      console.error('MetaMask is not installed (window.ethereum missing)');
+    }
     return isInstalled;
   }
 
@@ -11,20 +14,23 @@ class MetaMaskService {
       throw new Error('MetaMask is not installed');
     }
 
-    let accounts = await window.ethereum.request({ method: 'eth_accounts' });
+    try {
+      // Always prompt user to connect MetaMask
+      let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      console.log('MetaMask eth_requestAccounts result:', accounts);
 
-    // If accounts are empty, prompt user to unlock MetaMask
-    if (accounts.length === 0) {
-      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      if (!accounts || accounts.length === 0) {
+        alert('MetaMask is locked or no accounts found.');
+        throw new Error('MetaMask is locked or no accounts found.');
+      }
+
+      console.log('Ethereum address:', accounts[0]);
+      return accounts[0]; // Returns the first account
+    } catch (err) {
+      console.error('MetaMask eth_requestAccounts error:', err);
+      alert('MetaMask error: ' + (err && err.message ? err.message : err));
+      throw err;
     }
-
-    if (accounts.length === 0) {
-      alert('Metamask is locked.');
-      throw new Error('Metamask is locked.');
-    }
-
-    console.log('Ethereum address:', accounts[0]);
-    return accounts[0]; // Returns the first account
   }
 
   async signMessage(message) {
@@ -34,14 +40,19 @@ class MetaMaskService {
       throw new Error('MetaMask is not installed');
     }
 
-    const ethereumAddress = await this.getEthereumAddress();
-
-    const signature = await window.ethereum.request({
-      method: 'personal_sign',
-      params: [message, ethereumAddress],
-    });
-    //console.log('Signature:', signature);
-    return signature; // Returns the signature
+    try {
+      const ethereumAddress = await this.getEthereumAddress();
+      const signature = await window.ethereum.request({
+        method: 'personal_sign',
+        params: [message, ethereumAddress],
+      });
+      console.log('MetaMask signature:', signature);
+      return signature; // Returns the signature
+    } catch (err) {
+      console.error('MetaMask signMessage error:', err);
+      alert('MetaMask signMessage error: ' + (err && err.message ? err.message : err));
+      throw err;
+    }
   }
 }
 
