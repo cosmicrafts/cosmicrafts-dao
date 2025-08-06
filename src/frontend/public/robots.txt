@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cosmicrafts.com/sitemap.xml 
