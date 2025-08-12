@@ -97,6 +97,15 @@ const sendSeedPhraseToUnity = () => {
 };
 
 onMounted(async () => {
+  // Track game page load
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'game_page_loaded', {
+      game: 'cosmicrafts_adventures_3d',
+      game_type: 'unity_webgl',
+      game_category: 'prototype'
+    });
+  }
+  
   try {
     // Create the Unity WebGL instance
     unityContext.value = new UnityWebgl('#unity-canvas', config);
@@ -110,6 +119,16 @@ onMounted(async () => {
     
     window.dispatchUnityEvent = (name, ...args) => {
       console.log(`Unity dispatched event: ${name}`, args);
+      
+      // Track Unity game events
+      if (typeof window.clarity !== 'undefined') {
+        window.clarity('event', 'unity_game_event', {
+          game: 'cosmicrafts_adventures_3d',
+          event_name: name,
+          event_args: args
+        });
+      }
+      
       if (name === 'requestSeedPhrase') {
         sendSeedPhraseToUnity();
       }
@@ -120,15 +139,40 @@ onMounted(async () => {
       .on('progress', (progress: number) => {
         // Convert Unity's 0-1 progress to 0-100%
         loadingProgress.value = progress * 100;
+        
+        // Track loading progress milestones
+        if (typeof window.clarity !== 'undefined' && progress > 0.5 && progress < 0.51) {
+          window.clarity('event', 'game_loading_milestone', {
+            game: 'cosmicrafts_adventures_3d',
+            progress: Math.round(progress * 100),
+            milestone: '50_percent_loaded'
+          });
+        }
       })
       .on('error', (message: string) => {
         console.error('Unity error:', message);
         error.value = 'Error loading game: ' + message;
+        
+        // Track game loading error
+        if (typeof window.clarity !== 'undefined') {
+          window.clarity('event', 'game_loading_error', {
+            game: 'cosmicrafts_adventures_3d',
+            error: message
+          });
+        }
       })
       .on('mounted', () => {
         console.log('Unity WebGL instance mounted successfully');
         loading.value = false;
         window.gameInstance = unityContext.value;
+        
+        // Track successful game load
+        if (typeof window.clarity !== 'undefined') {
+          window.clarity('event', 'game_loaded_successfully', {
+            game: 'cosmicrafts_adventures_3d',
+            load_time: Date.now()
+          });
+        }
         
         setTimeout(() => {
           sendSeedPhraseToUnity();
@@ -147,6 +191,14 @@ onMounted(async () => {
   } catch (err: any) {
     error.value = 'Error initializing game: ' + (err.message || err);
     console.error('Unity initialization error:', err);
+    
+    // Track initialization error
+    if (typeof window.clarity !== 'undefined') {
+      window.clarity('event', 'game_initialization_error', {
+        game: 'cosmicrafts_adventures_3d',
+        error: err.message || err
+      });
+    }
   }
 });
 

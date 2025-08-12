@@ -585,6 +585,15 @@ export default {
       if (isOpeningChest.value) return;
       
       try {
+        // Track chest opening start
+        if (typeof window.clarity !== 'undefined') {
+          window.clarity('event', 'chest_opening_started', {
+            chest_id: chest.id,
+            chest_name: chest.name,
+            chest_type: chest.category
+          });
+        }
+        
         // Set up state for opening
         isOpeningChest.value = true;
         selectedChest.value = chest;
@@ -603,6 +612,16 @@ export default {
             openingStage.value = 2;
           }, 2000);
           
+          // Track successful chest opening
+          if (typeof window.clarity !== 'undefined') {
+            window.clarity('event', 'chest_opened_successfully', {
+              chest_id: chest.id,
+              chest_name: chest.name,
+              rewards_count: rewards.length,
+              rewards: rewards.map(r => r.type || 'unknown')
+            });
+          }
+          
           addLog(`Successfully opened ${chest.name} chest!`, 'success');
         } else {
           throw new Error("No rewards received from chest opening");
@@ -610,6 +629,16 @@ export default {
       } catch (error) {
         console.error('Error opening chest:', error);
         openingError.value = error.message;
+        
+        // Track chest opening error
+        if (typeof window.clarity !== 'undefined') {
+          window.clarity('event', 'chest_opening_error', {
+            chest_id: chest.id,
+            chest_name: chest.name,
+            error: error.message
+          });
+        }
+        
         addLog(`Error opening chest: ${error.message}`, 'error');
       }
     }

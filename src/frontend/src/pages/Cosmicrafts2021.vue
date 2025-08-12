@@ -72,6 +72,15 @@ const config = {
 };
 
 onMounted(async () => {
+  // Track game page load
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'game_page_loaded', {
+      game: 'cosmicrafts_alpha_2021',
+      game_type: 'unity_webgl',
+      game_category: 'alpha'
+    });
+  }
+  
   try {
     // Create the Unity WebGL instance
     unityContext.value = new UnityWebgl('#unity-canvas', config);
@@ -84,25 +93,67 @@ onMounted(async () => {
     // Add a generic event dispatcher for Unity
     window.dispatchUnityEvent = (name, ...args) => {
       console.log(`Unity dispatched event: ${name}`, args);
+      
+      // Track Unity game events
+      if (typeof window.clarity !== 'undefined') {
+        window.clarity('event', 'unity_game_event', {
+          game: 'cosmicrafts_alpha_2021',
+          event_name: name,
+          event_args: args
+        });
+      }
     };
     
     // Set up event listeners
     unityContext.value
       .on('progress', (progress: number) => {
         loadingProgress.value = progress * 100;
+        
+        // Track loading progress milestones
+        if (typeof window.clarity !== 'undefined' && progress > 0.5 && progress < 0.51) {
+          window.clarity('event', 'game_loading_milestone', {
+            game: 'cosmicrafts_alpha_2021',
+            progress: Math.round(progress * 100),
+            milestone: '50_percent_loaded'
+          });
+        }
       })
       .on('error', (message: string) => {
         console.error('Unity error:', message);
         error.value = 'Error loading Cosmicrafts Alpha 2021: ' + message;
+        
+        // Track game loading error
+        if (typeof window.clarity !== 'undefined') {
+          window.clarity('event', 'game_loading_error', {
+            game: 'cosmicrafts_alpha_2021',
+            error: message
+          });
+        }
       })
       .on('mounted', () => {
         loading.value = false;
         window.gameInstance = unityContext.value;
+        
+        // Track successful game load
+        if (typeof window.clarity !== 'undefined') {
+          window.clarity('event', 'game_loaded_successfully', {
+            game: 'cosmicrafts_alpha_2021',
+            load_time: Date.now()
+          });
+        }
       });
     
   } catch (err: any) {
     error.value = 'Error initializing Cosmicrafts Alpha 2021: ' + (err.message || err);
     console.error('Unity initialization error:', err);
+    
+    // Track initialization error
+    if (typeof window.clarity !== 'undefined') {
+      window.clarity('event', 'game_initialization_error', {
+        game: 'cosmicrafts_alpha_2021',
+        error: err.message || err
+      });
+    }
   }
 });
 

@@ -39,15 +39,39 @@ const additionalLogoSrc = computed(() => {
 
 // Close the menu
 const closeMenu = () => {
+  // Track mobile menu close
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'mobile_menu_closed', {
+      location: 'mobile_menu',
+      action: 'close'
+    });
+  }
   emit('closeMenu');
 };
 
 // Scroll to top
 const scrollToTop = () => {
+  // Track mobile logo click
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'mobile_logo_clicked', {
+      action: 'scroll_to_top'
+    });
+  }
+  
   window.scrollTo({
     top: 0,
     behavior: 'smooth',
   });
+};
+
+// Track mobile navigation clicks
+const trackMobileNavClick = (navItem) => {
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'mobile_nav_clicked', {
+      nav_item: navItem,
+      location: 'mobile_menu'
+    });
+  }
 };
 </script>
 
@@ -74,16 +98,16 @@ const scrollToTop = () => {
     <div class="nav-container">
       <ul class="nav-links">
         <li>
-          <router-link to="/games" class="cosmic-nav-link" :style="{ '--index': 0 }" @click="closeMenu">
+          <router-link to="/games" class="cosmic-nav-link" :style="{ '--index': 0 }" @click="() => { trackMobileNavClick('games'); closeMenu(); }">
             {{ t('header.games') }}
           </router-link>
         </li>
         <li v-for="(item, index) in [
-          { label: 'header.dao', path: '/dao' },
-          { label: 'header.whitepaper', path: '/whitepaper' },
-          { label: 'header.roadmap', path: '/roadmap' }
+          { label: 'header.dao', path: '/dao', key: 'dao' },
+          { label: 'header.whitepaper', path: '/whitepaper', key: 'whitepaper' },
+          { label: 'header.roadmap', path: '/roadmap', key: 'roadmap' }
         ]" :key="index + 1">
-          <router-link :to="item.path" class="cosmic-nav-link" :style="{ '--index': index + 1 }" @click="closeMenu">
+          <router-link :to="item.path" class="cosmic-nav-link" :style="{ '--index': index + 1 }" @click="() => { trackMobileNavClick(item.key); closeMenu(); }">
             {{ t(item.label) }}
           </router-link>
         </li>

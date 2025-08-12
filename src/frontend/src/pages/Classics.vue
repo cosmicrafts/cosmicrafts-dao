@@ -161,14 +161,41 @@ const selectGame = (gameKey) => {
   selectedGameTitle.value = game.title;
   selectedGameImage.value = game.image;
   showLauncher.value = true;
+  
+  // Track classic game selection
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'classic_game_selected', {
+      game_key: gameKey,
+      game_title: game.title,
+      game_category: 'classic'
+    });
+  }
 };
 
 const closeLauncher = () => {
   showLauncher.value = false;
   selectedGame.value = null;
+  
+  // Track launcher closed
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'classic_game_launcher_closed', {
+      game_key: selectedGame.value,
+      game_title: selectedGameTitle.value
+    });
+  }
 };
 
 const launchGame = () => {
+  // Track classic game launch
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'classic_game_launched', {
+      game_key: selectedGame.value,
+      game_title: selectedGameTitle.value,
+      launch_type: launchType.value,
+      game_route: games[selectedGame.value].route
+    });
+  }
+  
   if (launchType.value === 'web') {
     // Navigate to the game route
     const game = games[selectedGame.value];

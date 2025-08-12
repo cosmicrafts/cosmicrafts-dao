@@ -47,14 +47,44 @@ const selectGame = (gameKey) => {
   selectedGameTitle.value = game.title;
   selectedGameImage.value = game.image;
   showLauncher.value = true;
+  
+  // Track game selection
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'game_selected', {
+      game_key: gameKey,
+      game_title: game.title,
+      game_type: game.description.includes('3D') ? '3D' : '2D',
+      game_category: gameKey === 'adventures' ? 'prototype' : 
+                    gameKey === 'cosmicrafts2d' ? 'classic' : 
+                    gameKey === 'alpha2021' ? 'alpha' : 'beta'
+    });
+  }
 };
 
 const closeLauncher = () => {
   showLauncher.value = false;
   selectedGame.value = null;
+  
+  // Track launcher closed
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'game_launcher_closed', {
+      game_key: selectedGame.value,
+      game_title: selectedGameTitle.value
+    });
+  }
 };
 
 const launchGame = () => {
+  // Track game launch
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'game_launched', {
+      game_key: selectedGame.value,
+      game_title: selectedGameTitle.value,
+      launch_type: launchType.value,
+      game_route: games[selectedGame.value].route
+    });
+  }
+  
   // Always navigate to the game route
   const game = games[selectedGame.value];
   router.push(game.route);
@@ -63,9 +93,25 @@ const launchGame = () => {
 
 // CTA handlers for banner
 const openEpicGames = () => {
+  // Track Epic Games click
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'external_game_link_clicked', {
+      platform: 'epic_games',
+      game: 'cosmicrafts_battlegrounds',
+      action: 'wishlist'
+    });
+  }
   window.open('https://store.epicgames.com/en-US/p/cosmicrafts-499a8f', '_blank');
 };
 const openItchIo = () => {
+  // Track itch.io click
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'external_game_link_clicked', {
+      platform: 'itch_io',
+      game: 'cosmicrafts_battlegrounds',
+      action: 'play_demo'
+    });
+  }
   window.open('https://ohsalmeron.itch.io/cosmicrafts', '_blank');
 };
 </script>

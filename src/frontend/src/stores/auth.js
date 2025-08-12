@@ -284,6 +284,10 @@ async getPlayerByPrincipal(principal) {
     async loginWithPlug() {
       try {
         if (!window.ic || !window.ic.plug) {
+          // Track wallet not installed
+          if (typeof window.clarity !== 'undefined') {
+            window.clarity('event', 'wallet_not_installed', { wallet: 'plug' });
+          }
           throw new Error('Plug Wallet is not installed. Please install the Plug extension.');
         }
     
@@ -294,6 +298,10 @@ async getPlayerByPrincipal(principal) {
             whitelist: ['opcce-byaaa-aaaak-qcgda-cai'], // Replace with your canister ID
           });
           if (!connected) {
+            // Track connection failure
+            if (typeof window.clarity !== 'undefined') {
+              window.clarity('event', 'wallet_connection_failed', { wallet: 'plug', reason: 'user_rejected' });
+            }
             throw new Error('Failed to connect to Plug Wallet.');
           }
         }
@@ -301,11 +309,23 @@ async getPlayerByPrincipal(principal) {
         const principal = await window.ic.plug.getPrincipal();
         console.log('Plug Wallet Principal:', principal);
     
+        // Track successful connection
+        if (typeof window.clarity !== 'undefined') {
+          window.clarity('event', 'wallet_connected', { 
+            wallet: 'plug', 
+            principal: principal.toText().substring(0, 10) + '...' 
+          });
+        }
+    
         // Generate and save seed phrase
         const seedPhrase = await generateSeedPhrase(principal.toText());
         await this.handleLoginFlow(seedPhrase);
       } catch (error) {
         console.error('Plug Wallet login error:', error);
+        // Track login error
+        if (typeof window.clarity !== 'undefined') {
+          window.clarity('event', 'wallet_login_error', { wallet: 'plug', error: error.message });
+        }
         throw new Error('Plug Wallet login failed.');
       }
     },

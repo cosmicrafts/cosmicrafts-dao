@@ -89,19 +89,19 @@
 
         <!-- Social Media Links -->
         <div class="social-links">
-          <a href="https://x.com/cosmicrafts" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://x.com/cosmicrafts" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }" @click="trackSocialClick('x')">
             <img src="@/assets/icons/x.svg" alt="Twitter" />
           </a>
-          <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }" @click="trackSocialClick('discord')">
             <img src="@/assets/icons/discord.svg" alt="Discord" />
           </a>
-          <a href="https://www.youtube.com/@cosmicrafts" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://www.youtube.com/@cosmicrafts" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }" @click="trackSocialClick('youtube')">
             <img src="@/assets/icons/youtube.svg" alt="YouTube" />
           </a>
-          <a href="https://instagram.com/cosmicraftz" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://instagram.com/cosmicraftz" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }" @click="trackSocialClick('instagram')">
             <img src="@/assets/icons/instagram.svg" alt="Instagram" />
           </a>
-          <a href="https://facebook.com/cosmicrafts" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }">
+          <a href="https://facebook.com/cosmicrafts" class="cosmic-social-icon" :class="{ 'initial-load': !hasLoadedOnce }" @click="trackSocialClick('facebook')">
             <img src="@/assets/icons/facebook.svg" alt="Facebook" />
           </a>
         </div>
@@ -250,6 +250,17 @@ const socialLinks = [
 
 // **Function to handle CTA button clicks**
 const handleCTA = (link, isReferral) => {
+  // Track CTA button click
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'hero_cta_clicked', {
+      slide_index: currentSlide.value,
+      slide_title: slides.value[currentSlide.value].title,
+      link: link,
+      is_referral: isReferral,
+      is_external: link.startsWith('http')
+    });
+  }
+  
   if (isReferral) {
     // Show referral code notification
     showReferralNotification();
@@ -337,6 +348,16 @@ function toggleFreeze() {
 
 function nextSlide() {
   if (isFrozen.value) return;
+  
+  // Track manual slide navigation
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'hero_slide_navigated', {
+      action: 'next',
+      from_slide: currentSlide.value,
+      to_slide: (currentSlide.value + 1) % slides.value.length
+    });
+  }
+  
   const newSlide = (currentSlide.value + 1) % slides.value.length;
   transitionSlides(newSlide, "next"); // Set direction as "next"
   resetAutoSlide();
@@ -344,6 +365,16 @@ function nextSlide() {
 
 function prevSlide() {
   if (isFrozen.value) return;
+  
+  // Track manual slide navigation
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'hero_slide_navigated', {
+      action: 'prev',
+      from_slide: currentSlide.value,
+      to_slide: (currentSlide.value - 1 + slides.value.length) % slides.value.length
+    });
+  }
+  
   const newSlide = (currentSlide.value - 1 + slides.value.length) % slides.value.length;
   transitionSlides(newSlide, "prev"); // Set direction as "prev"
   resetAutoSlide();
@@ -352,10 +383,31 @@ function prevSlide() {
 function goToSlide(index) {
   if (index === currentSlide.value) return; // Do nothing if the same slide is clicked
   
+  // Track slide indicator click
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'hero_slide_indicator_clicked', {
+      from_slide: currentSlide.value,
+      to_slide: index,
+      direction: index > currentSlide.value ? "next" : "prev"
+    });
+  }
+  
   const direction = index > currentSlide.value ? "next" : "prev";
   transitionSlides(index, direction); // Pass the direction based on relative position
   resetAutoSlide();
 }
+
+// Track social media clicks
+const trackSocialClick = (platform) => {
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'hero_social_clicked', {
+      platform: platform,
+      slide_index: currentSlide.value,
+      slide_title: slides.value[currentSlide.value].title,
+      location: 'hero_section'
+    });
+  }
+};
 
 function startAutoSlide() {
   slideInterval = setInterval(nextSlide, 5000); // Slightly faster auto-slide

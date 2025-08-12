@@ -6,6 +6,7 @@ import Header from './components/layout/Header.vue';
 import Footer from './components/layout/Footer.vue';
 import Modal from '@/components/core/modals/BaseModal.vue';
 import { useCanonical } from '@/composables/useCanonical'; 
+import clarityService from '@/services/clarity';
 // Temporarily disabled Chat component for performance testing
 // import Chat from "@/components/core/Chat.vue";
 import EscMenu from "@/components/navigation/menus/EscMenu.vue";
@@ -33,6 +34,14 @@ watch(() => route.path, (newPath) => {
     isCosmicrafts2D: isCosmicrafts2D.value,
     isFullscreenGame: isFullscreenGame.value
   });
+  
+  // Track page views with Clarity
+  if (clarityService.isInitialized) {
+    clarityService.trackPageView(newPath, {
+      isGame: isGame.value,
+      isFullscreenGame: isFullscreenGame.value
+    });
+  }
 }, { immediate: true });
 const toastStore = useToastStore();
 const globalToastSystem = ref(null);
@@ -105,6 +114,14 @@ const handleEscKey = (event) => {
   
   // Toggle the menu if no other windows are open
   isEscMenuOpen.value = !isEscMenuOpen.value;
+  
+  // Track ESC menu usage
+  if (clarityService.isInitialized) {
+    clarityService.trackEvent('esc_menu_opened', {
+      action: isEscMenuOpen.value ? 'open' : 'close'
+    });
+  }
+  
   event.stopPropagation();
   event.preventDefault();
 };
@@ -118,6 +135,9 @@ const handleKeyDown = (event) => {
 
 onMounted(() => {
   document.addEventListener('keydown', handleKeyDown);
+  
+  // Initialize Microsoft Clarity
+  clarityService.init();
   
   // Register the toast system with the store
   if (globalToastSystem.value) {

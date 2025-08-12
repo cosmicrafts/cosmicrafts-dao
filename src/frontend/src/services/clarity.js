@@ -1,10 +1,8 @@
-// Microsoft Clarity Service using NPM package
-import { clarity } from '@microsoft/clarity';
-
+// Microsoft Clarity Service - Compatible with existing window.clarity calls
 class ClarityService {
   constructor() {
     this.isInitialized = false;
-    this.projectId = 'YOUR_CLARITY_PROJECT_ID'; // Replace with your actual ID
+    this.projectId = 'stoo40s80v'; // Replace this with your actual Clarity Project ID
   }
 
   // Initialize Clarity
@@ -12,39 +10,37 @@ class ClarityService {
     if (this.isInitialized || typeof window === 'undefined') return;
 
     try {
-      // Initialize Clarity with NPM package
-      clarity.init(this.projectId, {
-        // Configuration options
-        logLevel: 'warn',
-        upload: 'https://c.clarity.ms/collect',
-        delay: 1000,
-        // Enable session recordings
-        sessionReplay: {
-          enabled: true,
-          maskTextInputs: true,
-          maskUserInputs: true
-        },
-        // Enable heatmaps
-        heatmap: {
-          enabled: true
-        }
-      });
+      // Load Clarity script dynamically
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.async = true;
+      script.src = `https://www.clarity.ms/tag/${this.projectId}`;
 
-      this.isInitialized = true;
-      console.log('Microsoft Clarity initialized with NPM package');
+      script.onload = () => {
+        this.isInitialized = true;
+        console.log('Microsoft Clarity initialized');
+      };
+
+      script.onerror = (error) => {
+        console.error('Failed to load Clarity script:', error);
+      };
+
+      const firstScript = document.getElementsByTagName('script')[0];
+      firstScript.parentNode.insertBefore(script, firstScript);
+
     } catch (error) {
       console.error('Failed to initialize Clarity:', error);
     }
   }
 
-  // Track custom events
+  // Track custom events - compatible with existing window.clarity calls
   trackEvent(eventName, properties = {}) {
-    if (!this.isInitialized || typeof clarity === 'undefined') return;
-
-    try {
-      clarity.event(eventName, properties);
-    } catch (error) {
-      console.warn('Clarity event tracking failed:', error);
+    if (typeof window.clarity !== 'undefined') {
+      try {
+        window.clarity('event', eventName, properties);
+      } catch (error) {
+        console.warn('Clarity event tracking failed:', error);
+      }
     }
   }
 
@@ -118,6 +114,50 @@ class ClarityService {
       ...context,
       timestamp: new Date().toISOString()
     });
+  }
+
+  // Identify user (for better tracking)
+  identifyUser(userId, sessionId = null, pageId = null, friendlyName = null) {
+    if (typeof window.clarity !== 'undefined') {
+      try {
+        window.clarity('identify', userId, sessionId, pageId, friendlyName);
+      } catch (error) {
+        console.warn('Clarity identify failed:', error);
+      }
+    }
+  }
+
+  // Set custom tags for filtering
+  setTag(key, value) {
+    if (typeof window.clarity !== 'undefined') {
+      try {
+        window.clarity('setTag', key, value);
+      } catch (error) {
+        console.warn('Clarity setTag failed:', error);
+      }
+    }
+  }
+
+  // Upgrade session for priority recording
+  upgradeSession(reason) {
+    if (typeof window.clarity !== 'undefined') {
+      try {
+        window.clarity('upgrade', reason);
+      } catch (error) {
+        console.warn('Clarity upgrade failed:', error);
+      }
+    }
+  }
+
+  // Set cookie consent
+  setConsent(consent = true) {
+    if (typeof window.clarity !== 'undefined') {
+      try {
+        window.clarity('consent', consent);
+      } catch (error) {
+        console.warn('Clarity consent failed:', error);
+      }
+    }
   }
 }
 

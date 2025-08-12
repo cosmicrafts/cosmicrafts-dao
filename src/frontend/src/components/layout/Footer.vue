@@ -32,10 +32,39 @@ window.addEventListener('resize', () => {
 });
 
 const toggleSection = (section) => {
+  // Track footer accordion toggle
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'footer_accordion_toggled', {
+      section: section,
+      action: expandedSections.value.has(section) ? 'close' : 'open',
+      location: 'footer_mobile'
+    });
+  }
+  
   if (expandedSections.value.has(section)) {
     expandedSections.value.delete(section);
   } else {
     expandedSections.value.add(section);
+  }
+};
+
+// Track footer navigation clicks
+const trackFooterNavClick = (navItem) => {
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'footer_nav_clicked', {
+      nav_item: navItem,
+      location: 'footer'
+    });
+  }
+};
+
+// Track footer social media clicks
+const trackFooterSocialClick = (platform) => {
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'footer_social_clicked', {
+      platform: platform,
+      location: 'footer'
+    });
   }
 };
 
@@ -55,19 +84,19 @@ const isSectionExpanded = (section) => {
       <div class="social-top-container">
         <h4 class="cosmic-text-glow">{{ t('footer.stayConnected') }}</h4>
         <div class="social-icons-group">
-          <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer">
+          <a href="https://discord.com/invite/cosmicrafts-884272584491941888" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer" @click="trackFooterSocialClick('discord')">
             <img src="@/assets/icons/discord.svg" alt="Discord" />
           </a>
-          <a href="https://x.com/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer">
+          <a href="https://x.com/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer" @click="trackFooterSocialClick('x')">
             <img src="@/assets/icons/x.svg" alt="Twitter" />
           </a>
-          <a href="https://facebook.com/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer">
+          <a href="https://facebook.com/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer" @click="trackFooterSocialClick('facebook')">
             <img src="@/assets/icons/facebook.svg" alt="Facebook" />
           </a>
-          <a href="https://dscvr.one/p/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer">
+          <a href="https://dscvr.one/p/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer" @click="trackFooterSocialClick('dscvr')">
             <img src="@/assets/icons/dscvr.svg" alt="DSCVR" />
           </a>
-          <a href="https://distrikt.app/u/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer">
+          <a href="https://distrikt.app/u/cosmicrafts" class="cosmic-social-icon" target="_blank" rel="noopener noreferrer" @click="trackFooterSocialClick('distrikt')">
             <img src="@/assets/icons/distrikt.svg" alt="Distrikt" />
           </a>
         </div>
@@ -81,9 +110,9 @@ const isSectionExpanded = (section) => {
         <div class="desktop-nav-column cosmic-panel">
           <h4 class="cosmic-text-glow desktop-nav-title">{{ t('footer.explore') }}</h4>
           <ul class="desktop-link-list">
-            <li><router-link to="/careers" class="cosmic-nav-link">{{ t('footer.careers') }}</router-link></li>
-            <li><router-link to="/about" class="cosmic-nav-link">{{ t('footer.about') }}</router-link></li>
-            <li><router-link to="/contact" class="cosmic-nav-link">{{ t('footer.support') }}</router-link></li>
+            <li><router-link to="/careers" class="cosmic-nav-link" @click="trackFooterNavClick('careers')">{{ t('footer.careers') }}</router-link></li>
+            <li><router-link to="/about" class="cosmic-nav-link" @click="trackFooterNavClick('about')">{{ t('footer.about') }}</router-link></li>
+            <li><router-link to="/contact" class="cosmic-nav-link" @click="trackFooterNavClick('contact')">{{ t('footer.support') }}</router-link></li>
           </ul>
         </div>
 
@@ -91,9 +120,9 @@ const isSectionExpanded = (section) => {
         <div class="desktop-nav-column cosmic-panel">
           <h4 class="cosmic-text-glow desktop-nav-title">{{ t('footer.legal') }}</h4>
           <ul class="desktop-link-list">
-            <li><router-link to="/privacy" class="cosmic-nav-link">{{ t('footer.privacy') }}</router-link></li>
-            <li><router-link to="/legal" class="cosmic-nav-link">{{ t('footer.legal') }}</router-link></li>
-            <li><router-link to="/terms" class="cosmic-nav-link">{{ t('footer.terms') }}</router-link></li>
+            <li><router-link to="/privacy" class="cosmic-nav-link" @click="trackFooterNavClick('privacy')">{{ t('footer.privacy') }}</router-link></li>
+            <li><router-link to="/legal" class="cosmic-nav-link" @click="trackFooterNavClick('legal')">{{ t('footer.legal') }}</router-link></li>
+            <li><router-link to="/terms" class="cosmic-nav-link" @click="trackFooterNavClick('terms')">{{ t('footer.terms') }}</router-link></li>
           </ul>
         </div>
       </div>
@@ -115,9 +144,9 @@ const isSectionExpanded = (section) => {
           </div>
           <div class="accordion-content" :style="{ maxHeight: isSectionExpanded('explore') ? '200px' : '0' }">
             <ul class="link-list">
-              <li><router-link to="/careers" class="cosmic-nav-link">{{ t('footer.careers') }}</router-link></li>
-              <li><router-link to="/about" class="cosmic-nav-link">{{ t('footer.about') }}</router-link></li>
-              <li><router-link to="/contact" class="cosmic-nav-link">{{ t('footer.support') }}</router-link></li>
+              <li><router-link to="/careers" class="cosmic-nav-link" @click="trackFooterNavClick('careers')">{{ t('footer.careers') }}</router-link></li>
+              <li><router-link to="/about" class="cosmic-nav-link" @click="trackFooterNavClick('about')">{{ t('footer.about') }}</router-link></li>
+              <li><router-link to="/contact" class="cosmic-nav-link" @click="trackFooterNavClick('contact')">{{ t('footer.support') }}</router-link></li>
             </ul>
           </div>
         </div>
@@ -134,9 +163,9 @@ const isSectionExpanded = (section) => {
           </div>
           <div class="accordion-content" :style="{ maxHeight: isSectionExpanded('legal') ? '200px' : '0' }">
             <ul class="link-list">
-              <li><router-link to="/privacy" class="cosmic-nav-link">{{ t('footer.privacy') }}</router-link></li>
-              <li><router-link to="/legal" class="cosmic-nav-link">{{ t('footer.legal') }}</router-link></li>
-              <li><router-link to="/terms" class="cosmic-nav-link">{{ t('footer.terms') }}</router-link></li>
+              <li><router-link to="/privacy" class="cosmic-nav-link" @click="trackFooterNavClick('privacy')">{{ t('footer.privacy') }}</router-link></li>
+              <li><router-link to="/legal" class="cosmic-nav-link" @click="trackFooterNavClick('legal')">{{ t('footer.legal') }}</router-link></li>
+              <li><router-link to="/terms" class="cosmic-nav-link" @click="trackFooterNavClick('terms')">{{ t('footer.terms') }}</router-link></li>
             </ul>
           </div>
         </div>

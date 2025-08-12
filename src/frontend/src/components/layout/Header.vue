@@ -28,10 +28,10 @@
         <!-- Navigation Links (Desktop Only) -->
         <nav class="nav-links">
           <ul>
-            <li><router-link to="/games" class="cosmic-hover">{{ t('header.games') }}</router-link></li>
-            <li><router-link to="/dao" class="cosmic-hover">{{ t('header.dao') }}</router-link></li>
-            <li><router-link to="/whitepaper" class="cosmic-hover">{{ t('header.whitepaper') }}</router-link></li>
-            <li><router-link to="/roadmap" class="cosmic-hover">{{ t('header.roadmap') }}</router-link></li>
+            <li><router-link to="/games" class="cosmic-hover" @click="trackNavClick('games')">{{ t('header.games') }}</router-link></li>
+            <li><router-link to="/dao" class="cosmic-hover" @click="trackNavClick('dao')">{{ t('header.dao') }}</router-link></li>
+            <li><router-link to="/whitepaper" class="cosmic-hover" @click="trackNavClick('whitepaper')">{{ t('header.whitepaper') }}</router-link></li>
+            <li><router-link to="/roadmap" class="cosmic-hover" @click="trackNavClick('roadmap')">{{ t('header.roadmap') }}</router-link></li>
             
             <!-- Developer dropdown - commented out for now -->
             <!--
@@ -124,13 +124,13 @@
         </div>
       </div>
 
-      <!-- Navigation Links (Desktop Only) -->
-      <nav class="nav-links">
-        <ul>
-          <li><router-link to="/games" class="cosmic-hover">{{ t('header.games') }}</router-link></li>
-          <li><router-link to="/dao" class="cosmic-hover">{{ t('header.dao') }}</router-link></li>
-          <li><router-link to="/whitepaper" class="cosmic-hover">{{ t('header.whitepaper') }}</router-link></li>
-          <li><router-link to="/roadmap" class="cosmic-hover">{{ t('header.roadmap') }}</router-link></li>
+              <!-- Navigation Links (Desktop Only) -->
+        <nav class="nav-links">
+          <ul>
+            <li><router-link to="/games" class="cosmic-hover" @click="trackNavClick('games')">{{ t('header.games') }}</router-link></li>
+            <li><router-link to="/dao" class="cosmic-hover" @click="trackNavClick('dao')">{{ t('header.dao') }}</router-link></li>
+            <li><router-link to="/whitepaper" class="cosmic-hover" @click="trackNavClick('whitepaper')">{{ t('header.whitepaper') }}</router-link></li>
+            <li><router-link to="/roadmap" class="cosmic-hover" @click="trackNavClick('roadmap')">{{ t('header.roadmap') }}</router-link></li>
           <!-- Developer dropdown - commented out for now -->
           <!--
           <li class="dev-dropdown" ref="devDropdownRef">
@@ -329,15 +329,39 @@ watch(
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
+  
+  // Track mobile menu toggle
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'mobile_menu_toggled', {
+      action: isMenuOpen.value ? 'opened' : 'closed',
+      location: 'header'
+    });
+  }
 };
 
 const toggleDropdown = (event) => {
   event.stopPropagation(); // Prevent click from immediately propagating to document
   isDropdownVisible.value = !isDropdownVisible.value;
+  
+  // Track avatar dropdown toggle
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'avatar_dropdown_toggled', {
+      action: isDropdownVisible.value ? 'opened' : 'closed',
+      location: 'header'
+    });
+  }
 };
 
 // Logout functionality
 const logout = async () => {
+  // Track logout action
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'user_logged_out', {
+      location: 'header_dropdown',
+      principal: principalString.value.substring(0, 10) + '...'
+    });
+  }
+  
   isDropdownVisible.value = false; // Close dropdown before logout
   await authStore.logout();
   // Clear principal after logout
@@ -359,6 +383,14 @@ const goToWallet = () => {
 
 // Open login modal
 const handleLogin = () => {
+  // Track login button click
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'login_button_clicked', {
+      location: 'header',
+      button_type: 'connect'
+    });
+  }
+  
   modalStore.openModal(Login);
   // After login modal is closed, ensure we update the principal
   // This will be triggered by the auth.authenticated watcher
@@ -369,12 +401,31 @@ const router = useRouter();
 const route = useRoute();
 
 const scrollToTop = () => {
+  // Track logo click
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'logo_clicked', {
+      current_path: route.path,
+      action: route.path !== '/' ? 'navigate_home' : 'scroll_to_top'
+    });
+  }
+  
   if (route.path !== '/') {
     router.push('/');
   } else {
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
+    });
+  }
+};
+
+// Track navigation clicks
+const trackNavClick = (navItem) => {
+  if (typeof window.clarity !== 'undefined') {
+    window.clarity('event', 'header_nav_clicked', {
+      nav_item: navItem,
+      current_path: route.path,
+      location: 'header_desktop'
     });
   }
 };
