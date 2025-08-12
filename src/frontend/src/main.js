@@ -26,6 +26,9 @@ import tr from '@/locales/tr.json';
 import AccountManagement from '@/components/wallet/AccountManagement.vue';
 import NotificationSystem from '@/components/notifications/NotificationSystem.vue';
 
+// Import and initialize Microsoft Clarity
+import clarityService from '@/services/clarity';
+
 // Create i18n instance
 const i18n = createI18n({
   legacy: false,
@@ -85,6 +88,9 @@ app.config.globalProperties.$notify = {
 app.use(i18n);
 app.use(router);
 app.mount('#app');
+
+// Initialize Microsoft Clarity after app is mounted
+clarityService.init();
 
 // GLOBAL initialization state to ensure proper coordination
 let isIdentityInitialized = false;

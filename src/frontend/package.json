@@ -13,7 +13,12 @@
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx,vue}\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx,vue}\" --fix",
     "lint:check": "eslint \"src/**/*.{js,jsx,ts,tsx,vue}\" --max-warnings 0",
-    "clean": "npm run lint:fix && npm run format"
+    "clean": "npm run lint:fix && npm run format",
+    "lighthouse": "node scripts/lighthouse-audit.js",
+    "lighthouse:mobile": "lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-reports/mobile-report.html --chrome-flags='--headless' --preset=perf",
+    "lighthouse:desktop": "lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-reports/desktop-report.html --chrome-flags='--headless' --preset=perf --view",
+    "audit": "npm run build && npm run lighthouse",
+    "audit:ci": "npm run build && npm run lighthouse:mobile"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
@@ -22,6 +27,7 @@
     "@vitejs/plugin-vue": "^5.1.4",
     "@vue/tsconfig": "^0.4.0",
     "autoprefixer": "^10.4.20",
+    "chrome-launcher": "^1.2.0",
     "dotenv": "^16.4.7",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.8",
@@ -31,10 +37,12 @@
     "eslint-plugin-vue": "^10.4.0",
     "glob": "^10.4.5",
     "globals": "^14.0.0",
+    "lighthouse": "^12.8.1",
     "postcss": "^8.5.1",
     "prettier": "^3.6.2",
     "sass-embedded": "^1.80.5",
     "tailwindcss": "^3.4.17",
+    "terser": "^5.43.1",
     "typescript": "^5.7.3",
     "vite": "^6.2.0",
     "vite-plugin-environment": "^1.1.3"
@@ -50,6 +58,7 @@
     "@dfinity/principal": "^0.15.6",
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@heroicons/vue": "^2.2.0",
+    "@microsoft/clarity": "^1.0.0",
     "@solana/web3.js": "^1.98.0",
     "@vueuse/core": "^13.0.0",
     "base64-arraybuffer": "^1.0.2",

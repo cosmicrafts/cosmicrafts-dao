@@ -35,9 +35,31 @@
 import Starfield from "@/components/media/Starfield.vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from 'vue-router';
+import { onMounted } from 'vue';
 
 const router = useRouter();
 const { t } = useI18n();
+
+// Set proper meta tags for SEO
+onMounted(() => {
+  // Set title
+  document.title = 'Page Not Found - Cosmicrafts';
+  
+  // Set meta description
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (metaDescription) {
+    metaDescription.setAttribute('content', 'The page you are looking for does not exist. Return to Cosmicrafts home page.');
+  }
+  
+  // Add robots meta tag to prevent indexing of error pages
+  let robotsMeta = document.querySelector('meta[name="robots"]');
+  if (!robotsMeta) {
+    robotsMeta = document.createElement('meta');
+    robotsMeta.name = 'robots';
+    document.head.appendChild(robotsMeta);
+  }
+  robotsMeta.setAttribute('content', 'noindex, nofollow');
+});
 
 const handleHover = () => {
   // Add hover effect implementation if needed

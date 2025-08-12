@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useProfileStore } from '@/stores/profile';
 import { Principal } from '@dfinity/principal';
+import clarityService from '@/services/clarity';
 import Home from './pages/Home.vue';
 import DAO from './pages/DAO.vue';
 import Whitepaper from './pages/Whitepaper.vue';
@@ -209,8 +210,27 @@ const router = createRouter({
   routes,
 });
 
-// Use multiple hooks to ensure scrolling works
+// Authentication guard
 router.beforeEach((to, from, next) => {
+  // Check if route requires authentication
+  if (to.meta.requiresAuth) {
+    const authStore = useAuthStore();
+    if (!authStore.isAuthenticated()) {
+      // Redirect to login or show login modal
+      console.log('🔒 Authentication required for:', to.path);
+      
+      // For profile route specifically, redirect to error page with proper 404
+      if (to.path === '/profile') {
+        next('/error');
+        return;
+      }
+      
+      // For other auth routes, redirect to home page
+      next('/');
+      return;
+    }
+  }
+  
   // Immediate scroll reset
   window.scrollTo(0, 0);
   next();
@@ -230,6 +250,16 @@ router.afterEach((to, from) => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, 100);
+  
+  // Track page views with Microsoft Clarity
+  if (clarityService.isInitialized) {
+    const pageName = to.meta.title || to.name || to.path;
+    clarityService.trackPageView(pageName, {
+      path: to.path,
+      from: from.path,
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 export default router;

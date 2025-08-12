@@ -10,6 +10,26 @@ dotenv.config({ path: '../../.env' });
 export default defineConfig({
   build: {
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue', 'vue-router', 'pinia'],
+          dfinity: ['@dfinity/agent', '@dfinity/identity', '@dfinity/auth-client'],
+          ui: ['@heroicons/vue', '@fortawesome/fontawesome-free'],
+          charts: ['chart.js', 'd3'],
+          crypto: ['ethers', '@solana/web3.js', 'bip39'],
+          utils: ['lodash-es', 'date-fns', 'uuid']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
   },
   esbuild: {
     supported: {

@@ -1,3 +1,41 @@
 User-agent: *
 Allow: /
+
+# Block access to development and sensitive files
+Disallow: /node_modules/
+Disallow: /.env
+Disallow: /.git/
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /yarn.lock
+Disallow: /.config/
+Disallow: /.vscode/
+Disallow: /.idea/
+Disallow: /test/
+Disallow: /tests/
+Disallow: /spec/
+Disallow: /__tests__/
+Disallow: /coverage/
+Disallow: /.nyc_output/
+
+# Block access to temporary and system files
+Disallow: /.DS_Store
+Disallow: /Thumbs.db
+Disallow: /~$
+
+# Block access to authentication-required pages
+Disallow: /profile
+Disallow: /dashboard
+Disallow: /wallet
+Disallow: /feed
+Disallow: /explore
+Disallow: /notifications
+
+# Block query parameter URLs to prevent duplicate content
+Disallow: /*?ref=
+Disallow: /*?trk=
+Disallow: /*?utm_*
+Disallow: /*?fbclid=
+Disallow: /*?gclid=
+
 Sitemap: https://cosmicrafts.com/sitemap.xml 

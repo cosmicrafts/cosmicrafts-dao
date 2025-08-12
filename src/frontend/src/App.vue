@@ -4,7 +4,8 @@ import { computed, ref, onMounted, onUnmounted, watch, provide } from 'vue';
 import { useRoute } from 'vue-router';
 import Header from './components/layout/Header.vue';
 import Footer from './components/layout/Footer.vue';
-import Modal from '@/components/core/modals/BaseModal.vue'; 
+import Modal from '@/components/core/modals/BaseModal.vue';
+import { useCanonical } from '@/composables/useCanonical'; 
 // Temporarily disabled Chat component for performance testing
 // import Chat from "@/components/core/Chat.vue";
 import EscMenu from "@/components/navigation/menus/EscMenu.vue";
@@ -20,6 +21,9 @@ const isCosmicrafts2D = computed(() => route.path === '/cosmicrafts2d');
 const isAlpha2021 = computed(() => route.path === '/classics/alpha2021');
 const isBeta2022 = computed(() => route.path === '/classics/beta2022');
 const isFullscreenGame = computed(() => isGame.value || isCosmicrafts2D.value || isAlpha2021.value || isBeta2022.value);
+
+// Initialize canonical tags
+useCanonical();
 
 // Debug logging for route detection
 watch(() => route.path, (newPath) => {
