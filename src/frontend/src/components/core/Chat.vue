@@ -15,8 +15,16 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 // Replace OpenAI client with OpenRouter base URL
 const API_BASE_URL = 'https://openrouter.ai/api/v1';
 
-// API Key
-const API_KEY = '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';
+// API Key - REMOVED FOR SECURITY
+// TODO: Use environment variable instead:
+// const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
+// 
+// Add to your .env file:
+// VITE_OPENROUTER_API_KEY=your_api_key_here
+//
+// IMPORTANT: The exposed key has been revoked from OpenRouter.ai
+// Generate a new key at https://openrouter.ai/keys and add it to your .env file
+const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || '';
 
 // Define props
 const props = defineProps({
